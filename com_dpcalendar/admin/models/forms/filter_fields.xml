@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="custom">
+		<fieldset name="custom">
+			<field name="section" type="section" default="com_dpcalendar.event">
+				<option value="com_dpcalendar.event">COM_DPCALENDAR_FIELDS_SECTION_EVENT</option>
+				<option value="com_dpcalendar.location">COM_DPCALENDAR_FIELDS_SECTION_LOCATION</option>
+				<option value="com_dpcalendar.ticket">COM_DPCALENDAR_FIELDS_SECTION_TICKET</option>
+				<option value="com_dpcalendar.booking">COM_DPCALENDAR_FIELDS_SECTION_BOOKING</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

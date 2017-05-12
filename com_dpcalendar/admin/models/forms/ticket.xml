@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="content" label="COM_DPCALENDAR_CONTENT"
+		addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+		addrulepath="/administrator/components/com_dpcalendar/models/rules">>
+		<field name="id" default="0" label="JGLOBAL_FIELD_ID_LABEL"
+			type="text" readonly="true" class="readonly" description="JGLOBAL_FIELD_ID_DESC" />
+		<field name="name" type="text" size="40"
+			label="COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NAME_DESC" />
+		<field name="email" type="email" size="40"
+			label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"
+			required="true" />
+		<field name="user_id" type="user"
+			label="COM_DPCALENDAR_BOOKING_FIELD_USER_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_USER_DESC" />
+
+		<field name="country" type="text" size="40"
+			label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description="" />
+		<field name="province" type="text" size="40"
+			label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL" description="" />
+		<field name="city" type="text" size="40"
+			label="COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL" description="" />
+		<field name="zip" type="text" size="40"
+			label="COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL" description="" />
+		<field name="street" type="text" size="40"
+			label="COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL" description="" />
+		<field name="number" type="text" size="40"
+			label="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL" description="" />
+		<field name="telephone" type="text" size="40"
+			label="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_DESC" />
+		<field name="latitude" type="text" validate="decimal"
+			label="COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_LABEL" description="" />
+		<field name="longitude" type="text" validate="decimal"
+			label="COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_LABEL" description="" />
+
+		<field name="state" type="list" label="JSTATUS"
+			description="COM_DPCALENDAR_FIELD_STATE_DESC" class="inputbox" size="1"
+			default="1">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_NEED_PAYMENT
+			</option>
+			<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
+			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED
+			</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="price" type="text" class="inputbox" size="40"
+			label="COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_PRICE_DESC" />
+		<field name="seat" type="text" class="inputbox" size="40"
+			label="COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_SEAT_DESC" />
+		<field name="type" type="text" size="40"
+			label="COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_TYPE_DESC" />
+
+		<field name="public" type="radio"
+			label="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_DESC"
+			class="inputbox btn-group" size="1" default="1">
+			<option value="1" class="btn">JYES</option>
+			<option value="0" class="btn">JNO</option>
+		</field>
+
+		<field name="remind_time" type="text" size="4" default="15"
+			label="COM_DPCALENDAR_TICKET_FIELD_REMIND_TIME_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_REMIND_TIME_DESC" />
+		<field name="remind_type" type="list"
+			label="COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_DESC"
+			default="1">
+			<option value="1">COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_MINUTES
+			</option>
+			<option value="2">COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_HOURS
+			</option>
+			<option value="3">COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_DAYS
+			</option>
+			<option value="4">COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_WEEKS
+			</option>
+		</field>
+
+		<field name="captcha" type="captcha" label="" validate="captcha" />
+	</fieldset>
+</form>

@@ -1,0 +1,42 @@
+#dp-tickets-actions-filter {
+	margin: 0
+}
+
+#dp-tickets-actions-limit-container {
+	float: right
+}
+
+#dp-tickets-actions-future-label {
+	display: inline
+}
+
+#dp-tickets-counter {
+	float: right
+}
+
+@media print {
+	.noprint, .dp-share-button {
+		display: none !important;
+	}
+	a:link:after, a:visited:after {
+		display: none;
+		content: "";
+	}
+}
+
+#dp-map-actions-container {
+	margin-bottom: 10px
+}
+
+#dp-map-actions-container #dp-map-actions-location,
+	#dp-map-actions-container select {
+	margin: 0px 0px 0px 0px
+}
+
+#dp-map-actions-container #dp-map-actions-delete {
+	margin: 0px 10px 0px 0px
+}
+
+#dp-map-actions-radius, #dp-map-actions-length-type {
+	width: 100px
+}

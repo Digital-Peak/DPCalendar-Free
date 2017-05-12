@@ -1,0 +1,16 @@
+#dp-map-actions {
+	margin-bottom: 10px
+}
+
+#dp-map-actions #dp-map-actions-location,
+	#dp-map-actions select {
+	margin: 0px 0px 0px 0px
+}
+
+#dp-map-actions #dp-map-actions-delete {
+	margin: 0px 10px 0px 0px
+}
+
+#dp-map-actions-radius, #dp-map-actions-length-type {
+	width: 100px
+}

@@ -1,0 +1,43 @@
+#dp-calendar-share .dp-share-button {
+	margin: 5px;
+	float: left;
+}
+
+#dp-calendar-loader, #dp-calendar-toggle {
+	cursor: pointer;
+	text-align: center;
+	clear: both;
+	width: 100%;
+	display: block;
+}
+
+#dp-calendar-list input {
+	margin: 0;
+}
+
+#dp-calendar-comments, #dp-calendar-map {
+	margin-top: 10px
+}
+
+.ui-datepicker {
+	z-index: 1003 !important; /* must be > than popup editor (1002) */
+}
+
+.ui-timepicker-list li {
+	height: 14px;
+	font-size: 10px;
+	line-height: 14px;
+	margin-top: 5px;
+}
+
+.dp-event-tooltip a {
+	margin-right: 5px;
+}
+
+.dp-event-tooltip .dp-event-links {
+	border-top: 1px solid #DDDDDD;
+}
+
+.dp-calendar .fc-day-grid-event > .fc-content {
+	white-space: normal;
+}

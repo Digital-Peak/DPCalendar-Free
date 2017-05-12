@@ -1,0 +1,30 @@
+.dp-module-counter-layout .countdown-date {
+	overflow: overlay;
+}
+
+.dp-module-counter-layout .dp-module-counter-description {
+	text-align: left;
+	margin-top: 10px;
+}
+
+.dp-module-counter-modal {
+	display: none;
+	width: 700px;
+	height: 500px;
+}
+
+.dp-module-counter-modal iframe {
+	width: 99.6%;
+	height: 95%;
+	border: none;
+}
+
+/* Counter overrides */
+.dp-module-counter-root .is-countdown {
+	border: none;
+	background-color: inherit;
+}
+
+.dp-module-counter-root .countdown-section {
+	padding-left: 8px;
+}

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.7" method="upgrade" client="site">
+	<name>mod_dpcalendar_mini</name>
+	<author>Digital Peak</author>
+	<creationDate>Mar 2017</creationDate>
+	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>6.0.0</version>
+	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
+	<files>
+		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
+		<folder>tmpl</folder>
+		<folder>language</folder>
+	</files>
+	<config>
+		<fields name="params"
+		        addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+		        addrulepath="/administrator/components/com_dpcalendar/models/rules">
+			<fieldset name="basic">
+				<field name="ids" type="dpcalendar" multiple="true"
+				       description="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_DESC"
+				       extension="com_dpcalendar" label="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_LABEL"
+				       required="true"/>
+				<field name="event_color" type="dpcolor" default="135CAE" label="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_DESC" size="6"/>
+				<field name="compact_events" type="list" default="2"
+				       label="MOD_DPCALENDAR_MINI_FIELD_COMPACT_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_COMPACT_DESC">
+					<option value="1">JYES</option>
+					<option value="2">MOD_DPCALENDAR_MINI_FIELD_COMPACT_SINGLE</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="open_view" type="list" default="agendaDay"
+				       label="MOD_DPCALENDAR_MINI_FIELD_OPENVIEW_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_OPENVIEW_DESC"
+				       showon="compact_events:1">
+					<option value="month">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_MONTH</option>
+					<option value="agendaWeek">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_WEEK</option>
+					<option value="agendaDay">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_DAY</option>
+					<option value="list">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_LIST</option>
+				</field>
+				<field name="show_my_only_calendar" type="radio" class="btn-group"
+				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_SHOW_MY_ONLY_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_SHOW_MY_ONLY_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="default_view" type="list" default="day"
+				       label="MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_DESC">
+					<option value="month">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_MONTH</option>
+					<option value="week">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_WEEK</option>
+					<option value="day">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_DAY</option>
+					<option value="list">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_LIST</option>
+				</field>
+				<field name="weekstart" type="list" default="1"
+				       label="MOD_DPCALENDAR_MINI_FIELD_WEEK_START_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_WEEK_START_DESC">
+					<option value="0">MOD_DPCALENDAR_MINI_FIELD_WEEK_START_SUNDAY</option>
+					<option value="1">MOD_DPCALENDAR_MINI_FIELD_WEEK_START_MONDAY</option>
+					<option value="2">MOD_DPCALENDAR_MINI_FIELD_WEEK_START_TUESDAY</option>
+					<option value="3">MOD_DPCALENDAR_MINI_FIELD_WEEK_START_WEDNESDAY</option>
+					<option value="4">MOD_DPCALENDAR_MINI_FIELD_WEEK_START_THURSDAY</option>
+					<option value="5">MOD_DPCALENDAR_MINI_FIELD_WEEK_START_FRIDAY</option>
+					<option value="6">MOD_DPCALENDAR_MINI_FIELD_WEEK_START_SATURDAY</option>
+				</field>
+				<field name="weekend" type="radio" class="btn-group" default="1"
+				       label="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEKEND_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEKEND_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="week_mode" type="list" default="variable"
+				       label="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_DESC">
+					<option value="fixed">MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_FIXED
+					</option>
+					<option value="liquid">MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_LIQUID
+					</option>
+					<option value="variable">MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_VARIABLE
+					</option>
+				</field>
+				<field name="week_numbers" type="radio" class="btn-group"
+				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_NUMBER_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_NUMBER_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="overlap_events" type="radio" class="btn-group"
+				       default="1" label="MOD_DPCALENDAR_MINI_FIELD_OVERLAP_EVENTS_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_OVERLAP_EVENTS_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="agenda_slot_minutes" type="text" size="50" default="30"
+				       label="MOD_DPCALENDAR_MINI_FIELD_AGENDA_SLOT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_AGENDA_SLOT_DESC"/>
+				<field name="calendar_height" type="text" size="50" default="0"
+				       label="MOD_DPCALENDAR_MINI_FIELD_HEIGHT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_HEIGHT_DESC"/>
+				<field name="event_limit" type="text" size="50" default=""
+				       label="MOD_DPCALENDAR_MINI_FIELD_EVENT_LIMIT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_EVENT_LIMIT_DESC"/>
+				<field name="titleformat_month" type="text" default="F Y"
+				       label="MOD_DPCALENDAR_MINI_FIELD_TITLE_FORMAT_MONTH_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_TITLE_FORMAT_MONTH_DESC"
+				       size="50"/>
+				<field name="titleformat_week" type="text" default="M j Y"
+				       label="MOD_DPCALENDAR_MINI_FIELD_TITLE_FORMAT_WEEK_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_TITLE_FORMAT_WEEK_DESC"
+				       size="50"/>
+				<field name="titleformat_day" type="text" default="F j Y"
+				       label="MOD_DPCALENDAR_MINI_FIELD_TITLE_FORMAT_DAY_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_TITLE_FORMAT_DAY_DESC"
+				       size="50"/>
+				<field name="titleformat_list" type="text" default="M j Y"
+				       label="MOD_DPCALENDAR_MINI_FIELD_TITLE_FORMAT_LIST_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_TITLE_FORMAT_LIST_DESC"
+				       size="50"/>
+				<field name="timeformat_month" type="text" default="g:i a"
+				       label="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_MONTH_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_MONTH_DESC"
+				       size="50"/>
+				<field name="timeformat_week" type="text" default="g:i a"
+				       label="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_WEEK_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_WEEK_DESC"
+				       size="50"/>
+				<field name="timeformat_day" type="text" default="g:i a"
+				       label="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_DAY_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_DAY_DESC"
+				       size="50"/>
+				<field name="timeformat_list" type="text" default="g:i a"
+				       label="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_LIST_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_LIST_DESC"
+				       size="50"/>
+				<field name="axisformat" type="text" default="g:i a"
+				       label="MOD_DPCALENDAR_MINI_FIELD_AXIS_FORMAT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_AXIS_FORMAT_DESC"
+				       size="50"/>
+				<field name="list_range" type="text" default="30"
+				       label="MOD_DPCALENDAR_MINI_FIELD_LIST_RANGE_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_LIST_RANGE_DESC"
+				       size="50"/>
+				<field name="header_show_navigation" type="radio" class="btn-group"
+				       default="1" label="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_NAVIGATION_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_NAVIGATION_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="header_show_title" type="radio" class="btn-group"
+				       default="1" label="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_TITLE_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_TITLE_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="header_show_month" type="radio" class="btn-group"
+				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_MONTH_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_MONTH_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="header_show_week" type="radio" class="btn-group"
+				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_WEEK_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_WEEK_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="header_show_day" type="radio" class="btn-group"
+				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_DAY_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_DAY_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="header_show_list" type="radio" class="btn-group"
+				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_LIST_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_HEADER_SHOW_LIST_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+				</field>
+				<field name="show_event_as_popup" type="list" class="btn-group"
+				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_SHOW_POPUP_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_SHOW_POPUP_DESC">
+					<option value="0">JNO</option>
+					<option value="1">JYES</option>
+					<option value="2">JDISABLED</option>
+				</field>
+				<field name="popup_width" type="text" default="" size="5"
+				       label="MOD_DPCALENDAR_MINI_FIELD_POPUP_WIDTH_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_POPUP_WIDTH_DESC"/>
+				<field name="popup_height" type="text" default="500" size="5"
+				       label="MOD_DPCALENDAR_MINI_FIELD_POPUP_HEIGHT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_POPUP_HEIGHT_DESC"/>
+				<field name="description_length" type="text" size="10"
+				       label="MOD_DPCALENDAR_MINI_FIELD_DESC_COUNT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_DESC_COUNT_DESC"/>
+				<field name="adjust_fg_color" type="list" default="0"
+				       label="MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_DESC">
+					<option value="0">JNO</option>
+					<option value="1">MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_INVERSE
+					</option>
+					<option value="2">MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_BW
+					</option>
+				</field>
+				<field name="show_map" type="radio" class="btn-group" default="1"
+				       label="MOD_DPCALENDAR_MINI_FIELD_SHOW_MAP_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_SHOW_MAP_DESC">
+					<option value="1">JYES</option>
+					<option value="2">JNO</option>
+				</field>
+				<field name="map_zoom" type="text" default="4" size="5"
+				       label="MOD_DPCALENDAR_MINI_FIELD_MAP_ZOOM_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_MAP_ZOOM_DESC"/>
+				<field name="map_width" type="text" default="100%" size="10"
+				       label="MOD_DPCALENDAR_MINI_FIELD_MAP_WIDTH_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_MAP_WIDTH_DESC"/>
+				<field name="map_height" type="text" default="350px" size="10"
+				       label="MOD_DPCALENDAR_MINI_FIELD_MAP_HEIGHT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_MAP_HEIGHT_DESC"/>
+				<field name="map_lat" type="text" default="47" validate="decimal"
+				       label="MOD_DPCALENDAR_MINI_FIELD_MAP_LATITUDE_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_MAP_LATITUDE_DESC"/>
+				<field name="map_long" type="text" default="4" validate="decimal"
+				       label="MOD_DPCALENDAR_MINI_FIELD_MAP_LONGITUDE_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_MAP_LONGITUDE_DESC"/>
+				<field name="first_hour" type="text" default="6"
+				       label="MOD_DPCALENDAR_MINI_FIELD_FIRST_HOUR_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_FIRST_HOUR_DESC"
+				       size="10"/>
+				<field name="min_time" type="text" default="0"
+				       label="MOD_DPCALENDAR_MINI_FIELD_MIN_TIME_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_MIN_TIME_DESC"
+				       size="10"/>
+				<field name="max_time" type="text" default="24"
+				       label="MOD_DPCALENDAR_MINI_FIELD_MAX_TIME_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_MAX_TIME_DESC"
+				       size="10"/>
+			</fieldset>
+
+			<fieldset name="advanced">
+				<field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL"
+				       description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+				<field name="moduleclass_sfx" type="text"
+				       label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

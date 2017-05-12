@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_DPCALENDAR_LOCATION_VIEW_DEFAULT_TITLE">
+		<message>
+			<![CDATA[COM_DPCALENDAR_VIEW_LOCATION_DEFAULT_DESC]]>
+		</message>
+	</layout>
+	<fields name="request"
+		addfieldpath="/administrator/components/com_dpcalendar/models/fields">
+		<fieldset name="request">
+			<field name="id" type="location"
+				label="COM_DPCALENDAR_VIEW_LOCATION_FIELD_ID_LABEL" description="COM_DPCALENDAR_VIEW_LOCATION_FIELD_ID_DESC"
+				required="true" />
+		</fieldset>
+	</fields>
+	<fields name="params"
+        addrulepath="/administrator/components/com_dpcalendar/models/rules">
+		<fieldset name="basic">
+			<field name="location_map_zoom" type="text" size="5"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC" />
+			<field name="location_map_width" type="text" size="10"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC" />
+			<field name="location_map_height" type="text" size="10"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC" />
+			<field name="location_map_latitude" type="text" validate="decimal"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC" />
+			<field name="location_map_longitude" type="text" validate="decimal"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC" />
+			<field name="location_expand" type="list" class="btn-group"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND
+				</option>
+			</field>
+		</fieldset>
+	</fields>
+</metadata>

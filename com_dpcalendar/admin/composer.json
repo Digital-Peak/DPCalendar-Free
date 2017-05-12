@@ -1,0 +1,34 @@
+{
+	"config" : {
+		"vendor-dir": "libraries/vendor",
+		"platform": {
+			"php": "5.5.9"
+		}
+	},
+	"require" : {
+		"sabre/vobject": "^4.1",
+		"sabre/dav": "^3.2",
+		"tecnickcom/tcpdf": "dev-min",
+		"mustache/mustache": "2.11.*",
+		"omnipay/stripe": "2.4.*",
+		"omnipay/paypal": "2.5.*",
+		"omnipay/2checkout": "2.1.*",
+		"omnipay/manual": "2.2.*",
+		"Digital-Peak/ccl": "dev-unstable"
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": "https://github.com/Digital-Peak/TCPDF"
+		},
+		{
+			"url": "https://github.com/Digital-Peak/ccl",
+			"type": "vcs"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"DPCalendar\\": "libraries/dpcalendar/DPCalendar"
+		}
+	}
+}

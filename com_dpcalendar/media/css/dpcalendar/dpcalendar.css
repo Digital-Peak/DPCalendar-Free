@@ -1,0 +1,21 @@
+/* common stuff */
+.filters{
+	margin-bottom: 5px;
+}
+
+/* google map <-> bootstrap problem fix */
+.dpcalendar-fixed-map img {
+    border: 0px;
+    box-shadow: 0px;
+    margin: 0px;
+    max-width: none !important;
+}
+
+/* make facebook comment box width 100% */
+.dpcal-fb-comments-box .fb_iframe_widget,
+.dpcal-fb-comments-box .fb_iframe_widget span,
+.dpcal-fb-comments-box .fb_iframe_widget iframe[style]  {width: 100% !important;}
+
+.dp-container div[class="tooltip-inner"] {
+    min-width: 100px;
+}

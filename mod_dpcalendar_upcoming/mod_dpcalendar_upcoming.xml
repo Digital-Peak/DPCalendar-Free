@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.7" method="upgrade" client="site">
+	<name>mod_dpcalendar_upcoming</name>
+	<author>Digital Peak</author>
+	<creationDate>Mar 2017</creationDate>
+	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>6.0.0</version>
+	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
+	<files>
+		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>
+		<folder>tmpl</folder>
+		<folder>language</folder>
+	</files>
+	<media destination="mod_dpcalendar_upcoming" folder="media">
+		<folder>css</folder>
+		<folder>js</folder>
+	</media>
+	<config>
+		<fields name="params" addfieldpath="/administrator/components/com_dpcalendar/models/fields">
+			<fieldset name="basic">
+				<field name="ids" type="dpcalendar" multiple="true"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SELECT_CALENDARS_DESC"
+				       extension="com_dpcalendar" label="MOD_DPCALENDAR_UPCOMING_FIELD_SELECT_CALENDARS_LABEL"
+				       required="true"/>
+				<field name="date_format" type="text" size="80"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_FORMAT_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_FORMAT_DESC"/>
+				<field name="time_format" type="text" size="80"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_TIME_FORMAT_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_TIME_FORMAT_DESC"/>
+				<field name="max_events" type="text" size="2" default="5"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MAX_EVENTS_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_MAX_EVENTS_DESC"/>
+				<field name="order" type="radio" default="asc" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_DESC">
+					<option value="asc">MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_ASCENDING</option>
+					<option value="desc">MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_DESCENDING</option>
+				</field>
+				<field name="filter" type="text" size="80" default=""
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_DESC"/>
+				<field name="description_length" type="text" default="" size="10"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DESC_COUNT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DESC_COUNT_DESC"/>
+				<field name="show_location" type="radio" default="0" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_LOCATION_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_LOCATION_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="ongoing" type="radio" default="0" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_ONGOING_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_ONGOING_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_as_popup" type="radio" default="0" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_OPEN_POPUP_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_OPEN_POPUP_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_my_only" type="radio" default="0" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MY_ONLY_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MY_ONLY_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+			</fieldset>
+			<fieldset name="advanced">
+				<field name="start_date" type="text"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_DESC"
+				       size="22" format="%Y-%m-%d %H:%M:%S"/>
+				<field name="end_date" type="text"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_DESC"
+				       size="22" format="%Y-%m-%d %H:%M:%S"/>
+				<field name="output_grouping" type="text" size="80" default=""
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_OUTPUT_GROUPING_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_OUTPUT_GROUPING_DESC">
+				</field>
+				<field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL"
+				       description="JFIELD_ALT_MODULE_LAYOUT_DESC" default="_:default"/>
+				<field name="moduleclass_sfx" type="text"
+				       label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+				<field name="frontend_framework" type="list"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_DESC">
+					<option value="">JGLOBAL_USE_GLOBAL</option>
+					<option value="BS2">MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_BS2</option>
+					<option value="BS3">MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_BS3</option>
+					<option value="BS4">MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_BS4</option>
+					<option value="UIkit2">MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_UIKIT2</option>
+				</field>
+				<field name="icon_framework" type="list"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_DESC">
+					<option value="">JGLOBAL_USE_GLOBAL</option>
+					<option value="Joomla">MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_JOOMLA</option>
+					<option value="FontAwesome4">MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_FONTAWESOME4</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

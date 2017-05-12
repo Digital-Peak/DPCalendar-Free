@@ -1,0 +1,8 @@
+#dp-location-upcoming-events p {
+	border-left: 5px solid;
+}
+
+#dp-location-upcoming-events a,
+#dp-location-upcoming-events span {
+	margin-left: 5px;
+}

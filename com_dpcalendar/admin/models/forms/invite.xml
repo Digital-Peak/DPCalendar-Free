@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+		name="content">
+		<field name="users" type="sql"
+			query="select id as value, name as text from #__users" label="COM_DPCALENDAR_INVITE_FIELD_USERS_LABEL"
+			multiple="true" description="COM_DPCALENDAR_INVITE_FIELD_USERS_DESC"
+			value_field="text" key_field="value" />
+		<field name="groups" type="usergroup"
+			label="COM_DPCALENDAR_INVITE_FIELD_USER_GROUPS_LABEL" description="COM_DPCALENDAR_INVITE_FIELD_USER_GROUPS_DESC"
+			multiple="true" />
+		<field name="event_id" type="hidden" />
+
+		<field name="captcha" type="captcha" label="" validate="captcha" />
+	</fieldset>
+</form>

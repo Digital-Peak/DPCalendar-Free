@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="plugin" version="3.7" group="system" method="upgrade">
+	<name>plg_system_dpcalendar</name>
+	<author>Digital Peak</author>
+	<creationDate>Mar 2017</creationDate>
+	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>6.0.0</version>
+	<description>PLG_SYSTEM_DPCALENDAR_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="dpcalendar">dpcalendar.php</filename>
+		<folder>language</folder>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+			</fieldset>
+			<fieldset name="dav" label="PLG_SYSTEM_DPCALENDAR_DAV_LABEL">
+				<field name="cache" type="list" default="1"
+				       label="PLG_SYSTEM_DPCALENDAR_DAV_FIELD_CACHING_LABEL" description="PLG_SYSTEM_DPCALENDAR_DAV_FIELD_CACHING_DESC">
+					<option value="1">PLG_SYSTEM_DPCALENDAR_DAV_FIELD_CACHING_JOOMLA</option>
+					<option value="0">PLG_SYSTEM_DPCALENDAR_DAV_FIELD_CACHING_NEVER</option>
+				</field>
+				<field name="cache_time" type="text" default="900"
+				       label="PLG_SYSTEM_DPCALENDAR_DAV_FIELD_CACHING_TIME_LABEL"
+				       description="PLG_SYSTEM_DPCALENDAR_DAV_FIELD_CACHING_TIME_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

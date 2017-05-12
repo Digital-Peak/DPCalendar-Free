@@ -1,0 +1,42 @@
+.dp-list-hits {
+	float: right;
+}
+
+.dp-list-title {
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+.dp-list-date {
+	font-size: smaller;
+}
+
+.dp-list-date:after {
+	content: '\a';
+	white-space: pre;
+}
+
+.dp-list-calendar,
+.dp-list-capacity,
+.dp-list-price {
+	font-size: smaller;
+	display: block;
+}
+
+.dp-list-location {
+	float: right;
+	clear: both;
+	font-size: smaller;
+}
+
+.dp-list-locations .location-description {
+	display: none
+}
+
+.dp-list-tooltip a {
+	margin-right: 5px;
+}
+
+.dp-list-tooltip .dp-list-links {
+	border-top: 1px solid #DDDDDD;
+}

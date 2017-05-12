@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fieldset addfieldpath="/administrator/components/com_dpcalendar/models/fields" name="content"
+              label="COM_DPCALENDAR_CONTENT">
+        <field name="displayname" type="text" class="inputbox" size="40"
+               label="JGLOBAL_TITLE" description="COM_DPCALENDAR_DAVCALENDAR_FIELD_TITLE_DESC"
+               required="true"/>
+
+        <field name="uri" type="text" class="inputbox" size="40"
+               label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_DAVCALENDAR_FIELD_ALIAS_DESC"/>
+
+        <field name="calendarcolor" type="dpcolor" label="COM_DPCALENDAR_FIELD_COLOR_LABEL"
+               default="3366CC" description="COM_DPCALENDAR_DAVCALENDAR_FIELD_COLOR_DESC" size="6"/>
+
+        <field name="description" type="editor" buttons="true"
+               hide="pagebreak,readmore" class="inputbox" filter="JComponentHelper::filterText"
+               label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_DAVCALENDAR_FIELD_DESCRIPTION_DESC"/>
+
+        <field name="id" type="hidden" default="0" label="JGLOBAL_FIELD_ID_LABEL"
+               readonly="true" class="readonly" description="JGLOBAL_FIELD_ID_DESC"/>
+    </fieldset>
+</form>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_DPCALENDAR_VIEW_LOCATIONFORM_DEFAULT_TITLE" option="COM_DPCALENDAR_VIEW_LOCATIONFORM_DEFAULT_OPTION">
+		<message>
+			<![CDATA[COM_DPCALENDAR_VIEW_LOCATIONFORM_DEFAULT_DESC]]>
+		</message>
+	</layout>
+</metadata>

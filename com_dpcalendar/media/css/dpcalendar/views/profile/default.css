@@ -1,0 +1,74 @@
+#dp-profile-form-actions {
+	margin: 10px 0px 10px 0px;
+}
+
+#dp-profile-form-filter {
+	max-width: 150px;
+	margin: 0px 0px 0px 0px
+}
+
+#dp-profile-form-delete {
+	margin: 0px 10px 0px 0px
+}
+
+#dp-profile-form-actions-limit-container {
+	float: right;
+}
+
+.dp-profile-title:after {
+    content:"\000A";
+    white-space: pre;
+}
+
+.dp-profile-color-box {
+	width: 20px;
+	height: 15px;
+	display: inline-block;
+}
+
+.dp-profile-hits {
+	float: right;
+}
+
+.dp-profile-title {
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+.dp-profile-date {
+	font-size: smaller;
+}
+
+.dp-profile-date:after {
+	content: '\a';
+	white-space: pre;
+}
+
+.dp-profile-calendar {
+	font-size: smaller;
+	display: inline-block;
+}
+
+#dp-profile-events li {
+	overflow: hidden;
+}
+
+.dp-profile-locations {
+	float: right;
+	clear: both;
+	font-size: smaller;
+}
+
+.dp-profile-location-description {
+	display: none
+}
+
+@media print {
+	.noprint, .dp-share-button {
+		display: none !important;
+	}
+	a:link:after, a:visited:after {
+		display: none;
+		content: "";
+	}
+}

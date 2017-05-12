@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="params">
+		<fieldset name="basic"
+			addfieldpath="/administrator/components/com_dpcalendar/models/fields">
+			<field name="color" type="dpcolor" label="COM_DPCALENDAR_FIELD_COLOR_LABEL"
+				required="true" default="3366CC" description="COM_DPCALENDAR_FIELD_COLOR_DESC"
+				size="6" />
+			<field name="etag" type="hidden" default="1" />
+		</fieldset>
+	</fields>
+</form>

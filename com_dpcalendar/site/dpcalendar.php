@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-if (version_compare(PHP_VERSION, '5.3.0') < 0)
+if (version_compare(PHP_VERSION, '5.5.9') < 0)
 {
 	JError::raiseWarning(0,
 			'You have PHP version ' . PHP_VERSION . ' installed. This version is end of life and contains some security wholes!!

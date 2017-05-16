@@ -49,11 +49,10 @@ else
 	JFactory::getApplication()->input->set('DPCALENDAR_VERSION', $type);
 }
 
-if (version_compare(PHP_VERSION, '5.3.0') < 0)
+if (version_compare(PHP_VERSION, '5.5.9') < 0)
 {
 	JError::raiseWarning(0,
-			'You have PHP version ' . PHP_VERSION . ' installed. This version is end of life and contains some security wholes!!
-					 		Please upgrade your PHP version to at least 5.3.x. DPCalendar can not run on this version.');
+			'You have PHP version ' . PHP_VERSION . ' installed. Please upgrade your PHP version to at least 5.5.9. DPCalendar can not run on this version.');
 	return;
 }
 

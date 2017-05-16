@@ -52,7 +52,7 @@ class FontAwesome4 extends AbstractElementVisitor
 			case Icon::LOCATION:
 				$icon->addClass('fa fa-map-marker', true);
 				break;
-			case Icon::LOCATION:
+			case Icon::LOCK:
 				$icon->addClass('fa fa-lock', true);
 				break;
 			case Icon::OK:

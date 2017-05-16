@@ -43,7 +43,7 @@ $params = $displayData['params'];
 $root = $displayData['root'];
 
 // The options which will be passed to the js library
-$options = array();
+$options                 = array();
 $options['eventSources'] = array();
 foreach ($displayData['selectedCalendars'] as $calendar) {
 	$options['eventSources'][] = html_entity_decode(
@@ -69,7 +69,7 @@ $options['weekNumbers']    = (boolean)$params->get('week_numbers');
 $options['weekends']       = (boolean)$params->get('weekend', 1);
 $options['fixedWeekCount'] = (boolean)$params->get('week_mode', 'variable') == 'fixed';
 
-if ($params->get('week_mode', 'variable') != 'variable') {
+if ($params->get('week_mode', 'variable') == 'variable') {
 	$options['height'] = 'auto';
 }
 
@@ -85,6 +85,8 @@ $options['firstDay']              = $params->get('weekstart', 0);
 $options['firstHour']             = $params->get('first_hour', 6);
 $options['nextDayThreshold']      = '00:00:00';
 $options['weekNumbersWithinDays'] = 'true';
+$options['weekNumberCalculation'] = 'ISO';
+$options['displayEventEnd']       = 'true';
 $options['maxTime']               = $params->get('max_time', 24) . ':00:00';
 $options['minTime']               = $params->get('min_time', 0) . ':00:00';
 $options['nowIndicator']          = (boolean)$params->get('current_time_indicator', 1);
@@ -135,22 +137,26 @@ $options['header']['center'] = implode(',', $options['header']['center']);
 $options['header']['right']  = implode(',', $options['header']['right']);
 
 // Set up the views
-$options['views'] = array();
-$options['views']['month'] = array(
-	'titleFormat' => Fullcalendar::convertFromPHPDate($params->get('titleformat_month', 'F Y')),
-	'timeFormat'  => Fullcalendar::convertFromPHPDate($params->get('timeformat_month', 'g:i a'))
+$options['views']               = array();
+$options['views']['month']      = array(
+	'titleFormat'  => Fullcalendar::convertFromPHPDate($params->get('titleformat_month', 'F Y')),
+	'timeFormat'   => Fullcalendar::convertFromPHPDate($params->get('timeformat_month', 'g:i a')),
+	'columnFormat' => Fullcalendar::convertFromPHPDate($params->get('columnformat_month', 'D'))
 );
 $options['views']['agendaWeek'] = array(
-	'titleFormat' => Fullcalendar::convertFromPHPDate($params->get('titleformat_week', 'M j Y')),
-	'timeFormat'  => Fullcalendar::convertFromPHPDate($params->get('timeformat_week', 'g:i a'))
+	'titleFormat'  => Fullcalendar::convertFromPHPDate($params->get('titleformat_week', 'M j Y')),
+	'timeFormat'   => Fullcalendar::convertFromPHPDate($params->get('timeformat_week', 'g:i a')),
+	'columnFormat' => Fullcalendar::convertFromPHPDate($params->get('columnformat_week', 'D n/j'))
 );
-$options['views']['agendaDay'] = array(
-	'titleFormat' => Fullcalendar::convertFromPHPDate($params->get('titleformat_day', 'l M j, Y')),
-	'timeFormat'  => Fullcalendar::convertFromPHPDate($params->get('timeformat_day', 'g:i a'))
+$options['views']['agendaDay']  = array(
+	'titleFormat'  => Fullcalendar::convertFromPHPDate($params->get('titleformat_day', 'F j Y')),
+	'timeFormat'   => Fullcalendar::convertFromPHPDate($params->get('timeformat_day', 'g:i a')),
+	'columnFormat' => Fullcalendar::convertFromPHPDate($params->get('columnformat_day', 'l'))
 );
-$options['views']['list'] = array(
-	'titleFormat'      => Fullcalendar::convertFromPHPDate($params->get('titleformat_list', 'l M j, Y')),
+$options['views']['list']       = array(
+	'titleFormat'      => Fullcalendar::convertFromPHPDate($params->get('titleformat_list', 'M j Y')),
 	'timeFormat'       => Fullcalendar::convertFromPHPDate($params->get('timeformat_list', 'g:i a')),
+	'columnFormat'     => Fullcalendar::convertFromPHPDate($params->get('columnformat_list', 'D')),
 	'listDayFormat'    => Fullcalendar::convertFromPHPDate($params->get('dayformat_list', 'l')),
 	'listDayAltFormat' => Fullcalendar::convertFromPHPDate($params->get('dateformat_list', 'F j, Y')),
 	'duration'         => array('days' => $params->get('list_range', 30)),
@@ -179,23 +185,23 @@ for ($i = 1; $i <= 12; $i++) {
 }
 
 // Some DPCalendar specific options
-$options['show_event_as_popup'] = $params->get('show_event_as_popup');
-$options['show_date_picker'] = $params->get('show_date_picker', 1);
-$options['show_print'] = $params->get('show_print', 1);
-$options['use_hash'] = $params->get('use_hash');
-$options['event_edit_popup'] = $params->get('event_edit_popup', 1);
+$options['show_event_as_popup']   = $params->get('show_event_as_popup');
+$options['show_date_picker']      = $params->get('show_date_picker', 1);
+$options['show_print']            = $params->get('show_print', 1);
+$options['use_hash']              = $params->get('use_hash');
+$options['event_edit_popup']      = $params->get('event_edit_popup', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
 
 // Workaround to get the icon classes
 $pi = new Icon('print', Icon::PRINTING);
 DPCalendarHelper::renderElement($pi, $params);
 $options['icon_print'] = count($pi->getClasses()) > 1 ? $pi->getClasses()[1] : 'icon-print';
-$ci = new Icon('calendar', Icon::CALENDAR);
+$ci                    = new Icon('calendar', Icon::CALENDAR);
 DPCalendarHelper::renderElement($ci, $params);
 $options['icon_calendar'] = count($ci->getClasses()) > 1 ? $ci->getClasses()[1] : 'icon-calendar';
 
 // Set the actual date
-$now = DPCalendarHelper::getDate();
+$now              = DPCalendarHelper::getDate();
 $options['year']  = $now->format('Y', true);
 $options['month'] = $now->format('m', true);
 $options['date']  = $now->format('d', true);

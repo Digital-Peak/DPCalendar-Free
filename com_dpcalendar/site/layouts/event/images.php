@@ -90,7 +90,8 @@ for ($i = 1; $i <= 3; $i++) {
 	// Set up the image element and add it to the container
 	$imageContainer->addChild(
 		new Image(
-			'image-' . $i, htmlspecialchars($imagePath),
+			'image-' . $i,
+			$imagePath,
 			isset($images->{'image' . $i . '_alt'}) ? htmlspecialchars($images->{'image' . $i . '_alt'}) : '',
 			array('image')
 		)

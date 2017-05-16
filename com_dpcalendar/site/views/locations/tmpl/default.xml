@@ -28,7 +28,7 @@
 			<field name="locations_map_longitude" type="text" validate="decimal"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC" />
-			<field name="locations_expand" type="list" class="btn-group"
+			<field name="locations_expand" type="list" class="btn-group" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>

@@ -382,9 +382,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 	protected function prepareTable($table)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
-
 		$table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
 		$table->alias = JApplication::stringURLSafe($table->alias);
 

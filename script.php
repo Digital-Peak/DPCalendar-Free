@@ -34,6 +34,15 @@ class Pkg_DPCalendarInstallerScript
 			return false;
 		}
 
+		if (version_compare(PHP_VERSION, '5.5.9') < 0) {
+			JFactory::getApplication()->enqueueMessage(
+				'You have PHP version ' . PHP_VERSION . ' installed. Please upgrade your PHP version to at least 5.5.9. DPCalendar can not run on this version.',
+				'error');
+			JFactory::getApplication()->redirect('index.php?option=com_installer&view=install');
+
+			return false;
+		}
+
 		// The system plugin needs to be disabled during upgrade
 		$this->run("update `#__extensions` set enabled = 0 where type = 'plugin' and element = 'dpcalendar' and folder = 'system'");
 

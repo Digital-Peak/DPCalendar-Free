@@ -323,6 +323,9 @@ class Booking
 				} else {
 					// Absolute date
 					$date = \DPCalendarHelper::getDate($limit);
+					if ($date->format('H:i') == '00:00') {
+						$date->setTime(23, 59, 59);
+					}
 				}
 				if ($date->format('U') < $now->format('U')) {
 					continue;

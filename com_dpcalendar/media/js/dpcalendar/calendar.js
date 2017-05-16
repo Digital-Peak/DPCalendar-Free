@@ -9,10 +9,6 @@ function createDPCalendar(calendar, options) {
 	options['theme'] = false;
 	options['startParam'] = 'date-start';
 	options['endParam'] = 'date-end';
-	options['views'].month.columnFormat = 'ddd';
-	options['views'].agendaWeek.columnFormat = 'ddd M/D';
-	options['views'].agendaDay.columnFormat = 'dddd';
-	options['views'].list.columnFormat = 'ddd';
 
 	// Translations
 	options['eventLimitText'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE', true);

@@ -18,38 +18,33 @@ use CCL\Content\Element\Basic\Description\Term;
 use CCL\Content\Element\Basic\Description\Description;
 
 $params = $this->params;
-if (!$params->get('event_show_bookings', '1'))
-{
+if (!$params->get('event_show_bookings', '1')) {
 	// Booking stuff should not being displayed
 	return;
 }
 
 $event = $this->event;
-if (($event->capacity !== null && (int)$event->capacity === 0) || DPCalendarHelper::isFree())
-{
+if (($event->capacity !== null && (int)$event->capacity === 0) || DPCalendarHelper::isFree()) {
 	// Booking is not activated
 	return;
 }
 
 // Find the tickets of the logged in user
-$user = JFactory::getUser();
+$user    = JFactory::getUser();
 $tickets = array();
-foreach ($event->tickets as $t)
-{
-	if ($user->id > 0 && $user->id == $t->user_id)
-	{
+foreach ($event->tickets as $t) {
+	if ($user->id > 0 && $user->id == $t->user_id) {
 		$tickets[] = $t;
 	}
 }
 
-if ($tickets)
-{
+if ($tickets) {
 	// Send the message that tickets are already taken
 	JFactory::getApplication()->enqueueMessage(
-			JText::plural('COM_DPCALENDAR_VIEW_EVENT_BOOKED_TEXT', count($tickets), DPCalendarHelperRoute::getTicketsRoute(null, $event->id, true)));
+		JText::plural('COM_DPCALENDAR_VIEW_EVENT_BOOKED_TEXT', count($tickets), DPCalendarHelperRoute::getTicketsRoute(null, $event->id, true)));
 }
 
-/** @var Container $root **/
+/** @var Container $root * */
 $root = $this->root->addChild(new Container('booking'));
 
 // The heading
@@ -58,12 +53,9 @@ $h->setProtectedClass('dp-event-header');
 $h->setContent(JText::_('COM_DPCALENDAR_VIEW_EVENT_BOOKING_INFORMATION'));
 
 // Set up the booking alert when bookings can be done
-if (\DPCalendar\Helper\Booking::openForBooking($event))
-{
+if (\DPCalendar\Helper\Booking::openForBooking($event)) {
 	// Booking is possible, show the book message
-	$alert = $root->addChild(new Alert('text', Alert::WARNING, array(
-			'noprint'
-	)));
+	$alert = $root->addChild(new Alert('text', Alert::WARNING, array('noprint')));
 	$alert->setProtectedClass('noprint');
 
 	// The link to the booking form
@@ -77,37 +69,31 @@ if (\DPCalendar\Helper\Booking::openForBooking($event))
 }
 
 // Show the price
-if ($params->get('event_show_price', '1') && $event->price)
-{
+if ($params->get('event_show_price', '1') && $event->price) {
 	// The discount container
-	$dc = new Alert('discount', Alert::WARNING, array(
-			'noprint'
-	));
+	$dc = new Alert('discount', Alert::WARNING, array('noprint'));
 	$dc->setProtectedClass('noprint');
 
-	if ($event->earlybird)
-	{
+	if ($event->earlybird) {
 		// Create the earlybird element
 		$now = DPCalendarHelper::getDate();
-		foreach ($event->earlybird->value as $index => $value)
-		{
-			if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $event, $index, -2) == 1000)
-			{
+		foreach ($event->earlybird->value as $index => $value) {
+			if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $event, $index, -2) == 1000) {
 				// No discount
 				continue;
 			}
 
 			$limit = $event->earlybird->date[$index];
 			$date  = DPCalendarHelper::getDate($event->start_date);
-			if (strpos($limit, '-') === 0 || strpos($limit, '+') === 0)
-			{
+			if (strpos($limit, '-') === 0 || strpos($limit, '+') === 0) {
 				// Relative date
 				$date->modify(str_replace('+', '-', $limit));
-			}
-			else
-			{
+			} else {
 				// Absolute date
 				$date = DPCalendarHelper::getDate($limit);
+				if ($date->format('H:i') == '00:00') {
+					$date->setTime(23, 59, 59);
+				}
 			}
 
 			// Earlybird container
@@ -133,13 +119,10 @@ if ($params->get('event_show_price', '1') && $event->price)
 		}
 	}
 
-	if ($event->user_discount)
-	{
+	if ($event->user_discount) {
 		// Create the user discount message
-		foreach ($event->user_discount->value as $index => $value)
-		{
-			if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $event, -2, $index) == 1000)
-			{
+		foreach ($event->user_discount->value as $index => $value) {
+			if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $event, -2, $index) == 1000) {
 				// No discount
 				continue;
 			}
@@ -166,14 +149,12 @@ if ($params->get('event_show_price', '1') && $event->price)
 	}
 
 	// Add the booking container only when there is content
-	if ($dc->getChildren())
-	{
+	if ($dc->getChildren()) {
 		$root->addChild($dc);
 	}
 
 	// Add the prices
-	foreach ($event->price->value as $key => $value)
-	{
+	foreach ($event->price->value as $key => $value) {
 		$discounted = \DPCalendar\Helper\Booking::getPriceWithDiscount($value, $event);
 
 		// The description list
@@ -194,15 +175,13 @@ if ($params->get('event_show_price', '1') && $event->price)
 
 		// Add the regular price to the description
 		$classes = array('price-regular');
-		if ($discounted != $value)
-		{
+		if ($discounted != $value) {
 			$classes[] = 'price-has-discount';
 		}
 		$desc->addChild(new TextBlock('regular', $classes))->setContent(DPCalendarHelper::renderPrice($value));
 
 		// Add the discount price if available
-		if ($discounted != $value)
-		{
+		if ($discounted != $value) {
 			$desc->addChild(new TextBlock('discount', array('price-discount')))->setContent(DPCalendarHelper::renderPrice($discounted));
 		}
 
@@ -215,19 +194,27 @@ if ($params->get('event_show_price', '1') && $event->price)
 }
 
 // Set up the capacity when possible
-if ($params->get('event_show_capacity', '1') && ($event->capacity === null || $event->capacity > 0))
-{
-	DPCalendarHelper::renderLayout('content.dl', array('root' => $root, 'id' => 'capacity', 'label' => 'COM_DPCALENDAR_FIELD_CAPACITY_LABEL', 'content' => $event->capacity === null ? JText::_('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED') : (int)$event->capacity));
+if ($params->get('event_show_capacity', '1') && ($event->capacity === null || $event->capacity > 0)) {
+	DPCalendarHelper::renderLayout(
+		'content.dl',
+		array(
+			'root'    => $root,
+			'id'      => 'capacity',
+			'label'   => 'COM_DPCALENDAR_FIELD_CAPACITY_LABEL',
+			'content' => $event->capacity === null ? JText::_('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED') : (int)$event->capacity
+		)
+	);
 }
 
 // Set up the capacity used when possible
-if ($params->get('event_show_capacity_used', '1') && ($event->capacity === null || $event->capacity > 0))
-{
-	DPCalendarHelper::renderLayout('content.dl', array('root' => $root, 'id' => 'capacity-used', 'label' => 'COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL', 'content' => $event->capacity_used));
+if ($params->get('event_show_capacity_used', '1') && ($event->capacity === null || $event->capacity > 0)) {
+	DPCalendarHelper::renderLayout(
+		'content.dl',
+		array('root' => $root, 'id' => 'capacity-used', 'label' => 'COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL', 'content' => $event->capacity_used)
+	);
 }
 
 // Set up the booking information
-if ($event->booking_information)
-{
+if ($event->booking_information) {
 	$root->addChild(new Container('dp-event-booking-information'))->setContent($event->booking_information);
 }

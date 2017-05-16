@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.0.0</version>
+	<version>6.0.1</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -16,12 +16,12 @@
 	</files>
 	<config>
 		<fields name="params"
-		        addfieldpath="/administrator/components/com_dpcalendar/models/fields"
-		        addrulepath="/administrator/components/com_dpcalendar/models/rules">
+		        addfieldpath="/administrator/components/MOD_DPCALENDAR_MINI/models/fields"
+		        addrulepath="/administrator/components/MOD_DPCALENDAR_MINI/models/rules">
 			<fieldset name="basic">
 				<field name="ids" type="dpcalendar" multiple="true"
 				       description="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_DESC"
-				       extension="com_dpcalendar" label="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_LABEL"
+				       extension="MOD_DPCALENDAR_MINI" label="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_LABEL"
 				       required="true"/>
 				<field name="event_color" type="dpcolor" default="135CAE" label="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_DESC" size="6"/>
@@ -133,6 +133,22 @@
 				<field name="timeformat_list" type="text" default="g:i a"
 				       label="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_LIST_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_TIME_FORMAT_LIST_DESC"
+				       size="50"/>
+				<field name="columnformat_month" type="text" default="D"
+				       label="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_MONTH_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_MONTH_DESC"
+				       size="50"/>
+				<field name="columnformat_week" type="text" default="D n/j"
+				       label="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_WEEK_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_WEEK_DESC"
+				       size="50"/>
+				<field name="columnformat_day" type="text" default="l"
+				       label="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_DAY_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_DAY_DESC"
+				       size="50"/>
+				<field name="columnformat_list" type="text" default="D"
+				       label="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_LIST_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_LIST_DESC"
 				       size="50"/>
 				<field name="axisformat" type="text" default="g:i a"
 				       label="MOD_DPCALENDAR_MINI_FIELD_AXIS_FORMAT_LABEL"

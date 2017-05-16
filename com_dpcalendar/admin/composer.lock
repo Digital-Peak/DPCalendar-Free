@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Digital-Peak/ccl.git",
-                "reference": "35c8e0cbb2e7cc3b1c1c7f76f9639d48387a3f5c"
+                "reference": "9a167496c1a6fbf73b6e85c99c1de1b7aedd8d7c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Digital-Peak/ccl/zipball/35c8e0cbb2e7cc3b1c1c7f76f9639d48387a3f5c",
-                "reference": "35c8e0cbb2e7cc3b1c1c7f76f9639d48387a3f5c",
+                "url": "https://api.github.com/repos/Digital-Peak/ccl/zipball/9a167496c1a6fbf73b6e85c99c1de1b7aedd8d7c",
+                "reference": "9a167496c1a6fbf73b6e85c99c1de1b7aedd8d7c",
                 "shasum": ""
             },
             "require-dev": {
@@ -50,7 +50,7 @@
                 "source": "https://github.com/Digital-Peak/ccl/tree/unstable",
                 "issues": "https://github.com/Digital-Peak/ccl/issues"
             },
-            "time": "2017-05-12 09:19:30"
+            "time": "2017-05-16 08:49:25"
         },
         {
             "name": "guzzle/guzzle",

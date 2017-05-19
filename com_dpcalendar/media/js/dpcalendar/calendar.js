@@ -93,14 +93,13 @@ function createDPCalendar(calendar, options) {
 	};
 
 	// Handling the messages in the returned data
-	options['eventDataTransform'] = function (events) {
-		if (events.messages != null && jQuery('#system-message-container').length) {
-			Joomla.renderMessages(events.messages);
+	options['eventDataTransform'] = function (event) {
+		if (event.allDay) {
+			var end = moment(event.end);
+			end.add(1, 'day');
+			event.end = end;
 		}
-		if (events.data != null) {
-			return events.data;
-		}
-		return events;
+		return event;
 	};
 
 	// Drag and drop support

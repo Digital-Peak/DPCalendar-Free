@@ -260,15 +260,15 @@ $calCode .= "
 	createDPCalendar(calendar, options);
 
 	// Toggle the list of calendars
-	var selector = '#dp-calendar .dp-calendar-toggle';
-	jQuery(selector).bind('click', function(e) {
-		jQuery('#dp-calendar-list').slideToggle('slow', function() {
-			if (!jQuery('#dp-calendar-list').is(':visible')) {
-				jQuery(selector + ' i[data-direction=\"up\"]').hide();
-				jQuery(selector + ' i[data-direction=\"down\"]').show();
+	var root = calendar.parent();
+	root.find('.dp-calendar-toggle').bind('click', function(e) {
+		root.find('.dp-calendar-list').slideToggle('slow', function() {
+			if (!root.find('.dp-calendar-list').is(':visible')) {
+				root.find('i[data-direction=\"up\"]').hide();
+				root.find('i[data-direction=\"down\"]').show();
 			} else {
-				jQuery(selector + ' i[data-direction=\"up\"]').show();
-				jQuery(selector + ' i[data-direction=\"down\"]').hide();
+				root.find('i[data-direction=\"up\"]').show();
+				root.find('i[data-direction=\"down\"]').hide();
 			}
 		});
 	});

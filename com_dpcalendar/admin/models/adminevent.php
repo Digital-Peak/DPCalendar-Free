@@ -157,6 +157,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data = new JObject($data);
 		}
 
+		if ($data instanceof stdClass) {
+			$data = new JObject($data);
+		}
+
 		if ($data->get(('start_date_time'))) {
 			try {
 				// We got the data from a session, normalizing it
@@ -223,7 +227,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 					'type'        => $obj->type[$index],
 					'date'        => $obj->date[$index],
 					'label'       => $obj->label[$index],
-					'description' => $obj->description[$index]
+					'description' => $obj->description[$index],
+					'discount_groups' => $obj->discount_groups[$index]
 				);
 			}
 			$data->user_discount = json_encode($newData);
@@ -351,12 +356,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$obj->date        = array();
 			$obj->label       = array();
 			$obj->description = array();
+			$obj->discount_groups = array();
 			foreach ($data['user_discount'] as $key => $p) {
 				$obj->value[]       = $p['value'];
 				$obj->type[]        = $p['type'];
 				$obj->date[]        = $p['date'];
 				$obj->label[]       = $p['label'];
 				$obj->description[] = $p['description'];
+				$obj->discount_groups[] = $p['discount_groups'];
 			}
 			$data['user_discount'] = json_encode($obj);
 		}
@@ -546,6 +553,9 @@ class DPCalendarModelAdminEventHandler extends JEvent
 		$db->setQuery('select id from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
 		$rows   = $db->loadObjectList();
 		$values = '';
+
+		// Load the fields helper class
+		JLoader::import('components.com_fields.helpers.fields', JPATH_ADMINISTRATOR);
 
 		$fieldModel = JModelLegacy::getInstance('Field', 'FieldsModel', array('ignore_request' => true));
 

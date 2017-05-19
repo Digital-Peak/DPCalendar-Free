@@ -65,6 +65,11 @@
 	vertical-align: middle;
 }
 
+#dp-bookingform-options-events .dp-bookingform-options-amount-info,
+#dp-bookingform-options-events .dp-bookingform-options-price-info {
+	border-left: 0px;
+}
+
 #dp-bookingform-options-events table select {
 	max-width: 50px
 }
@@ -74,13 +79,12 @@
 }
 
 #dp-bookingform-options-events .dp-bookingform-options-amount,
-	#dp-bookingform-options-events .dp-bookingform-options-amount-info,
-	#dp-bookingform-options-events .dp-bookingform-options-price-info {
+#dp-bookingform-options-events .dp-bookingform-options-amount-info,
+#dp-bookingform-options-events .dp-bookingform-options-price-info {
 	width: 1%
 }
 
-#dp-bookingform-options-events .dp-bookingform-options-price-cell-original
-	{
+#dp-bookingform-options-events .dp-bookingform-options-price-cell-original {
 	text-decoration: line-through;
 	display: none;
 }

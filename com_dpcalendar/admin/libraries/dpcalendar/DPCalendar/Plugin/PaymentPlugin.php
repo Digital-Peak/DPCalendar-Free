@@ -49,7 +49,7 @@ abstract class PaymentPlugin extends \JPlugin
 	 *
 	 * @return array
 	 */
-	protected function getPurchaseParameters(GatewayInterface $gateway, $booking)
+	protected function getPurchaseParameters($gateway, $booking)
 	{
 		$rootURL = rtrim(\JURI::base(), '/');
 		$subpathURL = \JURI::base(true);

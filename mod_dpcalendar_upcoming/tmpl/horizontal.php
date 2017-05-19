@@ -51,23 +51,32 @@ $lastHeading = '';
 $grouping = $params->get('output_grouping', '');
 
 // Loop over the events
+$eventsContainer = $c;
 foreach ($events as $index => $event) {
 	// The start date
 	$startDate = DPCalendarHelper::getDate($event->start_date, $event->all_day);
 
+	// The classes for the event container
+	$classes = array('container');
+
 	// Grouping functionality
 	if ($grouping) {
+
+		// Reset the classes
+		$classes = array();
+
 		// Check if the actual grouping header is different than from the event before
 		$groupHeading = $startDate->format($grouping, true);
 		if ($groupHeading != $lastHeading) {
 			// Add a new grouping header
-			$lastHeading = $groupHeading;
-			$c->addChild(new Paragraph('heading-' . ($index + 1), array('heading')))->setContent($groupHeading);
+			$lastHeading     = $groupHeading;
+			$eventsContainer = $c->addChild(new Container($index + 1, array('container')));
+			$eventsContainer->addChild(new Paragraph('heading-', array('heading')))->setContent($groupHeading);
 		}
 	}
 
 	// The event container
-	$ec = $c->addChild(new Container($event->id, array('container'),
+	$ec = $eventsContainer->addChild(new Container($event->id, $classes,
 		array('itemprop' => 'event', 'itemtype' => 'http://schema.org/Event', 'itemscope' => 'itemscope')));
 
 	// The calendar icon element

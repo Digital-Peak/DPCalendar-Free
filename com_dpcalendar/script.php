@@ -337,6 +337,11 @@ from #__dpcalendar_bookings");
 				);
 			}
 		}
+
+		if (version_compare($version, '6.0.3') == -1) {
+			JFile::delete(JPATH_SITE . '/components/com_dpcalendar/models/forms/event.xml');
+			JFile::delete(JPATH_SITE . '/components/com_dpcalendar/models/forms/location.xml');
+		}
 	}
 
 	public function uninstall($parent)

@@ -56,10 +56,10 @@ function calculatePrice() {
 					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-live').show();
 					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-original').show();
 					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-original').html(events[id].original + ' ' + json.data.currency);
-					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-info-icon').show();
+					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-info').show();
 				} else {
 					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-original').hide();
-					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-info-icon').hide();
+					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-info').hide();
 				}
 			}
 			jQuery('#dp-bookingform-options-total-price-price-content').html(json.data.total);

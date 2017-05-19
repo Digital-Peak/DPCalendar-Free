@@ -315,18 +315,18 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 		$start = $vEvent->DTSTART->getDateTime();
 		if ($dpEvent->all_day) {
-			$start->setTime(0, 0, 0);
+			$start = $start->setTime(0, 0, 0);
 		} else {
-			$start->setTimezone(new \DateTimeZone('UTC'));
+			$start = $start->setTimezone(new \DateTimeZone('UTC'));
 		}
 		$dpEvent->start_date = $start->format(\JFactory::getDbo()->getDateFormat());
 
 		$end = $vEvent->DTEND->getDateTime();
 		if ($dpEvent->all_day) {
-			$end->setTime(0, 0, 0);
-			$end->modify('-1 day');
+			$end = $end->setTime(0, 0, 0);
+			$end = $end->modify('-1 day');
 		} else {
-			$end->setTimezone(new \DateTimeZone('UTC'));
+			$end = $end->setTimezone(new \DateTimeZone('UTC'));
 		}
 		$dpEvent->end_date = $end->format(\JFactory::getDbo()->getDateFormat());
 

@@ -30,6 +30,7 @@ if ($params->get('show_selection', 1) != 1 && $params->get('show_selection', 1) 
 
 // The container for the calendars
 $c = $root->addChild(new Container('list'));
+$c->addClass('dp-calendar-list', true);
 
 // Loop over the calendars
 foreach ($displayData['calendars'] as $calendar) {

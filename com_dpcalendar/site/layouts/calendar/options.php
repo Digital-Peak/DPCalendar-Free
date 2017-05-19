@@ -67,9 +67,9 @@ if ($params->get('default_view', 'month') == 'week') {
 // Some general calendar options
 $options['weekNumbers']    = (boolean)$params->get('week_numbers');
 $options['weekends']       = (boolean)$params->get('weekend', 1);
-$options['fixedWeekCount'] = (boolean)$params->get('week_mode', 'variable') == 'fixed';
+$options['fixedWeekCount'] = $params->get('week_mode', 'variable') == 'fixed';
 
-if ($params->get('week_mode', 'variable') == 'variable') {
+if ($params->get('week_mode', 'variable') != 'variable') {
 	$options['height'] = 'auto';
 }
 
@@ -84,9 +84,9 @@ if ($params->get('business_hours_days', array())) {
 $options['firstDay']              = $params->get('weekstart', 0);
 $options['firstHour']             = $params->get('first_hour', 6);
 $options['nextDayThreshold']      = '00:00:00';
-$options['weekNumbersWithinDays'] = 'true';
+$options['weekNumbersWithinDays'] = false;
 $options['weekNumberCalculation'] = 'ISO';
-$options['displayEventEnd']       = 'true';
+$options['displayEventEnd']       = true;
 $options['maxTime']               = $params->get('max_time', 24) . ':00:00';
 $options['minTime']               = $params->get('min_time', 0) . ':00:00';
 $options['nowIndicator']          = (boolean)$params->get('current_time_indicator', 1);
@@ -101,7 +101,7 @@ if ($params->get('calendar_height', 0) > 0) {
 
 $options['slotEventOverlap'] = (boolean)$params->get('overlap_events', 1);
 $options['slotMinutes']      = $params->get('agenda_slot_minutes', 30);
-$options['axisFormat']       = Fullcalendar::convertFromPHPDate($params->get('axisformat', 'h(:mm)a'));
+$options['slotLabelFormat']  = Fullcalendar::convertFromPHPDate($params->get('axisformat', 'h(:mm)a'));
 
 // Set up the header
 $options['header'] = array('left' => array(), 'center' => array(), 'right' => array());
@@ -260,7 +260,7 @@ $calCode .= "
 	createDPCalendar(calendar, options);
 
 	// Toggle the list of calendars
-	var selector = '#" . $displayData['id'] . " .dp-calendar-toggle';
+	var selector = '#dp-calendar .dp-calendar-toggle';
 	jQuery(selector).bind('click', function(e) {
 		jQuery('#dp-calendar-list').slideToggle('slow', function() {
 			if (!jQuery('#dp-calendar-list').is(':visible')) {

@@ -30,7 +30,7 @@
 			<option value="list">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LIST
 			</option>
 		</field>
-		<field name="weekstart" type="list" default="1"
+		<field name="weekstart" type="list" default="0"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_DESC">
 			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_SUNDAY
@@ -128,6 +128,14 @@
 		<field name="columnformat_day" type="text" default="l"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_DAY_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_DAY_DESC"
+		       size="50"/>
+		<field name="dayformat_list" type="text" default="l"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DAY_FORMAT_LIST_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DAY_FORMAT_LIST_DESC"
+		       size="50"/>
+		<field name="dateformat_list" type="text" default="F j, Y"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DATE_FORMAT_LIST_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DATE_FORMAT_LIST_DESC"
 		       size="50"/>
 		<field name="columnformat_list" type="text" default="D"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_LIST_LABEL"

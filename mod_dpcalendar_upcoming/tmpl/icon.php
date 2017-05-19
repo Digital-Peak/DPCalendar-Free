@@ -26,7 +26,7 @@ JHtml::_('stylesheet', 'mod_dpcalendar_upcoming/icon.css', array(), true);
 
 // The root container
 $root = new Container('dp-module-upcoming-icon-' . $module->id, array('root'), array('ccl-prefix' => 'dp-module-upcoming-icon-'));
-$root->addClass('dp-module-icon-root', true);
+$root->addClass('dp-module-upcoming-root', true);
 
 if ($params->get('show_as_popup')) {
 	// Load the required JS libraries

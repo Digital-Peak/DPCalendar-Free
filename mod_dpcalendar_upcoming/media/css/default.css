@@ -1,6 +1,6 @@
 .dp-module-upcoming-default-root {
-    clear: both;
-    overflow: overlay;
+	clear: both;
+	overflow: overlay;
 }
 
 .dp-module-upcoming-default-root .dp-module-upcoming-modal {
@@ -29,7 +29,7 @@
 }
 
 .dp-module-upcoming-default-calendar {
-	float:left;
+	float: left;
 	font-size: 0.7em; /* change icon size */
 	display: inline-block;
 	position: relative;

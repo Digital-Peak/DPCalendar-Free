@@ -12,6 +12,7 @@ use CCL\Content\Element\Basic\Form;
 use CCL\Content\Element\Basic\Element;
 use CCL\Content\Element\Basic\Form\Input;
 use CCL\Content\Element\Basic\Heading;
+use CCL\Content\Element\Component\Alert;
 
 /**
  * Layout variables

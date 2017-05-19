@@ -405,7 +405,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 	private function toSabreArray($event)
 	{
-		$ical = \\DPCalendar\Helper\Ical::createIcalFromEvents(array($event));
+		$ical = \DPCalendar\Helper\Ical::createIcalFromEvents(array($event));
 		$data = array(
 			'id'           => $event->id,
 			'uri'          => $event->uid,

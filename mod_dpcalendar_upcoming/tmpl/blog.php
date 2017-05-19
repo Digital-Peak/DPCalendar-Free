@@ -88,6 +88,9 @@ foreach ($events as $index => $event) {
 	$link->addAttribute('itemprop', 'url');
 	$link->addChild(new TextBlock('text', array(), array('itemprop' => 'name')))->setContent($event->title);
 
+	// Add a special class when popup is enabled
+	$link->addClass('dp-module-upcoming-modal-' . ($params->get('show_as_popup') ? 'enabled' : 'disabled'), true);
+
 	if ($params->get('show_hits', 1)) {
 		// The hits element
 		$b = $item->addChild(new Badge('hits', array('hits')));

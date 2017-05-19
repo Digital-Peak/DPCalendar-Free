@@ -75,7 +75,7 @@ if ($params->get('event_show_date', '1'))
 
 	$end = new Meta('end-date', 'endDate', DPCalendarHelper::getDate($event->end_date, $event->all_day)->format('c'));
 
-	DPCalendarHelper::renderLayout('content.dl', array('root' => $column, 'id' => 'url', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE', 'content' => array($start, $end)));
+	DPCalendarHelper::renderLayout('content.dl', array('root' => $column, 'id' => 'date', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE', 'content' => array($start, $end)));
 }
 
 // Add location information

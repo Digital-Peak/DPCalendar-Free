@@ -4,3 +4,13 @@ tx.exe
 .buildpath
 .project
 *.zip
+
+vendor
+dist
+jorobo.ini
+selenium.log
+composer.phar
+
+tests/joomla
+tests/cache
+tests/_output

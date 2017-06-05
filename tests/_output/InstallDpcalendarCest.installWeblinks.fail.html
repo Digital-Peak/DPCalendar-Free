@@ -1,0 +1,727 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en-gb" dir="ltr" slick-uniqueid="3"><head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta charset="utf-8" />
+	<meta name="description" content="Site for testing Joomla CMS" />
+	<meta name="generator" content="Joomla! - Open Source Content Management" />
+	<title>Extensions: Install - Joomla CMS test - Administration</title>
+	<link href="/tests/joomla/administrator/templates/isis/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+	<link href="/tests/joomla/administrator/templates/isis/css/template.css?452b44806302ec4154524ff0c10e320d" rel="stylesheet" />
+	<style>
+
+	#loading {
+		background: rgba(255, 255, 255, .8) url('/tests/joomla/media/jui/images/ajax-loader.gif') 50% 15% no-repeat;
+		position: fixed;
+		opacity: 0.8;
+		-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity = 80);
+		filter: alpha(opacity = 80);
+		overflow: hidden;
+	}
+	
+	#dragarea {
+		background-color: #fafbfc;
+		border: 1px dashed #999;
+		box-sizing: border-box;
+		padding: 5% 0;
+		transition: all 0.2s ease 0s;
+		width: 100%;
+	}
+	
+	#dragarea p.lead {
+		color: #999;
+	}
+
+	#upload-icon {
+		font-size: 48px;
+		width: auto;
+		height: auto;
+		margin: 0;
+		line-height: 175%;
+		color: #999;
+		transition: all .2s;
+	}
+	
+	#dragarea.hover {
+		border-color: #666;
+		background-color: #eee;
+	}
+	
+	#dragarea.hover #upload-icon,
+	#dragarea p.lead {
+		color: #666;
+	}
+	</style>
+	<script type="application/json" class="joomla-script-options loaded">{"joomla.jtext":{"JTOGGLE_HIDE_SIDEBAR":"Hide the sidebar","JTOGGLE_SHOW_SIDEBAR":"Show the sidebar"}}</script>
+	<script src="/tests/joomla/media/jui/js/jquery.min.js?452b44806302ec4154524ff0c10e320d"></script>
+	<script src="/tests/joomla/media/jui/js/jquery-noconflict.js?452b44806302ec4154524ff0c10e320d"></script>
+	<script src="/tests/joomla/media/jui/js/jquery-migrate.min.js?452b44806302ec4154524ff0c10e320d"></script>
+	<!--[if lte IE 9]><script src="/tests/joomla/media/system/js/polyfill.filter.js?452b44806302ec4154524ff0c10e320d"></script><![endif]-->
+	<script src="/tests/joomla/media/system/js/polyfill.xpath.js?452b44806302ec4154524ff0c10e320d"></script>
+	<script src="/tests/joomla/media/system/js/tabs-state.js?452b44806302ec4154524ff0c10e320d"></script>
+	<script src="/tests/joomla/media/system/js/core.js?452b44806302ec4154524ff0c10e320d"></script>
+	<script src="/tests/joomla/media/system/js/mootools-core.js?452b44806302ec4154524ff0c10e320d"></script>
+	<script src="/tests/joomla/media/system/js/mootools-more.js?452b44806302ec4154524ff0c10e320d"></script>
+	<script src="/tests/joomla/media/jui/js/bootstrap.min.js?452b44806302ec4154524ff0c10e320d"></script>
+	<script src="/tests/joomla/administrator/templates/isis/js/template.js?452b44806302ec4154524ff0c10e320d"></script>
+	<!--[if lt IE 9]><script src="/tests/joomla/media/jui/js/html5.js?452b44806302ec4154524ff0c10e320d"></script><![endif]-->
+	<script>
+
+	jQuery(document).ready(function($)
+	{
+		if (window.toggleSidebar)
+		{
+			toggleSidebar(true);
+		}
+		else
+		{
+			$("#j-toggle-sidebar-header").css("display", "none");
+			$("#j-toggle-button-wrapper").css("display", "none");
+		}
+	});
+
+jQuery(function($){ $(".hasTooltip").tooltip({"html": true,"container": "body"}); });
+	Joomla.submitbutton4 = function() {
+		var form = document.getElementById("adminForm");
+
+		// do field validation
+		if (form.install_url.value == "" || form.install_url.value == "http://" || form.install_url.value == "https://") {
+			alert("Please enter a URL");
+		}
+		else
+		{
+			JoomlaInstaller.showLoading();
+			
+			form.installtype.value = "url";
+			form.submit();
+		}
+	};
+
+	Joomla.submitbuttonInstallWebInstaller = function() {
+		var form = document.getElementById("adminForm");
+		
+		form.install_url.value = "https://appscdn.joomla.org/webapps/jedapps/webinstaller.xml";
+		
+		Joomla.submitbutton4();
+	};
+
+	// Add spindle-wheel for installations:
+	jQuery(document).ready(function($) {
+		var outerDiv = $("#installer-install");
+		
+		JoomlaInstaller.getLoadingOverlay()
+			.css("top", outerDiv.position().top - $(window).scrollTop())
+			.css("left", "0")
+			.css("width", "100%")
+			.css("height", "100%")
+			.css("display", "none")
+			.css("margin-top", "-10px");
+	});
+	
+	var JoomlaInstaller = {
+		getLoadingOverlay: function () {
+			return jQuery("#loading");
+		},
+		showLoading: function () {
+			this.getLoadingOverlay().css("display", "block");
+		},
+		hideLoading: function () {
+			this.getLoadingOverlay().css("display", "none");
+		}
+	};
+	
+jQuery(function($){ $("#myTab a").click(function (e) {e.preventDefault();$(this).tab("show");});});
+	Joomla.submitbuttonpackage = function()
+	{
+		var form = document.getElementById("adminForm");
+
+		// do field validation 
+		if (form.install_package.value == "")
+		{
+			alert("Please select a package to upload");
+		}
+		else
+		{
+			JoomlaInstaller.showLoading();
+			form.installtype.value = "upload"
+			form.submit();
+		}
+	};
+
+	jQuery(document).ready(function($) {
+		
+		if (typeof FormData === 'undefined') {
+			$('#legacy-uploader').show();
+			$('#uploader-wrapper').hide();
+			return;
+		}
+
+		var dragZone  = $('#dragarea');
+		var fileInput = $('#install_package');
+		var button    = $('#select-file-button');
+		var url       = 'index.php?option=com_installer&amp;task=install.ajax_upload';
+		var returnUrl = $('#installer-return').val();
+		var token     = $('#installer-token').val();
+
+		if (returnUrl) {
+			url += '&amp;return=' + returnUrl;
+		}
+		
+		button.on('click', function(e) {
+			fileInput.click();
+		});
+		
+		fileInput.on('change', function (e) {
+			Joomla.submitbuttonpackage();
+		});
+
+		dragZone.on('dragenter', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			
+			dragZone.addClass('hover');
+			
+			return false;
+		});
+
+		// Notify user when file is over the drop area
+		dragZone.on('dragover', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			dragZone.addClass('hover');
+
+			return false;
+		});
+
+		dragZone.on('dragleave', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+			dragZone.removeClass('hover');
+
+			return false;
+		});
+
+		dragZone.on('drop', function(e) {
+			e.preventDefault();
+			e.stopPropagation();
+
+			dragZone.removeClass('hover');
+
+			var files = e.originalEvent.target.files || e.originalEvent.dataTransfer.files;
+
+			if (!files.length) {
+				return;
+			}
+
+			var file = files[0];
+
+			var data = new FormData;
+			data.append('install_package', file);
+			data.append('installtype', 'upload');
+			data.append(token, 1);
+
+			JoomlaInstaller.showLoading();
+			
+			$.ajax({
+				url: url,
+				data: data,
+				type: 'post',
+				processData: false,
+				cache: false,
+				contentType: false
+			}).done(function (res) {
+				if (!res.success) {
+					console.log(res.message, res.messages);
+				}
+
+				// Always redirect that can show message queue from session 
+				if (res.data.redirect) {
+					location.href = res.data.redirect;
+				} else {
+					location.href = 'index.php?option=com_installer&amp;view=install';
+				}
+			}).error (function (error) {
+				JoomlaInstaller.hideLoading();
+				alert(error.statusText);
+			});
+		});
+	});
+	Joomla.submitbuttonfolder = function()
+	{
+		var form = document.getElementById("adminForm");
+
+		// do field validation 
+		if (form.install_directory.value == "")
+		{
+			alert("Please enter a Folder.");
+		}
+		else
+		{
+			JoomlaInstaller.showLoading();
+			form.installtype.value = "folder"
+			form.submit();
+		}
+	};
+
+	Joomla.submitbuttonurl = function()
+	{
+		var form = document.getElementById("adminForm");
+
+		// do field validation 
+		if (form.install_url.value == "" || form.install_url.value == "http://" || form.install_url.value == "https://") {
+			alert("Please enter a URL.");
+		}
+		else
+		{
+			JoomlaInstaller.showLoading();
+			form.installtype.value = "url"
+			form.submit();
+		}
+	};
+
+jQuery(function($){ $("#myTabTabs").append($("&lt;li class=\"\"&gt;&lt;a href=\"#package\" data-toggle=\"tab\"&gt;Upload Package File&lt;\/a&gt;&lt;\/li&gt;")); });
+jQuery(function($){ $("#myTabTabs").append($("&lt;li class=\"\"&gt;&lt;a href=\"#folder\" data-toggle=\"tab\"&gt;Install from Folder&lt;\/a&gt;&lt;\/li&gt;")); });
+jQuery(function($){ $("#myTabTabs").append($("&lt;li class=\"\"&gt;&lt;a href=\"#url\" data-toggle=\"tab\"&gt;Install from URL&lt;\/a&gt;&lt;\/li&gt;")); });
+	</script>
+
+</head>
+<body class="admin com_installer view-install layout- task- itemid-" data-basepath="/tests/joomla">
+<!-- Top Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+							<a href="#" class="btn btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="element-invisible">Toggle Navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+			
+			<!-- skip to content -->
+			<a class="element-invisible" href="#skiptarget">Skip to Main Content</a>
+
+			<a class="admin-logo " href="/tests/joomla/administrator/index.php">
+				<span class="icon-joomla"></span>
+				<div class="element-invisible">
+					Control Panel				</div>
+			</a>
+
+			<a class="brand hidden-desktop hidden-tablet" href="http://dpcal/tests/joomla/" title="Preview Joomla CMS test" target="_blank">Joomla CMS tes...				<span class="icon-out-2 small"></span></a>
+
+			<div class="nav-collapse collapse">
+				<ul id="menu" class="nav">
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">System <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li><a class="no-dropdown menu-cpanel" href="index.php">Control Panel</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-config" href="index.php?option=com_config">Global Configuration</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-checkin" href="index.php?option=com_checkin">Global Check-in</a></li>
+<li><a class="no-dropdown menu-clear" href="index.php?option=com_cache">Clear Cache</a></li>
+<li><a class="no-dropdown menu-purge" href="index.php?option=com_cache&amp;view=purge">Clear Expired Cache</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-info" href="index.php?option=com_admin&amp;view=sysinfo">System Information</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Users <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-user" data-toggle="dropdown" href="index.php?option=com_users&amp;view=users">Manage</a><ul id="menu-com-users-users" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_users&amp;task=user.add">Add New User</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-groups" data-toggle="dropdown" href="index.php?option=com_users&amp;view=groups">Groups</a><ul id="menu-com-users-groups" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_users&amp;task=group.add">Add New Group</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-levels" data-toggle="dropdown" href="index.php?option=com_users&amp;view=levels">Access Levels</a><ul id="menu-com-users-levels" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_users&amp;task=level.add">Add New Access Level</a></li>
+</ul>
+</li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-fields" href="index.php?option=com_fields&amp;context=com_users.user">Fields</a></li>
+<li><a class="no-dropdown menu-category" href="index.php?option=com_fields&amp;view=groups&amp;context=com_users.user">Field Groups</a></li>
+<li class="divider"><span></span></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-user-note" data-toggle="dropdown" href="index.php?option=com_users&amp;view=notes">User Notes</a><ul id="menu-com-users-notes" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_users&amp;task=note.add">Add User Note</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-category" data-toggle="dropdown" href="index.php?option=com_categories&amp;view=categories&amp;extension=com_users">User Note Categories</a><ul id="menu-com-categories-categories-com-users" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_categories&amp;task=category.add&amp;extension=com_users">Add New Category</a></li>
+</ul>
+</li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-massmail" href="index.php?option=com_users&amp;view=mail">Mass Mail Users</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Menus <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-menumgr" data-toggle="dropdown" href="index.php?option=com_menus&amp;view=menus">Manage</a><ul id="menu-com-menus-menus" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_menus&amp;view=menu&amp;layout=edit">Add New Menu</a></li>
+</ul>
+</li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-allmenu" href="index.php?option=com_menus&amp;view=items&amp;menutype=">All Menu Items</a></li>
+<li class="menuitem-group"><span>Site</span></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-menu" data-toggle="dropdown" href="index.php?option=com_menus&amp;view=items&amp;menutype=mainmenu">Main Menu <span class="icon-home" aria-hidden="true"></span></a><ul id="menu-com-menus-items-mainmenu" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_menus&amp;view=item&amp;layout=edit&amp;menutype=mainmenu">Add New Menu Item</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Content <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-article" data-toggle="dropdown" href="index.php?option=com_content">Articles</a><ul id="menu-com-content" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_content&amp;task=article.add">Add New Article</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-category" data-toggle="dropdown" href="index.php?option=com_categories&amp;extension=com_content">Categories</a><ul id="menu-com-categories-com-content" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_categories&amp;task=category.add&amp;extension=com_content">Add New Category</a></li>
+</ul>
+</li>
+<li><a class="no-dropdown menu-featured" href="index.php?option=com_content&amp;view=featured">Featured Articles</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-fields" href="index.php?option=com_fields&amp;context=com_content.article">Fields</a></li>
+<li><a class="no-dropdown menu-category" href="index.php?option=com_fields&amp;view=groups&amp;context=com_content.article">Field Groups</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-media" href="index.php?option=com_media">Media</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Components <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-banners" data-toggle="dropdown" href="index.php?option=com_banners">Banners</a><ul id="menu-com-banners" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-banners" href="index.php?option=com_banners">Banners</a></li>
+<li><a class="no-dropdown menu-banners-cat" href="index.php?option=com_categories&amp;extension=com_banners">Categories</a></li>
+<li><a class="no-dropdown menu-banners-clients" href="index.php?option=com_banners&amp;view=clients">Clients</a></li>
+<li><a class="no-dropdown menu-banners-tracks" href="index.php?option=com_banners&amp;view=tracks">Tracks</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-contact" data-toggle="dropdown" href="index.php?option=com_contact">Contacts</a><ul id="menu-com-contact" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-contact" href="index.php?option=com_contact">Contacts</a></li>
+<li><a class="no-dropdown menu-contact-cat" href="index.php?option=com_categories&amp;extension=com_contact">Categories</a></li>
+</ul>
+</li>
+<li><a class="no-dropdown menu-joomlaupdate" href="index.php?option=com_joomlaupdate">Joomla! Update</a></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-messages" data-toggle="dropdown" href="index.php?option=com_messages">Messaging</a><ul id="menu-com-messages" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-messages-add" href="index.php?option=com_messages&amp;task=message.add">New Private Message</a></li>
+</ul>
+</li>
+<li><a class="no-dropdown menu-associations" href="index.php?option=com_associations">Multilingual Associations</a></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-newsfeeds" data-toggle="dropdown" href="index.php?option=com_newsfeeds">News Feeds</a><ul id="menu-com-newsfeeds" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newsfeeds" href="index.php?option=com_newsfeeds">Feeds</a></li>
+<li><a class="no-dropdown menu-newsfeeds-cat" href="index.php?option=com_categories&amp;extension=com_newsfeeds">Categories</a></li>
+</ul>
+</li>
+<li><a class="no-dropdown menu-postinstall" href="index.php?option=com_postinstall">Post-installation Messages</a></li>
+<li><a class="no-dropdown menu-redirect" href="index.php?option=com_redirect">Redirects</a></li>
+<li><a class="no-dropdown menu-search" href="index.php?option=com_search">Search</a></li>
+<li><a class="no-dropdown menu-finder" href="index.php?option=com_finder">Smart Search</a></li>
+<li><a class="no-dropdown menu-tags" href="index.php?option=com_tags">Tags</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Extensions <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-install" data-toggle="dropdown" href="index.php?option=com_installer">Manage</a><ul id="menu-com-installer" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer">Install</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=update">Update</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=manage">Manage</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=discover">Discover</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=database">Database</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=warnings">Warnings</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=languages">Install Languages</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=updatesites">Update Sites</a></li>
+</ul>
+</li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-module" href="index.php?option=com_modules">Modules</a></li>
+<li><a class="no-dropdown menu-plugin" href="index.php?option=com_plugins">Plugins</a></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-themes" data-toggle="dropdown" href="index.php?option=com_templates">Templates</a><ul id="menu-com-templates" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-themes" href="index.php?option=com_templates&amp;view=styles">Styles</a></li>
+<li><a class="no-dropdown menu-themes" href="index.php?option=com_templates&amp;view=templates">Templates</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-language" data-toggle="dropdown" href="index.php?option=com_languages">Language(s)</a><ul id="menu-com-languages" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-language" href="index.php?option=com_languages&amp;view=installed">Installed</a></li>
+<li><a class="no-dropdown menu-language" href="index.php?option=com_languages&amp;view=languages">Content Languages</a></li>
+<li><a class="no-dropdown menu-language" href="index.php?option=com_languages&amp;view=overrides">Overrides</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Help <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li><a class="no-dropdown menu-help" href="index.php?option=com_admin&amp;view=help">Joomla! Help</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-help-forum" href="https://forum.joomla.org" target="_blank">Official Support Forum</a></li>
+<li><a class="no-dropdown menu-help-forum" href="https://forum.joomla.org/viewforum.php?f=511" target="_blank">Official Language Forums</a></li>
+<li><a class="no-dropdown menu-help-docs" href="https://docs.joomla.org" target="_blank">Documentation Wiki</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-help-jed" href="https://extensions.joomla.org" target="_blank">Joomla! Extensions</a></li>
+<li><a class="no-dropdown menu-help-trans" href="https://community.joomla.org/translations.html" target="_blank">Joomla! Translations</a></li>
+<li><a class="no-dropdown menu-help-jrd" href="https://resources.joomla.org" target="_blank">Joomla! Resources</a></li>
+<li><a class="no-dropdown menu-help-community" href="https://community.joomla.org" target="_blank">Community Portal</a></li>
+<li><a class="no-dropdown menu-help-security" href="https://developer.joomla.org/security-centre.html" target="_blank">Security Centre</a></li>
+<li><a class="no-dropdown menu-help-dev" href="https://developer.joomla.org" target="_blank">Developer Resources</a></li>
+<li><a class="no-dropdown menu-help-dev" href="https://joomla.stackexchange.com" target="_blank">Stack Exchange</a></li>
+<li><a class="no-dropdown menu-help-shop" href="https://community.joomla.org/the-joomla-shop.html" target="_blank">Joomla! Shop</a></li>
+</ul>
+</li>
+</ul>
+<ul id="nav-empty" class="dropdown-menu nav-empty hidden-phone" style="display: none;"></ul>
+				<ul class="nav nav-user pull-right">
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-user"></span>
+							<span class="caret"></span>
+							<div class="element-invisible">
+								User Menu							</div>
+						</a>
+						<ul class="dropdown-menu">
+															<li>
+									<span>
+										<span class="icon-user"></span>
+										<strong>Super User</strong>
+									</span>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="index.php?option=com_admin&amp;task=profile.edit&amp;id=928">Edit Account</a>
+								</li>
+								<li class="divider"></li>
+								<li class="">
+									<a href="/tests/joomla/administrator/index.php?option=com_login&amp;task=logout&amp;589433cd5707c412b1e884d02588349a=1">Logout</a>
+								</li>
+													</ul>
+					</li>
+				</ul>
+				<a class="brand visible-desktop visible-tablet" href="http://dpcal/tests/joomla/" title="Preview Joomla CMS test" target="_blank">Joomla CMS tes...					<span class="icon-out-2 small"></span></a>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+</nav>
+<!-- Header -->
+	<header class="header">
+		<div class="container-logo">
+			<img src="/tests/joomla/administrator/templates/isis/images/logo.png" class="logo" alt="Joomla CMS test" />
+		</div>
+		<div class="container-title">
+				<h1 class="page-title">
+	<span class="icon-puzzle install" aria-hidden="true"></span>
+	Extensions: Install</h1>
+
+		</div>
+	</header>
+	<!-- Subheader -->
+	<a class="btn btn-subhead" data-toggle="collapse" data-target=".subhead-collapse">Toolbar		<span class="icon-wrench"></span></a>
+	<div class="subhead-collapse collapse" id="isisJsData" data-tmpl-sticky="true" data-tmpl-offset="30" style="height: 51px;">
+		<div class="subhead">
+			<div class="container-fluid">
+				<div id="container-collapse" class="container-collapse"></div>
+				<div class="row-fluid">
+					<div class="span12">
+						<!-- target for skip to content link -->
+						<a id="skiptarget" class="element-invisible">Main content begins here</a>
+						<div class="btn-toolbar" role="toolbar" aria-label="Toolbar" id="toolbar">
+<div class="btn-wrapper" id="toolbar-options">
+	<button onclick="location.href='index.php?option=com_config&amp;view=component&amp;component=com_installer&amp;path=&amp;return=aHR0cDovL2RwY2FsL3Rlc3RzL2pvb21sYS9hZG1pbmlzdHJhdG9yL2luZGV4LnBocD9vcHRpb249Y29tX2luc3RhbGxlciZ2aWV3PWluc3RhbGw%3D';" class="btn btn-small">
+	<span class="icon-options" aria-hidden="true"></span>
+	Options</button>
+</div>
+<div class="btn-wrapper" id="toolbar-help">
+	<button onclick="Joomla.popupWindow('https://help.joomla.org/proxy?keyref=Help37:Extensions_Extension_Manager_Install&amp;lang=en', 'Help', 700, 500, 1)" rel="help" class="btn btn-small">
+	<span class="icon-question-sign" aria-hidden="true"></span>
+	Help</button>
+</div>
+</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- container-fluid -->
+<div class="container-fluid container-main" style="top: 82px;">
+	<section id="content">
+		<!-- Begin Content -->
+		
+		<div class="row-fluid">
+							<div class="span12">
+										<div id="system-message-container" class="j-toggle-main span10">
+						<div class="alert ">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+									<h4 class="alert-heading">Warning</h4>
+											<div class="alert-message">Error connecting to the server: 404</div>
+												</div>
+					<div class="alert alert-error">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+									<h4 class="alert-heading">Error</h4>
+											<div class="alert-message">Invalid URL</div>
+											<div class="alert-message">Unable to find install package</div>
+												</div>
+			</div>
+
+					
+<script type="text/javascript">
+	// Set the first tab to active if there is no other active tab
+	jQuery(document).ready(function($) {
+		var hasTab = function(href){
+			return $('a[data-toggle="tab"]a[href*="' + href + '"]').length;
+		};
+		if (!hasTab(localStorage.getItem('tab-href')))
+		{
+			var tabAnchor = $("#myTabTabs li:first a");
+			window.localStorage.setItem('tab-href', tabAnchor.attr('href'));
+			tabAnchor.click();
+		}
+	});
+</script>
+
+<div id="installer-install" class="clearfix">
+	<form enctype="multipart/form-data" action="/tests/joomla/administrator/index.php?option=com_installer&amp;view=install" method="post" name="adminForm" id="adminForm" class="form-horizontal">
+				<div id="j-sidebar-container" class="j-sidebar-container j-sidebar-visible">
+			
+<div id="j-toggle-sidebar-wrapper">
+	<div id="j-toggle-button-wrapper" class="j-toggle-button-wrapper j-toggle-visible">
+		<div id="j-toggle-sidebar-button" class="j-toggle-sidebar-button hidden-phone hasTooltip" onclick="toggleSidebar(false); return false;" data-original-title="Hide the sidebar">
+		<span id="j-toggle-sidebar-icon" class="icon-arrow-left-2 j-toggle-visible"></span>
+</div>
+	</div>
+	<div id="sidebar" class="sidebar">
+		<div class="sidebar-nav">
+						<ul id="submenu" class="nav nav-list">
+									<li class="active">
+										<a href="index.php?option=com_installer">Install</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_installer&amp;view=update">Update</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_installer&amp;view=manage">Manage</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_installer&amp;view=discover">Discover</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_installer&amp;view=database">Database</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_installer&amp;view=warnings">Warnings</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_installer&amp;view=languages">Install Languages</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_installer&amp;view=updatesites">Update Sites</a>
+									</li>
+							</ul>
+											</div>
+	</div>
+	<div id="j-toggle-sidebar"></div>
+</div>
+		</div>
+		<div id="j-main-container" class="span10 j-toggle-main">
+							<!-- Render messages set by extension install scripts here -->
+									<div class="alert alert-info j-jed-message" style="margin-bottom: 40px; line-height: 2em; color:#333333;">
+						<a href="/tests/joomla/administrator/index.php?option=com_config&amp;view=component&amp;component=com_installer&amp;path=&amp;return=aHR0cDovL2RwY2FsL3Rlc3RzL2pvb21sYS9hZG1pbmlzdHJhdG9yL2luZGV4LnBocD9vcHRpb249Y29tX2luc3RhbGxlciZ2aWV3PWluc3RhbGw%3D" class="alert-options hasTooltip icon-options" data-dismiss="alert" title="" data-original-title="Opens Installer Options for setting to hide this Joomla! Extensions Directory™ message."></a>						<p><a class="alert-link" href="https://extensions.joomla.org" target="_blank">Joomla! Extensions Directory™ (JED)</a> now available with <a class="alert-link" href="https://docs.joomla.org/Special:MyLanguage/Install_from_Web" target="_blank">Install from Web</a> on this page.							By selecting "Add Install from Web tab" below, you agree to the JED <a class="alert-link" href="https://extensions.joomla.org/tos" target="_blank">Terms of Service</a> and all applicable third party license terms.</p>
+						<input class="btn" type="button" value="Add &quot;Install from Web&quot; tab" onclick="Joomla.submitbuttonInstallWebInstaller()" />
+					</div>
+								
+<ul class="nav nav-tabs" id="myTabTabs"><li class="active"><a href="#package" data-toggle="tab">Upload Package File</a></li><li class=""><a href="#folder" data-toggle="tab">Install from Folder</a></li><li class=""><a href="#url" data-toggle="tab">Install from URL</a></li></ul>
+<div class="tab-content" id="myTabContent">																									
+<div id="package" class="tab-pane active">
+					<fieldset class="uploadform">
+						<legend>Upload &amp; Install Joomla Extension</legend>
+
+<div id="uploader-wrapper">
+	<div id="dragarea" class="">
+		<div id="dragarea-content" class="text-center">
+			<p>
+				<span id="upload-icon" class="icon-upload" aria-hidden="true"></span>
+			</p>
+			<p class="lead">
+				Drag and drop file here to upload.			</p>
+			<p>
+				<button id="select-file-button" type="button" class="btn btn-success">
+					<span class="icon-copy" aria-hidden="true"></span>
+					Or browse for file				</button>
+			</p>
+			<p>
+				Maximum upload size: <strong>300M</strong>			</p>
+		</div>
+
+	</div>
+</div>
+
+<div id="legacy-uploader" style="display: none;">
+	<div class="control-group">
+		<label for="install_package" class="control-label">Extension package file</label>
+		<div class="controls">
+			<input class="input_box" id="install_package" name="install_package" type="file" size="57" /><br />
+			Maximum upload size: <strong>300M</strong>		</div>
+	</div>
+	<div class="form-actions">
+		<button class="btn btn-primary" type="button" id="installbutton_package" onclick="Joomla.submitbuttonpackage()">
+			Upload &amp; Install		</button>
+	</div>
+
+	<input id="installer-return" name="return" type="hidden" value="" />
+	<input id="installer-token" name="return" type="hidden" value="589433cd5707c412b1e884d02588349a" />
+</div>
+					</fieldset>
+					
+</div>									
+<div id="folder" class="tab-pane">
+					<fieldset class="uploadform">
+						<legend>Install from Folder</legend>
+<div class="control-group">
+	<label for="install_directory" class="control-label">Install from Folder</label>
+	<div class="controls">
+		<input type="text" id="install_directory" name="install_directory" class="span5 input_box" size="70" value="/home/g0ne/projects/yvesh/DPCalendar/tests/joomla/tmp" />
+	</div>
+</div>
+<div class="form-actions">
+	<input type="button" class="btn btn-primary" id="installbutton_directory" value="Check and Install" onclick="Joomla.submitbuttonfolder()" />
+</div>
+					</fieldset>
+					
+</div>									
+<div id="url" class="tab-pane">
+					<fieldset class="uploadform">
+						<legend>Install from URL</legend>
+<div class="control-group">
+	<label for="install_url" class="control-label">Install from URL</label>
+	<div class="controls">
+		<input type="text" id="install_url" name="install_url" class="span5 input_box" size="70" placeholder="https://" />
+	</div>
+</div>
+<div class="form-actions">
+	<input type="button" class="btn btn-primary" id="installbutton_url" value="Check and Install" onclick="Joomla.submitbuttonurl()" />
+</div>
+					</fieldset>
+					
+</div>																				
+				
+				<input type="hidden" name="installtype" value="" />
+				<input type="hidden" name="task" value="install.install" />
+				<input type="hidden" name="589433cd5707c412b1e884d02588349a" value="1" />
+				
+</div>			</div>
+	</form>
+</div>
+<div id="loading" style="top: 153px; left: 0px; width: 100%; height: 100%; display: none; margin-top: -10px;"></div>
+
+				</div>
+			</div>
+						<!-- End Content -->
+	</section>
+
+	</div>
+	<!-- Begin Status Module -->
+	<div id="status" class="navbar navbar-fixed-bottom hidden-phone">
+		<div class="btn-toolbar">
+			<div class="btn-group pull-right">
+				<p>
+						Joomla! 3.7.3-dev	 — 
+					© 2017 Joomla CMS test				</p>
+
+			</div>
+			<div class="btn-group viewsite"><a href="http://dpcal/tests/joomla/" target="_blank"><span class="icon-out-2" aria-hidden="true"></span>View Site</a><span class="btn-group separator"></span></div><div class="btn-group loggedin-users"><span class="badge">0</span>Visitors<span class="btn-group separator"></span></div><div class="btn-group backloggedin-users"><span class="badge">2</span>Administrators<span class="btn-group separator"></span></div><div class="btn-group no-unread-messages"><a href="/tests/joomla/administrator/index.php?option=com_messages"><span class="badge">0</span>Messages</a><span class="btn-group separator"></span></div><div class="btn-group logout"><a href="/tests/joomla/administrator/index.php?option=com_login&amp;task=logout&amp;589433cd5707c412b1e884d02588349a=1"><span class="icon-minus-2" aria-hidden="true"></span>Log out</a></div>
+		</div>
+	</div>
+	<!-- End Status Module -->
+
+
+
+</body></html>

@@ -1,0 +1,852 @@
+<!DOCTYPE html><html xmlns="http://www.w3.org/1999/xhtml" lang="en-gb" dir="ltr" slick-uniqueid="3"><head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta charset="utf-8" />
+	<meta name="description" content="Site for testing Joomla CMS" />
+	<meta name="generator" content="Joomla! - Open Source Content Management" />
+	<title>DPCalendar Manager: Events - Joomla CMS test - Administration</title>
+	<link href="/tests/joomla/administrator/templates/isis/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+	<link href="/tests/joomla/media/com_dpcalendar/css/jquery/themes/bootstrap/jquery-ui.custom.css" rel="stylesheet" />
+	<link href="/tests/joomla/media/com_dpcalendar/css/jquery/timepicker/jquery.timepicker.css" rel="stylesheet" />
+	<link href="/tests/joomla/media/jui/css/jquery.searchtools.css?4ef0e42040fc0202a13171fec94cf60c" rel="stylesheet" />
+	<link href="/tests/joomla/administrator/templates/isis/css/template.css?4ef0e42040fc0202a13171fec94cf60c" rel="stylesheet" />
+	<style>
+.icon-48-events {background-image: url(../media/com_dpcalendar/images/admin/48-events.png);background-repeat: no-repeat;}
+.ui-datepicker { z-index: 1003 !important; }
+	</style>
+	<script type="application/json" class="joomla-script-options loaded">{"joomla.jtext":{"JTOGGLE_HIDE_SIDEBAR":"Hide the sidebar","JTOGGLE_SHOW_SIDEBAR":"Show the sidebar","JLIB_HTML_PLEASE_MAKE_A_SELECTION_FROM_THE_LIST":"Please first make a selection from the list."}}</script>
+	<script src="/tests/joomla/media/jui/js/jquery.min.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/jui/js/jquery-noconflict.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/jui/js/jquery-migrate.min.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/system/js/core.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/system/js/mootools-core.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/system/js/mootools-more.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/system/js/multiselect.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/jui/js/bootstrap.min.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/com_dpcalendar/js/jquery/ui/jquery-ui.custom.min.js"></script>
+	<script src="/tests/joomla/media/com_dpcalendar/js/jquery/timepicker/jquery.timepicker.min.js"></script>
+	<script src="/tests/joomla/media/jui/js/jquery.searchtools.min.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/system/js/html5fallback.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<script src="/tests/joomla/media/com_dpcalendar/js/jscolor/jscolor.js"></script>
+	<!--[if lte IE 9]><script src="/tests/joomla/media/system/js/polyfill.filter.js?4ef0e42040fc0202a13171fec94cf60c"></script><![endif]-->
+	<script src="/tests/joomla/administrator/templates/isis/js/template.js?4ef0e42040fc0202a13171fec94cf60c"></script>
+	<!--[if lt IE 9]><script src="/tests/joomla/media/jui/js/html5.js?4ef0e42040fc0202a13171fec94cf60c"></script><![endif]-->
+	<script>
+
+	jQuery(document).ready(function($)
+	{
+		if (window.toggleSidebar)
+		{
+			toggleSidebar(true);
+		}
+		else
+		{
+			$("#j-toggle-sidebar-header").css("display", "none");
+			$("#j-toggle-button-wrapper").css("display", "none");
+		}
+	});
+
+jQuery(function($) {
+			 $('.hasTip').each(function() {
+				var title = $(this).attr('title');
+				if (title) {
+					var parts = title.split('::', 2);
+					var mtelement = document.id(this);
+					mtelement.store('tip:title', parts[0]);
+					mtelement.store('tip:text', parts[1]);
+				}
+			});
+			var JTooltips = new Tips($('.hasTip').get(), {"maxTitleChars": 50,"fixed": false});
+		});
+jQuery(document).ready(function() {
+				Joomla.JMultiSelect('adminForm');
+			});
+			(function($){
+				$(document).ready(function (){
+					$('.has-context')
+					.mouseenter(function (){
+						$('.btn-group',$(this)).show();
+					})
+					.mouseleave(function (){
+						$('.btn-group',$(this)).hide();
+						$('.btn-group',$(this)).removeClass('open');
+					});
+
+					contextAction =function (cbId, task)
+					{
+						$('input[name="cid[]"]').removeAttr('checked');
+						$('#' + cbId).attr('checked','checked');
+						Joomla.submitbutton(task);
+					}
+				});
+			})(jQuery);
+			
+jQuery(document).ready(function(){
+	jQuery('#filter_search_start').datepicker({
+		dateFormat: 'mm.dd.yy',
+		changeYear: true, 
+		dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+		dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+		monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+		firstDay: 0,
+	});
+	jQuery('#filter_search_start').data('actualDate', jQuery('#filter_search_start').datepicker('getDate'));
+	jQuery('#filter_search_start_time').timepicker({'timeFormat': 'g:i a', 'step': 30});
+});
+
+jQuery(document).ready(function(){
+	jQuery('#filter_search_end').datepicker({
+		dateFormat: 'mm.dd.yy',
+		changeYear: true, 
+		dayNames: ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
+		dayNamesShort: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'],
+		dayNamesMin: ['Su','Mo','Tu','We','Th','Fr','Sa'],
+		monthNames: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+		monthNamesShort: ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+		firstDay: 0,
+	});
+	jQuery('#filter_search_end').data('actualDate', jQuery('#filter_search_end').datepicker('getDate'));
+	jQuery('#filter_search_end_time').timepicker({'timeFormat': 'g:i a', 'step': 30});
+});
+
+				(function($){
+					$(document).ready(function() {
+						$('#adminForm').searchtools(
+							{"filtersHidden":true,"filterButton":true,"defaultLimit":"20","searchFieldSelector":"#filter_search","selectorFieldName":"client_id","showSelector":false,"orderFieldSelector":"#list_fullordering","showNoResults":false,"noResultsText":"","formSelector":"#adminForm"}
+						);
+					});
+				})(jQuery);
+			
+jQuery(function($){ $(".hasPopover").popover({"html": true,"trigger": "hover focus","container": "body"}); });
+jQuery(function($){ $(".hasTooltip").tooltip({"html": true,"container": "body"}); });
+		jQuery(document).ready(function($){
+			if ($("#batch-category-id").length){var batchSelector = $("#batch-category-id");}
+			if ($("#batch-menu-id").length){var batchSelector = $("#batch-menu-id");}
+			if ($("#batch-position-id").length){var batchSelector = $("#batch-position-id");}
+			if ($("#batch-copy-move").length &amp;&amp; batchSelector) {
+				$("#batch-copy-move").hide();
+				batchSelector.on("change", function(){
+					if (batchSelector.val() != 0 || batchSelector.val() != "") {
+						$("#batch-copy-move").show();
+					} else {
+						$("#batch-copy-move").hide();
+					}
+				});
+			}
+		});
+			
+	</script>
+
+</head>
+<body class="admin com_dpcalendar view-events layout- task- itemid-" data-basepath="/tests/joomla">
+<!-- Top Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top">
+	<div class="navbar-inner">
+		<div class="container-fluid">
+							<a href="#" class="btn btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="element-invisible">Toggle Navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+			
+			<!-- skip to content -->
+			<a class="element-invisible" href="#skiptarget">Skip to Main Content</a>
+
+			<a class="admin-logo " href="/tests/joomla/administrator/index.php">
+				<span class="icon-joomla"></span>
+				<div class="element-invisible">
+					Control Panel				</div>
+			</a>
+
+			<a class="brand hidden-desktop hidden-tablet" href="http://dpcal/tests/joomla/" title="Preview Joomla CMS test" target="_blank">Joomla CMS tes...				<span class="icon-out-2 small"></span></a>
+
+			<div class="nav-collapse collapse">
+				<ul id="menu" class="nav ">
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">System <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li><a class="no-dropdown menu-cpanel" href="index.php">Control Panel</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-config" href="index.php?option=com_config">Global Configuration</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-checkin" href="index.php?option=com_checkin">Global Check-in</a></li>
+<li><a class="no-dropdown menu-clear" href="index.php?option=com_cache">Clear Cache</a></li>
+<li><a class="no-dropdown menu-purge" href="index.php?option=com_cache&amp;view=purge">Clear Expired Cache</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-info" href="index.php?option=com_admin&amp;view=sysinfo">System Information</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Users <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-user" data-toggle="dropdown" href="index.php?option=com_users&amp;view=users">Manage</a><ul id="menu-com-users-users" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_users&amp;task=user.add">Add New User</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-groups" data-toggle="dropdown" href="index.php?option=com_users&amp;view=groups">Groups</a><ul id="menu-com-users-groups" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_users&amp;task=group.add">Add New Group</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-levels" data-toggle="dropdown" href="index.php?option=com_users&amp;view=levels">Access Levels</a><ul id="menu-com-users-levels" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_users&amp;task=level.add">Add New Access Level</a></li>
+</ul>
+</li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-fields" href="index.php?option=com_fields&amp;context=com_users.user">Fields</a></li>
+<li><a class="no-dropdown menu-category" href="index.php?option=com_fields&amp;view=groups&amp;context=com_users.user">Field Groups</a></li>
+<li class="divider"><span></span></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-user-note" data-toggle="dropdown" href="index.php?option=com_users&amp;view=notes">User Notes</a><ul id="menu-com-users-notes" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_users&amp;task=note.add">Add User Note</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-category" data-toggle="dropdown" href="index.php?option=com_categories&amp;view=categories&amp;extension=com_users">User Note Categories</a><ul id="menu-com-categories-categories-com-users" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_categories&amp;task=category.add&amp;extension=com_users">Add New Category</a></li>
+</ul>
+</li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-massmail" href="index.php?option=com_users&amp;view=mail">Mass Mail Users</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Menus <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-menumgr" data-toggle="dropdown" href="index.php?option=com_menus&amp;view=menus">Manage</a><ul id="menu-com-menus-menus" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_menus&amp;view=menu&amp;layout=edit">Add New Menu</a></li>
+</ul>
+</li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-allmenu" href="index.php?option=com_menus&amp;view=items&amp;menutype=">All Menu Items</a></li>
+<li class="menuitem-group"><span>Site</span></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-menu" data-toggle="dropdown" href="index.php?option=com_menus&amp;view=items&amp;menutype=mainmenu">Main Menu <span class="icon-home" aria-hidden="true"></span></a><ul id="menu-com-menus-items-mainmenu" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_menus&amp;view=item&amp;layout=edit&amp;menutype=mainmenu">Add New Menu Item</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Content <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-article" data-toggle="dropdown" href="index.php?option=com_content">Articles</a><ul id="menu-com-content" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_content&amp;task=article.add">Add New Article</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-category" data-toggle="dropdown" href="index.php?option=com_categories&amp;extension=com_content">Categories</a><ul id="menu-com-categories-com-content" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newarticle" href="index.php?option=com_categories&amp;task=category.add&amp;extension=com_content">Add New Category</a></li>
+</ul>
+</li>
+<li><a class="no-dropdown menu-featured" href="index.php?option=com_content&amp;view=featured">Featured Articles</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-fields" href="index.php?option=com_fields&amp;context=com_content.article">Fields</a></li>
+<li><a class="no-dropdown menu-category" href="index.php?option=com_fields&amp;view=groups&amp;context=com_content.article">Field Groups</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-media" href="index.php?option=com_media">Media</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Components <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-banners" data-toggle="dropdown" href="index.php?option=com_banners">Banners</a><ul id="menu-com-banners" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-banners" href="index.php?option=com_banners">Banners</a></li>
+<li><a class="no-dropdown menu-banners-cat" href="index.php?option=com_categories&amp;extension=com_banners">Categories</a></li>
+<li><a class="no-dropdown menu-banners-clients" href="index.php?option=com_banners&amp;view=clients">Clients</a></li>
+<li><a class="no-dropdown menu-banners-tracks" href="index.php?option=com_banners&amp;view=tracks">Tracks</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-contact" data-toggle="dropdown" href="index.php?option=com_contact">Contacts</a><ul id="menu-com-contact" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-contact" href="index.php?option=com_contact">Contacts</a></li>
+<li><a class="no-dropdown menu-contact-cat" href="index.php?option=com_categories&amp;extension=com_contact">Categories</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-component" data-toggle="dropdown" href="index.php?option=com_dpcalendar">DPCalendar</a><ul id="menu-com-dpcalendar" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-component" href="index.php?option=com_dpcalendar&amp;view=cpanel">Control Panel</a></li>
+<li><a class="no-dropdown menu-component" href="index.php?option=com_dpcalendar&amp;view=events">Events</a></li>
+<li><a class="no-dropdown menu-component" href="index.php?option=com_categories&amp;extension=com_dpcalendar">Calendars</a></li>
+<li><a class="no-dropdown menu-component" href="index.php?option=com_dpcalendar&amp;view=locations">Locations</a></li>
+<li><a class="no-dropdown menu-component" href="index.php?option=com_dpcalendar&amp;view=tools">Tools</a></li>
+<li><a class="no-dropdown menu-component" href="index.php?option=com_dpcalendar&amp;view=support">Support</a></li>
+</ul>
+</li>
+<li><a class="no-dropdown menu-joomlaupdate" href="index.php?option=com_joomlaupdate">Joomla! Update</a></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-messages" data-toggle="dropdown" href="index.php?option=com_messages">Messaging</a><ul id="menu-com-messages" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-messages-add" href="index.php?option=com_messages&amp;task=message.add">New Private Message</a></li>
+</ul>
+</li>
+<li><a class="no-dropdown menu-associations" href="index.php?option=com_associations">Multilingual Associations</a></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-newsfeeds" data-toggle="dropdown" href="index.php?option=com_newsfeeds">News Feeds</a><ul id="menu-com-newsfeeds" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-newsfeeds" href="index.php?option=com_newsfeeds">Feeds</a></li>
+<li><a class="no-dropdown menu-newsfeeds-cat" href="index.php?option=com_categories&amp;extension=com_newsfeeds">Categories</a></li>
+</ul>
+</li>
+<li><a class="no-dropdown menu-postinstall" href="index.php?option=com_postinstall">Post-installation Messages</a></li>
+<li><a class="no-dropdown menu-redirect" href="index.php?option=com_redirect">Redirects</a></li>
+<li><a class="no-dropdown menu-search" href="index.php?option=com_search">Search</a></li>
+<li><a class="no-dropdown menu-finder" href="index.php?option=com_finder">Smart Search</a></li>
+<li><a class="no-dropdown menu-tags" href="index.php?option=com_tags">Tags</a></li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Extensions <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-install" data-toggle="dropdown" href="index.php?option=com_installer">Manage</a><ul id="menu-com-installer" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer">Install</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=update">Update</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=manage">Manage</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=discover">Discover</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=database">Database</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=warnings">Warnings</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=languages">Install Languages</a></li>
+<li><a class="no-dropdown menu-install" href="index.php?option=com_installer&amp;view=updatesites">Update Sites</a></li>
+</ul>
+</li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-module" href="index.php?option=com_modules">Modules</a></li>
+<li><a class="no-dropdown menu-plugin" href="index.php?option=com_plugins">Plugins</a></li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-themes" data-toggle="dropdown" href="index.php?option=com_templates">Templates</a><ul id="menu-com-templates" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-themes" href="index.php?option=com_templates&amp;view=styles">Styles</a></li>
+<li><a class="no-dropdown menu-themes" href="index.php?option=com_templates&amp;view=templates">Templates</a></li>
+</ul>
+</li>
+<li class="dropdown-submenu"><a class="dropdown-toggle menu-language" data-toggle="dropdown" href="index.php?option=com_languages">Language(s)</a><ul id="menu-com-languages" class="dropdown-menu menu-scrollable">
+<li><a class="no-dropdown menu-language" href="index.php?option=com_languages&amp;view=installed">Installed</a></li>
+<li><a class="no-dropdown menu-language" href="index.php?option=com_languages&amp;view=languages">Content Languages</a></li>
+<li><a class="no-dropdown menu-language" href="index.php?option=com_languages&amp;view=overrides">Overrides</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Help <span class="caret"></span></a><ul class="dropdown-menu scroll-menu">
+<li><a class="no-dropdown menu-help" href="index.php?option=com_admin&amp;view=help">Joomla! Help</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-help-forum" href="https://forum.joomla.org" target="_blank">Official Support Forum</a></li>
+<li><a class="no-dropdown menu-help-forum" href="https://forum.joomla.org/viewforum.php?f=511" target="_blank">Official Language Forums</a></li>
+<li><a class="no-dropdown menu-help-docs" href="https://docs.joomla.org" target="_blank">Documentation Wiki</a></li>
+<li class="divider"><span></span></li>
+<li><a class="no-dropdown menu-help-jed" href="https://extensions.joomla.org" target="_blank">Joomla! Extensions</a></li>
+<li><a class="no-dropdown menu-help-trans" href="https://community.joomla.org/translations.html" target="_blank">Joomla! Translations</a></li>
+<li><a class="no-dropdown menu-help-jrd" href="https://resources.joomla.org" target="_blank">Joomla! Resources</a></li>
+<li><a class="no-dropdown menu-help-community" href="https://community.joomla.org" target="_blank">Community Portal</a></li>
+<li><a class="no-dropdown menu-help-security" href="https://developer.joomla.org/security-centre.html" target="_blank">Security Centre</a></li>
+<li><a class="no-dropdown menu-help-dev" href="https://developer.joomla.org" target="_blank">Developer Resources</a></li>
+<li><a class="no-dropdown menu-help-dev" href="https://joomla.stackexchange.com" target="_blank">Stack Exchange</a></li>
+<li><a class="no-dropdown menu-help-shop" href="https://community.joomla.org/the-joomla-shop.html" target="_blank">Joomla! Shop</a></li>
+</ul>
+</li>
+</ul>
+<ul id="nav-empty" class="dropdown-menu nav-empty hidden-phone"></ul>
+				<ul class="nav nav-user pull-right">
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="icon-user"></span>
+							<span class="caret"></span>
+							<div class="element-invisible">
+								User Menu							</div>
+						</a>
+						<ul class="dropdown-menu">
+															<li>
+									<span>
+										<span class="icon-user"></span>
+										<strong>Super User</strong>
+									</span>
+								</li>
+								<li class="divider"></li>
+								<li>
+									<a href="index.php?option=com_admin&amp;task=profile.edit&amp;id=579">Edit Account</a>
+								</li>
+								<li class="divider"></li>
+								<li class="">
+									<a href="/tests/joomla/administrator/index.php?option=com_login&amp;task=logout&amp;0c867dd1ad074aad0c52b252e49d45fb=1">Logout</a>
+								</li>
+													</ul>
+					</li>
+				</ul>
+				<a class="brand visible-desktop visible-tablet" href="http://dpcal/tests/joomla/" title="Preview Joomla CMS test" target="_blank">Joomla CMS tes...					<span class="icon-out-2 small"></span></a>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div>
+</nav>
+<!-- Header -->
+	<header class="header">
+		<div class="container-logo">
+			<img src="/tests/joomla/administrator/templates/isis/images/logo.png" class="logo" alt="Joomla CMS test" />
+		</div>
+		<div class="container-title">
+				<h1 class="page-title">
+	<span class="icon-events" aria-hidden="true"></span>
+	DPCalendar Manager: Events</h1>
+
+		</div>
+	</header>
+	<!-- Subheader -->
+	<a class="btn btn-subhead" data-toggle="collapse" data-target=".subhead-collapse">Toolbar		<span class="icon-wrench"></span></a>
+	<div class="subhead-collapse collapse" id="isisJsData" data-tmpl-sticky="true" data-tmpl-offset="30" style="height: 51px;">
+		<div class="subhead">
+			<div class="container-fluid">
+				<div id="container-collapse" class="container-collapse"></div>
+				<div class="row-fluid">
+					<div class="span12">
+						<!-- target for skip to content link -->
+						<a id="skiptarget" class="element-invisible">Main content begins here</a>
+						<div class="btn-toolbar" role="toolbar" aria-label="Toolbar" id="toolbar">
+<div class="btn-wrapper" id="toolbar-new">
+	<button onclick="Joomla.submitbutton('event.add');" class="btn btn-small btn-success">
+	<span class="icon-new icon-white" aria-hidden="true"></span>
+	New</button>
+</div>
+<div class="btn-wrapper" id="toolbar-edit">
+	<button onclick="if (document.adminForm.boxchecked.value == 0) { alert(Joomla.JText._('JLIB_HTML_PLEASE_MAKE_A_SELECTION_FROM_THE_LIST')); } else { Joomla.submitbutton('event.edit'); }" class="btn btn-small">
+	<span class="icon-edit" aria-hidden="true"></span>
+	Edit</button>
+</div>
+<div class="btn-wrapper" id="toolbar-publish">
+	<button onclick="if (document.adminForm.boxchecked.value == 0) { alert(Joomla.JText._('JLIB_HTML_PLEASE_MAKE_A_SELECTION_FROM_THE_LIST')); } else { Joomla.submitbutton('events.publish'); }" class="btn btn-small">
+	<span class="icon-publish" aria-hidden="true"></span>
+	Publish</button>
+</div>
+<div class="btn-wrapper" id="toolbar-unpublish">
+	<button onclick="if (document.adminForm.boxchecked.value == 0) { alert(Joomla.JText._('JLIB_HTML_PLEASE_MAKE_A_SELECTION_FROM_THE_LIST')); } else { Joomla.submitbutton('events.unpublish'); }" class="btn btn-small">
+	<span class="icon-unpublish" aria-hidden="true"></span>
+	Unpublish</button>
+</div>
+<div class="btn-wrapper" id="toolbar-archive">
+	<button onclick="if (document.adminForm.boxchecked.value == 0) { alert(Joomla.JText._('JLIB_HTML_PLEASE_MAKE_A_SELECTION_FROM_THE_LIST')); } else { Joomla.submitbutton('events.archive'); }" class="btn btn-small">
+	<span class="icon-archive" aria-hidden="true"></span>
+	Archive</button>
+</div>
+<div class="btn-wrapper" id="toolbar-checkin">
+	<button onclick="if (document.adminForm.boxchecked.value == 0) { alert(Joomla.JText._('JLIB_HTML_PLEASE_MAKE_A_SELECTION_FROM_THE_LIST')); } else { Joomla.submitbutton('events.checkin'); }" class="btn btn-small">
+	<span class="icon-checkin" aria-hidden="true"></span>
+	Check-in</button>
+</div>
+<div class="btn-wrapper" id="toolbar-trash">
+	<button onclick="if (document.adminForm.boxchecked.value == 0) { alert(Joomla.JText._('JLIB_HTML_PLEASE_MAKE_A_SELECTION_FROM_THE_LIST')); } else { Joomla.submitbutton('events.trash'); }" class="btn btn-small">
+	<span class="icon-trash" aria-hidden="true"></span>
+	Trash</button>
+</div>
+<div class="btn-wrapper" id="toolbar-batch">
+	<button data-toggle="modal" data-target="#collapseModal" class="btn btn-small">
+			<i class="icon-checkbox-partial" title="Batch"></i>
+			Batch</button></div>
+<div class="btn-wrapper" id="toolbar-options">
+	<button onclick="location.href='index.php?option=com_config&amp;view=component&amp;component=com_dpcalendar&amp;path=&amp;return=aHR0cDovL2RwY2FsL3Rlc3RzL2pvb21sYS9hZG1pbmlzdHJhdG9yL2luZGV4LnBocD9vcHRpb249Y29tX2RwY2FsZW5kYXImdmlldz1ldmVudHM%3D';" class="btn btn-small">
+	<span class="icon-options" aria-hidden="true"></span>
+	Options</button>
+</div>
+</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<!-- container-fluid -->
+<div class="container-fluid container-main" style="top: 82px;">
+	<section id="content">
+		<!-- Begin Content -->
+		
+		<div class="row-fluid">
+							<div class="span12">
+										<div id="system-message-container" class="j-toggle-main span10">
+						<div class="alert alert-success">
+				<button type="button" class="close" data-dismiss="alert">×</button>
+									<h4 class="alert-heading">Message</h4>
+											<div class="alert-message">Event successfully saved</div>
+												</div>
+			</div>
+
+					<script type="text/javascript">
+	Joomla.orderTable = function() {
+		table = document.getElementById("sortTable");
+		direction = document.getElementById("directionTable");
+		order = table.options[table.selectedIndex].value;
+		if (order != 'a.start_date') {
+			dirn = 'asc';
+		} else {
+			dirn = direction.options[direction.selectedIndex].value;
+		}
+		Joomla.tableOrdering(order, dirn, '');
+	}
+</script>
+<form action="/tests/joomla/administrator/index.php?option=com_dpcalendar&amp;view=events" method="post" name="adminForm" id="adminForm">
+	<div id="j-sidebar-container" class="j-sidebar-container j-sidebar-visible">
+		
+<div id="j-toggle-sidebar-wrapper">
+	<div id="j-toggle-button-wrapper" class="j-toggle-button-wrapper j-toggle-visible">
+		<div id="j-toggle-sidebar-button" class="j-toggle-sidebar-button hidden-phone hasTooltip" onclick="toggleSidebar(false); return false;" data-original-title="Hide the sidebar">
+		<span id="j-toggle-sidebar-icon" class="icon-arrow-left-2 j-toggle-visible"></span>
+</div>
+	</div>
+	<div id="sidebar" class="sidebar">
+		<div class="sidebar-nav">
+						<ul id="submenu" class="nav nav-list">
+									<li>
+										<a href="index.php?option=com_dpcalendar&amp;view=cpanel">Control Panel</a>
+									</li>
+									<li class="active">
+										<a href="index.php?option=com_dpcalendar&amp;view=events">Events</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_categories&amp;extension=com_dpcalendar">Calendars</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_dpcalendar&amp;view=locations">Locations</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_fields&amp;context=com_dpcalendar.event">Fields</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_fields&amp;view=groups&amp;context=com_dpcalendar.event">Field Groups</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_dpcalendar&amp;view=tools">Tools</a>
+									</li>
+									<li>
+										<a href="index.php?option=com_dpcalendar&amp;view=support">Support</a>
+									</li>
+							</ul>
+											</div>
+	</div>
+	<div id="j-toggle-sidebar"></div>
+</div>
+	</div>
+	<div id="j-main-container" class="span10 j-toggle-main">
+		<div id="filter-bar" class="js-stools-container-bar pull-left">
+			<div class="btn-group pull-left">
+				<label class="element-invisible" for="filter_search_start">Start after:</label>
+				<input type="text" class="input-small hasDatepicker" value="06.03.2017" name="filter[search_start]" id="filter_search_start" size="15" maxlength="10" onchange="this.form.submit();" /> <input type="text" class="time  ui-timepicker-input" value="11:08 am" size="8" name="filter[search_start_time]" id="filter_search_start_time" style="display:none" autocomplete="off" />			</div>
+			<div class="btn-group pull-left">
+				<label class="element-invisible" for="filter_search_end">End before:</label>
+				<input type="text" class="input-small hasDatepicker" value="" name="filter[search_end]" id="filter_search_end" size="15" maxlength="10" onchange="this.form.submit();" /> <input type="text" class="time  ui-timepicker-input" value="" size="8" name="filter[search_end_time]" id="filter_search_end_time" style="display:none" autocomplete="off" />			</div>
+			 
+		</div>
+		<div class="js-stools clearfix">
+	<div class="clearfix">
+				<div class="js-stools-container-bar">
+			
+			<label for="filter_search" class="element-invisible">
+							Search					</label>
+		<div class="btn-wrapper input-append">
+			<input type="text" name="filter[search]" id="filter_search" value="" placeholder="Search" />
+						<button type="submit" class="btn hasTooltip" title="" data-original-title="Search">
+				<span class="icon-search"></span>
+			</button>
+		</div>
+					<div class="btn-wrapper hidden-phone">
+				<button type="button" class="btn hasTooltip js-stools-btn-filter" title="" data-original-title="Filter the list items.">
+					Search Tools <span class="caret"></span>
+				</button>
+			</div>
+				<div class="btn-wrapper">
+			<button type="button" class="btn hasTooltip js-stools-btn-clear" title="" data-original-title="Clear">
+				Clear			</button>
+		</div>
+			</div>
+		<div class="js-stools-container-list hidden-phone hidden-tablet shown" style="">
+				<div class="ordering-select hidden-phone">
+					<div class="js-stools-field-list">
+				<select id="list_fullordering" name="list[fullordering]" onchange="this.form.submit();">
+	<option value="">Sort Table By:</option>
+	<option value="a.ordering ASC">Ordering ascending</option>
+	<option value="a.ordering DESC">Ordering descending</option>
+	<option value="a.state ASC">Status ascending</option>
+	<option value="a.state DESC">Status descending</option>
+	<option value="a.title ASC">Title ascending</option>
+	<option value="a.title DESC">Title descending</option>
+	<option value="category_title ASC">Category ascending</option>
+	<option value="category_title DESC">Category descending</option>
+	<option value="a.access ASC">Access ascending</option>
+	<option value="a.access DESC">Access descending</option>
+	<option value="a.created_by ASC">Author ascending</option>
+	<option value="a.created_by DESC">Author descending</option>
+	<option value="language ASC">Language ascending</option>
+	<option value="language DESC">Language descending</option>
+	<option value="a.start_date ASC">Date ascending</option>
+	<option value="a.start_date DESC" selected="selected">Date descending</option>
+	<option value="a.id ASC">ID ascending</option>
+	<option value="a.id DESC">ID descending</option>
+	<option value="a.featured ASC">Featured ascending</option>
+	<option value="a.featured DESC">Featured descending</option>
+	<option value="a.hits ASC">Hits ascending</option>
+	<option value="a.hits DESC">Hits descending</option>
+<option value="a.color ASC">Colour</option><option value="a.language ASC">Language</option></select>
+			</div>
+					<div class="js-stools-field-list">
+				<select id="list_limit" name="list[limit]" class="input-mini" onchange="this.form.submit();">
+	<option value="5">5</option>
+	<option value="10">10</option>
+	<option value="15">15</option>
+	<option value="20" selected="selected">20</option>
+	<option value="25">25</option>
+	<option value="30">30</option>
+	<option value="50">50</option>
+	<option value="100">100</option>
+	<option value="200">200</option>
+	<option value="500">500</option>
+	<option value="0">All</option>
+</select>
+			</div>
+			</div>
+		</div>
+	</div>
+	<!-- Filters div -->
+		<div class="js-stools-container-filters hidden-phone clearfix" style="">
+																	<div class="js-stools-field-filter">
+				<select id="filter_event_type" name="filter[event_type]" onchange="this.form.submit();">
+	<option value="1">Original Events</option>
+	<option value="2">Both Events</option>
+	<option value="" selected="selected">Normal Events</option>
+</select>
+			</div>
+														<div class="js-stools-field-filter">
+				<select id="filter_state" name="filter[state]" onchange="this.form.submit();">
+	<option value="" selected="selected">- Select Status -</option>
+	<option value="-2">Trashed</option>
+	<option value="0">Unpublished</option>
+	<option value="1">Published</option>
+	<option value="2">Archived</option>
+	<option value="*">All</option>
+</select>
+			</div>
+														<div class="js-stools-field-filter">
+				<select id="filter_cat_id" name="filter[cat_id]" onchange="this.form.submit();">
+	<option value="" selected="selected">- Select Calendar -</option>
+	<option value="8">Uncategorised</option>
+</select>
+			</div>
+														<div class="js-stools-field-filter">
+				<select id="filter_access" name="filter[access]" onchange="this.form.submit();">
+	<option value="" selected="selected">- Select Access -</option>
+	<option value="1">Public</option>
+	<option value="5">Guest</option>
+	<option value="2">Registered</option>
+	<option value="3">Special</option>
+	<option value="6">Super Users</option>
+</select>
+			</div>
+														<div class="js-stools-field-filter">
+				<select id="filter_language" name="filter[language]" onchange="this.form.submit();">
+	<option value="" selected="selected">- Select Language -</option>
+	<option value="*">All</option>
+	<option value="en-GB">English (en-GB)</option>
+</select>
+			</div>
+														<div class="js-stools-field-filter">
+				<select id="filter_tag" name="filter[tag]" onchange="this.form.submit();">
+	<option value="" selected="selected">- Select Tag -</option>
+</select>
+			</div>
+														<div class="js-stools-field-filter">
+				<select id="filter_created_by" name="filter[created_by]" onchange="this.form.submit();">
+	<option value="" selected="selected">- Select Author -</option>
+	<option value="579">Super User</option>
+</select>
+			</div>
+														<div class="js-stools-field-filter">
+				<select id="filter_level" name="filter[level]" onchange="this.form.submit();">
+	<option value="" selected="selected">- Select Max Levels -</option>
+	<option value="1">1</option>
+	<option value="2">2</option>
+	<option value="3">3</option>
+	<option value="4">4</option>
+	<option value="5">5</option>
+	<option value="6">6</option>
+	<option value="7">7</option>
+	<option value="8">8</option>
+	<option value="9">9</option>
+	<option value="10">10</option>
+</select>
+			</div>
+				</div>
+	</div>
+		<table class="table table-striped" id="eventList">
+			<thead>
+				<tr>
+					<th width="1%" class="hidden-phone">
+						<input type="checkbox" name="checkall-toggle" value="" title="Check All" onclick="Joomla.checkAll(this)" />
+					</th>
+					<th width="1%" style="min-width:55px" class="nowrap center">
+						<a href="#" onclick="return false;" class="js-stools-column-order hasPopover" data-order="a.state" data-direction="ASC" data-name="Status" title="" data-content="Select to sort by this column" data-placement="top" data-original-title="Status">
+Status</a>
+					</th>
+					<th class="title">
+						<a href="#" onclick="return false;" class="js-stools-column-order hasPopover" data-order="a.title" data-direction="ASC" data-name="Title" title="" data-content="Select to sort by this column" data-placement="top" data-original-title="Title">
+Title</a>
+					</th>
+					<th width="15%">
+						<a href="#" onclick="return false;" class="js-stools-column-order hasPopover" data-order="a.start_date" data-direction="DESC" data-name="Date" title="" data-content="Select to sort by this column" data-placement="top" data-original-title="Date">
+Date<span class="icon-arrow-up-3"></span></a>
+					</th>
+					<th width="3%">
+						<a href="#" onclick="return false;" class="js-stools-column-order hasPopover" data-order="a.color" data-direction="ASC" data-name="Colour" title="" data-content="Select to sort by this column" data-placement="top" data-original-title="Colour">
+Colour</a>
+					</th>
+					<th width="5%" class="nowrap hidden-phone">
+						<a href="#" onclick="return false;" class="js-stools-column-order hasPopover" data-order="a.access" data-direction="ASC" data-name="Access" title="" data-content="Select to sort by this column" data-placement="top" data-original-title="Access">
+Access</a>
+					</th>
+					<th width="10%" class="nowrap hidden-phone">
+						<a href="#" onclick="return false;" class="js-stools-column-order hasPopover" data-order="a.created_by" data-direction="ASC" data-name="Author" title="" data-content="Select to sort by this column" data-placement="top" data-original-title="Author">
+Author</a>
+					</th>
+					<th width="5%" class="nowrap hidden-phone">
+						<a href="#" onclick="return false;" class="js-stools-column-order hasPopover" data-order="a.language" data-direction="ASC" data-name="Language" title="" data-content="Select to sort by this column" data-placement="top" data-original-title="Language">
+Language</a>
+					</th>
+					<th width="1%" class="nowrap">
+						<a href="#" onclick="return false;" class="js-stools-column-order hasPopover" data-order="a.id" data-direction="ASC" data-name="ID" title="" data-content="Select to sort by this column" data-placement="top" data-original-title="ID">
+ID</a>
+					</th>
+				</tr>
+			</thead>
+			<tfoot>
+				<tr>
+					<td colspan="11">
+						
+<div class="pagination pagination-toolbar clearfix">
+
+	
+	
+			<input type="hidden" name="limitstart" value="0" />
+	
+</div>
+					</td>
+				</tr>
+			</tfoot>
+			<tbody>
+							<tr class="row0" sortable-group-id="8">
+					<td class="center hidden-phone">
+						<input type="checkbox" id="cb0" name="cid[]" value="1" onclick="Joomla.isChecked(this.checked);" />					</td>
+					<td class="center">
+						<div class="btn-group">
+							<a class="btn btn-micro active hasTooltip" href="javascript:void(0);" onclick="return listItemTask('cb0','events.unpublish')" title="" data-original-title="Published and is Current."><span class="icon-publish" aria-hidden="true"></span></a>							<a href="#" onclick="return listItemTask('cb0','events.featured')" class="btn btn-micro " rel="tooltip" title="" data-original-title="Toggle to change event state to 'Featured'"><i class="icon-star-empty"></i></a>						</div>
+					</td>
+					<td class="nowrap has-context">
+						<div class="pull-left">
+																																												<a href="/tests/joomla/administrator/index.php?option=com_dpcalendar&amp;task=event.edit&amp;e_id=1" title="Edit">
+									JOscar for Allon</a>
+														<div class="small">
+								Calendar: Uncategorised							</div>
+						</div>
+						<div class="pull-left">
+							<div class="btn-group" style="margin-left:6px;display:none">
+							<a href="#" data-toggle="dropdown" class="dropdown-toggle btn btn-mini">
+								<span class="caret"></span>
+							</a>
+							<ul class="dropdown-menu"><li class=""><a href="/tests/joomla/administrator/index.php?option=com_dpcalendar&amp;task=event.edit&amp;id=1">Edit</a></li><li class="divider"></li><li class=""><a onclick="contextAction('cb0', 'events.unpublish')" href="javascript:void(0)">Unpublish</a></li><li class=""><a onclick="contextAction('cb0', 'events.featured')" href="javascript:void(0)">Featured</a></li><li class="divider"></li><li class=""><a onclick="contextAction('cb0', 'events.archive')" href="javascript:void(0)">Archive</a></li><li class=""><a onclick="contextAction('cb0', 'events.trash')" href="javascript:void(0)">Trash</a></li></ul></div>						</div>
+					</td>
+					<td class="small hidden-phone">
+						06.03.2017 11:00 am - 12:00 pm					</td>
+					<td class="small hidden-phone" style="background: none repeat scroll 0 0 #">
+					</td>
+					<td class="small hidden-phone">
+						Public					</td>
+					<td class="small hidden-phone">
+						Super User					</td>
+					<td class="small hidden-phone">
+													All											</td>
+					<td class="center hidden-phone">
+						1					</td>
+				</tr>
+							</tbody>
+		</table>
+	</div>
+
+	<div class="modal hide fade" id="collapseModal">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">x</button>
+		<h3>Batch process the selected items</h3>
+	</div>
+	<div class="modal-body">
+		<p>If choosing to copy an item, any other actions selected will be applied to the copied item. Otherwise, all actions are applied to the selected item.</p>
+		<div class="control-group">
+			<div class="controls">
+				<label id="batch-access-lbl" for="batch-access" class="modalTooltip" title="&lt;strong&gt;Set Access Level&lt;/strong&gt;&lt;br /&gt;Not making a selection will keep the original access levels when processing.">
+	Set Access Level</label>
+	<select id="batch-access" name="batch[assetgroup_id]" class="inputbox">
+	<option value="">- Keep original Access Levels -</option>
+	<option value="1">Public</option>
+	<option value="5">Guest</option>
+	<option value="2">Registered</option>
+	<option value="3">Special</option>
+	<option value="6">Super Users</option>
+</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<label id="batch-language-lbl" for="batch-language-id" class="modalTooltip" title="&lt;strong&gt;Set Language&lt;/strong&gt;&lt;br /&gt;Not making a selection will keep the original language when processing.">
+	Set Language</label>
+<select name="batch[language_id]" class="inputbox" id="batch-language-id">
+	<option value="">- Keep original Language -</option>
+	<option value="*">All</option>
+<option value="en-GB">English (en-GB)</option>
+</select>
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<label title="" class="hasTooltip" for="batch-color" id="batch-color-lbl" data-original-title="If the colour value is empty the the original colour will kept when processing.">Colour</label>
+				<input id="batch-color-id" class="color {required:false} inputbox" name="batch[color_id]" maxlength="6" autocomplete="off" />
+			</div>
+		</div>
+		<div class="control-group">
+			<div class="controls">
+				<label id="batch-tag-lbl" for="batch-tag-id" class="modalTooltip" title="&lt;strong&gt;Add Tag&lt;/strong&gt;&lt;br /&gt;Add a tag to selected items.">
+Add Tag</label>
+<select name="batch[tag]" class="inputbox" id="batch-tag-id">
+	<option value="">- Keep original Tags -</option>
+	</select>
+			</div>
+		</div>
+				<div class="control-group">
+			<div class="controls">
+				<label id="batch-choose-action-lbl" for="batch-choose-action">To Move or Copy your selection please select a Category.</label>
+<div id="batch-choose-action" class="control-group">
+	<select name="batch[category_id]" class="inputbox" id="batch-category-id">
+		<option value="">- Don't move or copy -</option>
+		<option value="8">Uncategorised</option>
+	</select>
+</div>
+<div id="batch-copy-move" class="control-group radio" style="display: none;">
+	Do you want to move the items or make a copy of them?	<div class="controls">
+	<label for="batch[move_copy]c" id="batch[move_copy]c-lbl" class="radio">
+	
+	<input type="radio" name="batch[move_copy]" id="batch[move_copy]c" value="c" />Copy
+	</label>
+	<label for="batch[move_copy]m" id="batch[move_copy]m-lbl" class="radio">
+	
+	<input type="radio" name="batch[move_copy]" id="batch[move_copy]m" value="m" checked="checked" />Move
+	</label>
+</div>
+</div>
+			</div>
+		</div>
+			</div>
+	<div class="modal-footer">
+		<button class="btn" type="button" onclick="document.id('batch-category-id').value='';document.id('batch-access').value='';document.id('batch-language-id').value='';document.id('batch-tag-id)').value=''" data-dismiss="modal">
+			Cancel		</button>
+		<button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('event.batch');">
+			Process		</button>
+	</div>
+</div>
+
+	<input type="hidden" name="task" value="" />
+	<input type="hidden" name="boxchecked" value="0" />
+	<input type="hidden" name="0c867dd1ad074aad0c52b252e49d45fb" value="1" /></form>
+
+<div align="center" style="clear: both">
+	DPCalendar version 6.0.4  Free , ©  <a href="http://joomla.digital-peak.com" target="_blank">Digital Peak</a></div>
+
+				</div>
+			</div>
+						<!-- End Content -->
+	</section>
+
+	</div>
+	<!-- Begin Status Module -->
+	<div id="status" class="navbar navbar-fixed-bottom hidden-phone">
+		<div class="btn-toolbar">
+			<div class="btn-group pull-right">
+				<p>
+						Joomla! 3.7.3-dev	 — 
+					© 2017 Joomla CMS test				</p>
+
+			</div>
+			<div class="btn-group viewsite"><a href="http://dpcal/tests/joomla/" target="_blank"><span class="icon-out-2" aria-hidden="true"></span>View Site</a><span class="btn-group separator"></span></div><div class="btn-group loggedin-users"><span class="badge">0</span>Visitors<span class="btn-group separator"></span></div><div class="btn-group backloggedin-users"><span class="badge">1</span>Administrator<span class="btn-group separator"></span></div><div class="btn-group no-unread-messages"><a href="/tests/joomla/administrator/index.php?option=com_messages"><span class="badge">0</span>Messages</a><span class="btn-group separator"></span></div><div class="btn-group logout"><a href="/tests/joomla/administrator/index.php?option=com_login&amp;task=logout&amp;0c867dd1ad074aad0c52b252e49d45fb=1"><span class="icon-minus-2" aria-hidden="true"></span>Log out</a></div>
+		</div>
+	</div>
+	<!-- End Status Module -->
+
+
+
+<div id="ui-datepicker-div" class="ui-datepicker ui-widget ui-widget-content ui-helper-clearfix ui-corner-all"></div></body></html>

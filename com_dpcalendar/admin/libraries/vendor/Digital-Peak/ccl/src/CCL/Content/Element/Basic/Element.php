@@ -252,13 +252,13 @@ class Element implements ElementInterface
 	}
 
 	/**
-	 * Sets the parent of the element.
+	 * Sets the parent of the element. If null is passed then the parent is cleared.
 	 *
 	 * @param \CCL\Content\Element\ElementInterface $parent
 	 *
 	 * @return Element
 	 */
-	public function setParent(ElementInterface $parent)
+	public function setParent(ElementInterface $parent = null)
 	{
 		$this->parent = $parent;
 

@@ -7,7 +7,7 @@
  */
 use CCL\Content\Element\Basic\Container;
 use CCL\Content\Element\Basic\Link;
-use CCL\Content\Element\Basic\Paragraph;
+use Joomla\Registry\Registry;
 
 defined('_JEXEC') or die();
 
@@ -17,7 +17,7 @@ if (!$event) {
 }
 $params = $displayData['params'];
 if (!$params) {
-	$params = new JRegistry();
+	$params = new Registry();
 }
 
 /** @var \CCL\Content\Element\Basic\Container $root */
@@ -37,12 +37,8 @@ if (!empty($return)) {
 	$return = $uri . JRoute::_('index.php?Itemid=' . $return, false);
 }
 
-$l = $root->addChild(
-	new Link('title', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid), null, array('event-link'))
-);
-$l->setContent($event->title);
-
-$p = $root->addChild(new Paragraph('date', array('date')));
+// Add the date
+$p = $root->addChild(new Container('date', array('date')));
 $p->setContent(
 	DPCalendarHelper::getDateStringFromEvent(
 		$event,
@@ -51,11 +47,20 @@ $p->setContent(
 	)
 );
 
+// Add the title
+$l = $root->addChild(
+	new Link('title', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid), null, array('event-link'))
+);
+$l->setContent($event->title);
+
+// Add the description
 if ($params->get('tooltip_show_description', 1)) {
 	$root->addChild(new Container('content'))->setContent(JHtml::_('string.truncate', $event->description, 100));
 }
 
 $c = $root->addChild(new Container('links', array('links')));
+
+// Add the booking link when possible
 if (\DPCalendar\Helper\Booking::openForBooking($event)) {
 	$l = $c->addChild(
 		new Link('book', JRoute::_(DPCalendarHelperRoute::getBookingFormRouteFromEvent($event, $return), false))
@@ -64,14 +69,18 @@ if (\DPCalendar\Helper\Booking::openForBooking($event)) {
 }
 
 $calendar = DPCalendarHelper::getCalendar($event->catid);
+
+// Add the edit link when possible
 if ($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id)) {
-	$l = $c->addChild(new Link('book', JRoute::_(DPCalendarHelperRoute::getFormRoute($event->id, $return), false)));
+	$l = $c->addChild(new Link('edit', JRoute::_(DPCalendarHelperRoute::getFormRoute($event->id, $return), false)));
 	$l->setContent(JText::_('JACTION_EDIT'));
 }
+
+// Add the delete link when possible
 if ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) {
 	$l = $c->addChild(
 		new Link(
-			'book',
+			'delete',
 			JRoute::_(
 				'index.php?option=com_dpcalendar&task=event.delete&e_id=' . $event->id . '&return=' . base64_encode($return),
 				false

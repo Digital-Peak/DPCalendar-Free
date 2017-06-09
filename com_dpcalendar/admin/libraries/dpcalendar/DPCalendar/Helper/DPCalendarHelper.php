@@ -390,18 +390,20 @@ class DPCalendarHelper
 			$variables['url']  = $event->url;
 			$variables['hits'] = $event->hits;
 
-			// Images
-			$images = is_string($event->images) ? json_decode($event->images) : $event->images;
-			for ($i = 1; $i <= 3; $i++) {
-				if (isset($images->{'image' . $i})) {
-					$variables['image' . $i] = $images->{'image' . $i};
-				}
+			if (isset($event->images)) {
+				// Images
+				$images = is_string($event->images) ? json_decode($event->images) : $event->images;
+				for ($i = 1; $i <= 3; $i++) {
+					if (isset($images->{'image' . $i})) {
+						$variables['image' . $i] = $images->{'image' . $i};
+					}
 
-				if (isset($images->{'image' . $i . '_caption'})) {
-					$variables['image' . $i . 'caption'] = $images->{'image' . $i . '_caption'};
-				}
-				if (isset($images->{'image' . $i . '_alt'})) {
-					$variables['image' . $i . 'alt'] = $images->{'image' . $i . '_alt'};
+					if (isset($images->{'image' . $i . '_caption'})) {
+						$variables['image' . $i . 'caption'] = $images->{'image' . $i . '_caption'};
+					}
+					if (isset($images->{'image' . $i . '_alt'})) {
+						$variables['image' . $i . 'alt'] = $images->{'image' . $i . '_alt'};
+					}
 				}
 			}
 

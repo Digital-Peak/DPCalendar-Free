@@ -92,7 +92,7 @@ if ($params->get('link_title') === 'external') {
 	}
 }
 
-if (!$params->get('full_width', true)) {
+if ($mapContainer && !$params->get('full_width', true)) {
 	// If the location should be shown beside the details, use a grid
 	$grid = $c->addChild(new Grid('content'));
 	$row  = $grid->addRow(new Row('details'));

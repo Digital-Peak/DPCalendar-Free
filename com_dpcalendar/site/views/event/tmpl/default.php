@@ -19,8 +19,7 @@ JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/views/event/default.css', arra
 $params = $this->params;
 
 // Load the maps javascript when needed
-if ($params->get('event_show_map', '1'))
-{
+if ($params->get('event_show_map', '1')) {
 	DPCalendarHelper::loadLibrary(array('maps' => true));
 }
 
@@ -38,27 +37,40 @@ $this->root->addAttribute('itemscope', 'itemscope');
 $this->root->addAttribute('itemtype', 'http://schema.org/Event');
 
 // The text before content
-$this->root->addChild(new Container('text-before'))->setContent(JHtml::_('content.prepare', $params->get('event_textbefore')));
+$text = JHtml::_('content.prepare', $params->get('event_textbefore'));
+if ($text) {
+	$this->root->addChild(new Container('text-before'))->setContent($text);
+}
 
 // The before event content
-$this->root->addChild(new Container('event-before-display'))->setContent(implode(' ', JDispatcher::getInstance()->trigger('onEventBeforeDisplay', array(
-	&$event
-))));
+$text = implode(' ', JDispatcher::getInstance()->trigger('onEventBeforeDisplay', array(&$event)));
+if ($text) {
+	$this->root->addChild(new Container('event-before-display'))->setContent($text);
+}
 
 // Header with buttons and title
 $this->loadTemplate('header');
 
 // Joomla event
-$this->root->addChild(new Container('after-display-title'))->setContent($event->displayEvent->afterDisplayTitle);
+$text = $event->displayEvent->afterDisplayTitle;
+if ($text) {
+	$this->root->addChild(new Container('after-display-title'))->setContent($text);
+}
 
 // Informations like date calendar
 $this->loadTemplate('information');
 
 // Contains custom fields
-$this->root->addChild(new Container('before-display-content'))->setContent($event->displayEvent->beforeDisplayContent);
+$text = $event->displayEvent->beforeDisplayContent;
+if ($text) {
+	$this->root->addChild(new Container('before-display-content'))->setContent($text);
+}
 
 // Tags
-$this->root->addChild(new Container('tags'))->setContent(JLayoutHelper::render('joomla.content.tags', $event->tags->itemTags));
+$text = JLayoutHelper::render('joomla.content.tags', $event->tags->itemTags);
+if ($text) {
+	$this->root->addChild(new Container('tags'))->setContent($text);
+}
 
 // Booking details when available
 $this->loadTemplate('bookings');
@@ -70,7 +82,10 @@ $this->loadTemplate('tickets');
 $this->loadTemplate('description');
 
 // Joomla event
-$this->root->addChild(new Container('after-display-content'))->setContent($event->displayEvent->afterDisplayContent);
+$text = $event->displayEvent->afterDisplayContent;
+if ($text) {
+	$this->root->addChild(new Container('after-display-content'))->setContent($text);
+}
 
 // Locations detail information
 $this->loadTemplate('locations');
@@ -79,12 +94,16 @@ $this->loadTemplate('locations');
 $this->loadTemplate('comments');
 
 // After event trigger
-$this->root->addChild(new Container('event-after-display'))->setContent(implode(' ', JDispatcher::getInstance()->trigger('onEventAfterDisplay', array(
-	&$event
-))));
+$text = implode(' ', JDispatcher::getInstance()->trigger('onEventAfterDisplay', array(&$event)));
+if ($text) {
+	$this->root->addChild(new Container('event-after-display'))->setContent($text);
+}
 
 // The text after parameter
-$this->root->addChild(new Container('text-after'))->setContent(JHtml::_('content.prepare', $params->get('event_textafter')));
+$text = JHtml::_('content.prepare', $params->get('event_textafter'));
+if ($text) {
+	$this->root->addChild(new Container('text-after'))->setContent($text);
+}
 
 // Render the tree
 echo DPCalendarHelper::renderElement($this->root, $this->params);

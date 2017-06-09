@@ -219,6 +219,34 @@ interface ElementVisitorInterface
 	public function visitMeta(\CCL\Content\Element\Basic\Meta $meta);
 
 	/**
+	 * Visit the Panel
+	 *
+	 * @param \CCL\Content\Element\Component\Panel $panel
+	 */
+	public function visitPanel(\CCL\Content\Element\Component\Panel $panel);
+
+	/**
+	 * Visit the PanelBody
+	 *
+	 * @param \CCL\Content\Element\Component\Panel\Body $panelBody
+	 */
+	public function visitPanelBody(\CCL\Content\Element\Component\Panel\Body $panelBody);
+
+	/**
+	 * Visit the PanelImage
+	 *
+	 * @param \CCL\Content\Element\Component\Panel\Image $panelImage
+	 */
+	public function visitPanelImage(\CCL\Content\Element\Component\Panel\Image $panelImage);
+
+	/**
+	 * Visit the PanelTitle
+	 *
+	 * @param \CCL\Content\Element\Component\Panel\Title $panelTitle
+	 */
+	public function visitPanelTitle(\CCL\Content\Element\Component\Panel\Title $panelTitle);
+
+	/**
 	 * Visit the Paragraph
 	 *
 	 * @param \CCL\Content\Element\Basic\Paragraph $paragraph

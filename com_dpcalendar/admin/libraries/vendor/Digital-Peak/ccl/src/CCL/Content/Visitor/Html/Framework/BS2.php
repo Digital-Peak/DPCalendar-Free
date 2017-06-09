@@ -120,6 +120,26 @@ class BS2 extends AbstractElementVisitor
 	/**
 	 * {@inheritdoc}
 	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanel()
+	 */
+	public function visitPanel(\CCL\Content\Element\Component\Panel $panel)
+	{
+		$panel->addClass('well', true);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelTitle()
+	 */
+	public function visitPanelTitle(\CCL\Content\Element\Component\Panel\Title $panelTitle)
+	{
+		$panelTitle->addClass('page-header', true);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
 	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitTabContainer()
 	 */
 	public function visitTabContainer(TabContainer $tabContainer)

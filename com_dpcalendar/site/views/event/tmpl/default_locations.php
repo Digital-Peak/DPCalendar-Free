@@ -25,6 +25,9 @@ $params->set('show_map', $params->get('event_show_map', '1') == '1');
 $params->set('full_width', false);
 $params->set('link_title', true);
 $params->set('location_map_height', '200px');
+$params->set('location_map_zoom', $params->get('event_map_zoom', 4));
+$params->set('location_map_latitude', $params->get('event_map_lat', 47));
+$params->set('location_map_longitude', $params->get('event_map_long', 4));
 
 /** @var Container $root **/
 $root = $this->root->addChild(new Container('locations', array(), array('itemprop' => 'description')));

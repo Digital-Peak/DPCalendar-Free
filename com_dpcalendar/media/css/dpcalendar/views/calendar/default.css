@@ -1,6 +1,7 @@
-#dp-calendar-share{
-	overflow:hidden;
+#dp-calendar-share {
+	overflow: hidden;
 }
+
 #dp-calendar-share .dp-share-button {
 	margin: 5px;
 	float: left;
@@ -39,6 +40,7 @@
 
 .dp-event-tooltip .dp-event-links {
 	border-top: 1px solid #DDDDDD;
+	margin-top: 5px;
 }
 
 .dp-calendar .fc-day-grid-event > .fc-content {

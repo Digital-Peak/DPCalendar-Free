@@ -20,6 +20,11 @@ foreach ($this->items as $event) {
 	// Get the tooltip
 	DPCalendarHelper::renderLayout('event.tooltip', array('root' => $root, 'event' => $event, 'params' => $this->params));
 
+	$description = '';
+	if ($root->getChildren()) {
+		$description = DPCalendarHelper::renderElement($root, $this->params);
+	}
+
 	// Set up the locations
 	$locations = array();
 	if (!empty($event->locations)) {
@@ -66,7 +71,7 @@ foreach ($this->items as $event) {
 		'color'       => '#' . $event->color,
 		'fgcolor'     => $fgcolor,
 		'allDay'      => $this->compactMode == 0 ? (bool)$event->all_day : true,
-		'description' => DPCalendarHelper::renderElement($root, $this->params),
+		'description' => $description,
 		'location'    => $locations
 	);
 }

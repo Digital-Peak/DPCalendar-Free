@@ -12,10 +12,11 @@ use CCL\Content\Element\Basic\Container;
 use CCL\Content\Element\Basic\Form;
 use CCL\Content\Element\Basic\Form\Input;
 use CCL\Content\Element\Component\Icon;
+use Joomla\Registry\Registry;
 
 $params = $displayData['params'];
 if (!$params) {
-	$params = new JRegistry();
+	$params = new Registry();
 }
 
 $root = $displayData['root']->addChild(new Container('quickadd'));
@@ -116,17 +117,30 @@ DPCalendarHelper::renderLayout(
 $calCode = "// <![CDATA[
 jQuery(document).ready(function(){
     jQuery('body').mouseup(function(e) {
-        var form = jQuery('" . $formElement->getId() . "');
+        var form = jQuery('#" . $root->getId() . "');
     
         if (form.has(e.target).length === 0 && !jQuery('#ui-datepicker-div').is(':visible') && !jQuery(e.target).hasClass('ui-timepicker-selected')) {
             form.hide();
         }
     });
     
+    document.onkeydown = function(evt) {
+	    evt = evt || window.event;
+	    var isEscape = false;
+	    if (\"key\" in evt) {
+	        isEscape = (evt.key == \"Escape\" || evt.key == \"Esc\");
+	    } else {
+	        isEscape = (evt.keyCode == 27);
+	    }
+	    if (isEscape) {
+	        jQuery('#" . $root->getId() . "').hide();
+	    }
+	};
+    
     jQuery(window).on('hashchange', function() {
-      jQuery('#" . $formElement->getId() . " input[name=urlhash').val(window.location.hash);
+      jQuery('#" . $formElement->getId() . " input[name=urlhash]').val(window.location.hash);
     });
-    jQuery('#" . $formElement->getId() . " input[name=urlhash').val(window.location.hash);
+    jQuery('#" . $formElement->getId() . " input[name=urlhash]').val(window.location.hash);
 });
 // ]]>\n";
 JFactory::getDocument()->addScriptDeclaration($calCode);

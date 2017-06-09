@@ -17,44 +17,43 @@ class DPCalendarTableDavcalendar extends JTable
 
 	public function store($updateNulls = false)
 	{
-		if (!$this->calendarid)
-		{
-			$obj = new stdClass();
+		if (!$this->calendarid) {
+			$obj             = new stdClass();
 			$obj->components = 'VEVENT,VTODO,VJOURNAL';
 			$this->getDbo()->insertObject('#__dpcalendar_caldav_calendars', $obj);
 			$this->calendarid = $this->getDbo()->insertid();
+			$this->access     = 1;
 		}
+
 		return parent::store($updateNulls);
 	}
 
 	public function check()
 	{
 		// Check for valid name
-		if (trim($this->displayname) == '')
-		{
+		if (trim($this->displayname) == '') {
 			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
+
 			return false;
 		}
 
 		// Check for existing name
 		$query = 'SELECT id FROM #__dpcalendar_caldav_calendarinstances WHERE uri = ' . $this->_db->Quote($this->uri) .
-				 " and principaluri = 'principals/" . JFactory::getUser()->username . "'";
+			" and principaluri = 'principals/" . JFactory::getUser()->username . "'";
 		$this->_db->setQuery($query);
 
 		$xid = (int)$this->_db->loadResult();
-		if ($xid && $xid != (int)$this->id)
-		{
+		if ($xid && $xid != (int)$this->id) {
 			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
+
 			return false;
 		}
 
-		if (empty($this->uri))
-		{
+		if (empty($this->uri)) {
 			$this->uri = $this->displayname;
 		}
 		$this->uri = JApplication::stringURLSafe($this->uri);
-		if (trim(str_replace('-', '', $this->uri)) == '')
-		{
+		if (trim(str_replace('-', '', $this->uri)) == '') {
 			$this->uri = JFactory::getDate()->format("Y-m-d-H-i-s");
 		}
 

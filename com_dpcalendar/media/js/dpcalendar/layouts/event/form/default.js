@@ -234,6 +234,11 @@ function updateRuleFromForm() {
 }
 
 function updateLocationFrame() {
+	if (jQuery('#dp-event-form-container-tabs-tab-location').length < 1) {
+		jQuery('#dp-event-form-map').hide();
+		return;
+	}
+
 	// Move map to right position
 	jQuery('#dp-event-form-map').appendTo('#dp-event-form-container-tabs-tab-location');
 

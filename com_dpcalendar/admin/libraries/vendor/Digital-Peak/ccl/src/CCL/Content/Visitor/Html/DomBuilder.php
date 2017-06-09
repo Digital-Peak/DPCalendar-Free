@@ -403,6 +403,46 @@ class DomBuilder implements ElementVisitorInterface
 	/**
 	 * {@inheritdoc}
 	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanel()
+	 */
+	public function visitPanel(\CCL\Content\Element\Component\Panel $panel)
+	{
+		$this->build($panel);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelBody()
+	 */
+	public function visitPanelBody(\CCL\Content\Element\Component\Panel\Body $panelBody)
+	{
+		$this->build($panelBody);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelImage()
+	 */
+	public function visitPanelImage(\CCL\Content\Element\Component\Panel\Image $panelImage)
+	{
+		$this->build($panelImage, 'img');
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelTitle()
+	 */
+	public function visitPanelTitle(\CCL\Content\Element\Component\Panel\Title $panelTitle)
+	{
+		$this->build($panelTitle);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
 	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitParagraph()
 	 */
 	public function visitParagraph(\CCL\Content\Element\Basic\Paragraph $paragraph)

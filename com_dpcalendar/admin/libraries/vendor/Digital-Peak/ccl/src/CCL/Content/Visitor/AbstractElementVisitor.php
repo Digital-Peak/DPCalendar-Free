@@ -281,6 +281,42 @@ abstract class AbstractElementVisitor implements ElementVisitorInterface
 	/**
 	 * {@inheritdoc}
 	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanel()
+	 */
+	public function visitPanel(\CCL\Content\Element\Component\Panel $panel)
+	{
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelBody()
+	 */
+	public function visitPanelBody(\CCL\Content\Element\Component\Panel\Body $panelBody)
+	{
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelImage()
+	 */
+	public function visitPanelImage(\CCL\Content\Element\Component\Panel\Image $panelImage)
+	{
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelTitle()
+	 */
+	public function visitPanelTitle(\CCL\Content\Element\Component\Panel\Title $panelTitle)
+	{
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
 	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitParagraph()
 	 */
 	public function visitParagraph(\CCL\Content\Element\Basic\Paragraph $paragraph)

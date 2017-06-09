@@ -9,6 +9,9 @@ defined('_JEXEC') or die();
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
+JLoader::registerAlias('DPCalendarHelperLocation', '\\DPCalendar\\Helper\\Location', '6.0');
+JLoader::registerAlias('DPCalendarHelperBooking', '\\DPCalendar\\Helper\\Booking', '6.0');
+
 class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 {
 
@@ -22,25 +25,62 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 
 		$db = JFactory::getDbo();
 		if ($isNew) {
-			$db->setQuery(
-				"insert into #__dpcalendar_caldav_principals (uri, email, displayname, external_id) values (" .
-				$db->quote('principals/' . $user['username']) . ", " . $db->quote($user['email']) . ", " . $db->quote($user['name']) .
-				", " . (int)$user['id'] . ')');
+			$query = $db->getQuery(true);
+			$query->insert('#__dpcalendar_caldav_principals');
+			$query->set('uri = ' . $db->quote('principals/' . $user['username']));
+			$query->set('email = ' . $db->quote($user['email']));
+			$query->set('displayname = ' . $db->quote($user['name']));
+			$query->set('external_id = ' . (int)$user['id']);
+			$db->setQuery($query);
 			$db->execute();
-			$db->setQuery(
-				"insert into #__dpcalendar_caldav_principals (uri, email, displayname, external_id) values (" .
-				$db->quote('principals/' . $user['username'] . '/calendar-proxy-read') . ", " . $db->quote($user['email']) . ", " .
-				$db->quote($user['name']) . ", " . (int)$user['id'] . ')');
+
+			$query = $db->getQuery(true);
+			$query->insert('#__dpcalendar_caldav_principals');
+			$query->set('uri = ' . $db->quote('principals/' . $user['username'] . '/calendar-proxy-read'));
+			$query->set('email = ' . $db->quote($user['email']));
+			$query->set('displayname = ' . $db->quote($user['name']));
+			$query->set('external_id = ' . (int)$user['id']);
+			$db->setQuery($query);
 			$db->execute();
-			$db->setQuery(
-				"insert into #__dpcalendar_caldav_principals (uri, email, displayname, external_id) values (" .
-				$db->quote('principals/' . $user['username'] . '/calendar-proxy-write') . ", " . $db->quote($user['email']) . ", " .
-				$db->quote($user['name']) . ", " . (int)$user['id'] . ')');
+
+			$query = $db->getQuery(true);
+			$query->insert('#__dpcalendar_caldav_principals');
+			$query->set('uri = ' . $db->quote('principals/' . $user['username'] . '/calendar-proxy-write'));
+			$query->set('email = ' . $db->quote($user['email']));
+			$query->set('displayname = ' . $db->quote($user['name']));
+			$query->set('external_id = ' . (int)$user['id']);
+			$db->setQuery($query);
 			$db->execute();
 		} else {
-			$db->setQuery(
-				"update #__dpcalendar_caldav_principals set email=" . $db->quote($user['email']) . ", displayname=" . $db->quote($user['name']) .
-				" where external_id=" . (int)$user['id']);
+			$query = $db->getQuery(true);
+			$query->update('#__dpcalendar_caldav_principals');
+			$query->set('uri = ' . $db->quote('principals/' . $user['username']));
+			$query->set('email = ' . $db->quote($user['email']));
+			$query->set('displayname = ' . $db->quote($user['name']));
+			$query->where('external_id = ' . (int)$user['id']);
+			$query->where('uri not like ' . $db->quote('principals/%/calendar-proxy-read'));
+			$query->where('uri not like ' . $db->quote('principals/%/calendar-proxy-write'));
+			$db->setQuery($query);
+			$db->execute();
+
+			$query = $db->getQuery(true);
+			$query->update('#__dpcalendar_caldav_principals');
+			$query->set('uri = ' . $db->quote('principals/' . $user['username'] . '/calendar-proxy-read'));
+			$query->set('email = ' . $db->quote($user['email']));
+			$query->set('displayname = ' . $db->quote($user['name']));
+			$query->where('external_id = ' . (int)$user['id']);
+			$query->where('uri like ' . $db->quote('principals/%/calendar-proxy-read'));
+			$db->setQuery($query);
+			$db->execute();
+
+			$query = $db->getQuery(true);
+			$query->update('#__dpcalendar_caldav_principals');
+			$query->set('uri = ' . $db->quote('principals/' . $user['username'] . '/calendar-proxy-write'));
+			$query->set('email = ' . $db->quote($user['email']));
+			$query->set('displayname = ' . $db->quote($user['name']));
+			$query->where('external_id = ' . (int)$user['id']);
+			$query->where('uri like ' . $db->quote('principals/%/calendar-proxy-write'));
+			$db->setQuery($query);
 			$db->execute();
 		}
 
@@ -64,31 +104,51 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 			return;
 		}
 
-		// Delete membership
 		$db = JFactory::getDbo();
-		$db->setQuery(
-			'delete from #__dpcalendar_caldav_groupmembers where
-				principal_id in (select id from #__dpcalendar_caldav_principals where external_id = ' . (int)$user['id'] . ') or
-				member_id in (select id from #__dpcalendar_caldav_principals where external_id = ' . (int)$user['id'] . ')');
+
+		// Delete membership
+		$query = $db->getQuery(true);
+		$query->delete('#__dpcalendar_caldav_groupmembers');
+		$query->where('principal_id in (select id from #__dpcalendar_caldav_principals where external_id = ' . (int)$user['id'] . ')');
+		$query->orWhere('member_id in (select id from #__dpcalendar_caldav_principals where external_id = ' . (int)$user['id'] . ')');
+		$db->setQuery($query);
 		$db->execute();
 
 		// Delete calendar data
-		$db->setQuery(
-			"delete from #__dpcalendar_caldav_calendarobjects where
-				calendarid in (select id from #__dpcalendar_caldav_calendarinstances where principaluri = " . $db->quote('principals/' . $user['username']) . ")");
-		$db->execute();
+		$subQuery = $db->getQuery(true);
+		$subQuery->select('id');
+		$subQuery->from('#__dpcalendar_caldav_calendarinstances');
+		$subQuery->where('principaluri = ' . $db->quote('principals/' . $user['username']));
 
+		$query = $db->getQuery(true);
+		$query->delete('#__dpcalendar_caldav_calendarobjects');
+		$query->where('calendarid in (' . $subQuery . ')');
+		$db->setQuery($query);
+		$db->execute();
 
 		// Delete calendars
-		$db->setQuery(
-			"delete from #__dpcalendar_caldav_calendars where
-				id in (select calendarid from #__dpcalendar_caldav_calendarinstances where principaluri = " . $db->quote('principals/' . $user['username']) . ")");
+		$subQuery = $db->getQuery(true);
+		$subQuery->select('calendarid');
+		$subQuery->from('#__dpcalendar_caldav_calendarinstances');
+		$subQuery->where('principaluri = ' . $db->quote('principals/' . $user['username']));
+
+		$query = $db->getQuery(true);
+		$query->delete('#__dpcalendar_caldav_calendars');
+		$query->where('id in (' . $subQuery . ')');
+		$db->setQuery($query);
 		$db->execute();
-		$db->setQuery("delete from #__dpcalendar_caldav_calendarinstances where principaluri = " . $db->quote('principals/' . $user['username']));
+
+		$query = $db->getQuery(true);
+		$query->delete('#__dpcalendar_caldav_calendarinstances');
+		$query->where('principaluri = ' . $db->quote('principals/' . $user['username']));
+		$db->setQuery($query);
 		$db->execute();
 
 		// Delete principals
-		$db->setQuery('delete from #__dpcalendar_caldav_principals where external_id = ' . (int)$user['id']);
+		$query = $db->getQuery(true);
+		$query->delete('#__dpcalendar_caldav_principals');
+		$query->where('external_id = ' . (int)$user['id']);
+		$db->setQuery($query);
 		$db->execute();
 	}
 
@@ -168,7 +228,7 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 
 		$query->select('e.*');
 		$query->from($db->quoteName('#__dpcalendar_caldav_calendarobjects') . ' AS e');
-		$query->join('RIGHT', '#__dpcalendar_caldav_calendarinstances c on c.calendarid = e.calendarid');
+		$query->join('RIGHT', '#__dpcalendar_caldav_calendarinstances c on c.id = e.calendarid');
 		$query->where('(c.principaluri = ' . $db->quote('principals/' . $user->username) . ' or c.principaluri in (' . $join . '))');
 		$query->where('c.id = ' . (int)$calendarId);
 

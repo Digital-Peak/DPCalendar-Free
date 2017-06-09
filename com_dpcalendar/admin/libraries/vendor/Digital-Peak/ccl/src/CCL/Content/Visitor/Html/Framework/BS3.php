@@ -44,4 +44,35 @@ class BS3 extends BS2
 	{
 		$gridRow->addClass('row', true);
 	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanel()
+	 */
+	public function visitPanel(\CCL\Content\Element\Component\Panel $panel)
+	{
+		$panel->addClass('panel', true);
+		$panel->addClass('panel-default', true);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelBody()
+	 */
+	public function visitPanelBody(\CCL\Content\Element\Component\Panel\Body $panelBody)
+	{
+		$panelBody->addClass('panel-body', true);
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitPanelTitle()
+	 */
+	public function visitPanelTitle(\CCL\Content\Element\Component\Panel\Title $panelTitle)
+	{
+		$panelTitle->addClass('panel-heading', true);
+	}
 }

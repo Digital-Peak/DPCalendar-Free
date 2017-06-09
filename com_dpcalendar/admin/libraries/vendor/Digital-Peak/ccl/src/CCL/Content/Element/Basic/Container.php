@@ -33,12 +33,13 @@ class Container extends Element
 
 		if (is_array($content)) {
 			foreach ($content as $item) {
-				if (! ($item instanceof Element)) {
+				if (!($item instanceof Element)) {
 					// If one item is not an element, we don't know what to do'
 					break;
 				}
 				$this->addChild($item);
 			}
+
 			return $this;
 		}
 
@@ -68,6 +69,17 @@ class Container extends Element
 	public function getChildren()
 	{
 		return $this->children;
+	}
+
+	/**
+	 * Clears the internal childrens. Their parents will be set to null.
+	 *
+	 */
+	public function clearChildren()
+	{
+		foreach ($this->getChildren() as $child) {
+			$child->setParent(null);
+		}
 	}
 
 	/**

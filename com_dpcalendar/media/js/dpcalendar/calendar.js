@@ -56,8 +56,8 @@ function createDPCalendar(calendar, options) {
 			var desc = event.description;
 
 			// Adding the hash to the url for proper return
-			desc = desc.replace('&task=event.delete', '&task=event.delete&urlhash=' + encodeURIComponent(window.location.hash));
-			desc = desc.replace('&task=event.edit', '&task=event.edit&urlhash=' + encodeURIComponent(window.location.hash));
+			desc = desc.replace('task=event.delete', 'task=event.delete&urlhash=' + encodeURIComponent(window.location.hash));
+			desc = desc.replace('task=event.edit', 'task=event.edit&urlhash=' + encodeURIComponent(window.location.hash));
 
 			// Adding the tooltip
 			element.tooltipster({

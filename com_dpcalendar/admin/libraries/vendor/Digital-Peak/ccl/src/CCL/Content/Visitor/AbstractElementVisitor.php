@@ -83,6 +83,15 @@ abstract class AbstractElementVisitor implements ElementVisitorInterface
 	/**
 	 * {@inheritdoc}
 	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitDropdown()
+	 */
+	public function visitDropdown(\CCL\Content\Element\Component\Dropdown $dropdown)
+	{
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
 	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitElement()
 	 */
 	public function visitElement(\CCL\Content\Element\Basic\Element $element)

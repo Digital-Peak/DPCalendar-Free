@@ -27,7 +27,7 @@ class ListContainer extends Container
 	/**
 	 * The type.
 	 *
-	 * @var unknown
+	 * @var string
 	 */
 	private $type = self::UNORDERED;
 

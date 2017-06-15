@@ -76,7 +76,7 @@ foreach ($events as $index => $event) {
 	$calendar = DPCalendarHelper::getCalendar($event->catid);
 
 	// The list item container
-	$item = $root->addChild(new Container($event->id, array(), array('itemscope' => 'itemscope', 'itemtype' => 'http://schema.org/Event')));
+	$item = $root->addChild(new Container($event->id));
 
 	// The heading of the event
 	$h = $item->addChild(new Heading('event-header', 2, array('dp-event-header')));
@@ -85,8 +85,7 @@ foreach ($events as $index => $event) {
 	// When we are shown in a modal dialog, make the title clickable
 	$url  = str_replace(array('?tmpl=component', 'tmpl=component'), '', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid));
 	$link = $h->addChild(new Link('link', $url, '_parent'));
-	$link->addAttribute('itemprop', 'url');
-	$link->addChild(new TextBlock('text', array(), array('itemprop' => 'name')))->setContent($event->title);
+	$link->addChild(new TextBlock('text'))->setContent($event->title);
 
 	// Add a special class when popup is enabled
 	$link->addClass('dp-module-upcoming-modal-' . ($params->get('show_as_popup') ? 'enabled' : 'disabled'), true);
@@ -123,9 +122,6 @@ foreach ($events as $index => $event) {
 			// The tooltip for the map
 			$d = $lc->addChild(new TextBlock($location->id . '-description', array('location-description')));
 			DPCalendarHelper::renderLayout('event.tooltip', array('event' => $event, 'root' => $d, 'params' => $params));
-
-			// Add the location schema
-			DPCalendarHelper::renderLayout('schema.location', array('locations' => array($location), 'root' => $lc));
 		}
 	}
 
@@ -154,18 +150,11 @@ foreach ($events as $index => $event) {
 	}
 
 	// The date element
-	$d = $item->addChild(
-		new TextBlock(
-			'date',
-			array('date'),
-			array('itemprop' => 'startDate', 'content' => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format('c'))
-		)
-	);
+	$d = $item->addChild(new TextBlock('date', array('date')));
 	$d->setContent('(' . JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE') . ': ');
 	$d->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('event_date_format', 'm.d.Y'),
 		$params->get('event_time_format', 'g:i a')), true);
 	$d->setContent(')', true);
-	$d->addChild(new Meta('enddate', 'endDate', DPCalendarHelper::getDate($event->end_date, $event->all_day)->format('c')));
 
 	// The calendar element
 	$c = $item->addChild(new TextBlock('calendar', array('calendar')));
@@ -185,11 +174,8 @@ foreach ($events as $index => $event) {
 	$c = $item->addChild(new TextBlock('price', array('price')));
 	$c->setContent(JText::_($event->price ? 'MOD_DPCALENDAR_UPCOMING_BLOG_PAID_EVENT' : 'MOD_DPCALENDAR_UPCOMING_BLOG_FREE_EVENT'));
 
-	// Add the price schema
-	DPCalendarHelper::renderLayout('schema.offer', array('event' => $event, 'root' => $item));
-
 	// The container with the event description
-	$desc = new Container('content', array(), array('itemprop' => 'description'));
+	$desc = new Container('content');
 
 	// Set the event description as content
 	$desc->setContent(JHTML::_('content.prepare', $event->description));
@@ -224,6 +210,9 @@ foreach ($events as $index => $event) {
 		$row->addColumn(new Column('description', 50))->addChild($desc);
 		$row->addColumn(new Column('images', 50))->setContent($images->getChildren());
 	}
+
+	// Add the event schema
+	DPCalendarHelper::renderLayout('schema.event', array('event' => $event, 'root' => $item));
 }
 
 // Render the element tree

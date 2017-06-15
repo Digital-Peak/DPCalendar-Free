@@ -121,6 +121,13 @@ function updateFormFromRule() {
 					});
 					break;
 				case 'BYDAY':
+					// Daily without weekend
+					if (frequency == 'WEEKLY' && parts[1] == 'MO,TU,WE,TH,FR') {
+						jQuery('#jform_scheduling_daily_weekdays0').attr('checked', 'checked');
+						jQuery('#jform_scheduling_daily_weekdays1').attr('checked', null);
+						jQuery('#jform_scheduling1').attr('checked', 'Checked');
+					}
+
 					jQuery.each(parts[1].split(','), function () {
 						if (frequency == 'MONTHLY') {
 							var pos = this.length;

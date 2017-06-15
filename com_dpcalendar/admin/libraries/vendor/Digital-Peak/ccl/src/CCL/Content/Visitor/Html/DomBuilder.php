@@ -193,16 +193,6 @@ class DomBuilder implements ElementVisitorInterface
 	/**
 	 * {@inheritdoc}
 	 *
-	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitDescriptionTerm()
-	 */
-	public function visitDescriptionTerm(\CCL\Content\Element\Basic\Description\Term $descriptionTerm)
-	{
-		$this->build($descriptionTerm, 'dt');
-	}
-
-	/**
-	 * {@inheritdoc}
-	 *
 	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitDescriptionList()
 	 */
 	public function visitDescriptionList(\CCL\Content\Element\Basic\DescriptionList $descriptionList)
@@ -218,6 +208,26 @@ class DomBuilder implements ElementVisitorInterface
 	public function visitDescriptionListHorizontal(\CCL\Content\Element\Basic\DescriptionListHorizontal $descriptionListHorizontal)
 	{
 		$this->build($descriptionListHorizontal, 'dl');
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitDescriptionTerm()
+	 */
+	public function visitDescriptionTerm(\CCL\Content\Element\Basic\Description\Term $descriptionTerm)
+	{
+		$this->build($descriptionTerm, 'dt');
+	}
+
+	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitDropdown()
+	 */
+	public function visitDropdown(\CCL\Content\Element\Component\Dropdown $dropdown)
+	{
+		$this->build($dropdown);
 	}
 
 	/**

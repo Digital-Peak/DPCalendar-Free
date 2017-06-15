@@ -76,8 +76,7 @@ foreach ($events as $index => $event) {
 	}
 
 	// The event container
-	$ec = $eventsContainer->addChild(new Container($event->id, $classes,
-		array('itemprop' => 'event', 'itemtype' => 'http://schema.org/Event', 'itemscope' => 'itemscope')));
+	$ec = $eventsContainer->addChild(new Container($event->id, $classes));
 
 	// The calendar icon element
 	$cal = $ec->addChild(new Container('calendar', array('calendar')));
@@ -91,19 +90,18 @@ foreach ($events as $index => $event) {
 	$e = $ec->addChild(new Container('event', array('event')));
 
 	// Add the date lement
-	$e->addChild(new Container('date', array(),
-		array('itemprop' => 'startDate', 'content' => $startDate->format('c'))))->setContent(DPCalendarHelper::getDateStringFromEvent($event,
-		$params->get('date_format'), $params->get('time_format')));
-	$e->addChild(new Meta('enddate', 'endDate', DPCalendarHelper::getDate($event->end_date, $event->all_day)->format('c')));
+	$e->addChild(new Container('date'))->setContent(
+		DPCalendarHelper::getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format'))
+	);
 
 	// Add the link
-	$l = $e->addChild(new Link('link', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid), '', array(), array('itemprop' => 'url')));
+	$l = $e->addChild(new Link('link', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid)));
 
 	// Add a special class when popup is enabled
 	$l->addClass('dp-module-upcoming-modal-' . ($params->get('show_as_popup') ? 'enabled' : 'disabled'), true);
 
 	// Add the title
-	$l->addChild(new TextBlock('title', array(), array('itemprop' => 'name')))->setContent($event->title);
+	$l->addChild(new TextBlock('title'))->setContent($event->title);
 
 	// Add the location information
 	if ($params->get('show_location') && isset($event->locations) && $event->locations) {
@@ -115,13 +113,10 @@ foreach ($events as $index => $event) {
 
 			$l->addChild(new Link('link', DPCalendarHelperRoute::getLocationRoute($location)))->setContent($location->title);
 		}
-
-		// Add the location schema
-		DPCalendarHelper::renderLayout('schema.location', array('locations' => $event->locations, 'root' => $ec));
 	}
 
 	// Add the price schema
-	DPCalendarHelper::renderLayout('schema.offer', array('event' => $ec, 'root' => $root));
+	DPCalendarHelper::renderLayout('schema.event', array('event' => $event, 'root' => $ec));
 }
 
 // Render the element tree

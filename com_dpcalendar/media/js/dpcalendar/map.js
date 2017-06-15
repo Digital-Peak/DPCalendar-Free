@@ -6,7 +6,7 @@ jQuery(document).ready(function() {
 
 /**
  * Creates a map and returns it.
- * 
+ *
  * @return map
  */
 function createDPCalendarMap(element) {

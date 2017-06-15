@@ -111,9 +111,6 @@ if ($event->locations && $params->get('event_show_location', '2'))
 			$lc->addChild(new Link('link', '#' . $location->alias))->setContent($location->title);
 		}
 
-		// Add the location schema
-		DPCalendarHelper::renderLayout('schema.location', array('locations' => array($location), 'root' => $lc));
-
 		$locations[] = $lc;
 	}
 

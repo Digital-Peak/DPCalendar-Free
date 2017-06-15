@@ -188,9 +188,6 @@ if ($params->get('event_show_price', '1') && $event->price) {
 		// Add the price description
 		$desc->addChild(new TextBlock('description'))->setContent($event->price->description[$key]);
 	}
-
-	// Add the price schema
-	DPCalendarHelper::renderLayout('schema.offer', array('event' => $event, 'root' => $root));
 }
 
 // Set up the capacity when possible

@@ -118,8 +118,8 @@ $calCode = "// <![CDATA[
 jQuery(document).ready(function(){
     jQuery('body').mouseup(function(e) {
         var form = jQuery('#" . $root->getId() . "');
-    
-        if (form.has(e.target).length === 0 && !jQuery('#ui-datepicker-div').is(':visible') && !jQuery(e.target).hasClass('ui-timepicker-selected')) {
+
+        if (form.has(e.target).length === 0 && !jQuery('#ui-datepicker-div').is(':visible') && !jQuery(e.target).parent().hasClass('ui-timepicker-list')) {
             form.hide();
         }
     });

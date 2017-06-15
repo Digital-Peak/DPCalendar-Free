@@ -47,13 +47,13 @@ $bookingId = $booking && $booking->id ? $booking->id : 0;
 
 // Add a need payment message when state is needs payment
 if ($bookingId && $booking->state == 3) {
-	$app->enqueueMessage(JText::_('COM_DPCALENDAR_VIEW_BOOKING_STATE_NEEDS_PAYMENT_INFORMATION'));
+	$app->enqueueMessage(JText::_('COM_DPCALENDAR_LAYOUT_BOOKING_STATE_NEEDS_PAYMENT_INFORMATION'));
 }
 
 // Add a is on hold message when payment is on hold
 $needsPayment = false;
 if ($bookingId && $booking->state == 4) {
-	$app->enqueueMessage(JText::_('COM_DPCALENDAR_VIEW_BOOKING_STATE_ON_HOLD_INFORMATION'));
+	$app->enqueueMessage(JText::_('COM_DPCALENDAR_LAYOUT_BOOKING_STATE_ON_HOLD_INFORMATION'));
 	$needsPayment = true;
 } else {
 	// Calculate if a payment is needed
@@ -162,6 +162,10 @@ if (!$bookingId) {
 
 			$info = JText::_('COM_DPCALENDAR_VIEW_BOOKINGFORM_CHOOSE_TICKETS');
 			$max  = $instance->max_tickets ? $instance->max_tickets : 1;
+
+			if ($max > ($event->capacity - $event->capacity_used)) {
+				$max = $event->capacity - $event->capacity_used;
+			}
 
 			// Loop trough the existing tickets
 			foreach ($instance->tickets as $ticket) {

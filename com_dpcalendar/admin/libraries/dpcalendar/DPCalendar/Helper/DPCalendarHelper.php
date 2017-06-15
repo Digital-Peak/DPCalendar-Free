@@ -532,7 +532,12 @@ class DPCalendarHelper
 			$rootElement->accept($builder);
 
 			// Render the tree
-			return $builder->render();
+			$html = $builder->render();
+
+			// Modify the output
+			$html = str_replace('&amp;', '&', $html);
+
+			return $html;
 		} catch (\Exception $e) {
 			$message = $e->getMessage();
 

@@ -34,7 +34,7 @@ foreach ((array)$locations as $location) {
 	);
 
 	// Add the name meta tag
-	$c->addChild(new Meta('name', 'name', htmlspecialchars(\DPCalendar\Helper\Location::format($location), ENT_QUOTES)));
+	$c->addChild(new Meta('name', 'name', \DPCalendar\Helper\Location::format($location)));
 
 	// Add the container for the location details
 	$c = $c->addChild(
@@ -50,18 +50,18 @@ foreach ((array)$locations as $location) {
 	);
 
 	if (isset($location->city) && $location->city) {
-		$c->addChild(new Meta('address-city', 'addressLocality', htmlspecialchars($location->city, ENT_QUOTES)));
+		$c->addChild(new Meta('address-city', 'addressLocality', $location->city));
 	}
 	if (isset($location->province) && $location->province) {
-		$c->addChild(new Meta('address-province', 'addressRegion', htmlspecialchars($location->province, ENT_QUOTES)));
+		$c->addChild(new Meta('address-province', 'addressRegion', $location->province));
 	}
 	if (isset($location->zip) && $location->zip) {
-		$c->addChild(new Meta('address-zip', 'postalCode', htmlspecialchars($location->zip, ENT_QUOTES)));
+		$c->addChild(new Meta('address-zip', 'postalCode', $location->zip));
 	}
 	if (isset($location->street) && $location->street) {
-		$c->addChild(new Meta('address-street', 'streetAddress', htmlspecialchars($location->street . ' ' . $location->number, ENT_QUOTES)));
+		$c->addChild(new Meta('address-street', 'streetAddress', $location->street . ' ' . $location->number));
 	}
 	if (isset($location->country) && $location->country) {
-		$c->addChild(new Meta('address-country', 'addressCountry', htmlspecialchars($location->country, ENT_QUOTES)));
+		$c->addChild(new Meta('address-country', 'addressCountry', $location->country));
 	}
 }

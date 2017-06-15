@@ -13,7 +13,7 @@ use CCL\Content\Element\Basic\Container;
 $document = JFactory::getDocument();
 $color    = $params->get('event_color', '135CAE');
 $cssClass = '#dp-module-mini-' . $module->id . ' .dp-event-compact';
-$document->addStyleDeclaration($cssClass . "," . $cssClass . " a," . $cssClass . " div{background-color:transparent; !important; border-color: #" . $color . "} .fc-header-center{vertical-align: middle !important;} #dpcalendar_module_" . $module->id . " .fc-state-default span, #dpcalendar_module_" . $module->id . " .ui-state-default{padding:0px !important;}");
+$document->addStyleDeclaration($cssClass . "," . $cssClass . " a," . $cssClass . " div{background-color:#" . $color . "; border-color: #" . $color . "} .fc-header-center{vertical-align: middle !important;} #dpcalendar_module_" . $module->id . " .fc-state-default span, #dpcalendar_module_" . $module->id . " .ui-state-default{padding:0px !important;}");
 $document->addStyleDeclaration("#dp-module-mini-" . $module->id . " h2 {
 	line-height: 20px;
 	font-size: 19px;
@@ -33,7 +33,7 @@ $root = new Container('dp-module-mini-' . $module->id, array(), array('ccl-prefi
 $url = html_entity_decode(
 	JRoute::_(
 		'index.php?option=com_dpcalendar&view=events&limit=0&format=raw&my=' . $params->get('show_my_only_calendar', '0') .
-		'&compact=' . $params->get('compact_events', 2) . '&ids=' . implode(',', $ids).'&openview='.$params->get('open_view', 'agendaDay')
+		'&compact=' . $params->get('compact_events', 2) . '&ids=' . implode(',', $ids) . '&openview=' . $params->get('open_view', 'agendaDay')
 	)
 );
 

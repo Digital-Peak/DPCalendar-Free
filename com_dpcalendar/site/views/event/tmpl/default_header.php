@@ -9,6 +9,8 @@ defined('_JEXEC') or die();
 
 use CCL\Content\Element\Basic\Container;
 use CCL\Content\Element\Basic\Button;
+use CCL\Content\Element\Basic\TextBlock;
+use CCL\Content\Element\Component\Dropdown;
 use CCL\Content\Element\Component\Icon;
 use CCL\Content\Element\Basic\Link;
 use CCL\Content\Element\Basic\Heading;
@@ -61,6 +63,9 @@ DPCalendarHelper::renderLayout(
 
 if ($params->get('event_show_copy', '1'))
 {
+	$d = $bc->addChild(new Dropdown('actions', ['actions']));
+	$d->setTriggerElement(new Button('trigger', new Icon('icon', Icon::DOWNLOAD)))->addChild(new Icon('icon', Icon::DOWN, ['caret']));
+
 	// Compile the Google url
 	$startDate  = DPCalendarHelper::getDate($event->start_date, $event->all_day);
 	$endDate    = DPCalendarHelper::getDate($event->end_date, $event->all_day);
@@ -77,28 +82,12 @@ if ($params->get('event_show_copy', '1'))
 	$url .= '&sf=true&output=xml';
 
 	// Add the Google button
-	DPCalendarHelper::renderLayout(
-		'content.button',
-		array(
-			'id'      => 'google',
-			'type'    => Icon::DOWNLOAD,
-			'root'    => $bc,
-			'title'   => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_GOOGLE',
-			'onclick' => "window.open('" . $url ."')"
-		)
-	);
+	$l = $d->addChild(new Link('google', $url, '_blank'));
+	$l->addChild(new TextBlock('text'))->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_GOOGLE'));
 
 	// Add the ics button
-	DPCalendarHelper::renderLayout(
-		'content.button',
-		array(
-			'id'      => 'ics',
-			'type'    => Icon::DOWNLOAD,
-			'root'    => $bc,
-			'title'   => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_OUTLOOK',
-			'onclick' => "window.open('" . JRoute::_("index.php?option=com_dpcalendar&view=event&format=raw&id=" . $event->id) ."')"
-		)
-	);
+	$l = $d->addChild(new Link('ics', JRoute::_("index.php?option=com_dpcalendar&view=event&format=raw&id=" . $event->id), '_blank'));
+	$l->addChild(new TextBlock('text'))->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_OUTLOOK'));
 }
 
 if (\DPCalendar\Helper\Booking::openForBooking($event) && $event->params->get('access-invite') && !DPCalendarHelper::isFree() )

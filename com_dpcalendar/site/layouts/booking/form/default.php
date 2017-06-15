@@ -68,9 +68,9 @@ if ($app->isSite()) {
 DPCalendarHelper::renderLayout('booking.form.payment', $displayData);
 
 // Load the form from the layout
-$hideFields = array('latitude', 'longitude', 'series', 'state', 'transaction_id', 'type', 'payer_email');
+$hideFields = array('latitude', 'longitude', 'series', 'transaction_id', 'type', 'payer_email');
 
-if ($app->isAdmin()) {
+if ($app->isClient('administrator')) {
 	if (!$booking->id) {
 		$hideFields[] = 'price';
 	} else {
@@ -82,6 +82,7 @@ if ($app->isAdmin()) {
 	$hideFields[] = 'processor';
 	$hideFields[] = 'amount';
 	$hideFields[] = 'event_id';
+	$hideFields[] = 'state';
 }
 DPCalendarHelper::renderLayout(
 	'content.form',

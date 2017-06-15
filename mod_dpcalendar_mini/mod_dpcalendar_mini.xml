@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>Mar 2017</creationDate>
+	<creationDate>Jun 2017</creationDate>
 	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.0.4</version>
+	<version>6.0.5</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -149,6 +149,14 @@
 				<field name="columnformat_list" type="text" default="D"
 				       label="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_LIST_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_LIST_DESC"
+				       size="50"/>
+				<field name="dayformat_list" type="text" default="l"
+				       label="MOD_DPCALENDAR_MINI_FIELD_DAY_FORMAT_LIST_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_DAY_FORMAT_LIST_DESC"
+				       size="50"/>
+				<field name="dateformat_list" type="text" default="F j, Y"
+				       label="MOD_DPCALENDAR_MINI_FIELD_DATE_FORMAT_LIST_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_DATE_FORMAT_LIST_DESC"
 				       size="50"/>
 				<field name="axisformat" type="text" default="g:i a"
 				       label="MOD_DPCALENDAR_MINI_FIELD_AXIS_FORMAT_LABEL"

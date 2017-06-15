@@ -65,6 +65,13 @@ interface ElementVisitorInterface
 	public function visitDescriptionTerm(\CCL\Content\Element\Basic\Description\Term $descriptionTerm);
 
 	/**
+	 * Visit the Dropdown
+	 *
+	 * @param \CCL\Content\Element\Component\Dropdown $dropdown
+	 */
+	public function visitDropdown(\CCL\Content\Element\Component\Dropdown $dropdown);
+
+	/**
 	 * Visit the Element
 	 *
 	 * @param \CCL\Content\Element\Basic\Element $element

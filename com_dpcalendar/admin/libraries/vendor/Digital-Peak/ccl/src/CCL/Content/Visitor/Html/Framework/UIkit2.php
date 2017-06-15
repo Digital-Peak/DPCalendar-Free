@@ -2,19 +2,20 @@
 
 namespace CCL\Content\Visitor\Html\Framework;
 
+use CCL\Content\Element\Basic\Container;
+use CCL\Content\Element\Basic\ListContainer;
+use CCL\Content\Element\Basic\ListItem;
 use CCL\Content\Element\Component\Alert;
 use CCL\Content\Element\Component\Badge;
 use CCL\Content\Element\Basic\Button;
 use CCL\Content\Element\Basic\DescriptionListHorizontal;
 use CCL\Content\Element\Basic\Form;
+use CCL\Content\Element\Component\Dropdown;
 use CCL\Content\Element\Component\Grid\Column;
 use CCL\Content\Element\Component\Grid\Row;
-use CCL\Content\Element\Basic\Link;
-use CCL\Content\Element\Component\Tab;
 use CCL\Content\Element\Component\TabContainer;
 use CCL\Content\Element\Basic\Table;
 use CCL\Content\Visitor\AbstractElementVisitor;
-use CCL\Content\Element\Component\Grid;
 
 /**
  * The Uikit 2 framework visitor.
@@ -79,6 +80,46 @@ class UIkit2 extends AbstractElementVisitor
 	}
 
 	/**
+	 * {@inheritdoc}
+	 *
+	 * @see \CCL\Content\Visitor\ElementVisitorInterface::visitDropdown()
+	 */
+	public function visitDropdown(\CCL\Content\Element\Component\Dropdown $dropdown)
+	{
+		// Prepare for restructure
+		$trigger  = $dropdown->getTriggerElement();
+		$elements = $dropdown->clearChildren();
+
+		// Configure the drop down
+		$dropdown->addClass('uk-button-dropdown', true);
+		$dropdown->addAttribute('data-uk-dropdown', "{mode:'click'}");
+		$dropdown->setTriggerElement($trigger);
+
+		// Configure the trigger element
+		$trigger->addClass('dropdown-toggle', true);
+
+		// Set up a list
+		$c = $dropdown->addChild(new Container('container'));
+		$c->addClass('uk-dropdown', true);
+		$c->addClass('uk-dropdown-bottom', true);
+
+		$l = $c->addChild(new ListContainer('list', ListContainer::UNORDERED));
+		$l->addClass('uk-nav', true);
+		$l->addClass('uk-nav-dropdown', true);
+		$l->addAttribute('role', 'menu');
+
+		// Add the elements as items again
+		foreach ($elements as $index => $element) {
+			if ($element == $trigger) {
+				continue;
+			}
+
+			$li = $l->addListItem(new ListItem($index + 1));
+			$li->addChild($element);
+		}
+	}
+
+	/**
 	 *
 	 * {@inheritdoc}
 	 *
@@ -140,10 +181,15 @@ class UIkit2 extends AbstractElementVisitor
 	 */
 	public function visitListContainer(\CCL\Content\Element\Basic\ListContainer $listContainer)
 	{
-		if (!$listContainer->getParent() instanceof TabContainer) {
-			$listContainer->addClass('uk-list', true);
-			$listContainer->addClass('uk-list-striped', true);
+		if ($listContainer->getParent() instanceof TabContainer) {
+			return;
 		}
+		if ($listContainer->getParent() instanceof Dropdown) {
+			return;
+		}
+
+		$listContainer->addClass('uk-list', true);
+		$listContainer->addClass('uk-list-striped', true);
 	}
 
 	/**

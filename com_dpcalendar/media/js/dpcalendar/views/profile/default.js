@@ -13,4 +13,8 @@ jQuery(document).ready(function () {
             }
         });
     });
+
+    jQuery('.dp-profile-delete-action').click(function(e){
+	    return confirm(Joomla.JText._('COM_DPCALENDAR_CONFIRM_DELETE'));
+    });
 });

@@ -179,6 +179,3 @@ $ld->addChild(new Container('plugins'))->setContent(trim(implode("\n", $output))
 if ($showDetails && $location->description) {
 	$ld->addChild(new Container('description'))->setContent(JHTML::_('content.prepare', $location->description));
 }
-
-// Add the schema information
-DPCalendarHelper::renderLayout('schema.location', array('root' => $ld, 'locations' => array($location)));

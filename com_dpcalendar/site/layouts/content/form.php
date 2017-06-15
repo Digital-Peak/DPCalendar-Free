@@ -38,9 +38,8 @@ $flat = isset($displayData['flat']) ? $displayData['flat'] : false;
 $columns = isset($displayData['columns']) ? $displayData['columns'] : 1;
 
 // Load some javascript we may use
-JHtml::_('behavior.tooltip');
 JHtml::_('behavior.keepalive');
-JHtml::_('behavior.formvalidation');
+JHtml::_('behavior.formvalidator');
 
 // Add the special case captcha, which will be rendered at the end of the form
 $fieldsToHide[] = 'captcha';

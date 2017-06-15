@@ -16,8 +16,19 @@ if (!$event || !$event->price) {
 	return;
 }
 
+$currency = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('currency', 'USD');
+
 // Set up the root container
-$root = $displayData['root']->addChild(new Container('schema-offer'));
+$root = $displayData['root']->addChild(
+	new Container('schema-offer',
+		array(),
+		array(
+			'itemscope' => 'itemscope',
+			'itemtype'  => 'https://schema.org/AggregateOffer',
+			'itemprop'  => 'offers'
+		)
+	)
+);
 
 foreach ($event->price->value as $key => $value) {
 	$label = $event->price->label[$key];
@@ -36,19 +47,21 @@ foreach ($event->price->value as $key => $value) {
 		)
 	);
 
-	$c->addChild(new Meta('price', 'price', htmlspecialchars($value, ENT_QUOTES)));
+	$c->addChild(new Meta('price', 'price', $value));
+	$c->addChild(new Meta('price-currency', 'priceCurrency', $currency));
+	$c->addChild(new Meta('valid', 'validFrom', \DPCalendar\Helper\DPCalendarHelper::getDate($event->created)->format('c')));
 	if ($label) {
-		$c->addChild(new Meta('name', 'name', htmlspecialchars($label, ENT_QUOTES)));
+		$c->addChild(new Meta('name', 'name', $label));
 	}
 	if ($desc) {
-		$c->addChild(new Meta('description', 'description', htmlspecialchars($desc, ENT_QUOTES)));
+		$c->addChild(new Meta('description', 'description', $desc));
 	}
 	$c->addChild(
 		new Meta(
 			'availability',
 			'availability',
-			htmlspecialchars(JText::_('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . $event->capacity, ENT_QUOTES)
+			JText::_('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . $event->capacity
 		)
 	);
-	$c->addChild(new Meta('url', 'url', htmlspecialchars(DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true), ENT_QUOTES)));
+	$c->addChild(new Meta('url', 'url', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true)));
 }

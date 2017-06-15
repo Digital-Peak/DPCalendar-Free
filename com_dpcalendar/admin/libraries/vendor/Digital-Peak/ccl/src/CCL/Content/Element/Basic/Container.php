@@ -50,14 +50,20 @@ class Container extends Element
 	 * Adds the given element as child to itself.
 	 * It also sets the parent of the given element to this container.
 	 *
-	 * @param Element $element
+	 * @param Element $element The element to add
+	 * @param boolean $beginning If the element should be added as first element to the children array
 	 *
 	 * @return Element
 	 */
-	public function addChild(Element $element)
+	public function addChild(Element $element, $beginning = false)
 	{
 		$element->setParent($this);
-		$this->children[] = $element;
+
+		if ($beginning) {
+			array_unshift($this->children, $element);
+		} else {
+			$this->children[] = $element;
+		}
 
 		return $element;
 	}
@@ -72,14 +78,21 @@ class Container extends Element
 	}
 
 	/**
-	 * Clears the internal childrens. Their parents will be set to null.
+	 * Clears the internal childrens. Their parents will be set to null. It returns the old children.
 	 *
+	 * @return Element[]
 	 */
 	public function clearChildren()
 	{
-		foreach ($this->getChildren() as $child) {
+		$children = $this->getChildren();
+
+		foreach ($children as $child) {
 			$child->setParent(null);
 		}
+
+		$this->children = [];
+
+		return $children;
 	}
 
 	/**
@@ -103,7 +116,7 @@ class Container extends Element
 	 */
 	public function __toString()
 	{
-		$buffer = $this->getId() . PHP_EOL;
+		$buffer = parent::__toString() . PHP_EOL;
 
 		foreach ($this->getChildren() as $child) {
 			$buffer .= "\t" . $child . PHP_EOL;

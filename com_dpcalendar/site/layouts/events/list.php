@@ -36,8 +36,7 @@ foreach ($displayData['events'] as $event) {
 	$calendar = DPCalendarHelper::getCalendar($event->catid);
 
 	// The list item container
-	$item = $list->addListItem(new ListItem('event-' . $event->id, array(),
-		array('itemscope' => 'itemscope', 'itemtype' => 'http://schema.org/Event')));
+	$item = $list->addListItem(new ListItem('event-' . $event->id));
 
 	// If possible add the book link
 	if (\DPCalendar\Helper\Booking::openForBooking($event)) {
@@ -73,23 +72,16 @@ foreach ($displayData['events'] as $event) {
 	$l = $t->addChild(
 		new Link(
 			'link',
-			DPCalendarHelperRoute::getEventRoute($event->id, $event->catid),
-			null,
-			array(),
-			array('itemprop' => 'url')
+			DPCalendarHelperRoute::getEventRoute($event->id, $event->catid)
 		)
 	);
-	$l->addChild(new TextBlock('title-text', array(), array('itemprop' => 'name')))->setContent($event->title);
+	$l->addChild(new TextBlock('title-text'))->setContent($event->title);
 
 	// The date element
 	$d = $item->addChild(
 		new TextBlock(
 			'date',
-			array('date'),
-			array(
-				'itemprop' => 'startDate',
-				'content'  => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format('c')
-			)
+			array('date')
 		)
 	);
 	$d->setContent('(' . JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE') . ': ');
@@ -122,8 +114,7 @@ foreach ($displayData['events'] as $event) {
 		$ls = $item->addChild(
 			new TextBlock(
 				'locations',
-				array('locations'),
-				array('itemprop' => 'location', 'content' => \DPCalendar\Helper\Location::format($event->locations))
+				array('locations')
 			)
 		);
 		foreach ($event->locations as $location) {
@@ -142,4 +133,7 @@ foreach ($displayData['events'] as $event) {
 			DPCalendarHelper::renderLayout('event.tooltip', array('event' => $event, 'root' => $d, 'params' => $params));
 		}
 	}
+
+	// Add the event schema
+	DPCalendarHelper::renderLayout('schema.event', array('event' => $event, 'root' => $item));
 }

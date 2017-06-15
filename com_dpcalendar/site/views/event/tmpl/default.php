@@ -32,10 +32,6 @@ JPluginHelper::importPlugin('dpcalendar');
 // User timezone
 DPCalendarHelper::renderLayout('user.timezone', array('root' => $this->root));
 
-// Add the schema data to the root container
-$this->root->addAttribute('itemscope', 'itemscope');
-$this->root->addAttribute('itemtype', 'http://schema.org/Event');
-
 // The text before content
 $text = JHtml::_('content.prepare', $params->get('event_textbefore'));
 if ($text) {
@@ -104,6 +100,9 @@ $text = JHtml::_('content.prepare', $params->get('event_textafter'));
 if ($text) {
 	$this->root->addChild(new Container('text-after'))->setContent($text);
 }
+
+// Add the structured data schema
+DPCalendarHelper::renderLayout('schema.event', array('event' => $event, 'root' => $this->root));
 
 // Render the tree
 echo DPCalendarHelper::renderElement($this->root, $this->params);

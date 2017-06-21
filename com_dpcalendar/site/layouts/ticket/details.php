@@ -165,7 +165,7 @@ $r->addCell(new Cell('content'))->setContent($ticket->seat);
 if (!isset($ticket->jcfields)) {
 	JPluginHelper::importPlugin('content');
 	$ticket->text = '';
-	JEventDispatcher::getInstance()->trigger('onContentPrepare', array('com_dpcalendar.ticket', &$ticket, &$params, 0));
+	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.ticket', &$ticket, &$params, 0));
 }
 
 // The fields table

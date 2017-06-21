@@ -48,7 +48,7 @@ JPluginHelper::importPlugin('dpcalendar');
 		</div>
 		<div class="clearfix"> </div>
 		<?php
-			$tmp = JDispatcher::getInstance()->trigger('onCalendarsFetch');
+			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
 			$calendars = array();
 			if (!empty($tmp))
 			{

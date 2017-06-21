@@ -50,7 +50,7 @@ jQuery(document).ready(function () {
 		return true;
 	});
 
-	jQuery('#dp-form-message-box').hide();
+	jQuery('#dp-event-form-message-box').hide();
 	setTimeout(checkOverlapping, 2000);
 	setTimeout(updateLocationFrame, 2000);
 
@@ -64,10 +64,10 @@ jQuery(document).ready(function () {
 });
 
 function checkOverlapping() {
-	if (jQuery('#dp-form-message-box').length < 1) {
+	if (jQuery('#dp-event-form-message-box').length < 1) {
 		return;
 	}
-	jQuery('#dp-form-message-box').hide();
+	jQuery('#dp-event-form-message-box').hide();
 
 	// Choosen doesn't update the selected value
 	var data = jQuery("#dp-event-form").find('input[name!=task], select');
@@ -83,7 +83,7 @@ function checkOverlapping() {
 			}
 
 			if (json.data.message) {
-				var box = jQuery('#dp-form-message-box');
+				var box = jQuery('#dp-event-form-message-box');
 				box.show();
 				box.attr('class', 'alert ' + (json.data.count ? '' : 'alert-success'));
 				box.html(json.data.message);

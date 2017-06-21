@@ -33,7 +33,7 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 		if (empty($calendar) || $calendar->external)
 		{
 			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JDispatcher::getInstance()->trigger('onCalendarsFetch',
+			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch',
 					array(
 							null,
 							!empty($calendar->system) ? $calendar->system : null

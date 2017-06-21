@@ -16,6 +16,7 @@ class DPCalendarControllerDavcalendar extends JControllerForm
 	protected $view_list = 'profile';
 	protected $option = 'com_dpcalendar';
 	protected $context = 'davcalendar';
+	protected $text_prefix = 'COM_DPCALENDAR_VIEW_DAVCALENDAR';
 
 	public function add ()
 	{

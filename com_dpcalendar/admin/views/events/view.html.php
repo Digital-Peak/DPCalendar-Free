@@ -40,35 +40,35 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 		$canDo = DPCalendarHelper::getActions($state->get('filter.category_id'));
 		$user = JFactory::getUser();
 
-		$bar = JToolBar::getInstance('toolbar');
+		$bar = JToolbar::getInstance('toolbar');
 
 		if (count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) > 0)
 		{
-			JToolBarHelper::addNew('event.add');
+			JToolbarHelper::addNew('event.add');
 		}
 		if ($canDo->get('core.edit'))
 		{
-			JToolBarHelper::editList('event.edit');
+			JToolbarHelper::editList('event.edit');
 		}
 		if ($canDo->get('core.edit.state'))
 		{
-			JToolBarHelper::divider();
-			JToolBarHelper::publish('events.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolBarHelper::unpublish('events.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			JToolbarHelper::divider();
+			JToolbarHelper::publish('events.publish', 'JTOOLBAR_PUBLISH', true);
+			JToolbarHelper::unpublish('events.unpublish', 'JTOOLBAR_UNPUBLISH', true);
 
-			JToolBarHelper::divider();
-			JToolBarHelper::archiveList('events.archive');
-			JToolBarHelper::checkin('events.checkin');
+			JToolbarHelper::divider();
+			JToolbarHelper::archiveList('events.archive');
+			JToolbarHelper::checkin('events.checkin');
 		}
 		if ($state->get('filter.state') == - 2 && $canDo->get('core.delete'))
 		{
-			JToolBarHelper::deleteList('', 'events.delete', 'JTOOLBAR_EMPTY_TRASH');
-			JToolBarHelper::divider();
+			JToolbarHelper::deleteList('', 'events.delete', 'JTOOLBAR_EMPTY_TRASH');
+			JToolbarHelper::divider();
 		}
 		else if ($canDo->get('core.edit.state'))
 		{
-			JToolBarHelper::trash('events.trash');
-			JToolBarHelper::divider();
+			JToolbarHelper::trash('events.trash');
+			JToolbarHelper::divider();
 		}
 
 		if ($user->authorise('core.edit') && DPCalendarHelper::isJoomlaVersion('3'))

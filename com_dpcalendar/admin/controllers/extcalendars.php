@@ -99,7 +99,7 @@ class DPCalendarControllerExtcalendars extends JControllerAdmin
 	{
 		$start = time();
 		JPluginHelper::importPlugin('dpcalendar');
-		JDispatcher::getInstance()->trigger('onEventsSync', $this->input->getCmd('dpplugin'));
+		JFactory::getApplication()->triggerEvent('onEventsSync', $this->input->getCmd('dpplugin'));
 		$end = time();
 
 		JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_DPCALENDAR_VIEW_EXTCALENDARS_SYNC_FINISHED', $end - $start), 'success');

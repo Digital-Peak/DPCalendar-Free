@@ -70,7 +70,7 @@ JPluginHelper::importPlugin('dpcalendar');
 
 foreach ($events as $event) {
 	$event->text = $event->description;
-	JEventDispatcher::getInstance()->trigger('onContentPrepare', array('com_dpcalendar.event', &$event, &$event->params, 0));
+	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.event', &$event, &$event->params, 0));
 	$event->description = $event->text;
 }
 

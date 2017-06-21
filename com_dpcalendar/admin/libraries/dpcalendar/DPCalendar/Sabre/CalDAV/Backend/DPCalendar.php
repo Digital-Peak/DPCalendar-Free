@@ -26,7 +26,17 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 		$user = \JFactory::getUser();
 
-		foreach (\DPCalendarHelper::getCalendar('root')->getChildren(true) as $calendar) {
+		// The calendar instance to get the calendars from
+		$cal = \DPCalendarHelper::getCalendar('root');
+
+		// Check if we are a guest
+		if ($user->guest)
+		{
+			// Get the calendar and ignoring the access flag, this is needed on authentication
+			$cal = \JCategories::getInstance('DPCalendar', array('access' => false))->get('root');
+		}
+
+		foreach ($cal->getChildren(true) as $calendar) {
 			$writePermission = $user->authorise('core.edit', 'com_dpcalendar.category.' . $calendar->id) &&
 				$user->authorise('core.delete', 'com_dpcalendar.category.' . $calendar->id);
 
@@ -194,7 +204,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 			$event        = $this->getTable();
 			$vEvent       = VObject\Reader::read($calendarData)->VEVENT;
-			$event->alias = \JApplication::stringURLSafe($vEvent->SUMMARY->getValue());
+			$event->alias = \JApplicationHelper::stringURLSafe($vEvent->SUMMARY->getValue());
 			$event->catid = str_replace('dp-', '', $calendarId);
 			$event->state = 1;
 			$event->uid   = $objectUri;

@@ -16,13 +16,13 @@ class DPCalendarViewTools extends \DPCalendar\View\BaseView
 	{
 		if (strpos($this->getLayout(), 'import') !== false && DPCalendarHelper::getActions()->get('core.create'))
 		{
-			JToolBarHelper::custom('import.add', 'new.png', 'new.png', 'COM_DPCALENDAR_VIEW_TOOLS_IMPORT', false);
+			JToolbarHelper::custom('import.add', 'new.png', 'new.png', 'COM_DPCALENDAR_VIEW_TOOLS_IMPORT', false);
 			$this->title = 'COM_DPCALENDAR_MANAGER_TOOLS_IMPORT';
 			$this->icon = 'import';
 		}
 		if (strpos($this->getLayout(), 'translate') !== false)
 		{
-			JToolBarHelper::custom('translate.update', 'new.png', 'new.png', 'COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_UPDATE', false);
+			JToolbarHelper::custom('translate.update', 'new.png', 'new.png', 'COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_UPDATE', false);
 			$this->title = 'COM_DPCALENDAR_MANAGER_TOOLS_TRANSLATE';
 			$this->icon = 'translation';
 			$this->resources = $this->get('ResourcesFromTransifex');

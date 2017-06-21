@@ -46,22 +46,22 @@ class DPCalendarViewEvent extends \DPCalendar\View\LayoutView
 		$canDo      = DPCalendarHelper::getActions($this->event->catid, 0);
 
 		if (!$checkedOut && ($canDo->get('core.edit') || (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create'))))) {
-			JToolBarHelper::apply('event.apply');
-			JToolBarHelper::save('event.save');
+			JToolbarHelper::apply('event.apply');
+			JToolbarHelper::save('event.save');
 		}
 		if (!$checkedOut && (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')))) {
-			JToolBarHelper::save2new('event.save2new');
+			JToolbarHelper::save2new('event.save2new');
 		}
 		if (!$isNew && (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) > 0)) {
-			JToolBarHelper::save2copy('event.save2copy');
+			JToolbarHelper::save2copy('event.save2copy');
 		}
 		if ($this->state->params->get('save_history', 1) && $this->user->authorise('core.edit')) {
 			JToolbarHelper::versions('com_dpcalendar.event', $this->event->id);
 		}
 		if (empty($this->event->id)) {
-			JToolBarHelper::cancel('event.cancel');
+			JToolbarHelper::cancel('event.cancel');
 		} else {
-			JToolBarHelper::cancel('event.cancel', 'JTOOLBAR_CLOSE');
+			JToolbarHelper::cancel('event.cancel', 'JTOOLBAR_CLOSE');
 		}
 		parent::addToolbar();
 	}

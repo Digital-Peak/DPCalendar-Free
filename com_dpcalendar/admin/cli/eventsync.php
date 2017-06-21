@@ -51,7 +51,7 @@ class DPCalendarEventSync extends JApplicationCli
 		try
 		{
 			JPluginHelper::importPlugin('dpcalendar');
-			JDispatcher::getInstance()->trigger('onEventsSync');
+			JFactory::getApplication()->triggerEvent('onEventsSync');
 
 			JLog::add('Finished with the DPCalendar event sync', JLog::DEBUG, 'com_dpcalendar');
 		}

@@ -100,7 +100,7 @@ class DPCalendarTableLocation extends JTable
 		if (empty($this->alias)) {
 			$this->alias = $this->title;
 		}
-		$this->alias = JApplication::stringURLSafe($this->alias);
+		$this->alias = JApplicationHelper::stringURLSafe($this->alias);
 		if (trim(str_replace('-', '', $this->alias)) == '') {
 			$this->alias = JFactory::getDate()->format("Y-m-d-H-i-s");
 		}
@@ -116,7 +116,7 @@ class DPCalendarTableLocation extends JTable
 		if (!empty($this->metakey)) {
 			$bad_characters = array("\n", "\r", "\"", "<", ">");
 
-			$after_clean = JString::str_ireplace($bad_characters, "", $this->metakey);
+			$after_clean = \Joomla\String\StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys = explode(',', $after_clean);
 			$clean_keys = array();
 			foreach ($keys as $key) {
@@ -125,6 +125,10 @@ class DPCalendarTableLocation extends JTable
 				}
 			}
 			$this->metakey = implode(", ", $clean_keys);
+		}
+
+		if (empty($this->modified)) {
+			$this->modified = $this->getDbo()->getNullDate();
 		}
 
 		return true;

@@ -39,7 +39,7 @@ if ($text) {
 }
 
 // The before event content
-$text = implode(' ', JDispatcher::getInstance()->trigger('onEventBeforeDisplay', array(&$event)));
+$text = implode(' ', JFactory::getApplication()->triggerEvent('onEventBeforeDisplay', array(&$event)));
 if ($text) {
 	$this->root->addChild(new Container('event-before-display'))->setContent($text);
 }
@@ -90,7 +90,7 @@ $this->loadTemplate('locations');
 $this->loadTemplate('comments');
 
 // After event trigger
-$text = implode(' ', JDispatcher::getInstance()->trigger('onEventAfterDisplay', array(&$event)));
+$text = implode(' ', JFactory::getApplication()->triggerEvent('onEventAfterDisplay', array(&$event)));
 if ($text) {
 	$this->root->addChild(new Container('event-after-display'))->setContent($text);
 }

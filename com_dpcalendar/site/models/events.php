@@ -60,7 +60,7 @@ class DPCalendarModelEvents extends JModelList
 
 		if (in_array('root', $categoryIds)) {
 			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JEventDispatcher::getInstance()->trigger('onCalendarsFetch');
+			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
 					foreach ($tmpCalendars as $calendar) {
@@ -85,7 +85,7 @@ class DPCalendarModelEvents extends JModelList
 			}
 
 			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JDispatcher::getInstance()->trigger('onEventsFetch', array($catId, $startDate, $endDate, $options));
+			$tmp = JFactory::getApplication()->triggerEvent('onEventsFetch', array($catId, $startDate, $endDate, $options));
 			if (!empty($tmp)) {
 				$containsExternalEvents = true;
 				foreach ($tmp as $events) {
@@ -353,7 +353,7 @@ class DPCalendarModelEvents extends JModelList
 				$searchColumns[] = 'jf.value';
 
 				// Creating the search terms
-				$searchTerms = explode(' ', JString::strtolower($searchString));
+				$searchTerms = explode(' ', \Joomla\String\StringHelper::strtolower($searchString));
 				natsort($searchTerms);
 
 				// Filtering the terms based on + - or none operators

@@ -21,7 +21,7 @@ class DPCalendarModelImport extends JModelLegacy
 		JFactory::getApplication()->input->set('extension', 'com_dpcalendar');
 		JFactory::getApplication()->input->post->set('extension', 'com_dpcalendar');
 
-		$tmp = JDispatcher::getInstance()->trigger('onCalendarsFetch');
+		$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
 		$calendars = array();
 		if (! empty($tmp))
 		{
@@ -73,7 +73,7 @@ class DPCalendarModelImport extends JModelLegacy
 				$category = $model->getItem($model->getState('category.id'));
 			}
 
-			$tmp = JDispatcher::getInstance()->trigger('onEventsFetch',
+			$tmp = JFactory::getApplication()->triggerEvent('onEventsFetch',
 					array(
 							$cal->id,
 							$start,
@@ -114,7 +114,7 @@ class DPCalendarModelImport extends JModelLegacy
 
 						unset($eventData['id']);
 						unset($eventData['locations']);
-						$eventData['alias'] = ! empty($event->alias) ? $event->alias : JApplication::stringURLSafe($event->title);
+						$eventData['alias'] = ! empty($event->alias) ? $event->alias : JApplicationHelper::stringURLSafe($event->title);
 						$eventData['catid'] = $category->id;
 
 						// Find an existing event with the same xreference

@@ -246,7 +246,11 @@ function createDPCalendar(calendar, options) {
 			text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER'),
 			icon: 'icon-calendar',
 			click: function () {
-				var picker = calendar.parent().find('[name=date-picker]');
+				var picker = jQuery('#dp-calendar-date-picker');
+				if (picker.length < 1) {
+					picker = jQuery('<input type="hidden" name="date-picker" id="dp-calendar-date-picker"/>');
+				}
+				jQuery(this).after(picker);
 
 				// Initialize the datepicker
 				picker.datepicker({

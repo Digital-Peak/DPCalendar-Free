@@ -52,7 +52,7 @@ class DPCalendarTableDavcalendar extends JTable
 		if (empty($this->uri)) {
 			$this->uri = $this->displayname;
 		}
-		$this->uri = JApplication::stringURLSafe($this->uri);
+		$this->uri = JApplicationHelper::stringURLSafe($this->uri);
 		if (trim(str_replace('-', '', $this->uri)) == '') {
 			$this->uri = JFactory::getDate()->format("Y-m-d-H-i-s");
 		}

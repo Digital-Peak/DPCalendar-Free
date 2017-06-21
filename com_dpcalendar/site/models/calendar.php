@@ -96,7 +96,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 			}
 
 			// Add caldav calendars when available
-			$tmp = JDispatcher::getInstance()->trigger('onCalendarsFetch', array(
+			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch', array(
 					null,
 					'cd'
 			));

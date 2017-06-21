@@ -280,13 +280,23 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 
 		$data  = array();
 		$items = $model->getItems();
+
 		if (empty($items)) {
 			return $data;
 		}
+
 		foreach ($items as $caldavCalendar) {
-			$calendar            = $this->createCalendar($caldavCalendar->id, $caldavCalendar->displayname,
+			$calendar = $this->createCalendar(
+				$caldavCalendar->id,
+				$caldavCalendar->displayname,
 				$caldavCalendar->description,
-				$caldavCalendar->calendarcolor);
+				$caldavCalendar->calendarcolor
+			);
+
+			if (!empty($calendarIds) && !in_array($caldavCalendar->id, $calendarIds)) {
+				continue;
+			}
+
 			$calendar->canCreate = $caldavCalendar->canEdit;
 			$calendar->canEdit   = $caldavCalendar->canEdit;
 			$calendar->canDelete = $caldavCalendar->canEdit;

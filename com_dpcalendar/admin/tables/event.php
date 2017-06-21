@@ -7,6 +7,8 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\String\StringHelper;
+
 class DPCalendarTableEvent extends JTable
 {
 
@@ -17,12 +19,17 @@ class DPCalendarTableEvent extends JTable
 		}
 		parent::__construct('#__dpcalendar_events', 'id', $db);
 
-		JObserverMapper::addObserverClassToClass('JTableObserverTags', 'DPCalendarTableEvent', array('typeAlias' => 'com_dpcalendar.event'));
-		JObserverMapper::addObserverClassToClass(
-			'JTableObserverContenthistory',
-			'DPCalendarTableEvent',
-			array('typeAlias' => 'com_dpcalendar.event')
-		);
+		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
+			JObserverMapper::addObserverClassToClass('JTableObserverTags', 'DPCalendarTableEvent', array('typeAlias' => 'com_dpcalendar.event'));
+			JObserverMapper::addObserverClassToClass(
+				'JTableObserverContenthistory',
+				'DPCalendarTableEvent',
+				array('typeAlias' => 'com_dpcalendar.event')
+			);
+		}
+
+		$this->access         = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('event_form_access', $this->access);
+		$this->access_content = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('event_form_access_content');
 	}
 
 	public function bind($array, $ignore = '')
@@ -67,8 +74,8 @@ class DPCalendarTableEvent extends JTable
 		// Verify that the alias is unique
 		$table = JTable::getInstance('Event', 'DPCalendarTable');
 		if ($table->load(array('alias' => $this->alias, 'catid' => $this->catid)) && ($table->id != $this->id || $this->id == 0)) {
-			$this->alias = JString::increment($this->alias, 'dash');
-			$this->alias = JApplication::stringURLSafe($this->alias);
+			$this->alias = StringHelper::increment($this->alias, 'dash');
+			$this->alias = JApplicationHelper::stringURLSafe($this->alias);
 		}
 
 		$timezone = JFactory::getApplication()->getCfg('offset');
@@ -337,13 +344,13 @@ class DPCalendarTableEvent extends JTable
 
 		$xid = $this->_db->loadObject();
 		if ($xid && $xid->id != intval($this->id) && $xid->original_id == $this->original_id) {
-			$this->alias = JString::increment($this->alias, 'dash');
+			$this->alias = StringHelper::increment($this->alias, 'dash');
 		}
 
 		if (empty($this->alias)) {
 			$this->alias = $this->title;
 		}
-		$this->alias = JApplication::stringURLSafe($this->alias);
+		$this->alias = JApplicationHelper::stringURLSafe($this->alias);
 		if (trim(str_replace('-', '', $this->alias)) == '') {
 			$this->alias = JFactory::getDate()->format("Y-m-d-H-i-s");
 		}
@@ -361,7 +368,7 @@ class DPCalendarTableEvent extends JTable
 		if (!empty($this->metakey)) {
 			// Only process if not empty
 			$bad_characters = array("\n", "\r", "\"", "<", ">");
-			$after_clean    = JString::str_ireplace($bad_characters, "", $this->metakey);
+			$after_clean    = StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys           = explode(',', $after_clean);
 			$clean_keys     = array();
 			foreach ($keys as $key) {
@@ -377,6 +384,21 @@ class DPCalendarTableEvent extends JTable
 			if (!isset($this->images)) {
 				$this->images = '{}';
 			}
+		}
+
+		// Strict mode adjustments
+		if (!is_integer($this->capacity_used)) {
+			$this->capacity_used = 0;
+		}
+
+		if (empty($this->modified)) {
+			$this->modified = $this->getDbo()->getNullDate();
+		}
+		if (empty($this->publish_up)) {
+			$this->publish_up = $this->getDbo()->getNullDate();
+		}
+		if (empty($this->publish_down)) {
+			$this->publish_down = $this->getDbo()->getNullDate();
 		}
 
 		return true;

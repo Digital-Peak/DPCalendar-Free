@@ -87,16 +87,27 @@ $options['nextDayThreshold']      = '00:00:00';
 $options['weekNumbersWithinDays'] = false;
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;
-$options['maxTime']               = $params->get('max_time', 24) . ':00:00';
-$options['minTime']               = $params->get('min_time', 0) . ':00:00';
-$options['nowIndicator']          = (boolean)$params->get('current_time_indicator', 1);
+
+$max = $params->get('max_time', 24);
+if (is_numeric($max)) {
+	$max = $max . ':00:00';
+}
+$options['maxTime'] = $max;
+
+$min = $params->get('min_time', 0);
+if (is_numeric($min)) {
+	$min = $min . ':00:00';
+}
+$options['minTime'] = $min;
+
+$options['nowIndicator'] = (boolean)$params->get('current_time_indicator', 1);
 
 if ($params->get('event_limit', '') != '-1') {
 	$options['eventLimit'] = $params->get('event_limit', '') == '' ? 'true' : $params->get('event_limit', '') + 1;
 }
 
 if ($params->get('calendar_height', 0) > 0) {
-	$options['contentHeight'] = $params->get('calendar_height', 0);
+	$options['contentHeight'] = (int)$params->get('calendar_height', 0);
 }
 
 $options['slotEventOverlap'] = (boolean)$params->get('overlap_events', 1);
@@ -195,10 +206,10 @@ $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
 // Workaround to get the icon classes
 $pi = new Icon('print', Icon::PRINTING);
 DPCalendarHelper::renderElement($pi, $params);
-$options['icon_print'] = count($pi->getClasses()) > 1 ? $pi->getClasses()[1] : 'icon-print';
+$options['icon_print'] = $pi->getClasses() ? implode(' ', $pi->getClasses()) : 'icon-print';
 $ci                    = new Icon('calendar', Icon::CALENDAR);
 DPCalendarHelper::renderElement($ci, $params);
-$options['icon_calendar'] = count($ci->getClasses()) > 1 ? $ci->getClasses()[1] : 'icon-calendar';
+$options['icon_calendar'] = $ci->getClasses() ? implode(' ', $ci->getClasses()) : 'icon-calendar';
 
 // Set the actual date
 $now              = DPCalendarHelper::getDate();

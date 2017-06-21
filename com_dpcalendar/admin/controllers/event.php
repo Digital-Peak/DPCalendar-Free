@@ -87,7 +87,7 @@ class DPCalendarControllerEvent extends JControllerForm
 				$validData['end_date']   = DPCalendarHelper::getDate($validData['end_date'])->toSql(true);
 			}
 
-			$tmp = JEventDispatcher::getInstance()->trigger('onEventSave', array($validData));
+			$tmp = JFactory::getApplication()->triggerEvent('onEventSave', array($validData));
 			foreach ($tmp as $newEventId) {
 				if ($newEventId === false) {
 					continue;

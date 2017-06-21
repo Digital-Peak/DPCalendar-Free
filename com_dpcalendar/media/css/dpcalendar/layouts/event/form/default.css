@@ -6,6 +6,10 @@
 	margin-bottom: 10px;
 }
 
+#dp-event-form-actions button {
+	margin-right: 5px;
+}
+
 #dp-event-form-original-information {
 	color: red;
 }

@@ -22,7 +22,7 @@ class DPCalendarTableExtcalendar extends JTable
 		{
 			// Load the DPCalendar plugins to delete cached events
 			JPluginHelper::importPlugin('dpcalendar');
-			JDispatcher::getInstance()->trigger('onCalendarAfterDelete', array(
+			JFactory::getApplication()->triggerEvent('onCalendarAfterDelete', array(
 					$this
 			));
 		}
@@ -89,7 +89,7 @@ class DPCalendarTableExtcalendar extends JTable
 				'alias' => $this->alias
 		)) && ($table->id != $this->id || $this->id == 0))
 		{
-			$this->alias = JString::increment($this->alias);
+			$this->alias = \Joomla\String\StringHelper::increment($this->alias);
 		}
 
 		if (empty($this->_rules))
@@ -142,7 +142,7 @@ class DPCalendarTableExtcalendar extends JTable
 		{
 			$this->alias = $this->title;
 		}
-		$this->alias = JApplication::stringURLSafe($this->alias);
+		$this->alias = JApplicationHelper::stringURLSafe($this->alias);
 		if (trim(str_replace('-', '', $this->alias)) == '')
 		{
 			$this->alias = JFactory::getDate()->format("Y-m-d-H-i-s");
@@ -172,7 +172,7 @@ class DPCalendarTableExtcalendar extends JTable
 					">"
 			);
 
-			$after_clean = JString::str_ireplace($bad_characters, "", $this->metakey);
+			$after_clean = \Joomla\String\StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys = explode(',', $after_clean);
 			$clean_keys = array();
 			foreach ($keys as $key)

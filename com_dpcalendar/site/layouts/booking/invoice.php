@@ -160,7 +160,7 @@ $r->addCell(new Cell('content'))->setContent($booking->street . ' ' . $booking->
 if (!isset($booking->jcfields)) {
 	JPluginHelper::importPlugin('content');
 	$booking->text = '';
-	JEventDispatcher::getInstance()->trigger('onContentPrepare', array('com_dpcalendar.booking', &$booking, &$params, 0));
+	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.booking', &$booking, &$params, 0));
 }
 
 // The fields table

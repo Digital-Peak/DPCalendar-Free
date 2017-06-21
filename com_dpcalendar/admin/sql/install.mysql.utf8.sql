@@ -41,11 +41,11 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `created_by_alias` varchar(255) NOT NULL DEFAULT '',
   `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `modified_by` int(10) unsigned NOT NULL DEFAULT '0',
-  `metakey` text NOT NULL,
-  `metadesc` text NOT NULL,
-  `metadata` text NOT NULL,
+  `metakey` text NULL,
+  `metadesc` text NULL,
+  `metadata` text NULL,
   `featured` tinyint(3) unsigned NOT NULL DEFAULT '0' COMMENT 'Set if link is featured.',
-  `xreference` varchar(255) NOT NULL COMMENT 'A reference to enable linkages to external data sets.',
+  `xreference` varchar(255) NULL COMMENT 'A reference to enable linkages to external data sets.',
   `publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `plugintype` TEXT NOT NULL,
@@ -86,7 +86,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
   `checked_out` int(11) NOT NULL DEFAULT '0',
   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `ordering` int(11) NOT NULL DEFAULT '0',
-  `params` text NOT NULL,
+  `params` text NULL,
   `language` char(7) NOT NULL DEFAULT '',
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `created_by` int(10) unsigned NOT NULL DEFAULT '0',
@@ -319,4 +319,4 @@ CREATE UNIQUE INDEX path_property ON #__dpcalendar_caldav_propertystorage (path(
 insert into #__dpcalendar_caldav_principals (uri, email, displayname, external_id) select concat("principals/", username) as uri, email, name as displayname, id from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name;
 insert into #__dpcalendar_caldav_principals (uri, email, displayname, external_id) select concat("principals/", username, "/calendar-proxy-read") as uri, email, name as displayname, id from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name;
 insert into #__dpcalendar_caldav_principals (uri, email, displayname, external_id) select concat("principals/", username, "/calendar-proxy-write") as uri, email, name as displayname, id from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name;
-		
+

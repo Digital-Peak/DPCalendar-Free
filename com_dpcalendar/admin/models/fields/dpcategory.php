@@ -19,7 +19,7 @@ class JFormFieldDPCategory extends JFormFieldCategory
 		$options = parent::getOptions();
 
 		JPluginHelper::importPlugin('dpcalendar');
-		$tmp = JDispatcher::getInstance()->trigger('onCalendarsFetch');
+		$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
 		if (! empty($tmp))
 		{
 			foreach ($tmp as $calendars)

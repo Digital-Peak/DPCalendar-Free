@@ -268,7 +268,7 @@ class Booking
 	public static function getPaymentStatementFromPlugin($booking, $params = null)
 	{
 		\JPluginHelper::importPlugin('dpcalendarpay');
-		$statement = \JEventDispatcher::getInstance()->trigger('onDPPaymentStatement', array($booking));
+		$statement = \JFactory::getApplication()->triggerEvent('onDPPaymentStatement', array($booking));
 
 		$buffer = '';
 		if ($statement) {

@@ -73,7 +73,7 @@ class DPCalendarModelEvent extends JModelForm
 		if (!isset($this->_item[$pk])) {
 			if (!empty($pk) && !is_numeric($pk)) {
 				JPluginHelper::importPlugin('dpcalendar');
-				$tmp = JDispatcher::getInstance()->trigger('onEventFetch', array($pk));
+				$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', array($pk));
 				if (!empty($tmp)) {
 					$tmp[0]->params   = new JRegistry();
 					$this->_item[$pk] = $tmp[0];

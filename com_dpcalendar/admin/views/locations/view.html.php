@@ -30,7 +30,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 		$state = $this->get('State');
 		$canDo = DPCalendarHelper::getActions();
 		$user = JFactory::getUser();
-		$bar = JToolBar::getInstance('toolbar');
+		$bar = JToolbar::getInstance('toolbar');
 
 		if ($canDo->get('core.create'))
 		{

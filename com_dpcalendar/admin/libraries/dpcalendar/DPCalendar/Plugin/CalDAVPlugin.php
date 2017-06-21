@@ -75,7 +75,8 @@ abstract class CalDAVPlugin extends SyncPlugin
 			$event    = null;
 			$oldEvent = null;
 			if (!empty($eventId)) {
-				$event    = $this->fetchEvent($eventId, $calendarId);
+				$event = \JTable::getInstance('Event', 'DPCalendarTable');
+				$event->bind($this->fetchEvent($eventId, $calendarId));
 				$oldEvent = clone $event;
 			} else {
 				$event = \JTable::getInstance('Event', 'DPCalendarTable');

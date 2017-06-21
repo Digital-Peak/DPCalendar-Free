@@ -31,8 +31,11 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	public function __construct($config = array())
 	{
 		parent::__construct($config);
-		$dispatcher         = JEventDispatcher::getInstance();
-		$this->eventHandler = new DPCalendarModelAdminEventHandler($dispatcher, $this);
+
+		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
+			$dispatcher         = JEventDispatcher::getInstance();
+			$this->eventHandler = new DPCalendarModelAdminEventHandler($dispatcher, $this);
+		}
 	}
 
 	protected function populateState()
@@ -150,6 +153,11 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			// Prime some default values.
 			if ($eventId == '0') {
 				$data->set('catid', $app->input->getCmd('catid', $app->getUserState('com_dpcalendar.events.filter.category_id')));
+
+				$requestParams = $app->input->get('jform', array(), 'array');
+				if (!$data->get('catid') && key_exists('catid', $requestParams)) {
+					$data->set('catid', $requestParams['catid']);
+				}
 			}
 		}
 
@@ -223,11 +231,11 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$newData = array();
 			foreach ($obj->value as $index => $value) {
 				$newData['price' . ($index + 1)] = array(
-					'value'       => $value,
-					'type'        => $obj->type[$index],
-					'date'        => $obj->date[$index],
-					'label'       => $obj->label[$index],
-					'description' => $obj->description[$index],
+					'value'           => $value,
+					'type'            => $obj->type[$index],
+					'date'            => $obj->date[$index],
+					'label'           => $obj->label[$index],
+					'description'     => $obj->description[$index],
 					'discount_groups' => $obj->discount_groups[$index]
 				);
 			}
@@ -243,7 +251,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$item = null;
 		if (!empty($pk) && !is_numeric($pk)) {
 			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JEventDispatcher::getInstance()->trigger('onEventFetch', array($pk));
+			$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', array($pk));
 			if (!empty($tmp)) {
 				$item = $tmp[0];
 			}
@@ -350,19 +358,19 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['earlybird'] = json_encode($obj);
 		}
 		if (isset($data['user_discount']) && is_array($data['user_discount'])) {
-			$obj              = new stdClass();
-			$obj->value       = array();
-			$obj->type        = array();
-			$obj->date        = array();
-			$obj->label       = array();
-			$obj->description = array();
+			$obj                  = new stdClass();
+			$obj->value           = array();
+			$obj->type            = array();
+			$obj->date            = array();
+			$obj->label           = array();
+			$obj->description     = array();
 			$obj->discount_groups = array();
 			foreach ($data['user_discount'] as $key => $p) {
-				$obj->value[]       = $p['value'];
-				$obj->type[]        = $p['type'];
-				$obj->date[]        = $p['date'];
-				$obj->label[]       = $p['label'];
-				$obj->description[] = $p['description'];
+				$obj->value[]           = $p['value'];
+				$obj->type[]            = $p['type'];
+				$obj->date[]            = $p['date'];
+				$obj->label[]           = $p['label'];
+				$obj->description[]     = $p['description'];
 				$obj->discount_groups[] = $p['discount_groups'];
 			}
 			$data['user_discount'] = json_encode($obj);
@@ -390,10 +398,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	protected function prepareTable($table)
 	{
 		$table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
-		$table->alias = JApplication::stringURLSafe($table->alias);
+		$table->alias = JApplicationHelper::stringURLSafe($table->alias);
 
 		if (empty($table->alias)) {
-			$table->alias = JApplication::stringURLSafe($table->title);
+			$table->alias = JApplicationHelper::stringURLSafe($table->title);
 		}
 
 		if (!isset($table->state) && $this->canEditState($table)) {
@@ -492,7 +500,9 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 	public function detach()
 	{
-		JEventDispatcher::getInstance()->detach($this->eventHandler);
+		if ($this->eventHandler) {
+			JEventDispatcher::getInstance()->detach($this->eventHandler);
+		}
 	}
 
 	public function getTickets($eventId)
@@ -510,7 +520,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	}
 }
 
-class DPCalendarModelAdminEventHandler extends JEvent
+class DPCalendarModelAdminEventHandler extends JPlugin
 {
 
 	private $model = null;
@@ -530,9 +540,9 @@ class DPCalendarModelAdminEventHandler extends JEvent
 
 		JPluginHelper::importPlugin('dpcalendar');
 		if ($isNew) {
-			return JDispatcher::getInstance()->trigger('onEventBeforeCreate', array(&$event));
+			return JFactory::getApplication()->triggerEvent('onEventBeforeCreate', array(&$event));
 		} else {
-			return JDispatcher::getInstance()->trigger('onEventBeforeSave', array(&$event));
+			return JFactory::getApplication()->triggerEvent('onEventBeforeSave', array(&$event));
 		}
 	}
 
@@ -641,9 +651,9 @@ class DPCalendarModelAdminEventHandler extends JEvent
 
 		JPluginHelper::importPlugin('dpcalendar');
 		if ($isNew) {
-			return JDispatcher::getInstance()->trigger('onEventAfterCreate', array(&$event));
+			return JFactory::getApplication()->triggerEvent('onEventAfterCreate', array(&$event));
 		} else {
-			return JDispatcher::getInstance()->trigger('onEventAfterSave', array(&$event));
+			return JFactory::getApplication()->triggerEvent('onEventAfterSave', array(&$event));
 		}
 	}
 
@@ -657,7 +667,7 @@ class DPCalendarModelAdminEventHandler extends JEvent
 
 		JPluginHelper::importPlugin('dpcalendar');
 
-		return JDispatcher::getInstance()->trigger('onEventBeforeDelete', array($event));
+		return JFactory::getApplication()->triggerEvent('onEventBeforeDelete', array($event));
 	}
 
 	public function onContentAfterDelete($context, $event)
@@ -671,7 +681,7 @@ class DPCalendarModelAdminEventHandler extends JEvent
 
 		JPluginHelper::importPlugin('dpcalendar');
 
-		return JDispatcher::getInstance()->trigger('onEventAfterDelete', array($event));
+		return JFactory::getApplication()->triggerEvent('onEventAfterDelete', array($event));
 	}
 
 	public function onContentChangeState($context, $pks, $value)
@@ -687,7 +697,7 @@ class DPCalendarModelAdminEventHandler extends JEvent
 			$event    = $model->getItem($pk);
 			$events[] = $event;
 
-			JDispatcher::getInstance()->trigger('onEventAfterSave', array($event));
+			JFactory::getApplication()->triggerEvent('onEventAfterSave', array($event));
 		}
 
 		$this->sendMail('edit', $events);

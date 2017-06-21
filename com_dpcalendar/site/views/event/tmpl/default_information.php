@@ -70,12 +70,10 @@ if ($params->get('event_show_calendar', '1'))
 if ($params->get('event_show_date', '1'))
 {
 	// Add a link to the url
-	$start = new TextBlock('start-date', array(), array('itemprop' => 'startDate', 'content' => $startDate->format('c')));
+	$start = new TextBlock('start-date');
 	$start->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('event_date_format', 'm.d.Y'), $params->get('event_time_format', 'g:i a')));
 
-	$end = new Meta('end-date', 'endDate', DPCalendarHelper::getDate($event->end_date, $event->all_day)->format('c'));
-
-	DPCalendarHelper::renderLayout('content.dl', array('root' => $column, 'id' => 'date', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE', 'content' => array($start, $end)));
+	DPCalendarHelper::renderLayout('content.dl', array('root' => $column, 'id' => 'date', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE', 'content' => $start));
 }
 
 // Add location information

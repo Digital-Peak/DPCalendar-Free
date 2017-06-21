@@ -11,6 +11,7 @@ namespace DPCalendar\Plugin;
 defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
+use Joomla\String\StringHelper;
 
 \JLoader::import('joomla.plugin.plugin');
 
@@ -185,7 +186,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$dbCal = $this->getDbCal($calendarId);
 		foreach ($data as $event) {
 			if (!empty($filter)) {
-				$string = \JString::strtolower($event->SUMMARY) . ' ' . \JString::strtolower($event->DESCRIPTION) . ' ' . \JString::strtolower($event->LOCATION);
+				$string = StringHelper::strtolower($event->SUMMARY) . ' ' . StringHelper::strtolower($event->DESCRIPTION) . ' ' . StringHelper::strtolower($event->LOCATION);
 				if (!\DPCalendarHelper::matches($string, $filter)) {
 					continue;
 				}
@@ -755,7 +756,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$title = str_replace('\n', ' ', $title);
 		$title = str_replace('\N', ' ', $title);
 		$tmpEvent->title = \DPCalendar\Helper\Ical::icalDecode($title);
-		$tmpEvent->alias = \JApplication::stringURLSafe($tmpEvent->title);
+		$tmpEvent->alias = \JApplicationHelper::stringURLSafe($tmpEvent->title);
 		$tmpEvent->description = \DPCalendar\Helper\Ical::icalDecode((string)$event->DESCRIPTION);
 
 		$created = $event->CREATED;
@@ -858,7 +859,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 					// Set the location title to the location name, otherwise it
 					// lat,long is the title
 					$locationObject->title = $location;
-					$locationObject->alias = \JApplication::stringURLSafe($location);
+					$locationObject->alias = \JApplicationHelper::stringURLSafe($location);
 
 					$locations[] = $locationObject;
 				}

@@ -111,7 +111,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		$event = $this->getModel()->getItem($recordId);
 
 		if (!is_numeric($event->catid)) {
-			JDispatcher::getInstance()->trigger('onEventDelete', array(
+			JFactory::getApplication()->triggerEvent('onEventDelete', array(
 				is_numeric($event->id) ? $event->xreference : $event->id
 			));
 		}
@@ -262,7 +262,7 @@ class DPCalendarControllerEvent extends JControllerForm
 				if (is_numeric($data['id'])) {
 					$data['id'] = $data['xreference'];
 				}
-				$tmp = JEventDispatcher::getInstance()->trigger('onEventSave', array($data));
+				$tmp = JFactory::getApplication()->triggerEvent('onEventSave', array($data));
 				foreach ($tmp as $newEventId) {
 					if ($newEventId === false) {
 						continue;
@@ -361,7 +361,7 @@ class DPCalendarControllerEvent extends JControllerForm
 				$validData['id'] = $data['xreference'];
 			}
 
-			$tmp = JEventDispatcher::getInstance()->trigger('onEventSave', array($validData));
+			$tmp = JFactory::getApplication()->triggerEvent('onEventSave', array($validData));
 			foreach ($tmp as $newEventId) {
 				if ($newEventId === false) {
 					continue;

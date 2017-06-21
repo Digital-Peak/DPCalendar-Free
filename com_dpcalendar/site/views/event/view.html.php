@@ -53,10 +53,9 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event->tags->getItemTags('com_dpcalendar.event', $event->id);
 
 		JPluginHelper::importPlugin('content');
-		$dispatcher = JEventDispatcher::getInstance();
 
 		$event->text = $event->description;
-		$dispatcher->trigger(
+		JFactory::getApplication()->triggerEvent(
 			'onContentPrepare',
 			array(
 				'com_dpcalendar.event',
@@ -68,7 +67,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event->description = $event->text;
 
 		$event->displayEvent                    = new stdClass();
-		$results                                = $dispatcher->trigger(
+		$results                                = JFactory::getApplication()->triggerEvent(
 			'onContentAfterTitle',
 			array(
 				'com_dpcalendar.event',
@@ -79,7 +78,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		);
 		$event->displayEvent->afterDisplayTitle = trim(implode("\n", $results));
 
-		$results                                   = $dispatcher->trigger(
+		$results                                   = JFactory::getApplication()->triggerEvent(
 			'onContentBeforeDisplay',
 			array(
 				'com_dpcalendar.event',
@@ -90,7 +89,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		);
 		$event->displayEvent->beforeDisplayContent = trim(implode("\n", $results));
 
-		$results                                  = $dispatcher->trigger(
+		$results                                  = JFactory::getApplication()->triggerEvent(
 			'onContentAfterDisplay',
 			array(
 				'com_dpcalendar.event',

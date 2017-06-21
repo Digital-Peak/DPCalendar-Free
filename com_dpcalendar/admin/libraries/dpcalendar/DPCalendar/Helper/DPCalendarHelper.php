@@ -63,7 +63,7 @@ class DPCalendarHelper
 			}
 		} else {
 			\JPluginHelper::importPlugin('dpcalendar');
-			$tmp = \JEventDispatcher::getInstance()->trigger('onCalendarsFetch', array($id));
+			$tmp = \JFactory::getApplication()->triggerEvent('onCalendarsFetch', array($id));
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
 					foreach ($calendars as $fetchedCalendar) {
@@ -769,7 +769,7 @@ class DPCalendarHelper
 		}
 
 		foreach ($items as $item) {
-			\JEventDispatcher::getInstance()->trigger('onContentPrepare', array('com_dpcalendar.' . $name, &$item, &$item->params));
+			\JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.' . $name, &$item, &$item->params));
 			$line = array();
 			foreach ($fieldsToLabels as $fieldName => $fieldLabel) {
 				$line[] = $valueParser($fieldName, $item);
@@ -816,16 +816,14 @@ class DPCalendarHelper
 			new $className($dispatcher, $p);
 		}
 
-		$result = \JDispatcher::getInstance()->trigger('onDPCalendarDoAction', array($action, $plugin));
+		$result = \JFactory::getApplication()->triggerEvent('onDPCalendarDoAction', array($action, $plugin));
 
 		return $result;
 	}
 
 	public static function isJoomlaVersion($version, $operator = '==')
 	{
-		$j = new \JVersion();
-
-		$release = $j->RELEASE;
+		$release = \JVersion::RELEASE;
 		switch ($operator) {
 			case '>=':
 				return substr($release, 0, strlen($version)) >= $version;
@@ -845,7 +843,7 @@ class DPCalendarHelper
 
 		if (!$canAdd) {
 			\JPluginHelper::importPlugin('dpcalendar');
-			$tmp = \JEventDispatcher::getInstance()->trigger('onCalendarsFetch');
+			$tmp = \JFactory::getApplication()->triggerEvent('onCalendarsFetch');
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
 					foreach ($tmpCalendars as $calendar) {

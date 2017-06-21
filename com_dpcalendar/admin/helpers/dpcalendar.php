@@ -50,7 +50,7 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 		JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_TOOLS'), 'index.php?option=com_dpcalendar&view=tools', $vName == 'tools');
 		JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_SUPPORT'), 'index.php?option=com_dpcalendar&view=support', $vName == 'support');
 		if ($vName == 'categories') {
-			JToolBarHelper::title(JText::sprintf('COM_CATEGORIES_CATEGORIES_TITLE', JText::_('com_dpcalendar')), 'dpcalendar-categories');
+			JToolbarHelper::title(JText::sprintf('COM_CATEGORIES_CATEGORIES_TITLE', JText::_('com_dpcalendar')), 'dpcalendar-categories');
 		}
 	}
 

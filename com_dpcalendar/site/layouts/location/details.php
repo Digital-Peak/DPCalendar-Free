@@ -167,7 +167,7 @@ if ($showDetails && $location->url) {
 }
 
 // Trigger the display event
-$output = JEventDispatcher::getInstance()->trigger(
+$output = JFactory::getApplication()->triggerEvent(
 	'onContentBeforeDisplay',
 	array('com_dpcalendar.location', &$location, &$params, 0)
 );

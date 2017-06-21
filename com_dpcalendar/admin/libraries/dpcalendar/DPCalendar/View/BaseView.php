@@ -138,15 +138,15 @@ class BaseView extends \JViewLegacy
 		if (empty($this->icon)) {
 			$this->icon = strtolower($this->getName());
 		}
-		\JToolBarHelper::title(\JText::_($this->title), $this->icon);
+		\JToolbarHelper::title(\JText::_($this->title), $this->icon);
 		\JFactory::getDocument()->addStyleDeclaration(
 			'.icon-48-' . $this->icon .
 			' {background-image: url(../media/com_dpcalendar/images/admin/48-' . $this->icon . '.png);background-repeat: no-repeat;}'
 		);
 
 		if ($canDo->get('core.admin', 'com_dpcalendar')) {
-			\JToolBarHelper::preferences('com_dpcalendar');
-			\JToolBarHelper::divider();
+			\JToolbarHelper::preferences('com_dpcalendar');
+			\JToolbarHelper::divider();
 		}
 	}
 

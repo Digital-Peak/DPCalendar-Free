@@ -25,7 +25,7 @@ $h->setProtectedClass('dp-event-header');
 $h->setContent(JText::_('COM_DPCALENDAR_DESCRIPTION'));
 
 // The container with the event description
-$desc = $root->addChild(new Container('content', array(), array('itemprop' => 'description')));
+$desc = $root->addChild(new Container('content'));
 
 try
 {

@@ -34,7 +34,7 @@ foreach ((array)$locations as $location) {
 	);
 
 	// Add the name meta tag
-	$c->addChild(new Meta('name', 'name', \DPCalendar\Helper\Location::format($location)));
+	$c->addChild(new Meta('name', 'name', $location->title));
 
 	// Add the container for the location details
 	$c = $c->addChild(

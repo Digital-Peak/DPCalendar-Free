@@ -173,7 +173,7 @@ if ($event->params->get('access-delete'))
 }
 
 // The heading of the page
-$h = $root->addChild(new Heading('event-header', 2, array('dp-event-header'), array('itemprop' => 'name')));
+$h = $root->addChild(new Heading('event-header', 2, array('dp-event-header')));
 $h->setProtectedClass('dp-event-header');
 
 if (JFactory::getApplication()->input->get('tmpl') == 'component')

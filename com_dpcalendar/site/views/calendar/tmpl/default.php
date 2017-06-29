@@ -50,7 +50,6 @@ $cc->setProtectedClass('noprint');
 // Call the comment layouts
 DPCalendarHelper::renderLayout('comment.facebook',  array('params' => $this->params, 'root' => $cc));
 DPCalendarHelper::renderLayout('comment.google',    array('params' => $this->params, 'root' => $cc));
-DPCalendarHelper::renderLayout('comment.jcomments', array('params' => $this->params, 'root' => $cc));
 
 // Render the tree
 echo DPCalendarHelper::renderElement($this->root, $this->params);

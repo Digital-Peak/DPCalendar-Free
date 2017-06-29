@@ -26,7 +26,7 @@ $cc = $root->addChild(new Container('container'));
 // Call the comment layouts
 DPCalendarHelper::renderLayout('comment.facebook',  array('params' => $this->params, 'root' => $cc));
 DPCalendarHelper::renderLayout('comment.google',    array('params' => $this->params, 'root' => $cc));
-DPCalendarHelper::renderLayout('comment.jcomments', array('params' => $this->params, 'root' => $cc));
+DPCalendarHelper::renderLayout('comment.jcomments', array('params' => $this->params, 'root' => $cc, 'event' => $this->event));
 
 if (!$cc->getChildren())
 {

@@ -15,7 +15,7 @@
 		<field name="url" type="url" label="COM_DPCALENDAR_FIELD_URL_LABEL"
 		       default="" description="COM_DPCALENDAR_FIELD_URL_DESC" size="70"/>
 
-		<field name="start_date" type="datetimechooser" default="NOW"
+		<field name="start_date" type="datetimechooser" default="NOW" datepair="datepair"
 		       label="COM_DPCALENDAR_FIELD_START_DATE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_START_DATE_DESC" class="start inputbox validate input-small"
 		       timeclass="time timestart validate input-small" required="true"/>

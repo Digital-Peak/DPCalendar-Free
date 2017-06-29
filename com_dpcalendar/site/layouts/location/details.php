@@ -16,6 +16,9 @@ use CCL\Content\Element\Basic\TextBlock;
 use CCL\Content\Element\Component\Grid;
 use CCL\Content\Element\Component\Grid\Row;
 use CCL\Content\Element\Component\Grid\Column;
+use DPCalendar\Helper\Location;
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\Registry\Registry;
 
 // The location to display
 $location = $displayData['location'];
@@ -26,7 +29,7 @@ if (!$location) {
 // The params
 $params = $displayData['params'];
 if (!$params) {
-	$params = new JRegistry();
+	$params = new Registry();
 }
 
 // Set up the root container
@@ -80,11 +83,11 @@ if (JFactory::getUser()->authorise('core.edit', 'com_dpcalendar')) {
 // Add the title
 if ($params->get('link_title') === 'external') {
 	// The link to the external map provider
-	$l = $h->addChild(new Link('external', \DPCalendar\Helper\Location::getMapLink($location), '_blank'));
+	$l = $h->addChild(new Link('external', Location::getMapLink($location), '_blank'));
 	$l->setContent($location->title);
 } else {
 	if ($params->get('link_title')) {
-		// Link to the locatoin detail view
+		// Link to the location detail view
 		$h->addChild(new Link('external', DPCalendarHelperRoute::getLocationRoute($location)))->setContent($location->title);
 	} else {
 		// Just add the title
@@ -107,9 +110,9 @@ $ld = new Container(
 	'details',
 	array('location-details'),
 	array(
-		'data-color'       => \DPCalendar\Helper\Location::getColor($location),
+		'data-color'       => Location::getColor($location),
 		'data-title'       => $location->title,
-		'data-description' => $location->title,
+		'data-description' => '<a href="' . DPCalendarHelperRoute::getLocationRoute($location) . '">' . $location->title . '</a>',
 		'data-latitude'    => $location->latitude,
 		'data-longitude'   => $location->longitude
 	)

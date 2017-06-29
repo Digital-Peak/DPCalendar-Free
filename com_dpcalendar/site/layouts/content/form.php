@@ -131,7 +131,8 @@ $root->setContent(JHtml::_('form.token'));
 
 // The description field
 $editorSaveCode = '';
-if ($d = $jform->getField('description') && method_exists($d, 'save')) {
+$d = $jform->getField('description');
+if ($d && method_exists($d, 'save')) {
 	$editorSaveCode = $d->save();
 }
 

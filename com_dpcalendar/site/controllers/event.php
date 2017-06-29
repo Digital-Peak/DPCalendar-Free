@@ -84,7 +84,7 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		$return   = true;
 		$recordId = $this->input->getVar($key);
-		if (is_numeric($recordId)) {
+		if (!$recordId || is_numeric($recordId)) {
 			$return = parent::cancel($key);
 		}
 		$this->setRedirect($this->getReturnPage());
@@ -392,7 +392,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			$canChangeState = $calendar->external || JFactory::getUser()->authorise('core.edit.state',
 					'com_dpcalendar.category.' . $data['catid']);
 			if ($this->getTask() == 'save') {
-				$app->setUserState("$this->option.edit.$this->context" . '.data', null);
+				$app->setUserState('com_dpcalendar.edit.event.data', null);
 				$return = $this->getReturnPage();
 				if ($return == JURI::base() && $canChangeState) {
 					$return = DPCalendarHelperRoute::getEventRoute($app->getUserState('dpcalendar.event.id'),
@@ -409,7 +409,7 @@ class DPCalendarControllerEvent extends JControllerForm
 				$this->setRedirect($return);
 			}
 			if ($this->getTask() == 'save2new') {
-				$app->setUserState("$this->option.edit.$this->context" . '.data', null);
+				$app->setUserState('com_dpcalendar.edit.event.data', null);
 				$return = DPCalendarHelperRoute::getFormRoute(0, $this->getReturnPage());
 				$this->setRedirect($return);
 			}

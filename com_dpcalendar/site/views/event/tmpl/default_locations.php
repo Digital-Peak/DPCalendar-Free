@@ -30,7 +30,7 @@ $params->set('location_map_latitude', $params->get('event_map_lat', 47));
 $params->set('location_map_longitude', $params->get('event_map_long', 4));
 
 /** @var Container $root **/
-$root = $this->root->addChild(new Container('locations', array(), array('itemprop' => 'description')));
+$root = $this->root->addChild(new Container('locations'));
 $root->setProtectedClass('dplocations');
 
 // Add the heading

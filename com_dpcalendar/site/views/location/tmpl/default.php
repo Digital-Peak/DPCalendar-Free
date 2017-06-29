@@ -33,19 +33,22 @@ $h->setContent(JText::_('COM_DPCALENDAR_VIEW_PROFILE_UPCOMING_EVENTS'));
 $c = $this->root->addChild(new Container('upcoming-events'));
 
 // Loop trough the events
-foreach ($this->events as $event)
-{
+foreach ($this->events as $event) {
 	$startDate = DPCalendarHelper::getDate($event->start_date, $event->all_day);
 
 	// The event paragraph
-	$p = $c->addChild(new Paragraph('event-' . $event->id, array(), array('style' => 'border-color:#' . $event->color, 'itemprop' => 'startDate', 'content' => $startDate->format('c'))));
-	$p->addChild(new TextBlock('date-' . $event->id))->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')));
+	$p = $c->addChild(new Paragraph('event-' . $event->id, array(), array('style' => 'border-color:#' . $event->color)));
+	$p->addChild(new TextBlock('date-' . $event->id));
+	$b->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')));
 
 	// The link
-	$l = $p->addChild(new Link('link-' . $event->id, DPCalendarHelperRoute::getEventRoute($event->id, $event->catid), array(), array('itemprop' => 'url')));
+	$l = $p->addChild(new Link('link-' . $event->id, DPCalendarHelperRoute::getEventRoute($event->id, $event->catid)));
 
 	// The title block
-	$l->addChild(new TextBlock('title-' . $event->id, array(), array('itemprop' => 'name')))->setContent($event->title);
+	$l->addChild(new TextBlock('title-' . $event->id))->setContent($event->title);
+
+	// Add the structured data schema
+	DPCalendarHelper::renderLayout('schema.event', array('event' => $event, 'root' => $p));
 }
 
 echo DPCalendarHelper::renderElement($this->root, $this->params);

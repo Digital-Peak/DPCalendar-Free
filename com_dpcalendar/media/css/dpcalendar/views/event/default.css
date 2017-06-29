@@ -57,6 +57,10 @@
 	margin-right: 10px;
 }
 
+#dp-event-information-content-details-metadata-details-map {
+	height: 200px;
+}
+
 .dp-event-label {
 	font-weight: bold;
 	text-align: left !important;

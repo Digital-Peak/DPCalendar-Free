@@ -87,7 +87,7 @@ DPCalendarHelper::renderLayout(
 		'type'    => Icon::OK,
 		'root'    => $root,
 		'text'    => 'COM_DPCALENDAR_VIEW_FORM_BUTTON_SUBMIT_EVENT',
-		'onclick' => "jQuery('#" . $formElement->getId() . " [name=\"task\"').val('event.save'); jQuery('#" . $formElement->getId() . "').submit()"
+		'onclick' => "jQuery('#" . $formElement->getId() . " [name=\"task\"]').val('event.save'); jQuery('#" . $formElement->getId() . "').submit()"
 	)
 );
 
@@ -109,7 +109,7 @@ DPCalendarHelper::renderLayout(
 		'type'    => Icon::CANCEL,
 		'root'    => $root,
 		'text'    => 'JCANCEL',
-		'onclick' => "jQuery('#" . $root->getId() . "').toggle(); jQuery('#" . $formElement->getId() . " [name=\"title\"').val('')"
+		'onclick' => "jQuery('#" . $root->getId() . "').toggle(); jQuery('#" . $formElement->getId() . " [name=\"title\"]').val('')"
 	)
 );
 

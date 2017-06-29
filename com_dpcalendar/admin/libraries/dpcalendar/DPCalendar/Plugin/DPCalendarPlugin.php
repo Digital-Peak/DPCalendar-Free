@@ -37,7 +37,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	public function fetchEvent($eventId, $calendarId)
 	{
 		$eventId = urldecode($eventId);
-		$pos = strrpos($eventId, '_');
+		$pos     = strrpos($eventId, '_');
 		if ($pos === false) {
 			return null;
 		}
@@ -66,7 +66,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$start = \JFactory::getDate(substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' 00:00');
 		} else {
 			$start = \JFactory::getDate(
-				substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' ' . substr($s, 8, 2) . ':' . substr($s, 10, 2));
+				substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' ' . substr($s, 8, 2) . ':' . substr($s, 10, 2)
+			);
 		}
 
 		$end = clone $start;
@@ -93,9 +94,9 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 * events need to be.
 	 * - length_type: The length type in kilometers or miles
 	 *
-	 * @param string $content
-	 * @param \JDate $startDate
-	 * @param \JDate $endDate
+	 * @param string   $content
+	 * @param \JDate   $startDate
+	 * @param \JDate   $endDate
 	 * @param Registry $options
 	 *
 	 * @return array
@@ -180,8 +181,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		$events = array();
 		$filter = strtolower($options->get('filter', null));
-		$limit = $options->get('limit', null);
-		$order = strtolower($options->get('order', 'asc'));
+		$limit  = $options->get('limit', null);
+		$order  = strtolower($options->get('order', 'asc'));
 
 		$dbCal = $this->getDbCal($calendarId);
 		foreach ($data as $event) {
@@ -192,14 +193,14 @@ abstract class DPCalendarPlugin extends \JPlugin
 				}
 			}
 
-			$tmpEvent = $this->createEventFromIcal($event, $calendarId, $originals);
+			$tmpEvent                 = $this->createEventFromIcal($event, $calendarId, $originals);
 			$tmpEvent->access_content = $dbCal->access_content;
 
 			if (!$this->matchLocationFilterEvent($tmpEvent, $options)) {
 				continue;
 			}
 
-			$at = strpos($tmpEvent->id, '@');
+			$at        = strpos($tmpEvent->id, '@');
 			$delimiter = strrpos($tmpEvent->id, '_');
 			if ($at !== false && $delimiter !== false) {
 				$tmpEvent->id = substr_replace($tmpEvent->id, '', $at, $delimiter - $at);
@@ -210,10 +211,10 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		usort($events,
 			function ($event1, $event2) use ($order) {
-				$first = $event1;
+				$first  = $event1;
 				$second = $event2;
 				if (strtolower($order) == 'desc') {
-					$first = $event2;
+					$first  = $event2;
 					$second = $event1;
 				}
 
@@ -244,19 +245,19 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$model->setState('list.limit', -1);
 		$model->setState('list.ordering', 'a.ordering');
 
-		$user = \JFactory::getUser();
+		$user      = \JFactory::getUser();
 		$calendars = array();
 		foreach ($model->getItems() as $calendar) {
 			if (!empty($calendarIds) && !in_array($calendar->id, $calendarIds)) {
 				continue;
 			}
 
-			$cal = $this->createCalendar($calendar->id, $calendar->title, $calendar->description, $calendar->color);
-			$cal->params = $calendar->params;
-			$cal->color_force = $calendar->color_force;
-			$cal->access = $calendar->access;
+			$cal                 = $this->createCalendar($calendar->id, $calendar->title, $calendar->description, $calendar->color);
+			$cal->params         = $calendar->params;
+			$cal->color_force    = $calendar->color_force;
+			$cal->access         = $calendar->access;
 			$cal->access_content = $calendar->access_content;
-			$cal->sync_date = $calendar->sync_date;
+			$cal->sync_date      = $calendar->sync_date;
 
 			// Null the sync date
 			if (!$cal->sync_date || $cal->sync_date == \JFactory::getDbo()->getNullDate()) {
@@ -265,16 +266,16 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 			$cal->sync_token = $calendar->sync_token;
 
-			$action = $calendar->params->get('action-create', 'false');
-			$cal->canCreate = $user->authorise('core.create',
-					'com_dpcalendar.extcalendar.' . $calendar->id) && ($action == 'true' || $action === true || $action == 1);
-			$action = $calendar->params->get('action-edit', 'false');
-			$cal->canEdit = $user->authorise('core.edit',
-					'com_dpcalendar.extcalendar.' . $calendar->id) && ($action == 'true' || $action === true || $action == 1);
-			$action = $calendar->params->get('action-delete', 'false');
-			$cal->canDelete = $user->authorise('core.delete',
-					'com_dpcalendar.extcalendar.' . $calendar->id) && ($action == 'true' || $action === true || $action == 1);
-			$calendars[] = $cal;
+			$action         = $calendar->params->get('action-create', 'false');
+			$cal->canCreate = $user->authorise('core.create', 'com_dpcalendar.extcalendar.' . $calendar->id) &&
+				($action == 'true' || $action === true || $action == 1);
+			$action         = $calendar->params->get('action-edit', 'false');
+			$cal->canEdit   = $user->authorise('core.edit', 'com_dpcalendar.extcalendar.' . $calendar->id) &&
+				($action == 'true' || $action === true || $action == 1);
+			$action         = $calendar->params->get('action-delete', 'false');
+			$cal->canDelete = $user->authorise('core.delete', 'com_dpcalendar.extcalendar.' . $calendar->id) &&
+				($action == 'true' || $action === true || $action == 1);
+			$calendars[]    = $cal;
 		}
 
 		return $calendars;
@@ -307,7 +308,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 *
 	 * @param string $eventId
 	 * @param string $calendarId
-	 * @param array $data
+	 * @param array  $data
 	 *
 	 * @return string false
 	 */
@@ -349,12 +350,12 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		// Sometimes it changes the id
 		$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $eventId);
-		$id = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
+		$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
 		if (count($id) < 2 || !is_numeric($id[0])) {
 			return;
 		}
 
-		$cache = \JFactory::getCache('plg_dpcalendar_' . $this->_name);
+		$cache = \JFactory::getCache('plg_' . $this->_type . '_' . $this->_name);
 		$cache->setCaching($params->get('cache', 1) == '1' && $this->cachingEnabled);
 		$cache->setLifeTime($params->get('cache_time', 900) / 60);
 		$cache->options['locking'] = false;
@@ -381,7 +382,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		$id = str_replace($this->identifier . '-', '', $calendarId);
 
-		$cache = \JFactory::getCache('plg_dpcalendar_' . $this->_name, 'callback');
+		$cache = \JFactory::getCache('plg_' . $this->_type . '_' . $this->_name, 'callback');
 		$cache->setCaching($params->get('cache', 1) == '1' && $this->cachingEnabled);
 		$cache->setLifeTime($params->get('cache_time', 900) / 60);
 		$cache->options['locking'] = false;
@@ -491,7 +492,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		} else {
 			$eventId = $data['id'];
 			$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $eventId);
-			$id = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
+			$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
 			if (count($id) < 2) {
 				return false;
 			}
@@ -499,7 +500,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$newEventId = $this->saveEvent($id[1], $id[0], $data);
 		}
 		if ($newEventId != false) {
-			$cache = \JFactory::getCache('plg_' . $this->_name);
+			$cache = \JFactory::getCache('plg_' . $this->_type . '_' . $this->_name);
 			$cache->clean();
 		}
 
@@ -531,7 +532,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $eventId);
-		$id = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
+		$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
 		if (count($id) < 2) {
 			return false;
 		}
@@ -545,7 +546,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		$success = $this->deleteEvent($id[1], $id[0]);
 		if ($success != false) {
-			$cache = \JFactory::getCache('plg_' . $this->_name);
+			$cache = \JFactory::getCache('plg_' . $this->_type . '_' . $this->_name);
 			$cache->clean();
 		}
 
@@ -590,7 +591,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $eventId);
-		$id = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
+		$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
 		if (count($id) < 2) {
 			return true;
 		}
@@ -600,27 +601,27 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 	protected function createCalendar($id, $title, $description, $color = '3366CC')
 	{
-		$calendar = new \stdClass();
-		$calendar->id = $this->identifier . '-' . $id;
-		$calendar->title = $title;
-		$calendar->description = $description;
-		$calendar->plugin_name = $this->_name;
-		$calendar->level = 1;
-		$calendar->color = $color;
-		$calendar->color_force = 0;
-		$calendar->access = 1;
-		$calendar->access_content = 1;
+		$calendar                  = new \stdClass();
+		$calendar->id              = $this->identifier . '-' . $id;
+		$calendar->title           = $title;
+		$calendar->description     = $description;
+		$calendar->plugin_name     = $this->_name;
+		$calendar->level           = 1;
+		$calendar->color           = $color;
+		$calendar->color_force     = 0;
+		$calendar->access          = 1;
+		$calendar->access_content  = 1;
 		$calendar->created_user_id = 0;
-		$calendar->external = true;
-		$calendar->system = $this->identifier;
-		$calendar->canCreate = false;
-		$calendar->canEdit = false;
-		$calendar->canEditOwn = false;
-		$calendar->canDelete = false;
-		$calendar->canBook = false;
-		$calendar->sync_date = null;
-		$calendar->sync_token = null;
-		$calendar->native = $this->params->get('cache', 1) == 2;
+		$calendar->external        = true;
+		$calendar->system          = $this->identifier;
+		$calendar->canCreate       = false;
+		$calendar->canEdit         = false;
+		$calendar->canEditOwn      = false;
+		$calendar->canDelete       = false;
+		$calendar->canBook         = false;
+		$calendar->sync_date       = null;
+		$calendar->sync_token      = null;
+		$calendar->native          = $this->params->get('cache', 1) == 2;
 
 		return $calendar;
 	}
@@ -631,45 +632,45 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 */
 	protected function createEvent($id, $calendarId)
 	{
-		$event = new \stdClass();
-		$event->id = $this->identifier . '-' . $calendarId . '-' . $id;
-		$event->alias = $id;
-		$event->catid = $this->identifier . '-' . $calendarId;
-		$event->category_access = 1;
-		$event->category_alias = $calendarId;
-		$event->category_title = \DPCalendarHelper::getCalendar($event->catid)->title;
-		$event->parent_alias = '';
-		$event->parent_id = 0;
-		$event->original_id = 0;
-		$event->title = '';
-		$event->rrule = null;
-		$event->recurrence_id = null;
-		$event->start_date = '';
-		$event->end_date = '';
-		$event->all_day = false;
-		$event->color = '';
-		$event->url = '';
-		$event->price = array();
-		$event->locations = array();
-		$event->hits = 0;
-		$event->capacity = 0;
-		$event->capacity_used = 0;
-		$event->description = '';
-		$event->state = 1;
-		$event->access = 1;
-		$event->access_content = 1;
-		$event->language = '*';
-		$event->created = '';
-		$event->created_by = 0;
+		$event                   = new \stdClass();
+		$event->id               = $this->identifier . '-' . $calendarId . '-' . $id;
+		$event->alias            = $id;
+		$event->catid            = $this->identifier . '-' . $calendarId;
+		$event->category_access  = 1;
+		$event->category_alias   = $calendarId;
+		$event->category_title   = \DPCalendarHelper::getCalendar($event->catid)->title;
+		$event->parent_alias     = '';
+		$event->parent_id        = 0;
+		$event->original_id      = 0;
+		$event->title            = '';
+		$event->rrule            = null;
+		$event->recurrence_id    = null;
+		$event->start_date       = '';
+		$event->end_date         = '';
+		$event->all_day          = false;
+		$event->color            = '';
+		$event->url              = '';
+		$event->price            = array();
+		$event->locations        = array();
+		$event->hits             = 0;
+		$event->capacity         = 0;
+		$event->capacity_used    = 0;
+		$event->description      = '';
+		$event->state            = 1;
+		$event->access           = 1;
+		$event->access_content   = 1;
+		$event->language         = '*';
+		$event->created          = '';
+		$event->created_by       = 0;
 		$event->created_by_alias = '';
-		$event->modified = '';
-		$event->modified_by = 0;
-		$event->params = '';
-		$event->metadesc = null;
-		$event->metakey = null;
-		$event->metadata = new Registry();
-		$event->author = null;
-		$event->xreference = $event->id;
+		$event->modified         = '';
+		$event->modified_by      = 0;
+		$event->params           = '';
+		$event->metadesc         = null;
+		$event->metakey          = null;
+		$event->metadata         = new Registry();
+		$event->author           = null;
+		$event->xreference       = $event->id;
 
 		return $event;
 	}
@@ -690,7 +691,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		$endDate = null;
 		if ($event->DURATION != null) {
-			$endDate = clone $startDate;
+			$endDate  = clone $startDate;
 			$duration = \Sabre\VObject\DateTimeParser::parseDuration($event->DURATION, true);
 			$endDate->modify($duration);
 
@@ -736,7 +737,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			}
 		}
 
-		$id = 0;
+		$id    = 0;
 		$recId = $event->{'RECURRENCE-ID'};
 		if ($original !== null && $recId === null) {
 			$id = $event->UID . '_0';
@@ -744,19 +745,19 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$id = $event->UID . '_' . ($allDay ? $startDate->format('Ymd') : $startDate->format('YmdHi'));
 		}
 
-		$tmpEvent = $this->createEvent($id, $calendarId);
+		$tmpEvent      = $this->createEvent($id, $calendarId);
 		$tmpEvent->uid = (string)$event->UID;
 		if (!empty($recId)) {
 			$tmpEvent->recurrence_id = (string)$recId;
 		}
 		$tmpEvent->start_date = $startDate->toSql();
-		$tmpEvent->end_date = $endDate->toSql();
+		$tmpEvent->end_date   = $endDate->toSql();
 
-		$title = (string)$event->SUMMARY;
-		$title = str_replace('\n', ' ', $title);
-		$title = str_replace('\N', ' ', $title);
-		$tmpEvent->title = \DPCalendar\Helper\Ical::icalDecode($title);
-		$tmpEvent->alias = \JApplicationHelper::stringURLSafe($tmpEvent->title);
+		$title                 = (string)$event->SUMMARY;
+		$title                 = str_replace('\n', ' ', $title);
+		$title                 = str_replace('\N', ' ', $title);
+		$tmpEvent->title       = \DPCalendar\Helper\Ical::icalDecode($title);
+		$tmpEvent->alias       = \JApplicationHelper::stringURLSafe($tmpEvent->title);
 		$tmpEvent->description = \DPCalendar\Helper\Ical::icalDecode((string)$event->DESCRIPTION);
 
 		$created = $event->CREATED;
@@ -785,10 +786,10 @@ abstract class DPCalendarPlugin extends \JPlugin
 		if (isset($event->ATTENDEE)) {
 			$tmpEvent->bookings = array();
 			foreach ($event->ATTENDEE as $child) {
-				$booking = new \stdClass();
-				$booking->name = '';
+				$booking        = new \stdClass();
+				$booking->name  = '';
 				$booking->email = str_replace('MAILTO:', '', $child);
-				$booking->id = md5($booking->email);
+				$booking->id    = md5($booking->email);
 				foreach ($child->parameters() as $param) {
 					if ($param->name == 'CN') {
 						$booking->name = (string)$param;
@@ -828,7 +829,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$tmpEvent->images = json_encode(array('image1' => $image));
 		}
 
-		$location = (string)$event->LOCATION;
+		$location  = (string)$event->LOCATION;
 		$locations = array();
 		if (!empty($location)) {
 			$geo = (string)$event->GEO;
@@ -868,13 +869,13 @@ abstract class DPCalendarPlugin extends \JPlugin
 			}
 		}
 		$tmpEvent->locations = $locations;
-		$tmpEvent->all_day = $allDay;
+		$tmpEvent->all_day   = $allDay;
 
 		if ($original !== null) {
 			if ($recId !== null) {
 				$tmpEvent->original_id = $this->identifier . '-' . $calendarId . '-' . $event->UID . '_0';
 			} else {
-				$tmpEvent->rrule = (string)$original->RRULE;
+				$tmpEvent->rrule       = (string)$original->RRULE;
 				$tmpEvent->original_id = -1;
 			}
 		}
@@ -907,14 +908,14 @@ abstract class DPCalendarPlugin extends \JPlugin
 		if ($options->get('radius') == -1) {
 			return true;
 		}
-		$location = $options->get('location');
+		$location    = $options->get('location');
 		$locationIds = $options->get('location_ids', array());
 		if (empty($location) && empty($locationIds)) {
 			return true;
 		}
 
-		$locationFilterData = new  \stdClass();
-		$locationFilterData->latitude = null;
+		$locationFilterData            = new  \stdClass();
+		$locationFilterData->latitude  = null;
 		$locationFilterData->longitude = null;
 
 		$radius = $options->get('radius');
@@ -924,7 +925,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		if (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
 			list ($latitude, $longitude) = explode(';', $location);
-			$locationFilterData->latitude = str_replace('latitude=', '', $latitude);
+			$locationFilterData->latitude  = str_replace('latitude=', '', $latitude);
 			$locationFilterData->longitude = str_replace('longitude=', '', $longitude);
 		} else {
 			if (!empty($location)) {
@@ -934,8 +935,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		$within = false;
 		foreach ($event->locations as $loc) {
-			if (!in_array($loc->id, $locationIds) && !\DPCalendar\Helper\Location::within($loc, $locationFilterData->latitude,
-					$locationFilterData->longitude, $radius)
+			if (!in_array($loc->id, $locationIds) &&
+				!\DPCalendar\Helper\Location::within($loc, $locationFilterData->latitude, $locationFilterData->longitude, $radius)
 			) {
 				continue;
 			}

@@ -4,7 +4,6 @@ function createDPCalendar(calendar, options) {
 		options['defaultView'] = 'list';
 	}
 
-	options['navLinks'] = true;
 	options['weekNumberTitle'] = '';
 	options['theme'] = false;
 	options['startParam'] = 'date-start';
@@ -232,7 +231,7 @@ function createDPCalendar(calendar, options) {
 				form.find('input[name=task]').val('');
 				form.submit();
 			}
-		} else {
+		} else if (options['header'].right.indexOf('agendaDay') > 0) {
 			// The edit form is not loaded, navigate to the day
 			calendar.fullCalendar('gotoDate', date);
 			calendar.fullCalendar('changeView', 'agendaDay');

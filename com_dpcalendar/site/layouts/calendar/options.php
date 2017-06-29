@@ -87,6 +87,7 @@ $options['nextDayThreshold']      = '00:00:00';
 $options['weekNumbersWithinDays'] = false;
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;
+$options['navLinks']              = true;
 
 $max = $params->get('max_time', 24);
 if (is_numeric($max)) {
@@ -138,6 +139,8 @@ if ($params->get('header_show_week', 1)) {
 }
 if ($params->get('header_show_day', 1)) {
 	$options['header']['right'][] = 'agendaDay';
+} else {
+	$options['navLinks'] = false;
 }
 if ($params->get('header_show_list', 1)) {
 	$options['header']['right'][] = 'list';

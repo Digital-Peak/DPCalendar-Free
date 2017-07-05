@@ -38,14 +38,12 @@ foreach ($this->events as $event) {
 
 	// The event paragraph
 	$p = $c->addChild(new Paragraph('event-' . $event->id, array(), array('style' => 'border-color:#' . $event->color)));
-	$p->addChild(new TextBlock('date-' . $event->id));
+	$b = $p->addChild(new TextBlock('date-' . $event->id));
 	$b->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')));
 
 	// The link
 	$l = $p->addChild(new Link('link-' . $event->id, DPCalendarHelperRoute::getEventRoute($event->id, $event->catid)));
-
-	// The title block
-	$l->addChild(new TextBlock('title-' . $event->id))->setContent($event->title);
+	$l->setContent($event->title);
 
 	// Add the structured data schema
 	DPCalendarHelper::renderLayout('schema.event', array('event' => $event, 'root' => $p));

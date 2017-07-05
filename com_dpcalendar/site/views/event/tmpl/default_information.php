@@ -58,19 +58,24 @@ if ($params->get('event_show_calendar', '1')) {
 		// Set the name as content of the description
 		$content = $calendar != null ? $calendar->title : $event->catid;
 	}
-	DPCalendarHelper::renderLayout('content.dl',
-		array('root' => $column, 'id' => 'calendar', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_CALANDAR', 'content' => $content));
+	DPCalendarHelper::renderLayout(
+		'content.dl',
+		array('root' => $column, 'id' => 'calendar', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_CALANDAR', 'content' => $content)
+	);
 }
 
 // Add date
 if ($params->get('event_show_date', '1')) {
 	// Add a link to the url
 	$start = new TextBlock('start-date');
-	$start->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('event_date_format', 'm.d.Y'),
-		$params->get('event_time_format', 'g:i a')));
+	$start->setContent(
+		DPCalendarHelper::getDateStringFromEvent($event, $params->get('event_date_format', 'm.d.Y'), $params->get('event_time_format', 'g:i a'))
+	);
 
-	DPCalendarHelper::renderLayout('content.dl',
-		array('root' => $column, 'id' => 'date', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE', 'content' => $start));
+	DPCalendarHelper::renderLayout(
+		'content.dl',
+		array('root' => $column, 'id' => 'date', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE', 'content' => $start)
+	);
 }
 
 // Add location information
@@ -85,10 +90,11 @@ if ($event->locations && $params->get('event_show_location', '2')) {
 				'location-details'
 			),
 			array(
-				'data-latitude'  => $location->latitude,
-				'data-longitude' => $location->longitude,
-				'data-title'     => $location->title,
-				'data-color'     => \DPCalendar\Helper\Location::getColor($location),
+				'data-latitude'    => $location->latitude,
+				'data-longitude'   => $location->longitude,
+				'data-title'       => $location->title,
+				'data-description' => '<a href="' . DPCalendarHelperRoute::getLocationRoute($location) . '">' . $location->title . '</a>',
+				'data-color'       => \DPCalendar\Helper\Location::getColor($location)
 			)
 		);
 		$lc->setProtectedClass('location-details');
@@ -98,14 +104,16 @@ if ($event->locations && $params->get('event_show_location', '2')) {
 			$lc->addChild(new Link('link', DPCalendarHelperRoute::getLocationRoute($location)))->setContent($location->title);
 		} else if ($params->get('event_show_location', '2') == '2') {
 			// Link to the location details on the same page
-			$lc->addChild(new Link('link', '#' . $location->alias))->setContent($location->title);
+			$lc->addChild(new Link('link', '#dp-event-locations-' . $location->id))->setContent($location->title);
 		}
 
 		$locations[] = $lc;
 	}
 
-	DPCalendarHelper::renderLayout('content.dl',
-		array('root' => $column, 'id' => 'location', 'label' => 'COM_DPCALENDAR_LOCATION', 'content' => $locations));
+	DPCalendarHelper::renderLayout(
+		'content.dl',
+		array('root' => $column, 'id' => 'location', 'label' => 'COM_DPCALENDAR_LOCATION', 'content' => $locations)
+	);
 }
 
 // Author
@@ -113,6 +121,8 @@ $author = JFactory::getUser($event->created_by);
 if ($author && !$author->guest && $params->get('event_show_author', '1')) {
 	// The description list
 	$dl = $column->addChild(new DescriptionListHorizontal('author'));
+
+	// Set the term
 	$dl->setTerm(new Term('label', array('label')))->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_AUTHOR'));
 	$desc = $dl->setDescription(new Description('description', array('content')));
 
@@ -147,8 +157,10 @@ if ($event->url && $params->get('event_show_url', '1')) {
 	$content = new Link('link', $event->url);
 	$content->setContent($event->url);
 
-	DPCalendarHelper::renderLayout('content.dl',
-		array('root' => $column, 'id' => 'url', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_URL', 'content' => $content));
+	DPCalendarHelper::renderLayout(
+		'content.dl',
+		array('root' => $column, 'id' => 'url', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_URL', 'content' => $content)
+	);
 }
 
 // Information column

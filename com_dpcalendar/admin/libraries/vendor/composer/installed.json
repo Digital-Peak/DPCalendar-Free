@@ -958,65 +958,6 @@
         "homepage": "https://symfony.com"
     },
     {
-        "name": "omnipay/stripe",
-        "version": "v2.4.5",
-        "version_normalized": "2.4.5.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/thephpleague/omnipay-stripe.git",
-            "reference": "a88b94d6b2228ec29ab8dcef84050ffaaccc4fac"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/thephpleague/omnipay-stripe/zipball/a88b94d6b2228ec29ab8dcef84050ffaaccc4fac",
-            "reference": "a88b94d6b2228ec29ab8dcef84050ffaaccc4fac",
-            "shasum": ""
-        },
-        "require": {
-            "omnipay/common": "~2.0"
-        },
-        "require-dev": {
-            "omnipay/tests": "~2.0"
-        },
-        "time": "2017-05-28T07:05:31+00:00",
-        "type": "library",
-        "extra": {
-            "branch-alias": {
-                "dev-master": "2.0.x-dev"
-            }
-        },
-        "installation-source": "dist",
-        "autoload": {
-            "psr-4": {
-                "Omnipay\\Stripe\\": "src/"
-            }
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "MIT"
-        ],
-        "authors": [
-            {
-                "name": "Adrian Macneil",
-                "email": "adrian@adrianmacneil.com"
-            },
-            {
-                "name": "Omnipay Contributors",
-                "homepage": "https://github.com/thephpleague/omnipay-stripe/contributors"
-            }
-        ],
-        "description": "Stripe driver for the Omnipay payment processing library",
-        "homepage": "https://github.com/thephpleague/omnipay-stripe",
-        "keywords": [
-            "gateway",
-            "merchant",
-            "omnipay",
-            "pay",
-            "payment",
-            "stripe"
-        ]
-    },
-    {
         "name": "symfony/polyfill-mbstring",
         "version": "v1.4.0",
         "version_normalized": "1.4.0.0",
@@ -1198,26 +1139,86 @@
         "homepage": "https://symfony.com"
     },
     {
+        "name": "omnipay/stripe",
+        "version": "v2.4.6",
+        "version_normalized": "2.4.6.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/thephpleague/omnipay-stripe.git",
+            "reference": "2c0df1df7e6bcc00e893119f50b090b3cd617b0c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/thephpleague/omnipay-stripe/zipball/2c0df1df7e6bcc00e893119f50b090b3cd617b0c",
+            "reference": "2c0df1df7e6bcc00e893119f50b090b3cd617b0c",
+            "shasum": ""
+        },
+        "require": {
+            "omnipay/common": "~2.0"
+        },
+        "require-dev": {
+            "omnipay/tests": "~2.0"
+        },
+        "time": "2017-06-15T07:01:00+00:00",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "2.0.x-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Omnipay\\Stripe\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Adrian Macneil",
+                "email": "adrian@adrianmacneil.com"
+            },
+            {
+                "name": "Omnipay Contributors",
+                "homepage": "https://github.com/thephpleague/omnipay-stripe/contributors"
+            }
+        ],
+        "description": "Stripe driver for the Omnipay payment processing library",
+        "homepage": "https://github.com/thephpleague/omnipay-stripe",
+        "keywords": [
+            "gateway",
+            "merchant",
+            "omnipay",
+            "pay",
+            "payment",
+            "stripe"
+        ]
+    },
+    {
         "name": "Digital-Peak/ccl",
         "version": "dev-unstable",
         "version_normalized": "dev-unstable",
         "source": {
             "type": "git",
             "url": "https://github.com/Digital-Peak/ccl.git",
-            "reference": "044bc7f7bc9e86a896315ff09acb94b0b1f2e376"
+            "reference": "ad18034d89cfcabd61b335356b68d2e5dc8684ce"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Digital-Peak/ccl/zipball/044bc7f7bc9e86a896315ff09acb94b0b1f2e376",
-            "reference": "044bc7f7bc9e86a896315ff09acb94b0b1f2e376",
+            "url": "https://api.github.com/repos/Digital-Peak/ccl/zipball/ad18034d89cfcabd61b335356b68d2e5dc8684ce",
+            "reference": "ad18034d89cfcabd61b335356b68d2e5dc8684ce",
             "shasum": ""
         },
         "require-dev": {
             "phpunit/phpunit": "^5",
             "satooshi/php-coveralls": "^1.0",
-            "squizlabs/php_codesniffer": "^2"
+            "squizlabs/php_codesniffer": "^2",
+            "victorjonsson/markdowndocs": "^1.3"
         },
-        "time": "2017-06-16T07:04:11+00:00",
+        "time": "2017-06-29T09:17:15+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

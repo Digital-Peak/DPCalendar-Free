@@ -56,18 +56,19 @@ class Element implements ElementInterface
 	private $parent = null;
 
 	/**
-	 * Defines the internal attributes structure with the given parameters.
+	 * Constructor which sets the classes and attributes of the element.
+	 * The id parameter must be set, otherwise an InvalidArgumentException is thrown.
 	 *
-	 * @param string $id
-	 * @param array  $classes
-	 * @param array  $attributes
+	 * @param string $id         The id of the element, must be not empty
+	 * @param array  $classes    The classes of the element
+	 * @param array  $attributes Additional attributes for the element
 	 *
-	 * @throws \Exception
+	 * @throws \InvalidArgumentException
 	 */
 	public function __construct($id, array $classes = [], array $attributes = [])
 	{
 		if (!$id) {
-			throw new \Exception('ID cannot be empty!');
+			throw new \InvalidArgumentException('ID can not be empty!');
 		}
 
 		$this->id         = $id;
@@ -219,7 +220,7 @@ class Element implements ElementInterface
 
 	/**
 	 * Sets the content for the element.
-	 * If append is set to true, the existing content will not being touched. If the content is invalid XML, an exception is thrown.
+	 * If append is set to true, the existing content will not being touched and the new content appended.
 	 *
 	 * @param string  $content
 	 * @param boolean $append
@@ -231,10 +232,6 @@ class Element implements ElementInterface
 	public function setContent($content, $append = false)
 	{
 		$content = ($append ? $this->content : '') . $content;
-
-		if ($content === '' || $content === null) {
-			return $this;
-		}
 
 		$this->content = $content;
 

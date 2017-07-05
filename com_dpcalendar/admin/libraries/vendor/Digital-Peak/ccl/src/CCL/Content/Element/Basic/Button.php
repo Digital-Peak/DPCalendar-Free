@@ -6,19 +6,25 @@ use CCL\Content\Element\Basic\Container;
 use CCL\Content\Element\Component\Icon;
 
 /**
- * A button representation.
+ * Represents a button element.
+ *
+ * @example // The following code snippet creates a button which has a text and ok icon.
+ * $b = new Button('myb', 'Demo Button', new Icon('icon', Icon::OK));
  */
 class Button extends Container
 {
-
 	/**
-	 * Initiates the button with some optional text and icon.
+	 * Constructor which sets the classes and attributes of the element. Additionally you can define
+	 * a text and Icon for the button.
+	 * The id parameter must be set, otherwise an InvalidArgumentException is thrown.
 	 *
-	 * @param string $id
-	 * @param string $text
-	 * @param Icon   $icon
-	 * @param array  $classes
-	 * @param array  $attributes
+	 * @param string $id         The id of the element, must be not empty
+	 * @param string $text       Optional text of the button
+	 * @param Icon   $icon       Optional icon of the button
+	 * @param array  $classes    The classes of the element
+	 * @param array  $attributes Additional attributes for the element
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public function __construct($id, $text = '', Icon $icon = null, array $classes = [], array $attributes = [])
 	{

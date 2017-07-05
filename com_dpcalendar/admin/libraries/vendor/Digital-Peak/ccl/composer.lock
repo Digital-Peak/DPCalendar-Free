@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1db908b9d5e312acc6d15b03630ad17c",
+    "content-hash": "cd9ca9e7e08ed8ba1c003b95fa41ea9f",
     "packages": [],
     "packages-dev": [
         {
@@ -1936,6 +1936,50 @@
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
             "time": "2017-02-16T22:46:52+00:00"
+        },
+        {
+            "name": "victorjonsson/markdowndocs",
+            "version": "1.3.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/victorjonsson/PHP-Markdown-Documentation-Generator.git",
+                "reference": "c5eb16ff5bd15ee60223883ddacba0ab8797268d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/victorjonsson/PHP-Markdown-Documentation-Generator/zipball/c5eb16ff5bd15ee60223883ddacba0ab8797268d",
+                "reference": "c5eb16ff5bd15ee60223883ddacba0ab8797268d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0",
+                "symfony/console": ">=2.6"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.23"
+            },
+            "bin": [
+                "bin/phpdoc-md"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "PHPDocsMD": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Victor Jonsson",
+                    "email": "kontakt@victorjonsson.se"
+                }
+            ],
+            "description": "Command line tool for generating markdown-formatted class documentation",
+            "homepage": "https://github.com/victorjonsson/PHP-Markdown-Documentation-Generator",
+            "time": "2017-04-20T09:52:47+00:00"
         },
         {
             "name": "webmozart/assert",

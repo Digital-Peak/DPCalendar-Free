@@ -50,7 +50,9 @@ class Container extends Element
 	 * Adds the given element as child to itself.
 	 * It also sets the parent of the given element to this container.
 	 *
-	 * @param Element $element The element to add
+	 * The given element is returned for chaining calls.
+	 *
+	 * @param Element $element   The element to add
 	 * @param boolean $beginning If the element should be added as first element to the children array
 	 *
 	 * @return Element

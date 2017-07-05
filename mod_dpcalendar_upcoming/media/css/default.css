@@ -26,6 +26,7 @@
 .dp-module-upcoming-default-container {
 	display: block;
 	margin-bottom: 5px;
+	overflow: hidden;
 }
 
 .dp-module-upcoming-default-calendar {

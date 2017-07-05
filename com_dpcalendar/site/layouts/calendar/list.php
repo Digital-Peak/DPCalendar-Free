@@ -32,6 +32,11 @@ if ($params->get('show_selection', 1) != 1 && $params->get('show_selection', 1) 
 $c = $root->addChild(new Container('list'));
 $c->addClass('dp-calendar-list', true);
 
+// Default the calendars
+if (!key_exists('calendars', $displayData)) {
+	$displayData['calendars'] = array();
+}
+
 // Loop over the calendars
 foreach ($displayData['calendars'] as $calendar) {
 	// The url for the source

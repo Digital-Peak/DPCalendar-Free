@@ -15,8 +15,7 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 	public function display($tpl = null)
 	{
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-		$model = JModelLegacy::getInstance('Location', 'DPCalendarModel');
-		$this->setModel($model, true);
+		$this->setModel(JModelLegacy::getInstance('Location', 'DPCalendarModel'), true);
 
 		return parent::display($tpl);
 	}
@@ -25,15 +24,13 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 	{
 		$this->item = $this->getModel()->getItem(JFactory::getApplication()->input->getInt('id'));
 
-		if ($this->item->id == null)
-		{
+		if ($this->item->id == null) {
 			$this->set('Errors', JText::_('JERROR_ALERTNOAUTHOR'));
+
 			return false;
 		}
 
-		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array(
-				'ignore_request' => true
-		));
+		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
 		$model->setState('list.limit', 1000);
 		$model->setState('list.start-date', DPCalendarHelper::getDate());
 		$model->setState('list.ordering', 'start_date');
@@ -41,9 +38,7 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		$model->setState('filter.ongoing', true);
 		$model->setState('filter.state', 1);
 		$model->setState('filter.language', JFactory::getLanguage());
-		$model->setState('filter.locations', array(
-				$this->item->id
-		));
+		$model->setState('filter.locations', array($this->item->id));
 		$this->events = $model->getItems();
 	}
 }

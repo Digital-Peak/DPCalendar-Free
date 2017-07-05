@@ -387,7 +387,7 @@ class DPCalendarTableEvent extends JTable
 		}
 
 		// Strict mode adjustments
-		if (!is_integer($this->capacity_used)) {
+		if (!is_numeric($this->capacity_used)) {
 			$this->capacity_used = 0;
 		}
 

@@ -189,7 +189,7 @@ function createDPCalendar(calendar, options) {
 
 	options['dayClick'] = function (date, jsEvent, view, resourceObj) {
 		var form = calendar.parent().find('form[name=adminForm]');
-		if (form.length > 0) {
+		if (form.length > 0 && options['event_create_form'] == 1) {
 			// On small screens open the edit page directly
 			if (jQuery(window).width() < 600) {
 				form.find('input[name=task]').val('');
@@ -214,54 +214,52 @@ function createDPCalendar(calendar, options) {
 			date.hours(date.hours() + 1);
 			form.find('#jform_end_date_time').timepicker('setTime', date.toDate());
 
-			if (options['event_edit_popup'] == 1) {
-				var pointerEventToXY = function (e) {
-					var out = {x: 0, y: 0};
-					if (e.type == 'touchstart' || e.type == 'touchmove' || e.type == 'touchend' || e.type == 'touchcancel') {
-						var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-						out.x = touch.pageX;
-						out.y = touch.pageY;
-					} else if (e.type == 'mousedown' || e.type == 'mouseup' || e.type == 'mousemove' || e.type == 'mouseover' || e.type == 'mouseout' || e.type == 'mouseenter' || e.type == 'mouseleave') {
-						out.x = e.pageX;
-						out.y = e.pageY;
-					}
-					return out;
-				};
-
-				var height = form.parent().height();
-				var width = form.parent().width();
-				var top = pointerEventToXY(jsEvent).y;
-				var left = pointerEventToXY(jsEvent).x - (width / 2);
-
-				// Get the viewport width (w) and height (y)
-				var w = window, d = document, e = d.documentElement, g = d.getElementsByTagName('body')[0],
-					x = w.innerWidth || e.clientWidth || g.clientWidth, y = w.innerHeight || e.clientHeight || g.clientHeight;
-
-				// Check if the popup height is outside the viewport
-				if (y < (top + height - jQuery(window).scrollTop())) {
-					top = top - height;
+			var pointerEventToXY = function (e) {
+				var out = {x: 0, y: 0};
+				if (e.type == 'touchstart' || e.type == 'touchmove' || e.type == 'touchend' || e.type == 'touchcancel') {
+					var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
+					out.x = touch.pageX;
+					out.y = touch.pageY;
+				} else if (e.type == 'mousedown' || e.type == 'mouseup' || e.type == 'mousemove' || e.type == 'mouseover' || e.type == 'mouseout' || e.type == 'mouseenter' || e.type == 'mouseleave') {
+					out.x = e.pageX;
+					out.y = e.pageY;
 				}
+				return out;
+			};
 
-				// Check if the popup left is outside the viewport
-				if (left < 0) {
-					left = 0;
-				}
-				if ((left + width) > x) {
-					left = x - width;
-				}
+			var height = form.parent().height();
+			var width = form.parent().width();
+			var top = pointerEventToXY(jsEvent).y;
+			var left = pointerEventToXY(jsEvent).x - (width / 2);
 
-				// Show the quick add popup
-				form.parent().css({
-					top: top,
-					left: left
-				});
-				form.parent().show();
-				form.find('#jform_title').focus();
-			} else {
-				// Open the edit page
-				form.find('input[name=task]').val('');
-				form.submit();
+			// Get the viewport width (w) and height (y)
+			var w = window, d = document, e = d.documentElement, g = d.getElementsByTagName('body')[0],
+				x = w.innerWidth || e.clientWidth || g.clientWidth, y = w.innerHeight || e.clientHeight || g.clientHeight;
+
+			// Check if the popup height is outside the viewport
+			if (y < (top + height - jQuery(window).scrollTop())) {
+				top = top - height;
 			}
+
+			// Check if the popup left is outside the viewport
+			if (left < 0) {
+				left = 0;
+			}
+			if ((left + width) > x) {
+				left = x - width;
+			}
+
+			// Show the quick add popup
+			form.parent().css({
+				top: top,
+				left: left
+			});
+			form.parent().show();
+			form.find('#jform_title').focus();
+		}
+		else if (options['event_create_form'] == 2 && typeof DPCALENDAR_CREATE_FORM_URL !== 'undefined') {
+			// Just navigate to the event form
+			window.location = dpEncode(DPCALENDAR_CREATE_FORM_URL);
 		} else if (options['header'].right.indexOf('agendaDay') > 0) {
 			// The edit form is not loaded, navigate to the day
 			calendar.fullCalendar('gotoDate', date);

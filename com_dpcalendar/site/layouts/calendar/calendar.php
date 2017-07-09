@@ -61,8 +61,14 @@ JFactory::getDocument()->addScriptDeclaration($js);
 $root->addChild(new Input('date-picker', 'hidden', 'date-picker'));
 
 // Add quick add
-if ($params->get('event_edit_popup', 1) && DPCalendarHelper::canCreateEvent()) {
-	DPCalendarHelper::renderLayout('calendar.quickadd', $displayData);
+if (DPCalendarHelper::canCreateEvent()) {
+	if ($params->get('event_create_form', 1) == 1) {
+		DPCalendarHelper::renderLayout('calendar.quickadd', $displayData);
+	}
+	if ($params->get('event_create_form', 1) == 2) {
+		JFactory::getDocument()->addScriptDeclaration("var DPCALENDAR_CREATE_FORM_URL='" . JRoute::_(DPCalendarHelperRoute::getFormRoute(0,
+				JUri::getInstance()->toString())) . "';");
+	}
 }
 
 // Load the map

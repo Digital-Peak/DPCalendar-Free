@@ -77,7 +77,8 @@ class DPCalendarModelAdminEvents extends JModelList
 
 		$accessId = $this->getUserStateFromRequest($this->context . '.filter.access', 'filter_access');
 		$this->setState('filter.access', $accessId);
-		$authorId = $this->getUserStateFromRequest($this->context . '.filter.author_id', 'filter_author_id');
+
+		$authorId = $this->getUserStateFromRequest($this->context . '.filter.created_by', 'filter_created_by');
 		$this->setState('filter.author_id', $authorId);
 
 		$eventType = $this->getUserStateFromRequest($this->context . '.filter.event_type', 'filter_event_type', '', 'string');

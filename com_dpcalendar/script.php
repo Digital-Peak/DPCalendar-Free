@@ -342,6 +342,14 @@ from #__dpcalendar_bookings");
 			JFile::delete(JPATH_SITE . '/components/com_dpcalendar/models/forms/event.xml');
 			JFile::delete(JPATH_SITE . '/components/com_dpcalendar/models/forms/location.xml');
 		}
+
+		if (version_compare($version, '6.0.9') == -1) {
+			// Defaulting some params which have changed
+			$params = JComponentHelper::getParams('com_dpcalendar');
+			$params->set('event_create_form', $params->get('event_edit_popup', 1));
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
 	}
 
 	public function uninstall($parent)

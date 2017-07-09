@@ -27,8 +27,7 @@
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
-				<option value="3">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND
-				</option>
+				<option value="3">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
 				<option value="2">JNO</option>
 			</field>
 			<field name="show_my_only_calendar" type="list"
@@ -42,33 +41,22 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="month">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH
-				</option>
-				<option value="week">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK
-				</option>
-				<option value="day">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY
-				</option>
-				<option value="list">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LIST
-				</option>
+				<option value="month">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
+				<option value="week">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
+				<option value="day">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
+				<option value="list">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LIST</option>
 			</field>
 			<field name="weekstart" type="list"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_SUNDAY
-				</option>
-				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_MONDAY
-				</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_TUESDAY
-				</option>
-				<option value="3">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_WEDNESDAY
-				</option>
-				<option value="4">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_THURSDAY
-				</option>
-				<option value="5">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_FRIDAY
-				</option>
-				<option value="6">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_SATURDAY
-				</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_SUNDAY</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_MONDAY</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_TUESDAY</option>
+				<option value="3">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_WEDNESDAY</option>
+				<option value="4">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_THURSDAY</option>
+				<option value="5">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_FRIDAY</option>
+				<option value="6">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_SATURDAY</option>
 			</field>
 			<field name="weekend" type="list"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEKEND_LABEL"
@@ -81,12 +69,9 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="fixed">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_FIXED
-				</option>
-				<option value="liquid">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_LIQUID
-				</option>
-				<option value="variable">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_VARIABLE
-				</option>
+				<option value="fixed">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_FIXED</option>
+				<option value="liquid">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_LIQUID</option>
+				<option value="variable">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_VARIABLE</option>
 			</field>
 			<field name="week_numbers" type="list"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_NUMBER_LABEL"
@@ -251,12 +236,13 @@
 			<field name="popup_height" type="text" size="5"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_HEIGHT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_HEIGHT_DESC"/>
-			<field name="event_edit_popup" type="list" class="btn-group"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_EDIT_POPUP_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_EDIT_POPUP_DESC">
+			<field name="event_create_form" type="list" class="btn-group"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="1">JYES</option>
-				<option value="2">JNO</option>
+				<option value="0">JDISABLED</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_POPUP</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_SITE</option>
 			</field>
 			<field name="description_length" type="text" size="10"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DESC_COUNT_LABEL"
@@ -266,10 +252,8 @@
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_ADJUST_FG_COLOR_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
-				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_ADJUST_FG_COLOR_INVERSE
-				</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_ADJUST_FG_COLOR_BW
-				</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_ADJUST_FG_COLOR_INVERSE</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_ADJUST_FG_COLOR_BW</option>
 			</field>
 			<field name="show_map" type="list"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MAP_LABEL"
@@ -755,36 +739,26 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_LIKE
-				</option>
-				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_RECCOMMEND
-				</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_LIKE</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_RECCOMMEND</option>
 			</field>
 			<field name="font" type="list"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="arial">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_ARIAL
-				</option>
-				<option value="lucida grande">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_LUCIDA_GRANDE
-				</option>
-				<option value="segoe ui">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_SEGOE_UI
-				</option>
-				<option value="tahoma">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_TAHOMA
-				</option>
-				<option value="trebuchet ms">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_TREBUCHET_MS
-				</option>
-				<option value="verdana">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_VERDANA
-				</option>
+				<option value="arial">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_ARIAL</option>
+				<option value="lucida grande">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_LUCIDA_GRANDE</option>
+				<option value="segoe ui">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_SEGOE_UI</option>
+				<option value="tahoma">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_TAHOMA</option>
+				<option value="trebuchet ms">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_TREBUCHET_MS</option>
+				<option value="verdana">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_VERDANA</option>
 			</field>
 			<field name="color_scheme" type="list"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="light">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_LIGHT
-				</option>
-				<option value="dark">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_DARK
-				</option>
+				<option value="light">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_LIGHT</option>
+				<option value="dark">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_DARK</option>
 			</field>
 
 			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_LABEL"/>
@@ -792,14 +766,10 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="small">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_SMALL
-				</option>
-				<option value="medium">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_MEDIUM
-				</option>
-				<option value="standard">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_STANDARD
-				</option>
-				<option value="tall">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_TALL
-				</option>
+				<option value="small">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_SMALL</option>
+				<option value="medium">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_MEDIUM</option>
+				<option value="standard">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_STANDARD</option>
+				<option value="tall">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_TALL</option>
 			</field>
 			<field name="show_count_google" type="list"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SHOW_COUNT_GOOGLE_LABEL"
@@ -814,12 +784,9 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL
-				</option>
-				<option value="horizontal">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_HORIZONTAL
-				</option>
-				<option value="none">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_NONE
-				</option>
+				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL</option>
+				<option value="horizontal">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_HORIZONTAL</option>
+				<option value="none">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_NONE</option>
 			</field>
 			<field name="data_via_twitter" type="text"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_VIA_LABEL"
@@ -835,12 +802,9 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LINKEDIN_SHOW_COUNT_LINKEDIN_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LINKEDIN_SHOW_COUNT_LINKEDIN_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL
-				</option>
-				<option value="horizontal">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_HORIZONTAL
-				</option>
-				<option value="none">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_NONE
-				</option>
+				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL</option>
+				<option value="horizontal">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_HORIZONTAL</option>
+				<option value="none">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_NONE</option>
 			</field>
 
 			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_LABEL"/>
@@ -848,12 +812,9 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_SHOW_COUNT_XING_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_SHOW_COUNT_XING_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL
-				</option>
-				<option value="horizontal">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_HORIZONTAL
-				</option>
-				<option value="none">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_NONE
-				</option>
+				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL</option>
+				<option value="horizontal">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_HORIZONTAL</option>
+				<option value="none">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_NONE</option>
 			</field>
 
 			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_LABEL"/>
@@ -862,12 +823,9 @@
 			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JHIDE</option>
-				<option value="facebook">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_FACEBOOK
-				</option>
-				<option value="googleplus">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_GOOGLE_PLUS
-				</option>
-				<option value="jcomments">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_JCOMMENTS
-				</option>
+				<option value="facebook">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_FACEBOOK</option>
+				<option value="googleplus">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_GOOGLE_PLUS</option>
+				<option value="jcomments">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_JCOMMENTS</option>
 			</field>
 
 			<field name="comment_gp_width" type="text" size="20"
@@ -886,10 +844,8 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="light">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_LIGHT
-				</option>
-				<option value="dark">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_DARK
-				</option>
+				<option value="light">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_LIGHT</option>
+				<option value="dark">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_DARK</option>
 			</field>
 			<field name="comment_fb_admin_id" type="text"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_ADMIN_ID_LABEL"
@@ -915,16 +871,11 @@
 			       description="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
-				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_AUTO
-				</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_GRAVATAR
-				</option>
-				<option value="3">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_JOMSOCIAL
-				</option>
-				<option value="4">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_COMMUNITY_BUILDER
-				</option>
-				<option value="5">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_EASY_SOCIAL
-				</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_AUTO</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_GRAVATAR</option>
+				<option value="3">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_JOMSOCIAL</option>
+				<option value="4">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_COMMUNITY_BUILDER</option>
+				<option value="5">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_EASY_SOCIAL</option>
 			</field>
 			<field name="avatar_width" type="text" size="8"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_AVATAR_WIDTH_LABEL"

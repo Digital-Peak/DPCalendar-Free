@@ -111,7 +111,7 @@ $this->params->set('use_hash', true);
 $this->params->set('echo_js_code', true);
 $this->params->set('header_show_datepicker', false);
 $this->params->set('header_show_print', false);
-$this->params->set('event_edit_popup', false);
+$this->params->set('event_create_form', 0);
 
 // Load the calendar layout
 $js = DPCalendarHelper::renderLayout(

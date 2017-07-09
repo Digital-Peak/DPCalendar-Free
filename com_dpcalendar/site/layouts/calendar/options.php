@@ -69,7 +69,7 @@ $options['weekNumbers']    = (boolean)$params->get('week_numbers');
 $options['weekends']       = (boolean)$params->get('weekend', 1);
 $options['fixedWeekCount'] = $params->get('week_mode', 'variable') == 'fixed';
 
-if ($params->get('week_mode', 'variable') != 'variable') {
+if ($params->get('week_mode', 'variable') == 'variable') {
 	$options['height'] = 'auto';
 }
 
@@ -203,7 +203,7 @@ $options['show_event_as_popup']   = $params->get('show_event_as_popup');
 $options['show_date_picker']      = $params->get('show_date_picker', 1);
 $options['show_print']            = $params->get('show_print', 1);
 $options['use_hash']              = $params->get('use_hash');
-$options['event_edit_popup']      = $params->get('event_edit_popup', 1);
+$options['event_create_form']       = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
 
 // Workaround to get the icon classes

@@ -12,9 +12,7 @@ class Frame extends Container
 {
 	/**
 	 * Constructor which sets the classes and attributes of the element.
-	 * The src attribute must be a url which should be embedded by this frame.
-	 *
-	 * The idand src parameter must be set, otherwise an InvalidArgumentException is thrown.
+	 * The src attribute can be a url which should be embedded by this frame.
 	 *
 	 * @param string $id         The id of the element, must be not empty
 	 * @param string $src        The src url to embed
@@ -25,10 +23,6 @@ class Frame extends Container
 	 */
 	public function __construct($id, $src, array $classes = [], array $attributes = [])
 	{
-		if (!$src) {
-			throw new \InvalidArgumentException('Source url can not be empty!');
-		}
-
 		$attributes['src'] = $src;
 
 		parent::__construct($id, $classes, $attributes);

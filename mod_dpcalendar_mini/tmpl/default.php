@@ -42,7 +42,7 @@ $params->set('header_show_print', false);
 $params->set('show_map', false);
 $params->set('show_compact_events', $params->get('compact_events', 2) == 1);
 $params->set('use_hash', false);
-$params->set('event_edit_popup', false);
+$params->set('event_create_form', 0);
 $params->set('screen_size_list_view', 0);
 
 // Load the calendar layout

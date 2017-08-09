@@ -214,45 +214,15 @@ function createDPCalendar(calendar, options) {
 			date.hours(date.hours() + 1);
 			form.find('#jform_end_date_time').timepicker('setTime', date.toDate());
 
-			var pointerEventToXY = function (e) {
-				var out = {x: 0, y: 0};
-				if (e.type == 'touchstart' || e.type == 'touchmove' || e.type == 'touchend' || e.type == 'touchcancel') {
-					var touch = e.originalEvent.touches[0] || e.originalEvent.changedTouches[0];
-					out.x = touch.pageX;
-					out.y = touch.pageY;
-				} else if (e.type == 'mousedown' || e.type == 'mouseup' || e.type == 'mousemove' || e.type == 'mouseover' || e.type == 'mouseout' || e.type == 'mouseenter' || e.type == 'mouseleave') {
-					out.x = e.pageX;
-					out.y = e.pageY;
-				}
-				return out;
-			};
-
-			var height = form.parent().height();
-			var width = form.parent().width();
-			var top = pointerEventToXY(jsEvent).y;
-			var left = pointerEventToXY(jsEvent).x - (width / 2);
-
-			// Get the viewport width (w) and height (y)
-			var w = window, d = document, e = d.documentElement, g = d.getElementsByTagName('body')[0],
-				x = w.innerWidth || e.clientWidth || g.clientWidth, y = w.innerHeight || e.clientHeight || g.clientHeight;
-
-			// Check if the popup height is outside the viewport
-			if (y < (top + height - jQuery(window).scrollTop())) {
-				top = top - height;
-			}
-
-			// Check if the popup left is outside the viewport
-			if (left < 0) {
-				left = 0;
-			}
-			if ((left + width) > x) {
-				left = x - width;
-			}
+			var p = calendar.parents().filter(function () {
+				var parent = jQuery(this);
+				return parent.is('body') || parent.css('position') == 'relative';
+			}).slice(0, 1).offset();
 
 			// Show the quick add popup
 			form.parent().css({
-				top: top,
-				left: left
+				top: jsEvent.pageY - p.top,
+				left: jsEvent.pageX - 160 - p.left
 			});
 			form.parent().show();
 			form.find('#jform_title').focus();

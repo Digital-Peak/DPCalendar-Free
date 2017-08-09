@@ -42,12 +42,11 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-		<field name="week_mode" type="list" default="variable"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_DESC">
-			<option value="fixed">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_FIXED</option>
-			<option value="liquid">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_LIQUID</option>
-			<option value="variable">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_MODE_VARIABLE</option>
+		<field name="fixed_week_count" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIXED_WEEK_COUNT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIXED_WEEK_COUNT_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
 		</field>
 		<field name="week_numbers" type="radio" class="btn-group"
 		       default="0" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_NUMBER_LABEL"

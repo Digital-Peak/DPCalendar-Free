@@ -350,6 +350,14 @@ from #__dpcalendar_bookings");
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
+
+		if (version_compare($version, '6.0.10') == -1) {
+			// Defaulting some params which have changed
+			$params = JComponentHelper::getParams('com_dpcalendar');
+			$params->set('fixed_week_count', $params->get('week_mode', 'variable') == 'variable' ? 1 : 0);
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
 	}
 
 	public function uninstall($parent)

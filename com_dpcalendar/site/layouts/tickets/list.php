@@ -111,10 +111,10 @@ foreach ($tickets as $ticket) {
 	}
 
 	if (!$limited) {
-		$row->addCell(new Cell('name'))->setContent($ticket->seat);
+		$row->addCell(new Cell('seat'))->setContent($ticket->seat);
 	}
 
 	if ($hasPrice && !$limited) {
-		$row->addCell(new Cell('name'))->setContent(DPCalendarHelper::renderPrice($ticket->price));
+		$row->addCell(new Cell('price'))->setContent(DPCalendarHelper::renderPrice($ticket->price));
 	}
 }

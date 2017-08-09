@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="assigned_cat_ids" type="hidden"/>
+	</fieldset>
+</form>

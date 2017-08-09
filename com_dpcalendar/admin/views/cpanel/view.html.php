@@ -18,12 +18,6 @@ class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
 
 	protected function init ()
 	{
-		if (! JFactory::getApplication()->getCfg('live_site') && ! DPCalendarHelper::isFree())
-		{
-			JFactory::getApplication()->enqueueMessage(
-					'The life site entry is empty. This can cause invalid links on command line actions like the reminder notification.
-			Please define the live_site parameter in your configuration.php file if you are running DPCalendar cron jobs.');
-		}
 		if (! DPCalendarHelper::getComponentParameter('downloadid') && ! DPCalendarHelper::isFree())
 		{
 			JFactory::getApplication()->enqueueMessage(

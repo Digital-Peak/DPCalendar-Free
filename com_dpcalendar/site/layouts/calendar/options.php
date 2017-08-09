@@ -67,11 +67,7 @@ if ($params->get('default_view', 'month') == 'week') {
 // Some general calendar options
 $options['weekNumbers']    = (boolean)$params->get('week_numbers');
 $options['weekends']       = (boolean)$params->get('weekend', 1);
-$options['fixedWeekCount'] = $params->get('week_mode', 'variable') == 'fixed';
-
-if ($params->get('week_mode', 'variable') == 'variable') {
-	$options['height'] = 'auto';
-}
+$options['fixedWeekCount'] = (boolean)$params->get('fixed_week_count', 1);
 
 if ($params->get('business_hours_days', array())) {
 	$options['businessHours'] = array(
@@ -104,11 +100,14 @@ $options['minTime'] = $min;
 $options['nowIndicator'] = (boolean)$params->get('current_time_indicator', 1);
 
 if ($params->get('event_limit', '') != '-1') {
-	$options['eventLimit'] = $params->get('event_limit', '') == '' ? 'true' : $params->get('event_limit', '') + 1;
+	$options['eventLimit'] = $params->get('event_limit', '') == '' ? 2 : $params->get('event_limit', '') + 1;
 }
 
+// Set the height
 if ($params->get('calendar_height', 0) > 0) {
 	$options['contentHeight'] = (int)$params->get('calendar_height', 0);
+} else {
+	$options['height'] = 'auto';
 }
 
 $options['slotEventOverlap'] = (boolean)$params->get('overlap_events', 1);
@@ -203,7 +202,7 @@ $options['show_event_as_popup']   = $params->get('show_event_as_popup');
 $options['show_date_picker']      = $params->get('show_date_picker', 1);
 $options['show_print']            = $params->get('show_print', 1);
 $options['use_hash']              = $params->get('use_hash');
-$options['event_create_form']       = (int)$params->get('event_create_form', 1);
+$options['event_create_form']     = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
 
 // Workaround to get the icon classes

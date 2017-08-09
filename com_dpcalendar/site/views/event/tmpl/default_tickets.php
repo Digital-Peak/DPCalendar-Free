@@ -37,4 +37,3 @@ DPCalendarHelper::renderLayout(
 		'root'         => $root
 	)
 );
-

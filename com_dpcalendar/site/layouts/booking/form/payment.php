@@ -163,7 +163,7 @@ if (!$bookingId) {
 			$info = JText::_('COM_DPCALENDAR_VIEW_BOOKINGFORM_CHOOSE_TICKETS');
 			$max  = $instance->max_tickets ? $instance->max_tickets : 1;
 
-			if ($max > ($event->capacity - $event->capacity_used)) {
+			if ($event->capacity !== null && $max > ($event->capacity - $event->capacity_used)) {
 				$max = $event->capacity - $event->capacity_used;
 			}
 

@@ -138,11 +138,11 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 				$this->document->setTitle($this->event->title);
 			}
 
-			$path     = array(array('title' => $this->event->title, 'link'  => ''));
+			$path     = array(array('title' => $this->event->title, 'link' => ''));
 			$category = DPCalendarHelper::getCalendar($this->event->catid);
 			while ($category != null && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] == 'event' || $id != $category->id) &&
 				$category->id > 1) {
-				$path[]   = array('title' => $category->title, 'link'  => DPCalendarHelperRoute::getCalendarRoute($category->id));
+				$path[]   = array('title' => $category->title, 'link' => DPCalendarHelperRoute::getCalendarRoute($category->id));
 				$category = $category->getParent();
 			}
 			$path = array_reverse($path);

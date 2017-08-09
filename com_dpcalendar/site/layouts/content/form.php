@@ -37,6 +37,9 @@ $flat = isset($displayData['flat']) ? $displayData['flat'] : false;
 /** @var boolean $columns * */
 $columns = isset($displayData['columns']) ? $displayData['columns'] : 1;
 
+/** @var array $fieldSets * */
+$fieldSets = isset($displayData['fieldSets']) ? $displayData['fieldSets'] : array_merge($jform->getFieldsets(), $jform->getFieldsets('params'));
+
 // Load some javascript we may use
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.formvalidator');
@@ -54,9 +57,6 @@ if (!$flat) {
 	JHtml::_('behavior.tabstate');
 }
 $root->addChild($c);
-
-// The fieldsets of the form
-$fieldSets = array_merge($jform->getFieldsets(), $jform->getFieldsets('params'));
 
 // Loop trough the field sets
 foreach ($fieldSets as $name => $fieldSet) {
@@ -131,7 +131,7 @@ $root->setContent(JHtml::_('form.token'));
 
 // The description field
 $editorSaveCode = '';
-$d = $jform->getField('description');
+$d              = $jform->getField('description');
 if ($d && method_exists($d, 'save')) {
 	$editorSaveCode = $d->save();
 }

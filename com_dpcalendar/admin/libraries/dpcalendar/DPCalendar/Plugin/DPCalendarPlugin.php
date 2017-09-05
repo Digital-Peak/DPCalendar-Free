@@ -649,6 +649,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->recurrence_id    = null;
 		$event->start_date       = '';
 		$event->end_date         = '';
+		$event->show_end_time    = true;
 		$event->all_day          = false;
 		$event->color            = '';
 		$event->url              = '';

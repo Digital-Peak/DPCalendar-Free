@@ -30,8 +30,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 		$cal = \DPCalendarHelper::getCalendar('root');
 
 		// Check if we are a guest
-		if ($user->guest)
-		{
+		if ($user->guest) {
 			// Get the calendar and ignoring the access flag, this is needed on authentication
 			$cal = \JCategories::getInstance('DPCalendar', array('access' => false))->get('root');
 		}
@@ -290,7 +289,11 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 			$event->state = -2;
 			$event->store();
-			$model = \JModelLegacy::getInstance('Form', 'DPCalendarModel');
+			$model = \JModelLegacy::getInstance(
+				'Form',
+				'DPCalendarModel',
+				array('event_before_delete' => 'nooperationtocatch', 'event_after_delete' => 'nooperationtocatch')
+			);
 			$model->delete($event->id);
 
 			if ($model->getError()) {
@@ -405,7 +408,11 @@ class DPCalendar extends CalDAV\Backend\PDO
 			}
 		}
 
-		$model = \JModelLegacy::getInstance('Form', 'DPCalendarModel');
+		$model = \JModelLegacy::getInstance(
+			'Form',
+			'DPCalendarModel',
+			array('event_before_save' => 'nooperationtocatch', 'event_after_save' => 'nooperationtocatch')
+		);
 		$model->save((array)$dpEvent);
 
 		if ($model->getError()) {

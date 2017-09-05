@@ -5,6 +5,7 @@
  * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 use CCL\Content\Element\Basic\Container;
 use DPCalendar\CCL\Visitor\InlineStyleVisitor;
 
@@ -22,8 +23,8 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 	 * Invites the given users or groups to the event with the given id.
 	 *
 	 * @param integer $eventId
-	 * @param array $users
-	 * @param array $groups
+	 * @param array   $users
+	 * @param array   $groups
 	 */
 	public function invite($eventId, $userIds, $groups)
 	{
@@ -31,7 +32,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$userIds = array_merge($userIds, JFactory::getACL()->getUsersByGroup($groupId));
 		}
 		$event = JModelLegacy::getInstance('Event', 'DPCalendarModel')->getItem($eventId);
-		$lang = JFactory::$language;
+		$lang  = JFactory::$language;
 
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
 
@@ -57,15 +58,11 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			}
 
 			$amount = array();
-			if ($event->price)
-			{
-				foreach ($event->price->value as $index => $value)
-				{
+			if ($event->price) {
+				foreach ($event->price->value as $index => $value) {
 					$amount[$index] = 1;
 				}
-			}
-			else
-			{
+			} else {
 				$amount[0] = 1;
 			}
 
@@ -179,10 +176,10 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		if (!$form->getValue('catid')) {
 			$form->setValue('catid', null, $params->get('event_form_calid'));
 		}
-		if ($params->get('event_form_show_end_time') != '') {
+		if (!$form->getValue('show_end_time')) {
 			$form->setValue('show_end_time', null, $params->get('event_form_show_end_time'));
 		}
-		if ($params->get('event_form_all_day') != '') {
+		if (!$form->getValue('all_day')) {
 			$form->setValue('all_day', null, $params->get('event_form_all_day'));
 		}
 		if (!$form->getValue('color')) {
@@ -212,10 +209,10 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		if (!$form->getValue('payment_statement')) {
 			$form->setValue('payment_statement', null, $params->get('event_form_payment_statement'));
 		}
-		if ($params->get('event_form_access')) {
+		if (!$form->getValue('access')) {
 			$form->setValue('access', null, $params->get('event_form_access'));
 		}
-		if ($params->get('event_form_access_content')) {
+		if (!$form->getValue('access_content')) {
 			$form->setValue('access_content', null, $params->get('event_form_access_content'));
 		}
 		if (!$form->getValue('featured')) {

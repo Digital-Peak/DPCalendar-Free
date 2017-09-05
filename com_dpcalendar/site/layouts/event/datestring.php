@@ -60,10 +60,10 @@ if ($startDate == $endDate && empty($startTime) && empty($endTime)) {
 
 // Timed event ending on the same day as start
 if ($startDate == $endDate) {
-	echo $startDate . ' ' . $startTime . ' ' . ($event->show_end_time ? $dateSeparator . ' ' . $endTime : '');
+	echo $startDate . ' ' . $startTime . ($event->show_end_time ? ' ' . $dateSeparator . ' ' . $endTime : '');
 
 	return;
 }
 
 // Multi day timed event
-echo $startDate . ' ' . $startTime . ' ' . $dateSeparator . ' ' . $endDate . ' ' . ($event->show_end_time ? $endTime : '');
+echo $startDate . ' ' . $startTime . ' ' . $dateSeparator . ' ' . $endDate . ($event->show_end_time ? ' ' . $endTime : '');

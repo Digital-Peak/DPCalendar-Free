@@ -59,19 +59,7 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		$data = $this->input->post->get('jform', array(), 'array');
 
-		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
-			$data['all_day'] = '1';
-		}
-
-		$dateFormat = DPCalendarHelper::getComponentParameter('event_date_format', 'Y-m-d');
-		$timeFormat = DPCalendarHelper::getComponentParameter('event_time_format', 'g:i a');
-
-		$data['start_date'] = DPCalendarHelper::getDateFromString($data['start_date'], $data['start_date_time'], $data['all_day'] == '1')->toSql(
-			false);
-		$data['end_date']   = DPCalendarHelper::getDateFromString($data['end_date'], $data['end_date_time'], $data['all_day'] == '1')->toSql(false);
-
-		$this->input->set('jform', $data);
-		$this->input->post->set('jform', $data);
+		$this->transformDatesToSql($data);
 
 		$result = false;
 		if (!is_numeric($data['catid'])) {
@@ -144,8 +132,31 @@ class DPCalendarControllerEvent extends JControllerForm
 		return parent::batch($this->getModel());
 	}
 
+	public function reload($key = null, $urlVar = null)
+	{
+		$this->transformDatesToSql($this->input->post->get('jform', array(), 'array'));
+
+		return parent::reload($key, $urlVar);
+	}
+
 	public function getModel($name = 'AdminEvent', $prefix = 'DPCalendarModel', $config = array('ignore_request' => true))
 	{
 		return parent::getModel($name, $prefix, $config);
+	}
+
+	private function transformDatesToSql(&$data)
+	{
+		$data = $this->input->post->get('jform', array(), 'array');
+
+		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
+			$data['all_day'] = '1';
+		}
+
+		$data['start_date'] = DPCalendarHelper::getDateFromString($data['start_date'], $data['start_date_time'], $data['all_day'] == '1')->toSql(
+			false);
+		$data['end_date']   = DPCalendarHelper::getDateFromString($data['end_date'], $data['end_date_time'], $data['all_day'] == '1')->toSql(false);
+
+		$this->input->set('jform', $data);
+		$this->input->post->set('jform', $data);
 	}
 }

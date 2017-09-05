@@ -62,6 +62,7 @@ $model->setState('filter.publish_date', true);
 $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
 $model->setState('filter.my', $params->get('show_my_only', 0));
+$model->setState('filter.featured', $params->get('filter_featured', 0));
 
 $events = $model->getItems();
 

@@ -156,17 +156,19 @@ class Booking
 			$pdf->AddPage();
 			$pdf->writeHTML(\DPCalendarHelper::renderElement($root), true, false, true, false, '');
 
-			$style = array(
-				'border'        => 2,
-				'position'      => 'C',
-				'vpadding'      => 'auto',
-				'hpadding'      => 'auto',
-				'fgcolor'       => array(0, 0, 0),
-				'bgcolor'       => false,
-				'module_width'  => 1,
-				'module_height' => 1
-			);
-			$pdf->write2DBarcode(\DPCalendarHelperRoute::getTicketRoute($ticket, true), 'QRCODE,L', 20, 200, 50, 50, $style, 'N');
+			if ($params->get('ticket_show_barcode', 1)) {
+				$style = array(
+					'border'        => 2,
+					'position'      => 'C',
+					'vpadding'      => 'auto',
+					'hpadding'      => 'auto',
+					'fgcolor'       => array(0, 0, 0),
+					'bgcolor'       => false,
+					'module_width'  => 1,
+					'module_height' => 1
+				);
+				$pdf->write2DBarcode(\DPCalendarHelperRoute::getTicketRoute($ticket, true), 'QRCODE,L', 20, 200, 50, 50, $style, 'N');
+			}
 
 			$fileName = $ticket->uid . '.pdf';
 			if ($toFile) {

@@ -202,9 +202,9 @@ class JHtmlDPCalendaricon
 	{
 		$icon = 'icon-info';
 
-		$text = '<i class="' . $icon . '"></i> ' . JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL');
+		$text = '<i class="' . $icon . '"></i> ' . JText::_('COM_DPCALENDAR_EVENT');
 		$button = JHtml::_('link', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid), $text);
-		$output = '<span class="hasTooltip btn btn-small btn-default btn-sm" title="' . JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL') . '">' . $button . '</span>';
+		$output = '<span class="hasTooltip btn btn-small btn-default btn-sm" title="' . JText::_('COM_DPCALENDAR_EVENT') . '">' . $button . '</span>';
 		return $output;
 	}
 

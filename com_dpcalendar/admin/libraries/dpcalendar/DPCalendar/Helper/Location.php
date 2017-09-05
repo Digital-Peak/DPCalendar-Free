@@ -209,6 +209,8 @@ class Location
 			} catch (\Exception $e) {
 				\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 			}
+
+			self::$locationCache = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
 		}
 
 		return $locObject;

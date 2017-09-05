@@ -2,10 +2,12 @@
 
 namespace CCL\Content\Element\Basic;
 
-use CCL\Content\Element\Basic\Container;
-
 /**
- * An alert representation.
+ * Represents a list element.
+ *
+ * @example // The following code snippet creates an unordered list with one item.
+ * $l = new ListContainer('mylist', ListContainer::UNORDERED);
+ * $l->addListItem(new ListItem('myitem'));
  */
 class ListContainer extends Container
 {
@@ -32,11 +34,15 @@ class ListContainer extends Container
 	private $type = self::UNORDERED;
 
 	/**
-	 * Initiates the alert of the given type.
+	 * Constructor which sets the classes and attributes of the element.
+	 * The type defines if the list is ordered or not.
 	 *
-	 * @param string $type
-	 * @param array  $classes
-	 * @param array  $attributes
+	 * @param string $id         The id of the element, must be not empty
+	 * @param string $type       The type of the list
+	 * @param array  $classes    The classes of the element
+	 * @param array  $attributes Additional attributes for the element
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public function __construct($id, $type, array $classes = [], array $attributes = [])
 	{

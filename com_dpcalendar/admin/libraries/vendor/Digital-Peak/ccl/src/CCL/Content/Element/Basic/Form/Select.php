@@ -5,25 +5,32 @@ namespace CCL\Content\Element\Basic\Form;
 use CCL\Content\Element\Basic\Container;
 
 /**
- * A select representation.
+ * Represents a select element.
+ *
+ * @example // The following code snippet creates a select element which allows to select multiple options.
+ *          // The option 2 is pre selected.
+ * $s = new Select('myselect', 'myname', true);
+ * s->addOption(1, 'Option 1', false);
+ * s->addOption(2, 'Option 2', true);
  */
 class Select extends Container
 {
-
 	private $optionCounter = 1;
 
 	/**
-	 * Initiates the select for a given name.
+	 * Constructor which sets the classes and attributes of the element.
 	 *
-	 * @param string $id
-	 * @param string $name
-	 * @param boolean $multiple
-	 * @param array $classes
-	 * @param array $attributes
+	 * @param string  $id         The id of the element, must be not empty
+	 * @param string  $name       The name of the select
+	 * @param boolean $multiple   If it is allowed to select multiple elements
+	 * @param array   $classes    The classes of the element
+	 * @param array   $attributes Additional attributes for the element
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public function __construct($id, $name, $multiple = false, array $classes = [], array $attributes = [])
 	{
-		$attributes['name']     = $name;
+		$attributes['name'] = $name;
 
 		if ($multiple) {
 			$attributes['multiple'] = 'multiple';
@@ -34,8 +41,8 @@ class Select extends Container
 	/**
 	 * Adds an option with the text and value, if selected is true, it gets the selected property.
 	 *
-	 * @param string $text
-	 * @param string $value
+	 * @param string  $text
+	 * @param string  $value
 	 * @param boolean $selected
 	 *
 	 * @return \CCL\Content\Element\Basic\Element

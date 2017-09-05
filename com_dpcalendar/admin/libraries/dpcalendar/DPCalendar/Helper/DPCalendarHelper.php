@@ -453,13 +453,13 @@ class DPCalendarHelper
 		$configuration['canCreate']  = self::canCreateEvent();
 		$configuration['createLink'] = \DPCalendarHelperRoute::getFormRoute(0, $return);
 
-		$configuration['calendarNameLabel'] = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_CALANDAR');
+		$configuration['calendarNameLabel'] = \JText::_('COM_DPCALENDAR_CALENDAR');
 		$configuration['titleLabel']        = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_TITLE');
-		$configuration['dateLabel']         = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE');
+		$configuration['dateLabel']         = \JText::_('COM_DPCALENDAR_DATE');
 		$configuration['locationLabel']     = \JText::_('COM_DPCALENDAR_LOCATION');
 		$configuration['descriptionLabel']  = \JText::_('COM_DPCALENDAR_DESCRIPTION');
 		$configuration['commentsLabel']     = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COMMENTS');
-		$configuration['eventLabel']        = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL');
+		$configuration['eventLabel']        = \JText::_('COM_DPCALENDAR_EVENT');
 		$configuration['authorLabel']       = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_AUTHOR');
 		$configuration['bookingsLabel']     = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_BOOKINGS');
 		$configuration['bookLabel']         = \JText::_('COM_DPCALENDAR_BOOK');
@@ -505,8 +505,16 @@ class DPCalendarHelper
 		}
 
 		try {
+			$ff = $params->get('frontend_framework', 'BS2');
+
+			// On admin, force it to BS2
+			if (\JFactory::getApplication()->isClient('administrator')) {
+				$ff = 'BS2';
+			}
+
 			// Load the front end framework
-			$className = 'CCL\\Content\\Visitor\\Html\\Framework\\' . $params->get('frontend_framework', 'BS2');
+			$className = 'CCL\\Content\\Visitor\\Html\\Framework\\' . $ff;
+
 			if (class_exists($className)) {
 				$rootElement->accept(new $className());
 			}
@@ -1043,6 +1051,56 @@ class DPCalendarHelper
 		return true;
 	}
 
+	/**
+	 * Sort the given fields array based on the given order. The order is a setting from a subform field.
+	 *
+	 * @param $fields
+	 * @param $order
+	 */
+	public static function sortFields(&$fields, $order)
+	{
+		$order = (array)$order;
+
+		// Check if empty
+		if (!$order) {
+			return;
+		}
+
+		// Get the field names out of the object
+		$order = array_values(array_map(function ($f) {
+			return isset($f->field) ? $f->field : $f['field'];
+		}, $order));
+
+		// Sort the fields array when needed
+		if (!$order) {
+			return;
+		}
+
+		// get the keys
+		$keys = array_keys($fields);
+
+		// Sort the fields
+		usort(
+			$fields,
+			function ($f1, $f2) use ($order, $keys) {
+				$fieldName = property_exists($f1, 'fieldname') ? 'fieldname' : 'name';
+				$k1        = in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order) : -1;
+				$k2        = in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order) : -1;
+
+				if ($k1 >= 0 && $k2 < 0) {
+					return -1;
+				}
+				if ($k1 < 0 && $k2 >= 0) {
+					return 1;
+				}
+				if ($k1 >= 0 && $k2 >= 0) {
+					return $k1 > $k2 ? 1 : -1;
+				}
+
+				return array_search($f1->id, $keys) - array_search($f2->id, $keys);
+			}
+		);
+	}
 
 	public static function parseHtml($text)
 	{

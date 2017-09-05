@@ -44,8 +44,11 @@ if ($text) {
 	$this->root->addChild(new Container('event-before-display'))->setContent($text);
 }
 
-// Header with buttons and title
+// Header with buttons
 $this->loadTemplate('header');
+
+// Title
+$this->loadTemplate('title');
 
 // Joomla event
 $text = $event->displayEvent->afterDisplayTitle;

@@ -26,8 +26,9 @@ extract($displayData);
 $bookingId = $booking && $booking->id ? $booking->id : 0;
 
 /** @var Container $root * */
-$root = $root->addChild(new Container('actions', array('noprint')));
-$root->setProtectedClass('noprint');
+$root = $root->addChild(new Container('actions'));
+$root->addClass('noprint', true);
+$root->addClass('dp-actions-container', true);
 
 // Determine the text for the button
 $text = 'JSAVE';

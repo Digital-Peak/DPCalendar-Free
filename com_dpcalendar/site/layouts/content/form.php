@@ -37,6 +37,9 @@ $flat = isset($displayData['flat']) ? $displayData['flat'] : false;
 /** @var boolean $columns * */
 $columns = isset($displayData['columns']) ? $displayData['columns'] : 1;
 
+/** @var \Joomla\Registry\Registry $params * */
+$params = isset($displayData['params']) ? $displayData['params'] : JComponentHelper::getParams('com_dpcalendar');
+
 /** @var array $fieldSets * */
 $fieldSets = isset($displayData['fieldSets']) ? $displayData['fieldSets'] : array_merge($jform->getFieldsets(), $jform->getFieldsets('params'));
 
@@ -58,6 +61,12 @@ if (!$flat) {
 }
 $root->addChild($c);
 
+// Default grid when flat mode
+if ($flat) {
+	// Make one fieldset
+	$fieldSets = array('' => new stdClass());
+}
+
 // Loop trough the field sets
 foreach ($fieldSets as $name => $fieldSet) {
 	// Check if the fieldset should be ignored
@@ -66,15 +75,23 @@ foreach ($fieldSets as $name => $fieldSet) {
 		continue;
 	}
 
+	$fields = $jform->getFieldset($name);
+
+	// Sort the fields
+	\DPCalendar\Helper\DPCalendarHelper::sortFields(
+		$fields,
+		$params->get(str_replace('com_dpcalendar.', '', $jform->getName()) . '_form_fields_order_' . $name, new stdClass())
+	);
+
 	// The grid of columns
-	$grid = new Grid('fields-' . $name);
+	$grid = new Grid('fields-' . ($name ?: 'default'));
 
 	$hiddenFields = array();
 
 	// Loop trough the fields
 	$counter = 0;
 	$row     = null;
-	foreach ($jform->getFieldset($name) as $field) {
+	foreach ($fields as $field) {
 		// Check if the field should be ignored
 		if (in_array($field->fieldname, $fieldsToHide)) {
 			// Should not be rendered

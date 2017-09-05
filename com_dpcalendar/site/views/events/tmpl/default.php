@@ -60,12 +60,14 @@ foreach ($this->items as $event) {
 		$fgcolor = ($yiq >= 128) ? '#000000' : '#ffffff';
 	}
 
+	// Format the dates depending on the all day flag
+	$format = $event->all_day ? 'Y-m-d' : 'c';
+
 	// Add the data
-	$data[] = array(
+	$eventData = array(
 		'id'          => $event->id,
 		'title'       => $this->compactMode == 0 ? htmlspecialchars_decode($event->title) : utf8_encode(chr(160)),
-		'start'       => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format('c', true),
-		'end'         => DPCalendarHelper::getDate($event->end_date, $event->all_day)->format('c', true),
+		'start'       => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format($format, true),
 		'url'         => DPCalendarHelperRoute::getEventRoute($event->id, $event->catid),
 		'editable'    => DPCalendarHelper::getCalendar($event->catid)->canEdit != false,
 		'color'       => '#' . $event->color,
@@ -74,6 +76,11 @@ foreach ($this->items as $event) {
 		'description' => $description,
 		'location'    => $locations
 	);
+
+	if ($event->show_end_time) {
+		$eventData['end'] = DPCalendarHelper::getDate($event->end_date, $event->all_day)->format($format, true);
+	}
+	$data[] = $eventData;
 }
 
 $messages = JFactory::getApplication()->getMessageQueue();

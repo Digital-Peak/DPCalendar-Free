@@ -189,13 +189,7 @@ function createDPCalendar(calendar, options) {
 
 	options['dayClick'] = function (date, jsEvent, view, resourceObj) {
 		var form = calendar.parent().find('form[name=adminForm]');
-		if (form.length > 0 && options['event_create_form'] == 1) {
-			// On small screens open the edit page directly
-			if (jQuery(window).width() < 600) {
-				form.find('input[name=task]').val('');
-				form.submit();
-				return false;
-			}
+		if (form.length > 0) {
 			jsEvent.stopPropagation();
 
 			// Setting some defaults on the quick add popup form
@@ -214,22 +208,27 @@ function createDPCalendar(calendar, options) {
 			date.hours(date.hours() + 1);
 			form.find('#jform_end_date_time').timepicker('setTime', date.toDate());
 
-			var p = calendar.parents().filter(function () {
-				var parent = jQuery(this);
-				return parent.is('body') || parent.css('position') == 'relative';
-			}).slice(0, 1).offset();
+			if (options['event_create_form'] == 1
+				// On small screens and touch devices open the edit page directly
+				&& jQuery(window).width() > 600
+				&& !('ontouchstart' in window || navigator.maxTouchPoints)) {
+				var p = calendar.parents().filter(function () {
+					var parent = jQuery(this);
+					return parent.is('body') || parent.css('position') == 'relative';
+				}).slice(0, 1).offset();
 
-			// Show the quick add popup
-			form.parent().css({
-				top: jsEvent.pageY - p.top,
-				left: jsEvent.pageX - 160 - p.left
-			});
-			form.parent().show();
-			form.find('#jform_title').focus();
-		}
-		else if (options['event_create_form'] == 2 && typeof DPCALENDAR_CREATE_FORM_URL !== 'undefined') {
-			// Just navigate to the event form
-			window.location = dpEncode(DPCALENDAR_CREATE_FORM_URL);
+				// Show the quick add popup
+				form.parent().css({
+					top: jsEvent.pageY - p.top,
+					left: jsEvent.pageX - 160 - p.left
+				});
+				form.parent().show();
+				form.find('#jform_title').focus();
+			} else {
+				// Open the edit page
+				form.find('input[name=task]').val('');
+				form.submit();
+			}
 		} else if (options['header'].right.indexOf('agendaDay') > 0) {
 			// The edit form is not loaded, navigate to the day
 			calendar.fullCalendar('gotoDate', date);

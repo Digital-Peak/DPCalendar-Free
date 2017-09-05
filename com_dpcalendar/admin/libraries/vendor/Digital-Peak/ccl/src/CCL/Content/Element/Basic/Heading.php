@@ -3,7 +3,10 @@
 namespace CCL\Content\Element\Basic;
 
 /**
- * An heading representation.
+ * Represents a heading element.
+ *
+ * @example // The following code snippet creates a heading with the size 3.
+ * $h = new Heading('myheading', 3);
  */
 class Heading extends Container
 {
@@ -30,7 +33,7 @@ class Heading extends Container
 	}
 
 	/**
-	 * The size of the heading.
+	 * The size of the heading, must be between 1 and 6.
 	 *
 	 * @return number
 	 */

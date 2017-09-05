@@ -25,8 +25,9 @@ use CCL\Content\Element\Basic\TextBlock;
 extract($displayData);
 
 /** @var Container $root * */
-$root = $root->addChild(new Container('actions', array('noprint')));
-$root->setProtectedClass('noprint');
+$root = $root->addChild(new Container('actions'));
+$root->addClass('noprint', true);
+$root->addClass('dp-actions-container', true);
 
 $calendar    = DPCalendarHelper::getCalendar($form->getValue('catid'));
 $disableSave = $params->get('event_form_check_overlaping', 0) == '2' ? ' save-button' : '';

@@ -29,10 +29,8 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 	{
 		$event = $this->get('Item');
 
-		if ($event == null) {
-			$this->setError(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'));
-
-			return false;
+		if ($event == null || !$event->id) {
+			throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
 
 		// Add router helpers.

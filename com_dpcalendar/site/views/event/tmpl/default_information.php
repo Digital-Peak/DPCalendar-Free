@@ -37,22 +37,22 @@ $grid->setProtectedClass('dpcalendar-locations-container');
 $row = $grid->addRow(new Row('details'));
 
 /** @var Column $column */
-$column = $row->addColumn(new Column('data', 60));
+$column = $row->addColumn(new Column('data', 100));
 
 // Add the calendar information
 if ($params->get('event_show_calendar', '1')) {
 	// Create the calendar link
-	$content = DPCalendarHelperRoute::getCalendarRoute($event->catid);
-	if ($content) {
+	$calendarLink = DPCalendarHelperRoute::getCalendarRoute($event->catid);
+	if ($calendarLink) {
 		if ($params->get('event_show_calendar', '1') == '2') {
 			// Link to month
-			$content = $calendarLink .
+			$calendarLink = $calendarLink .
 				'#year=' . $startDate->format('Y', true) .
 				'&month=' . $startDate->format('m', true) .
 				'&day=' . $startDate->format('d', true);
 		}
 		// Add the link
-		$content = new Link('url', JRoute::_($content), '_parent');
+		$content = new Link('url', JRoute::_($calendarLink), '_parent');
 		$content->setContent($calendar->title);
 	} else {
 		// Set the name as content of the description
@@ -60,7 +60,7 @@ if ($params->get('event_show_calendar', '1')) {
 	}
 	DPCalendarHelper::renderLayout(
 		'content.dl',
-		array('root' => $column, 'id' => 'calendar', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_CALANDAR', 'content' => $content)
+		array('root' => $column, 'id' => 'calendar', 'label' => 'COM_DPCALENDAR_CALENDAR', 'content' => $content)
 	);
 }
 
@@ -74,7 +74,7 @@ if ($params->get('event_show_date', '1')) {
 
 	DPCalendarHelper::renderLayout(
 		'content.dl',
-		array('root' => $column, 'id' => 'date', 'label' => 'COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE', 'content' => $start)
+		array('root' => $column, 'id' => 'date', 'label' => 'COM_DPCALENDAR_DATE', 'content' => $start)
 	);
 }
 
@@ -164,16 +164,16 @@ if ($event->url && $params->get('event_show_url', '1')) {
 }
 
 // Information column
-$column = $row->addColumn(new Column('metadata', 40));
+$metaColumn = new Column('metadata', 40);
 
 if ($params->get('event_show_images', '1')) {
 	// Show the images
-	DPCalendarHelper::renderLayout('event.images', array('event' => $event, 'root' => $column));
+	DPCalendarHelper::renderLayout('event.images', array('event' => $event, 'root' => $metaColumn));
 }
 
 if ($event->locations && $params->get('event_show_map', '1') == '1' && $params->get('event_show_location', '2') == '1') {
 	// Add the map container
-	$map = $column->addChild(
+	$map = $metaColumn->addChild(
 		new Element(
 			'details-map',
 			array('dpcalendar-map', 'dpcalendar-fixed-map'),
@@ -189,4 +189,10 @@ if ($event->locations && $params->get('event_show_map', '1') == '1' && $params->
 	);
 	$map->setProtectedClass('dpcalendar-map');
 	$map->setProtectedClass('dpcalendar-fixed-map');
+}
+
+// If there are childs in the second column, add it and make the first one smaller
+if ($metaColumn->getChildren()) {
+	$column->setWidth(60);
+	$row->addColumn($metaColumn);
 }

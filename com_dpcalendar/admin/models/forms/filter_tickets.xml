@@ -28,8 +28,8 @@
 			<option value="a.state DESC">JSTATUS_DESC</option>
 			<option value="a.name ASC">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
 			<option value="a.name DESC">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
-			<option value="event_title ASC">COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL</option>
-			<option value="event_title DESC">COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL</option>
+			<option value="event_title ASC">COM_DPCALENDAR_EVENT</option>
+			<option value="event_title DESC">COM_DPCALENDAR_EVENT</option>
 			<option value="booking_name ASC">JAUTHOR_ASC</option>
 			<option value="booking_name DESC">JAUTHOR_DESC</option>
 			<option value="e.start_date ASC">JDATE_ASC</option>

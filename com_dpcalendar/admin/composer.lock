@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Digital-Peak/ccl.git",
-                "reference": "d07832a235d0a4b73d68e515f862fd6505971809"
+                "reference": "01f3ef1f409c61d29c35acd07ffe7bebd933dc1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Digital-Peak/ccl/zipball/d07832a235d0a4b73d68e515f862fd6505971809",
-                "reference": "d07832a235d0a4b73d68e515f862fd6505971809",
+                "url": "https://api.github.com/repos/Digital-Peak/ccl/zipball/01f3ef1f409c61d29c35acd07ffe7bebd933dc1d",
+                "reference": "01f3ef1f409c61d29c35acd07ffe7bebd933dc1d",
                 "shasum": ""
             },
             "require-dev": {
@@ -51,7 +51,7 @@
                 "source": "https://github.com/Digital-Peak/ccl/tree/unstable",
                 "issues": "https://github.com/Digital-Peak/ccl/issues"
             },
-            "time": "2017-07-04T18:03:11+00:00"
+            "time": "2017-08-11T09:18:26+00:00"
         },
         {
             "name": "guzzle/guzzle",
@@ -469,16 +469,16 @@
         },
         {
             "name": "omnipay/stripe",
-            "version": "v2.4.6",
+            "version": "V2.4.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/omnipay-stripe.git",
-                "reference": "2c0df1df7e6bcc00e893119f50b090b3cd617b0c"
+                "reference": "26a33414a75939af75064022112005d5e51fc9ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/omnipay-stripe/zipball/2c0df1df7e6bcc00e893119f50b090b3cd617b0c",
-                "reference": "2c0df1df7e6bcc00e893119f50b090b3cd617b0c",
+                "url": "https://api.github.com/repos/thephpleague/omnipay-stripe/zipball/26a33414a75939af75064022112005d5e51fc9ea",
+                "reference": "26a33414a75939af75064022112005d5e51fc9ea",
                 "shasum": ""
             },
             "require": {
@@ -522,7 +522,7 @@
                 "payment",
                 "stripe"
             ],
-            "time": "2017-06-15T07:01:00+00:00"
+            "time": "2017-07-14T09:22:01+00:00"
         },
         {
             "name": "psr/log",
@@ -980,7 +980,7 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.24",
+            "version": "v2.8.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
@@ -1040,16 +1040,16 @@
         },
         {
             "name": "symfony/http-foundation",
-            "version": "v3.3.3",
+            "version": "v3.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/http-foundation.git",
-                "reference": "f347a5f561b03db95ed666959db42bbbf429b7e5"
+                "reference": "49e8cd2d59a7aa9bfab19e46de680c76e500a031"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/f347a5f561b03db95ed666959db42bbbf429b7e5",
-                "reference": "f347a5f561b03db95ed666959db42bbbf429b7e5",
+                "url": "https://api.github.com/repos/symfony/http-foundation/zipball/49e8cd2d59a7aa9bfab19e46de680c76e500a031",
+                "reference": "49e8cd2d59a7aa9bfab19e46de680c76e500a031",
                 "shasum": ""
             },
             "require": {
@@ -1089,7 +1089,7 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
-            "time": "2017-06-24T09:29:48+00:00"
+            "time": "2017-07-21T11:04:46+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",

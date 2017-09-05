@@ -1,6 +1,6 @@
 jQuery(document).ready(function () {
 	jQuery(document).on('click', 'label[for="jform_series0"], label[for="jform_series1"]', function () {
-		if (jQuery("#jform_series1").is(':checked')) {
+		if (jQuery("#jform_series0").is(':checked')) {
 			jQuery('#dp-bookingform-options-events-table .dp-bookingform-event-instance').hide();
 			jQuery('#dp-bookingform-options-events-table .dp-bookingform-event-instance select').val('0');
 		} else {
@@ -23,7 +23,9 @@ jQuery(document).ready(function () {
 function checkIfPaymentIsneeded(event) {
 	event.preventDefault();
 
-	if (jQuery('#dp-bookingform-options-total-price-price-content').text() > 0 && jQuery('.dp-bookingform-payment-plugin').length && !jQuery("input[name='paymentmethod']:checked").val()) {
+	if (jQuery('#dp-bookingform-options-total-price-price-content').text()
+		&& jQuery('.dp-bookingform-payment-plugin').length
+		&& !jQuery("input[name='paymentmethod']:checked").val()) {
 		jQuery('#dp-bookingform-options-payment').fadeToggle('slow');
 		jQuery(".dp-bookingform-payment-plugin").click(function () {
 			jQuery(this).find("input[name='paymentmethod']").attr('checked', 'checked');
@@ -51,11 +53,11 @@ function calculatePrice() {
 
 			var events = json.data.events;
 			for (var id in events) {
-				jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-live').html(events[id].discount + ' ' + json.data.currency);
+				jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-live').html(events[id].discount);
 				if (events[id].discount != events[id].original) {
 					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-live').show();
 					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-original').show();
-					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-original').html(events[id].original + ' ' + json.data.currency);
+					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-original').html(events[id].original);
 					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-info').show();
 				} else {
 					jQuery('#dp-bookingform-options-events-table-body-row-' + id + '-price-original').hide();
@@ -63,7 +65,6 @@ function calculatePrice() {
 				}
 			}
 			jQuery('#dp-bookingform-options-total-price-price-content').html(json.data.total);
-			jQuery('#dp-bookingform-options-total-price-price-currency').html(json.data.currency);
 		},
 		complete: function (request) {
 			jQuery('#dp-bookingform-loader').hide();

@@ -72,6 +72,12 @@ foreach ($events as $event) {
 	$event->text = $event->description;
 	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.event', &$event, &$event->params, 0));
 	$event->description = $event->text;
+
+	$event->realUrl = str_replace(
+		array('?tmpl=component', 'tmpl=component'),
+		'',
+		DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, false, true, $params->get('default_menu_item'))
+	);
 }
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', $params->get('layout', 'default'));

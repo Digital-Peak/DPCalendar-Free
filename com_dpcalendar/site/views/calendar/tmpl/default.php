@@ -13,6 +13,9 @@ use CCL\Content\Element\Basic\Container;
 // Allow access from same server
 JFactory::getApplication()->setHeader('Access-Control-Allow-Origin', JURI::base());
 
+// Load the required assets
+DPCalendarHelper::loadLibrary(array('dpcalendar' => true));
+
 // User timezone
 DPCalendarHelper::renderLayout('user.timezone', array('root' => $this->root));
 

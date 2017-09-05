@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_upcoming</name>
 	<author>Digital Peak</author>
-	<creationDate>Jul 2017</creationDate>
+	<creationDate>Aug 2017</creationDate>
 	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.0.10</version>
+	<version>6.1.0</version>
 	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>
@@ -62,6 +62,10 @@
 				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MY_ONLY_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MY_ONLY_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
+				</field>
+				<field name="default_menu_item" type="menuitem" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MENU_ITEM_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_MENU_ITEM_DESC">
+					<option></option>
 				</field>
 			</fieldset>
 			<fieldset name="advanced">

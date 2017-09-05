@@ -108,7 +108,7 @@ class PlgSearchDPCalendar extends JPlugin
 			$events[$key]->browsernav = $item->title;
 			$events[$key]->href       = DPCalendarHelperRoute::getEventRoute($item->id, $item->catid);
 
-			$events[$key]->text = $item->title . '<br/>' . JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE') . ' ' .
+			$events[$key]->text = $item->title . '<br/>' . JText::_('COM_DPCALENDAR_DATE') . ' ' .
 				DPCalendarHelper::getDateStringFromEvent($item, $this->params->get('date_format'), $this->params->get('time_format'));
 		}
 

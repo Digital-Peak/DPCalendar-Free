@@ -7,7 +7,13 @@ use CCL\Content\Element\Basic\Container;
 use CCL\Content\Element\ElementInterface;
 
 /**
- * An element represents a node in an HTML tree.
+ * An element represents a node in an HTML tree. This is the basic class for all elements.
+ *
+ * @example // The following code snippet creates an element which has a class
+ * // myclass and an attribute title with the value "My Title". Additionally a content
+ * // will be set as well.
+ * $e = new Element('myelement', ['myclass'], ['title' => 'My Title']);
+ * $e->setContent('This is the content of the element');
  */
 class Element implements ElementInterface
 {
@@ -71,7 +77,8 @@ class Element implements ElementInterface
 			throw new \InvalidArgumentException('ID can not be empty!');
 		}
 
-		$this->id         = $id;
+		// Only alpha num in ids
+		$this->id         = preg_replace("/[^a-zA-Z0-9_\-]+/", "", $id);
 		$this->classes    = $classes;
 		$this->attributes = $attributes;
 	}

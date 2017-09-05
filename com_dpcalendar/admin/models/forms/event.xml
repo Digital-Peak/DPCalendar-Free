@@ -3,35 +3,39 @@
 	<fieldset addfieldpath="/administrator/components/com_dpcalendar/models/fields"
 	          name="content" label="COM_DPCALENDAR_CONTENT">
 
-		<field name="title" type="text" size="40" label="JGLOBAL_TITLE"
-		       description="COM_DPCALENDAR_FIELD_TITLE_DESC" required="true"/>
+		<field name="title" type="text" required="true" class="dp-form-input"
+		       label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_TITLE_DESC"/>
 
 		<field name="catid" type="dpcalendaredit" extension="com_dpcalendar"
 		       label="COM_DPCALENDAR_CALENDAR" description="COM_DPCALENDAR_FIELD_CALENDAR_DESC"/>
 
-		<field name="color" type="dpcolor" label="COM_DPCALENDAR_FIELD_COLOR_LABEL"
-		       default="" description="COM_DPCALENDAR_FIELD_COLOR_DESC" size="6"/>
+		<field name="color" type="dpcolor"
+		       label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"/>
 
-		<field name="url" type="url" label="COM_DPCALENDAR_FIELD_URL_LABEL"
-		       default="" description="COM_DPCALENDAR_FIELD_URL_DESC" size="70"/>
+		<field name="url" type="url" class="dp-form-input"
+		       label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"/>
 
-		<field name="start_date" type="datetimechooser" default="NOW" datepair="datepair"
-		       label="COM_DPCALENDAR_FIELD_START_DATE_LABEL"
-		       description="COM_DPCALENDAR_FIELD_START_DATE_DESC" class="start inputbox validate input-small"
-		       timeclass="time timestart validate input-small" required="true"/>
+		<field name="start_date" type="datetimechooser" default="NOW" datepair="datepair" required="true"
+		       timeclass="time timestart validate" class="start inputbox validate"
+		       label="COM_DPCALENDAR_FIELD_START_DATE_LABEL" description="COM_DPCALENDAR_FIELD_START_DATE_DESC"/>
 
-		<field name="end_date" type="datetimechooser" default="+1 hour" timepair="timepair"
-		       label="COM_DPCALENDAR_FIELD_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_END_DATE_DESC"
-		       class="end inputbox validate input-small" timeclass="time timeend validate input-small"
-		       required="true"/>
+		<field name="end_date" type="datetimechooser" default="+1 hour" timepair="timepair" required="true"
+		       class="end inputbox validate" timeclass="time timeend validate"
+		       label="COM_DPCALENDAR_FIELD_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_END_DATE_DESC"/>
 
-		<field id="all_day" name="all_day" type="radio" default="0"
-		       class="" label="COM_DPCALENDAR_FIELD_ALL_DAY_LABEL" description="COM_DPCALENDAR_FIELD_ALL_DAY_DESC">
+		<field name="show_end_time" type="radio" default="1" class="dp-form-radio"
+		       label="COM_DPCALENDAR_FIELD_SHOW_END_TIME_LABEL" description="COM_DPCALENDAR_FIELD_SHOW_END_TIME_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 
-		<field id="scheduling" name="scheduling" type="radio" default="0"
+		<field name="all_day" type="radio" default="0" class="dp-form-radio"
+		       label="COM_DPCALENDAR_FIELD_ALL_DAY_LABEL" description="COM_DPCALENDAR_FIELD_ALL_DAY_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field type="radio" name="scheduling" default="0" class="dp-form-radio"
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_DESC">
 			<option value="0">JNO</option>
 			<option value="DAILY">COM_DPCALENDAR_FIELD_SCHEDULING_DAILY</option>
@@ -42,26 +46,19 @@
 		</field>
 		<field name="scheduling_end_date" type="datetimechooser"
 		       all_day="1" onchange="updateRuleFromForm();" default="+2 Month"
-		       label="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_DESC"
-		       class="inputbox validate-date" format="Y-m-d"/>
-		<field name="scheduling_interval" type="text" class="inputbox"
-		       size="10" default="1" label="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_LABEL"
-		       description="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_DESC"/>
-		<field name="scheduling_repeat_count" type="text" class="inputbox"
-		       size="10" default=""
-		       label="COM_DPCALENDAR_FIELD_SCHEDULING_REPEAT_COUNT_LABEL"
-		       description="COM_DPCALENDAR_FIELD_SCHEDULING_REPEAT_COUNT_DESC"/>
-		<field id="scheduling_daily_weekdays" name="scheduling_daily_weekdays"
-		       type="radio" default="0"
-		       label="COM_DPCALENDAR_FIELD_SCHEDULING_DAILY_WEEK_DAYS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_SCHEDULING_DAILY_WEEK_DAYS_DESC">
+		       class="validate-date" format="Y-m-d" formatTime="g:i a"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_DESC"/>
+		<field name="scheduling_interval" type="text" default="1"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_DESC"/>
+		<field name="scheduling_repeat_count" type="text"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_REPEAT_COUNT_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_REPEAT_COUNT_DESC"/>
+		<field name="scheduling_daily_weekdays" type="radio" default="0" class="dp-form-radio"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_DAILY_WEEK_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_DAILY_WEEK_DAYS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field id="scheduling_weekly_days" name="scheduling_weekly_days"
-		       type="list" default="" multiple="true"
-		       label="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_DESC">
+		<field name="scheduling_weekly_days" type="list" multiple="true"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_DESC">
 			<option value="MO">MONDAY</option>
 			<option value="TU">TUESDAY</option>
 			<option value="WE">WEDNESDAY</option>
@@ -70,17 +67,13 @@
 			<option value="SA">SATURDAY</option>
 			<option value="SU">SUNDAY</option>
 		</field>
-		<field id="scheduling_monthly_options" name="scheduling_monthly_options"
-		       type="radio" default="by_week" label="" description="">
-			<option value="by_day">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_DAY
-			</option>
-			<option value="by_week">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_WEEK
-			</option>
+		<field name="scheduling_monthly_options" type="radio" default="by_week" class="dp-form-radio"
+		       label="" description="">
+			<option value="by_day">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_DAY</option>
+			<option value="by_week">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_WEEK</option>
 		</field>
-		<field id="scheduling_monthly_week" name="scheduling_monthly_week"
-		       type="list" default="" multiple="true"
-		       label="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_LABEL"
-		       description="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_DESC">
+		<field name="scheduling_monthly_week" type="list" multiple="true"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_DESC">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3">3</option>
@@ -89,10 +82,8 @@
 			<option value="last">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_LAST
 			</option>
 		</field>
-		<field id="scheduling_monthly_week_days" name="scheduling_monthly_week_days"
-		       type="list" default="" multiple="true"
-		       label="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_DESC">
+		<field name="scheduling_monthly_week_days" type="list" multiple="true"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_DESC">
 			<option value="MO">MONDAY</option>
 			<option value="TU">TUESDAY</option>
 			<option value="WE">WEDNESDAY</option>
@@ -101,10 +92,8 @@
 			<option value="SA">SATURDAY</option>
 			<option value="SU">SUNDAY</option>
 		</field>
-		<field id="scheduling_monthly_days" name="scheduling_monthly_days"
-		       type="list" default="" multiple="true"
-		       label="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_DAYS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_DAYS_DESC">
+		<field name="scheduling_monthly_days" type="list" multiple="true"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_DAYS_DESC">
 			<option value="1">1</option>
 			<option value="2">2</option>
 			<option value="3">3</option>
@@ -137,77 +126,67 @@
 			<option value="30">30</option>
 			<option value="31">31</option>
 		</field>
-		<field name="rrule" type="text" class="input-xlarge" default=""
-		       size="70" label="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_LABEL"
-		       description="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_DESC"/>
+		<field name="rrule" type="text"
+		       label="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_DESC"/>
 
-		<field name="description" type="editor" buttons="true"
-		       hide="pagebreak,readmore" class="input-xlarge" filter="JComponentHelper::filterText"
+		<field name="description" type="editor" buttons="true" hide="pagebreak,readmore" filter="JComponentHelper::filterText"
 		       label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
 
-		<field name="id" default="0" label="JGLOBAL_FIELD_ID_LABEL"
-		       type="hidden" readonly="true" class="readonly" description="JGLOBAL_FIELD_ID_DESC"/>
+		<field name="id" type="hidden" readonly="true" default="0"
+		       label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
-		<field name="location_ids" type="sql" default=""
-		       label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" multiple="true"
-		       description="COM_DPCALENDAR_FIELD_LOCATION_DESC"
+		<field name="location_ids" type="sql" multiple="true"
+		       key_field="id" value_field="title"
 		       query="SELECT id, concat(title,' [',IFNULL(latitude, '0'),':',IFNULL(longitude, '0'),']') as title FROM #__dpcalendar_locations where state = 1 order by title"
-		       key_field="id" value_field="title"/>
+		       label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC"/>
 	</fieldset>
 	<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
-		<field name="capacity" type="text" size="6"
+		<field name="capacity" type="text"
 		       label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
-		<field name="capacity_used" type="text" size="6"
+		<field name="capacity_used" type="text"
 		       label="COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_USED_DESC"/>
-		<field name="max_tickets" type="text" size="6" default="1"
+		<field name="max_tickets" type="text" default="1"
 		       label="COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_MAX_TICKETS_DESC"/>
 		<field name="booking_closing_date" type="text" size="100"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_DESC"/>
-		<field name="price" type="subform"
+		<field name="price" type="subform" multiple="true"
 		       formsource="administrator/components/com_dpcalendar/models/forms/event_price.xml"
-		       multiple="true" label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
-		<field name="earlybird" type="subform"
+		       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
+		<field name="earlybird" type="subform" multiple="true"
 		       formsource="administrator/components/com_dpcalendar/models/forms/event_earlybird.xml"
-		       multiple="true" description="COM_DPCALENDAR_FIELD_EARLYBIRD_DESC"
-		       label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL"/>
-		<field name="user_discount" type="subform"
+		       label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL" description="COM_DPCALENDAR_FIELD_EARLYBIRD_DESC"/>
+		<field name="user_discount" type="subform" multiple="true"
 		       formsource="administrator/components/com_dpcalendar/models/forms/event_userdiscount.xml"
-		       multiple="true" description="COM_DPCALENDAR_FIELD_USER_DISCOUNT_DESC"
-		       label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL"/>
-		<field name="plugintype" type="plugins" folder="dpcalendarpay"
-		       default="0" label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL"
-		       description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
+		       label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL" description="COM_DPCALENDAR_FIELD_USER_DISCOUNT_DESC"/>
+		<field name="plugintype" type="plugins" folder="dpcalendarpay" default="0"
+		       label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
 			<option value="0">COM_DPCALENDAR_FIELD_PAYMENT_TYPE_ALL</option>
 		</field>
 		<field name="booking_information" type="editor" filter="raw"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
-		<field name="ordertext" type="editor" default=""
-		       label="COM_DPCALENDAR_FIELD_CONFIG_PAYMENT_ORDERTEXT_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_PAYMENT_ORDERTEXT_DESC"/>
-		<field name="canceltext" type="editor" default=""
-		       label="COM_DPCALENDAR_FIELD_CONFIG_PAYMENT_CANCELTEXT_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_PAYMENT_CANCELTEXT_DESC"/>
+		<field name="ordertext" type="editor"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_DESC"/>
+		<field name="canceltext" type="editor"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_DESC"/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
-		<field name="alias" type="text" class="input-xlarge" size="70"
+		<field name="alias" type="text"
 		       label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_FIELD_ALIAS_DESC"/>
 
-		<field name="tags" type="tag" label="JTAG" description="JTAG_DESC"
-		       class="inputbox small" multiple="true"/>
-		<field name="publish_up" type="calendar" label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
-		       description="JGLOBAL_FIELD_PUBLISH_UP_DESC" class="inputbox" format="%Y-%m-%d %H:%M:%S"
-		       size="22" filter="user_utc"/>
-		<field name="featured" type="list" label="JFEATURED"
-		       description="COM_DPCALENDAR_FIELD_FEATURED_DESC" default="0">
+		<field name="tags" type="tag" multiple="true"
+		       label="JTAG" description="JTAG_DESC"/>
+		<field name="publish_up" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S" label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
+		       description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
+		<field name="featured" type="list" default="0"
+		       label="JFEATURED" description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="hits" type="text" class="readonly" size="6"
-		       label="JGLOBAL_HITS" description="COM_DPCALENDAR_HITS_DESC" readonly="true"
-		       filter="unset"/>
-		<field name="state" type="list" label="JSTATUS" class="chzn-color-state"
-		       filter="intval" size="1" default="1" description="COM_DPCALENDAR_FIELD_STATE_DESC">
+		<field name="hits" type="text" readonly="true" filter="unset"
+		       label="JGLOBAL_HITS" description="COM_DPCALENDAR_HITS_DESC"/>
+		<field name="state" type="list" class="chzn-color-state" filter="intval" default="1"
+		       label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
 			<option value="1">JPUBLISHED</option>
 			<option value="0">JUNPUBLISHED</option>
 			<option value="2">JARCHIVED</option>
@@ -215,82 +194,69 @@
 			<option value="-2">JTRASHED</option>
 		</field>
 
-		<field name="access" type="accesslevel" label="JFIELD_ACCESS_LABEL"
-		       description="JFIELD_ACCESS_DESC" class="inputbox" size="1" default="1"/>
+		<field name="access" type="accesslevel" default="1"
+		       label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>
 
-		<field name="access_content" type="accesslevel"
-		       label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"
-		       class="inputbox" size="1" default="1"/>
-		<field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL"
-		       description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC" class="inputbox">
+		<field name="access_content" type="accesslevel" default="1"
+		       label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"/>
+		<field name="language" type="contentlanguage"
+		       label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
 			<option value="*">JALL</option>
 		</field>
 
-		<field name="created" type="calendar" label="JGLOBAL_FIELD_CREATED_LABEL"
-		       description="JGLOBAL_FIELD_CREATED_DESC" class="inputbox" size="22"
-		       format="%Y-%m-%d %H:%M:%S" filter="user_utc"/>
+		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+		       label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
 
-		<field name="created_by" type="user" label="JGLOBAL_FIELD_CREATED_BY_LABEL"
-		       description="JGLOBAL_FIELD_CREATED_BY_Desc"/>
+		<field name="created_by" type="user"
+		       label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_Desc"/>
 
 		<field name="created_by_alias" type="text"
-		       label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"
-		       class="inputbox" size="20"/>
+		       label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
 
-		<field name="modified" type="calendar" class="readonly"
-		       label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_DPCALENDAR_FIELD_MODIFIED_DESC"
-		       size="22" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc"/>
+		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+		       label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_DPCALENDAR_FIELD_MODIFIED_DESC"/>
 
-		<field name="modified_by" type="user" label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
-		       class="readonly" readonly="true" filter="unset"/>
+		<field name="modified_by" type="user" readonly="true" filter="unset"
+		       label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"/>
 
 		<field name="checked_out" type="hidden" filter="unset"/>
 
 		<field name="checked_out_time" type="hidden" filter="unset"/>
 
-		<field name="publish_up" type="calendar" label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
-		       description="JGLOBAL_FIELD_PUBLISH_UP_DESC" class="inputbox" format="%Y-%m-%d %H:%M:%S"
-		       size="22" filter="user_utc"/>
+		<field name="publish_up" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S"
+		       label="JGLOBAL_FIELD_PUBLISH_UP_LABEL" description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
 
-		<field name="publish_down" type="calendar"
-		       label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL" description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"
-		       class="inputbox" format="%Y-%m-%d %H:%M:%S" size="22" filter="user_utc"/>
+		<field name="publish_down" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+		       label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL" description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
 
-		<field name="version_note" type="text"
-		       label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC"
-		       class="inputbox" size="45" labelclass="control-label"/>
+		<field name="version_note" type="text" labelclass="control-label"
+		       label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC"/>
 
 		<field type="hidden" name="notify_changes" default="0"/>
 	</fieldset>
 
 	<fields name="images">
 		<fieldset name="images" label="COM_DPCALENDAR_IMAGES">
-			<field name="image1" type="media" label="COM_DPCALENDAR_FIELD_IMAGE_LABEL"
-			       description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
-			<field name="image1_alt" type="text"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"
-			       size="20"/>
-			<field name="image1_caption" type="text"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"
-			       size="20"/>
+			<field name="image1" type="media" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
+			<field name="image1_alt" type="text" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"/>
+			<field name="image1_caption" type="text" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"/>
 			<field name="spacer1" type="spacer" hr="true"/>
-			<field name="image2" type="media" label="COM_DPCALENDAR_FIELD_IMAGE_LABEL"
-			       description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
-			<field name="image2_alt" type="text"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"
-			       size="20"/>
-			<field name="image2_caption" type="text"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"
-			       size="20"/>
+			<field name="image2" type="media" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
+			<field name="image2_alt" type="text" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"/>
+			<field name="image2_caption" type="text" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"/>
 			<field name="spacer2" type="spacer" hr="true"/>
-			<field name="image3" type="media" label="COM_DPCALENDAR_FIELD_IMAGE_LABEL"
-			       description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
-			<field name="image3_alt" type="text"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"
-			       size="20"/>
-			<field name="image3_caption" type="text"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"
-			       size="20"/>
+			<field name="image3" type="media" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
+			<field name="image3_alt" type="text" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"/>
+			<field name="image3_caption" type="text" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"/>
 		</fieldset>
 	</fields>
 
@@ -303,24 +269,23 @@
 				<option value="1">JYES</option>
 			</field>
 		</fieldset>
-		<field name="payment_statement" type="editor" default="" filter="safehtml"
+		<field name="payment_statement" type="editor" filter="safehtml"
 		       label="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_DESC"/>
 	</fields>
 	<fields name="metadata">
 		<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
 
-			<field name="metakey" type="textarea" label="JFIELD_META_KEYWORDS_LABEL"
-			       description="JFIELD_META_KEYWORDS_DESC" class="inputbox" rows="3"
-			       cols="30"/>
+			<field name="metakey" type="textarea" rows="3"
+			       cols="30"
+			       label="JFIELD_META_KEYWORDS_LABEL" description="JFIELD_META_KEYWORDS_DESC"/>
 
-			<field name="metadesc" type="textarea" label="JFIELD_META_DESCRIPTION_LABEL"
-			       description="JFIELD_META_DESCRIPTION_DESC" class="inputbox" rows="3"
-			       cols="30"/>
+			<field name="metadesc" type="textarea" rows="3" cols="30"
+			       label="JFIELD_META_DESCRIPTION_LABEL" description="JFIELD_META_DESCRIPTION_DESC"/>
 
-			<field name="xreference" type="text" label="JFIELD_XREFERENCE_LABEL"
-			       description="JFIELD_XREFERENCE_DESC" class="inputbox" size="20"/>
-			<field name="robots" type="list" label="JFIELD_METADATA_ROBOTS_LABEL"
-			       description="JFIELD_METADATA_ROBOTS_DESC">
+			<field name="xreference" type="text"
+			       label="JFIELD_XREFERENCE_LABEL" description="JFIELD_XREFERENCE_DESC"/>
+			<field name="robots" type="list"
+			       label="JFIELD_METADATA_ROBOTS_LABEL" description="JFIELD_METADATA_ROBOTS_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="index, follow">JGLOBAL_INDEX_FOLLOW</option>
 				<option value="noindex, follow">JGLOBAL_NOINDEX_FOLLOW</option>
@@ -328,9 +293,8 @@
 				<option value="noindex, nofollow">JGLOBAL_NOINDEX_NOFOLLOW</option>
 			</field>
 
-			<field name="rights" type="text" label="JFIELD_META_RIGHTS_LABEL"
-			       description="JFIELD_META_RIGHTS_DESC" required="false" filter="string"
-			       cols="30" rows="2"/>
+			<field name="rights" type="text" required="false" filter="string" cols="30" rows="2"
+			       label="JFIELD_META_RIGHTS_LABEL" description="JFIELD_META_RIGHTS_DESC"/>
 		</fieldset>
 	</fields>
 </form>

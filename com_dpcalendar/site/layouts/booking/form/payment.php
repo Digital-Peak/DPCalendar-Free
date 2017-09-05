@@ -113,9 +113,8 @@ if (!$bookingId) {
 		$s = $root->addChild(new Container('series'));
 
 		$field = $form->getField('series');
-		$s->addChild(new TextBlock('label'))->setContent($field->__get('label'));
-		$s->addChild(new TextBlock('content'))->setContent($field->__get('input'));
 		$s->addChild(new TextBlock('description'))->setContent(JText::_($field->__get('description')));
+		$s->addChild(new TextBlock('content'))->setContent($field->__get('input'));
 	}
 
 	$columns = array('', '', '');
@@ -154,6 +153,9 @@ if (!$bookingId) {
 				)
 			);
 
+			// Add the ticket price cell
+			$cell = $row->addCell(new Cell('ticket-price'))->setContent(DPCalendarHelper::renderPrice($value));
+
 			// Add the price cell
 			$cell = $row->addCell(new Cell('amount', array('options-amount')));
 
@@ -184,7 +186,7 @@ if (!$bookingId) {
 
 			// For every possible ticket add an option
 			for ($i = 0; $i <= $max; $i++) {
-				$select->addOption($i, $i, $i == 1 && $instance->id == $event->id);
+				$select->addOption($i, $i, count($price->value) == 1 && $i == 1 && $instance->id == $event->id);
 			}
 
 			// Set up the info cell for the amount
@@ -195,10 +197,10 @@ if (!$bookingId) {
 				$cell = $row->addCell(new Cell('price', array('options-price')));
 
 				$o = $cell->addChild(new Element('live', array('options-price-live')));
-				$o->setContent('0.00');
+				$o->setContent(DPCalendarHelper::renderPrice('0.00'));
 
 				$o = $cell->addChild(new Element('original', array('options-price-cell-original')));
-				$o->setContent('0.00');
+				$o->setContent(DPCalendarHelper::renderPrice('0.00'));
 
 				// Add the info icon
 				$cell = $row->addCell(new Cell('info', array('options-price-info')));
@@ -228,6 +230,5 @@ if (!$bookingId) {
 if ($needsPayment || $booking->state == 3) {
 	$row = $root->addChild(new Container('total-price'));
 	$row->addChild(new TextBlock('label'))->setContent(JText::_('COM_DPCALENDAR_VIEW_BOOKING_TOTAL') . ': ');
-	$row->addChild(new TextBlock('price-content'))->setContent($booking && $booking->id ? $booking->price : 0.00);
-	$row->addChild(new TextBlock('price-currency'))->setContent(DPCalendarHelper::getComponentParameter('currency_symbol', '$'));
+	$row->addChild(new TextBlock('price-content'))->setContent(DPCalendarHelper::renderPrice($booking && $booking->id ? $booking->price : 0.00));
 }

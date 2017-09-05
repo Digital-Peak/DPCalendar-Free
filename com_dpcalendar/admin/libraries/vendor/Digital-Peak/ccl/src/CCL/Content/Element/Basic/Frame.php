@@ -6,7 +6,7 @@ namespace CCL\Content\Element\Basic;
  * Represents a frame element.
  *
  * @example // The following code snippet creates a frame.
- * $f = new Form('myfram', 'url/to/embed.html');
+ * $f = new Frame('myframe', 'url/to/embed.html');
  */
 class Frame extends Container
 {

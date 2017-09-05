@@ -32,11 +32,25 @@ $list = $root->addChild(new ListContainer('events', ListContainer::UNORDERED));
 
 // Loop over the events
 foreach ($displayData['events'] as $event) {
+	// The start date
+	$startDate = DPCalendarHelper::getDate($event->start_date, $event->all_day);
+
 	// The calendar
 	$calendar = DPCalendarHelper::getCalendar($event->catid);
 
 	// The list item container
 	$item = $list->addListItem(new ListItem('event-' . $event->id));
+
+	// Show the icon when activated
+	if ($params->get('list_show_icon')) {
+		// The calendar icon element
+		$cal = $item->addChild(new Container('calendar-icon', array('calendar-icon')));
+		$cal->addChild(new TextBlock('day', array('day')))->setContent($startDate->format('j', true));
+		$m = $cal->addChild(new TextBlock('month', array('month')))->setContent($startDate->format('M', true));
+
+		// Add per event the color for the calendar icon
+		JFactory::getDocument()->addStyleDeclaration('#' . $m->getId() . ' {background-color: #' . $event->color . '; box-shadow: 0 2px 0 #' . $event->color . ';}');
+	}
 
 	// If possible add the book link
 	if (\DPCalendar\Helper\Booking::openForBooking($event)) {
@@ -84,19 +98,20 @@ foreach ($displayData['events'] as $event) {
 			array('date')
 		)
 	);
-	$d->setContent('(' . JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE') . ': ');
+	$d->setContent('(' . JText::_('COM_DPCALENDAR_DATE') . ': ');
 	$d->setContent(
 		DPCalendarHelper::getDateStringFromEvent(
 			$event,
 			$params->get('event_date_format', 'm.d.Y'),
 			$params->get('event_time_format', 'g:i a')
 		),
-		true);
+		true
+	);
 	$d->setContent(')', true);
 
 	// The calendar element
 	$c = $item->addChild(new TextBlock('calendar', array('calendar')));
-	$c->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_CALANDAR') . ': ');
+	$c->setContent(JText::_('COM_DPCALENDAR_CALENDAR') . ': ');
 	$c->setContent($calendar != null ? $calendar->title : $event->catid, true);
 
 	// The capacity element

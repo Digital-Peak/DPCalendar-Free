@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 use CCL\Content\Element\Basic\Form;
 
-DPCalendarHelper::loadLibrary(array('chosen' => true));
+DPCalendarHelper::loadLibrary(array('chosen' => true, 'dpcalendar' => true));
 
 JFactory::getDocument()->addStyleDeclaration('#dp-invite-actions {margin-bottom: 10px;}');
 

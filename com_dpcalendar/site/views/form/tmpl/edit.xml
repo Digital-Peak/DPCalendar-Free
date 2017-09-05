@@ -243,11 +243,11 @@
 				hide="pagebreak,readmore" class="input-xlarge" filter="JComponentHelper::filterText"
 				label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC" />
 			<field name="event_form_ordertext" type="editor"
-				label="COM_DPCALENDAR_FIELD_CONFIG_PAYMENT_ORDERTEXT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_PAYMENT_ORDERTEXT_DESC" />
+				label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_DESC" />
 			<field name="event_form_canceltext" type="editor"
-				label="COM_DPCALENDAR_FIELD_CONFIG_PAYMENT_CANCELTEXT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_PAYMENT_CANCELTEXT_DESC" />
+				label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_DESC" />
 			<field name="event_form_payment_statement" type="editor"
 				filter="safehtml" label="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_LABEL"
 				description="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_DESC" />

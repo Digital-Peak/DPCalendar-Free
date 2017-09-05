@@ -20,8 +20,9 @@ $event  = $this->event;
 $params = $this->params;
 
 /** @var Container $root **/
-$root = $this->root->addChild(new Container('actions-container', array('noprint')));
-$root->setProtectedClass('noprint');
+$root = $this->root->addChild(new Container('actions-container'));
+$root->addClass('noprint', true);
+$root->addClass('dp-actions-container', true);
 
 // The share container
 $sc = $root->addChild(new Container('share'));
@@ -41,14 +42,14 @@ DPCalendarHelper::renderLayout(
 	array(
 		'root'     => $bc,
 		'id'       => 'print',
-		'selector' => 'dp-event-container'
+		'selector' => 'dp-event'
 	)
 );
 
 // Compile the url fo the email button
 require_once JPATH_SITE . '/components/com_mailto/helpers/mailto.php';
 $uri = JUri::getInstance()->toString(array('scheme', 'host', 'port'));
-$url = 'index.php?option=com_mailto&link=' . MailToHelper::addLink($uri . DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, false, true));
+$url = 'index.php?option=com_mailto&tmpl=component&link=' . MailToHelper::addLink($uri . DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, false, true));
 
 // Create the email button
 DPCalendarHelper::renderLayout(
@@ -57,14 +58,16 @@ DPCalendarHelper::renderLayout(
 		'type'    => Icon::MAIL,
 		'root'    => $bc,
 		'title'   => 'JGLOBAL_EMAIL',
-		'onclick' => "window.open('" . $url ."')"
+		'onclick' => "window.open('" . $url ."','win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"
 	)
 );
 
 if ($params->get('event_show_copy', '1'))
 {
 	$d = $bc->addChild(new Dropdown('actions', ['actions']));
-	$d->setTriggerElement(new Button('trigger', new Icon('icon', Icon::DOWNLOAD)))->addChild(new Icon('icon', Icon::DOWN, ['caret']));
+	$b = $d->setTriggerElement(new Button('trigger', new Icon('icon', Icon::DOWNLOAD)));
+	$b->addClass('dp-button', true);
+	$b->addChild(new Icon('icon', Icon::DOWN, ['caret']));
 
 	// Compile the Google url
 	$startDate  = DPCalendarHelper::getDate($event->start_date, $event->all_day);
@@ -120,6 +123,21 @@ if ($event->capacity != '0' && $event->params->get('access-tickets') && !DPCalen
 	);
 }
 
+if ($event->capacity != '0' && $event->params->get('access-bookings') && !DPCalendarHelper::isFree())
+{
+	// Add the tickets button
+	DPCalendarHelper::renderLayout(
+		'content.button',
+		array(
+			'id'      => 'bookings',
+			'type'    => Icon::SIGNUP,
+			'root'    => $bc,
+			'text'    => 'COM_DPCALENDAR_BOOKINGS',
+			'onclick' => "location.href='" . DPCalendarHelperRoute::getBookingsRoute($event->id) ."'"
+		)
+	);
+}
+
 if ($event->params->get('access-edit'))
 {
 	// Add the tickets button
@@ -170,22 +188,4 @@ if ($event->params->get('access-delete'))
 			)
 		);
 	}
-}
-
-// The heading of the page
-$h = $root->addChild(new Heading('event-header', 2, array('dp-event-header')));
-$h->setProtectedClass('dp-event-header');
-
-if (JFactory::getApplication()->input->get('tmpl') == 'component')
-{
-	// When we are shown in a modal dialog, make the title clickable
-	$link = new Link('link', str_replace(array('?tmpl=component', 'tmpl=component'), '', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid)), '_parent');
-	$link->setContent($event->title);
-
-	$h->addChild($link);
-}
-else
-{
-	// Add the title
-	$h->setContent($event->title);
 }

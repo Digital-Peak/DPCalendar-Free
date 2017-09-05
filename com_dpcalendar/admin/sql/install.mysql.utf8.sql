@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `recurrence_id` varchar(255) DEFAULT NULL,
   `start_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `end_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `show_end_time` tinyint(3) unsigned NOT NULL DEFAULT '1',
   `all_day` tinyint(3) unsigned NOT NULL DEFAULT '0',
   `color` varchar(250) NOT NULL DEFAULT '',
   `url` varchar(250) NOT NULL DEFAULT '',

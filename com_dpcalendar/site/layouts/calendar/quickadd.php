@@ -19,6 +19,8 @@ if (!$params) {
 	$params = new Registry();
 }
 
+DPCalendarHelper::loadLibrary(array('dpcalendar' => true));
+
 $root = $displayData['root']->addChild(new Container('quickadd'));
 
 $uniqueId = $displayData['id'];
@@ -80,12 +82,15 @@ $formElement->addChild(new Input('capacity', 'hidden', 'jform[capacity]', '0'));
 $formElement->addChild(new Input('all_day', 'hidden', 'form[all_day]', '0'));
 $formElement->addChild(new Input('layout', 'hidden', 'layout', 'edit'));
 
+$actions = $root->addChild(new Container('actions'));
+$actions->addClass('dp-actions-container', true);
+
 // Create the submit button
 DPCalendarHelper::renderLayout(
 	'content.button',
 	array(
 		'type'    => Icon::OK,
-		'root'    => $root,
+		'root'    => $actions,
 		'text'    => 'COM_DPCALENDAR_VIEW_FORM_BUTTON_SUBMIT_EVENT',
 		'onclick' => "jQuery('#" . $formElement->getId() . " [name=\"task\"]').val('event.save'); jQuery('#" . $formElement->getId() . "').submit()"
 	)
@@ -96,7 +101,7 @@ DPCalendarHelper::renderLayout(
 	'content.button',
 	array(
 		'type'    => Icon::EDIT,
-		'root'    => $root,
+		'root'    => $actions,
 		'text'    => 'COM_DPCALENDAR_VIEW_FORM_BUTTON_EDIT_EVENT',
 		'onclick' => "jQuery('#" . $formElement->getId() . "').submit()"
 	)
@@ -107,7 +112,7 @@ DPCalendarHelper::renderLayout(
 	'content.button',
 	array(
 		'type'    => Icon::CANCEL,
-		'root'    => $root,
+		'root'    => $actions,
 		'text'    => 'JCANCEL',
 		'onclick' => "jQuery('#" . $root->getId() . "').toggle(); jQuery('#" . $formElement->getId() . " [name=\"title\"]').val('')"
 	)
@@ -119,7 +124,16 @@ jQuery(document).ready(function(){
     jQuery('body').mouseup(function(e) {
         var form = jQuery('#" . $root->getId() . "');
 
-        if (form.has(e.target).length === 0 && !jQuery('#ui-datepicker-div').is(':visible') && !jQuery(e.target).hasClass('ui-timepicker-wrapper')) {
+        if (
+            // Check if the form contains the event
+            form.has(e.target).length === 0
+            // Check if the click is in the datepicker
+            && !jQuery('#ui-datepicker-div').is(':visible')
+            // Check if the click is the selected time box
+            && !jQuery(e.target).hasClass('ui-timepicker-selected')
+            // Check if it is the release of the scrollbar in the time field
+            && !jQuery(e.target).hasClass('ui-timepicker-wrapper')
+            ) {
             form.hide();
         }
     });
@@ -151,7 +165,7 @@ JFactory::getDocument()->addStyleDeclaration('#' . $root->getId() . ' {
 	background-color: white;
 	z-index: 1002;
 	border: 1px solid #ccc;
-	max-width: 320px;
+	min-width: 350px;
 	padding: 5px;
 }
 

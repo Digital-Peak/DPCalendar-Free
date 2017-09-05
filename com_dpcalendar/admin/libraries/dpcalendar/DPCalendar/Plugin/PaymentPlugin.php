@@ -21,7 +21,6 @@ defined('_JEXEC') or die();
  */
 abstract class PaymentPlugin extends \JPlugin
 {
-
 	protected $autoloadLanguage = true;
 
 	/**
@@ -36,8 +35,8 @@ abstract class PaymentPlugin extends \JPlugin
 	 * gateway.
 	 *
 	 * @param \Omnipay\Common\AbstractGateway $gateway
-	 * @param array $transactionData
-	 * @param stdClass $booking
+	 * @param array                           $transactionData
+	 * @param \stdClass                       $booking
 	 */
 	abstract protected function getPaymentData($gateway, $transactionData, $booking);
 
@@ -45,40 +44,41 @@ abstract class PaymentPlugin extends \JPlugin
 	 * The parameters for the purchase.
 	 *
 	 * @param GatewayInterface $gateway
-	 * @param \stdClass $booking
+	 * @param \stdClass        $booking
 	 *
 	 * @return array
 	 */
 	protected function getPurchaseParameters($gateway, $booking)
 	{
-		$rootURL = rtrim(\JURI::base(), '/');
+		$rootURL    = rtrim(\JURI::base(), '/');
 		$subpathURL = \JURI::base(true);
-		if (!empty($subpathURL) && ($subpathURL != '/'))
-		{
+		if (!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 
 		$tmpl = '';
-		if ($t = \JFactory::getApplication()->input->get('tmpl'))
-		{
+		if ($t = \JFactory::getApplication()->input->get('tmpl')) {
 			$tmpl = '&tmpl=' . $t;
 		}
 
-		$purchaseParameters = array();
-		$purchaseParameters['amount'] = $booking->price;
-		$purchaseParameters['currency'] = strtoupper(\DPCalendarHelper::getComponentParameter('currency', 'USD'));
+		$purchaseParameters              = array();
+		$purchaseParameters['amount']    = $booking->price;
+		$purchaseParameters['currency']  = strtoupper(\DPCalendarHelper::getComponentParameter('currency', 'USD'));
 		$purchaseParameters['returnUrl'] = $rootURL . \JRoute::_(
-				'index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . '&paymentmethod=' . $this->_name . $tmpl, false);
+				'index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . '&paymentmethod=' . $this->_name . $tmpl,
+				false
+			);
 		$purchaseParameters['cancelUrl'] = $rootURL . \JRoute::_(
-				'index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . '&ptype=' . $this->_name . $tmpl, false);
+				'index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . '&ptype=' . $this->_name . $tmpl,
+				false
+			);
 
 		return $purchaseParameters;
 	}
 
 	public function onDPPaymentNew($paymentmethod, $booking)
 	{
-		if ($paymentmethod != $this->_name && $paymentmethod != '0')
-		{
+		if ($paymentmethod != $this->_name && $paymentmethod != '0') {
 			return false;
 		}
 
@@ -89,37 +89,31 @@ abstract class PaymentPlugin extends \JPlugin
 		$layout = \JLayoutHelper::render(
 			'purchase.form',
 			array(
-				'booking' => $booking,
-				'params' => $this->params,
+				'booking'   => $booking,
+				'params'    => $this->params,
 				'returnUrl' => $purchaseParameters['returnUrl'],
 				'cancelUrl' => $purchaseParameters['cancelUrl']
 			),
 			JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/layouts'
 		);
 
-		if ($layout)
-		{
+		if ($layout) {
 			return $layout;
 		}
 
 		$response = null;
 
-		if (method_exists($gateway, 'purchase'))
-		{
+		if (method_exists($gateway, 'purchase')) {
 			$response = $gateway->purchase($purchaseParameters)->send();
-		}
-		else
-		{
+		} else {
 			$response = $gateway->authorize($purchaseParameters)->send();
 		}
 
-		if ($response->isRedirect())
-		{
+		if ($response->isRedirect()) {
 			$response->redirect();
-		}
-		else if (!$response->isSuccessful())
-		{
-			$this->cancelPayment(array('b_id' => $booking->id), $response->getMessage() ? : 'Server error!');
+		} else if (!$response->isSuccessful()) {
+			$this->cancelPayment(array('b_id' => $booking->id), $response->getMessage() ?: 'Server error!');
+
 			return false;
 		}
 
@@ -131,8 +125,7 @@ abstract class PaymentPlugin extends \JPlugin
 	public function onDPPaymentCallBack($bookingmethod, $data)
 	{
 		// Check if we're supposed to handle this
-		if ($bookingmethod != $this->_name)
-		{
+		if ($bookingmethod != $this->_name) {
 			return false;
 		}
 
@@ -141,33 +134,28 @@ abstract class PaymentPlugin extends \JPlugin
 		$gateway = $this->getPaymentGateway();
 
 		$response = null;
-		if (method_exists($gateway, 'completePurchase'))
-		{
+		if (method_exists($gateway, 'completePurchase')) {
 			$response = $gateway->completePurchase($this->getPurchaseParameters($gateway, $booking))
 				->send();
-		}
-		else if (method_exists($gateway, 'purchase'))
-		{
+		} else if (method_exists($gateway, 'purchase')) {
 			$response = $gateway->purchase($this->getPurchaseParameters($gateway, $booking))
 				->send();
-		}
-		else
-		{
+		} else {
 			$response = $gateway->authorize($this->getPurchaseParameters($gateway, $booking))
 				->send();
 		}
 
 		// Error during checkout
-		if (!$response->isSuccessful())
-		{
+		if (!$response->isSuccessful()) {
 			$this->cancelPayment($response->getData(), $response->getMessage());
+
 			return false;
 		}
 
 		$data = $this->getPaymentData($gateway, $response->getData(), $booking);
-		if (is_string($data))
-		{
+		if (is_string($data)) {
 			$this->cancelPayment(array(), $data);
+
 			return false;
 		}
 
@@ -180,12 +168,9 @@ abstract class PaymentPlugin extends \JPlugin
 
 		$data['processor'] = $this->_name;
 
-		if ($booking)
-		{
+		if ($booking) {
 			$dataOld = (array)$booking;
-		}
-		else
-		{
+		} else {
 			$dataOld = array();
 		}
 		$data = array_merge($dataOld, $data);
@@ -194,11 +179,10 @@ abstract class PaymentPlugin extends \JPlugin
 		$data = json_decode(str_replace('\u0000*\u0000_', '', json_encode($data)), true);
 		unset($data['errors']);
 
-		\JModelLegacy::getInstance('Booking', 'DPCalendarModel')->save($data);
+		\JModelLegacy::getInstance('Booking', 'DPCalendarModel', array('event_after_save' => 'dontusethisevent'))->save($data);
 
 		$tmpl = '';
-		if ($t = \JFactory::getApplication()->input->get('tmpl'))
-		{
+		if ($t = \JFactory::getApplication()->input->get('tmpl')) {
 			$tmpl = '&tmpl=' . $t;
 		}
 
@@ -208,14 +192,14 @@ abstract class PaymentPlugin extends \JPlugin
 
 	public function onDPPaymentStatement($booking)
 	{
-		if ($booking == null || $booking->processor != $this->_name)
-		{
+		if ($booking == null || $booking->processor != $this->_name) {
 			return;
 		}
-		$return = new \stdClass();
-		$return->status = true;
+		$return            = new \stdClass();
+		$return->status    = true;
 		$return->statement = \JText::_($this->params->get('payment_statement'));
-		$return->type = $this->_name;
+		$return->type      = $this->_name;
+
 		return $return;
 	}
 
@@ -223,12 +207,10 @@ abstract class PaymentPlugin extends \JPlugin
 	{
 		$app = \JFactory::getApplication();
 
-		if (!isset($data['b_id']))
-		{
+		if (!isset($data['b_id'])) {
 			$data['b_id'] = $app->input->getInt('b_id');
 		}
-		if (!is_null($msg))
-		{
+		if (!is_null($msg)) {
 			$data['dpcalendar_failure_reason'] = $msg;
 			$app->enqueueMessage($msg, 'error');
 		}
@@ -242,12 +224,9 @@ abstract class PaymentPlugin extends \JPlugin
 	protected function log($data, $isValid)
 	{
 		$config = \JFactory::getConfig();
-		if (version_compare(JVERSION, '3.0', 'ge'))
-		{
+		if (version_compare(JVERSION, '3.0', 'ge')) {
 			$logpath = $config->get('log_path');
-		}
-		else
-		{
+		} else {
 			$logpath = $config->getValue('log_path');
 		}
 
@@ -255,18 +234,13 @@ abstract class PaymentPlugin extends \JPlugin
 
 		$logFile = $logFilenameBase . '.php';
 		\JLoader::import('joomla.filesystem.file');
-		if (!\JFile::exists($logFile))
-		{
+		if (!\JFile::exists($logFile)) {
 			$dummy = "<?php die(); ?>\n";
 			\JFile::write($logFile, $dummy);
-		}
-		else
-		{
-			if (@filesize($logFile) > 1048756)
-			{
+		} else {
+			if (@filesize($logFile) > 1048756) {
 				$altLog = $logFilenameBase . '-1.php';
-				if (\JFile::exists($altLog))
-				{
+				if (\JFile::exists($altLog)) {
 					\JFile::delete($altLog);
 				}
 				\JFile::copy($logFile, $altLog);
@@ -276,16 +250,14 @@ abstract class PaymentPlugin extends \JPlugin
 			}
 		}
 		$logData = file_get_contents($logFile);
-		if ($logData === false)
-		{
+		if ($logData === false) {
 			$logData = '';
 		}
-		$logData .= "\n" . str_repeat('-', 80);
+		$logData    .= "\n" . str_repeat('-', 80);
 		$pluginName = strtoupper($this->_name);
-		$logData .= $isValid ? 'VALID ' . $pluginName . ' IPN' : 'INVALID ' . $pluginName . ' IPN *** FRAUD ATTEMPT OR INVALID NOTIFICATION ***';
-		$logData .= "\nDate/time : " . gmdate('Y-m-d H:i:s') . " GMT\n\n";
-		foreach ($data as $key => $value)
-		{
+		$logData    .= $isValid ? 'VALID ' . $pluginName . ' IPN' : 'INVALID ' . $pluginName . ' IPN *** FRAUD ATTEMPT OR INVALID NOTIFICATION ***';
+		$logData    .= "\nDate/time : " . gmdate('Y-m-d H:i:s') . " GMT\n\n";
+		foreach ($data as $key => $value) {
 			$logData .= '  ' . str_pad($key, 30, ' ') . $value . "\n";
 		}
 		$logData .= "\n";

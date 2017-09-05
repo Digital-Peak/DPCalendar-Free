@@ -2,32 +2,10 @@
 	display: block;
 }
 
-#dp-event-actions-container-user {
-	float: right;
-	margin-bottom: 10px;
-}
-
-#dp-event-actions-container-user > button {
-	margin: 2px;
-	float: right;
-	padding: 2px 10px;
-	font-size: 12px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-}
-
+#dp-event-actions-container-user,
+#dp-event-actions-container-user > button,
 .dp-event-actions {
-	float: right
-}
-
-.dp-event-actions button {
-	margin: 2px;
-	padding: 2px 10px;
-	font-size: 12px;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
+	float: right;
 }
 
 #dp-event .dp-event-caret {
@@ -79,6 +57,10 @@
 .dp-event-price-discount {
 	margin-left: 10px;
 	font-weight: bold;
+}
+
+.dp-event-price-description {
+	margin-left: 5px;
 }
 
 .item-image {

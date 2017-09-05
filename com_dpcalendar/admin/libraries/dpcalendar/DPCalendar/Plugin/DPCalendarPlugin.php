@@ -12,6 +12,8 @@ defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
+use Sabre\VObject\Parser\Parser;
+use Sabre\VObject\Reader;
 
 \JLoader::import('joomla.plugin.plugin');
 
@@ -51,7 +53,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 				$content = implode(PHP_EOL, $content);
 			}
 
-			$cal = \Sabre\VObject\Reader::read($content);
+			$cal = Reader::read($content);
 
 			foreach ($cal->VEVENT as $event) {
 				if ((string)$event->UID != $uid) {
@@ -133,7 +135,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$cal = null;
 
 		try {
-			$cal = \Sabre\VObject\Reader::read($content);
+			$cal = Reader::read($content, Parser::OPTION_IGNORE_INVALID_LINES);
 		} catch (\Exception $e) {
 			$this->log($e->getMessage());
 			$this->log('Content is:' . nl2br(substr($content, 0, 200)));

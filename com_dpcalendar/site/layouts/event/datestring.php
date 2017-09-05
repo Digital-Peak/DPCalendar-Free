@@ -37,24 +37,33 @@ $endTime       = DPCalendarHelper::getDate($event->end_date, $event->all_day)->f
 $endTime       = trim($endTime);
 $dateSeparator = '-';
 
-$timeString = $startTime . ' ' . $startDate . ' ' . $dateSeparator . ' ' . $endTime . ' ' . $endDate;
+// Same day all day event
+if ($event->all_day && $startDate == $endDate) {
+	echo $startDate;
 
-if ($event->all_day) {
-	if ($startDate == $endDate) {
-		$timeString    = $startDate;
-		$dateSeparator = '';
-		$endDate       = '';
-	} else {
-		$timeString = $startDate . ' ' . $dateSeparator . ' ' . $endDate;
-	}
-} else {
-	if ($startDate == $endDate) {
-		if (empty($startTime) && empty($endTime)) {
-			$timeString = $startDate;
-		} else {
-			$timeString = $startDate . ' ' . $startTime . ' ' . $dateSeparator . ' ' . $endTime;
-		}
-	}
+	return;
 }
 
-echo $timeString;
+// Multi day all day event
+if ($event->all_day && $startDate != $endDate) {
+	echo $startDate . ' ' . $dateSeparator . ' ' . $endDate;
+
+	return;
+}
+
+// Same day, but empty date strings as format was empty
+if ($startDate == $endDate && empty($startTime) && empty($endTime)) {
+	echo $startDate;
+
+	return;
+}
+
+// Timed event ending on the same day as start
+if ($startDate == $endDate) {
+	echo $startDate . ' ' . $startTime . ' ' . ($event->show_end_time ? $dateSeparator . ' ' . $endTime : '');
+
+	return;
+}
+
+// Multi day timed event
+echo $startDate . ' ' . $startTime . ' ' . $dateSeparator . ' ' . $endDate . ' ' . ($event->show_end_time ? $endTime : '');

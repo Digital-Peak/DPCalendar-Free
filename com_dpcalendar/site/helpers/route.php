@@ -12,7 +12,7 @@ class DPCalendarHelperRoute
 
 	private static $lookup;
 
-	public static function getEventRoute($id, $calId, $full = false, $autoRoute = true)
+	public static function getEventRoute($id, $calId, $full = false, $autoRoute = true, $defaultItemId = 0)
 	{
 		$needles = array(
 			'event' => array(
@@ -39,9 +39,14 @@ class DPCalendarHelperRoute
 			$needles['list']     = array(
 				$calId
 			);
+			$needles['map']      = array(
+				$calId
+			);
 		}
 
-		if ($item = self::findItem($needles)) {
+		if ($defaultItemId) {
+			$link .= '&Itemid=' . $defaultItemId;
+		} else if ($item = self::findItem($needles)) {
 			$link .= '&Itemid=' . $item;
 		} else if ($item = self::findItem()) {
 			$link .= '&Itemid=' . $item;
@@ -142,11 +147,7 @@ class DPCalendarHelperRoute
 
 		$uri = self::getUrl($args, false);
 
-		$uri = $full ? $uri->toString() : JRoute::_($uri->toString(array(
-			'path',
-			'query',
-			'fragment'
-		)));
+		$uri = $full ? $uri->toString() : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
 
 		// When a booking is created on the back end it contains the
 		// administrator part
@@ -191,11 +192,7 @@ class DPCalendarHelperRoute
 
 		$uri = self::getUrl($args, false);
 
-		return $full ? $uri->toString() : JRoute::_($uri->toString(array(
-			'path',
-			'query',
-			'fragment'
-		)));
+		return $full ? $uri->toString() : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
 	}
 
 	public static function getBookingFormRoute($bookingId, $return = null)
@@ -231,11 +228,7 @@ class DPCalendarHelperRoute
 		$args['uid']  = $ticket->uid;
 
 		$uri = self::getUrl($args, false);
-		$uri = $full ? $uri->toString() : JRoute::_($uri->toString(array(
-			'path',
-			'query',
-			'fragment'
-		)));
+		$uri = $full ? $uri->toString() : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
 		$uri = str_replace('/administrator/', '/', $uri);
 
 		return $uri;
@@ -249,11 +242,7 @@ class DPCalendarHelperRoute
 
 		$uri = self::getUrl($args, false);
 
-		return $full ? $uri->toString() : JRoute::_($uri->toString(array(
-			'path',
-			'query',
-			'fragment'
-		)));
+		return $full ? $uri->toString() : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
 	}
 
 	public static function getTicketsRoute($bookingId = null, $eventId = null, $my = false)
@@ -312,6 +301,9 @@ class DPCalendarHelperRoute
 				),
 				'list'     => array(
 					$id
+				),
+				'map'      => array(
+					$id
 				)
 			);
 
@@ -331,6 +323,7 @@ class DPCalendarHelperRoute
 
 					$needles = array(
 						'calendar' => $calIds,
+						'map'      => $calIds,
 						'list'     => $calIds
 					);
 

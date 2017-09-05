@@ -121,40 +121,16 @@ $root->addChild(new Heading('details-heading', 2))->setContent(JText::_('COM_DPC
 // The details table
 $t = $root->addChild(new Table('booking-details', array('', '')));
 
-// Add an information row
-$r = $t->addRow(new Row('name'));
-$r->addCell(new Cell('label'))->setContent(JText::_('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'));
-$r->addCell(new Cell('content'))->setContent($booking->name);
-
-// Add an information row
-$r = $t->addRow(new Row('email'));
-$r->addCell(new Cell('label'))->setContent(JText::_('COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL'));
-$r->addCell(new Cell('content'))->setContent($booking->email);
-
-// Add an information row
-$r = $t->addRow(new Row('telephone'));
-$r->addCell(new Cell('label'))->setContent(JText::_('COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL'));
-$r->addCell(new Cell('content'))->setContent($booking->telephone);
-
-// Add an information row
-$r = $t->addRow(new Row('country'));
-$r->addCell(new Cell('label'))->setContent(JText::_('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'));
-$r->addCell(new Cell('content'))->setContent($booking->country);
-
-// Add an information row
-$r = $t->addRow(new Row('province'));
-$r->addCell(new Cell('label'))->setContent(JText::_('COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL'));
-$r->addCell(new Cell('content'))->setContent($booking->province);
-
-// Add an information row
-$r = $t->addRow(new Row('city'));
-$r->addCell(new Cell('label'))->setContent(JText::_('COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL'));
-$r->addCell(new Cell('content'))->setContent($booking->zip . ' ' . $booking->city);
-
-// Add an information row
-$r = $t->addRow(new Row('street'));
-$r->addCell(new Cell('label'))->setContent(JText::_('COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL'));
-$r->addCell(new Cell('content'))->setContent($booking->street . ' ' . $booking->number);
+$fields   = array();
+$fields[] = (object)array('id' => 'name', 'name' => 'name');
+$fields[] = (object)array('id' => 'email', 'name' => 'email');
+$fields[] = (object)array('id' => 'telephone', 'name' => 'telephone');
+$fields[] = (object)array('id' => 'country', 'name' => 'country', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL');
+$fields[] = (object)array('id' => 'province', 'name' => 'province', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL');
+$fields[] = (object)array('id' => 'city', 'name' => 'city', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL');
+$fields[] = (object)array('id' => 'zip', 'name' => 'zip', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL');
+$fields[] = (object)array('id' => 'street', 'name' => 'street', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL');
+$fields[] = (object)array('id' => 'number', 'name' => 'number', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL');
 
 // The fields are not fetched, load them
 if (!isset($booking->jcfields)) {
@@ -163,16 +139,31 @@ if (!isset($booking->jcfields)) {
 	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.booking', &$booking, &$params, 0));
 }
 
-// The fields table
-$t = $root->addChild(new Table('booking-fields', array('', '')));
-if (!empty($booking->jcfields)) {
-	// Loop over the fields
-	foreach ($booking->jcfields as $field) {
-		// Add an information row for the field
-		$r = $t->addRow(new Row($field->id));
-		$r->addCell(new Cell('label'))->setContent($field->label);
-		$r->addCell(new Cell('content'))->setContent(!empty($field->value) ? $field->value : '');
+$fields = array_merge($fields, $booking->jcfields);
+
+\DPCalendar\Helper\DPCalendarHelper::sortFields($fields, $params->get('booking_fields_order', new stdClass()));
+
+foreach ($fields as $field) {
+	if (!$params->get('booking_show_' . $field->name, 1)) {
+		continue;
 	}
+	$label = 'COM_DPCALENDAR_BOOKING_FIELD_' . strtoupper($field->name) . '_LABEL';
+
+	if (isset($field->label)) {
+		$label = $field->label;
+	}
+
+	$content = '';
+	if (property_exists($booking, $field->name)) {
+		$content = $booking->{$field->name};
+	}
+	if (property_exists($field, 'value')) {
+		$content = $field->value;
+	}
+
+	$r = $t->addRow(new Row($field->name));
+	$r->addCell(new Cell('label'))->setContent(JText::_($label));
+	$r->addCell(new Cell('content'))->setContent($content);
 }
 
 // The tickets heading

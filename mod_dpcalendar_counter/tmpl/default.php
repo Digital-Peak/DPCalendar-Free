@@ -46,7 +46,13 @@ $c->setContent('
 // The body of the module
 $body = $layout->addChild(new Container('content'))->addClass('countdown-content', true);
 $body->addChild(new Link('link', DPCalendarHelperRoute::getEventRoute($item->id, $item->catid), '', array('link')))->setContent($item->title);
-$body->addChild(new Element('description', array('description')))->setContent(JHTML::_('content.prepare', JHtml::_('string.truncate', $item->description, $params->get('description_length'))));
+
+// Add description only if it is different than 0
+if ($params->get('description_length') > 0 || $params->get('description_length') === null) {
+	$body->addChild(new Element('description', array('description')))
+		->setContent(JHTML::_('content.prepare', JHtml::_('string.truncate', $item->description, $params->get('description_length'))));
+}
+
 
 // Date compiling
 $d = DPCalendarHelper::getDate($item->start_date, $item->all_day);

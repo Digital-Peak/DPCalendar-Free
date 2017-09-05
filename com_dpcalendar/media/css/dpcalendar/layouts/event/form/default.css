@@ -2,14 +2,6 @@
 	clear: both;
 }
 
-#dp-event-form-actions {
-	margin-bottom: 10px;
-}
-
-#dp-event-form-actions button {
-	margin-right: 5px;
-}
-
 #dp-event-form-original-information {
 	color: red;
 }
@@ -28,72 +20,8 @@
 	color: red
 }
 
-/* Radio buttons */
-.controls fieldset.radio {
-	padding-left: 0px;
-}
-
-.controls fieldset label {
-	padding-right: 10px;
-	border-radius: 3px;
-	border: 1px solid #D1D3D4
-}
-
-/* hide input */
-.controls fieldset input[type=radio]:empty {
-	display: none;
-}
-
-/* style label */
-.controls fieldset input[type=radio]:empty + label {
-	position: relative;
-	float: left;
-	line-height: 2em;
-	text-indent: 3em;
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	margin-right: 5px;
-}
-
-.controls fieldset input[type=radio]:empty + label:before {
-	position: absolute;
-	display: block;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	content: '';
-	width: 2.5em;
-	background: #D1D3D4;
-	border-radius: 3px 0 0 3px;
-}
-
-/* toggle hover */
-.controls fieldset input[type=radio]:hover:not(:checked) + label:before {
-	content: '\2714';
-	text-indent: .9em;
-	color: #C2C2C2;
-}
-
-.controls fieldset input[type=radio]:hover:not(:checked) + label {
-	color: #888;
-}
-
-/* toggle on */
-.controls fieldset input[type=radio]:checked + label:before {
-	content: '\2714';
-	text-indent: .9em;
-	color: #9CE2AE;
-	background-color: #4DCB6D;
-}
-
-.controls fieldset input[type=radio]:checked + label {
-	color: #777;
-}
-
-/* radio focus */
-.controls fieldset input[type=radio]:focus ~ label:before {
-	box-shadow: 0 0 0 3px #999;
+/* time input width */
+#dp-event-form .time,
+#dp-event-form .hasDatepicker {
+	max-width: 100px;
 }

@@ -46,3 +46,9 @@
 .dp-calendar .fc-day-grid-event > .fc-content {
 	white-space: normal;
 }
+
+/* time input width */
+#dp-calendar-quickadd-form-container .time,
+#dp-calendar-quickadd-form-container .hasDatepicker {
+	max-width: 80px;
+}

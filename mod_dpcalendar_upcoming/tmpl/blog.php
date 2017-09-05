@@ -21,7 +21,7 @@ use CCL\Content\Element\Component\Grid\Row;
 use CCL\Content\Element\Component\Grid\Column;
 
 if (!$events) {
-	echo JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_NO_EVENT_TEXT');
+	echo JText::_('MOD_DPCALENDAR_UPCOMING_NO_EVENT_TEXT');
 
 	return;
 }
@@ -83,8 +83,7 @@ foreach ($events as $index => $event) {
 	$h->setProtectedClass('dp-event-header');
 
 	// When we are shown in a modal dialog, make the title clickable
-	$url  = str_replace(array('?tmpl=component', 'tmpl=component'), '', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid));
-	$link = $h->addChild(new Link('link', $url, '_parent'));
+	$link = $h->addChild(new Link('link', $event->realUrl, '_parent'));
 	$link->addChild(new TextBlock('text'))->setContent($event->title);
 
 	// Add a special class when popup is enabled
@@ -93,7 +92,7 @@ foreach ($events as $index => $event) {
 	if ($params->get('show_hits', 1)) {
 		// The hits element
 		$b = $item->addChild(new Badge('hits', array('hits')));
-		$b->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_HITS') . ':' . $event->hits);
+		$b->setContent(JText::_('MOD_DPCALENDAR_UPCOMING_BLOG_HITS') . ':' . $event->hits);
 	}
 
 	// The location elements
@@ -133,7 +132,7 @@ foreach ($events as $index => $event) {
 	// If possible add the book link
 	if (\DPCalendar\Helper\Booking::openForBooking($event)) {
 		$l = $item->addChild(new Link('book', DPCalendarHelperRoute::getBookingFormRouteFromEvent($event, $return)));
-		$l->addChild(new Icon('book-icon', Icon::PLUS, array(), array('title' => JText::_('COM_DPCALENDAR_BOOK'))));
+		$l->addChild(new Icon('book-icon', Icon::PLUS, array(), array('title' => JText::_('MOD_DPCALENDAR_UPCOMING_BLOG_BOOK'))));
 	}
 
 	// If possible add the edit link
@@ -151,24 +150,24 @@ foreach ($events as $index => $event) {
 
 	// The date element
 	$d = $item->addChild(new TextBlock('date', array('date')));
-	$d->setContent('(' . JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE') . ': ');
+	$d->setContent('(' . JText::_('MOD_DPCALENDAR_UPCOMING_BLOG_DATE') . ': ');
 	$d->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('event_date_format', 'm.d.Y'),
 		$params->get('event_time_format', 'g:i a')), true);
 	$d->setContent(')', true);
 
 	// The calendar element
 	$c = $item->addChild(new TextBlock('calendar', array('calendar')));
-	$c->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_CALANDAR') . ': ');
+	$c->setContent(JText::_('MOD_DPCALENDAR_UPCOMING_BLOG_CALENDAR') . ': ');
 	$c->setContent($calendar != null ? $calendar->title : $event->catid, true);
 
 	// The capacity element
 	if ($event->capacity === null) {
 		$c = $item->addChild(new TextBlock('capacity', array('capacity')));
-		$c->setContent(JText::_('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . JText::_('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED'));
+		$c->setContent(JText::_('MOD_DPCALENDAR_UPCOMING_BLOG_CAPACITY') . ': ' . JText::_('MOD_DPCALENDAR_UPCOMING_BLOG_CAPACITY_UNLIMITED'));
 	} else {
 		if ($event->capacity > 0) {
 			$c = $item->addChild(new TextBlock('capacity', array('capacity')));
-			$c->setContent(JText::_('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . ($event->capacity - $event->capacity_used) . '/' . (int)$event->capacity);
+			$c->setContent(JText::_('MOD_DPCALENDAR_UPCOMING_BLOG_CAPACITY_UNLIMITED') . ': ' . ($event->capacity - $event->capacity_used) . '/' . (int)$event->capacity);
 		}
 	}
 	$c = $item->addChild(new TextBlock('price', array('price')));
@@ -188,7 +187,7 @@ foreach ($events as $index => $event) {
 			// Set up for readmore
 			$desc->setContent($descTruncated);
 			$params->set('access-view', true);
-			$event->alternative_readmore = JText::_('COM_DPCALENDAR_READ_MORE');
+			$event->alternative_readmore = JText::_('MOD_DPCALENDAR_UPCOMING_READ_MORE');
 			$desc                        .= JLayoutHelper::render(
 				'joomla.content.readmore',
 				array('item' => $event, 'params' => $params, 'link' => DPCalendarHelperRoute::getEventRoute($event->id, $event->catid))

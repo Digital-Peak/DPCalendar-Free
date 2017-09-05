@@ -62,13 +62,7 @@ $root->addChild(new Input('date-picker', 'hidden', 'date-picker'));
 
 // Add quick add
 if (DPCalendarHelper::canCreateEvent()) {
-	if ($params->get('event_create_form', 1) == 1) {
-		DPCalendarHelper::renderLayout('calendar.quickadd', $displayData);
-	}
-	if ($params->get('event_create_form', 1) == 2) {
-		JFactory::getDocument()->addScriptDeclaration("var DPCALENDAR_CREATE_FORM_URL='" . JRoute::_(DPCalendarHelperRoute::getFormRoute(0,
-				JUri::getInstance()->toString())) . "';");
-	}
+	DPCalendarHelper::renderLayout('calendar.quickadd', $displayData);
 }
 
 // Load the map

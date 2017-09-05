@@ -28,13 +28,14 @@ $button = new Button(
 	$id,
 	html_entity_decode(JText::_($text)),
 	$icon,
-	array('hasTooltip', $id),
+	array($id),
 	array(
 		'title'   => html_entity_decode(JText::_($title)),
 		'onclick' => $onclick
 	)
 );
-$button->setProtectedClass('hasTooltip');
+$button->addClass('hasTooltip', true);
+$button->addClass('dp-button', true);
 
 // Add it to the parent
 $root->addChild($button);

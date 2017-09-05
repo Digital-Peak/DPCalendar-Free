@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>Jul 2017</creationDate>
+	<creationDate>Aug 2017</creationDate>
 	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.0.10</version>
+	<version>6.1.0</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -71,15 +71,11 @@
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
-				<field name="week_mode" type="list" default="fixed"
-				       label="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_LABEL"
-				       description="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_DESC">
-					<option value="fixed">MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_FIXED
-					</option>
-					<option value="liquid">MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_LIQUID
-					</option>
-					<option value="variable">MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_MODE_VARIABLE
-					</option>
+				<field name="fixed_week_count" type="radio" class="btn-group" default="1"
+				       label="MOD_DPCALENDAR_MINI_FIELD_FIXED_WEEK_COUNT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_FIXED_WEEK_COUNT_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
 				</field>
 				<field name="week_numbers" type="radio" class="btn-group"
 				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_SHOW_WEEK_NUMBER_LABEL"
@@ -222,10 +218,8 @@
 				       label="MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_DESC">
 					<option value="0">JNO</option>
-					<option value="1">MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_INVERSE
-					</option>
-					<option value="2">MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_BW
-					</option>
+					<option value="1">MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_INVERSE</option>
+					<option value="2">MOD_DPCALENDAR_MINI_FIELD_ADJUST_FG_COLOR_BW</option>
 				</field>
 				<field name="show_map" type="radio" class="btn-group" default="1"
 				       label="MOD_DPCALENDAR_MINI_FIELD_SHOW_MAP_LABEL"
@@ -260,6 +254,34 @@
 				       label="MOD_DPCALENDAR_MINI_FIELD_MAX_TIME_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_MAX_TIME_DESC"
 				       size="10"/>
+				<field name="current_time_indicator" type="radio" class="btn-group" default="1"
+				       label="MOD_DPCALENDAR_MINI_FIELD_CURRENT_TIME_INDICATOR_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_CURRENT_TIME_INDICATOR_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="business_hours_start" type="text" default=""
+				       label="MOD_DPCALENDAR_MINI_FIELD_BUSINESS_HOURS_START_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_BUSINESS_HOURS_START_DESC"
+				/>
+				<field name="business_hours_end" type="text" default=""
+				       label="MOD_DPCALENDAR_MINI_FIELD_BUSINESS_HOURS_END_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_BUSINESS_HOURS_END_DESC"
+				/>
+				<field name="business_hours_days" type="list" multiple="true"
+				       label="MOD_DPCALENDAR_MINI_FIELD_BUSINESS_HOURS_DAYS_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_BUSINESS_HOURS_DAYS_DESC">
+					<option value="1">MONDAY</option>
+					<option value="2">TUESDAY</option>
+					<option value="3">WEDNESDAY</option>
+					<option value="4">THURSDAY</option>
+					<option value="5">FRIDAY</option>
+					<option value="6">SATURDAY</option>
+					<option value="0">SUNDAY</option>
+				</field>
+				<field name="screen_size_list_view" type="text" default="500"
+				       label="MOD_DPCALENDAR_MINI_FIELD_SCREEN_SIZE_LIST_VIEW_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_SCREEN_SIZE_LIST_VIEW_DESC"/>
 			</fieldset>
 
 			<fieldset name="advanced">

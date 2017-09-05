@@ -125,6 +125,343 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
 				rows="5" cols="50" filter="safehtml" />
 		</fieldset>
+		<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
+			<field name="booking_fields_order" type="subform" multiple="true"
+			       layout="joomla.form.field.subform.repeatable-table"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
+				<form>
+					<field name="field" type="dpcfields" section="booking" label="COM_DPCALENDAR_FIELD">
+						<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
+						<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
+						<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
+						<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
+						<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
+						<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
+						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
+						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
+						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
+					</field>
+				</form>
+			</field>
+			<field name="booking_show_country" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKING_SHOW_COUNTRY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="booking_show_province" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKING_SHOW_PROVINCE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="booking_show_city" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKING_SHOW_CITY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="booking_show_zip" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKING_SHOW_ZIP_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="booking_show_street" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKING_SHOW_STREET_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="booking_show_number" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKING_SHOW_NUMBER_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="booking_show_telephone" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKING_SHOW_TELEPHONE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+		</fieldset>
+		<fieldset name="booking_form" label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_LABEL"
+		          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+			<field name="booking_form_fields_order_" type="subform" multiple="true"
+			       layout="joomla.form.field.subform.repeatable-table"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
+				<form>
+					<field name="field" type="dpcfields" section="booking" label="COM_DPCALENDAR_FIELD">
+						<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
+						<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
+						<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
+						<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
+						<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
+						<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
+						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
+						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
+						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
+					</field>
+				</form>
+			</field>
+			<field name="booking_form_country" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="booking_form_province" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="booking_form_city" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="booking_form_zip" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="booking_form_street" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="booking_form_number" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="booking_form_telephone" type="list" default="1"
+			       label="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+		</fieldset>
+		<fieldset name="ticket" label="COM_DPCALENDAR_TICKET"
+		          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+			<field name="ticket_fields_order" type="subform" multiple="true"
+			       layout="joomla.form.field.subform.repeatable-table"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
+				<form>
+					<field name="field" type="dpcfields" section="ticket" label="COM_DPCALENDAR_FIELD">
+						<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
+						<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
+						<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
+						<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
+						<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
+						<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
+						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
+						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
+						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
+						<option value="seat">COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL</option>
+					</field>
+				</form>
+			</field>
+			<field name="ticket_show_country" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_COUNTRY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="ticket_show_province" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_PROVINCE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="ticket_show_city" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_CITY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="ticket_show_zip" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_ZIP_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="ticket_show_street" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_STREET_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="ticket_show_number" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_NUMBER_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="ticket_show_telephone" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_TELEPHONE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="ticket_show_seat" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_SEAT_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="ticket_show_barcode" type="list"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_BARCODE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+		</fieldset>
+		<fieldset name="ticket_form" label="COM_DPCALENDAR_FIELD_CONFIG_TICKETFORM_LABEL"
+		          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+			<field name="ticket_form_fields_order_" type="subform" multiple="true"
+			       layout="joomla.form.field.subform.repeatable-table"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
+				<form>
+					<field name="field" type="dpcfields" section="ticket" label="COM_DPCALENDAR_FIELD">
+						<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
+						<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
+						<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
+						<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
+						<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
+						<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
+						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
+						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
+						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
+						<option value="seat">COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL</option>
+					</field>
+				</form>
+			</field>
+			<field name="ticket_form_country" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_province" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_city" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_zip" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_street" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_number" type="list" default="1"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_telephone" type="list" default="1"
+			       label="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_seat" type="list" default="1"
+			       label="COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_public" type="list" default="1"
+			       label="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_remind_time" type="list" default="1"
+			       label="COM_DPCALENDAR_TICKET_FIELD_REMIND_TIME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+			<field name="ticket_form_remind_type" type="list" default="1"
+			       label="COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+			</field>
+		</fieldset>
 		<fieldset name="share"
 			label="COM_DPCALENDAR_VIEW_CALENDAR_SHARE_FIELDSET_LABEL">
 			<field name="enable_like" type="list"

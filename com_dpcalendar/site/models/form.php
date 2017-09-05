@@ -179,6 +179,9 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		if (!$form->getValue('catid')) {
 			$form->setValue('catid', null, $params->get('event_form_calid'));
 		}
+		if ($params->get('event_form_show_end_time') != '') {
+			$form->setValue('show_end_time', null, $params->get('event_form_show_end_time'));
+		}
 		if ($params->get('event_form_all_day') != '') {
 			$form->setValue('all_day', null, $params->get('event_form_all_day'));
 		}

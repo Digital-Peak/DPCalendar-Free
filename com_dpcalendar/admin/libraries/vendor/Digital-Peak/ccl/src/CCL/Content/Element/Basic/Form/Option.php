@@ -5,17 +5,23 @@ namespace CCL\Content\Element\Basic\Form;
 use CCL\Content\Element\Basic\Element;
 
 /**
- * A select option representation.
+ * Represents a select option element.
+ *
+ * @example // The following code snippet creates a select option element with a value.
+ * $o = new Option('myselect', 'myvalue');
  */
 class Option extends Element
 {
 
 	/**
-	 * Initiates the label for the id of the given for input.
+	 * Constructor which sets the classes and attributes of the element.
 	 *
-	 * @param string $value
-	 * @param array $classes
-	 * @param array $attributes
+	 * @param string $id         The id of the element, must be not empty
+	 * @param string $value      The value of the option
+	 * @param array  $classes    The classes of the element
+	 * @param array  $attributes Additional attributes for the element
+	 *
+	 * @throws \InvalidArgumentException
 	 */
 	public function __construct($id, $value, array $classes = [], array $attributes = [])
 	{

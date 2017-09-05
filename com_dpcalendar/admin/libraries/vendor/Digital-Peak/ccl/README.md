@@ -1,7 +1,6 @@
 # CCL a simple library for CMS extensions
 
 [![Build Status](https://travis-ci.org/Digital-Peak/ccl.svg?branch=unstable)](https://travis-ci.org/Digital-Peak/ccl)
-[![Coverage Status](https://coveralls.io/repos/github/Digital-Peak/ccl/badge.svg?branch=unstable)](https://coveralls.io/github/Digital-Peak/ccl?branch=unstable)
 
 ## Status
 CCL means **C**ross **C**MS **L**ibrary. This is a fresh project under heavy development. The target is to provide a library which allows to use one code base for an extension on different CMS's like Joomla or Wordpress.

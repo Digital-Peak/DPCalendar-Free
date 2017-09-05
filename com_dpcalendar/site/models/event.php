@@ -5,7 +5,10 @@
  * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\Registry\Registry;
 
 JLoader::import('joomla.application.component.modelform');
 JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
@@ -41,7 +44,7 @@ class DPCalendarModelEvent extends JModelForm
 	public function getForm($data = array(), $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.event', 'event', array('control'   => 'jform', 'load_data' => true));
+		$form = $this->loadForm('com_dpcalendar.event', 'event', array('control' => 'jform', 'load_data' => true));
 		if (empty($form)) {
 			return false;
 		}
@@ -75,7 +78,7 @@ class DPCalendarModelEvent extends JModelForm
 				JPluginHelper::importPlugin('dpcalendar');
 				$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', array($pk));
 				if (!empty($tmp)) {
-					$tmp[0]->params   = new JRegistry();
+					$tmp[0]->params   = new Registry();
 					$this->_item[$pk] = $tmp[0];
 				} else {
 					$this->_item[$pk] = false;
@@ -228,8 +231,14 @@ class DPCalendarModelEvent extends JModelForm
 				$item->description = '';
 			}
 
-			$item->params->set('access-tickets',
-				is_numeric($item->catid) && ((!$user->guest && $item->created_by == $user->id) || $user->authorise('core.admin', 'com_dpcalendar')));
+			$item->params->set(
+				'access-tickets',
+				is_numeric($item->catid) && ((!$user->guest && $item->created_by == $user->id) || $user->authorise('core.admin', 'com_dpcalendar'))
+			);
+			$item->params->set(
+				'access-bookings',
+				is_numeric($item->catid) && ((!$user->guest && $item->created_by == $user->id) || $user->authorise('core.admin', 'com_dpcalendar'))
+			);
 
 			$calendar = DPCalendarHelper::getCalendar($item->catid);
 			$item->params->set('access-edit', $calendar->canEdit || ($calendar->canEditOwn && $item->created_by == $user->id));

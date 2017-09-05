@@ -57,7 +57,7 @@ $root = new Form(
 // Add the loader image for the ajax requests
 $root->addChild(new Container('loader'))->addChild(new Image('loader-image', JUri::base() . 'media/com_dpcalendar/images/site/ajax-loader.gif'));
 
-if ($app->isSite()) {
+if ($app->isClient('site')) {
 	$displayData['root'] = $root;
 
 	// Load the header template

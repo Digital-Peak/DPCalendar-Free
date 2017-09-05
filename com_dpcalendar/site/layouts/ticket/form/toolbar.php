@@ -24,8 +24,9 @@ use CCL\Content\Element\Component\Icon;
 extract($displayData);
 
 /** @var Container $root * */
-$root = $root->addChild(new Container('actions', array('noprint')));
-$root->setProtectedClass('noprint');
+$root = $root->addChild(new Container('actions'));
+$root->addClass('noprint', true);
+$root->addClass('dp-actions-container', true);
 
 // Create the save/book button
 DPCalendarHelper::renderLayout(

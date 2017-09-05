@@ -33,7 +33,9 @@ if (!$params) {
 $root = $displayData['root'];
 
 // Check if we can register
-if (!JFactory::getUser()->guest || JComponentHelper::getParams('com_users')->get('allowUserRegistration') == 0) {
+if (!JFactory::getUser()->guest
+	|| JComponentHelper::getParams('com_users')->get('allowUserRegistration') == 0
+	|| !$params->get('booking_show_registration', 1)) {
 	return '';
 }
 

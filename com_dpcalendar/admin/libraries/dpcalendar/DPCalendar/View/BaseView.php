@@ -61,7 +61,7 @@ class BaseView extends \JViewLegacy
 
 		$this->init();
 
-		if (count($errors = $this->get('Errors'))) {
+		if ($errors = $this->getErrors()) {
 			\JError::raiseError(500, implode("\n", $errors));
 
 			return false;

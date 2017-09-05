@@ -45,11 +45,11 @@ if (!$limited) {
 }
 
 if (!$limited && $params->get('display_list_event', true)) {
-	$columns[] = JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL');
+	$columns[] = JText::_('COM_DPCALENDAR_EVENT');
 }
 
 if (!$limited && $params->get('display_list_date', true)) {
-	$columns[] = JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_DATE');
+	$columns[] = JText::_('COM_DPCALENDAR_DATE');
 }
 
 if (!$limited) {

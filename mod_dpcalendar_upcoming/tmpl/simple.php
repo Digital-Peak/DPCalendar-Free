@@ -9,13 +9,12 @@ defined('_JEXEC') or die();
 
 use CCL\Content\Element\Basic\Container;
 use CCL\Content\Element\Basic\Frame;
-use CCL\Content\Element\Basic\Meta;
 use CCL\Content\Element\Basic\Paragraph;
 use CCL\Content\Element\Basic\TextBlock;
 use CCL\Content\Element\Basic\Link;
 
 if (!$events) {
-	echo JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_NO_EVENT_TEXT');
+	echo JText::_('MOD_DPCALENDAR_UPCOMING_NO_EVENT_TEXT');
 
 	return;
 }
@@ -81,7 +80,7 @@ foreach ($events as $index => $event) {
 	);
 
 	// Add the link
-	$l = $e->addChild(new Link('link', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid)));
+	$l = $e->addChild(new Link('link', $event->realUrl));
 
 	// Add a special class when popup is enabled
 	$l->addClass('dp-module-upcoming-modal-' . ($params->get('show_as_popup') ? 'enabled' : 'disabled'), true);

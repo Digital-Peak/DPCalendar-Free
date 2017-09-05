@@ -14,8 +14,9 @@ use CCL\Content\Element\Component\Icon;
 $params = $this->params;
 
 /** @var Container $root **/
-$root = $this->root->addChild(new Container('actions', array('noprint')));
-$root->setProtectedClass('noprint');
+$root = $this->root->addChild(new Container('actions'));
+$root->addClass('noprint', true);
+$root->addClass('dp-actions-container', true);
 
 // Create the invite button
 DPCalendarHelper::renderLayout(

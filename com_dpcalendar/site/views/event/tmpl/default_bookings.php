@@ -161,8 +161,7 @@ if ($params->get('event_show_price', '1') && $event->price) {
 		$dl = $root->addChild(new DescriptionListHorizontal('price-' . $key));
 
 		// Add the term
-		$label = $event->price->label[$key];
-		$dl->setTerm(new Term('label', array('label')))->setContent(JText::_('COM_DPCALENDAR_FIELD_PRICE_LABEL'));
+		$dl->setTerm(new Term('label', array('label')))->setContent($event->price->label[$key] ?: JText::_('COM_DPCALENDAR_FIELD_PRICE_LABEL'));
 
 		// Add the description
 		$desc = $dl->setDescription(
@@ -186,7 +185,7 @@ if ($params->get('event_show_price', '1') && $event->price) {
 		}
 
 		// Add the price description
-		$desc->addChild(new TextBlock('description'))->setContent($event->price->description[$key]);
+		$desc->addChild(new TextBlock('description', array('price-description')))->setContent($event->price->description[$key]);
 	}
 }
 

@@ -1,6 +1,3 @@
-#dp-bookingform-actions {
-	margin-bottom: 10px;
-}
 
 #dp-bookingform-loader {
 	text-align: center;
@@ -23,21 +20,10 @@
 
 #dp-bookingform-options-series {
 	border-top: 1px solid #EEE;
-	margin: 18px 0px 0px 0px;
 	padding: 10px 0px 10px 0px;
 }
 
-#dp-bookingform-options-series-label label {
-	display: inline;
-	margin: 0px 10px 0px 10px;
-}
-
-#dp-bookingform-options-series-content input {
-	display: none
-}
-
 #dp-bookingform-options-series-description {
-	margin-left: 10px;
 	font-weight: bold;
 }
 
@@ -94,8 +80,9 @@
 	font-weight: bold;
 	border-top: 1px solid #EEE;
 	border-bottom: 1px solid #EEE;
-	padding: 10px 50px 10px 0px;
+	padding: 10px 0px 10px 0px;
 	margin: 10px 0px 10px 0px;
+	width: 100%;
 }
 
 #dp-bookingform-options-total-price-currency {

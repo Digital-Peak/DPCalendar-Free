@@ -132,7 +132,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		return parent::batch($this->getModel());
 	}
 
-	public function reload($key = null, $urlVar = null)
+	public function reload($key = null, $urlVar = 'e_id')
 	{
 		$this->transformDatesToSql($this->input->post->get('jform', array(), 'array'));
 

@@ -77,9 +77,18 @@ if ($needsPayment || ($bookingId && $booking->state == 3)) {
 	// The alert box with the choose payment text
 	$c->addChild(new Alert('info', Alert::INFO))->setContent(JText::_('COM_DPCALENDAR_VIEW_BOOKING_CHOOSE_PAYMENT_OPTION'));
 
+	$activatedPlugins = array();
+	foreach ($events as $event) {
+		$activatedPlugins[$event->plugintype] = true;
+	}
+
 	// Loop trough all payment plugins
 	$plugins = JPluginHelper::getPlugin('dpcalendarpay');
 	foreach ($plugins as $key => $plugin) {
+		if (!key_exists(0, $activatedPlugins) && !key_exists($plugin->name, $activatedPlugins)) {
+			continue;
+		}
+
 		// Load the language file of the plugin
 		$app->getLanguage()->load('plg_' . $plugin->type . '_' . $plugin->name, JPATH_PLUGINS . '/' . $plugin->type . '/' . $plugin->name);
 
@@ -91,7 +100,7 @@ if ($needsPayment || ($bookingId && $booking->state == 3)) {
 
 		// The attributes for the input box
 		$attributes = array();
-		if (count($plugins) == 1) {
+		if (count($plugins) == 1 || (!key_exists(0, $activatedPlugins) && count($activatedPlugins) == 1)) {
 			// When there is only one plugin select it directly
 			$attributes['checked'] = 'checked';
 		}

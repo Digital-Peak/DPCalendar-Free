@@ -136,6 +136,128 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$form->removeField('captcha');
 		}
 
+		$params = $this->getParams();
+
+		$form->setFieldAttribute('start_date', 'min_time', $params->get('event_form_min_time'));
+		$form->setFieldAttribute('start_date', 'max_time', $params->get('event_form_max_time'));
+		$form->setFieldAttribute('end_date', 'min_time', $params->get('event_form_min_time'));
+		$form->setFieldAttribute('end_date', 'max_time', $params->get('event_form_max_time'));
+
+		// Set the default values from the params
+		if (!$form->getValue('catid')) {
+			$form->setValue('catid', null, $params->get('event_form_calid'));
+		}
+		if (!$form->getValue('show_end_time')) {
+			$form->setValue('show_end_time', null, $params->get('event_form_show_end_time'));
+		}
+		if (!$form->getValue('all_day')) {
+			$form->setValue('all_day', null, $params->get('event_form_all_day'));
+		}
+		if (!$form->getValue('color')) {
+			$form->setValue('color', null, $params->get('event_form_color'));
+		}
+		if (!$form->getValue('url')) {
+			$form->setValue('url', null, $params->get('event_form_url'));
+		}
+		if (!$form->getValue('description')) {
+			$form->setValue('description', null, $params->get('event_form_description'));
+		}
+		if (!$form->getValue('capacity') && $params->get('event_form_capacity') > 0) {
+			$form->setValue('capacity', null, $params->get('event_form_capacity'));
+		}
+		if (!$form->getValue('price')) {
+			$form->setValue('price', null, $params->get('event_form_price'));
+		}
+		if (!$form->getValue('plugintype')) {
+			$form->setValue('plugintype', null, $params->get('event_form_plugintype'));
+		}
+		if (!$form->getValue('ordertext')) {
+			$form->setValue('ordertext', null, $params->get('event_form_ordertext'));
+		}
+		if (!$form->getValue('canceltext')) {
+			$form->setValue('canceltext', null, $params->get('event_form_canceltext'));
+		}
+		if (!$form->getValue('payment_statement')) {
+			$form->setValue('payment_statement', null, $params->get('event_form_payment_statement'));
+		}
+		if (!$form->getValue('access')) {
+			$form->setValue('access', null, $params->get('event_form_access'));
+		}
+		if (!$form->getValue('access_content')) {
+			$form->setValue('access_content', null, $params->get('event_form_access_content'));
+		}
+		if (!$form->getValue('featured')) {
+			$form->setValue('featured', null, $params->get('event_form_featured'));
+		}
+		if (!$form->getValue('language')) {
+			$form->setValue('language', null, $params->get('event_form_language'));
+		}
+		if (!$form->getValue('metakey')) {
+			$form->setValue('metakey', null, $params->get('menu-meta_keywords'));
+		}
+		if (!$form->getValue('metadesc')) {
+			$form->setValue('metadesc', null, $params->get('menu-meta_description'));
+		}
+
+		// Remove fields depending on the params
+		if ($params->get('event_form_change_calid', '1') != '1') {
+			$form->setFieldAttribute('catid', 'readonly', 'readonly');
+		}
+		if ($params->get('event_form_change_color', '1') != '1') {
+			$form->removeField('color');
+		}
+		if ($params->get('event_form_change_url', '1') != '1') {
+			$form->removeField('url');
+		}
+		if ($params->get('event_form_change_images', '1') != '1') {
+			$form->removeGroup('images');
+		}
+		if ($params->get('event_form_change_description', '1') != '1') {
+			$form->removeField('description');
+		}
+		if ($params->get('event_form_change_capacity', '1') != '1') {
+			$form->removeField('capacity');
+		}
+		if ($params->get('event_form_change_capacity_used', '1') != '1') {
+			$form->removeField('capacity_used');
+		}
+		if ($params->get('event_form_change_max_tickets', '1') != '1') {
+			$form->removeField('max_tickets');
+		}
+		if ($params->get('event_form_change_price', '1') != '1') {
+			$form->removeField('price');
+
+			// We need to do it a second time because of the booking form
+			$form->removeField('price');
+		}
+		if ($params->get('event_form_change_payment', '1') != '1') {
+			$form->removeField('plugintype');
+		}
+		if ($params->get('event_form_change_order', '1') != '1') {
+			$form->removeField('ordertext');
+		}
+		if ($params->get('event_form_change_cancellation', '1') != '1') {
+			$form->removeField('canceltext');
+		}
+		if ($params->get('event_form_change_paystatement', '1') != '1') {
+			$form->removeField('payment_statement');
+		}
+		if ($params->get('event_form_change_access', '1') != '1') {
+			$form->removeField('access');
+		}
+		if ($params->get('event_form_change_access_content', '1') != '1') {
+			$form->removeField('access_content');
+		}
+		if ($params->get('event_form_change_featured', '1') != '1') {
+			$form->removeField('featured');
+		}
+
+		// Handle tabs
+		if ($params->get('event_form_change_location', '1') != '1') {
+			$form->removeField('location');
+			$form->removeField('location_ids');
+		}
+
 		return $form;
 	}
 
@@ -316,7 +438,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		if (isset($data['images']) && is_array($data['images'])) {
-			$registry = new JRegistry();
+			$registry = new Registry();
 			$registry->loadArray($data['images']);
 			$data['images'] = (string)$registry;
 		}
@@ -392,6 +514,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			}
 		}
 
+		// Disable booking when it can't be changed
+		if (!isset($data['capacity']) && !$this->getParams()->get('event_form_change_capacity', '1')) {
+			$data['capacity'] = 0;
+		}
 		return parent::save($data);
 	}
 
@@ -517,6 +643,21 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$ticketsModel->setState('list.limit', 10000);
 
 		return $ticketsModel->getItems();
+	}
+
+	private function getParams()
+	{
+		$params = $this->getState('params');
+
+		if (!$params) {
+			if (JFactory::getApplication()->isClient('site')) {
+				$params = JFactory::getApplication()->getParams();
+			} else {
+				$params = JComponentHelper::getParams('com_dpcalendar');
+			}
+		}
+
+		return $params;
 	}
 }
 
@@ -705,26 +846,86 @@ class DPCalendarModelAdminEventHandler extends JPlugin
 
 	private function sendMail($action, $events)
 	{
+		// The current user
+		$user = JFactory::getUser();
+
+		// The event authors
+		$authors = array();
+
 		// We don't send notifications when an event is external
 		foreach ($events as $event) {
 			if (!is_numeric($event->catid)) {
 				return;
 			}
-		}
-		JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_dpcalendar');
 
+			if ($user->id != $event->created_by) {
+				$authors[] = $event->created_by;
+			}
+		}
+
+		// Load the language
+		JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+
+		// Create the subject
 		$subject = DPCalendarHelper::renderEvents($events, JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_' . strtoupper($action)));
 
+		// Create the body
 		$body = DPCalendarHelper::renderEvents(
 			$events,
 			JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_' . strtoupper($action) . '_BODY'),
 			null,
 			array(
 				'sitename' => JFactory::getConfig()->get('sitename'),
-				'user'     => JFactory::getUser()->name
+				'user'     => $user->name
 			)
 		);
 
-		DPCalendarHelper::sendMail($subject, $body, 'notification_groups_' . $action);
+		// Send the notification to the groups
+		DPCalendarHelper::sendMail($subject, $body, 'notification_groups_' . $action, $authors);
+
+		// Check if authors should get a mail
+		if (!$authors || !DPCalendarHelper::getComponentParameter('notification_author')) {
+			return;
+		}
+		$authors = array_unique($authors);
+
+		$extraVars = array(
+			'sitename' => JFactory::getConfig()->get('sitename'),
+			'user'     => $user->name
+		);
+
+		// Create the subject
+		$subject = DPCalendarHelper::renderEvents(
+			$events,
+			JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_SUBJECT_' . strtoupper($action)),
+			null,
+			$extraVars
+		);
+
+		// Create the body
+		$body = DPCalendarHelper::renderEvents(
+			$events,
+			JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_' . strtoupper($action) . '_BODY'),
+			null,
+			$extraVars
+		);
+
+		// Loop over the authors to send the notification
+		foreach ($authors as $author) {
+			$u = \JUser::getTable();
+
+			// Load the user
+			if (!$u->load($author)) {
+				continue;
+			}
+
+			// Send the mail
+			$mailer = \JFactory::getMailer();
+			$mailer->setSubject($subject);
+			$mailer->setBody($body);
+			$mailer->IsHTML(true);
+			$mailer->addRecipient($u->email);
+			$mailer->Send();
+		}
 	}
 }

@@ -104,7 +104,7 @@ if ($event->locations && $params->get('event_show_location', '2')) {
 			$lc->addChild(new Link('link', DPCalendarHelperRoute::getLocationRoute($location)))->setContent($location->title);
 		} else if ($params->get('event_show_location', '2') == '2') {
 			// Link to the location details on the same page
-			$lc->addChild(new Link('link', '#dp-event-locations-' . $location->id))->setContent($location->title);
+			$lc->addChild(new Link('link', $this->escape(JUri::getInstance()) . '#dp-event-locations-' . $location->id))->setContent($location->title);
 		}
 
 		$locations[] = $lc;

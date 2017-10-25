@@ -413,7 +413,7 @@ class DPCalendarControllerEvent extends JControllerForm
 				$return = DPCalendarHelperRoute::getFormRoute(0, $this->getReturnPage());
 				$this->setRedirect($return);
 			}
-		} else {
+		} else if (!$this->redirect) {
 			$this->setRedirect(
 				DPCalendarHelperRoute::getEventRoute($app->getUserState('dpcalendar.event.id'), $data['catid'])
 			);

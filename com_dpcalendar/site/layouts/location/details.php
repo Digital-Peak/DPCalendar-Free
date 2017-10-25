@@ -163,9 +163,11 @@ if ($showDetails && $location->room) {
 	);
 }
 if ($showDetails && $location->url) {
+	$l = new Link('url-link', $location->url, '_blank');
+	$l->setContent($location->url);
 	DPCalendarHelper::renderLayout(
 		'content.dl',
-		array('root' => $ld, 'id' => 'url', 'label' => 'COM_DPCALENDAR_FIELD_URL_LABEL', 'content' => new Link('url-link', $location->url, '_blank'))
+		array('root' => $ld, 'id' => 'url', 'label' => 'COM_DPCALENDAR_FIELD_URL_LABEL', 'content' => $l)
 	);
 }
 

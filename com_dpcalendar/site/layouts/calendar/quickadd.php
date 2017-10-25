@@ -57,6 +57,11 @@ $form->setFieldAttribute('end_date', 'format', $params->get('event_form_date_for
 $form->setFieldAttribute('end_date', 'formatTime', $params->get('event_form_time_format', 'g:i a'));
 $form->setFieldAttribute('end_date', 'formated', true);
 
+$form->setFieldAttribute('start_date', 'min_time', $params->get('event_form_min_time'));
+$form->setFieldAttribute('start_date', 'max_time', $params->get('event_form_max_time'));
+$form->setFieldAttribute('end_date', 'min_time', $params->get('event_form_min_time'));
+$form->setFieldAttribute('end_date', 'max_time', $params->get('event_form_max_time'));
+
 $formElement = $root->addChild(
 	new Form(
 		'form',

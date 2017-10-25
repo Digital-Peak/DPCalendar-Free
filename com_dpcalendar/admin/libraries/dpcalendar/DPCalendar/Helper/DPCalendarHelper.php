@@ -955,18 +955,21 @@ class DPCalendarHelper
 			$groups = array($groups);
 		}
 
+		$users = array();
 		foreach ($groups as $groupId) {
-			$users = \JFactory::getACL()->getUsersByGroup($groupId);
-			foreach ($users as $user) {
-				$u = \JUser::getTable();
-				if ($u->load($user)) {
-					$mailer = \JFactory::getMailer();
-					$mailer->setSubject($subject);
-					$mailer->setBody($message);
-					$mailer->IsHTML(true);
-					$mailer->addRecipient($u->email);
-					$mailer->Send();
-				}
+			$users = array_merge($users, \JAccess::getUsersByGroup($groupId));
+		}
+
+		$users = array_unique($users);
+		foreach ($users as $user) {
+			$u = \JUser::getTable();
+			if ($u->load($user)) {
+				$mailer = \JFactory::getMailer();
+				$mailer->setSubject($subject);
+				$mailer->setBody($message);
+				$mailer->IsHTML(true);
+				$mailer->addRecipient($u->email);
+				$mailer->Send();
 			}
 		}
 	}

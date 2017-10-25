@@ -61,7 +61,7 @@ JFactory::getDocument()->addScriptDeclaration($js);
 $root->addChild(new Input('date-picker', 'hidden', 'date-picker'));
 
 // Add quick add
-if (DPCalendarHelper::canCreateEvent()) {
+if (DPCalendarHelper::canCreateEvent() && $params->get('event_create_form', 1)) {
 	DPCalendarHelper::renderLayout('calendar.quickadd', $displayData);
 }
 

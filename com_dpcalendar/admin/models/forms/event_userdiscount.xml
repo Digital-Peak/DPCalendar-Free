@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
 	<fields>
-		<field name="value" label="COM_DPCALENDAR_FIELD_EARLYBIRD_VALUE_LABEL"
-			size="30" type="text" description="COM_DPCALENDAR_FIELD_EARLYBIRD_VALUE_DESC" />
-		<field name="type" type="list"
-			label="COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_LABEL" class="inputbox"
-			size="1" default="value">
-			<option value="value">COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_VALUE
-			</option>
-			<option value="percentage">COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_PERCENTAGE
-			</option>
+		<field name="value" type="text"
+		       label="COM_DPCALENDAR_FIELD_EARLYBIRD_VALUE_LABEL" description="COM_DPCALENDAR_FIELD_EARLYBIRD_VALUE_DESC"/>
+		<field name="type" type="list" default="value"
+		       label="COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_LABEL">
+			<option value="value">COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_VALUE</option>
+			<option value="percentage">COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_PERCENTAGE</option>
 		</field>
-		<field name="discount_groups" label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_GROUP_LABEL"
-			class="inputbox" size="30" type="usergroup" multiple="true" />
-		<field name="label" label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL_LABEL"
-			size="30" type="text" />
-		<field name="description" label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"
-			size="30" type="textarea" filter="raw" />
+		<field name="discount_groups" type="usergroup" multiple="true"
+		       label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_GROUP_LABEL"/>
+		<field name="label" type="text" label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL_LABEL"/>
+		<field name="description" type="textarea" filter="raw"
+		       label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
 	</fields>
 </form>

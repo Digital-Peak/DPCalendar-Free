@@ -23,6 +23,10 @@ class DPCalendarViewLocationForm extends \DPCalendar\View\LayoutView
 
 	public function init()
 	{
+		if (!$this->user->authorise('core.create', 'com_dpcalendar')) {
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+		}
+
 		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 		$this->app->getLanguage()->load('', JPATH_ADMINISTRATOR);
 

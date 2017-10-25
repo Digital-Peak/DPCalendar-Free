@@ -25,6 +25,12 @@
 	box-sizing: border-box; /* Opera/IE 8+ */
 }
 
+@media screen and (min-width: 1000px) {
+	.control-group .controls input.dp-form-input{
+		max-width: 60%;
+	}
+}
+
 /* Standard radio buttons */
 .dp-form-radio.radio {
 	padding-left: 0px;

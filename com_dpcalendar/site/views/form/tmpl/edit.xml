@@ -8,15 +8,21 @@
 	<fields name="params"
 		addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 		<fieldset name="basic">
-			<field name="event_form_date_format" type="text" size="80"
+			<field name="event_form_date_format" type="text"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC" />
-			<field name="event_form_time_format" type="text" size="80"
+			<field name="event_form_time_format" type="text"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_DESC" />
-			<field name="event_form_time_step" type="text" size="80"
+			<field name="event_form_time_step" type="text"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_DESC" />
+			<field name="event_form_min_time" type="text"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_MIN_TIME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_MIN_TIME_STEP_DESC"/>
+			<field name="event_form_max_time" type="text"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_MAX_TIME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_MAX_TIME_STEP_DESC"/>
 			<field name="event_form_check_overlaping" type="list"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_DESC">

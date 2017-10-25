@@ -1,26 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form>
-	<fieldset addfieldpath="/administrator/components/com_dpcalendar/models/fields"
-	          name="content" label="COM_DPCALENDAR_CONTENT">
-
+<form addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+      addrulepath="/administrator/components/com_dpcalendar/models/rules">
+	<fieldset name="content" label="COM_DPCALENDAR_CONTENT">
 		<field name="title" type="text" required="true" class="dp-form-input"
 		       label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_TITLE_DESC"/>
 
 		<field name="catid" type="dpcalendaredit" extension="com_dpcalendar"
 		       label="COM_DPCALENDAR_CALENDAR" description="COM_DPCALENDAR_FIELD_CALENDAR_DESC"/>
 
-		<field name="color" type="dpcolor"
+		<field name="color" type="dpcolor" maxlength="6" size="6"
 		       label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"/>
 
 		<field name="url" type="url" class="dp-form-input"
 		       label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"/>
 
 		<field name="start_date" type="datetimechooser" default="NOW" datepair="datepair" required="true"
-		       timeclass="time timestart validate" class="start inputbox validate"
+		       validate="minmaxtime" timeclass="time timestart validate" class="start inputbox validate"
 		       label="COM_DPCALENDAR_FIELD_START_DATE_LABEL" description="COM_DPCALENDAR_FIELD_START_DATE_DESC"/>
 
 		<field name="end_date" type="datetimechooser" default="+1 hour" timepair="timepair" required="true"
-		       class="end inputbox validate" timeclass="time timeend validate"
+		       validate="minmaxtime" class="end inputbox validate" timeclass="time timeend validate"
 		       label="COM_DPCALENDAR_FIELD_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_END_DATE_DESC"/>
 
 		<field name="show_end_time" type="radio" default="1" class="dp-form-radio"
@@ -148,7 +147,7 @@
 		       label="COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_USED_DESC"/>
 		<field name="max_tickets" type="text" default="1"
 		       label="COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_MAX_TICKETS_DESC"/>
-		<field name="booking_closing_date" type="text" size="100"
+		<field name="booking_closing_date" type="text"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_DESC"/>
 		<field name="price" type="subform" multiple="true"
 		       formsource="administrator/components/com_dpcalendar/models/forms/event_price.xml"

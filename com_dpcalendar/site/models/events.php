@@ -16,7 +16,6 @@ JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 
 class DPCalendarModelEvents extends JModelList
 {
-
 	public function __construct($config = array())
 	{
 		if (empty($config['filter_fields'])) {
@@ -160,8 +159,7 @@ class DPCalendarModelEvents extends JModelList
 				}
 			}
 
-			// If we search for a location, but the event doesn't have any
-			// locations, ignore
+			// If we search for a location, but the event doesn't have any locations, ignore
 			if ((!empty($locationsFilter) || !empty($location)) && empty($item->locations)) {
 				continue;
 			}
@@ -181,8 +179,8 @@ class DPCalendarModelEvents extends JModelList
 			}
 
 			// Implement View Level Access
-			if (!JFactory::getUser()->authorise('core.admin', 'com_dpcalendar') && !in_array($item->access_content,
-					JFactory::getUser()->getAuthorisedViewLevels())
+			if (!JFactory::getUser()->authorise('core.admin', 'com_dpcalendar')
+				&& !in_array($item->access_content, JFactory::getUser()->getAuthorisedViewLevels())
 			) {
 				$item->title       = JText::_('COM_DPCALENDAR_EVENT_BUSY');
 				$item->location    = '';
@@ -214,8 +212,7 @@ class DPCalendarModelEvents extends JModelList
 		if ($this->getState('filter.expand')) {
 			$query->where('a.original_id > -1');
 		} else {
-			$query->where(
-				'(a.original_id in (-1, 0) or (a.original_id > 0 and a.modified > ' . $this->getDbo()->quote($this->getDbo()->getNullDate()) . '))');
+			$query->where('(a.original_id in (-1, 0) or (a.original_id > 0 and a.modified > ' . $this->getDbo()->quote($this->getDbo()->getNullDate()) . '))');
 		}
 
 		// Join over the categories.
@@ -235,7 +232,6 @@ class DPCalendarModelEvents extends JModelList
 		$query->group('a.id');
 
 		// Filter by category.
-
 		if ($categoryIds = $this->getState('category.id', 0)) {
 			if (!is_array($categoryIds)) {
 				$categoryIds = array($categoryIds);
@@ -247,7 +243,7 @@ class DPCalendarModelEvents extends JModelList
 				}
 				$cats[$categoryId] = $db->q($categoryId);
 
-				if (!$this->getState('category.recursive', false) || !is_numeric($categoryId) || $categoryId != 'root') {
+				if (!$this->getState('category.recursive', false) || (!is_numeric($categoryId) && $categoryId != 'root')) {
 					continue;
 				}
 

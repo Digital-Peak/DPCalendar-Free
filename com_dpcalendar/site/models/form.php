@@ -151,7 +151,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		$this->setState('return_page', base64_decode($return));
 
 		// Load the parameters.
-		if ($app->isSite()) {
+		if ($app->isClient('site')) {
 			$this->setState('params', $app->getParams());
 		} else {
 			$this->setState('params', JComponentHelper::getParams('com_dpcalendar'));
@@ -164,130 +164,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 	{
 		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 
-		/** @var JForm $form */
-		$form = parent::getForm($data, $loadData);
-
-		$params = $this->getState('params');
-		if (!$params) {
-			$params = JFactory::getApplication()->getParams();
-		}
-
-		// Set the default values from the params
-		if (!$form->getValue('catid')) {
-			$form->setValue('catid', null, $params->get('event_form_calid'));
-		}
-		if (!$form->getValue('show_end_time')) {
-			$form->setValue('show_end_time', null, $params->get('event_form_show_end_time'));
-		}
-		if (!$form->getValue('all_day')) {
-			$form->setValue('all_day', null, $params->get('event_form_all_day'));
-		}
-		if (!$form->getValue('color')) {
-			$form->setValue('color', null, $params->get('event_form_color'));
-		}
-		if (!$form->getValue('url')) {
-			$form->setValue('url', null, $params->get('event_form_url'));
-		}
-		if (!$form->getValue('description')) {
-			$form->setValue('description', null, $params->get('event_form_description'));
-		}
-		if (!$form->getValue('capacity') && $params->get('event_form_capacity') > 0) {
-			$form->setValue('capacity', null, $params->get('event_form_capacity'));
-		}
-		if (!$form->getValue('price')) {
-			$form->setValue('price', null, $params->get('event_form_price'));
-		}
-		if (!$form->getValue('plugintype')) {
-			$form->setValue('plugintype', null, $params->get('event_form_plugintype'));
-		}
-		if (!$form->getValue('ordertext')) {
-			$form->setValue('ordertext', null, $params->get('event_form_ordertext'));
-		}
-		if (!$form->getValue('canceltext')) {
-			$form->setValue('canceltext', null, $params->get('event_form_canceltext'));
-		}
-		if (!$form->getValue('payment_statement')) {
-			$form->setValue('payment_statement', null, $params->get('event_form_payment_statement'));
-		}
-		if (!$form->getValue('access')) {
-			$form->setValue('access', null, $params->get('event_form_access'));
-		}
-		if (!$form->getValue('access_content')) {
-			$form->setValue('access_content', null, $params->get('event_form_access_content'));
-		}
-		if (!$form->getValue('featured')) {
-			$form->setValue('featured', null, $params->get('event_form_featured'));
-		}
-		if (!$form->getValue('language')) {
-			$form->setValue('language', null, $params->get('event_form_language'));
-		}
-		if (!$form->getValue('metakey')) {
-			$form->setValue('metakey', null, $params->get('menu-meta_keywords'));
-		}
-		if (!$form->getValue('metadesc')) {
-			$form->setValue('metadesc', null, $params->get('menu-meta_description'));
-		}
-
-		// Remove fields depending on the params
-		if ($params->get('event_form_change_calid', '1') != '1') {
-			$form->setFieldAttribute('catid', 'readonly', 'readonly');
-		}
-		if ($params->get('event_form_change_color', '1') != '1') {
-			$form->removeField('color');
-		}
-		if ($params->get('event_form_change_url', '1') != '1') {
-			$form->removeField('url');
-		}
-		if ($params->get('event_form_change_images', '1') != '1') {
-			$form->removeGroup('images');
-		}
-		if ($params->get('event_form_change_description', '1') != '1') {
-			$form->removeField('description');
-		}
-		if ($params->get('event_form_change_capacity', '1') != '1') {
-			$form->removeField('capacity');
-		}
-		if ($params->get('event_form_change_capacity_used', '1') != '1') {
-			$form->removeField('capacity_used');
-		}
-		if ($params->get('event_form_change_max_tickets', '1') != '1') {
-			$form->removeField('max_tickets');
-		}
-		if ($params->get('event_form_change_price', '1') != '1') {
-			$form->removeField('price');
-
-			// We need to do it a second time because of the booking form
-			$form->removeField('price');
-		}
-		if ($params->get('event_form_change_payment', '1') != '1') {
-			$form->removeField('plugintype');
-		}
-		if ($params->get('event_form_change_order', '1') != '1') {
-			$form->removeField('ordertext');
-		}
-		if ($params->get('event_form_change_cancellation', '1') != '1') {
-			$form->removeField('canceltext');
-		}
-		if ($params->get('event_form_change_paystatement', '1') != '1') {
-			$form->removeField('payment_statement');
-		}
-		if ($params->get('event_form_change_access', '1') != '1') {
-			$form->removeField('access');
-		}
-		if ($params->get('event_form_change_access_content', '1') != '1') {
-			$form->removeField('access_content');
-		}
-		if ($params->get('event_form_change_featured', '1') != '1') {
-			$form->removeField('featured');
-		}
-
-		// Handle tabs
-		if ($params->get('event_form_change_location', '1') != '1') {
-			$form->removeField('location');
-			$form->removeField('location_ids');
-		}
-
-		return $form;
+		return parent::getForm($data, $loadData);
 	}
 
 	protected function preprocessForm(JForm $form, $data, $group = 'content')

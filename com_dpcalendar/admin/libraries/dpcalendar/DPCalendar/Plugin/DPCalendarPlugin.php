@@ -858,12 +858,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 					}
 				} else {
 					list ($latitude, $longitude) = explode(';', $geo);
-					$locationObject = \DPCalendar\Helper\Location::get($latitude . ',' . $longitude);
-
-					// Set the location title to the location name, otherwise it
-					// lat,long is the title
-					$locationObject->title = $location;
-					$locationObject->alias = \JApplicationHelper::stringURLSafe($location);
+					$locationObject = \DPCalendar\Helper\Location::get($latitude . ',' . $longitude, true, $location);
 
 					$locations[] = $locationObject;
 				}

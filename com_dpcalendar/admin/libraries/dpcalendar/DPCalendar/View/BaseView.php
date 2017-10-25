@@ -59,7 +59,16 @@ class BaseView extends \JViewLegacy
 			$this->root->addChild(new Heading('page-heading', 1))->setContent($this->params->get('page_heading'));
 		}
 
-		$this->init();
+		try {
+			$this->init();
+		} catch (\Exception $e) {
+			$this->app->enqueueMessage($e->getMessage(), 'error');
+			if ($e->getCode()) {
+				$this->app->setHeader('status', $e->getCode(), true);
+			}
+
+			return false;
+		}
 
 		if ($errors = $this->getErrors()) {
 			\JError::raiseError(500, implode("\n", $errors));
@@ -150,6 +159,11 @@ class BaseView extends \JViewLegacy
 		}
 	}
 
+	/**
+	 * Function to initialize the view. Can throw an Exception to abort the display.
+	 *
+	 * @throws \Exception
+	 */
 	protected function init()
 	{
 	}

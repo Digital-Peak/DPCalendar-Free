@@ -70,7 +70,7 @@ foreach ($displayData['calendars'] as $calendar) {
 	$f->setContent(str_pad(' ' . $calendar->title, strlen(' ' . $calendar->title) + $calendar->level - 1, '-', STR_PAD_LEFT));
 
 	// When native calendars add sharing urls
-	if (!$calendar->external) {
+	if (!$calendar->external && $params->get('show_export_links', 1)) {
 		// Add the ical link
 		$link = $l->addChild(new Link('ical', DPCalendarHelperRoute::getCalendarIcalRoute($calendar->id)));
 		$link->setContent(' [ ' . JText::_('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ICAL') . ' ]');

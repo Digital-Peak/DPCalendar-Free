@@ -96,7 +96,16 @@ class Location
 		return \DPCalendarHelper::renderLayout('location.' . $format, array('locations' => $locations));
 	}
 
-	public static function get($location, $fill = true)
+	/**
+	 * Returns a location table for the given location. If the title is set it will use that one instead of the location.
+	 *
+	 * @param string $location
+	 * @param bool   $fill
+	 * @param string $title
+	 *
+	 * @return bool|\JTable
+	 */
+	public static function get($location, $fill = true, $title = null)
 	{
 		if (self::$locationCache == null) {
 			\JLoader::import('joomla.application.component.model');
@@ -138,12 +147,16 @@ class Location
 			$content = \DPCalendarHelper::fetchContent($url);
 		}
 		if ($content instanceof \Exception) {
-			JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
+			\JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
+		}
+
+		if (!$title) {
+			$title = $location;
 		}
 
 		if (!isset($locObject)) {
 			$locObject            = \JTable::getInstance('Location', 'DPCalendarTable');
-			$locObject->title     = $location;
+			$locObject->title     = $title;
 			$locObject->alias     = \JApplicationHelper::stringURLSafe($location);
 			$locObject->state     = 1;
 			$locObject->language  = '*';
@@ -191,7 +204,7 @@ class Location
 									break;
 							}
 						}
-						$locObject->title     = $tmp->results[0]->formatted_address;
+
 						$locObject->latitude  = $tmp->results[0]->geometry->location->lat;
 						$locObject->longitude = $tmp->results[0]->geometry->location->lng;
 					}

@@ -216,11 +216,12 @@
 			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_ADJUST_FG_COLOR_INVERSE</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_ADJUST_FG_COLOR_BW</option>
 		</field>
-		<field name="show_map" type="radio" class="btn-group" default="1"
+		<field name="show_map" type="list" default="1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MAP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MAP_DESC">
+			<option value="0">JNO</option>
 			<option value="1">JYES</option>
-			<option value="2">JNO</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MAP_NO_PRINT</option>
 		</field>
 		<field name="map_zoom" type="text" default="4"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
@@ -522,9 +523,8 @@
 		<field name="event_textafter" type="textarea"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
 		       rows="5" cols="50" filter="safehtml"/>
-		<field name="count_clicks" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
+		<field name="count_clicks" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
@@ -537,12 +537,18 @@
 		<field name="event_form_time_format" type="text"
 		       default="g:i a" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_DESC"/>
-		<field name="event_form_time_step" type="text"
-		       default="30" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_LABEL"
+		<field name="event_form_time_step" type="text" default="30"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_DESC"/>
-		<field name="event_form_check_overlaping" type="list"
+		<field name="event_form_min_time" type="text"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_MIN_TIME_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_MIN_TIME_STEP_DESC"/>
+		<field name="event_form_max_time" type="text"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_MAX_TIME_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_MAX_TIME_STEP_DESC"/>
+		<field name="event_form_check_overlaping" type="list" default="0"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_LABEL"
-		       default="0" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_DESC">
+		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 			<option value="2">JDISABLED</option>
@@ -1418,22 +1424,24 @@
 		<field name="downloadid" type="text"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_DESC"/>
-		<field name="notification_groups_create" type="usergroup"
-		       multiple="true"
+		<field name="notification_groups_create" type="usergroup" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_DESC"/>
-		<field name="notification_groups_edit" type="usergroup"
-		       multiple="true"
+		<field name="notification_groups_edit" type="usergroup" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_DESC"/>
-		<field name="notification_groups_delete" type="usergroup"
-		       multiple="true"
+		<field name="notification_groups_delete" type="usergroup" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_DESC"/>
-		<field name="notification_groups_book" type="usergroup"
-		       multiple="true"
+		<field name="notification_groups_book" type="usergroup" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_DESC"/>
+		<field name="notification_author" type="radio" class="btn-group" default="0"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="captcha_groups" type="usergroup" multiple="true"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_DESC"/>
@@ -1443,14 +1451,13 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-		<field name="save_history" type="radio" class="btn-group"
-		       default="0" label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+		<field name="save_history" type="radio" class="btn-group" default="0"
+		       label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="history_limit" type="text" filter="integer"
-		       label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL" description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC"
-		       default="5"/>
+		<field name="history_limit" type="text" filter="integer" default="5"
+		       label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL" description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC"/>
 	</fieldset>
 	<fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC"
 	          label="JCONFIG_PERMISSIONS_LABEL">

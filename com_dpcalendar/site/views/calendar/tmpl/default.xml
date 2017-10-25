@@ -258,8 +258,9 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MAP_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MAP_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="0">JNO</option>
 				<option value="1">JYES</option>
-				<option value="2">JNO</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MAP_NO_PRINT</option>
 			</field>
 			<field name="map_zoom" type="text" size="5"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
@@ -327,10 +328,10 @@
 			</field>
 		</fieldset>
 		<fieldset name="event" label="COM_DPCALENDAR_EVENT">
-			<field name="event_date_format" type="text" size="80"
+			<field name="event_date_format" type="text"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_DESC"/>
-			<field name="event_time_format" type="text" size="80"
+			<field name="event_time_format" type="text"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_DESC"/>
 			<field name="event_show_calendar" type="list"
@@ -434,15 +435,21 @@
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		</fieldset>
 		<fieldset name="form" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_LABEL">
-			<field name="event_form_date_format" type="text" size="80"
+			<field name="event_form_date_format" type="text"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>
-			<field name="event_form_time_format" type="text" size="80"
+			<field name="event_form_time_format" type="text"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_DESC"/>
-			<field name="event_form_time_step" type="text" size="80"
+			<field name="event_form_time_step" type="text"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_DESC"/>
+			<field name="event_form_min_time" type="text"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_MIN_TIME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_MIN_TIME_STEP_DESC"/>
+			<field name="event_form_max_time" type="text"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_MAX_TIME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_MAX_TIME_STEP_DESC"/>
 			<field name="event_form_check_overlaping" type="list"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_DESC">

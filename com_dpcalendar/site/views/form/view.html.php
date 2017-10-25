@@ -37,13 +37,11 @@ class DPCalendarViewForm extends \DPCalendar\View\LayoutView
 		$authorised = true;
 		if (empty($this->event->id)) {
 			$tmp        = $this->app->triggerEvent('onCalendarsFetch', array(null, 'cd'));
-			$authorised = DPCalendarHelper::canCreateEvent() || !empty($tmp);
+			$authorised = DPCalendarHelper::canCreateEvent() || !empty(array_filter($tmp));
 		}
 
 		if ($authorised !== true) {
-			$this->setError(JText::_('JERROR_ALERTNOAUTHOR'));
-
-			return false;
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
 
 		$requestParams = $this->input->getVar('jform', array());

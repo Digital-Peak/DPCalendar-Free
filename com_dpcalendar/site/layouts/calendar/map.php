@@ -15,7 +15,8 @@ $params = $displayData['params'];
 // The root element
 $root = $displayData['root'];
 
-if ($params->get('show_map', 1) != 1) {
+// Check if the map should be loaded at all
+if (!$params->get('show_map', 1)) {
 	return;
 }
 

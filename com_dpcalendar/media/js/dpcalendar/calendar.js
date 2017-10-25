@@ -247,7 +247,7 @@ function createDPCalendar(calendar, options) {
 				if (picker.length < 1) {
 					picker = jQuery('<input type="hidden" name="date-picker" id="dp-calendar-date-picker"/>');
 				}
-				jQuery(this).after(picker);
+				jQuery(this).before(picker);
 
 				// Initialize the datepicker
 				picker.datepicker({
@@ -282,9 +282,9 @@ function createDPCalendar(calendar, options) {
 			text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'),
 			icon: 'icon-print',
 			click: function () {
-				var loc = document.location.href.replace(/\?/, "\?layout=print&format=raw\&");
+				var loc = document.location.href.replace(/\?/, "\?layout=print&tmpl=component\&");
 				if (loc == document.location.href)
-					loc = document.location.href.replace(/#/, "\?layout=print&format=raw#");
+					loc = document.location.href.replace(/#/, "\?layout=print&tmpl=component#");
 				var printWindow = window.open(loc);
 				printWindow.focus();
 			}

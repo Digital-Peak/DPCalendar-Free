@@ -17,15 +17,17 @@ class JFormFieldDatetimechooser extends JFormField
 		JHtml::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/helpers/html');
 
 		$options               = array();
-		$options['class']      = $this->element['class'];
-		$options['onchange']   = $this->element['onchange'];
+		$options['class']      = (string)$this->element['class'];
+		$options['onchange']   = (string)$this->element['onchange'];
 		$options['allDay']     = $this->element['all_day'] == '1';
-		$options['dateFormat'] = $this->element['format'];
-		$options['timeFormat'] = $this->element['formatTime'];
-		$options['formated']   = $this->element['formated'];
+		$options['dateFormat'] = (string)$this->element['format'];
+		$options['timeFormat'] = (string)$this->element['formatTime'];
+		$options['formated']   = (string)$this->element['formated'];
 		$options['timepair']   = $this->element['timepair'];
-		$options['datepair']   = $this->element['datepair'];
-		$options['timeclass']  = $this->element['timeclass'];
+		$options['datepair']   = (string)$this->element['datepair'];
+		$options['timeclass']  = (string)$this->element['timeclass'];
+		$options['minTime']    = (string)$this->element['min_time'];
+		$options['maxTime']    = (string)$this->element['max_time'];
 
 		return JHtml::_('datetime.render', $this->value, $this->id, $this->name, $options);
 	}

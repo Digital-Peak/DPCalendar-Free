@@ -12,7 +12,7 @@ class JHtmlDateTime
 
 	public static function render($dateValue, $id, $name, $options = array())
 	{
-		DPCalendarHelper::loadLibrary(array('jquery'     => true, 'datepicker' => true));
+		DPCalendarHelper::loadLibrary(array('jquery' => true, 'datepicker' => true));
 
 		JHtml::_('script', 'com_dpcalendar/jquery/timepicker/jquery.timepicker.min.js', false, true);
 		JHtml::_('stylesheet', 'com_dpcalendar/jquery/timepicker/jquery.timepicker.css', array(), true);
@@ -52,14 +52,6 @@ class JHtmlDateTime
 			$date = DPCalendarHelper::getDateFromString($dateValue, null, $options['allDay'], $dateFormat, $timeFormat);
 		} else if ($dateValue) {
 			$date = DPCalendarHelper::getDate($dateValue, $options['allDay']);
-		}
-
-		// Transform the date string.
-		$dateString = $date ? $date->format($dateFormat, true) : '';
-		$timeString = $date ? $date->format($timeFormat, true) : '';
-		if ($date && $options['allDay']) {
-			$dateString = $date->format($dateFormat, false);
-			$timeString = $date->format($timeFormat, false);
 		}
 
 		$daysLong    = "[";
@@ -114,8 +106,35 @@ class JHtmlDateTime
 		$calCode .= "	});\n";
 
 		$calCode .= "	jQuery('#" . $id . "').data('actualDate', jQuery('#" . $id . "').datepicker('getDate'));\n";
-		$calCode .= "	jQuery('#" . $id . "_time').timepicker({'timeFormat': '" . $timeFormat . "', 'step': " .
-			DPCalendarHelper::getComponentParameter('event_form_time_step', 30) . "});\n";
+
+		$timePickerOptions               = array();
+		$timePickerOptions['timeFormat'] = $timeFormat;
+		$timePickerOptions['step']       = DPCalendarHelper::getComponentParameter('event_form_time_step', 30);
+
+		if (!empty($options['minTime'])) {
+			$timePickerOptions['minTime'] = $options['minTime'];
+
+			$minDate = clone $date;
+			$minTime = explode(':', $options['minTime']);
+			$minDate->setTime($minTime[0], $minTime[1]);
+
+			if ($date < $minDate) {
+				$date->setTime($minTime[0], $minTime[1]);
+			}
+		}
+		if (!empty($options['maxTime'])) {
+			$timePickerOptions['maxTime'] = $options['maxTime'];
+
+			$maxDate = clone $date;
+			$maxTime = explode(':', $options['maxTime']);
+			$maxDate->setTime($maxTime[0], $maxTime[1]);
+
+			if ($date > $maxDate) {
+				$date->setTime($maxTime[0], $maxTime[1]);
+			}
+		}
+
+		$calCode .= "	jQuery('#" . $id . "_time').timepicker(" . json_encode($timePickerOptions) . ");\n";
 
 		if (isset($options['timepair'])) {
 			$calCode .= "	jQuery('." . $options['timepair'] . "').datepair({'startClass': 'timestart', 'endClass': 'timeend', 'setMinTime': null});\n";
@@ -127,6 +146,14 @@ class JHtmlDateTime
 
 		if (!isset($options['class']) || empty($options['class'])) {
 			$options['class'] = 'input-small';
+		}
+
+		// Transform the date string.
+		$dateString = $date ? $date->format($dateFormat, true) : '';
+		$timeString = $date ? $date->format($timeFormat, true) : '';
+		if ($date && $options['allDay']) {
+			$dateString = $date->format($dateFormat, false);
+			$timeString = $date->format($timeFormat, false);
 		}
 
 		$buffer = '';

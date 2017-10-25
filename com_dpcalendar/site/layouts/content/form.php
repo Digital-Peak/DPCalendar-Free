@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 use CCL\Content\Element\Basic\Form\Input;
 use CCL\Content\Element\Basic\Container;
 use CCL\Content\Element\Basic\Element;
+use CCL\Content\Element\Component\Alert;
 use CCL\Content\Element\Component\Grid;
 use CCL\Content\Element\Component\Grid\Column;
 use CCL\Content\Element\Component\Grid\Row;
@@ -123,7 +124,16 @@ foreach ($fieldSets as $name => $fieldSet) {
 	if ($flat) {
 		$c->addChild($grid);
 	} else {
-		$c->addTab(new Tab('tab-' . $name, $name, JText::_($fieldSet->label)))->addChild($grid);
+		// Create the tab
+		$t = $c->addTab(new Tab('tab-' . $name, $name, JText::_($fieldSet->label)));
+
+		// Add the description of the field group as alert
+		if ($fieldSet->description) {
+			$t->addChild(new Alert('desc', Alert::INFO))->setContent($fieldSet->description);
+		}
+
+		// Add the grid
+		$t->addChild($grid);
 	}
 }
 

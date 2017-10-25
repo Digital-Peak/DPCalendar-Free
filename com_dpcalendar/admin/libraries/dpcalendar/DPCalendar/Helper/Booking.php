@@ -236,15 +236,7 @@ class Booking
 		}
 
 		$now                = \DPCalendarHelper::getDate();
-		$regstrationEndDate = \DPCalendarHelper::getDate($event->start_date);
-
-		if (!empty($event->booking_closing_date)) {
-			if (strpos($event->booking_closing_date, '-') === 0 || strpos($event->booking_closing_date, '+') === 0) {
-				$regstrationEndDate->modify($event->booking_closing_date);
-			} else {
-				$regstrationEndDate = \DPCalendarHelper::getDate($event->booking_closing_date);
-			}
-		}
+		$regstrationEndDate = self::getRegistrationEndDate($event);
 
 		if ($regstrationEndDate->format('U') < $now->format('U')) {
 			return false;
@@ -256,6 +248,32 @@ class Booking
 		}
 
 		return $calendar->canBook;
+	}
+
+	/**
+	 * Return the closing end date for the event.
+	 *
+	 * @param \stdClass $event
+	 *
+	 * @return \Joomla\CMS\Date\Date
+	 */
+	public static function getRegistrationEndDate($event)
+	{
+		// When no closing date, use the start date
+		if (empty($event->booking_closing_date)) {
+			return \DPCalendarHelper::getDate($event->start_date);
+		}
+
+		// Check if it is a realative date
+		if (strpos($event->booking_closing_date, '-') === 0 || strpos($event->booking_closing_date, '+') === 0) {
+			$date = \DPCalendarHelper::getDate($event->start_date);
+			$date->modify($event->booking_closing_date);
+
+			return $date;
+		}
+
+		// Absolute date
+		return \DPCalendarHelper::getDate($event->booking_closing_date);
 	}
 
 	/**

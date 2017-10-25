@@ -574,7 +574,7 @@ class DPCalendarHelper
 			} else {
 				$size = '?s=' . $size;
 			}
-			$image = (\JFactory::getApplication()->isSSLConnection() ? "https" : "http") . '://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) . $size;
+			$image = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) . $size;
 		}
 
 		$cbLoader  = JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php';
@@ -876,8 +876,8 @@ class DPCalendarHelper
 	{
 		\JPluginHelper::importPlugin('captcha');
 
-		$user          = \JFactory::getUser();
-		$accessCaptcha = array_intersect(self::getComponentParameter('captcha_groups', array(1)), \JAccess::getGroupsByUser($user->id, false));
+		$userGroups    = \JAccess::getGroupsByUser(\JFactory::getUser()->id, false);
+		$accessCaptcha = array_intersect(self::getComponentParameter('captcha_groups', array(1)), $userGroups);
 
 		return \JPluginHelper::isEnabled('captcha') && $accessCaptcha;
 	}
@@ -915,9 +915,7 @@ class DPCalendarHelper
 			if ($key) {
 				$key = '&key=' . $key;
 			}
-			\JHtml::_('script',
-				(\JFactory::getApplication()->isSSLConnection() ? "https" : "http") .
-				'://maps.googleapis.com/maps/api/js?libraries=places&language=' . self::getGoogleLanguage() . $key);
+			\JHtml::_('script', 'https://maps.googleapis.com/maps/api/js?libraries=places&language=' . self::getGoogleLanguage() . $key);
 			\JHtml::_('script', 'com_dpcalendar/dpcalendar/map.js', false, true);
 		}
 

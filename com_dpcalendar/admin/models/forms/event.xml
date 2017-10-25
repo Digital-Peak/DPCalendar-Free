@@ -168,6 +168,7 @@
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_DESC"/>
 		<field name="canceltext" type="editor"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_DESC"/>
+		<field name="captcha" type="captcha" label="" validate="captcha"/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
 		<field name="alias" type="text"

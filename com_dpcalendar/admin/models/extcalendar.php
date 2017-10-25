@@ -160,7 +160,7 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 			{
 				foreach ($calendars as $externalCalendar)
 				{
-					if ($externalCalendar->plugin_name != 'dpcalendar_' . $plugin)
+					if ($externalCalendar->plugin_name != $plugin)
 					{
 						continue;
 					}

@@ -13,7 +13,9 @@
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SELECT_CALENDARS_DESC"
 			       extension="com_dpcalendar"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SELECT_CALENDARS_LABEL"
-			       required="true"/>
+			       required="true">
+				<option value="-1">JALL</option>
+			</field>
 		</fieldset>
 		<fieldset name="calendar"
 		          label="COM_DPCALENDAR_CALENDAR">

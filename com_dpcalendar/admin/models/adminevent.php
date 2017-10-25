@@ -143,62 +143,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$form->setFieldAttribute('end_date', 'min_time', $params->get('event_form_min_time'));
 		$form->setFieldAttribute('end_date', 'max_time', $params->get('event_form_max_time'));
 
-		// Set the default values from the params
-		if (!$form->getValue('catid')) {
-			$form->setValue('catid', null, $params->get('event_form_calid'));
-		}
-		if (!$form->getValue('show_end_time')) {
-			$form->setValue('show_end_time', null, $params->get('event_form_show_end_time'));
-		}
-		if (!$form->getValue('all_day')) {
-			$form->setValue('all_day', null, $params->get('event_form_all_day'));
-		}
-		if (!$form->getValue('color')) {
-			$form->setValue('color', null, $params->get('event_form_color'));
-		}
-		if (!$form->getValue('url')) {
-			$form->setValue('url', null, $params->get('event_form_url'));
-		}
-		if (!$form->getValue('description')) {
-			$form->setValue('description', null, $params->get('event_form_description'));
-		}
-		if (!$form->getValue('capacity') && $params->get('event_form_capacity') > 0) {
-			$form->setValue('capacity', null, $params->get('event_form_capacity'));
-		}
-		if (!$form->getValue('price')) {
-			$form->setValue('price', null, $params->get('event_form_price'));
-		}
-		if (!$form->getValue('plugintype')) {
-			$form->setValue('plugintype', null, $params->get('event_form_plugintype'));
-		}
-		if (!$form->getValue('ordertext')) {
-			$form->setValue('ordertext', null, $params->get('event_form_ordertext'));
-		}
-		if (!$form->getValue('canceltext')) {
-			$form->setValue('canceltext', null, $params->get('event_form_canceltext'));
-		}
-		if (!$form->getValue('payment_statement')) {
-			$form->setValue('payment_statement', null, $params->get('event_form_payment_statement'));
-		}
-		if (!$form->getValue('access')) {
-			$form->setValue('access', null, $params->get('event_form_access'));
-		}
-		if (!$form->getValue('access_content')) {
-			$form->setValue('access_content', null, $params->get('event_form_access_content'));
-		}
-		if (!$form->getValue('featured')) {
-			$form->setValue('featured', null, $params->get('event_form_featured'));
-		}
-		if (!$form->getValue('language')) {
-			$form->setValue('language', null, $params->get('event_form_language'));
-		}
-		if (!$form->getValue('metakey')) {
-			$form->setValue('metakey', null, $params->get('menu-meta_keywords'));
-		}
-		if (!$form->getValue('metadesc')) {
-			$form->setValue('metadesc', null, $params->get('menu-meta_description'));
-		}
-
 		// Remove fields depending on the params
 		if ($params->get('event_form_change_calid', '1') != '1') {
 			$form->setFieldAttribute('catid', 'readonly', 'readonly');
@@ -290,6 +234,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if ($data instanceof stdClass) {
 			$data = new JObject($data);
 		}
+
+		$data->setProperties($this->getDefaultValues($data));
 
 		if ($data->get(('start_date_time'))) {
 			try {
@@ -518,6 +464,12 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if (!isset($data['capacity']) && !$this->getParams()->get('event_form_change_capacity', '1')) {
 			$data['capacity'] = 0;
 		}
+
+		// Only apply the default values on create
+		if (empty($data['id'])) {
+			$data = array_merge($data, $this->getDefaultValues(new JObject($data)));
+		}
+
 		return parent::save($data);
 	}
 
@@ -643,6 +595,71 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$ticketsModel->setState('list.limit', 10000);
 
 		return $ticketsModel->getItems();
+	}
+
+
+	private function getDefaultValues(JObject $item)
+	{
+		$params = $this->getParams();
+		$data   = array();
+
+		// Set the default values from the params
+		if (!$item->get('catid')) {
+			$data['catid'] = $params->get('event_form_calid');
+		}
+		if ($params->get('event_form_show_end_time') != '' && $item->get('show_end_time') === null) {
+			$data['show_end_time'] = $params->get('event_form_show_end_time');
+		}
+		if ($params->get('event_form_all_day') != '' && $item->get('all_day') === null) {
+			$data['all_day'] = $params->get('event_form_all_day');
+		}
+		if (!$item->get('color')) {
+			$data['color'] = $params->get('event_form_color');
+		}
+		if (!$item->get('url')) {
+			$data['url'] = $params->get('event_form_url');
+		}
+		if (!$item->get('description')) {
+			$data['description'] = $params->get('event_form_description');
+		}
+		if (!$item->get('capacity') && $params->get('event_form_capacity') > 0) {
+			$data['capacity'] = $params->get('event_form_capacity');
+		}
+		if (!$item->get('price')) {
+			$data['price'] = $params->get('event_form_price');
+		}
+		if (!$item->get('plugintype')) {
+			$data['plugintype'] = $params->get('event_form_plugintype');
+		}
+		if (!$item->get('ordertext')) {
+			$data['ordertext'] = $params->get('event_form_ordertext');
+		}
+		if (!$item->get('canceltext')) {
+			$data['canceltext'] = $params->get('event_form_canceltext');
+		}
+		if (!$item->get('payment_statement')) {
+			$data['payment_statement'] = $params->get('event_form_payment_statement');
+		}
+		if (!$item->get('access')) {
+			$data['access'] = $params->get('event_form_access');
+		}
+		if (!$item->get('access_content')) {
+			$data['access_content'] = $params->get('event_form_access_content');
+		}
+		if (!$item->get('featured')) {
+			$data['featured'] = $params->get('event_form_featured');
+		}
+		if (!$item->get('language')) {
+			$data['language'] = $params->get('event_form_language');
+		}
+		if (!$item->get('metakey')) {
+			$data['metakey'] = $params->get('menu-meta_keywords');
+		}
+		if (!$item->get('metadesc')) {
+			$data['metadesc'] = $params->get('menu-meta_description');
+		}
+
+		return $data;
 	}
 
 	private function getParams()

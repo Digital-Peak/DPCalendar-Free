@@ -1,21 +1,21 @@
-jQuery(document).ready(function() {
-	jQuery('.dpcalendar-map-container').find('*[name="filter-location"], *[name="radius"], *[name="length_type"], *[name="ids"]').bind('change', function(e) {
+jQuery(document).ready(function () {
+	jQuery('.dpcalendar-map-container').find('*[name="filter-location"], *[name="radius"], *[name="length_type"], *[name="ids"]').bind('change', function (e) {
 		updateDPLocationFrame(this);
 	});
 
-	jQuery('.dpcalendar-map-container').each(function(index) {
+	jQuery('.dpcalendar-map-container').each(function (index) {
 		updateDPLocationFrame(this);
-		jQuery(this).find('form').submit(function(e) {
+		jQuery(this).find('form').submit(function (e) {
 			e.preventDefault();
 			updateDPLocationFrame(this);
 		});
 	});
 
-	jQuery(document).on('click', '.dp-event-link', function(event) {
+	jQuery(document).on('click', '.dp-event-link', function (event) {
 		if (jQuery(window).width() < 600) {
 			return true;
 		}
-		
+
 		event.stopPropagation();
 
 		var root = jQuery(this).closest('.dpcalendar-map-container');
@@ -25,10 +25,10 @@ jQuery(document).ready(function() {
 			var url = new Url(jQuery(this).attr('href'));
 			url.query.tmpl = 'component';
 			SqueezeBox.open(url.toString(), {
-				handler : 'iframe',
-				size : {
-					x : (width < 650 ? width - (width * 0.10) : root.data('popupwidth')),
-					y : root.data('popupheight')
+				handler: 'iframe',
+				size: {
+					x: (width < 650 ? width - (width * 0.10) : root.data('popupwidth')),
+					y: root.data('popupheight')
 				}
 			});
 		} else {
@@ -47,10 +47,10 @@ function updateDPLocationFrame(input) {
 	data['filter-length_type'] = root.find('*[name="length_type"]').val();
 	data['moduleId'] = root.find('.module_id').val();
 	jQuery.ajax({
-		type : 'get',
-		url : 'index.php?option=com_dpcalendar&view=map&layout=events&format=raw&Itemid=' + root.find('input[name="itemid"]').val(),
-		data : data,
-		success : function(response) {
+		type: 'post',
+		url: 'index.php?option=com_dpcalendar&view=map&layout=events&format=raw&Itemid=' + root.find('input[name="itemid"]').val(),
+		data: data,
+		success: function (response) {
 			var json = jQuery.parseJSON(response);
 
 			var mapElement = root.find('.dpcalendar-fixed-map');
@@ -66,7 +66,7 @@ function updateDPLocationFrame(input) {
 					continue;
 				}
 
-				jQuery.each(event.location, function(i, loc) {
+				jQuery.each(event.location, function (i, loc) {
 					var locationData = JSON.parse(JSON.stringify(loc));
 					locationData.title = event.title;
 					locationData.color = event.color;

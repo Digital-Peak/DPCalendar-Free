@@ -65,6 +65,11 @@ class DPCalendarModelCalendar extends JModelLegacy
 
 			foreach ($this->getState('filter.parentIds', array('root')) as $calendar)
 			{
+				if ($calendar == '-1')
+				{
+					$calendar = 'root';
+				}
+
 				$parent = DPCalendarHelper::getCalendar($calendar);
 				if ($parent == null)
 				{

@@ -54,6 +54,7 @@ $h->setContent(JText::_('COM_DPCALENDAR_VIEW_EVENT_BOOKING_INFORMATION'));
 
 // Set up the booking alert when bookings can be done
 if (\DPCalendar\Helper\Booking::openForBooking($event)) {
+
 	// Booking is possible, show the book message
 	$alert = $root->addChild(new Alert('text', Alert::WARNING, array('noprint')));
 	$alert->setProtectedClass('noprint');
@@ -66,6 +67,16 @@ if (\DPCalendar\Helper\Booking::openForBooking($event)) {
 
 	// The text
 	$link->addChild(new TextBlock('text'))->setContent(JText::_('COM_DPCALENDAR_VIEW_EVENT_TO_BOOK_TEXT'));
+
+	// Add registration end date
+	$endDate = \DPCalendar\Helper\Booking::getRegistrationEndDate($event);
+	$alert->addChild(new Container('registration-closing-date'))->setContent(
+		JText::sprintf(
+			'COM_DPCALENDAR_VIEW_EVENT_REGISTRATION_END_TEXT',
+			$endDate->format($params->get('event_date_format', 'm.d.Y'), true),
+			$endDate->format($params->get('event_time_format', 'm.d.Y'), true)
+		)
+	);
 }
 
 // Show the price
@@ -105,7 +116,7 @@ if ($params->get('event_show_price', '1') && $event->price) {
 
 			// Add the earlybird text
 			$value        = ($event->earlybird->type[$index] == 'value' ? DPCalendarHelper::renderPrice($value) : $value . ' %');
-			$dateFormated = $date->format(DPCalendarHelper::getComponentParameter('event_date_format', 'm.d.Y'), true);
+			$dateFormated = $date->format($params->get('event_date_format', 'm.d.Y'), true);
 			$v            = $ec->addChild(new TextBlock('value'))->setContent(' ');
 			$v->setContent(JText::sprintf('COM_DPCALENDAR_VIEW_EVENT_EARLYBIRD_DISCOUNT_TEXT', $value, $dateFormated), true);
 

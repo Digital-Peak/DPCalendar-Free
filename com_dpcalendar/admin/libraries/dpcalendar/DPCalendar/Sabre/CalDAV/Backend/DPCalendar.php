@@ -306,6 +306,17 @@ class DPCalendar extends CalDAV\Backend\PDO
 		return parent::deleteCalendarObject($calendarId, $objectUri);
 	}
 
+	public function updateCalendar($calendarId, \Sabre\DAV\PropPatch $propPatch)
+	{
+		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
+			$this->log('Update calendar ' . $calendarId . 'with propatch');
+			\DPCalendarHelper::increaseEtag(str_replace('dp-', '', $calendarId));
+			return;
+		}
+
+		return parent::updateCalendar($calendarId, $propPatch);
+	}
+
 	private function getTable($type = 'Event')
 	{
 		\JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
@@ -313,7 +324,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 		return \JTable::getInstance($type, 'DPCalendarTable');
 	}
 
-	private function merge($dpEvent, $vEvent)
+	private function merge(\JTable $dpEvent, $vEvent)
 	{
 		if (isset($vEvent->SUMMARY)) {
 			$dpEvent->title = $vEvent->SUMMARY->getValue();
@@ -413,7 +424,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 			'DPCalendarModel',
 			array('event_before_save' => 'nooperationtocatch', 'event_after_save' => 'nooperationtocatch')
 		);
-		$model->save((array)$dpEvent);
+		$model->save($dpEvent->getProperties());
 
 		if ($model->getError()) {
 			throw new \Sabre\DAV\Exception\BadRequest('Error happened storing the event: ' . $model->getError());

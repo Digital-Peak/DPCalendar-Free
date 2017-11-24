@@ -138,7 +138,7 @@ foreach ($fieldSets as $name => $fieldSet) {
 }
 
 // Add captcha when available
-if ($captcha = $jform->renderField('captcha')) {
+if (\DPCalendar\Helper\DPCalendarHelper::isCaptchaNeeded() && $captcha = $jform->renderField('captcha')) {
 	$root->addChild(new Element('captcha'))->setContent($captcha);
 }
 

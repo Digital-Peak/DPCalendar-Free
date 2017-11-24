@@ -34,7 +34,7 @@ $root->addClass('dp-actions-container', true);
 $text = 'JSAVE';
 if (!$bookingId) {
 	$text = 'COM_DPCALENDAR_VIEW_BOOKING_BOOK_BUTTON';
-} else if ($booking->state == 3 || $booking->state == 4) {
+} else if ($booking->state == 3) {
 	$text = 'COM_DPCALENDAR_PAY';
 }
 
@@ -60,8 +60,8 @@ DPCalendarHelper::renderLayout(
 	)
 );
 
-if ($bookingId && !$booking->price) {
-	// Create the cancel button
+if ($bookingId && (!$booking->price || $booking->price == '0.00')) {
+	// Create the delete button
 	DPCalendarHelper::renderLayout(
 		'content.button',
 		array(

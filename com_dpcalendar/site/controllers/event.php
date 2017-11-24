@@ -467,8 +467,8 @@ class DPCalendarControllerEvent extends JControllerForm
 		$model->setState('filter.ongoing', 1);
 		$model->setState('filter.expand', true);
 		$model->setState('filter.language', $data['language']);
-		$model->setState('list.start-date', $startDate->format('U'));
-		$model->setState('list.end-date', $endDate->format('U'));
+		$model->setState('list.start-date', $startDate);
+		$model->setState('list.end-date', $endDate);
 
 		$events = $model->getItems();
 
@@ -483,12 +483,13 @@ class DPCalendarControllerEvent extends JControllerForm
 			break;
 		}
 
-		$event             = new stdClass();
-		$event->start_date = $startDate->toSql();
-		$event->end_date   = $endDate->toSql();
-		$event->all_day    = $data['all_day'];
-		$date              = DPCalendarHelper::getDateStringFromEvent($event);
-		$message           = DPCalendarHelper::renderEvents(
+		$event                = new stdClass();
+		$event->start_date    = $startDate->toSql();
+		$event->end_date      = $endDate->toSql();
+		$event->all_day       = $data['all_day'];
+		$event->show_end_time = true;
+		$date                 = DPCalendarHelper::getDateStringFromEvent($event);
+		$message              = DPCalendarHelper::renderEvents(
 			$events,
 			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'), null,
 			array(
@@ -502,5 +503,45 @@ class DPCalendarControllerEvent extends JControllerForm
 			false,
 			array('message' => $message, 'count' => count($events))
 		);
+	}
+
+	public function checkin()
+	{
+		// Check for request forgeries.
+		\JSession::checkToken('get') or jexit(\JText::_('JINVALID_TOKEN'));
+
+		$model = $this->getModel();
+		$event = $model->getItem($this->input->getInt('e_id'));
+
+		$message = JText::sprintf('COM_DPCALENDAR_N_ITEMS_CHECKED_IN_1', 1);
+		$type    = null;
+
+		if ($model->checkin([$event->id]) === false) {
+			// Checkin failed
+			$message = \JText::sprintf('JLIB_APPLICATION_ERROR_CHECKIN_FAILED', $model->getError());
+			$type    = 'error';
+		}
+
+		$this->setRedirect(DPCalendarHelperRoute::getEventRoute($event->id, $event->catid), $message, $type);
+
+		return $type == null;
+	}
+
+	public function reload($key = null, $urlVar = 'e_id')
+	{
+		$data = $this->input->post->get('jform', array(), 'array');
+
+		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
+			$data['all_day'] = '1';
+		}
+
+		$data['start_date'] = DPCalendarHelper::getDateFromString($data['start_date'], $data['start_date_time'], $data['all_day'] == '1')->toSql(
+			false);
+		$data['end_date']   = DPCalendarHelper::getDateFromString($data['end_date'], $data['end_date_time'], $data['all_day'] == '1')->toSql(false);
+
+		$this->input->set('jform', $data);
+		$this->input->post->set('jform', $data);
+
+		return parent::reload($key, $urlVar);
 	}
 }

@@ -45,7 +45,10 @@ function calculatePrice() {
 		url: PRICE_URL,
 		data: data,
 		success: function (response) {
-			var json = jQuery.parseJSON(response);
+			var json = response;
+			if(typeof json !== 'object'){
+				json = jQuery.parseJSON(response);
+			}
 
 			if (json.messages != null && jQuery('#system-message-container').length) {
 				Joomla.renderMessages(json.messages);

@@ -13,13 +13,13 @@ use CCL\Content\Element\Basic\TextBlock;
 use CCL\Content\Element\Component\Dropdown;
 use CCL\Content\Element\Component\Icon;
 use CCL\Content\Element\Basic\Link;
-use CCL\Content\Element\Basic\Heading;
 
 // Global variables
-$event  = $this->event;
-$params = $this->params;
+$event      = $this->event;
+$params     = $this->params;
+$eventRoute = DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, false, true);
 
-/** @var Container $root **/
+/** @var Container $root * */
 $root = $this->root->addChild(new Container('actions-container'));
 $root->addClass('noprint', true);
 $root->addClass('dp-actions-container', true);
@@ -49,7 +49,7 @@ DPCalendarHelper::renderLayout(
 // Compile the url fo the email button
 require_once JPATH_SITE . '/components/com_mailto/helpers/mailto.php';
 $uri = JUri::getInstance()->toString(array('scheme', 'host', 'port'));
-$url = 'index.php?option=com_mailto&tmpl=component&link=' . MailToHelper::addLink($uri . DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, false, true));
+$url = 'index.php?option=com_mailto&tmpl=component&link=' . MailToHelper::addLink($uri . $eventRoute);
 
 // Create the email button
 DPCalendarHelper::renderLayout(
@@ -58,12 +58,11 @@ DPCalendarHelper::renderLayout(
 		'type'    => Icon::MAIL,
 		'root'    => $bc,
 		'title'   => 'JGLOBAL_EMAIL',
-		'onclick' => "window.open('" . $url ."','win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"
+		'onclick' => "window.open('" . $url . "','win2','width=400,height=350,menubar=yes,resizable=yes'); return false;"
 	)
 );
 
-if ($params->get('event_show_copy', '1'))
-{
+if ($params->get('event_show_copy', '1')) {
 	$d = $bc->addChild(new Dropdown('actions', ['actions']));
 	$b = $d->setTriggerElement(new Button('trigger', new Icon('icon', Icon::DOWNLOAD)));
 	$b->addClass('dp-button', true);
@@ -73,8 +72,7 @@ if ($params->get('event_show_copy', '1'))
 	$startDate  = DPCalendarHelper::getDate($event->start_date, $event->all_day);
 	$endDate    = DPCalendarHelper::getDate($event->end_date, $event->all_day);
 	$copyFormat = $event->all_day ? 'Ymd' : 'Ymd\THis';
-	if ($event->all_day)
-	{
+	if ($event->all_day) {
 		$endDate->modify('+1 day');
 	}
 	$url = 'http://www.google.com/calendar/render?action=TEMPLATE&text=' . urlencode($event->title);
@@ -93,8 +91,7 @@ if ($params->get('event_show_copy', '1'))
 	$l->addChild(new TextBlock('text'))->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_OUTLOOK'));
 }
 
-if (\DPCalendar\Helper\Booking::openForBooking($event) && $event->params->get('access-invite') && !DPCalendarHelper::isFree() )
-{
+if (\DPCalendar\Helper\Booking::openForBooking($event) && $event->params->get('access-invite') && !DPCalendarHelper::isFree()) {
 	// Add the invite button
 	DPCalendarHelper::renderLayout(
 		'content.button',
@@ -103,13 +100,12 @@ if (\DPCalendar\Helper\Booking::openForBooking($event) && $event->params->get('a
 			'type'    => Icon::SIGNUP,
 			'root'    => $bc,
 			'text'    => 'COM_DPCALENDAR_INVITE',
-			'onclick' => "location.href='" . DPCalendarHelperRoute::getInviteRoute($event) ."'"
+			'onclick' => "location.href='" . DPCalendarHelperRoute::getInviteRoute($event) . "'"
 		)
 	);
 }
 
-if ($event->capacity != '0' && $event->params->get('access-tickets') && !DPCalendarHelper::isFree())
-{
+if ($event->capacity != '0' && $event->params->get('access-tickets') && !DPCalendarHelper::isFree()) {
 	// Add the tickets button
 	DPCalendarHelper::renderLayout(
 		'content.button',
@@ -118,13 +114,12 @@ if ($event->capacity != '0' && $event->params->get('access-tickets') && !DPCalen
 			'type'    => Icon::SIGNUP,
 			'root'    => $bc,
 			'text'    => 'COM_DPCALENDAR_BOOKING_FIELD_TICKETS_LABEL',
-			'onclick' => "location.href='" . DPCalendarHelperRoute::getTicketsRoute(null, $event->id) ."'"
+			'onclick' => "location.href='" . DPCalendarHelperRoute::getTicketsRoute(null, $event->id) . "'"
 		)
 	);
 }
 
-if ($event->capacity != '0' && $event->params->get('access-bookings') && !DPCalendarHelper::isFree())
-{
+if ($event->capacity != '0' && $event->params->get('access-bookings') && !DPCalendarHelper::isFree()) {
 	// Add the tickets button
 	DPCalendarHelper::renderLayout(
 		'content.button',
@@ -133,34 +128,59 @@ if ($event->capacity != '0' && $event->params->get('access-bookings') && !DPCale
 			'type'    => Icon::SIGNUP,
 			'root'    => $bc,
 			'text'    => 'COM_DPCALENDAR_BOOKINGS',
-			'onclick' => "location.href='" . DPCalendarHelperRoute::getBookingsRoute($event->id) ."'"
+			'onclick' => "location.href='" . DPCalendarHelperRoute::getBookingsRoute($event->id) . "'"
 		)
 	);
 }
 
-if ($event->params->get('access-edit'))
-{
-	// Add the tickets button
-	DPCalendarHelper::renderLayout(
-		'content.button',
-		array(
-			'type'    => Icon::EDIT,
-			'root'    => $bc,
-			'text'    => 'COM_DPCALENDAR_VIEW_FORM_BUTTON_EDIT_EVENT',
-			'onclick' => "location.href='" . DPCalendarHelperRoute::getFormRoute($event->id, JUri::getInstance()) ."'"
-		)
-	);
+if ($event->params->get('access-edit')) {
+
+	// Add a warning
+	if ($event->checked_out && $this->user->id != $event->checked_out) {
+		JFactory::getApplication()->enqueueMessage(
+			JText::sprintf('COM_DPCALENDAR_VIEW_EVENT_CHECKED_OUT_BY', JFactory::getUser($event->checked_out)->name), 'warning'
+		);
+	}
+
+	if ($event->checked_out && $this->user->id != $event->checked_out && $this->user->authorise('core.manage', 'com_checkin')) {
+		$url = 'index.php?option=com_dpcalendar&task=event.checkin';
+		$url .= '&e_id=' . $event->id;
+		$url .= '&' . JSession::getFormToken() . '=1';
+
+		// Add the check in button
+		DPCalendarHelper::renderLayout(
+			'content.button',
+			array(
+				'type'    => Icon::LOCK,
+				'root'    => $bc,
+				'text'    => JText::_('JLIB_HTML_CHECKIN'),
+				'onclick' => "location.href='" . $url . "'"
+			)
+		);
+	}
+
+	if (!$event->checked_out || $this->user->id == $event->checked_out) {
+		// Add the edit button
+		DPCalendarHelper::renderLayout(
+			'content.button',
+			array(
+				'type'    => Icon::EDIT,
+				'root'    => $bc,
+				'text'    => 'COM_DPCALENDAR_VIEW_FORM_BUTTON_EDIT_EVENT',
+				'onclick' => "location.href='" . DPCalendarHelperRoute::getFormRoute($event->id, JUri::getInstance()) . "'"
+			)
+		);
+	}
 }
 
-if ($event->params->get('access-delete'))
-{
+if ($event->params->get('access-delete')) {
 	$return = clone JFactory::getURI();
-	if ($this->input->getCmd('view', null) == 'event')
-	{
+	if ($this->input->getCmd('view', null) == 'event') {
 		$return->setVar('layout', 'empty');
 	}
 
-	$deleteUrl = 'index.php?option=com_dpcalendar&task=event.delete&tmpl=' . $this->input->getWord('tmpl') . '&return=' . base64_encode($return) . '&e_id=';
+	$deleteUrl  = 'index.php?option=com_dpcalendar&task=event.delete&tmpl=';
+	$deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return) . '&e_id=' . $event->id;
 
 	// Add the delete button
 	DPCalendarHelper::renderLayout(
@@ -170,12 +190,11 @@ if ($event->params->get('access-delete'))
 			'type'    => Icon::DELETE,
 			'root'    => $bc,
 			'text'    => 'COM_DPCALENDAR_DELETE',
-			'onclick' => "location.href='" . JRoute::_($deleteUrl . $event->id) ."'"
+			'onclick' => "location.href='" . JRoute::_($deleteUrl) . "'"
 		)
 	);
 
-	if ($event->original_id > 0)
-	{
+	if ($event->original_id > 0) {
 		// Add the series delete button
 		DPCalendarHelper::renderLayout(
 			'content.button',
@@ -184,7 +203,7 @@ if ($event->params->get('access-delete'))
 				'type'    => Icon::DELETE,
 				'root'    => $bc,
 				'text'    => 'COM_DPCALENDAR_DELETE_SERIES',
-				'onclick' => "location.href='" . JRoute::_($deleteUrl . $event->original_id) ."'"
+				'onclick' => "location.href='" . JRoute::_($deleteUrl . $event->original_id) . "'"
 			)
 		);
 	}

@@ -13,7 +13,7 @@ use CCL\Content\Element\Basic\Container;
 $params = $displayData['params'];
 $event  = $displayData['event'];
 
-if ($params->get('comment_system') != 'jcomments' || $event != null || is_numeric($event->id)) {
+if ($params->get('comment_system') != 'jcomments' || $event == null || !is_numeric($event->id)) {
 	// Nothing to set up
 	return;
 }

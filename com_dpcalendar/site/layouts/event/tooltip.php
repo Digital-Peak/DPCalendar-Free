@@ -5,6 +5,7 @@
  * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 use CCL\Content\Element\Basic\Container;
 use CCL\Content\Element\Basic\Link;
 use Joomla\Registry\Registry;
@@ -19,6 +20,9 @@ $params = $displayData['params'];
 if (!$params) {
 	$params = new Registry();
 }
+
+// The user
+$user = !empty($displayData['user']) ? $displayData['user'] : JFactory::getUser();
 
 /** @var \CCL\Content\Element\Basic\Container $root */
 $root = $displayData['root']->addChild(new Container('tooltip', array('tooltip')));
@@ -71,7 +75,8 @@ if (\DPCalendar\Helper\Booking::openForBooking($event)) {
 $calendar = DPCalendarHelper::getCalendar($event->catid);
 
 // Add the edit link when possible
-if ($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id)) {
+if (($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id))
+	&& (!$event->checked_out || $user->id == $event->checked_out)) {
 	$l = $c->addChild(new Link('edit', JRoute::_(DPCalendarHelperRoute::getFormRoute($event->id, $return), false)));
 	$l->setContent(JText::_('JACTION_EDIT'));
 }

@@ -63,7 +63,7 @@ if (!$limited) {
 	$columns[] = JText::_('COM_DPCALENDAR_CREATED_DATE');
 }
 
-if (!$limited) {
+if (!$limited && $params->get('ticket_show_seat', 1)) {
 	$columns[] = JText::_('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL');
 }
 
@@ -84,7 +84,18 @@ foreach ($tickets as $ticket) {
 			);
 		}
 		$l = $cell->addChild(new Link('link', DPCalendarHelperRoute::getTicketRoute($ticket, true)));
-		$l->setContent(JHtmlString::abridge($ticket->uid, 15, 5));
+
+		// Define the content
+		$content = JHtmlString::abridge($ticket->uid, 15, 5);
+
+		if (!empty($ticket->event_prices)) {
+			$prices = json_decode($ticket->event_prices);
+
+			if (!empty($prices->label[$ticket->type])) {
+				$content = $prices->label[$ticket->type];
+			}
+		}
+		$l->setContent($content);
 	}
 
 	if (!$limited && $params->get('display_list_event', true)) {
@@ -110,7 +121,7 @@ foreach ($tickets as $ticket) {
 		$c    = $row->addCell(new Cell('date-created'))->setContent($date);
 	}
 
-	if (!$limited) {
+	if (!$limited && $params->get('ticket_show_seat', 1)) {
 		$row->addCell(new Cell('seat'))->setContent($ticket->seat);
 	}
 

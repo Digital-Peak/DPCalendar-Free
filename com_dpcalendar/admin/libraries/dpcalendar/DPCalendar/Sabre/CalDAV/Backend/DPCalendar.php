@@ -301,6 +301,8 @@ class DPCalendar extends CalDAV\Backend\PDO
 			}
 
 			\DPCalendarHelper::increaseEtag(str_replace('dp-', '', $calendarId));
+
+			return;
 		}
 
 		return parent::deleteCalendarObject($calendarId, $objectUri);

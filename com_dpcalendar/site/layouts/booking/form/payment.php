@@ -158,7 +158,7 @@ if (!$bookingId) {
 				DPCalendarHelper::getDateStringFromEvent(
 					$instance,
 					$params->get('event_date_format', 'm.d.Y'),
-					$params->get('event_time_format'), 'g:i a'
+					$params->get('event_time_format', 'g:i a')
 				)
 			);
 

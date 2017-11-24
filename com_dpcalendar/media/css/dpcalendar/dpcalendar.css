@@ -26,7 +26,7 @@
 }
 
 @media screen and (min-width: 1000px) {
-	.control-group .controls input.dp-form-input{
+	.control-group .controls dp-form-input{
 		max-width: 60%;
 	}
 }

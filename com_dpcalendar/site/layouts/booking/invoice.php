@@ -172,20 +172,36 @@ $h->setContent(JText::_('COM_DPCALENDAR_INVOICE_TICKET_DETAILS'));
 $h->addClass('dp-event-header', true);
 
 // The tickets table
-$t = $root->addChild(
-	new Table(
-		'ticket-details',
-		array(
-			JText::_('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'),
-			JText::_('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'),
-			JText::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'),
-			JText::_('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL')
-		)
-	)
+$columns = array(
+	JText::_('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'),
+	JText::_('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'),
+	JText::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL')
 );
+
+if ($params->get('ticket_show_seat', 1)) {
+	$columns[] = JText::_('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL');
+}
+$t = $root->addChild(new Table('ticket-details', $columns));
 
 // Loop over the tickets
 foreach ($tickets as $ticket) {
+	if (!empty($ticket->event_prices)) {
+		$prices = $ticket->event_prices;
+
+		if (is_string($prices)) {
+			$prices = json_decode($ticket->event_prices);
+		}
+
+		if (!empty($prices->label[$ticket->type])) {
+			// Add an information row
+			$r = $t->addRow(new Row($ticket->id . '-heading'));
+
+			// Add the title cell which spans over all columns
+			$c = $r->addCell(new Cell('title', array(), array('colspan' => count($columns))));
+			$c->addChild(new Heading('title', 4))->setContent($prices->label[$ticket->type]);
+		}
+	}
+
 	// Add an information row
 	$r = $t->addRow(new Row($ticket->id . '-ticket'));
 
@@ -193,5 +209,8 @@ foreach ($tickets as $ticket) {
 	$r->addCell(new Cell('uid'))->setContent($ticket->uid);
 	$r->addCell(new Cell('name'))->setContent($ticket->name);
 	$r->addCell(new Cell('price'))->setContent(DPCalendarHelper::renderPrice($ticket->price, $params->get('currency_symbol', '$')));
-	$r->addCell(new Cell('seat'))->setContent($ticket->seat);
+
+	if ($params->get('ticket_show_seat', 1)) {
+		$r->addCell(new Cell('seat'))->setContent($ticket->seat);
+	}
 }

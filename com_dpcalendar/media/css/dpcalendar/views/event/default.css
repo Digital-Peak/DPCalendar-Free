@@ -44,7 +44,7 @@
 	text-align: left !important;
 }
 
-.dp-event-content a {
+#dp-event-information-content-details-data-url-content .dp-event-content a {
 	white-space: nowrap;
 	overflow: hidden;
 	display: block;

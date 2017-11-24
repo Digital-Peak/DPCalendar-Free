@@ -74,12 +74,14 @@ $formElement = $root->addChild(
 $formElement->addClass('timepair', true);
 
 // Render the form layout
-DPCalendarHelper::renderLayout('content.form', array(
-	'root'         => $formElement,
-	'jform'        => $form,
-	'fieldsToShow' => array('start_date', 'end_date', 'title', 'catid'),
-	'flat'         => true
-));
+DPCalendarHelper::renderLayout('content.form',
+	array(
+		'root'         => $formElement,
+		'jform'        => $form,
+		'fieldsToShow' => array('start_date', 'end_date', 'title', 'catid'),
+		'flat'         => true
+	)
+);
 
 // Add some hidden input fields
 $formElement->addChild(new Input('urlhash', 'hidden', 'urlhash'));

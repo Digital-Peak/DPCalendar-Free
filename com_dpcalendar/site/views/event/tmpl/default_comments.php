@@ -16,8 +16,8 @@ $root = new Container('comments', array('noprint'));
 $root->setProtectedClass('noprint');
 
 // Add the heading
-$h = $root->addChild(new Heading('heading', 2, array('dp-event-header')));
-$h->setProtectedClass('dp-event-header');
+$h = $root->addChild(new Heading('heading', 3, array('dpcalendar-heading')));
+$h->setProtectedClass('dpcalendar-heading');
 $h->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COMMENTS'));
 
 // The comments container

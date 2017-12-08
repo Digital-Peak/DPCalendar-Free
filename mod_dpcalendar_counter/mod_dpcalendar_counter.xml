@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_counter</name>
 	<author>Digital Peak</author>
-	<creationDate>Nov 2017</creationDate>
+	<creationDate>Dec 2017</creationDate>
 	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.1.5</version>
+	<version>6.2.0</version>
 	<description>MOD_DPCALENDAR_COUNTER_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_counter">mod_dpcalendar_counter.php</filename>
@@ -31,8 +31,8 @@
 				       label="MOD_DPCALENDAR_COUNTER_FIELD_DESC_COUNT_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_DESC_COUNT_DESC"/>
 				<field name="show_as_popup" type="radio" default="0" class="btn-group"
 				       label="MOD_DPCALENDAR_COUNTER_FIELD_OPEN_POPUP_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_OPEN_POPUP_DESC">
-					<option value="0">JNO</option>
 					<option value="1">JYES</option>
+					<option value="0">JNO</option>
 				</field>
 				<field name="show_my_only" type="radio" default="0" class="btn-group"
 				       label="MOD_DPCALENDAR_COUNTER_SHOW_MY_ONLY_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_MY_ONLY_DESC">
@@ -45,6 +45,10 @@
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
+				<field name="filter_locations" type="location" multiple="true"
+				       label="MOD_DPCALENDAR_COUNTER_FILTER_LOCATIONS_LABEL" description="MOD_DPCALENDAR_COUNTER_FILTER_LOCATIONS_DESC"/>
+				<field name="filter_tags" type="tag" multiple="true" mode="nested"
+				       label="MOD_DPCALENDAR_COUNTER_FILTER_TAGS_LABEL" description="MOD_DPCALENDAR_COUNTER_FILTER_TAGS_DESC"/>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL"

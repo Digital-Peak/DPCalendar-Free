@@ -1,4 +1,8 @@
 jQuery(document).ready(function () {
+	if (typeof google === 'undefined') {
+		return;
+	}
+
 	jQuery('#jform_street, #jform_number, #jform_zip, #jform_city, #jform_country, #jform_province').bind('change', function (e) {
 		jQuery("#jform_geocomplete").val('');
 		var task = 'location.loc';

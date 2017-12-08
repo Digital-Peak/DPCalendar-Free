@@ -23,8 +23,8 @@ $attributes = isset($displayData['attributes']) ? $displayData['attributes'] : a
 $dl = new DescriptionListHorizontal($id, $classes, $attributes);
 
 // Add the term
-$term = new Term('label', array('label', 'dp-event-label'));
-$term->setProtectedClass('dp-event-label');
+$term = new Term('label', array('label', 'dpcalendar-label'));
+$term->setProtectedClass('dpcalendar-label');
 $term->setContent(JText::_($label));
 $dl->setTerm($term);
 

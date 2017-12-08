@@ -152,6 +152,19 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 		$db->execute();
 	}
 
+	public function onContentPrepareForm($form, $data)
+	{
+		if ($form->getName() == 'com_users.profile') {
+
+			// Load the language
+			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+
+			$form->loadFile(JPATH_PLUGINS . '/system/dpcalendar/forms/user.xml');
+		}
+
+		return parent::onContentPrepareForm($form, $data);
+	}
+
 	public function prepareForm($eventId, $calendarId, $form, $data)
 	{
 		$form->removeField('alias');

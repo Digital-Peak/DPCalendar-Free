@@ -24,7 +24,7 @@ use CCL\Content\Element\Basic\TextBlock;
 extract($displayData);
 
 // Load the needed JS libraries
-DPCalendarHelper::loadLibrary(array('jquery' => true, 'datepicker' => true, 'dpcalendar' => true));
+DPCalendarHelper::loadLibrary(array('jquery' => true, 'dpcalendar' => true));
 
 // Add some CSS rules
 JFactory::getDocument()->addStyleDeclaration('

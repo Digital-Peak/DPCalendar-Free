@@ -94,7 +94,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 * radius
 	 * - radius: Comes into action when a location is set. Defines how close the
 	 * events need to be.
-	 * - length_type: The length type in kilometers or miles
+	 * - length-type: The length type in kilometers or miles
 	 *
 	 * @param string   $content
 	 * @param \JDate   $startDate
@@ -260,6 +260,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$cal->access         = $calendar->access;
 			$cal->access_content = $calendar->access_content;
 			$cal->sync_date      = $calendar->sync_date;
+			$cal->icalurl        = $this->getIcalUrl($cal);
 
 			// Null the sync date
 			if (!$cal->sync_date || $cal->sync_date == \JFactory::getDbo()->getNullDate()) {
@@ -655,6 +656,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->url              = '';
 		$event->price            = array();
 		$event->locations        = array();
+		$event->rooms            = null;
 		$event->hits             = 0;
 		$event->capacity         = 0;
 		$event->capacity_used    = 0;
@@ -891,6 +893,11 @@ abstract class DPCalendarPlugin extends \JPlugin
 		return $calendars[0];
 	}
 
+	protected function getIcalUrl($calendar)
+	{
+		return null;
+	}
+
 	protected function replaceNl($text, $replace = '')
 	{
 		return str_replace(array("\r\n", "\r", "\n"), $replace, $text);
@@ -917,7 +924,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$locationFilterData->longitude = null;
 
 		$radius = $options->get('radius');
-		if ($options->get('length_type') == 'm') {
+		if ($options->get('length-type') == 'm') {
 			$radius = $radius * 0.62137119;
 		}
 

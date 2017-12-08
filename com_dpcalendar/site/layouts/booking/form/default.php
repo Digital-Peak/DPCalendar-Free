@@ -27,8 +27,8 @@ extract($displayData);
 // Load the needed javascript files
 DPCalendarHelper::loadLibrary(array('jquery' => true, 'dpcalendar' => true));
 
-JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/layouts/booking/form/default.css', array(), true);
-JHtml::_('script', 'com_dpcalendar/dpcalendar/layouts/booking/form/default.js', false, true);
+JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/layouts/booking/form/default.css', ['relative' => true]);
+JHtml::_('script', 'com_dpcalendar/dpcalendar/layouts/booking/form/default.js', ['relative' => true], ['defer' => true]);
 
 /** @var integer $bookingId * */
 $bookingId = $booking && $booking->id ? $booking->id : 0;
@@ -54,18 +54,20 @@ $root = new Form(
 	array('ccl-prefix' => $root->getPrefix())
 );
 
-// Add the loader image for the ajax requests
-$root->addChild(new Container('loader'))->addChild(new Image('loader-image', JUri::base() . 'media/com_dpcalendar/images/site/ajax-loader.gif'));
+// Load the spinning wheel
+DPCalendarHelper::renderLayout('calendar.loader', ['root' => $root]);
 
 if ($app->isClient('site')) {
 	$displayData['root'] = $root;
-
-	// Load the header template
-	DPCalendarHelper::renderLayout('booking.form.toolbar', $displayData);
 }
 
 // Load the payment template
 DPCalendarHelper::renderLayout('booking.form.payment', $displayData);
+
+if ($app->isClient('site')) {
+	// Load the header template
+	DPCalendarHelper::renderLayout('booking.form.toolbar', $displayData);
+}
 
 // Load the form from the layout
 $hideFields = array('latitude', 'longitude', 'series', 'transaction_id', 'type', 'payer_email');

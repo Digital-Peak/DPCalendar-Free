@@ -27,5 +27,28 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 			$this->getModel()->setState('filter.search', 'ids:' . implode(',', $ids));
 		}
 		$this->locations = $this->get('Items');
+
+		JLoader::import('joomla.application.component.model');
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+
+		$model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
+		$model->getState();
+		$model->setState('filter.parentIds', array('root'));
+
+		$this->ids = array();
+		foreach ($model->getItems() as $calendar) {
+			$this->ids[] = $calendar->id;
+		}
+
+		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$model->setState('list.limit', 1000);
+		$model->setState('list.start-date', DPCalendarHelper::getDate());
+		$model->setState('list.ordering', 'start_date');
+		$model->setState('filter.expand', true);
+		$model->setState('filter.ongoing', true);
+		$model->setState('filter.state', 1);
+		$model->setState('filter.language', JFactory::getLanguage());
+		$model->setState('filter.locations', $this->params->get('ids'));
+		$this->events = $model->getItems();
 	}
 }

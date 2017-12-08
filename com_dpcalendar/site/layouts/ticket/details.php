@@ -63,7 +63,7 @@ if ($params->get('show_header', true)) {
 }
 
 // Add the header
-$root->addChild(new Heading('event-heading', 2))->setContent($event->title)->addClass('dp-event-header', true);
+$root->addChild(new Heading('event-heading', 2))->setContent($event->title)->addClass('dpcalendar-heading', true);
 
 // The event details table
 $t = $root->addChild(new Table('event-details', array('', '')));
@@ -92,7 +92,7 @@ if ($event->locations) {
 // Add the header
 $root->addChild(
 	new Heading('ticket-heading', 2)
-)->setContent(JText::_('COM_DPCALENDAR_INVOICE_TICKET_DETAILS'))->addClass('dp-event-header', true);
+)->setContent(JText::_('COM_DPCALENDAR_INVOICE_TICKET_DETAILS'))->addClass('dpcalendar-heading', true);
 
 // Add an information row
 $r = $t->addRow(new Row('id'));

@@ -9,9 +9,7 @@
 defined('_JEXEC') or die();
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-DPCalendarHelper::loadLibrary(array('jquery' => true));
-
-JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeResizer.contentWindow.min.js', false, true);
+JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeresizer-contentwindow.min.js', ['relative' => true], ['defer' => true]);
 
 $input = JFactory::getApplication()->input;
 $user = JFactory::getUser();
@@ -22,11 +20,7 @@ $saveOrder = $listOrder == 'a.ordering';
 if ($saveOrder)
 {
 	$saveOrderingUrl = 'index.php?option=com_dpcalendar&task=extcalendars.saveOrderAjax&tmpl=component';
-
-	if (DPCalendarHelper::isJoomlaVersion('3'))
-	{
-		JHtml::_('sortablelist.sortable', 'extcalendarsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
-	}
+    JHtml::_('sortablelist.sortable', 'extcalendarsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 
 if ($input->getCmd('tmpl') == 'component')
@@ -38,7 +32,7 @@ if ($input->getCmd('tmpl') == 'component')
 	Joomla.submitbutton = function(task)
 	{
 		if (task == 'plugin.action') {
-			jQuery('#extcalendar-action').val('import');
+			document.getElementById('extcalendar-action').val = 'import';
 		}
 		Joomla.submitform(task, document.getElementById('adminForm'));
 	}
@@ -67,16 +61,16 @@ if ($this->pluginParams->get('cache', 1) == '2')
 
 	?>
 	<script type="text/javascript">
-	jQuery.ajax({
-		type: 'POST',
-		url: 'index.php?option=com_dpcalendar&task=extcalendars.sync&dpplugin=<?php echo $input->getWord('dpplugin')?>',
-		success: function (data) {
-			var json = jQuery.parseJSON(data);
-			if(json.success && json.messages != null) {
-				Joomla.renderMessages(json.messages);
-			}
-		}
-	});
+        Joomla.request({
+	        method: 'POST',
+            url: 'index.php?option=com_dpcalendar&task=extcalendars.sync&dpplugin=<?php echo $input->getWord('dpplugin')?>',
+	        onSuccess: function (data) {
+                var json = JSON.parse(data);
+                if(json.success && json.messages != null) {
+                    Joomla.renderMessages(json.messages);
+                }
+            }
+        });
 	</script>
 	<?php
 }

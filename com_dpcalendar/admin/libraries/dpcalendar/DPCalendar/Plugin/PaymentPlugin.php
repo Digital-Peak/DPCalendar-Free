@@ -129,7 +129,7 @@ abstract class PaymentPlugin extends \JPlugin
 			return false;
 		}
 
-		$booking = \JModelLegacy::getInstance('Booking', 'DPCalendarModel')->getItem(\JFactory::getApplication()->input->getInt('b_id'));
+		$booking = \JModelLegacy::getInstance('Booking', 'DPCalendarModel')->getItem($data['b_id']);
 
 		$gateway = $this->getPaymentGateway();
 
@@ -181,13 +181,7 @@ abstract class PaymentPlugin extends \JPlugin
 
 		\JModelLegacy::getInstance('Booking', 'DPCalendarModel', array('event_after_save' => 'dontusethisevent'))->save($data);
 
-		$tmpl = '';
-		if ($t = \JFactory::getApplication()->input->get('tmpl')) {
-			$tmpl = '&tmpl=' . $t;
-		}
-
-		$app = \JFactory::getApplication();
-		$app->redirect(\JRoute::_('index.php?option=com_dpcalendar&view=booking&layout=order&b_id=' . $data['id'] . $tmpl, false));
+		return true;
 	}
 
 	public function onDPPaymentStatement($booking)

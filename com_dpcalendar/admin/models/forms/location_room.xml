@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields>
+		<field name="id" type="text" label="JGLOBAL_FIELD_ID_LABEL"/>
+		<field name="title" type="text" label="JGLOBAL_TITLE"/>
+		<field name="description" type="textarea" filter="raw" label="JGLOBAL_DESCRIPTION"/>
+	</fields>
+</form>

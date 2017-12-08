@@ -1,25 +1,59 @@
-#dp-list-form {
-	margin: 10px 0px 10px 0px;
+#dp-list-map {
+	margin-bottom: 10px;
 }
 
-#dp-list-form-search {
-	max-width: 150px;
+#dp-list-navigation {
+	float: left;
+}
+
+#dp-list-navigation .dp-button,
+#dp-list-header .dp-button,
+#dp-list-form .dp-button {
 	margin: 0px 0px 0px 0px
 }
 
-#dp-list-form-clear {
-	margin: 0px 10px 0px 0px
+#dp-list-header {
+	text-align: center;
 }
 
-#dp-list-form-print, #dp-list-form-jump-button {
-	float: right;
-}
-
-#dp-list-form-date {
+#dp-list-header-date {
+	margin-left: 5px;
 	margin-bottom: 18px;
 	font-size: 19.5px;
 	font-weight: 200;
 	line-height: 27px;
+}
+
+#dp-list-header button {
+	float: right;
+}
+
+#dp-list-form {
+	overflow: hidden;
+	border-top: 1px solid #ddd;
+	padding-top: 10px;
+	margin: 10px 0px 10px 0px;
+}
+
+#dp-list-form > div {
+	margin-bottom: 5px;
+}
+
+#dp-list-form-basic, #dp-list-form-location {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+#dp-list-form [name=filter-search], #dp-list-form [name=location] {
+	flex-grow: 1;
+}
+
+#dp-list-form [name=start-date], #dp-list-form [name=end-date] {
+	width: 95px;
+}
+
+#dp-list-form [name=radius], #dp-list-form [name=length-type] {
+	width: 111px;
 }
 
 .dp-list-hits {

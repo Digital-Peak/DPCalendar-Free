@@ -22,12 +22,24 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 
 	public function init()
 	{
-		$this->item = $this->getModel()->getItem(JFactory::getApplication()->input->getInt('id'));
+		$this->item = $this->getModel()->getItem($this->input->getInt('id'));
 
 		if ($this->item->id == null) {
 			$this->set('Errors', JText::_('JERROR_ALERTNOAUTHOR'));
 
 			return false;
+		}
+
+		JLoader::import('joomla.application.component.model');
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+
+		$model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
+		$model->getState();
+		$model->setState('filter.parentIds', array('root'));
+
+		$this->ids = array();
+		foreach ($model->getItems() as $calendar) {
+			$this->ids[] = $calendar->id;
 		}
 
 		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));

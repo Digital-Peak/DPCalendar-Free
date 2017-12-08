@@ -28,7 +28,7 @@ class DPCalendarModelEvent extends JModelForm
 		$this->setState('event.id', $pk);
 
 		// Load the parameters.
-		$params = $app->isAdmin() ? JComponentHelper::getParams('com_dpcalendar') : $app->getParams();
+		$params = $app->isClient('administrator') ? JComponentHelper::getParams('com_dpcalendar') : $app->getParams();
 		$this->setState('params', $params);
 		$this->setState('filter.public', $params->get('event_show_tickets'));
 
@@ -193,9 +193,12 @@ class DPCalendarModelEvent extends JModelForm
 					$locationQuery->order('ordering asc');
 					$db->setQuery($locationQuery);
 					$data->locations = $db->loadObjectList();
+					foreach ($data->locations as $location) {
+						$location->rooms = json_decode($location->rooms);
+					}
 
 					// Convert parameter fields to objects.
-					$registry = new JRegistry();
+					$registry = new Registry();
 					$registry->loadString($data->params);
 					if ($this->getState('params')) {
 						$data->params = clone $this->getState('params');
@@ -204,13 +207,14 @@ class DPCalendarModelEvent extends JModelForm
 						$data->params = $registry;
 					}
 
-					$registry = new JRegistry();
+					$registry = new Registry();
 					$registry->loadString($data->metadata);
 					$data->metadata = $registry;
 
 					$data->price         = json_decode($data->price);
 					$data->earlybird     = json_decode($data->earlybird);
 					$data->user_discount = json_decode($data->user_discount);
+					$data->rooms         = explode(',', $data->rooms);
 
 					$this->_item[$pk] = $data;
 				} catch (Exception $e) {

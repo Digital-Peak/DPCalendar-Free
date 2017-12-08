@@ -128,23 +128,6 @@ DPCalendarHelper::renderLayout(
 // Some JS code to handle closing and hashchanges
 $calCode = "// <![CDATA[
 jQuery(document).ready(function(){
-    jQuery('body').mouseup(function(e) {
-        var form = jQuery('#" . $root->getId() . "');
-
-        if (
-            // Check if the form contains the event
-            form.has(e.target).length === 0
-            // Check if the click is in the datepicker
-            && !jQuery('#ui-datepicker-div').is(':visible')
-            // Check if the click is the selected time box
-            && !jQuery(e.target).hasClass('ui-timepicker-selected')
-            // Check if it is the release of the scrollbar in the time field
-            && !jQuery(e.target).hasClass('ui-timepicker-wrapper')
-            ) {
-            form.hide();
-        }
-    });
-    
     document.onkeydown = function(evt) {
 	    evt = evt || window.event;
 	    var isEscape = false;
@@ -165,49 +148,3 @@ jQuery(document).ready(function(){
 });
 // ]]>\n";
 JFactory::getDocument()->addScriptDeclaration($calCode);
-
-JFactory::getDocument()->addStyleDeclaration('#' . $root->getId() . ' {
-	display: none;
-	position: absolute;
-	background-color: white;
-	z-index: 1002;
-	border: 1px solid #ccc;
-	min-width: 350px;
-	padding: 5px;
-}
-
-#' . $root->getId() . ' .control-group, #' . $root->getId() . ' .control-group .controls  {
-	margin: 2px;
-	padding: 0;
-}
-
-#' . $root->getId() . ' .control-group .control-label {
-	width: 80px;
-}
-
-#' . $root->getId() . ' .control-group label {
-	height: 14px;
-	font-size: 10px;
-	line-height: 14px;
-	margin-top: 5px;
-}
-
-#' . $root->getId() . ' .ui-timepicker-list li {
-	height: 14px;
-	font-size: 10px;
-	line-height: 14px;
-	margin-top: 5px;
-}
-
-#' . $root->getId() . ' .control-group input {
-	height: 14px;
-	font-size: 10px;
-	line-height: 14px;
-}
-
-#' . $root->getId() . ' .control-group select {
-	height: 28px;
-	font-size: 10px;
-	line-height: 14px;
-	padding: 0;
-}');

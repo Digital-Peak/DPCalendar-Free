@@ -11,6 +11,6 @@
 			multiple="true" />
 		<field name="event_id" type="hidden" />
 
-		<field name="captcha" type="captcha" label="" validate="captcha" />
+		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha" />
 	</fieldset>
 </form>

@@ -10,12 +10,8 @@ defined('_JEXEC') or die();
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
-// Load tooltip behavior
-JHtml::_('behavior.tooltip');
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
-
-JFactory::getDocument()->addStyleDeclaration('.ui-datepicker { z-index: 1003 !important; }');
 
 $function = JFactory::getApplication()->input->getCmd('function', 'jSelectEvent');
 ?>
@@ -49,7 +45,7 @@ $function = JFactory::getApplication()->input->getCmd('function', 'jSelectEvent'
 		<div class="btn-group pull-left hidden-phone">
 			<button class="btn tip" type="submit" rel="tooltip" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>
 			<button class="btn tip" type="button"
-			onclick="document.id('filter_search').value='';document.id('filter_search_start').value='';document.id('filter_search_end').value='';this.form.submit();"
+			onclick="document.getElementById('filter_search').value='';document.getElementById('filter_search_start').value='<?php echo DPCalendarHelper::getDate()->format($this->params->get('event_form_date_format', 'm.d.Y'))?>';document.getElementById('filter_search_end').value='';this.form.submit();"
 			rel="tooltip" title="<?php echo JText::_('JSEARCH_FILTER_CLEAR'); ?>"><i class="icon-remove"></i></button>
 		</div>
 	</div>

@@ -352,6 +352,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 					$item->tags->getTagIds($item->id, 'com_dpcalendar.event');
 				}
 				$item->tickets = $this->getTickets($item->id);
+
+				if ($item->rooms && is_string($item->rooms)) {
+					$item->rooms = explode(',', $item->rooms);
+				}
 			}
 		}
 

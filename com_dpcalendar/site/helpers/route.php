@@ -277,9 +277,16 @@ class DPCalendarHelperRoute
 		return self::getUrl($args, true);
 	}
 
-	public static function getCalendarIcalRoute($calId)
+	public static function getCalendarIcalRoute($calId, $token = '')
 	{
-		return JUri::base() . 'index.php?option=com_dpcalendar&task=ical.download&id=' . $calId;
+		$url = JUri::base();
+		$url .= 'index.php?option=com_dpcalendar&task=ical.download&id=' . $calId;
+
+		if ($token) {
+			$url .= '&token=' . $token;
+		}
+
+		return $url;
 	}
 
 	public static function getCalendarRoute($calId)

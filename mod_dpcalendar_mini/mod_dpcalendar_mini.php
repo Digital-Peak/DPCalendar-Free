@@ -12,8 +12,6 @@ if (!class_exists('DPCalendarHelper')) {
 	return;
 }
 
-JLoader::import('components.com_dpcalendar.libraries.dpcalendar.fullcalendar', JPATH_SITE);
-
 JLoader::import('joomla.application.component.model');
 JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 

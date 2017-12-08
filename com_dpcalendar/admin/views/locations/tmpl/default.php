@@ -149,7 +149,6 @@ if ($saveOrder)
 						<?php echo $item->country . ' ' . $item->province; ?><br/>
 						<?php echo $item->zip . ' ' . $item->city; ?><br/>
 						<?php echo $item->street . ' ' . $item->number; ?><br/>
-						<?php echo $item->room . ' ';?><br/>
 					</td>
 					<td class="small nowrap hidden-phone">
 						<?php if ($item->language == '*')

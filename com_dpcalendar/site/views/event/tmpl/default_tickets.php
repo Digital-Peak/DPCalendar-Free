@@ -24,8 +24,8 @@ $this->params->set('display_list_date', false);
 $root = $this->root->addChild(new Container('container'));
 
 // The heading
-$h = $root->addChild(new Heading('heading', 2, array('dp-event-header')));
-$h->setProtectedClass('dp-event-header');
+$h = $root->addChild(new Heading('heading', 3, array('dpcalendar-heading')));
+$h->setProtectedClass('dpcalendar-heading');
 $h->setContent(JText::_('COM_DPCALENDAR_VIEW_EVENT_TICKETS_LABEL'));
 
 // Fille the event container with the tickets list

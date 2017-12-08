@@ -113,17 +113,19 @@ class Location
 			self::$locationCache = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
 		}
 
-		try {
-			self::$locationCache->setState('filter.search', \JApplicationHelper::stringURLSafe($location));
-			$locations = self::$locationCache->getItems();
-			if ($locations) {
-				$locObject = $locations[0];
-				if ((int)$locObject->latitude) {
-					return $locObject;
+		if ($fill) {
+			try {
+				self::$locationCache->setState('filter.search', \JApplicationHelper::stringURLSafe($location));
+				$locations = self::$locationCache->getItems();
+				if ($locations) {
+					$locObject = $locations[0];
+					if ((int)$locObject->latitude) {
+						return $locObject;
+					}
 				}
+			} catch (\Exception $e) {
+				\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 			}
-		} catch (\Exception $e) {
-			\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 		}
 
 		$lang = \DPCalendarHelper::getFrLanguage();

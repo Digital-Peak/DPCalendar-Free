@@ -8,7 +8,6 @@
 defined('_JEXEC') or die();
 
 use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Basic\Frame;
 use CCL\Content\Element\Component\Panel;
 use CCL\Content\Element\Basic\Paragraph;
 use CCL\Content\Element\Basic\TextBlock;
@@ -20,8 +19,11 @@ if (!$events) {
 	return;
 }
 
+// Load the required JS libraries
+DPCalendarHelper::loadLibrary(array('dpcalendar' => true, 'url' => true));
+
 // Load the stylesheet
-JHtml::_('stylesheet', 'mod_dpcalendar_upcoming/panel.css', array(), true);
+JHtml::_('stylesheet', 'mod_dpcalendar_upcoming/panel.min.css', ['relative' => true]);
 
 // The root container
 $root = new Container('dp-module-upcoming-panel-' . $module->id, array('root'), array('ccl-prefix' => 'dp-module-upcoming-panel-'));
@@ -29,16 +31,8 @@ $root->addClass('dp-module-upcoming-root', true);
 
 if ($params->get('show_as_popup')) {
 	// Load the required JS libraries
-	DPCalendarHelper::loadLibrary(array('jquery' => true, 'dpcalendar' => true));
-	JHtml::_('behavior.modal', '.dp-module-upcoming-event-link-invalid');
-	JHtml::_('script', 'mod_dpcalendar_upcoming/default.js', false, true);
-
-	// The root container for the modal iframe
-	$m = $root->addChild(new Container('modal', array('modal')));
-	$m->addClass('dp-module-upcoming-modal', true);
-
-	// Add the iframe which holds the content
-	$m->addChild(new Frame('frame', ''));
+	DPCalendarHelper::loadLibrary(array('modal' => true));
+	JHtml::_('script', 'mod_dpcalendar_upcoming/default.min.js', ['relative' => true], ['defer' => true]);
 }
 
 // The events container

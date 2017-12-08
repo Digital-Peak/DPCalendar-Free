@@ -5,15 +5,15 @@
  * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JLoader::import('joomla.application.component.view');
-JLoader::import('libraries.fullcalendar.fullcalendar', JPATH_COMPONENT);
+use Joomla\Registry\Registry;
 
-class DPCalendarViewEvents extends JViewLegacy
+class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 {
 
-	public function display($tpl = null)
+	public function init()
 	{
 		// Don't display errors as we want to send them nicely in the ajax response
 		ini_set('display_errors', false);
@@ -21,21 +21,27 @@ class DPCalendarViewEvents extends JViewLegacy
 		// Registering shutdown function to catch fatal errors
 		register_shutdown_function(array($this, 'handleError'));
 
-		JFactory::getApplication()->input->set('list.limit', 1000);
-
+		// Set some defaults
+		$this->input->set('list.limit', 1000);
 		$this->get('State')->set('filter.state', 1);
+
+		if ($id = $this->input->getInt('module-id')) {
+			foreach (JModuleHelper::getModuleList() as $module) {
+				if ($id != $module->id) {
+					continue;
+				}
+
+				$this->getModel()->setStateFromParams(new Registry($module->params));
+				break;
+			}
+		}
+
 		$this->items = $this->get('Items');
 
-		$tmp = clone JFactory::getApplication()->getParams();
-		$tmp->merge($this->get('State')->params);
-		$this->params = $tmp;
-
-		$this->compactMode = JFactory::getApplication()->input->getInt('compact', 0);
+		$this->compactMode = $this->input->getInt('compact', 0);
 		if ($this->compactMode == 1) {
 			$this->setLayout('compact');
 		}
-
-		parent::display($tpl);
 	}
 
 	public function handleError()

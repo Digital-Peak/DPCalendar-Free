@@ -8,11 +8,10 @@
 
 defined('_JEXEC') or die();
 
-DPCalendarHelper::loadLibrary(array('jquery' => true, 'chosen' => true));
-JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeResizer.contentWindow.min.js', false, true);
+DPCalendarHelper::loadLibrary(array('chosen' => true));
+JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeresizer-contentwindow.min.js', ['relative' => true], ['defer' => true]);
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('behavior.tooltip');
 JHtml::_('behavior.formvalidation');
 
 $input = JFactory::getApplication()->input;

@@ -57,11 +57,13 @@ class Fullcalendar
 			'}' => ')'
 		);
 
+		$formatArray = str_split($format);
+
 		$newFormat = "";
 		$isText    = false;
 		$i         = 0;
-		while ($i < strlen($format)) {
-			$chr = $format[$i];
+		while ($i < count($formatArray)) {
+			$chr = $formatArray[$i];
 			if ($chr == '"' || $chr == "'") {
 				$isText = !$isText;
 			}

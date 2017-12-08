@@ -77,6 +77,11 @@ if ($needsPayment || ($bookingId && $booking->state == 3)) {
 	// The alert box with the choose payment text
 	$c->addChild(new Alert('info', Alert::INFO))->setContent(JText::_('COM_DPCALENDAR_VIEW_BOOKING_CHOOSE_PAYMENT_OPTION'));
 
+	// Ensure, empty is all plugins
+	if (!$event->plugintype) {
+		$event->plugintype = 0;
+	}
+
 	$activatedPlugins = array();
 	foreach ($events as $event) {
 		$activatedPlugins[$event->plugintype] = true;
@@ -178,19 +183,9 @@ if (!$bookingId) {
 				$max = $event->capacity - $event->capacity_used;
 			}
 
-			// Loop trough the existing tickets
-			foreach ($instance->tickets as $ticket) {
-				// Check if the user has already tickets
-				if ($user->guest || $ticket->user_id != $user->id || $ticket->type != $key) {
-					continue;
-				}
-				$max--;
-
-				if ($max == 0) {
-					// Tickets are not available
-					$info = JText::_('COM_DPCALENDAR_VIEW_BOOKINGFORM_CHOOSE_TICKET_LIMIT_REACHED');
-					break;
-				}
+			if ($max == 0) {
+				// Tickets are not available
+				$info = JText::_('COM_DPCALENDAR_VIEW_BOOKINGFORM_CHOOSE_TICKET_LIMIT_REACHED');
 			}
 
 			// For every possible ticket add an option

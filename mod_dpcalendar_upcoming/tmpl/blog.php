@@ -8,8 +8,6 @@
 defined('_JEXEC') or die();
 
 use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Basic\Frame;
-use CCL\Content\Element\Basic\Meta;
 use CCL\Content\Element\Basic\Paragraph;
 use CCL\Content\Element\Basic\TextBlock;
 use CCL\Content\Element\Basic\Link;
@@ -26,8 +24,11 @@ if (!$events) {
 	return;
 }
 
+// Load the required JS libraries
+DPCalendarHelper::loadLibrary(array('dpcalendar' => true, 'url' => true));
+
 // Load the stylesheet
-JHtml::_('stylesheet', 'mod_dpcalendar_upcoming/blog.css', array(), true);
+JHtml::_('stylesheet', 'mod_dpcalendar_upcoming/blog.min.css', ['relative' => true]);
 
 // The root container
 $root = new Container('dp-module-upcoming-blog-' . $module->id, array('root'), array('ccl-prefix' => 'dp-module-upcoming-blog-'));
@@ -35,16 +36,8 @@ $root->addClass('dp-module-upcoming-root', true);
 
 if ($params->get('show_as_popup')) {
 	// Load the required JS libraries
-	DPCalendarHelper::loadLibrary(array('jquery' => true, 'dpcalendar' => true));
-	JHtml::_('behavior.modal', '.dp-module-upcoming-event-link-invalid');
-	JHtml::_('script', 'mod_dpcalendar_upcoming/default.js', false, true);
-
-	// The root container for the modal iframe
-	$m = $root->addChild(new Container('modal', array('modal')));
-	$m->addClass('dp-module-upcoming-modal', true);
-
-	// Add the iframe which holds the content
-	$m->addChild(new Frame('frame', ''));
+	DPCalendarHelper::loadLibrary(array('modal' => true));
+	JHtml::_('script', 'mod_dpcalendar_upcoming/default.min.js', ['relative' => true], ['defer' => true]);
 }
 
 // The events container
@@ -79,8 +72,8 @@ foreach ($events as $index => $event) {
 	$item = $root->addChild(new Container($event->id));
 
 	// The heading of the event
-	$h = $item->addChild(new Heading('event-header', 2, array('dp-event-header')));
-	$h->setProtectedClass('dp-event-header');
+	$h = $item->addChild(new Heading('event-header', 2, array('dpcalendar-heading')));
+	$h->setProtectedClass('dpcalendar-heading');
 
 	// When we are shown in a modal dialog, make the title clickable
 	$link = $h->addChild(new Link('link', $event->realUrl, '_parent'));

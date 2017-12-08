@@ -57,9 +57,9 @@ class DPCalendarControllerEvent extends JControllerForm
 
 	public function save($key = null, $urlVar = 'e_id')
 	{
-		$data = $this->input->post->get('jform', array(), 'array');
+		$this->transformDatesToSql();
 
-		$this->transformDatesToSql($data);
+		$data = $this->input->post->get('jform', array(), 'array');
 
 		$result = false;
 		if (!is_numeric($data['catid'])) {
@@ -134,7 +134,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 	public function reload($key = null, $urlVar = 'e_id')
 	{
-		$this->transformDatesToSql($this->input->post->get('jform', array(), 'array'));
+		$this->transformDatesToSql();
 
 		return parent::reload($key, $urlVar);
 	}
@@ -144,7 +144,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		return parent::getModel($name, $prefix, $config);
 	}
 
-	private function transformDatesToSql(&$data)
+	private function transformDatesToSql()
 	{
 		$data = $this->input->post->get('jform', array(), 'array');
 

@@ -24,8 +24,6 @@
 		       label="COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_STREET_DESC"/>
 		<field name="number" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_DESC"/>
-		<field name="room" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_ROOM_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_ROOM_DESC"/>
 		<field name="latitude" type="text" validate="decimal" class="dp-form-input"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_DESC"/>
 		<field name="longitude" type="text" validate="decimal" class="dp-form-input"
@@ -39,6 +37,11 @@
 		<field name="description" type="editor" buttons="true"
 		       hide="pagebreak,readmore" filter="JComponentHelper::filterText"
 		       label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
+	</fieldset>
+	<fieldset name="rooms" label="COM_DPCALENDAR_ROOMS">
+		<field name="rooms" type="subform" multiple="true"
+		       formsource="administrator/components/com_dpcalendar/models/forms/location_room.xml"
+		       label="" description=""/>
 	</fieldset>
 	<fieldset addfieldpath="/administrator/components/com_dpcalendar/models/fields"
 	          name="publishing" label="COM_DPCALENDAR_PUBLISHING">
@@ -78,7 +81,7 @@
 		<field name="publish_down" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S"
 		       label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL" description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
 
-		<field name="captcha" type="captcha" label="" validate="captcha"/>
+		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
 	</fieldset>
 	<fieldset name="optional">
 		<field name="ordering" type="text"

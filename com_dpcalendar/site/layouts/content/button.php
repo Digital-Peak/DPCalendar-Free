@@ -12,16 +12,19 @@ use CCL\Content\Element\Component\Icon;
 
 // Global required variables
 $root    = $displayData['root'];
-$type    = $displayData['type'];
 $onclick = $displayData['onclick'];
 
 // Global optional variables
-$id    = isset($displayData['id']) ? $displayData['id'] : $type;
+$type  = isset($displayData['type']) ? $displayData['type'] : '';
+$id    = isset($displayData['id']) ? $displayData['id'] : $type ?: 'not-set';
 $text  = isset($displayData['text']) ? $displayData['text'] : '';
 $title = isset($displayData['title']) ? $displayData['title'] : $text;
 
-// The icon of the button
-$icon = new Icon('icon', $type);
+$icon = null;
+if ($type) {
+	// The icon of the button
+	$icon = new Icon('icon', $type);
+}
 
 // Create the button
 $button = new Button(

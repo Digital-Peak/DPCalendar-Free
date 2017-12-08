@@ -48,8 +48,8 @@ if ($tickets) {
 $root = $this->root->addChild(new Container('booking'));
 
 // The heading
-$h = $root->addChild(new Heading('heading', 2, array('dp-event-header')));
-$h->setProtectedClass('dp-event-header');
+$h = $root->addChild(new Heading('heading', 3, array('dpcalendar-heading')));
+$h->setProtectedClass('dpcalendar-heading');
 $h->setContent(JText::_('COM_DPCALENDAR_VIEW_EVENT_BOOKING_INFORMATION'));
 
 // Set up the booking alert when bookings can be done
@@ -74,7 +74,7 @@ if (\DPCalendar\Helper\Booking::openForBooking($event)) {
 		JText::sprintf(
 			'COM_DPCALENDAR_VIEW_EVENT_REGISTRATION_END_TEXT',
 			$endDate->format($params->get('event_date_format', 'm.d.Y'), true),
-			$endDate->format($params->get('event_time_format', 'm.d.Y'), true)
+			$endDate->format('H:i') != '00:00' ? $endDate->format($params->get('event_time_format', 'h:i a'), true) : ''
 		)
 	);
 }
@@ -172,7 +172,9 @@ if ($params->get('event_show_price', '1') && $event->price) {
 		$dl = $root->addChild(new DescriptionListHorizontal('price-' . $key));
 
 		// Add the term
-		$dl->setTerm(new Term('label', array('label')))->setContent($event->price->label[$key] ?: JText::_('COM_DPCALENDAR_FIELD_PRICE_LABEL'));
+		$t = $dl->setTerm(new Term('label', array('label')));
+		$t->addClass('dpcalendar-label', true);
+		$t->setContent($event->price->label[$key] ?: JText::_('COM_DPCALENDAR_FIELD_PRICE_LABEL'));
 
 		// Add the description
 		$desc = $dl->setDescription(

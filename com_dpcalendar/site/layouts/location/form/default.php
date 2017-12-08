@@ -25,7 +25,7 @@ defined('_JEXEC') or die();
 
 // Load the needed JS libraries
 DPCalendarHelper::loadLibrary(array('jquery' => true, 'chosen' => true, 'maps' => true, 'dpcalendar' => true));
-JHtml::_('script', 'com_dpcalendar/dpcalendar/layouts/location/form/default.js', false, true);
+JHtml::_('script', 'com_dpcalendar/dpcalendar/layouts/location/form/default.js', ['relative' => true], ['defer' => true]);
 
 // Add some CSS rules
 JFactory::getDocument()->addStyleDeclaration('.map_canvas{width:100%;height:200px;} #dp-locationform-actions {margin-bottom:10px}');

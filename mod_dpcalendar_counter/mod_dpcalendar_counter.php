@@ -8,22 +8,18 @@
 defined('_JEXEC') or die();
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-if (! class_exists('DPCalendarHelper'))
-{
+if (!class_exists('DPCalendarHelper')) {
 	return;
 }
 
 JLoader::import('joomla.application.component.model');
-JModelLegacy::addIncludePath(JPATH_SITE . DS . 'components' . DS . 'com_dpcalendar' . DS . 'models', 'DPCalendarModel');
+JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 $model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
 $model->getState();
-$model->setState('filter.parentIds', $params->get('ids', array(
-		'root'
-)));
+$model->setState('filter.parentIds', $params->get('ids', array('root')));
 $ids = array();
-foreach ($model->getItems() as $calendar)
-{
+foreach ($model->getItems() as $calendar) {
 	$ids[] = $calendar->id;
 }
 
@@ -36,9 +32,7 @@ $startDate->sub(new DateInterval("PT" . ($startDate->format("i") % 15) . "M"));
 $endDate = clone $startDate;
 $endDate->modify('+1 year');
 
-$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array(
-		'ignore_request' => true
-));
+$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
 $model->getState();
 $model->setState('list.limit', 1);
 $model->setState('list.direction', $params->get('order', 'asc'));
@@ -49,17 +43,16 @@ $model->setState('filter.expand', true);
 $model->setState('filter.state', 1);
 $model->setState('filter.language', JFactory::getLanguage());
 $model->setState('filter.publish_date', true);
-$model->setState('list.start-date', $startDate->format('U'));
-$model->setState('list.end-date', $endDate->format('U'));
+$model->setState('list.start-date', $startDate);
+$model->setState('list.end-date', $endDate);
+$model->setState('filter.tags', $params->get('filter_tags', array()));
+$model->setState('filter.locations', $params->get('filter_locations', array()));
 $model->setState('filter.my', $params->get('show_my_only', 0));
 
 $item = $model->getItems();
-if (empty($item))
-{
+if (empty($item)) {
 	$item = null;
-}
-else
-{
+} else {
 	$item = reset($item);
 }
 

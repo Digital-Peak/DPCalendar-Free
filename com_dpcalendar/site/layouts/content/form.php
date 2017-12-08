@@ -44,6 +44,9 @@ $params = isset($displayData['params']) ? $displayData['params'] : JComponentHel
 /** @var array $fieldSets * */
 $fieldSets = isset($displayData['fieldSets']) ? $displayData['fieldSets'] : array_merge($jform->getFieldsets(), $jform->getFieldsets('params'));
 
+/** @var boolean $hideTask * */
+$hideTask = isset($displayData['hideTask']) ? $displayData['hideTask'] : false;
+
 // Load some javascript we may use
 JHtml::_('behavior.keepalive');
 JHtml::_('behavior.formvalidator');
@@ -64,6 +67,17 @@ $root->addChild($c);
 
 // Default grid when flat mode
 if ($flat) {
+	// Hide the fields of the hidden field sets
+	foreach ($fieldSets as $name => $fieldSet) {
+		if (!in_array($name, $fieldsetsToHide)) {
+			continue;
+		}
+
+		foreach ($jform->getFieldset($name) as $field) {
+			$fieldsToHide[] = $field->fieldname;
+		}
+	}
+
 	// Make one fieldset
 	$fieldSets = array('' => new stdClass());
 }
@@ -150,8 +164,11 @@ if (!empty($displayData['return'])) {
 	// The return hidden field
 	$root->addChild(new Input('return', 'hidden', 'return', $displayData['return']));
 }
-// Add the task hidden field
-$root->addChild(new Input('task', 'hidden', 'task'));
+
+if (!$hideTask) {
+	// Add the task hidden field
+	$root->addChild(new Input('task', 'hidden', 'task'));
+}
 
 // Add the security token
 $root->setContent(JHtml::_('form.token'));

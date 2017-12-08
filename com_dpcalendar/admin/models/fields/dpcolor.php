@@ -9,19 +9,20 @@ defined('_JEXEC') or die();
 
 class JFormFieldDpcolor extends JFormFieldText
 {
-
 	protected $type = 'Dpcolor';
 
-	public function getInput ()
+	public function getInput()
 	{
-		JHtml::_('script', 'com_dpcalendar/jscolor/jscolor.js', false, true);
+		JHtml::_('script', 'com_dpcalendar/jscolor/jscolor.js', ['relative' => true], ['defer' => true]);
+
 		return parent::getInput();
 	}
 
-	public function setup (SimpleXMLElement $element, $value, $group = null)
+	public function setup(SimpleXMLElement $element, $value, $group = null)
 	{
 		$element['class'] = $element['class'] . ' color' . ($element['required'] ? '' : ' {required:false}');
-		$return = parent::setup($element, $value, $group);
+		$return           = parent::setup($element, $value, $group);
+
 		return $return;
 	}
 }

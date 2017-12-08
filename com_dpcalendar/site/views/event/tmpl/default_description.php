@@ -20,8 +20,8 @@ if (!$this->event->description)
 $root = $this->root->addChild(new Container('container'));
 
 // Thea heading of the page
-$h = $root->addChild(new Heading('heading', 2, array('dp-event-header')));
-$h->setProtectedClass('dp-event-header');
+$h = $root->addChild(new Heading('heading', 3, array('dpcalendar-heading')));
+$h->setProtectedClass('dpcalendar-heading');
 $h->setContent(JText::_('COM_DPCALENDAR_DESCRIPTION'));
 
 // The container with the event description

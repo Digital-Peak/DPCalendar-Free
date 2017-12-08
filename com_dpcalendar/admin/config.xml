@@ -277,15 +277,20 @@
 		<field name="screen_size_list_view" type="text" default="500"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SCREEN_SIZE_LIST_VIEW_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SCREEN_SIZE_LIST_VIEW_DESC"/>
-		<field name="calendar_filter_locations" type="location"
-		       multiple="true"
+		<field name="calendar_filter_locations" type="location" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_DESC">
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_DESC"/>
+		<field name="calendar_resource_views" type="list" multiple="true" showon="calendar_filter_locations!:"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_DESC">
+			<option value=""></option>
+			<option value="month">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
+			<option value="week">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
+			<option value="day">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
 		</field>
 		<field name="calendar_filter_tags" type="tag" multiple="true"
 		       mode="nested" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC">
-		</field>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC"/>
 	</fieldset>
 	<fieldset name="map" label="COM_DPCALENDAR_FIELD_CONFIG_MAP_LABEL"
 	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
@@ -391,7 +396,7 @@
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
 			<option value="1">JYES</option>
-			<option value="2">JNO</option>
+			<option value="0">JNO</option>
 		</field>
 		<field name="list_map_zoom" type="text" default="4"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
@@ -531,6 +536,20 @@
 	</fieldset>
 	<fieldset name="form" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_LABEL"
 	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="event_form_flat_mode" type="radio" class="btn-group" default="0"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_FLAT_MODE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_FLAT_MODE_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+
+		<field name="event_form_fields_order_" type="subform" multiple="true"
+		       layout="joomla.form.field.subform.repeatable-table" showon="event_form_flat_mode:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
+			<form>
+				<field name="field" type="dpcfields" section="event" hide="id,scheduling*,notify_changes,checked_out*"
+				       label="COM_DPCALENDAR_FIELD"/>
+			</form>
+		</field>
 		<field name="event_form_date_format" type="text"
 		       default="m.d.Y" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>
@@ -758,17 +777,9 @@
 		       layout="joomla.form.field.subform.repeatable-table"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
-				<field name="field" type="dpcfields" section="booking" label="COM_DPCALENDAR_FIELD">
-					<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
-					<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
-					<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
-					<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
-					<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
-					<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
-					<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
-					<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
-					<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-				</field>
+				<field name="field" type="dpcfields" section="booking"
+				       hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,payer_email,latitude,longitude"
+				       label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
 		<field name="booking_show_country" type="radio" class="btn-group"
@@ -821,17 +832,9 @@
 		       layout="joomla.form.field.subform.repeatable-table"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
-				<field name="field" type="dpcfields" section="booking" label="COM_DPCALENDAR_FIELD">
-					<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
-					<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
-					<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
-					<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
-					<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
-					<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
-					<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
-					<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
-					<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-				</field>
+				<field name="field" type="dpcfields" section="booking"
+				       hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,payer_email,latitude,longitude"
+				       label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
 		<field name="booking_form_country" type="list" default="1"
@@ -891,18 +894,9 @@
 		       layout="joomla.form.field.subform.repeatable-table"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
-				<field name="field" type="dpcfields" section="ticket" label="COM_DPCALENDAR_FIELD">
-					<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
-					<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
-					<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
-					<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
-					<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
-					<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
-					<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
-					<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
-					<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-					<option value="seat">COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL</option>
-				</field>
+				<field name="field" type="dpcfields" section="ticket"
+				       hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude"
+				       label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
 		<field name="ticket_show_country" type="radio" class="btn-group"
@@ -967,18 +961,9 @@
 		       layout="joomla.form.field.subform.repeatable-table"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
-				<field name="field" type="dpcfields" section="ticket" label="COM_DPCALENDAR_FIELD">
-					<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
-					<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
-					<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
-					<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
-					<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
-					<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
-					<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
-					<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
-					<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-					<option value="seat">COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL</option>
-				</field>
+				<field name="field" type="dpcfields" section="ticket"
+				       hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude,seat"
+				       label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
 		<field name="ticket_form_country" type="list" default="1"
@@ -1084,6 +1069,26 @@
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
 		</field>
+		<field name="locations_show_resource_view" type="radio" class="btn-group"
+		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="locations_default_view" type="list" default="resday" showon="location_show_resource_view:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
+			<option value="resmonth">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
+			<option value="resweek">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
+			<option value="resday">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
+			<option value="resyear">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_YEAR</option>
+		</field>
+		<field name="locations_show_upcoming_events" type="radio" class="btn-group"
+		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 	</fieldset>
 
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION"
@@ -1103,18 +1108,37 @@
 		<field name="location_map_longitude" type="text"
 		       default="4" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-		<field name="location_expand" type="list" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
-		</field>
 		<field name="location_format" type="filelist" default="format_us"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_LOCATION_FORMAT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_LOCATION_FORMAT_DESC"
 		       directory="components/com_dpcalendar/layouts/location" filter="format*(.+).php"
 		       stripext="true" hide_none="true" hide_default="true"/>
+		<field name="location_expand" type="radio" class="btn-group"
+		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="location_show_resource_view" type="radio" class="btn-group"
+		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="location_default_view" type="list" default="resday" showon="location_show_resource_view:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
+			<option value="resmonth">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
+			<option value="resweek">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
+			<option value="resday">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
+			<option value="resyear">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_YEAR</option>
+		</field>
+		<field name="location_show_upcoming_events" type="radio" class="btn-group"
+		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 	</fieldset>
 
 	<fieldset name="profile" label="COM_DPCALENDAR_FIELD_CONFIG_PROFILE_LABEL"

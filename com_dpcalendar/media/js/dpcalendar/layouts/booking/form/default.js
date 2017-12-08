@@ -40,17 +40,19 @@ function checkIfPaymentIsneeded(event) {
 
 function calculatePrice() {
 	var data = jQuery("#dp-bookingform").find('input[name!=task], select').serialize();
-	jQuery.ajax({
-		type: 'POST',
+	Joomla.request({
+		method: 'POST',
 		url: PRICE_URL,
 		data: data,
-		success: function (response) {
+		onSuccess: function (response) {
+			DPCalendar.loader('hide', document.getElementById('dp-bookingform'));
+
 			var json = response;
-			if(typeof json !== 'object'){
-				json = jQuery.parseJSON(response);
+			if (typeof json !== 'object') {
+				json = JSON.parse(response);
 			}
 
-			if (json.messages != null && jQuery('#system-message-container').length) {
+			if (json.messages != null && document.getElementById('system-message-container')) {
 				Joomla.renderMessages(json.messages);
 			}
 
@@ -69,8 +71,8 @@ function calculatePrice() {
 			}
 			jQuery('#dp-bookingform-options-total-price-price-content').html(json.data.total);
 		},
-		complete: function (request) {
-			jQuery('#dp-bookingform-loader').hide();
+		onError: function (request) {
+			DPCalendar.loader('hide', document.getElementById('dp-bookingform'));
 		}
 	});
 }

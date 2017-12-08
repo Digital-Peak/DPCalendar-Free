@@ -6,36 +6,55 @@
 		</message>
 	</layout>
 	<fields name="params"
-		addfieldpath="/administrator/components/com_dpcalendar/models/fields">
+	        addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 		<fieldset name="request">
 			<field name="ids" type="location" multiple="true" size="10"
-				description="COM_DPCALENDAR_FIELD_LOCATION_LABEL" label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" />
+			       description="COM_DPCALENDAR_FIELD_LOCATION_LABEL" label="COM_DPCALENDAR_FIELD_LOCATION_LABEL"/>
 		</fieldset>
 		<fieldset name="basic"
-			addrulepath="/administrator/components/com_dpcalendar/models/rules">
+		          addrulepath="/administrator/components/com_dpcalendar/models/rules">
 			<field name="locations_map_zoom" type="text" size="5"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL" useglobal="true"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
 			<field name="locations_map_width" type="text" size="10"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL" useglobal="true"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
 			<field name="locations_map_height" type="text" size="10"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL" useglobal="true"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
 			<field name="locations_map_latitude" type="text" validate="decimal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC" />
-			<field name="locations_map_longitude" type="text" validate="decimal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL" useglobal="true"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+			<field name="locations_map_longitude" type="text" validate="decimal" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 			<field name="locations_expand" type="list" class="btn-group" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
-				<option value="">JGLOBAL_USE_GLOBAL</option>
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND
 				</option>
+			</field>
+			<field name="locations_show_resource_view" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="locations_default_view" type="list" showon="location_show_resource_view:1"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
+				<option value="resmonth">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
+				<option value="resweek">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
+				<option value="resday">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
+				<option value="resyear">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_YEAR</option>
+			</field>
+			<field name="locations_show_upcoming_events" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
 			</field>
 		</fieldset>
 	</fields>

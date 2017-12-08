@@ -1,16 +1,20 @@
-#dp-map-actions {
-	margin-bottom: 10px
+#dp-map form > div {
+	margin-bottom: 5px;
 }
 
-#dp-map-actions #dp-map-actions-location,
-	#dp-map-actions select {
-	margin: 0px 0px 0px 0px
+.dp-map-form-container {
+	display: flex;
+	flex-wrap: wrap;
 }
 
-#dp-map-actions #dp-map-actions-delete {
-	margin: 0px 10px 0px 0px
+#dp-map [name=search], #dp-map [name=location] {
+	flex-grow: 1;
 }
 
-#dp-map-actions-radius, #dp-map-actions-length-type {
-	width: 100px
+#dp-map [name=start-date], #dp-map [name=end-date] {
+	width: 95px;
+}
+
+#dp-map [name=radius], #dp-map [name=length-type] {
+	width: 111px;
 }

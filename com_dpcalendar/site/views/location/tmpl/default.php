@@ -12,41 +12,115 @@ use CCL\Content\Element\Basic\Heading;
 use CCL\Content\Element\Basic\Paragraph;
 use CCL\Content\Element\Basic\TextBlock;
 use CCL\Content\Element\Basic\Link;
+use CCL\Content\Element\Component\Icon;
 
 // Add the needed stylesheet
-JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/views/location/default.css', array(), true);
-JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/views/event/default.css', array(), true);
+JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/views/location/default.css', ['relative' => true]);
+JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/dpcalendar.css', ['relative' => true]);
 
 // The params
 $params = $this->params;
 
+// The heading
+$h = $this->root->addChild(new Heading('header', 2, array('dpcalendar-heading')));
+$h->setProtectedClass('dpcalendar-heading');
+
+// Allow to edit
+if (JFactory::getUser()->authorise('core.edit', 'com_dpcalendar')) {
+	$l = $h->addChild(new Link('edit-icon', DPCalendarHelperRoute::getLocationFormRoute($this->item->id, JUri::getInstance())));
+	$l->addChild(new Icon('location-edit-icon', Icon::EDIT));
+}
+
+$l = $h->addChild(new Link('external', \DPCalendar\Helper\Location::getMapLink($this->item), '_blank'));
+$l->setContent($this->item->title);
+
+// The resource view
+if ($params->get('location_show_resource_view', 1) && !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
+	$resourceParams = clone $params;
+
+	// Some defaults for the calendar
+	$resourceParams->set('header_show_datepicker', false);
+	$resourceParams->set('header_show_print', false);
+	$resourceParams->set('header_show_month', false);
+	$resourceParams->set('header_show_week', false);
+	$resourceParams->set('header_show_day', false);
+	$resourceParams->set('header_show_list', false);
+	$resourceParams->set('header_show_timeline_day', true);
+	$resourceParams->set('header_show_timeline_week', true);
+	$resourceParams->set('header_show_timeline_month', true);
+	$resourceParams->set('header_show_timeline_year', true);
+	$resourceParams->set('show_selection', false);
+	$resourceParams->set('show_map', false);
+	$resourceParams->set('show_compact_events', $params->get('compact_events', 2) == 1);
+	$resourceParams->set('default_view', $params->get('location_default_view', 'resday'));
+	$resourceParams->set('use_hash', true);
+	$resourceParams->set('event_create_form', 0);
+	$resourceParams->set('screen_size_list_view', 0);
+
+	// Resource specific options
+	$resourceParams->set('calendar_filter_locations', array($this->item->id));
+	$resourceParams->set('calendar_resource_views', ['timeline']);
+
+	// Load the calendar layout
+	DPCalendarHelper::renderLayout(
+		'calendar.calendar',
+		array(
+			'params'            => $resourceParams,
+			'root'              => $this->root,
+			'selectedCalendars' => $this->ids
+		)
+	);
+}
+
+// The map
+$c = $this->root->addChild(new Container('map'));
+$params->set('show_title', false);
+$params->set('show_details', false);
+$params->set('show_map', true);
+DPCalendarHelper::renderLayout('location.details', array('location' => $this->item, 'params' => $params, 'root' => $c));
+
 // Get the location details
-$params->set('link_title', 'external');
-DPCalendarHelper::renderLayout('location.details', array('location' => $this->item, 'params' => $params, 'root' => $this->root));
+if ($params->get('location_expand', 1)) {
+	// The heading
+	$h = $this->root->addChild(new Heading('info-header', 3, array('dpcalendar-heading')));
+	$h->setProtectedClass('dpcalendar-heading');
+	$h->setContent(JText::_('COM_DPCALENDAR_VIEW_EVENT_LOCATION_INFORMATION'));
 
-// The heading of the upcoming events
-$h = $this->root->addChild(new Heading('heading', 3, array('dp-event-header')));
-$h->setProtectedClass('dp-event-header');
-$h->setContent(JText::_('COM_DPCALENDAR_VIEW_PROFILE_UPCOMING_EVENTS'));
+	// The details
+	$c = $this->root->addChild(new Container('details'));
+	$params->set('show_title', false);
+	$params->set('show_details', true);
+	$params->set('show_map', false);
+	DPCalendarHelper::renderLayout('location.details', array('location' => $this->item, 'params' => $params, 'root' => $c));
+}
 
-// Upcoming events container
-$c = $this->root->addChild(new Container('upcoming-events'));
+// The upcoming events view
+if ($params->get('location_show_upcoming_events', 1)) {
+	// The heading of the upcoming events
+	$h = $this->root->addChild(new Heading('heading', 3, array('dpcalendar-heading')));
 
-// Loop trough the events
-foreach ($this->events as $event) {
-	$startDate = DPCalendarHelper::getDate($event->start_date, $event->all_day);
+	$h->setProtectedClass('dpcalendar-heading');
+	$h->setContent(JText::_('COM_DPCALENDAR_VIEW_PROFILE_UPCOMING_EVENTS'));
 
-	// The event paragraph
-	$p = $c->addChild(new Paragraph('event-' . $event->id, array(), array('style' => 'border-color:#' . $event->color)));
-	$b = $p->addChild(new TextBlock('date-' . $event->id));
-	$b->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')));
+	// Upcoming events container
+	$c = $this->root->addChild(new Container('upcoming-events'));
 
-	// The link
-	$l = $p->addChild(new Link('link-' . $event->id, DPCalendarHelperRoute::getEventRoute($event->id, $event->catid)));
-	$l->setContent($event->title);
+	// Loop trough the events
+	foreach ($this->events as $event) {
+		$startDate = DPCalendarHelper::getDate($event->start_date, $event->all_day);
 
-	// Add the structured data schema
-	DPCalendarHelper::renderLayout('schema.event', array('event' => $event, 'root' => $p));
+		// The event paragraph
+		$p = $c->addChild(new Paragraph('event-' . $event->id, array(), array('style' => 'border-color:#' . $event->color)));
+		$b = $p->addChild(new TextBlock('date-' . $event->id));
+		$b->setContent(DPCalendarHelper::getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')));
+
+		// The link
+		$l = $p->addChild(new Link('link-' . $event->id, DPCalendarHelperRoute::getEventRoute($event->id, $event->catid)));
+		$l->setContent($event->title);
+
+		// Add the structured data schema
+		DPCalendarHelper::renderLayout('schema.event', array('event' => $event, 'root' => $p));
+	}
 }
 
 echo DPCalendarHelper::renderElement($this->root, $this->params);

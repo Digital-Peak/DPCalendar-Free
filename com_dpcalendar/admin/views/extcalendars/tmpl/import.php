@@ -8,8 +8,7 @@
 defined('_JEXEC') or die();
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-DPCalendarHelper::loadLibrary();
-JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeResizer.contentWindow.min.js', false, true);
+JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeresizer-contentwindow.min.js', ['relative' => true], ['defer' => true]);
 
 $plugin = JFactory::getApplication()->input->getCmd('dpplugin');
 JFactory::getLanguage()->load('plg_dpcalendar_' . $plugin, JPATH_PLUGINS . '/dpcalendar/' . $plugin);

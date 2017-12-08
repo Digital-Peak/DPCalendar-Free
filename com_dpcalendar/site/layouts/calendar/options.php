@@ -34,6 +34,7 @@ JText::script('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER', true);
 JText::script('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT', true);
 
 JText::script('JCANCEL', true);
+JText::script('JLIB_HTML_BEHAVIOR_CLOSE', true);
 JText::script('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY', true);
 
 // Set up the params
@@ -42,14 +43,22 @@ $params = $displayData['params'];
 // The root element
 $root = $displayData['root'];
 
+$horizontalMode = $params->get('header_show_timeline_day') ||
+	$params->get('header_show_timeline_week') ||
+	$params->get('header_show_timeline_month') ||
+	$params->get('header_show_timeline_year');
+
 // The options which will be passed to the js library
 $options                 = array();
 $options['eventSources'] = array();
 foreach ($displayData['selectedCalendars'] as $calendar) {
 	$options['eventSources'][] = html_entity_decode(
 		JRoute::_(
-			'index.php?option=com_dpcalendar&view=events&format=raw&limit=0&ids=' . $calendar . '&my=' .
-			$params->get('show_my_only_calendar', '0') . '&Itemid=' . JFactory::getApplication()->input->getInt('Itemid', 0)
+			'index.php?option=com_dpcalendar&view=events&format=raw&limit=0' .
+			'&ids=' . $calendar .
+			'&my=' . $params->get('show_my_only_calendar', '0') .
+			'&l=' . ($horizontalMode ? 1 : 0) .
+			'&Itemid=' . JFactory::getApplication()->input->getInt('Itemid', 0)
 		)
 	);
 }
@@ -58,10 +67,17 @@ foreach ($displayData['selectedCalendars'] as $calendar) {
 $options['defaultView'] = $params->get('default_view', 'month');
 
 // Translate to the fullcalendar view names
-if ($params->get('default_view', 'month') == 'week') {
-	$options['defaultView'] = 'agendaWeek';
-} elseif ($params->get('default_view', 'month') == 'day') {
-	$options['defaultView'] = 'agendaDay';
+$mapping                = array(
+	'day'      => 'agendaDay',
+	'week'     => 'agendaWeek',
+	'month'    => 'month',
+	'resday'   => 'timelineDay',
+	'resweek'  => 'timelineWeek',
+	'resmonth' => 'timelineMonth'
+);
+$options['defaultView'] = $params->get('default_view', 'month');
+if (key_exists($params->get('default_view', 'month'), $mapping)) {
+	$options['defaultView'] = $mapping[$params->get('default_view', 'month')];
 }
 
 // Some general calendar options
@@ -112,7 +128,7 @@ if ($params->get('calendar_height', 0) > 0) {
 
 $options['slotEventOverlap'] = (boolean)$params->get('overlap_events', 1);
 $options['slotMinutes']      = $params->get('agenda_slot_minutes', 30);
-$options['slotLabelFormat']  = Fullcalendar::convertFromPHPDate($params->get('axisformat', 'h(:mm)a'));
+$options['slotLabelFormat']  = Fullcalendar::convertFromPHPDate($params->get('axisformat', 'g:i a'));
 
 // Set up the header
 $options['header'] = array('left' => array(), 'center' => array(), 'right' => array());
@@ -121,7 +137,9 @@ if ($params->get('header_show_navigation', 1)) {
 	$options['header']['left'][] = 'next';
 }
 if ($params->get('header_show_datepicker', 1)) {
-	DPCalendarHelper::loadLibrary(array('jquery' => true, 'dpcalendar' => true, 'fullcalendar' => true, 'datepicker' => true));
+	JHtml::_('script', 'com_dpcalendar/pikaday/pikaday.min.js', ['relative' => true], ['defer' => true]);
+	JHtml::_('stylesheet', 'com_dpcalendar/pikaday/pikaday.min.css', ['relative' => true]);
+	JHtml::_('stylesheet', 'com_dpcalendar/pikaday/custom.css', ['relative' => true]);
 	$options['header']['left'][] = 'datepicker';
 }
 if ($params->get('header_show_print', 1)) {
@@ -144,27 +162,81 @@ if ($params->get('header_show_day', 1)) {
 if ($params->get('header_show_list', 1)) {
 	$options['header']['right'][] = 'list';
 }
+if ($params->get('header_show_timeline_day')) {
+	$options['header']['right'][] = 'timelineDay';
+}
+if ($params->get('header_show_timeline_week')) {
+	$options['header']['right'][] = 'timelineWeek';
+}
+if ($params->get('header_show_timeline_month')) {
+	$options['header']['right'][] = 'timelineMonth';
+}
+if ($params->get('header_show_timeline_year')) {
+	$options['header']['right'][] = 'timelineYear';
+}
 
 $options['header']['left']   = implode(',', $options['header']['left']);
 $options['header']['center'] = implode(',', $options['header']['center']);
 $options['header']['right']  = implode(',', $options['header']['right']);
 
+$resourceViews = $params->get('calendar_resource_views');
+$resources     = $params->get('calendar_filter_locations');
+
+if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $resources) {
+	\JHtml::_('script', 'com_dpcalendar/scheduler/scheduler.min.js', ['relative' => true], ['defer' => true]);
+	\JHtml::_('stylesheet', 'com_dpcalendar/scheduler/scheduler.min.css', ['relative' => true]);
+
+	$options['slotLabelFormat'] = null;
+	$options['smallTimeFormat'] = Fullcalendar::convertFromPHPDate($params->get('timeformat_day', 'g:i a'));
+
+	// Load the model
+	JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+	$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
+	$model->getState();
+	$model->setState('list.limit', 10000);
+	$model->setState('filter.search', 'ids:' . implode($resources, ','));
+
+	// The resources data
+	$resources = array();
+
+	// Add the locations
+	foreach ($model->getItems() as $location) {
+		$rooms = array();
+		if ($location->rooms) {
+			foreach ($location->rooms as $room) {
+				$rooms[] = (object)array('id' => $location->id . '-' . $room->id, 'title' => $room->title);
+			}
+		}
+
+		if ($horizontalMode || !$rooms) {
+			$resources[] = (object)array('id' => $location->id, 'title' => $location->title, 'children' => $rooms);
+		} else {
+			$resources = array_merge($resources, $rooms);
+		}
+	}
+	$options['resources'] = $resources;
+}
+$options['resourceLabelText'] = JText::_('COM_DPCALENDAR_LAYOUT_CALENDAR_LOCATIONS_AND_ROOMS');
+
 // Set up the views
 $options['views']               = array();
 $options['views']['month']      = array(
-	'titleFormat'  => Fullcalendar::convertFromPHPDate($params->get('titleformat_month', 'F Y')),
-	'timeFormat'   => Fullcalendar::convertFromPHPDate($params->get('timeformat_month', 'g:i a')),
-	'columnFormat' => Fullcalendar::convertFromPHPDate($params->get('columnformat_month', 'D'))
+	'titleFormat'            => Fullcalendar::convertFromPHPDate($params->get('titleformat_month', 'F Y')),
+	'timeFormat'             => Fullcalendar::convertFromPHPDate($params->get('timeformat_month', 'g:i a')),
+	'columnFormat'           => Fullcalendar::convertFromPHPDate($params->get('columnformat_month', 'D')),
+	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
 );
 $options['views']['agendaWeek'] = array(
-	'titleFormat'  => Fullcalendar::convertFromPHPDate($params->get('titleformat_week', 'M j Y')),
-	'timeFormat'   => Fullcalendar::convertFromPHPDate($params->get('timeformat_week', 'g:i a')),
-	'columnFormat' => Fullcalendar::convertFromPHPDate($params->get('columnformat_week', 'D n/j'))
+	'titleFormat'            => Fullcalendar::convertFromPHPDate($params->get('titleformat_week', 'M j Y')),
+	'timeFormat'             => Fullcalendar::convertFromPHPDate($params->get('timeformat_week', 'g:i a')),
+	'columnFormat'           => Fullcalendar::convertFromPHPDate($params->get('columnformat_week', 'D n/j')),
+	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 );
 $options['views']['agendaDay']  = array(
-	'titleFormat'  => Fullcalendar::convertFromPHPDate($params->get('titleformat_day', 'F j Y')),
-	'timeFormat'   => Fullcalendar::convertFromPHPDate($params->get('timeformat_day', 'g:i a')),
-	'columnFormat' => Fullcalendar::convertFromPHPDate($params->get('columnformat_day', 'l'))
+	'titleFormat'            => Fullcalendar::convertFromPHPDate($params->get('titleformat_day', 'F j Y')),
+	'timeFormat'             => Fullcalendar::convertFromPHPDate($params->get('timeformat_day', 'g:i a')),
+	'columnFormat'           => Fullcalendar::convertFromPHPDate($params->get('columnformat_day', 'l')),
+	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
 );
 $options['views']['list']       = array(
 	'titleFormat'      => Fullcalendar::convertFromPHPDate($params->get('titleformat_list', 'M j Y')),
@@ -202,6 +274,7 @@ $options['show_event_as_popup']   = $params->get('show_event_as_popup');
 $options['use_hash']              = $params->get('use_hash');
 $options['event_create_form']     = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
+$options['use_hash']              = $params->get('use_hash');
 
 // Workaround to get the icon classes
 $pi = new Icon('print', Icon::PRINTING);
@@ -217,82 +290,15 @@ $options['year']  = $now->format('Y', true);
 $options['month'] = $now->format('m', true);
 $options['date']  = $now->format('d', true);
 
-$calCode = "jQuery(document).ready(function() {
-	var calendar = jQuery('#" . $displayData['id'] . "');
-	var options = " . json_encode($options) . ";
-";
+$hideCode = '';
 
-if ($params->get('use_hash')) {
-	$calCode .= "
-	// Parsing the hash
-	var vars = window.location.hash.replace(/&amp;/gi, '&').split('&');
-	for (var i = 0; i < vars.length; i++) {
-		if (vars[i].match('^#year'))
-			options['year'] = vars[i].substring(6);
-		if (vars[i].match('^month'))
-			options['month'] = vars[i].substring(6);
-		if (vars[i].match('^day'))
-			options['date'] = vars[i].substring(4);
-		if (vars[i].match('^view'))
-			options['defaultView'] = vars[i].substring(5);
-	}
-
-	// Listening for hash/url changes
-	jQuery(window).bind('hashchange', function() {
-		var today = new Date();
-		var tmpYear = today.getFullYear();
-		var tmpMonth = today.getMonth() + 1;
-		var tmpDay = today.getDate();
-		var tmpView = options['defaultView'];
-		var vars = window.location.hash.replace(/&amp;/gi, '&').split('&');
-		for (var i = 0; i < vars.length; i++) {
-			if (vars[i].match('^#year'))
-				tmpYear = vars[i].substring(6);
-			if (vars[i].match('^month'))
-				tmpMonth = vars[i].substring(6) - 1;
-			if (vars[i].match('^day'))
-				tmpDay = vars[i].substring(4);
-			if (vars[i].match('^view'))
-				tmpView = vars[i].substring(5);
-		}
-		var date = new Date(tmpYear, tmpMonth, tmpDay, 0, 0, 0);
-		var d = calendar.fullCalendar('getDate');
-		var view = calendar.fullCalendar('getView');
-		if (date.getYear() != d.year() || date.month() != d.month() || date.date() != d.date())
-			calendar.fullCalendar('gotoDate', date);
-		if (view.name != tmpView)
-			calendar.fullCalendar('changeView', tmpView);
-	});";
+if ($params->get('show_selection', 1) == 1) {
+	$hideCode = 'DPCalendar.hide(document.getElementById("' . $displayData['id'] . '").parentElement.querySelector(".dp-calendar-list"));';
 }
 
-$calCode .= "
-	options['defaultDate'] = moment(options['year'] + '-' + pad(parseInt(options['month']), 2) + '-' + pad(options['date'], 2));
-
-	createDPCalendar(calendar, options);
-
-	// Toggle the list of calendars
-	var root = calendar.parent();
-	root.find('.dp-calendar-toggle').bind('click', function(e) {
-		root.find('.dp-calendar-list').slideToggle('slow', function() {
-			if (!root.find('.dp-calendar-list').is(':visible')) {
-				root.find('i[data-direction=\"up\"]').hide();
-				root.find('i[data-direction=\"down\"]').show();
-			} else {
-				root.find('i[data-direction=\"up\"]').show();
-				root.find('i[data-direction=\"down\"]').hide();
-			}
-		});
-	});
-	" . ($params->get('show_selection', 1) == 1 ? "jQuery('#dp-calendar-list').hide()" : "") . "
-
-	jQuery.each(options['eventSources'], function(index, value) {
-		jQuery('#dp-calendar-list input').each(function(indexInput) {
-			var input = jQuery(this);
-			if (value.url == input.val()) {
-				input.attr('checked', true);
-			}
-		});
-	});
+$calCode = "document.addEventListener('DOMContentLoaded', function () {
+	" . $hideCode . "
+	DPCalendar.createCalendar(jQuery('#" . $displayData['id'] . "'), " . json_encode($options, JDEBUG ? JSON_PRETTY_PRINT : 0) . ");
 });";
 
 echo $calCode;

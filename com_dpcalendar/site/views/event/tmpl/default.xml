@@ -8,122 +8,122 @@
 	<fields name="request">
 		<fieldset name="request">
 			<field name="id" type="event"
-				label="COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_LABEL" description="COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_DESC"
-				required="true" />
+			       label="COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_LABEL" description="COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_DESC"
+			       required="true"/>
 		</fieldset>
 	</fields>
 	<fields name="params"
-		addfieldpath="/administrator/components/com_dpcalendar/models/fields"
-	    addrulepath="/administrator/components/com_dpcalendar/models/rules">
+	        addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+	        addrulepath="/administrator/components/com_dpcalendar/models/rules">
 		<fieldset name="basic">
 			<field name="event_date_format" type="text" size="80"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_DESC"/>
 			<field name="event_time_format" type="text" size="80"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_DESC"/>
 			<field name="event_show_calendar" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LINK_MONTH</option>
 			</field>
 			<field name="event_show_date" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_show_location" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
 			</field>
 			<field name="event_show_url" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_show_author" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_show_price" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_show_capacity" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_show_capacity_used" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_show_bookings" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_show_tickets" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LIMITED</option>
 			</field>
 			<field name="event_show_copy" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_show_map" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="event_map_zoom" type="text" size="5"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
 			<field name="event_map_lat" type="text" validate="decimal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
 			<field name="event_map_long" type="text" validate="decimal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 			<field name="event_textbefore" type="textarea" default=""
-				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"
-				rows="5" cols="50" filter="safehtml" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"
+			       rows="5" cols="50" filter="safehtml"/>
 			<field name="event_textafter" type="textarea" default=""
-				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
-				rows="5" cols="50" filter="safehtml" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
+			       rows="5" cols="50" filter="safehtml"/>
 		</fieldset>
 		<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
 			<field name="booking_fields_order" type="subform" multiple="true"
@@ -462,63 +462,62 @@
 				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 			</field>
 		</fieldset>
-		<fieldset name="share"
-			label="COM_DPCALENDAR_VIEW_CALENDAR_SHARE_FIELDSET_LABEL">
+		<fieldset name="share" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LABEL">
 			<field name="enable_like" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_LIKE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_LIKE_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_LIKE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_LIKE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 			<field name="enable_twitter" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_TWITTER_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_TWITTER_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_TWITTER_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_TWITTER_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 			<field name="enable_google" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_GOOGLE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_GOOGLE_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_GOOGLE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_GOOGLE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 			<field name="enable_linkedin" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_LINKEDIN_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_LINKEDIN_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_LINKEDIN_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_LINKEDIN_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 			<field name="enable_xing" type="list" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_XING_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_XING_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_XING_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_ENABLE_XING_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 
-			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_LABEL" />
+			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_LABEL"/>
 			<field name="layout_style" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_LAYOUT_STYLE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_LAYOUT_STYLE_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_LAYOUT_STYLE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_LAYOUT_STYLE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="standard">standard</option>
 				<option value="button_count">button_count</option>
 				<option value="box_count">box_count</option>
 			</field>
 			<field name="show_faces" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_SHOW_FACES_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_SHOW_FACES_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_SHOW_FACES_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_SHOW_FACES_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 			<field name="send" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_SEND_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_SEND_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_SEND_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_SEND_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
@@ -526,11 +525,11 @@
 				</option>
 			</field>
 			<field name="width_like" type="text"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_WIDTH_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_WIDTH_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_WIDTH_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_WIDTH_DESC"/>
 			<field name="verb_to_display" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_VERB_TO_DISPLAY_LIKE
 				</option>
@@ -538,8 +537,8 @@
 				</option>
 			</field>
 			<field name="font" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="arial">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_FONT_ARIAL
 				</option>
@@ -555,8 +554,8 @@
 				</option>
 			</field>
 			<field name="color_scheme" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="light">COM_DPCALENDAR_FIELD_CONFIG_SHARE_FB_LIKE_COLOR_SCHEME_LIGHT
 				</option>
@@ -564,10 +563,10 @@
 				</option>
 			</field>
 
-			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_LABEL" />
+			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_LABEL"/>
 			<field name="size_google" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="small">COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SIZE_GOOGLE_SMALL
 				</option>
@@ -579,17 +578,17 @@
 				</option>
 			</field>
 			<field name="show_count_google" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SHOW_COUNT_GOOGLE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SHOW_COUNT_GOOGLE_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SHOW_COUNT_GOOGLE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_PLUS_SHOW_COUNT_GOOGLE_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 
-			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_LABEL" />
+			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_LABEL"/>
 			<field name="show_count_twitter" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL
 				</option>
@@ -599,19 +598,19 @@
 				</option>
 			</field>
 			<field name="data_via_twitter" type="text"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_VIA_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_VIA_DESC"
-				size="60" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_VIA_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_VIA_DESC"
+			       size="60"/>
 			<field name="data_related_twitter" type="text"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_RELATED_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_RELATED_DESC"
-				size="60" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_RELATED_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_DATA_RELATED_DESC"
+			       size="60"/>
 
-			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LINKEDIN_LABEL" />
+			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LINKEDIN_LABEL"/>
 			<field name="show_count_linkedin" type="list" class="btn-group"
-				default="horizontal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LINKEDIN_SHOW_COUNT_LINKEDIN_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LINKEDIN_SHOW_COUNT_LINKEDIN_DESC">
+			       default="horizontal"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LINKEDIN_SHOW_COUNT_LINKEDIN_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_LINKEDIN_SHOW_COUNT_LINKEDIN_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL
 				</option>
@@ -621,11 +620,11 @@
 				</option>
 			</field>
 
-			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_LABEL" />
+			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_LABEL"/>
 			<field name="show_count_xing" type="list" class="btn-group"
-				default="horizontal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_SHOW_COUNT_XING_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_SHOW_COUNT_XING_DESC">
+			       default="horizontal"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_SHOW_COUNT_XING_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_SHARE_XING_SHOW_COUNT_XING_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="vertical">COM_DPCALENDAR_FIELD_CONFIG_SHARE_TWITTER_SHOW_COUNT_TWITTER_VERTICAL
 				</option>
@@ -635,10 +634,10 @@
 				</option>
 			</field>
 
-			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_LABEL" />
+			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_LABEL"/>
 			<field name="comment_system" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JHIDE</option>
 				<option value="facebook">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_SYSTEM_FACEBOOK
@@ -650,20 +649,20 @@
 			</field>
 
 			<field name="comment_gp_width" type="text" size="20" default="700"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_GP_WIDTH_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_GP_WIDTH_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_GP_WIDTH_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_GP_WIDTH_DESC"/>
 			<field name="comment_fb_width" type="text" size="20"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_WIDTH_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_WIDTH_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_WIDTH_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_WIDTH_DESC"/>
 			<field name="comment_fb_num_posts" type="text" size="20"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_NUM_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_NUM_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_NUM_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_NUM_DESC"/>
 			<field name="comment_fb_app_id" type="text" size="20"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_APP_ID_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_APP_ID_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_APP_ID_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_APP_ID_DESC"/>
 			<field name="comment_fb_colorscheme" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="light">COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_SCHEME_LIGHT
 				</option>
@@ -671,21 +670,21 @@
 				</option>
 			</field>
 			<field name="comment_fb_admin_id" type="text"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_ADMIN_ID_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_ADMIN_ID_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_ADMIN_ID_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_ADMIN_ID_DESC"/>
 			<field name="comment_fb_og_url" type="list"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_URL_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_URL_DESC">
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_URL_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_URL_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>
 				<option value="0">JHIDE</option>
 				<option value="1">JSHOW</option>
 			</field>
 			<field name="comment_fb_og_type" type="text" size="20"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_TYPE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_TYPE_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_TYPE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_TYPE_DESC"/>
 			<field name="comment_fb_og_image" type="text" size="50"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_IMAGE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_IMAGE_DESC" />
+			       label="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_IMAGE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_COMMENT_FB_OGG_IMAGE_DESC"/>
 		</fieldset>
 	</fields>
 </metadata>

@@ -16,6 +16,18 @@
 	border-radius: 3px;
 }
 
+/* DPCalendar heading */
+.dpcalendar-heading {
+	border-bottom: 2px solid #DDDDDD;
+	clear: both;
+}
+
+/* DPCalendar label */
+.dpcalendar-label {
+	font-weight: bold;
+	text-align: left !important;
+}
+
 /* Standard DPCalendar input */
 .dp-form-input {
 	width: 100%;
@@ -25,8 +37,17 @@
 	box-sizing: border-box; /* Opera/IE 8+ */
 }
 
+/* Modal stuff */
+.dpcalendar-modal .tingle-modal-box__content {
+	padding: 1rem 1rem;
+}
+
+.dpcalendar-modal .tingle-modal__close {
+	font-size: 3rem;
+}
+
 @media screen and (min-width: 1000px) {
-	.control-group .controls dp-form-input{
+	.control-group .controls dp-form-input {
 		max-width: 60%;
 	}
 }

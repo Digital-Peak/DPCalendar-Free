@@ -9,8 +9,7 @@ defined('_JEXEC') or die();
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-if (!class_exists('DPCalendarHelper'))
-{
+if (!class_exists('DPCalendarHelper')) {
 	return;
 }
 
@@ -21,22 +20,20 @@ class JFormFieldExtcalendar extends JFormField
 
 	public function getInput()
 	{
-		DPCalendarHelper::loadLibrary(array(
-				'jquery' => true
-		));
 		JFactory::getSession()->set('extcalendarOrigin', JUri::getInstance()->toString(), 'DPCalendar');
 
-		JHtml::_('script', 'com_dpcalendar/iframe-resizer/jquery.iframeResizer.min.js', false, true);
+		JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeresizer.min.js', ['relative' => true], ['defer' => true]);
 		JFactory::getDocument()->addStyleDeclaration('#general .controls {margin-left: 0}');
-		JFactory::getDocument()->addScriptDeclaration("jQuery(document).ready(function() {
-				jQuery('iframe').iFrameResize({log: true});
+		JFactory::getDocument()->addScriptDeclaration("document.addEventListener('DOMContentLoaded', function () {
+				iFrameResize({log: false});
 	});");
 
-		$url = 'index.php?option=com_dpcalendar&view=extcalendars';
-		$url .= '&dpplugin=' . $this->element['plugin'];
-		$url .= '&import=' . $this->element['import'];
-		$url .= '&tmpl=component';
-		$buffer = '<iframe src="' . JRoute::_($url) . '" style="width:100%; border:0"></iframe>';
+		$url    = 'index.php?option=com_dpcalendar&view=extcalendars';
+		$url    .= '&dpplugin=' . $this->element['plugin'];
+		$url    .= '&import=' . $this->element['import'];
+		$url    .= '&tmpl=component';
+		$buffer = '<iframe src="' . JRoute::_($url) . '" style="width:100%; border:0"m id="' . $this->id . '"></iframe>';
+
 		return $buffer;
 	}
 }

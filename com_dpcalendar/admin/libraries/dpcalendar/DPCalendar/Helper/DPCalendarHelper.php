@@ -119,6 +119,37 @@ class DPCalendarHelper
 		return $language;
 	}
 
+	/**
+	 * Obfuscates the given string.
+	 *
+	 * @param $string
+	 *
+	 * @return string
+	 */
+	public static function obfuscate($string)
+	{
+		return base64_encode(@convert_uuencode($string));
+	}
+
+	/**
+	 * Deobfuscates the given string.
+	 *
+	 * @param $string
+	 *
+	 * @return string
+	 */
+	public static function deobfuscate($string)
+	{
+		$tmp = @convert_uudecode(base64_decode($string));
+
+		// Probably not obfuscated
+		if (!$tmp) {
+			return $string;
+		}
+
+		return $tmp;
+	}
+
 	public static function dayToString($day, $abbr = false)
 	{
 		$date = new \JDate();
@@ -560,6 +591,17 @@ class DPCalendarHelper
 		}
 	}
 
+	public static function getStringFromParams($key, $default, $params)
+	{
+		$text = $params->get($key, $default);
+
+		if (\JFactory::getLanguage()->hasKey(strip_tags($text))) {
+			return \JText::_(strip_tags($text));
+		}
+
+		return $text;
+	}
+
 	public static function getAvatar($userId, $email, $params)
 	{
 		$image          = null;
@@ -719,16 +761,7 @@ class DPCalendarHelper
 					$http  = new \JHttp($options, new $class($options));
 
 					$u   = \JUri::getInstance($uri);
-					$uri = $u->toString(
-						array(
-							'scheme',
-							'user',
-							'pass',
-							'host',
-							'port',
-							'path'
-						)
-					);
+					$uri = $u->toString(array('scheme', 'user', 'pass', 'host', 'port', 'path'));
 					$uri .= $u->toString(array('query', 'fragment'));
 
 					$language = \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag());
@@ -888,8 +921,27 @@ class DPCalendarHelper
 			return;
 		}
 
+		if (isset($libraries['modal']) || isset($libraries['maps'])) {
+			$libraries['dpcalendar'] = true;
+		}
+
+		if (isset($libraries['dpcalendar'])) {
+			\JHtml::_('script', 'com_dpcalendar/dpcalendar/dpcalendar.min.js', ['relative' => true], ['defer' => true]);
+			\JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/dpcalendar.min.css', ['relative' => true]);
+		}
+
 		if (isset($libraries['jquery'])) {
 			\JHtml::_('jquery.framework');
+		}
+
+		if (isset($libraries['maps'])) {
+			$key = self::getComponentParameter('map_api_google_jskey', '');
+			if ($key) {
+				$key = '&key=' . $key;
+			}
+			\JHtml::_('script', 'https://maps.googleapis.com/maps/api/js?libraries=places&language=' . self::getGoogleLanguage() . $key, [],
+				['defer' => true]);
+			\JHtml::_('script', 'com_dpcalendar/dpcalendar/map.min.js', ['relative' => true], ['defer' => true]);
 		}
 
 		if (isset($libraries['chosen'])) {
@@ -900,29 +952,13 @@ class DPCalendarHelper
 			\JHtml::_('formbehavior.chosen', $selector, null, array('disable_search_threshold' => 0));
 		}
 
-		if (isset($libraries['dpcalendar'])) {
-			\JHtml::_('script', 'com_dpcalendar/dpcalendar/dpcalendar.js', false, true);
-			\JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/dpcalendar.css', array(), true);
+		if (isset($libraries['modal'])) {
+			\JHtml::_('script', 'com_dpcalendar/tingle/tingle.min.js', ['relative' => true], ['defer' => true]);
+			\JHtml::_('stylesheet', 'com_dpcalendar/tingle/tingle.min.css', ['relative' => true], ['defer' => true]);
 		}
 
-		if (isset($libraries['datepicker'])) {
-			\JHtml::_('stylesheet', 'com_dpcalendar/jquery/themes/bootstrap/jquery-ui.custom.css', array(), true);
-			\JHtml::_('script', 'com_dpcalendar/jquery/ui/jquery-ui.custom.min.js', false, true);
-		}
-
-		if (isset($libraries['maps'])) {
-			$key = self::getComponentParameter('map_api_google_jskey', '');
-			if ($key) {
-				$key = '&key=' . $key;
-			}
-			\JHtml::_('script', 'https://maps.googleapis.com/maps/api/js?libraries=places&language=' . self::getGoogleLanguage() . $key);
-			\JHtml::_('script', 'com_dpcalendar/dpcalendar/map.js', false, true);
-		}
-
-		if (isset($libraries['fullcalendar'])) {
-			\JHtml::_('script', 'com_dpcalendar/fullcalendar/moment.min.js', false, true);
-			\JHtml::_('script', 'com_dpcalendar/fullcalendar/fullcalendar.min.js', false, true);
-			\JHtml::_('stylesheet', 'com_dpcalendar/fullcalendar/fullcalendar.min.css', array(), true);
+		if (isset($libraries['url'])) {
+			\JHtml::_('script', 'com_dpcalendar/domurl/url.min.js', ['relative' => true], ['defer' => true]);
 		}
 	}
 

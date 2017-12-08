@@ -39,6 +39,12 @@ class DPCalendarTableLocation extends JTable
 			$array['images'] = (string)$registry;
 		}
 
+		if (isset($array['rooms']) && is_array($array['rooms'])) {
+			$registry = new Registry();
+			$registry->loadArray($array['rooms']);
+			$array['rooms'] = (string)$registry;
+		}
+
 		return parent::bind($array, $ignore);
 	}
 
@@ -48,7 +54,7 @@ class DPCalendarTableLocation extends JTable
 		$user = JFactory::getUser();
 		if ($this->id) {
 			// Existing item
-			$this->modified = $date->toSql();
+			$this->modified    = $date->toSql();
 			$this->modified_by = $user->get('id');
 		} else {
 			if (!(int)$this->created) {
@@ -73,8 +79,10 @@ class DPCalendarTableLocation extends JTable
 		$table = JTable::getInstance('Location', 'DPCalendarTable');
 		if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0)) {
 			$this->setError(JText::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_LOCATION') . ': ' . $table->alias);
+
 			return false;
 		}
+
 		// Attempt to store the user data.
 		return parent::store($updateNulls);
 	}
@@ -84,6 +92,7 @@ class DPCalendarTableLocation extends JTable
 		// Check for valid name
 		if (trim($this->title) == '') {
 			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
+
 			return false;
 		}
 
@@ -94,6 +103,7 @@ class DPCalendarTableLocation extends JTable
 		$xid = (int)$this->_db->loadResult();
 		if ($xid && $xid != (int)$this->id) {
 			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
+
 			return false;
 		}
 
@@ -108,6 +118,7 @@ class DPCalendarTableLocation extends JTable
 		// Check the publish down date is not earlier than publish up.
 		if ($this->publish_down > $this->_db->getNullDate() && $this->publish_down < $this->publish_up) {
 			$this->setError(JText::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
+
 			return false;
 		}
 
@@ -117,8 +128,8 @@ class DPCalendarTableLocation extends JTable
 			$bad_characters = array("\n", "\r", "\"", "<", ">");
 
 			$after_clean = \Joomla\String\StringHelper::str_ireplace($bad_characters, "", $this->metakey);
-			$keys = explode(',', $after_clean);
-			$clean_keys = array();
+			$keys        = explode(',', $after_clean);
+			$clean_keys  = array();
 			foreach ($keys as $key) {
 				if (trim($key)) {
 					$clean_keys[] = trim($key);
@@ -141,7 +152,7 @@ class DPCalendarTableLocation extends JTable
 		// Sanitize input.
 		ArrayHelper::toInteger($pks);
 		$userId = (int)$userId;
-		$state = (int)$state;
+		$state  = (int)$state;
 
 		// If there are no primary keys set check to see if the instance key is
 		// set.
@@ -150,6 +161,7 @@ class DPCalendarTableLocation extends JTable
 				$pks = array($this->$k);
 			} else {
 				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+
 				return false;
 			}
 		}
@@ -173,6 +185,7 @@ class DPCalendarTableLocation extends JTable
 			$this->_db->execute();
 		} catch (RuntimeException $e) {
 			$this->setError($e->getMessage());
+
 			return false;
 		}
 
@@ -191,6 +204,7 @@ class DPCalendarTableLocation extends JTable
 		}
 
 		$this->setError('');
+
 		return true;
 	}
 }

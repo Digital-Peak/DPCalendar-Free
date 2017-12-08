@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 
 $published = $this->state->get('filter.state');
 
-JHtml::_('script', 'com_dpcalendar/jscolor/jscolor.js', false, true);
+JHtml::_('script', 'com_dpcalendar/jscolor/jscolor.js', ['relative' => true], ['defer' => true]);
 ?>
 <div class="modal hide fade" id="collapseModal">
 	<div class="modal-header">

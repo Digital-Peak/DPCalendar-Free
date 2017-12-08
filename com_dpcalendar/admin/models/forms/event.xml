@@ -14,7 +14,7 @@
 		<field name="url" type="url" class="dp-form-input"
 		       label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"/>
 
-		<field name="start_date" type="datetimechooser" default="NOW" datepair="datepair" required="true"
+		<field name="start_date" type="datetimechooser" default="NOW" required="true" datepair="end_date"
 		       validate="minmaxtime" timeclass="time timestart validate" class="start inputbox validate"
 		       label="COM_DPCALENDAR_FIELD_START_DATE_LABEL" description="COM_DPCALENDAR_FIELD_START_DATE_DESC"/>
 
@@ -139,6 +139,7 @@
 		       key_field="id" value_field="title"
 		       query="SELECT id, concat(title,' [',IFNULL(latitude, '0'),':',IFNULL(longitude, '0'),']') as title FROM #__dpcalendar_locations where state = 1 order by title"
 		       label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC"/>
+		<field name="rooms" type="dpcrooms" multiple="true" label="COM_DPCALENDAR_ROOMS"/>
 	</fieldset>
 	<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
 		<field name="capacity" type="text"
@@ -168,7 +169,9 @@
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_DESC"/>
 		<field name="canceltext" type="editor"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_DESC"/>
-		<field name="captcha" type="captcha" label="" validate="captcha"/>
+		<field name="payment_statement" type="editor" filter="safehtml"
+		       label="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_DESC"/>
+		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
 		<field name="alias" type="text"
@@ -269,8 +272,6 @@
 				<option value="1">JYES</option>
 			</field>
 		</fieldset>
-		<field name="payment_statement" type="editor" filter="safehtml"
-		       label="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_DESC"/>
 	</fields>
 	<fields name="metadata">
 		<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">

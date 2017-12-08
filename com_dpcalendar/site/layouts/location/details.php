@@ -70,28 +70,30 @@ if ($mapContainer && $params->get('full_width', true)) {
 	$c->addChild($mapContainer);
 }
 
-// Create the header
-$h = $c->addChild(new Heading('header', 3));
-$h->addChild(new Icon('location-icon', Icon::LOCATION));
+if ($params->get('show_title', true)) {
+	// Create the header
+	$h = $c->addChild(new Heading('header', 3));
+	$h->addChild(new Icon('location-icon', Icon::LOCATION));
 
-// Allow to edit
-if (JFactory::getUser()->authorise('core.edit', 'com_dpcalendar')) {
-	$l = $h->addChild(new Link('edit-icon', DPCalendarHelperRoute::getLocationFormRoute($location->id, JUri::getInstance())));
-	$l->addChild(new Icon('location-edit-icon', Icon::EDIT));
-}
+	// Allow to edit
+	if (JFactory::getUser()->authorise('core.edit', 'com_dpcalendar')) {
+		$l = $h->addChild(new Link('edit-icon', DPCalendarHelperRoute::getLocationFormRoute($location->id, JUri::getInstance())));
+		$l->addChild(new Icon('location-edit-icon', Icon::EDIT));
+	}
 
-// Add the title
-if ($params->get('link_title') === 'external') {
-	// The link to the external map provider
-	$l = $h->addChild(new Link('external', Location::getMapLink($location), '_blank'));
-	$l->setContent($location->title);
-} else {
-	if ($params->get('link_title')) {
-		// Link to the location detail view
-		$h->addChild(new Link('external', DPCalendarHelperRoute::getLocationRoute($location)))->setContent($location->title);
+	// Add the title
+	if ($params->get('link_title') === 'external') {
+		// The link to the external map provider
+		$l = $h->addChild(new Link('external', Location::getMapLink($location), '_blank'));
+		$l->setContent($location->title);
 	} else {
-		// Just add the title
-		$h->addChild(new TextBlock('title'))->setContent($location->title);
+		if ($params->get('link_title')) {
+			// Link to the location detail view
+			$h->addChild(new Link('external', DPCalendarHelperRoute::getLocationRoute($location)))->setContent($location->title);
+		} else {
+			// Just add the title
+			$h->addChild(new TextBlock('title'))->setContent($location->title);
+		}
 	}
 }
 
@@ -156,10 +158,17 @@ if ($showDetails && $location->street) {
 		array('root' => $ld, 'id' => 'street', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL', 'content' => $content)
 	);
 }
-if ($showDetails && $location->room) {
+if ($showDetails && $location->rooms) {
+	$buffer = array();
+	foreach ($location->rooms as $room) {
+		$t = new Container($room->id);
+		$t->setContent($room->title);
+		$buffer[] = $t;
+	}
+
 	DPCalendarHelper::renderLayout(
 		'content.dl',
-		array('root' => $ld, 'id' => 'room', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_ROOM_LABEL', 'content' => $location->room)
+		array('root' => $ld, 'id' => 'rooms', 'label' => 'COM_DPCALENDAR_ROOMS', 'content' => $buffer)
 	);
 }
 if ($showDetails && $location->url) {

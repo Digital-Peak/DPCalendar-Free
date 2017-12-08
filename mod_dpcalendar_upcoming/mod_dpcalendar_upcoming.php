@@ -63,8 +63,14 @@ $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
 $model->setState('filter.my', $params->get('show_my_only', 0));
 $model->setState('filter.featured', $params->get('filter_featured', 0));
+$model->setState('filter.tags', $params->get('filter_tags', array()));
+$model->setState('filter.locations', $params->get('filter_locations', array()));
 
 $events = $model->getItems();
+
+if (!$events && !$params->get('empty_text', 1)) {
+	return;
+}
 
 JPluginHelper::importPlugin('content');
 JPluginHelper::importPlugin('dpcalendar');

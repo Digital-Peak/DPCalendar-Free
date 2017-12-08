@@ -99,12 +99,33 @@ if ($event->locations && $params->get('event_show_location', '2')) {
 		);
 		$lc->setProtectedClass('location-details');
 
+		$rooms = [];
+		if (!empty($event->rooms)) {
+			foreach ($event->rooms as $room) {
+				list($locationId, $roomId) = explode('-', $room, 2);
+				foreach ($location->rooms as $lroom) {
+					if ($locationId != $location->id || $roomId != $lroom->id) {
+						continue;
+					}
+
+					$rooms[$lroom->id] = $lroom->title;
+				}
+			}
+		}
+
+		if ($rooms) {
+			$rooms .= ' [' . implode(', ', $rooms) . ']';
+		} else {
+			$rooms = '';
+		}
+
 		if ($params->get('event_show_location', '2') == '1') {
 			// Link to the location view
-			$lc->addChild(new Link('link', DPCalendarHelperRoute::getLocationRoute($location)))->setContent($location->title);
+			$lc->addChild(new Link('link', DPCalendarHelperRoute::getLocationRoute($location)))->setContent($location->title . $rooms);
 		} else if ($params->get('event_show_location', '2') == '2') {
 			// Link to the location details on the same page
-			$lc->addChild(new Link('link', $this->escape(JUri::getInstance()) . '#dp-event-locations-' . $location->id))->setContent($location->title);
+			$lc->addChild(new Link('link',
+				$this->escape(JUri::getInstance()) . '#dp-event-locations-' . $location->id))->setContent($location->title . $rooms);
 		}
 
 		$locations[] = $lc;
@@ -123,7 +144,9 @@ if ($author && !$author->guest && $params->get('event_show_author', '1')) {
 	$dl = $column->addChild(new DescriptionListHorizontal('author'));
 
 	// Set the term
-	$dl->setTerm(new Term('label', array('label')))->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_AUTHOR'));
+	$t = $dl->setTerm(new Term('label', array('label')));
+	$t->addClass('dpcalendar-label', true);
+	$t->setContent(JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_AUTHOR'));
 	$desc = $dl->setDescription(new Description('description', array('content')));
 
 	// Set the author information as content

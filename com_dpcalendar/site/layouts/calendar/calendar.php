@@ -14,13 +14,19 @@ use CCL\Content\Element\Basic\Element;
 use CCL\Content\Element\Basic\Form\Input;
 
 // Load the JS libraries
-DPCalendarHelper::loadLibrary(array('jquery' => true, 'dpcalendar' => true, 'fullcalendar' => true));
-JHtml::_('script', 'system/core.js', false, true);
-JHtml::_('script', 'com_dpcalendar/jquery/ext/jquery.tooltipster.min.js', false, true);
-JHtml::_('stylesheet', 'com_dpcalendar/jquery/ext/tooltipster.css', array(), true);
+JHtml::_('behavior.core');
+DPCalendarHelper::loadLibrary(array('jquery' => true, 'dpcalendar' => true, 'url' => true));
+JHtml::_('script', 'com_dpcalendar/md5/md5.min.js', ['relative' => true], ['defer' => true]);
+JHtml::_('script', 'com_dpcalendar/popper/popper.min.js', ['relative' => true], ['defer' => true]);
+JHtml::_('script', 'com_dpcalendar/tippy/tippy.min.js', ['relative' => true], ['defer' => true]);
+JHtml::_('stylesheet', 'com_dpcalendar/tippy/tippy.min.css', ['relative' => true]);
 
-JHtml::_('script', 'com_dpcalendar/dpcalendar/calendar.js', false, true);
-JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/views/calendar/default.css', array(), true);
+JHtml::_('script', 'com_dpcalendar/moment/moment.min.js', ['relative' => true], ['defer' => true]);
+JHtml::_('script', 'com_dpcalendar/fullcalendar/fullcalendar.min.js', ['relative' => true], ['defer' => true]);
+JHtml::_('stylesheet', 'com_dpcalendar/fullcalendar/fullcalendar.min.css', ['relative' => true]);
+
+JHtml::_('script', 'com_dpcalendar/dpcalendar/calendar.min.js', ['relative' => true], ['defer' => true]);
+JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/layouts/calendar/calendar.min.css', ['relative' => true]);
 
 // Set up the params
 $params = $displayData['params'];
@@ -30,13 +36,11 @@ $root = $displayData['root'];
 
 // Activate modal behavior when needed
 if ($params->get('show_event_as_popup')) {
-	JHtml::_('behavior.modal', 'a.fc-event');
+	DPCalendarHelper::loadLibrary(array('modal' => true));
 }
 
-// The loader image
-$l = $root->addChild(new Container('loader'));
-$l->addClass('dpcalendar-loader', true);
-$l->addChild(new Image('image', 'media/com_dpcalendar/images/site/ajax-loader.gif', 'loader'));
+// Load the spinning wheel
+DPCalendarHelper::renderLayout('calendar.loader', $displayData);
 
 // Load the calendarlist above the calendar view
 DPCalendarHelper::renderLayout('calendar.list', $displayData);

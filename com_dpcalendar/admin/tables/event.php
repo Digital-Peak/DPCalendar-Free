@@ -46,6 +46,10 @@ class DPCalendarTableEvent extends JTable
 			$array['metadata'] = (string)$registry;
 		}
 
+		if (is_array($array) && isset($array['rooms']) && is_array($array['rooms'])) {
+			$array['rooms'] = implode(',', $array['rooms']);
+		}
+
 		return parent::bind($array, $ignore);
 	}
 
@@ -255,6 +259,9 @@ class DPCalendarTableEvent extends JTable
 				if (is_array($this->price)) {
 					$this->price = json_encode($this->price);
 				}
+				if (is_array($this->rooms)) {
+					$this->rooms = json_encode($this->rooms);
+				}
 
 				// Fields to update.
 				$files = array(
@@ -262,6 +269,7 @@ class DPCalendarTableEvent extends JTable
 					$this->_db->qn('title') . ' = ' . $this->_db->q($this->title),
 					$this->_db->qn('alias') . ' = concat(' . $this->_db->q($this->alias . '_') . ', UNIX_TIMESTAMP(start_date))',
 					$this->_db->qn('color') . ' = ' . $this->_db->q($this->color),
+					$this->_db->qn('show_end_time') . ' = ' . $this->_db->q($this->show_end_time),
 					$this->_db->qn('url') . ' = ' . $this->_db->q($this->url),
 					$this->_db->qn('images') . ' = ' . $this->_db->q($this->images),
 					$this->_db->qn('description') . ' = ' . $this->_db->q($this->description),
@@ -284,6 +292,7 @@ class DPCalendarTableEvent extends JTable
 					$this->_db->qn('access') . ' = ' . $this->_db->q($this->access),
 					$this->_db->qn('access_content') . ' = ' . $this->_db->q($this->access_content),
 					$this->_db->qn('params') . ' = ' . $this->_db->q($this->params),
+					$this->_db->qn('rooms') . ' = ' . $this->_db->q($this->rooms),
 					$this->_db->qn('language') . ' = ' . $this->_db->q($this->language),
 					$this->_db->qn('modified') . ' = ' . $this->_db->q($this->modified),
 					$this->_db->qn('modified_by') . ' = ' . $this->_db->q($user->id),

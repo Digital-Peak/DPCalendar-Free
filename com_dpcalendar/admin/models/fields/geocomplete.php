@@ -16,7 +16,7 @@ class JFormFieldGeocomplete extends JFormFieldText
 
 	public function getInput()
 	{
-		JHtml::_('script', 'com_dpcalendar/geocomplete/geocomplete.js', false, true);
+		JHtml::_('script', 'com_dpcalendar/geocomplete/geocomplete.js', ['relative' => true]);
 
 		$input = parent::getInput();
 

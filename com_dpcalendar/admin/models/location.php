@@ -27,6 +27,17 @@ class DPCalendarModelLocation extends JModelAdmin
 		}
 	}
 
+	public function getItem($pk = null)
+	{
+		$item = parent::getItem($pk);
+
+		if ($item->rooms) {
+			$item->rooms = json_decode($item->rooms);
+		}
+
+		return $item;
+	}
+
 	public function getTable($type = 'Location', $prefix = 'DPCalendarTable', $config = array())
 	{
 		return JTable::getInstance($type, $prefix, $config);
@@ -75,7 +86,7 @@ class DPCalendarModelLocation extends JModelAdmin
 			$data = $this->getItem();
 		}
 
-		$this->preprocessData('com_dpcalendar.ticket', $data);
+		$this->preprocessData('com_dpcalendar.location', $data);
 
 		return $data;
 	}

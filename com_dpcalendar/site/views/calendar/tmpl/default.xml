@@ -324,6 +324,14 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_DESC">
 			</field>
+			<field name="calendar_resource_views" type="list" multiple="true" showon="calendar_filter_locations!:"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_DESC">
+				<option value=""></option>
+				<option value="month">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
+				<option value="week">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
+				<option value="day">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
+			</field>
 			<field name="calendar_filter_tags" type="tag" multiple="true"
 			       mode="nested" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC">

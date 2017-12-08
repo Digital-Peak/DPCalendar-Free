@@ -10,11 +10,22 @@ defined('_JEXEC') or die();
 
 use CCL\Content\Element\Basic\Container;
 
-$document = JFactory::getDocument();
-$color    = $params->get('event_color', '135CAE');
+// The color fo the compact events
+$color = $params->get('event_color', '135CAE');
+
+// Add the CSS changes
 $cssClass = '#dp-module-mini-' . $module->id . ' .dp-event-compact';
-$document->addStyleDeclaration($cssClass . "," . $cssClass . " a," . $cssClass . " div{background-color:#" . $color . "; border-color: #" . $color . "} .fc-header-center{vertical-align: middle !important;} #dpcalendar_module_" . $module->id . " .fc-state-default span, #dpcalendar_module_" . $module->id . " .ui-state-default{padding:0px !important;}");
-$document->addStyleDeclaration("#dp-module-mini-" . $module->id . " h2 {
+JFactory::getDocument()->addStyleDeclaration($cssClass . "," . $cssClass . " a," . $cssClass . " div {
+	background-color:#" . $color . "; border-color: #" . $color . "
+} 
+.fc-header-center {
+	vertical-align: middle !important;
+} 
+#dpcalendar_module_" . $module->id . " .fc-state-default span, #dpcalendar_module_" . $module->id . " .ui-state-default {
+	padding:0px !important;
+}
+
+#dp-module-mini-" . $module->id . " h2 {
 	line-height: 20px;
 	font-size: 19px;
 }
@@ -28,15 +39,19 @@ $document->addStyleDeclaration("#dp-module-mini-" . $module->id . " h2 {
 	white-space: normal;
 }");
 
+// The root container
 $root = new Container('dp-module-mini-' . $module->id, array(), array('ccl-prefix' => 'dp-module-mini'));
 
+// The url to fetch the events from
 $url = html_entity_decode(
 	JRoute::_(
-		'index.php?option=com_dpcalendar&view=events&limit=0&format=raw&my=' . $params->get('show_my_only_calendar', '0') .
-		'&compact=' . $params->get('compact_events', 2) . '&ids=' . implode(',', $ids) . '&openview=' . $params->get('open_view', 'agendaDay')
+		'index.php?option=com_dpcalendar&view=events&limit=0&format=raw&'.
+		'&compact=' . $params->get('compact_events', 2) . '&ids=' . implode(',', $ids) . '&openview=' . $params->get('open_view', 'agendaDay') .
+		'&module-id=' . $module->id
 	)
 );
 
+// Some defaults for the calendar
 $params->set('header_show_datepicker', false);
 $params->set('header_show_print', false);
 $params->set('show_map', false);
@@ -55,4 +70,5 @@ DPCalendarHelper::renderLayout(
 	)
 );
 
+// Render the element
 echo DPCalendarHelper::renderElement($root, $params);

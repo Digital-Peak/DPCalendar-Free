@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>Nov 2017</creationDate>
+	<creationDate>Dec 2017</creationDate>
 	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.1.5</version>
+	<version>6.2.0</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -279,6 +279,20 @@
 					<option value="6">SATURDAY</option>
 					<option value="0">SUNDAY</option>
 				</field>
+				<field name="calendar_filter_locations" type="location" multiple="true"
+				       label="MOD_DPCALENDAR_MINI_FIELD_FILTER_LOCATIONS_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_FILTER_LOCATIONS_DESC"/>
+				<field name="calendar_resource_views" type="list" multiple="true" showon="calendar_filter_locations!:"
+				       label="MOD_DPCALENDAR_MINI_FIELD_RESOURCES_VIEWS_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_RESOURCES_VIEWS_DESC">
+					<option value=""></option>
+					<option value="month">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_MONTH</option>
+					<option value="week">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_WEEK</option>
+					<option value="day">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_DAY</option>
+				</field>
+				<field name="calendar_filter_tags" type="tag" multiple="true" mode="nested"
+				       label="MOD_DPCALENDAR_MINI_FIELD_FILTER_TAGS_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_FILTER_TAGS_DESC"/>
 				<field name="screen_size_list_view" type="text" default="500"
 				       label="MOD_DPCALENDAR_MINI_FIELD_SCREEN_SIZE_LIST_VIEW_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_SCREEN_SIZE_LIST_VIEW_DESC"/>

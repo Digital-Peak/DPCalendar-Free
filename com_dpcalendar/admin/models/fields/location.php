@@ -11,22 +11,18 @@ JFormHelper::loadFieldClass('list');
 
 class JFormFieldLocation extends JFormFieldList
 {
-
 	public $type = 'Location';
 
-	protected function getOptions ()
+	protected function getOptions()
 	{
 		$options = parent::getOptions();
 
 		JLoader::import('joomla.application.component.model');
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', array(
-				'ignore_request' => true
-		));
+		$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
 		$model->getState();
 		$model->setState('list.limit', 0);
-		foreach ($model->getItems() as $location)
-		{
+		foreach ($model->getItems() as $location) {
 			$options[] = JHtml::_('select.option', $location->id, $location->title);
 		}
 

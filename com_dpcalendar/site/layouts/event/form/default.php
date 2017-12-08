@@ -27,10 +27,10 @@ use CCL\Content\Element\Component\Alert;
 extract($displayData);
 
 // Load the needed JS libraries
-DPCalendarHelper::loadLibrary(array('jquery' => true, 'datepicker' => true, 'chosen' => true, 'dpcalendar' => true));
+DPCalendarHelper::loadLibrary(array('jquery' => true, 'chosen' => true, 'dpcalendar' => true, 'url' => true));
 
-JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/layouts/event/form/default.css', array(), true);
-JHtml::_('script', 'com_dpcalendar/dpcalendar/layouts/event/form/default.js', false, true);
+JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/layouts/event/form/default.css', ['relative' => true]);
+JHtml::_('script', 'com_dpcalendar/dpcalendar/layouts/event/form/default.js', ['relative' => true], ['defer' => true]);
 
 // Initialise the modal behavior
 JHtml::_('behavior.modal', 'a.modal_jform_contenthistory');
@@ -141,24 +141,22 @@ DPCalendarHelper::renderLayout(
 		'jform'           => $form,
 		'fieldsToHide'    => $hideFields,
 		'fieldsetsToHide' => $hideFieldsets,
-		'return'          => $returnPage
+		'return'          => $returnPage,
+		'flat'            => $params->get('event_form_flat_mode')
 	)
 );
 
-// Add the map element
-$map = $root->addChild(
-	new Element(
-		'map',
-		array('dpcalendar-map', 'dpcalendar-fixed-map'),
-		array(
-			'data-zoom'      => $params->get('map_zoom', 6),
-			'data-latitude'  => $params->get('map_lat', 47),
-			'data-longitude' => $params->get('map_long', 4)
-		)
+// Load the location layout
+DPCalendarHelper::renderLayout(
+	'event.form.location',
+	array(
+		'root'   => $root,
+		'jform'  => $form,
+		'params' => $params,
+		'app'    => $app,
+		'return' => $returnPage
 	)
 );
-$map->setProtectedClass('dpcalendar-map');
-$map->setProtectedClass('dpcalendar-fixed-map');
 
 // Add some hidden inputs for redirects
 $root->addChild(new Input('tmpl', 'hidden', 'tmpl', $input->get('tmpl')));

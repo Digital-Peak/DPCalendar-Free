@@ -17,8 +17,8 @@ $event = $this->event;
 $title = $event->title;
 
 // The heading of the page
-$h = $this->root->addChild(new Heading('event-header', 2, array('dp-event-header')));
-$h->setProtectedClass('dp-event-header');
+$h = $this->root->addChild(new Heading('event-header', 2, array('dpcalendar-heading')));
+$h->setProtectedClass('dpcalendar-heading');
 
 if ($this->input->get('tmpl') == 'component') {
 	$url = DPCalendarHelperRoute::getEventRoute($event->id, $event->catid);

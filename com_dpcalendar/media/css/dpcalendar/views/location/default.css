@@ -1,5 +1,9 @@
-#dp-location h3 i {
-	margin-right: 5px;
+#dp-location h2 i {
+	margin-right: 0.5em;
+}
+
+#dp-location-map {
+	margin-top: 10px
 }
 
 #dp-location-upcoming-events p {

@@ -53,7 +53,7 @@ class DPCalendarModelEvents extends JModelList
 		$options->set('location', $this->getState('filter.location', null));
 		$options->set('location_ids', $this->getState('filter.locations', null));
 		$options->set('radius', $this->getState('filter.radius', 20));
-		$options->set('length_type', $this->getState('filter.length_type', 'm'));
+		$options->set('length-type', $this->getState('filter.length-type', 'm'));
 
 		$containsExternalEvents = false;
 
@@ -112,28 +112,15 @@ class DPCalendarModelEvents extends JModelList
 		}
 
 		if (empty($items)) {
-			echo $this->getError();
-
 			return array();
 		}
-
-		$location   = $this->getState('filter.location');
-		$radius     = $this->getState('filter.radius', 20);
-		$lengthType = $this->getState('filter.length_type', 'm');
 
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 		$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
 		$model->getState();
-		$model->setState('filter.location', $location);
-		$model->setState('filter.radius', $radius);
-		$model->setState('filter.length_type', $lengthType);
 		$model->setState('list.ordering', 'ordering');
 		$model->setState('list.direction', 'asc');
 
-		$locationsFilter = $this->getState('filter.locations');
-		$tagsFilter      = $this->getState('filter.tags');
-
-		$filteredItems = array();
 		foreach ($items as $key => $item) {
 			// Initialize the parameters
 			if (!isset($this->_params)) {
@@ -142,26 +129,15 @@ class DPCalendarModelEvents extends JModelList
 				$item->params = $params;
 			}
 
-			// Assign the locations
+			// Add the locations
 			if (!empty($item->location_ids) && empty($item->locations)) {
-				// If the items locations doesn't match the filter, ignore
-				$ids = explode(',', $item->location_ids);
-				ArrayHelper::toInteger($ids);
-				if (!$locationsFilter || array_intersect($locationsFilter, $ids)) {
-					$model->setState('filter.search', 'ids:' . $item->location_ids);
-					$locations       = $model->getItems();
-					$item->locations = $locations;
-				}
-			} else {
-				if (empty($item->locations)) {
-					// External events can have locations
-					$item->locations = null;
-				}
+				$model->setState('filter.search', 'ids:' . $item->location_ids);
+				$item->locations = $model->getItems();
 			}
 
-			// If we search for a location, but the event doesn't have any locations, ignore
-			if ((!empty($locationsFilter) || !empty($location)) && empty($item->locations)) {
-				continue;
+			// Set up the rooms
+			if (!empty($item->rooms)) {
+				$item->rooms = explode(',', $item->rooms);
 			}
 
 			// If the event has no color, use the one from the calendar
@@ -188,10 +164,9 @@ class DPCalendarModelEvents extends JModelList
 				$item->description = '';
 				$item->price       = array();
 			}
-			$filteredItems[] = $item;
 		}
 
-		return $filteredItems;
+		return $items;
 	}
 
 	protected function getListQuery()
@@ -386,9 +361,32 @@ class DPCalendarModelEvents extends JModelList
 			}
 		}
 
+		// The locations to filter for
+		$locationsFilter = $this->getState('filter.locations', array());
+
+		// Search for a location
 		$location = $this->getState('filter.location');
-		if (!empty($location)) {
-			$query->where('v.id is not null');
+		if ($location) {
+			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
+			$model->getState();
+			$model->setState('filter.location', $location);
+			$model->setState('filter.radius', $this->getState('filter.radius', 20));
+			$model->setState('filter.length-type', $this->getState('filter.length-type', 'm'));
+			$model->setState('list.ordering', 'ordering');
+			$model->setState('list.direction', 'asc');
+			foreach ($model->getItems() as $l) {
+				$locationsFilter[] = $l->id;
+			}
+
+			if (empty($locationsFilter)) {
+				$locationsFilter[] = 0;
+			}
+		}
+
+		// If we have a location filter apply it
+		if ($locationsFilter) {
+			$query->where('v.id in (' . implode(',', ArrayHelper::toInteger($locationsFilter)) . ')');
 		}
 
 		// Filter by tags
@@ -402,7 +400,7 @@ class DPCalendarModelEvents extends JModelList
 			$query->where($db->quoteName('tagmap.tag_id') . ' in (' . implode(',', $tagIds) . ')');
 		}
 
-		if ($this->getState('filter.my', '0') == '1') {
+		if ($this->getState('filter.my')) {
 			$cond = 'a.created_by = ' . (int)$user->id;
 
 			if ($user->id > 0 && !DPCalendarHelper::isFree()) {
@@ -486,6 +484,18 @@ class DPCalendarModelEvents extends JModelList
 		return $result;
 	}
 
+	public function setStateFromParams(Registry $params)
+	{
+		// Filter for my
+		$this->setState('filter.my', $params->get('show_my_only_calendar', $params->get('show_my_only_list')));
+
+		// Filter for locations
+		$this->setState('filter.locations', $params->get('calendar_filter_locations', $params->get('list_filter_locations')));
+
+		// Filter for tags
+		$this->setState('filter.tags', $params->get('calendar_filter_tags', $params->get('list_filter_tags')));
+	}
+
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables.
@@ -493,7 +503,7 @@ class DPCalendarModelEvents extends JModelList
 		$params = $app->getParams();
 
 		// List state information
-		if (JFactory::getApplication()->input->getInt('limit', null) === null) {
+		if ($app->input->getInt('limit', null) === null) {
 			$limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'));
 			$this->setState('list.limit', $limit);
 		} else {
@@ -501,8 +511,8 @@ class DPCalendarModelEvents extends JModelList
 		}
 
 		$this->setState('list.start-date', $app->input->get('date-start', DPCalendarHelper::getDate()->format('c')));
-		if ($app->input->getInt('date-end', null) !== null) {
-			$this->setState('list.end-date', $app->input->get('date-end', null));
+		if ($app->input->get('date-end')) {
+			$this->setState('list.end-date', $app->input->get('date-end'));
 		}
 
 		$limitstart = $app->input->getInt('limitstart', 0);
@@ -520,7 +530,7 @@ class DPCalendarModelEvents extends JModelList
 		}
 		$this->setState('list.direction', $listOrder);
 
-		$id = JFactory::getApplication()->input->getVar('ids', null);
+		$id = $app->input->getVar('ids', null);
 		if (!is_array($id)) {
 			$id = explode(',', $id);
 		}
@@ -528,7 +538,7 @@ class DPCalendarModelEvents extends JModelList
 			$id = $params->get('ids');
 		}
 		$this->setState('category.id', $id);
-		$this->setState('category.recursive', JFactory::getApplication()->input->getVar('layout') == 'module');
+		$this->setState('category.recursive', $app->input->getVar('layout') == 'module');
 
 		$user = JFactory::getUser();
 		if ((!$user->authorise('core.edit.state', 'com_dpcalendar')) && (!$user->authorise('core.edit', 'com_dpcalendar'))) {
@@ -540,8 +550,7 @@ class DPCalendarModelEvents extends JModelList
 		}
 
 		$this->setState('filter.language', $app->getLanguageFilter());
-		$this->setState('filter.search', JFactory::getApplication()->input->getVar('filter-search'));
-		$this->setState('filter.my', JFactory::getApplication()->input->getVar('my', $params->get('show_my_only_list', '0')) == '1');
+		$this->setState('filter.search', $this->getUserStateFromRequest('com_dpcalendar.filter.search', 'filter-search'));
 
 		// Filter for
 		$this->setState('filter.expand', true);
@@ -549,11 +558,7 @@ class DPCalendarModelEvents extends JModelList
 		// Filter for featured events
 		$this->setState('filter.featured', false);
 
-		// Filter for locations
-		$this->setState('filter.locations', $params->get('calendar_filter_locations', $params->get('list_filter_locations')));
-
-		// Filter for tags
-		$this->setState('filter.tags', $params->get('calendar_filter_tags', $params->get('list_filter_tags')));
+		$this->setStateFromParams($params);
 
 		// Load the parameters.
 		$this->setState('params', $params);

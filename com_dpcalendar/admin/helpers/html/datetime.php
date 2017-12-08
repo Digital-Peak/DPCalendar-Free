@@ -5,17 +5,23 @@
  * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\Fullcalendar;
 
 class JHtmlDateTime
 {
 
 	public static function render($dateValue, $id, $name, $options = array())
 	{
-		DPCalendarHelper::loadLibrary(array('jquery' => true, 'datepicker' => true));
+		JHtml::_('script', 'com_dpcalendar/moment/moment.min.js', ['relative' => true], ['defer' => true]);
+		JHtml::_('script', 'com_dpcalendar/pikaday/pikaday.min.js', ['relative' => true], ['defer' => true]);
+		JHtml::_('stylesheet', 'com_dpcalendar/pikaday/pikaday.min.css', ['relative' => true]);
+		JHtml::_('stylesheet', 'com_dpcalendar/pikaday/custom.css', ['relative' => true]);
 
-		JHtml::_('script', 'com_dpcalendar/jquery/timepicker/jquery.timepicker.min.js', false, true);
-		JHtml::_('stylesheet', 'com_dpcalendar/jquery/timepicker/jquery.timepicker.css', array(), true);
+		JHtml::_('script', 'com_dpcalendar/jquery/timepicker/jquery.timepicker.min.js', ['relative' => true], ['defer' => true]);
+		JHtml::_('stylesheet', 'com_dpcalendar/jquery/timepicker/jquery.timepicker.css', ['relative' => true]);
 
 		$dateFormat = DPCalendarHelper::getComponentParameter('event_date_format', 'm.d.Y');
 		if (isset($options['dateFormat']) && !empty($options['dateFormat'])) {
@@ -39,6 +45,10 @@ class JHtmlDateTime
 			$options['allDay'] = false;
 		}
 
+		if (!isset($options['datepair'])) {
+			$options['datepair'] = '';
+		}
+
 		// Handle the special case for "now".
 		$date = null;
 		if (strtoupper($dateValue) == 'NOW') {
@@ -54,58 +64,54 @@ class JHtmlDateTime
 			$date = DPCalendarHelper::getDate($dateValue, $options['allDay']);
 		}
 
-		$daysLong    = "[";
-		$daysShort   = "[";
-		$daysMin     = "[";
-		$monthsLong  = "[";
-		$monthsShort = "[";
+		// Transform the date string.
+		$dateString = $date ? $date->format($dateFormat, true) : '';
+		$timeString = $date ? $date->format($timeFormat, true) : '';
+		if ($date && $options['allDay']) {
+			$dateString = $date->format($dateFormat, false);
+			$timeString = $date->format($timeFormat, false);
+		}
+
+		// Set up the month and day names
+		$datePickerOptions                  = array();
+		$datePickerOptions['monthNames']    = array();
+		$datePickerOptions['dayNames']      = array();
+		$datePickerOptions['dayNamesShort'] = array();
 		for ($i = 0; $i < 7; $i++) {
-			$daysLong  .= "'" . htmlspecialchars(DPCalendarHelper::dayToString($i, false), ENT_QUOTES) . "'";
-			$daysShort .= "'" . htmlspecialchars(DPCalendarHelper::dayToString($i, true), ENT_QUOTES) . "'";
-			$daysMin   .= "'" . htmlspecialchars(mb_substr(DPCalendarHelper::dayToString($i, true), 0, 2), ENT_QUOTES) . "'";
-			if ($i < 6) {
-				$daysLong  .= ",";
-				$daysShort .= ",";
-				$daysMin   .= ",";
-			}
+			$datePickerOptions['dayNames'][]      = DPCalendarHelper::dayToString($i, false);
+			$datePickerOptions['dayNamesShort'][] = DPCalendarHelper::dayToString($i, true);
 		}
 		for ($i = 1; $i <= 12; $i++) {
-			$monthsLong  .= "'" . htmlspecialchars(DPCalendarHelper::monthToString($i, false), ENT_QUOTES) . "'";
-			$monthsShort .= "'" . htmlspecialchars(DPCalendarHelper::monthToString($i, true), ENT_QUOTES) . "'";
-			if ($i < 12) {
-				$monthsLong  .= ",";
-				$monthsShort .= ",";
+			$datePickerOptions['monthNames'][] = DPCalendarHelper::monthToString($i, false);
+		}
+
+		$calCode = "document.addEventListener('DOMContentLoaded', function () {
+		var picker = new Pikaday({
+			field: document.getElementById('" . $id . "'),
+			numberOfMonths: 1,
+			format: '" . Fullcalendar::convertFromPHPDate($dateFormat) . "',
+			" . ($date ? "defaultDate: new Date('" . $date->format('Y-m-d') . "')," : '') . "
+			i18n: {
+				months: " . json_encode($datePickerOptions['monthNames']) . ",
+				weekdays: " . json_encode($datePickerOptions['dayNames']) . ",
+				weekdaysShort: " . json_encode($datePickerOptions['dayNamesShort']) . "
+			},
+			onSelect: function () {
+				var end = document.getElementById('jform_" . $options['datepair'] . "');
+				if(!end) {
+					return;
+				}
+				var format = '" . Fullcalendar::convertFromPHPDate($dateFormat) . "';
+				var start = this.actualDate.set('h', 0).set('m', 0).set('s', 0).set('ms', 0);
+				var diff = this.getMoment().diff(start);
+				var date = moment(end.value, format);
+				date.add(diff, 'ms');
+				end.value = date.format(format);
+				picker.actualDate = this.getMoment();
 			}
-		}
-		$daysLong    .= "]";
-		$daysShort   .= "]";
-		$daysMin     .= "]";
-		$monthsLong  .= "]";
-		$monthsShort .= "]";
-
-		$calCode = "jQuery(document).ready(function(){\n";
-		$calCode .= "	jQuery('#" . $id . "').datepicker({\n";
-		$calCode .= "		dateFormat: '" . self::dateStringToDatepickerFormat($dateFormat) . "',\n";
-		$calCode .= "		changeYear: true, \n";
-		$calCode .= "		dayNames: " . $daysLong . ",\n";
-		$calCode .= "		dayNamesShort: " . $daysShort . ",\n";
-		$calCode .= "		dayNamesMin: " . $daysMin . ",\n";
-		$calCode .= "		monthNames: " . $monthsLong . ",\n";
-		$calCode .= "		monthNamesShort: " . $monthsShort . ",\n";
-		$calCode .= "		firstDay: " . DPCalendarHelper::getComponentParameter('weekstart', 0) . ",\n";
-		if (isset($options['datepair'])) {
-			$calCode .= "		onSelect: function(date, object){
-					var diff = jQuery('#" . $id . "').datepicker('getDate') - jQuery('#" . $id . "').data('actualDate');
-					diff = diff / 1000 / 60 / 60 / 24;
-					var date = new Date(jQuery('.end').datepicker('getDate'));
-					date.setDate(date.getDate() + diff);
-					jQuery('.end').datepicker('setDate', date);
-					jQuery('#" . $id . "').data('actualDate', jQuery('#" . $id . "').datepicker('getDate'));
-		}\n";
-		}
-		$calCode .= "	});\n";
-
-		$calCode .= "	jQuery('#" . $id . "').data('actualDate', jQuery('#" . $id . "').datepicker('getDate'));\n";
+		});
+		picker.actualDate = picker.getMoment();
+		";
 
 		$timePickerOptions               = array();
 		$timePickerOptions['timeFormat'] = $timeFormat;
@@ -148,14 +154,6 @@ class JHtmlDateTime
 			$options['class'] = 'input-small';
 		}
 
-		// Transform the date string.
-		$dateString = $date ? $date->format($dateFormat, true) : '';
-		$timeString = $date ? $date->format($timeFormat, true) : '';
-		if ($date && $options['allDay']) {
-			$dateString = $date->format($dateFormat, false);
-			$timeString = $date->format($timeFormat, false);
-		}
-
 		$buffer = '';
 
 		$type = 'text';
@@ -170,7 +168,7 @@ class JHtmlDateTime
 			$timeName .= '_time';
 		}
 		$buffer .= '<input type="' . $type . '" class="' . $options['class'] . '" value="' . $dateString . '" name="' . $name . '" id="' . $id .
-			'" size="15" maxlength="10" ' . $onchange . '/>';
+			'" size="15" maxlength="10" ' . $onchange . ' format="' . Fullcalendar::convertFromPHPDate($dateFormat) . '"/>';
 		$buffer .= '&nbsp;<input type="text" class="time ' . $timeClass . '" value="' . $timeString . '" size="8" name="' . $timeName . '" id="' . $id .
 			'_time" ' . ($options['allDay'] == '1' ? 'style="display:none"' : '') . '/>';
 		if (isset($options['button']) && $options['button']) {
@@ -180,38 +178,5 @@ class JHtmlDateTime
 		}
 
 		return $buffer;
-	}
-
-	public static function dateStringToDatepickerFormat($dateString)
-	{
-		$pattern = array(
-			'd',
-			'j',
-			'l',
-			'z',
-			'F',
-			'M',
-			'n',
-			'm',
-			'Y',
-			'y'
-		);
-		$replace = array(
-			'dd',
-			'd',
-			'DD',
-			'o',
-			'MM',
-			'M',
-			'm',
-			'mm',
-			'yy',
-			'y'
-		);
-		foreach ($pattern as &$p) {
-			$p = '/' . $p . '/';
-		}
-
-		return preg_replace($pattern, $replace, $dateString);
 	}
 }

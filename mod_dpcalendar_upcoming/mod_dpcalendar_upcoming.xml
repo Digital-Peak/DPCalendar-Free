@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_upcoming</name>
 	<author>Digital Peak</author>
-	<creationDate>Nov 2017</creationDate>
+	<creationDate>Dec 2017</creationDate>
 	<copyright>(C) 2007 - 2017 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.1.5</version>
+	<version>6.2.0</version>
 	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>
@@ -63,24 +63,33 @@
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
-				<field name="filter_featured" type="radio" class="btn-group"
-				       default="0" label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_FEATURED_LABEL"
+				<field name="filter_featured" type="radio" class="btn-group" default="0"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_FEATURED_LABEL"
 				       description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_FEATURED_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
+				<field name="filter_locations" type="location" multiple="true"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LOCATIONS_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LOCATIONS_DESC"/>
+				<field name="filter_tags" type="tag" multiple="true" mode="nested"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_TAGS_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_TAGS_DESC"/>
 				<field name="default_menu_item" type="menuitem" class="btn-group"
 				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MENU_ITEM_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_MENU_ITEM_DESC">
 					<option></option>
 				</field>
+				<field name="empty_text" type="radio" default="1" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_EMPTY_TEXT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_EMPTY_TEXT_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="start_date" type="text"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_DESC"
-				       size="22" format="%Y-%m-%d %H:%M:%S"/>
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_DESC"/>
 				<field name="end_date" type="text"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_DESC"
-				       size="22" format="%Y-%m-%d %H:%M:%S"/>
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_DESC"/>
 				<field name="output_grouping" type="text" size="80" default=""
 				       label="MOD_DPCALENDAR_UPCOMING_FIELD_OUTPUT_GROUPING_LABEL"
 				       description="MOD_DPCALENDAR_UPCOMING_FIELD_OUTPUT_GROUPING_DESC">

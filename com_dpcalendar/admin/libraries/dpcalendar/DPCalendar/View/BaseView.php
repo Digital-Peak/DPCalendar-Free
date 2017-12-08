@@ -47,6 +47,8 @@ class BaseView extends \JViewLegacy
 		$tmp = clone $state->get('params', new Registry());
 		if (method_exists($this->app, 'getParams')) {
 			$tmp->merge($this->app->getParams('com_dpcalendar'));
+		} else {
+			$tmp->merge(\JComponentHelper::getParams('com_dpcalendar'));
 		}
 
 		$this->state  = $state;
@@ -82,7 +84,7 @@ class BaseView extends \JViewLegacy
 			$this->addToolbar();
 
 			// Only render the sidebar when we are not editing a form
-			if (!($this->getModel() instanceof JModelAdmin)) {
+			if (!($this->getModel() instanceof \JModelAdmin) && $this->input->get('tmpl') != 'component') {
 				$this->sidebar       = \JHtmlSidebar::render();
 				$this->filterForm    = $this->get('FilterForm');
 				$this->activeFilters = $this->get('ActiveFilters');

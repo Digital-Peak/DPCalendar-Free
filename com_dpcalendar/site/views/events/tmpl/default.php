@@ -26,7 +26,8 @@ foreach ($this->items as $event) {
 	}
 
 	// Set up the locations
-	$locations = array();
+	$locations   = array();
+	$resourceIds = array();
 	if (!empty($event->locations)) {
 		foreach ($event->locations as $location) {
 			$locations[] = array(
@@ -34,6 +35,17 @@ foreach ($this->items as $event) {
 				'latitude'  => $location->latitude,
 				'longitude' => $location->longitude
 			);
+
+			if (!$event->rooms || !$this->input->get('l')) {
+				$resourceIds[] = $location->id;
+			}
+
+			foreach ($event->rooms as $room) {
+				if (strpos($room, $location->id . '-') === false) {
+					continue;
+				}
+				$resourceIds[] = $room;
+			}
 		}
 	}
 
@@ -79,6 +91,10 @@ foreach ($this->items as $event) {
 
 	if ($event->show_end_time) {
 		$eventData['end'] = DPCalendarHelper::getDate($event->end_date, $event->all_day)->format($format, true);
+	}
+
+	if ($resourceIds) {
+		$eventData['resourceIds'] = $resourceIds;
 	}
 	$data[] = $eventData;
 }

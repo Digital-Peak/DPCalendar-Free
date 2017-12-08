@@ -13,7 +13,7 @@ use CCL\Content\Element\Basic\Container;
 DPCalendarHelper::loadLibrary(array('jquery' => true, 'dpcalendar' => true));
 
 // Load the event stylesheet
-JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/views/event/default.css', array(), true);
+JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/views/event/default.css', ['relative' => true]);
 
 // The params
 $params = $this->params;

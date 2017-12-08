@@ -66,6 +66,6 @@
 		<field name="payer_email" type="email" class="dp-form-input"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
 
-		<field name="captcha" type="captcha" label="" validate="captcha"/>
+		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
 	</fieldset>
 </form>

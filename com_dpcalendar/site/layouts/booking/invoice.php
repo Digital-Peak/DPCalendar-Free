@@ -82,7 +82,7 @@ if ($params->get('show_header', true)) {
 // Show an invoice part when the booking has a price
 if ($hasPrice) {
 	// Add the header
-	$root->addChild(new Heading('details-heading', 2))->setContent(JText::_('COM_DPCALENDAR_INVOICE_INVOICE_DETAILS'))->addClass('dp-event-header',
+	$root->addChild(new Heading('details-heading', 2))->setContent(JText::_('COM_DPCALENDAR_INVOICE_INVOICE_DETAILS'))->addClass('dpcalendar-heading',
 		true);
 
 	// The details table
@@ -116,7 +116,7 @@ if ($hasPrice) {
 }
 
 // The booking details heading
-$root->addChild(new Heading('details-heading', 2))->setContent(JText::_('COM_DPCALENDAR_INVOICE_BOOKING_DETAILS'))->addClass('dp-event-header', true);
+$root->addChild(new Heading('details-heading', 2))->setContent(JText::_('COM_DPCALENDAR_INVOICE_BOOKING_DETAILS'))->addClass('dpcalendar-heading', true);
 
 // The details table
 $t = $root->addChild(new Table('booking-details', array('', '')));
@@ -169,7 +169,7 @@ foreach ($fields as $field) {
 // The tickets heading
 $h = $root->addChild(new Heading('tickets-heading', 2));
 $h->setContent(JText::_('COM_DPCALENDAR_INVOICE_TICKET_DETAILS'));
-$h->addClass('dp-event-header', true);
+$h->addClass('dpcalendar-heading', true);
 
 // The tickets table
 $columns = array(

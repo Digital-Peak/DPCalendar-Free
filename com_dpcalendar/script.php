@@ -366,6 +366,21 @@ from #__dpcalendar_bookings");
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
+
+		if (version_compare($version, '6.2.0') == -1) {
+			$db->setQuery(
+				"select id,rooms from `#__dpcalendar_locations` where rooms is not null and rooms != ''");
+			foreach ($db->loadObjectList() as $index => $loc) {
+				$rooms = json_encode(array('rooms0' => array('id' => $index + 1, 'title' => $loc->rooms)));
+				$this->run('UPDATE `#__dpcalendar_locations` SET rooms = ' . $db->quote($rooms) . ' where id = ' . $loc->id);
+			}
+
+			// Defaulting some params which have changed
+			$params = JComponentHelper::getParams('com_dpcalendar');
+			$params->set('list_show_map', $params->get('list_show_map', '1') == '2' ? 0 : 1);
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
 	}
 
 	public function uninstall($parent)

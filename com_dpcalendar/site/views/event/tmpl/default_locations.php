@@ -34,8 +34,8 @@ $root = $this->root->addChild(new Container('locations'));
 $root->setProtectedClass('dplocations');
 
 // Add the heading
-$h = $root->addChild(new Heading('header', 2, array('dp-event-header')));
-$h->setProtectedClass('dp-event-header');
+$h = $root->addChild(new Heading('header', 3, array('dpcalendar-heading')));
+$h->setProtectedClass('dpcalendar-heading');
 $h->setContent(JText::_('COM_DPCALENDAR_VIEW_EVENT_LOCATION_INFORMATION'));
 
 // Create the locations

@@ -13,12 +13,11 @@
 		<field name="price" type="text"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_PRICE_DESC"/>
 		<field name="processor" type="plugins" folder="dpcalendarpay"
-		       label="COM_DPCALENDAR_BOOKING_FIELD_PROCESSOR_LABEL"
-		       description="COM_DPCALENDAR_BOOKING_FIELD_PROCESSOR_DESC">
+		       label="COM_DPCALENDAR_BOOKING_FIELD_PROCESSOR_LABEL">
 			<option value=""></option>
 		</field>
 		<field name="state" type="list" default="1"
-		       label="JSTATUS" description="COM_DPCALENDAR_BOOKING_FIELD_STATE_DESC">
+		       label="JSTATUS">
 			<option value="1">COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED</option>
 			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
 			<option value="2">JARCHIVED</option>

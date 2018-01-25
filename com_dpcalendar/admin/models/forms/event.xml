@@ -45,7 +45,6 @@
 		</field>
 		<field name="scheduling_end_date" type="datetimechooser"
 		       all_day="1" onchange="updateRuleFromForm();" default="+2 Month"
-		       class="validate-date" format="Y-m-d" formatTime="g:i a"
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_DESC"/>
 		<field name="scheduling_interval" type="text" default="1"
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_DESC"/>
@@ -166,12 +165,6 @@
 		</field>
 		<field name="booking_information" type="editor" filter="raw"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
-		<field name="ordertext" type="editor"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_DESC"/>
-		<field name="canceltext" type="editor"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_DESC"/>
-		<field name="payment_statement" type="editor" filter="safehtml"
-		       label="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_DESC"/>
 		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">

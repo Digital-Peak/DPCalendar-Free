@@ -30,7 +30,7 @@ if (!Element.prototype.closest) {
 			stickyFooter: false,
 			closeMethods: ['overlay', 'button', 'escape'],
 			cssClass: ['dpcalendar-modal'],
-			closeLabel: Joomla.JText._('JLIB_HTML_BEHAVIOR_CLOSE', true),
+			closeLabel: Joomla.JText._('COM_DPCALENDAR_CLOSE', 'Close'),
 			onClose: function () {
 				if (closeFunction) {
 					closeFunction(modal.modalBox.children[0].querySelector('iframe'));

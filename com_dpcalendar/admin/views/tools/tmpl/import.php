@@ -20,7 +20,7 @@ JPluginHelper::importPlugin('dpcalendar');
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
 				<label class="element-invisible" for="filter_search"><?php echo JText::_('JSEARCH_FILTER_LABEL'); ?></label>
-				<input type="text" name="filter_search" id="filter_search" value=""
+				<input type="text" name="filter_search" id="filter_search" value="" placeholder="<?php echo JText::_('JSEARCH_FILTER_LABEL'); ?>"
 					title="<?php echo JText::_('COM_DPCALENDAR_SEARCH_IN_TITLE'); ?>" />
 			</div>
 			<div class="btn-group pull-left">

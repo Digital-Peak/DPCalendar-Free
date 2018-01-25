@@ -143,63 +143,56 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$form->setFieldAttribute('end_date', 'min_time', $params->get('event_form_min_time'));
 		$form->setFieldAttribute('end_date', 'max_time', $params->get('event_form_max_time'));
 
-		// Remove fields depending on the params
-		if ($params->get('event_form_change_calid', '1') != '1') {
-			$form->setFieldAttribute('catid', 'readonly', 'readonly');
-		}
-		if ($params->get('event_form_change_color', '1') != '1') {
-			$form->removeField('color');
-		}
-		if ($params->get('event_form_change_url', '1') != '1') {
-			$form->removeField('url');
-		}
-		if ($params->get('event_form_change_images', '1') != '1') {
-			$form->removeGroup('images');
-		}
-		if ($params->get('event_form_change_description', '1') != '1') {
-			$form->removeField('description');
-		}
-		if ($params->get('event_form_change_capacity', '1') != '1') {
-			$form->removeField('capacity');
-		}
-		if ($params->get('event_form_change_capacity_used', '1') != '1') {
-			$form->removeField('capacity_used');
-		}
-		if ($params->get('event_form_change_max_tickets', '1') != '1') {
-			$form->removeField('max_tickets');
-		}
-		if ($params->get('event_form_change_price', '1') != '1') {
-			$form->removeField('price');
+		if (!JFactory::getUser()->authorise('core.admin', 'com_dpcalendar')) {
+			// Remove fields depending on the params
+			if ($params->get('event_form_change_calid', '1') != '1') {
+				$form->setFieldAttribute('catid', 'readonly', 'readonly');
+			}
+			if ($params->get('event_form_change_color', '1') != '1') {
+				$form->removeField('color');
+			}
+			if ($params->get('event_form_change_url', '1') != '1') {
+				$form->removeField('url');
+			}
+			if ($params->get('event_form_change_images', '1') != '1') {
+				$form->removeGroup('images');
+			}
+			if ($params->get('event_form_change_description', '1') != '1') {
+				$form->removeField('description');
+			}
+			if ($params->get('event_form_change_capacity', '1') != '1') {
+				$form->removeField('capacity');
+			}
+			if ($params->get('event_form_change_capacity_used', '1') != '1') {
+				$form->removeField('capacity_used');
+			}
+			if ($params->get('event_form_change_max_tickets', '1') != '1') {
+				$form->removeField('max_tickets');
+			}
+			if ($params->get('event_form_change_price', '1') != '1') {
+				$form->removeField('price');
 
-			// We need to do it a second time because of the booking form
-			$form->removeField('price');
-		}
-		if ($params->get('event_form_change_payment', '1') != '1') {
-			$form->removeField('plugintype');
-		}
-		if ($params->get('event_form_change_order', '1') != '1') {
-			$form->removeField('ordertext');
-		}
-		if ($params->get('event_form_change_cancellation', '1') != '1') {
-			$form->removeField('canceltext');
-		}
-		if ($params->get('event_form_change_paystatement', '1') != '1') {
-			$form->removeField('payment_statement');
-		}
-		if ($params->get('event_form_change_access', '1') != '1') {
-			$form->removeField('access');
-		}
-		if ($params->get('event_form_change_access_content', '1') != '1') {
-			$form->removeField('access_content');
-		}
-		if ($params->get('event_form_change_featured', '1') != '1') {
-			$form->removeField('featured');
-		}
+				// We need to do it a second time because of the booking form
+				$form->removeField('price');
+			}
+			if ($params->get('event_form_change_payment', '1') != '1') {
+				$form->removeField('plugintype');
+			}
+			if ($params->get('event_form_change_access', '1') != '1') {
+				$form->removeField('access');
+			}
+			if ($params->get('event_form_change_access_content', '1') != '1') {
+				$form->removeField('access_content');
+			}
+			if ($params->get('event_form_change_featured', '1') != '1') {
+				$form->removeField('featured');
+			}
 
-		// Handle tabs
-		if ($params->get('event_form_change_location', '1') != '1') {
-			$form->removeField('location');
-			$form->removeField('location_ids');
+			// Handle tabs
+			if ($params->get('event_form_change_location', '1') != '1') {
+				$form->removeField('location');
+				$form->removeField('location_ids');
+			}
 		}
 
 		return $form;
@@ -249,7 +242,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			}
 		}
 
-		if (!$data->get('id')) {
+		if (!$data->get('id') && !isset($data->capacity)) {
 			$data->set('capacity', 0);
 		}
 
@@ -465,8 +458,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		// Disable booking when it can't be changed
-		if (!isset($data['capacity']) && !$this->getParams()->get('event_form_change_capacity', '1')) {
-			$data['capacity'] = 0;
+		if (!isset($data['capacity']) || !$this->getParams()->get('event_form_change_capacity', '1')) {
+			$data['capacity'] = $this->getParams()->get('event_form_capacity');
 		}
 
 		// Only apply the default values on create
@@ -634,15 +627,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 		if (!$item->get('plugintype')) {
 			$data['plugintype'] = $params->get('event_form_plugintype');
-		}
-		if (!$item->get('ordertext')) {
-			$data['ordertext'] = $params->get('event_form_ordertext');
-		}
-		if (!$item->get('canceltext')) {
-			$data['canceltext'] = $params->get('event_form_canceltext');
-		}
-		if (!$item->get('payment_statement')) {
-			$data['payment_statement'] = $params->get('event_form_payment_statement');
 		}
 		if (!$item->get('access')) {
 			$data['access'] = $params->get('event_form_access');

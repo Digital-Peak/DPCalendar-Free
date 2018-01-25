@@ -281,14 +281,25 @@ class DPCalendarControllerEvent extends JControllerForm
 		}
 
 		if ($success) {
-			DPCalendarHelper::sendMessage(
-				JText::_('JLIB_APPLICATION_SAVE_SUCCESS'),
-				false,
-				array('url' => DPCalendarHelperRoute::getEventRoute($data['id'], $data['catid']))
-			);
-		} else {
-			DPCalendarHelper::sendMessage($model->getError(), true);
+			$event = $model->getItem($data['id']);
+
+			if ($event->start_date == $data['start_date'] && $event->end_date == $data['end_date']) {
+				DPCalendarHelper::sendMessage(
+					JText::_('JLIB_APPLICATION_SAVE_SUCCESS'),
+					false,
+					array('url' => DPCalendarHelperRoute::getEventRoute($data['id'], $data['catid']))
+				);
+
+				return;
+			}
+
+
+			DPCalendarHelper::sendMessage(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), true);
+
+			return;
 		}
+
+		DPCalendarHelper::sendMessage($model->getError(), true);
 	}
 
 	public function save($key = null, $urlVar = 'e_id')
@@ -361,7 +372,16 @@ class DPCalendarControllerEvent extends JControllerForm
 				$validData['id'] = $data['xreference'];
 			}
 
-			$tmp = JFactory::getApplication()->triggerEvent('onEventSave', array($validData));
+			try {
+				$tmp = JFactory::getApplication()->triggerEvent('onEventSave', array($validData));
+			} catch (InvalidArgumentException $e) {
+				$this->setMessage($e->getMessage(), 'error');
+
+				$this->setRedirect(DPCalendarHelperRoute::getFormRoute($app->getUserState('dpcalendar.event.id'), $this->getReturnPage()));
+
+				return false;
+			}
+
 			foreach ($tmp as $newEventId) {
 				if ($newEventId === false) {
 					continue;

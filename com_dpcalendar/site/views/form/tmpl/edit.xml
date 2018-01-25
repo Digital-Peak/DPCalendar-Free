@@ -154,27 +154,6 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
-			<field name="event_form_change_order" type="list"
-				class="btn-group btn-group-yesno" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ORDER_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ORDER_DESC">
-				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_cancellation" type="list"
-				class="btn-group btn-group-yesno" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CANCELLATION_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CANCELLATION_DESC">
-				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_paystatement" type="list"
-				class="btn-group btn-group-yesno" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PAYSTATEMENT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PAYSTATEMENT_DESC">
-				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
 			<field name="event_form_change_access" type="list"
 				class="btn-group btn-group-yesno" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ACCESS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ACCESS_DESC">
@@ -248,15 +227,6 @@
 			<field name="event_form_description" type="editor" buttons="true"
 				hide="pagebreak,readmore" class="input-xlarge" filter="JComponentHelper::filterText"
 				label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC" />
-			<field name="event_form_ordertext" type="editor"
-				label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_DESC" />
-			<field name="event_form_canceltext" type="editor"
-				label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_DESC" />
-			<field name="event_form_payment_statement" type="editor"
-				filter="safehtml" label="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_LABEL"
-				description="COM_DPCALENDAR_FIELD_PAYMENT_STATEMENT_DESC" />
 		</fieldset>
 	</fields>
 </metadata>

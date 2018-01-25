@@ -51,6 +51,7 @@ class DPCalendarViewForm extends \DPCalendar\View\LayoutView
 			$this->form->setValue('start_date', null,
 				$requestParams['start_date'] . (key_exists('start_date_time', $requestParams) ? ' ' . $requestParams['start_date_time'] : ''));
 		}
+
 		if (key_exists('end_date', $requestParams)) {
 			$this->form->setFieldAttribute('end_date', 'filter', null);
 			$this->form->setFieldAttribute('end_date', 'formated', true);
@@ -61,8 +62,17 @@ class DPCalendarViewForm extends \DPCalendar\View\LayoutView
 		if (key_exists('title', $requestParams)) {
 			$this->form->setValue('title', null, $requestParams['title']);
 		}
+
 		if (key_exists('catid', $requestParams)) {
 			$this->form->setValue('catid', null, $requestParams['catid']);
+		}
+
+		if (key_exists('location_ids', $requestParams)) {
+			$this->form->setValue('location_ids', null, $requestParams['location_ids']);
+		}
+
+		if (key_exists('rooms', $requestParams)) {
+			$this->form->setValue('rooms', null, $requestParams['rooms']);
 		}
 
 		return parent::init();

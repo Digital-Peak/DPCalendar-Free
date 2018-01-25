@@ -224,29 +224,29 @@ $options['views']               = array();
 $options['views']['month']      = array(
 	'titleFormat'            => Fullcalendar::convertFromPHPDate($params->get('titleformat_month', 'F Y')),
 	'timeFormat'             => Fullcalendar::convertFromPHPDate($params->get('timeformat_month', 'g:i a')),
-	'columnFormat'           => Fullcalendar::convertFromPHPDate($params->get('columnformat_month', 'D')),
+	'columnHeaderFormat'     => Fullcalendar::convertFromPHPDate($params->get('columnformat_month', 'D')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
 );
 $options['views']['agendaWeek'] = array(
 	'titleFormat'            => Fullcalendar::convertFromPHPDate($params->get('titleformat_week', 'M j Y')),
 	'timeFormat'             => Fullcalendar::convertFromPHPDate($params->get('timeformat_week', 'g:i a')),
-	'columnFormat'           => Fullcalendar::convertFromPHPDate($params->get('columnformat_week', 'D n/j')),
+	'columnHeaderFormat'     => Fullcalendar::convertFromPHPDate($params->get('columnformat_week', 'D n/j')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 );
 $options['views']['agendaDay']  = array(
 	'titleFormat'            => Fullcalendar::convertFromPHPDate($params->get('titleformat_day', 'F j Y')),
 	'timeFormat'             => Fullcalendar::convertFromPHPDate($params->get('timeformat_day', 'g:i a')),
-	'columnFormat'           => Fullcalendar::convertFromPHPDate($params->get('columnformat_day', 'l')),
+	'columnHeaderFormat'     => Fullcalendar::convertFromPHPDate($params->get('columnformat_day', 'l')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
 );
 $options['views']['list']       = array(
-	'titleFormat'      => Fullcalendar::convertFromPHPDate($params->get('titleformat_list', 'M j Y')),
-	'timeFormat'       => Fullcalendar::convertFromPHPDate($params->get('timeformat_list', 'g:i a')),
-	'columnFormat'     => Fullcalendar::convertFromPHPDate($params->get('columnformat_list', 'D')),
-	'listDayFormat'    => Fullcalendar::convertFromPHPDate($params->get('dayformat_list', 'l')),
-	'listDayAltFormat' => Fullcalendar::convertFromPHPDate($params->get('dateformat_list', 'F j, Y')),
-	'duration'         => array('days' => $params->get('list_range', 30)),
-	'noEventsMessage'  => JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
+	'titleFormat'        => Fullcalendar::convertFromPHPDate($params->get('titleformat_list', 'M j Y')),
+	'timeFormat'         => Fullcalendar::convertFromPHPDate($params->get('timeformat_list', 'g:i a')),
+	'columnHeaderFormat' => Fullcalendar::convertFromPHPDate($params->get('columnformat_list', 'D')),
+	'listDayFormat'      => Fullcalendar::convertFromPHPDate($params->get('dayformat_list', 'l')),
+	'listDayAltFormat'   => Fullcalendar::convertFromPHPDate($params->get('dateformat_list', 'F j, Y')),
+	'duration'           => array('days' => $params->get('list_range', 30)),
+	'noEventsMessage'    => JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
 );
 
 // Set up the month and day names

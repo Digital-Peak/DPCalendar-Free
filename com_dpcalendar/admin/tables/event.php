@@ -14,11 +14,6 @@ class DPCalendarTableEvent extends JTable
 
 	public function __construct(&$db = null)
 	{
-		if ($db == null) {
-			$db = JFactory::getDbo();
-		}
-		parent::__construct('#__dpcalendar_events', 'id', $db);
-
 		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
 			JObserverMapper::addObserverClassToClass('JTableObserverTags', 'DPCalendarTableEvent', array('typeAlias' => 'com_dpcalendar.event'));
 			JObserverMapper::addObserverClassToClass(
@@ -27,6 +22,11 @@ class DPCalendarTableEvent extends JTable
 				array('typeAlias' => 'com_dpcalendar.event')
 			);
 		}
+
+		if ($db == null) {
+			$db = JFactory::getDbo();
+		}
+		parent::__construct('#__dpcalendar_events', 'id', $db);
 
 		$this->access         = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('event_form_access', $this->access);
 		$this->access_content = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('event_form_access_content');

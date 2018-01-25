@@ -7,7 +7,9 @@
  */
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
+	return;
+}
 
 JLoader::registerAlias('DPCalendarHelperLocation', '\\DPCalendar\\Helper\\Location', '6.0');
 JLoader::registerAlias('DPCalendarHelperBooking', '\\DPCalendar\\Helper\\Booking', '6.0');
@@ -150,6 +152,46 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 		$query->where('external_id = ' . (int)$user['id']);
 		$db->setQuery($query);
 		$db->execute();
+	}
+
+	public function onContentAfterDelete($context, $item)
+	{
+		// Check if it is a category to delete
+		if ($context != 'com_categories.category') {
+			return;
+		}
+
+		// Check if the category belongs to DPCalendar
+		if ($item->extension != 'com_dpcalendar') {
+			return;
+		}
+
+		// Add the required table and module path
+		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+
+		// Load the model
+		$model = JModelLegacy::getInstance('Form', 'DPCalendarModel', array('ignore_request' => true));
+
+		// Select all events which do belong to the category
+		$db    = JFactory::getDbo();
+		$query = $db->getQuery(true);
+		$query->select('id')->from('#__dpcalendar_events')->where('original_id in (0, -1) and catid=' . (int)$item->id);
+		$db->setQuery($query);
+
+		// Loop over the events
+		foreach ($db->loadAssocList() as $eventId) {
+			// We are using here the model to properly trigger the events
+
+			// Unpublish it first
+			$model->publish($eventId, -2);
+
+			// The actually delete the event
+			if (!$model->delete($eventId)) {
+				// Add the error message
+				JFactory::getApplication()->enqueueMessage($model->getError(), 'error');
+			}
+		}
 	}
 
 	public function onContentPrepareForm($form, $data)

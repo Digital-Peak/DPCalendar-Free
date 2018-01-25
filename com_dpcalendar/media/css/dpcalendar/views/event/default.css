@@ -34,6 +34,10 @@
 	height: 200px;
 }
 
+#dp-event-information-content-details-data-url-content {
+	word-break: break-all;
+}
+
 #dp-event-information-content-details-data-url-content .dp-event-content a {
 	white-space: nowrap;
 	overflow: hidden;

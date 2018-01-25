@@ -21,18 +21,18 @@ if (!$events) {
 // Load the required JS libraries
 DPCalendarHelper::loadLibrary(array('dpcalendar' => true, 'url' => true));
 
+if ($params->get('show_as_popup')) {
+	// Load the required JS libraries
+	DPCalendarHelper::loadLibrary(array('modal' => true));
+	JHtml::_('script', 'mod_dpcalendar_upcoming/default.min.js', ['relative' => true], ['defer' => true]);
+}
+
 // Load the stylesheet
 JHtml::_('stylesheet', 'mod_dpcalendar_upcoming/default.min.css', ['relative' => true]);
 
 // The root container
 $root = new Container('dp-module-upcoming-default-' . $module->id, array('root'), array('ccl-prefix' => 'dp-module-upcoming-default-'));
 $root->addClass('dp-module-upcoming-root', true);
-
-if ($params->get('show_as_popup')) {
-	// Load the required JS libraries
-	DPCalendarHelper::loadLibrary(array('modal' => true));
-	JHtml::_('script', 'mod_dpcalendar_upcoming/default.min.js', ['relative' => true], ['defer' => true]);
-}
 
 // The events container
 $c = $root->addChild(new Container('events'));

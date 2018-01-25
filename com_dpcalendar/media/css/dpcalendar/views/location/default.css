@@ -15,3 +15,7 @@
 #dp-location-upcoming-events span {
 	margin-left: 5px;
 }
+
+#dp-location-quickadd {
+	display: none;
+}

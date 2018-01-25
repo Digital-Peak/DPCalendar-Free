@@ -294,6 +294,9 @@
 	</fieldset>
 	<fieldset name="map" label="COM_DPCALENDAR_FIELD_CONFIG_MAP_LABEL"
 	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="map_date_format" type="text" default="m.d.Y"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>
 		<field name="map_view_zoom" type="text" default="6"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
@@ -680,24 +683,6 @@
 		<field name="event_form_change_payment" type="radio"
 		       class="btn-group" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PAYMENT_LABEL"
 		       default="1" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PAYMENT_DESC">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
-		</field>
-		<field name="event_form_change_order" type="radio"
-		       class="btn-group" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ORDER_LABEL"
-		       default="1" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ORDER_DESC">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
-		</field>
-		<field name="event_form_change_cancellation" type="radio"
-		       class="btn-group" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CANCELLATION_LABEL"
-		       default="1" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CANCELLATION_DESC">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
-		</field>
-		<field name="event_form_change_paystatement" type="radio"
-		       class="btn-group" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PAYSTATEMENT_LABEL"
-		       default="1" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PAYSTATEMENT_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
@@ -1144,6 +1129,59 @@
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
+		</field>
+	</fieldset>
+
+	<fieldset name="location_form" label="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONFORM_LABEL"
+	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="location_form_country" type="list" default="1"
+		       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+		</field>
+		<field name="location_form_province" type="list" default="1"
+		       label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+		</field>
+		<field name="location_form_city" type="list" default="1"
+		       label="COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+		</field>
+		<field name="location_form_zip" type="list" default="1"
+		       label="COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+		</field>
+		<field name="location_form_street" type="list" default="1"
+		       label="COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+		</field>
+		<field name="location_form_number" type="list" default="1"
+		       label="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
+		</field>
+		<field name="location_form_url" type="list" default="1"
+		       label="COM_DPCALENDAR_FIELD_URL_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 		</field>
 	</fieldset>
 

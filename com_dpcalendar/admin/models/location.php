@@ -75,7 +75,36 @@ class DPCalendarModelLocation extends JModelAdmin
 			$form->removeField('captcha');
 		}
 
+		$this->modifyField($form, 'country');
+		$this->modifyField($form, 'province');
+		$this->modifyField($form, 'city');
+		$this->modifyField($form, 'zip');
+		$this->modifyField($form, 'street');
+		$this->modifyField($form, 'number');
+
 		return $form;
+	}
+
+	private function modifyField(JForm $form, $name)
+	{
+		$params = $this->getState('params');
+		if (!$params) {
+			$params = JComponentHelper::getParams('com_dpcalendar');
+
+			if (JFactory::getApplication()->isClient('site')) {
+				$params = JFactory::getApplication()->getParams();
+			}
+		}
+
+		$state = $params->get('location_form_' . $name, 1);
+		switch ($state) {
+			case 0:
+				$form->removeField($name);
+				break;
+			case 2:
+				$form->setFieldAttribute($name, 'required', 'true');
+				break;
+		}
 	}
 
 	protected function loadFormData()
@@ -150,7 +179,7 @@ class DPCalendarModelLocation extends JModelAdmin
 
 		$params = JComponentHelper::getParams('com_dpcalendar');
 
-		if ($app->isSite()) {
+		if ($app->isClient('site')) {
 			$params = $app->getParams();
 		}
 		$this->setState('params', $params);

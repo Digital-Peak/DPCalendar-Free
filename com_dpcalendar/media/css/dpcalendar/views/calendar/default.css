@@ -10,3 +10,7 @@
 #dp-calendar-comments{
 	margin-top: 10px
 }
+
+.fc-header-toolbar h2 {
+	padding: 4px 15px 0;
+}

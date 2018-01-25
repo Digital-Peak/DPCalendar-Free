@@ -8,7 +8,10 @@
 defined('_JEXEC') or die();
 
 use Joomla\Utilities\ArrayHelper;
-JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+
+if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
+	return;
+}
 
 class PlgContentDpcalendar extends JPlugin
 {

@@ -88,6 +88,8 @@ $formElement->addChild(new Input('urlhash', 'hidden', 'urlhash'));
 $formElement->addChild(new Input('capacity', 'hidden', 'jform[capacity]', '0'));
 $formElement->addChild(new Input('all_day', 'hidden', 'form[all_day]', '0'));
 $formElement->addChild(new Input('layout', 'hidden', 'layout', 'edit'));
+$formElement->addChild(new Input('location-ids', 'hidden', 'jform[location_ids][]'));
+$formElement->addChild(new Input('rooms', 'hidden', 'jform[rooms][]'));
 
 $actions = $root->addChild(new Container('actions'));
 $actions->addClass('dp-actions-container', true);

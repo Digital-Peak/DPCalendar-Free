@@ -54,7 +54,7 @@ if ($params->get('location_show_resource_view', 1) && !\DPCalendar\Helper\DPCale
 	$resourceParams->set('show_compact_events', $params->get('compact_events', 2) == 1);
 	$resourceParams->set('default_view', $params->get('location_default_view', 'resday'));
 	$resourceParams->set('use_hash', true);
-	$resourceParams->set('event_create_form', 0);
+	$resourceParams->set('event_create_form', 2);
 	$resourceParams->set('screen_size_list_view', 0);
 
 	// Resource specific options

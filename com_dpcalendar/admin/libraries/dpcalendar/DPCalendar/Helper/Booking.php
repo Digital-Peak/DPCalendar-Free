@@ -13,7 +13,7 @@ use CCL\Content\Element\Basic\Container;
 use DPCalendar\CCL\Visitor\InlineStyleVisitor;
 
 \JLoader::import('joomla.application.component.helper');
-\JTable::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
+\JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
 
 class Booking
 {

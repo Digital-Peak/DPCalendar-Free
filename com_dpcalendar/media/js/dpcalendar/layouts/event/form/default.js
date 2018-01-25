@@ -212,8 +212,8 @@ function updateFormFromRule() {
 					jQuery('#jform_scheduling_interval').val(parts[1]);
 					break;
 				case 'UNTIL':
-					var t = parts[1];
-					jQuery('#jform_scheduling_end_date').val(t.substring(0, 4) + '-' + t.substring(4, 6) + '-' + t.substring(6, 8));
+					var untilField = document.getElementById('jform_scheduling_end_date');
+					untilField.value = moment.utc(parts[1]).format(untilField.getAttribute('format'));
 					break;
 			}
 		}
@@ -287,9 +287,11 @@ function updateRuleFromForm() {
 		if (count > 0) {
 			rule += ';COUNT=' + count;
 		}
-		var until = jQuery('#jform_scheduling_end_date').val();
-		if (until != '0000-00-00' && until.length == 10) {
-			rule += ';UNTIL=' + until.replace(/\-/g, '') + 'T235900Z';
+
+		var untilField = document.getElementById('jform_scheduling_end_date');
+		var until = moment(untilField.value, untilField.getAttribute('format'));
+		if (until.isValid()) {
+			rule += ';UNTIL=' + until.format('YYYYMMDD') + 'T235900Z';
 		}
 	}
 	jQuery('#jform_rrule').val(rule);

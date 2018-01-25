@@ -18,7 +18,6 @@ use CCL\Content\Element\Basic\Element;
 use CCL\Content\Element\Basic\Description\Term;
 use CCL\Content\Element\Basic\Description\Description;
 use CCL\Content\Element\Basic\TextBlock;
-use CCL\Content\Element\Basic\Meta;
 
 // Global parameters
 $params    = $this->params;

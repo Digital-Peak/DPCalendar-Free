@@ -32,8 +32,10 @@ DPCalendarHelper::loadLibrary(array('jquery' => true, 'chosen' => true, 'dpcalen
 JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/layouts/event/form/default.css', ['relative' => true]);
 JHtml::_('script', 'com_dpcalendar/dpcalendar/layouts/event/form/default.js', ['relative' => true], ['defer' => true]);
 
-// Initialise the modal behavior
-JHtml::_('behavior.modal', 'a.modal_jform_contenthistory');
+if ($params->get('save_history')) {
+	// Initialise the modal behavior
+	JHtml::_('behavior.modal', 'a.modal_jform_contenthistory');
+}
 
 // Some JS language strings
 JText::script('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');

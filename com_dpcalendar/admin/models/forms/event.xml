@@ -125,7 +125,7 @@
 			<option value="30">30</option>
 			<option value="31">31</option>
 		</field>
-		<field name="rrule" type="text"
+		<field name="rrule" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_DESC"/>
 
 		<field name="description" type="editor" buttons="true" hide="pagebreak,readmore" filter="JComponentHelper::filterText"
@@ -139,7 +139,8 @@
 		       key_field="id" value_field="title"
 		       query="SELECT id, concat(title,' [',IFNULL(latitude, '0'),':',IFNULL(longitude, '0'),']') as title FROM #__dpcalendar_locations where state = 1 order by title"
 		       label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC"/>
-		<field name="rooms" type="dpcrooms" multiple="true" label="COM_DPCALENDAR_ROOMS"/>
+		<field name="rooms" type="dpcrooms" multiple="true"
+		       label="COM_DPCALENDAR_ROOMS" description="COM_DPCALENDAR_FIELD_ROOMS_DESC"/>
 	</fieldset>
 	<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
 		<field name="capacity" type="text"

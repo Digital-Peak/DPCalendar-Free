@@ -112,6 +112,7 @@ JFactory::getDocument()->addStyleDeclaration('.ui-datepicker { z-index: 1003 !im
 			{
 				$canCreate	= $user->authorise('core.create',		'com_dpcalendar.category.' . $item->catid);
 				$canEdit	= $user->authorise('core.edit',			'com_dpcalendar.category.' . $item->catid);
+				$canEditOwn = $user->authorise('core.edit.own',     'com_dpcalendar.category.' . $item->catid);
 				$canCheckin	= $user->authorise('core.manage',		'com_checkin') || $item->checked_out == $user->get('id') || $item->checked_out == 0;
 				$canChange	= $user->authorise('core.edit.state',	'com_dpcalendar.category.' . $item->catid) && $canCheckin;
 				?>

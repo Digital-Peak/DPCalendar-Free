@@ -8,6 +8,7 @@
 
 #dp-calendar-list {
 	overflow: hidden;
+	display: none;
 }
 
 #dp-calendar-list input {
@@ -27,16 +28,18 @@
 	white-space: normal;
 }
 
-.dp-event-tooltip{
+.dp-event-tooltip {
 	font-size: 0.7rem;
 }
+
 .dp-event-tooltip a {
 	margin-right: .4rem;
 }
 
-.tippy-tooltip{
+.tippy-tooltip {
 	padding: .2rem;
 }
+
 .tippy-tooltip [x-circle] {
 	border-radius: 0;
 }

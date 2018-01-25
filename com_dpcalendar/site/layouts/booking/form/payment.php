@@ -69,6 +69,11 @@ if ($bookingId && $booking->state == 4) {
 /** @var Container $root * */
 $root = $root->addChild(new Container('options'));
 
+// SHow the booking text when there is only one event
+if (count($events) == 1 && reset($events)->booking_information) {
+	$root->addChild(new Element('payment-text'))->setContent(reset($events)->booking_information);
+}
+
 // Add the payment options when a payment is needed
 if ($needsPayment || ($bookingId && $booking->state == 3)) {
 	// The container

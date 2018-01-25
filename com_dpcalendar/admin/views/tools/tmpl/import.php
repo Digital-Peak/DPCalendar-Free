@@ -62,10 +62,10 @@ JPluginHelper::importPlugin('dpcalendar');
 			}
 			foreach (JPluginHelper::getPlugin('dpcalendar') as $plugin)
 			{
-			JFactory::getLanguage()->load('plg_dpcalendar_' . $plugin->name, JPATH_PLUGINS . DS . 'dpcalendar' . DS . $plugin->name);
+			JFactory::getLanguage()->load('plg_dpcalendar_' . $plugin->name, JPATH_PLUGINS . '/dpcalendar/' . $plugin->name);
 			?>
 			<fieldset class="panelform">
-			<legend><?php echo JText::_('PLG_' . $plugin->name)?></legend>
+			<legend><?php echo JText::_('PLG_DPCALENDAR_' . $plugin->name)?></legend>
 
 			<?php
 				foreach ($calendars as $cal)

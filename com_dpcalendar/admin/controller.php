@@ -42,6 +42,10 @@ class DPCalendarController extends JControllerLegacy
 			$name = 'AdminEvent';
 		}
 
+		if ($name == 'events') {
+			$name = 'AdminEvents';
+		}
+
 		return parent::getModel($name, $prefix, $config);
 	}
 }

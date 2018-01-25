@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 $price = $displayData['price'];
 if (!$price) {
-	return;
+	$price = '0';
 }
 
 $currency = DPCalendarHelper::getComponentParameter('currency_symbol', '$');

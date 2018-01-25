@@ -138,6 +138,8 @@ class DPCalendarModelEvents extends JModelList
 			// Set up the rooms
 			if (!empty($item->rooms)) {
 				$item->rooms = explode(',', $item->rooms);
+			} else {
+				$item->rooms = [];
 			}
 
 			// If the event has no color, use the one from the calendar

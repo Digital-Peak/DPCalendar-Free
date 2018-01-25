@@ -82,6 +82,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 			\Sabre\DAV\Server::$exposeVersion = false;
 
 			$server = new \Sabre\DAV\Server($tree);
+			$server->debugExceptions = JDEBUG;
 
 			$uri = trim(JUri::root(true), '/');
 			if (strpos($uri, 'components/com_dpcalendar') === false)

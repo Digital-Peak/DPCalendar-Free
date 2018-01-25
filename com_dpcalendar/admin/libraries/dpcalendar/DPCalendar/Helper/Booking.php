@@ -326,6 +326,9 @@ class Booking
 	 */
 	public static function getPriceWithDiscount($price, $event, $earlyBirdIndex = -1, $userGroupIndex = -1)
 	{
+		if (!$price) {
+			return $price;
+		}
 		$newPrice = $price;
 
 		$now = \DPCalendarHelper::getDate();

@@ -30,7 +30,7 @@ $params->set('link_title', true);
 $this->root->addClass('dpcalendar-locations-container', true);
 
 // The resource view
-if ($params->get('location_show_resource_view', 1) && !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
+if ($params->get('locations_show_resource_view', 1) && !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
 	$resourceParams = clone $params;
 
 	// Some defaults for the calendar

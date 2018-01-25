@@ -169,10 +169,10 @@ class DPCalendar extends CalDAV\Backend\PDO
 			$model->setState('category.recursive', true);
 			$model->setState('filter.ongoing', 1);
 
-			if (key_exists('start', $timeRange) && !empty($timeRange['start'])) {
+			if (is_array($timeRange) && key_exists('start', $timeRange) && !empty($timeRange['start'])) {
 				$model->setState('list.start-date', $timeRange['start']->getTimeStamp());
 			}
-			if (key_exists('end', $timeRange) && !empty($timeRange['end'])) {
+			if (is_array($timeRange) && key_exists('end', $timeRange) && !empty($timeRange['end'])) {
 				$model->setState('list.end-date', $timeRange['end']->getTimeStamp());
 			}
 

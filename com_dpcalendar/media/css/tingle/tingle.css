@@ -205,7 +205,7 @@
 /* responsive
 -------------------------------------------------------------- */
 
-@media (max-width : 540px) {
+@media (max-width : 760px) {
   .tingle-modal {
     top: 0px;
     display: block;

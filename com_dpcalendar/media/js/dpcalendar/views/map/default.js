@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				// Opening the modal box
 				var url = new Url(event.target.getAttribute('href'));
 				url.query.tmpl = 'component';
-				DPCalendar.modal(url, root.dataset.popupheight);
+				DPCalendar.modal(url, root.dataset.popupwidth, root.dataset.popupheight);
 			} else {
 				window.location = DPCalendar.encode(event.target.getAttribute('href'));
 			}

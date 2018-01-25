@@ -43,7 +43,7 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		}
 
 		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
-		$model->setState('list.limit', 1000);
+		$model->setState('list.limit', 25);
 		$model->setState('list.start-date', DPCalendarHelper::getDate());
 		$model->setState('list.ordering', 'start_date');
 		$model->setState('filter.expand', true);

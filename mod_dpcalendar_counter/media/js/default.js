@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 				var url = new Url(this.getAttribute('href'));
 				url.query.tmpl = 'component';
-				DPCalendar.modal(url, 700);
+				DPCalendar.modal(url, 0, 700);
 			});
 		}
 

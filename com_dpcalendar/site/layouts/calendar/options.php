@@ -85,7 +85,8 @@ $options['weekNumbers']    = (boolean)$params->get('week_numbers');
 $options['weekends']       = (boolean)$params->get('weekend', 1);
 $options['fixedWeekCount'] = (boolean)$params->get('fixed_week_count', 1);
 
-if ($params->get('business_hours_days', array())) {
+$bd = $params->get('business_hours_days', array());
+if ($bd && !(count($bd) == 1 && !$bd[0])) {
 	$options['businessHours'] = array(
 		'start' => $params->get('business_hours_start', ''),
 		'end'   => $params->get('business_hours_end', ''),
@@ -292,8 +293,8 @@ $options['date']  = $now->format('d', true);
 
 $hideCode = '';
 
-if ($params->get('show_selection', 1) == 1) {
-	$hideCode = 'DPCalendar.hide(document.getElementById("' . $displayData['id'] . '").parentElement.querySelector(".dp-calendar-list"));';
+if ($params->get('show_selection', 1) == 3) {
+	$hideCode = 'document.getElementById("' . $displayData['id'] . '").parentElement.querySelector(".dp-calendar-list").style.display = "block";';
 }
 
 $calCode = "document.addEventListener('DOMContentLoaded', function () {

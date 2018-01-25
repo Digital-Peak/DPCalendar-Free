@@ -221,7 +221,7 @@ DPCalendar = window.DPCalendar || {};
 				// Opening the Joomal modal box
 				var url = new Url(event.url);
 				url.query.tmpl = 'component';
-				DPCalendar.modal(url, calendar.data('popupheight'), function (frame) {
+				DPCalendar.modal(url, calendar.data('popupwidth'), calendar.data('popupheight'),function (frame) {
 					// Check if there is a system message
 					var innerDoc = frame.contentDocument || frame.contentWindow.document;
 					if (innerDoc.getElementById('system-message').children.length < 1) {
@@ -366,7 +366,7 @@ DPCalendar = window.DPCalendar || {};
 		var toggle = root.querySelector('.dp-calendar-toggle');
 		if (toggle) {
 			toggle.addEventListener('click', function (event) {
-				DPCalendar.fadeToggle(root.querySelector('.dp-calendar-list'), function (fadeIn) {
+				DPCalendar.slideToggle(root.querySelector('.dp-calendar-list'), function (fadeIn) {
 					if (!fadeIn) {
 						root.querySelector('i[data-direction="up"]').style.display = 'none';
 						root.querySelector('i[data-direction="down"]').style.display = 'inline';
@@ -404,8 +404,8 @@ DPCalendar = window.DPCalendar || {};
 			calendar.fullCalendar('removeEventSource', source);
 
 			for (var i = 0; i < eventSources.length; i++) {
-				if (value == source.url) {
-					eventSources.splice(index, 1);
+				if (eventSources[i] == source.url) {
+					eventSources.splice(i, 1);
 				}
 			}
 		}

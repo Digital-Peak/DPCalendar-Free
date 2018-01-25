@@ -50,7 +50,7 @@ $c = $root->addChild(
 	new Element(
 		'calendar',
 		array(),
-		array('data-popupwidth' => $params->get('popup_width', 700), 'data-popupheight' => $params->get('popup_height', 500))
+		array('data-popupwidth' => $params->get('popup_width'), 'data-popupheight' => $params->get('popup_height', 500))
 	)
 );
 $c->addClass('dp-calendar', true);

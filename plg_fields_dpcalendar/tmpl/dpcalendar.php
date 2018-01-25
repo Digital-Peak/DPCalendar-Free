@@ -1,13 +1,11 @@
 <?php
 /**
- * @package     Joomla.Plugin
- * @subpackage  Fields.Calendar
- *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @package    DPCalendar
+ * @author     Digital Peak http://www.digital-peak.com
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
-defined('_JEXEC') or die;
+defined('_JEXEC') or die();
 
 $value = $field->value;
 
@@ -16,9 +14,7 @@ if ($value == '') {
 }
 
 if (!is_array($value)) {
-	$value = array(
-		$value
-	);
+	$value = array($value);
 }
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);

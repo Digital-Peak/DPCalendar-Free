@@ -1,13 +1,11 @@
 <?php
 /**
- * @package     Joomla.Site
- * @subpackage  com_fields
- *
- * @copyright   Copyright (C) 2005 - 2017 Open Source Matters, Inc. All rights reserved.
- * @license     GNU General Public License version 2 or later; see LICENSE.txt
+ * @package    DPCalendar
+ * @author     Digital Peak http://www.digital-peak.com
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
-defined('_JEXEC') or die;
+defined('_JEXEC') or die();
 
 use CCL\Content\Element\Basic\Container;
 
@@ -59,8 +57,14 @@ foreach ($fields as $field) {
 		continue;
 	}
 
-	DPCalendarHelper::renderLayout('content.dl',
-		array('root' => $c, 'id' => 'field-' . $field->id, 'label' => $field->params->get('showlabel') ? $field->label : '', 'content' => $field->value)
+	DPCalendarHelper::renderLayout(
+		'content.dl',
+		array(
+			'root'    => $c,
+			'id'      => 'field-' . $field->id,
+			'label'   => $field->params->get('showlabel') ? $field->label : '',
+			'content' => $field->value
+		)
 	);
 }
 

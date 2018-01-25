@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -45,7 +45,7 @@ $root = new Container('dp-module-mini-' . $module->id, array(), array('ccl-prefi
 // The url to fetch the events from
 $url = html_entity_decode(
 	JRoute::_(
-		'index.php?option=com_dpcalendar&view=events&limit=0&format=raw&'.
+		'index.php?option=com_dpcalendar&view=events&limit=0&format=raw&' .
 		'&compact=' . $params->get('compact_events', 2) . '&ids=' . implode(',', $ids) . '&openview=' . $params->get('open_view', 'agendaDay') .
 		'&module-id=' . $module->id
 	)
@@ -55,7 +55,7 @@ $url = html_entity_decode(
 $params->set('header_show_datepicker', false);
 $params->set('header_show_print', false);
 $params->set('show_map', false);
-$params->set('show_compact_events', $params->get('compact_events', 2) == 1);
+$params->set('show_event_time', $params->get('compact_events', 2) != 2);
 $params->set('use_hash', false);
 $params->set('event_create_form', 0);
 $params->set('screen_size_list_view', 0);

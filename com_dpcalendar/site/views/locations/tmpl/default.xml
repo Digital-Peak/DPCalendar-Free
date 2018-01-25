@@ -42,13 +42,25 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="locations_default_view" type="list" showon="location_show_resource_view:1"
+			<field name="locations_default_view" type="list" showon="locations_show_resource_view:1" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
 				<option value="resmonth">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
 				<option value="resweek">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
 				<option value="resday">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
 				<option value="resyear">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_YEAR</option>
+			</field>
+			<field name="locations_header_show_datepicker" type="radio" class="btn-group" showon="locations_show_resource_view:1" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="locations_header_show_title" type="radio" class="btn-group" showon="locations_show_resource_view:1" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
 			</field>
 			<field name="locations_show_upcoming_events" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"

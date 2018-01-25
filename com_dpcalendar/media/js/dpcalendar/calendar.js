@@ -99,7 +99,7 @@ DPCalendar = window.DPCalendar || {};
 			}
 
 			var map = calendar[0].parentElement.querySelector('.dpcalendar-map');
-			if (map == null || map.dpmap == null) {
+			if (map == null || map.dpmap == null || !options['show_map']) {
 				return;
 			}
 			DPCalendar.Map.clearMarkers(map.dpmap);
@@ -121,7 +121,7 @@ DPCalendar = window.DPCalendar || {};
 
 				var content = document.createElement('div');
 				content.innerHTML = desc;
-				tippy(element, {
+				element.tippy = tippy(element, {
 					interactive: true,
 					delay: 100,
 					arrow: true,
@@ -142,7 +142,7 @@ DPCalendar = window.DPCalendar || {};
 			}
 
 			var map = calendar[0].parentElement.querySelector('.dpcalendar-map');
-			if (map == null || map.dpmap == null) {
+			if (map == null || map.dpmap == null || !options['show_map']) {
 				return;
 			}
 
@@ -261,6 +261,11 @@ DPCalendar = window.DPCalendar || {};
 		// Handling clicking on an event
 		options['eventClick'] = function (event, jsEvent, view) {
 			jsEvent.stopPropagation();
+
+			var tippy = jsEvent.currentTarget.tippy;
+			if (tippy) {
+				tippy.hide(tippy.getPopperElement(jsEvent.currentTarget));
+			}
 
 			if (options['show_event_as_popup'] == 2) {
 				return false;
@@ -414,11 +419,18 @@ DPCalendar = window.DPCalendar || {};
 		options['eventSources'] = sources;
 
 		// Loading the calendar
-		calendar.fullCalendar(jQuery.extend({}, options));
+		calendar.fullCalendar(options);
 
 		// Replace class names with the one from Joomla
-		jQuery('.fc-icon-icon-print').attr('class', options['icon_print']);
-		jQuery('.fc-icon-icon-calendar').attr('class', options['icon_calendar']);
+		var icon = document.querySelector('.fc-icon-icon-print');
+		if (icon) {
+			icon.setAttribute('class', options['icon_print']);
+		}
+
+		icon = document.querySelector('.fc-icon-icon-calendar');
+		if (icon) {
+			icon.setAttribute('class', options['icon_calendar']);
+		}
 
 		// Toggle the list of calendars
 		var root = calendar[0].parentElement;
@@ -438,14 +450,14 @@ DPCalendar = window.DPCalendar || {};
 		}
 
 		// Modify the calendar list
-		jQuery.each(options['eventSources'], function (index, value) {
-			jQuery('#dp-calendar-list input').each(function (indexInput) {
-				var input = jQuery(this);
-				if (value.url == input.val()) {
-					input.attr('checked', true);
+		for (var i = 0; i < options['eventSources'].length; i++) {
+			var elements = calendar[0].parentElement.querySelectorAll('.dp-calendar-list input');
+			for (var j = 0; j < elements.length; j++) {
+				if (options['eventSources'][i].url == elements[j].value) {
+					elements[j].setAttribute('checked', true);
 				}
-			});
-		});
+			}
+		}
 	}
 
 	DPCalendar.updateCalendar = function (input, calendar) {

@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -84,7 +84,7 @@ foreach ($this->items as $event) {
 		'editable'    => DPCalendarHelper::getCalendar($event->catid)->canEdit != false,
 		'color'       => '#' . $event->color,
 		'fgcolor'     => $fgcolor,
-		'allDay'      => $this->compactMode == 0 ? (bool)$event->all_day : true,
+		'allDay'      => (bool)$event->all_day,
 		'description' => $description,
 		'location'    => $locations
 	);

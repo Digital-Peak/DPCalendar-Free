@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -34,7 +34,8 @@ if ($params->get('locations_show_resource_view', 1) && !\DPCalendar\Helper\DPCal
 	$resourceParams = clone $params;
 
 	// Some defaults for the calendar
-	$resourceParams->set('header_show_datepicker', false);
+	$resourceParams->set('header_show_datepicker', $params->get('locations_header_show_datepicker', 1));
+	$resourceParams->set('header_show_title', $params->get('locations_header_show_title', 1));
 	$resourceParams->set('header_show_print', false);
 	$resourceParams->set('header_show_month', false);
 	$resourceParams->set('header_show_week', false);
@@ -46,7 +47,6 @@ if ($params->get('locations_show_resource_view', 1) && !\DPCalendar\Helper\DPCal
 	$resourceParams->set('header_show_timeline_year', true);
 	$resourceParams->set('show_selection', false);
 	$resourceParams->set('show_map', false);
-	$resourceParams->set('show_compact_events', $params->get('compact_events', 2) == 1);
 	$resourceParams->set('default_view', $params->get('locations_default_view', 'resday'));
 	$resourceParams->set('use_hash', true);
 	$resourceParams->set('event_create_form', 0);

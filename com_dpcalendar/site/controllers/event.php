@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -555,9 +555,20 @@ class DPCalendarControllerEvent extends JControllerForm
 			$data['all_day'] = '1';
 		}
 
-		$data['start_date'] = DPCalendarHelper::getDateFromString($data['start_date'], $data['start_date_time'], $data['all_day'] == '1')->toSql(
-			false);
-		$data['end_date']   = DPCalendarHelper::getDateFromString($data['end_date'], $data['end_date_time'], $data['all_day'] == '1')->toSql(false);
+		$data['start_date'] = DPCalendarHelper::getDateFromString(
+			$data['start_date'],
+			$data['start_date_time'],
+			$data['all_day'] == '1'
+		)->toSql(false);
+		$data['end_date']   = DPCalendarHelper::getDateFromString(
+			$data['end_date'],
+			$data['end_date_time'],
+			$data['all_day'] == '1'
+		)->toSql(false);
+
+		if (!empty($data['scheduling_end_date'])) {
+			$data['scheduling_end_date'] = DPCalendarHelper::getDateFromString($data['scheduling_end_date'], null, true)->toSql(false);
+		}
 
 		$this->input->set('jform', $data);
 		$this->input->post->set('jform', $data);

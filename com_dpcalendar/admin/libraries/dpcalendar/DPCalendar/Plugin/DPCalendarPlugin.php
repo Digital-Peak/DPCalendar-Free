@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -810,7 +810,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		// Add none standard properties
 		$color = (string)$event->{'x-color'};
-		if (!empty($color) && !\DPCalendarHelper::getCalendar($event->catid)->color_force) {
+		if (!empty($color) && !\DPCalendarHelper::getCalendar($tmpEvent->catid)->color_force) {
 			$tmpEvent->color = $color;
 		}
 		$url = (string)$event->{'x-url'};

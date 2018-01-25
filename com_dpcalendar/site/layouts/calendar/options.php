@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -114,7 +114,8 @@ if (is_numeric($min)) {
 }
 $options['minTime'] = $min;
 
-$options['nowIndicator'] = (boolean)$params->get('current_time_indicator', 1);
+$options['nowIndicator']     = (boolean)$params->get('current_time_indicator', 1);
+$options['displayEventTime'] = (boolean)$params->get('show_event_time', 1);
 
 if ($params->get('event_limit', '') != '-1') {
 	$options['eventLimit'] = $params->get('event_limit', '') == '' ? 2 : $params->get('event_limit', '') + 1;
@@ -272,6 +273,7 @@ for ($i = 1; $i <= 12; $i++) {
 
 // Some DPCalendar specific options
 $options['show_event_as_popup']   = $params->get('show_event_as_popup');
+$options['show_map']              = $params->get('show_map', 1);
 $options['use_hash']              = $params->get('use_hash');
 $options['event_create_form']     = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);

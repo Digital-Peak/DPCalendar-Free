@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -31,6 +31,10 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 
 		if ($event == null || !$event->id) {
 			throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
+		}
+
+		if ($this->params->get('event_redirect_to_url', 0) && $event->url) {
+			$this->app->redirect($event->url);
 		}
 
 		// Add router helpers.

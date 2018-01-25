@@ -1,20 +1,30 @@
-#dp-map form > div {
-	margin-bottom: 5px;
+.dp-actions-container {
+    padding-top: 5px;
+}
+
+#dp-map input,
+#dp-map select {
+	width: 100%;
+	overflow: hidden;
 }
 
 .dp-map-form-container {
+	margin: 0 -5px;
 	display: flex;
 	flex-wrap: wrap;
 }
 
-#dp-map [name=search], #dp-map [name=location] {
-	flex-grow: 1;
+.dp-map-form-container > div {
+	display: flex;
+	flex: 1 1 260px;
+	margin: 0 5px 10px;
 }
 
-#dp-map [name=start-date], #dp-map [name=end-date] {
-	width: 95px;
+.dp-map-date input {
+	flex: 1 0 0;
 }
 
-#dp-map [name=radius], #dp-map [name=length-type] {
-	width: 111px;
+.dp-map-date input + input,
+.dp-map-area select + select {
+	margin-left: 10px;
 }

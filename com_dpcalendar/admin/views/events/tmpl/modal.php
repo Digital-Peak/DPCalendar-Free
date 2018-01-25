@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2017 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -25,21 +25,35 @@ $function = JFactory::getApplication()->input->getCmd('function', 'jSelectEvent'
 		<div class="btn-group pull-left">
 			<label class="element-invisible" for="filter_search_start"><?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_START_DATE_AFTER_LABEL'); ?>:</label>
 			<?php
-			echo JHtml::_('datetime.render',
-						$this->escape($this->state->get('filter.search_start')),
-						'filter_search_start',
-						'filter[search_start]',
-						array('allDay' => true, 'onchange' => 'this.form.submit();', 'formated' => true));
+			echo JHtml::_(
+                'datetime.render',
+                $this->escape($this->state->get('filter.search_start')),
+                'filter_search_start',
+                'filter[search_start]',
+                array(
+                    'allDay'     => true,
+                    'onchange'   => 'this.form.submit();',
+                    'formated'   => true,
+                    'dateFormat' => $this->params->get('event_form_date_format', 'm.d.Y')
+                )
+            );
 			?>
 		</div>
 		<div class="btn-group pull-left">
 			<label class="element-invisible" for="filter_search_end"><?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_END_DATE_BEFORE_LABEL'); ?>:</label>
 			<?php
-			echo JHtml::_('datetime.render',
-						$this->escape($this->state->get('filter.search_end')),
-						'filter_search_end',
-						'filter[search_end]',
-						array('allDay' => true, 'onchange' => 'this.form.submit();', 'formated' => true));
+			echo JHtml::_(
+                'datetime.render',
+                $this->escape($this->state->get('filter.search_end')),
+                'filter_search_end',
+                'filter[search_end]',
+                array(
+                    'allDay'     => true,
+                    'onchange'   => 'this.form.submit();',
+                    'formated'   => true,
+                    'dateFormat' => $this->params->get('event_form_date_format', 'm.d.Y')
+                )
+            );
 			?>
 		</div>
 		<div class="btn-group pull-left hidden-phone">

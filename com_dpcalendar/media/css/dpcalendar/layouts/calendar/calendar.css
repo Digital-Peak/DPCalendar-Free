@@ -29,15 +29,18 @@
 }
 
 .dp-event-tooltip {
-	font-size: 0.7rem;
+	text-align: left;
+	font-size: 12px;
 }
 
 .dp-event-tooltip a {
 	margin-right: .4rem;
+	color: #42a1ff;
 }
 
 .tippy-tooltip {
 	padding: .2rem;
+	max-width: 200px;
 }
 
 .tippy-tooltip [x-circle] {

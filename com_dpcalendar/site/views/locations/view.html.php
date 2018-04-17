@@ -26,6 +26,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 		{
 			$this->getModel()->setState('filter.search', 'ids:' . implode(',', $ids));
 		}
+		$this->getModel()->setState('list.limit', 100);
 		$this->locations = $this->get('Items');
 
 		JLoader::import('joomla.application.component.model');

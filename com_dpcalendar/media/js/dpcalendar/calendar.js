@@ -149,7 +149,7 @@ DPCalendar = window.DPCalendar || {};
 
 				var content = document.createElement('div');
 				content.innerHTML = desc;
-				element.tippy = tippy(element, {
+				tippy(element, {
 					interactive: true,
 					delay: 100,
 					arrow: true,
@@ -291,9 +291,8 @@ DPCalendar = window.DPCalendar || {};
 		options['eventClick'] = function (event, jsEvent, view) {
 			jsEvent.stopPropagation();
 
-			var tippy = jsEvent.currentTarget.tippy;
-			if (tippy) {
-				tippy.hide(tippy.getPopperElement(jsEvent.currentTarget));
+			if (jsEvent.currentTarget._tippy) {
+				jsEvent.currentTarget._tippy.hide();
 			}
 
 			if (options['show_event_as_popup'] == 2) {

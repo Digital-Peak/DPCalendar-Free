@@ -313,7 +313,7 @@ class DPCalendarModelAdminEvents extends JModelList
 	{
 		$data = parent::loadFormData();
 
-		if ($data instanceof stdClass && $data->filter) {
+		if ($data instanceof stdClass && !empty($data->filter)) {
 			if (!empty($data->filter['published'])) {
 				$data->filter['state'] = $data->filter['published'];
 			}

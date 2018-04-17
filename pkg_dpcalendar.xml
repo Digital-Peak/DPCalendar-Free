@@ -4,12 +4,12 @@
 	<packager>Digital Peak</packager>
 	<name>DPCalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>Feb 2018</creationDate>
+	<creationDate>Mar 2018</creationDate>
 	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.html GNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.3.4</version>
+	<version>6.3.5</version>
 	<files>
 		<file id="plg_system_dpcalendar" type="plugin" group="system" client="site">plg_system_dpcalendar.zip</file>
 		<file id="com_dpcalendar" type="component">com_dpcalendar.zip</file>

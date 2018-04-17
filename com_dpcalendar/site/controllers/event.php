@@ -482,7 +482,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		$model = $this->getModel('Events');
 		$model->getState();
-		$model->setState('list.limit', 2);
+		$model->setState('list.limit', 4);
 		$model->setState('category.id', $data['catid']);
 		$model->setState('filter.ongoing', false);
 		$model->setState('filter.expand', true);
@@ -506,11 +506,10 @@ class DPCalendarControllerEvent extends JControllerForm
 			$data['id'] = $this->input->get('id', 0);
 		}
 		foreach ($events as $key => $e) {
-			if ($e->id != $data['id']) {
+			if ($e->id != $data['id'] && $e->original_id != $data['id']) {
 				continue;
 			}
 			unset($events[$key]);
-			break;
 		}
 
 		$event                = new stdClass();

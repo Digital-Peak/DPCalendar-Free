@@ -14,19 +14,12 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 
 	protected $event;
 
-	public function display($tpl = null)
+	public function init()
 	{
 		if ($this->getLayout() == 'empty') {
-			parent::display($tpl);
-
 			return;
 		}
 
-		return parent::display($tpl);
-	}
-
-	public function init()
-	{
 		$event = $this->get('Item');
 
 		if ($event == null || !$event->id) {
@@ -117,6 +110,10 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 
 	protected function prepareDocument()
 	{
+		if ($this->getLayout() == 'empty') {
+			return;
+		}
+
 		parent::prepareDocument();
 
 		$app     = JFactory::getApplication();

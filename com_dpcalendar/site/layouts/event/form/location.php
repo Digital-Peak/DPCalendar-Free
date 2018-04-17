@@ -59,8 +59,8 @@ $h->addChild(new TextBlock('text'))->setContent(JText::_('COM_DPCALENDAR_VIEW_EV
 
 // The toggle icons
 $t = $h->addChild(new TextBlock('toggle'));
-$t->addChild(new Icon('up', Icon::UP, array(), array('data-direction' => 'up', 'title' => $title)));
-$t->addChild(new Icon('down', Icon::DOWN, array(), array('data-direction' => 'down', 'title' => $title)));
+$t->addChild(new Icon('up', Icon::UP, array(), array('data-direction' => 'up')));
+$t->addChild(new Icon('down', Icon::DOWN, array(), array('data-direction' => 'down')));
 
 $fc = $c->addChild(new Container('form'));
 $fc->addClass('dp-actions-container');
@@ -73,7 +73,7 @@ $fc->addChild(
 	)
 )->addClass('dp-button', true);
 
-$locationForm = JForm::getInstance('com_dpcalendar.location', 'location', array('control' => 'location'));
+$locationForm = JModelLegacy::getInstance('Location', 'DPCalendarModel', ['ignore_request' => true])->getForm([], false, 'location');
 $locationForm->setFieldAttribute('title', 'required', false);
 $locationForm->setFieldAttribute('rooms', 'label', 'COM_DPCALENDAR_ROOMS');
 

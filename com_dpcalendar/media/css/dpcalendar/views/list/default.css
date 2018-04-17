@@ -35,25 +35,35 @@
 	margin: 10px 0px 10px 0px;
 }
 
-#dp-list-form > div {
-	margin-bottom: 5px;
+#dp-list-form .dp-actions-container {
+	padding-top: 5px;
 }
 
-#dp-list-form-basic, #dp-list-form-location {
+#dp-list-form .dp-list-container input,
+#dp-list-form .dp-list-container select {
+	width: 100%;
+	overflow: hidden;
+}
+
+#dp-list-form .dp-list-container {
+	margin: 0 -5px;
 	display: flex;
 	flex-wrap: wrap;
 }
 
-#dp-list-form [name=filter-search], #dp-list-form [name=location] {
-	flex-grow: 1;
+#dp-list-form .dp-list-container > div {
+	display: flex;
+	flex: 1 1 260px;
+	margin: 0 5px 10px;
 }
 
-#dp-list-form [name=start-date], #dp-list-form [name=end-date] {
-	width: 95px;
+.dp-list-date input {
+	flex: 1 0 0;
 }
 
-#dp-list-form [name=radius], #dp-list-form [name=length-type] {
-	width: 111px;
+.dp-list-date input + input,
+.dp-list-area select + select {
+	margin-left: 10px;
 }
 
 .dp-list-hits {

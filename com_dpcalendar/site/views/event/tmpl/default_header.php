@@ -174,7 +174,7 @@ if ($event->params->get('access-edit')) {
 }
 
 if ($event->params->get('access-delete')) {
-	$return = clone JFactory::getURI();
+	$return = JUri::getInstance(!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
 	if ($this->input->getCmd('view', null) == 'event') {
 		$return->setVar('layout', 'empty');
 	}

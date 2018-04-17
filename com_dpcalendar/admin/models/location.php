@@ -43,15 +43,10 @@ class DPCalendarModelLocation extends JModelAdmin
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm($data = array(), $loadData = true)
+	public function getForm($data = array(), $loadData = true, $controlName = 'jform')
 	{
-		$app = JFactory::getApplication();
-
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.location', 'location', array(
-			'control'   => 'jform',
-			'load_data' => $loadData
-		));
+		$form = $this->loadForm('com_dpcalendar.location', 'location', array('control' => $controlName, 'load_data' => $loadData));
 		if (empty($form)) {
 			return false;
 		}
@@ -81,6 +76,7 @@ class DPCalendarModelLocation extends JModelAdmin
 		$this->modifyField($form, 'zip');
 		$this->modifyField($form, 'street');
 		$this->modifyField($form, 'number');
+		$this->modifyField($form, 'url');
 
 		return $form;
 	}

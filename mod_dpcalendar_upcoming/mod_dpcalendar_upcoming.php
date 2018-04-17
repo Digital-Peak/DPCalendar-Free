@@ -73,6 +73,14 @@ if (!$events && !$params->get('empty_text', 1)) {
 	return;
 }
 
+// Sort the array by user date
+usort($events, function ($e1, $e2) {
+	$d1 = DPCalendarHelper::getDate($e1->start_date, $e1->all_day);
+	$d2 = DPCalendarHelper::getDate($e2->start_date, $e2->all_day);
+
+	return strcmp($d1->format('c', true), $d2->format('c', true));
+});
+
 JPluginHelper::importPlugin('content');
 JPluginHelper::importPlugin('dpcalendar');
 

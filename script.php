@@ -24,23 +24,21 @@ class Pkg_DPCalendarInstallerScript
 
 	public function preflight($type, $parent)
 	{
-		$app = JFactory::getApplication();
-
 		// Check if the local Joomla version does fit the minimum requirement
 		if (version_compare(JVERSION, '3.7') == -1) {
-			$app->enqueueMessage(
+			JFactory::getApplication()->enqueueMessage(
 				'This DPCalendar version does only run on Joomla 3.7 and above, please upgrade your Joomla version or install an older version of DPCalendar!',
 				'error');
-			$app->redirect('index.php?option=com_installer&view=install');
+			JFactory::getApplication()->redirect('index.php?option=com_installer&view=install');
 
 			return false;
 		}
 
 		if (version_compare(PHP_VERSION, '5.5.9') < 0) {
-			$app->enqueueMessage(
+			JFactory::getApplication()->enqueueMessage(
 				'You have PHP version ' . PHP_VERSION . ' installed. Please upgrade your PHP version to at least 5.5.9. DPCalendar can not run on this version.',
 				'error');
-			$app->redirect('index.php?option=com_installer&view=install');
+			JFactory::getApplication()->redirect('index.php?option=com_installer&view=install');
 
 			return false;
 		}

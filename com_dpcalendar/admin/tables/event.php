@@ -82,14 +82,6 @@ class DPCalendarTableEvent extends JTable
 			$this->alias = JApplicationHelper::stringURLSafe($this->alias);
 		}
 
-		$timezone = JFactory::getApplication()->getCfg('offset');
-		$user     = JFactory::getUser();
-		if ($user->get('id')) {
-			$userTimezone = $user->getParam('timezone');
-			if (!empty($userTimezone)) {
-				$timezone = $userTimezone;
-			}
-		}
 		$start = DPCalendarHelper::getDate($this->start_date, $this->all_day);
 		$end   = DPCalendarHelper::getDate($this->end_date, $this->all_day);
 
@@ -152,14 +144,14 @@ class DPCalendarTableEvent extends JTable
 					$this->price      = $table->price;
 					$hardReset        = false;
 
-					JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_dpcalendar');
+					JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 					JFactory::getApplication()->enqueueMessage(JText::_('COM_DPCALENDAR_ERR_TABLE_NO_DATE_CHANGE'), 'notice');
 				}
 			}
 		}
 
 		// Only delete the childs when a hard reset must be done
-		if ($this->id > 0 && $this->original_id == '-1' && $hardReset) {
+		if ($this->id > 0 && $hardReset) {
 			$this->_db->setQuery('delete from #__dpcalendar_events where original_id = ' . (int)$this->id);
 			$this->_db->execute();
 		}

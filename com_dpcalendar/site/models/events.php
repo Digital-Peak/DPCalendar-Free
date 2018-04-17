@@ -391,6 +391,15 @@ class DPCalendarModelEvents extends JModelList
 			$query->where('v.id in (' . implode(',', ArrayHelper::toInteger($locationsFilter)) . ')');
 		}
 
+		// Filter rooms
+		if ($rooms = $this->getState('filter.rooms')) {
+			$conditions = [];
+			foreach ((array)$rooms as $room) {
+				$conditions[] = 'a.rooms like ' . $db->quote($db->escape('%' . $room . '%'));
+			}
+			$query->where('(' . implode(' or ', $conditions) . ')');
+		}
+
 		// Filter by tags
 		$tagIds = (array)$this->getState('filter.tags');
 		if ($tagIds) {

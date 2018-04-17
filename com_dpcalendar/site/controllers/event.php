@@ -484,12 +484,22 @@ class DPCalendarControllerEvent extends JControllerForm
 		$model->getState();
 		$model->setState('list.limit', 2);
 		$model->setState('category.id', $data['catid']);
-		$model->setState('filter.ongoing', 1);
+		$model->setState('filter.ongoing', false);
 		$model->setState('filter.expand', true);
 		$model->setState('filter.language', $data['language']);
 		$model->setState('list.start-date', $startDate);
 		$model->setState('list.end-date', $endDate);
 
+		if (DPCalendarHelper::getComponentParameter('event_form_check_overlaping_locations')) {
+			if (!empty($data['location_ids'])) {
+				$model->setState('filter.locations', $data['location_ids']);
+			}
+			if (!empty($data['rooms'])) {
+				$model->setState('filter.rooms', $data['rooms']);
+			}
+		}
+
+		// Get the events in that period
 		$events = $model->getItems();
 
 		if (!isset($data['id']) || !$data['id']) {

@@ -132,16 +132,17 @@ if (!Element.prototype.closest) {
 			}
 		},
 
-		DPCalendar.formToString = function (form) {
+		DPCalendar.formToString = function (form, selector) {
+			var elements = selector ? form.querySelectorAll(selector) : form.elements;
 			var field, s = [];
-			for (var i = 0; i < form.elements.length; i++) {
-				field = form.elements[i];
+			for (var i = 0; i < elements.length; i++) {
+				field = elements[i];
 				if (!field.name || field.disabled || field.type == 'file' || field.type == 'reset' || field.type == 'submit' || field.type == 'button') {
 					continue;
 				}
 
 				if (field.type == 'select-multiple') {
-					for (var j = form.elements[i].options.length - 1; j >= 0; j--) {
+					for (var j = elements[i].options.length - 1; j >= 0; j--) {
 						if (field.options[j].selected)
 							s[s.length] = encodeURIComponent(field.name) + "=" + encodeURIComponent(field.options[j].value);
 					}

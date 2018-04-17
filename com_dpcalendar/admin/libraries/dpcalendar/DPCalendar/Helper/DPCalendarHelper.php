@@ -166,7 +166,11 @@ class DPCalendarHelper
 
 	public static function getDate($date = null, $allDay = null, $tz = null)
 	{
-		$dateObj = \JFactory::getDate($date, $tz);
+		if ($date instanceof \JDate) {
+			$dateObj = clone $date;
+		} else {
+			$dateObj = \JFactory::getDate($date, $tz);
+		}
 
 		$timezone = \JFactory::getApplication()->getCfg('offset');
 		$user     = \JFactory::getUser();

@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_upcoming</name>
 	<author>Digital Peak</author>
-	<creationDate>Jan 2018</creationDate>
+	<creationDate>Feb 2018</creationDate>
 	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.3.1</version>
+	<version>6.3.2</version>
 	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>

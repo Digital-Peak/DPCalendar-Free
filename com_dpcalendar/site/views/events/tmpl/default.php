@@ -89,7 +89,7 @@ foreach ($this->items as $event) {
 		'location'    => $locations
 	);
 
-	if ($event->show_end_time) {
+	if ($event->show_end_time || $event->all_day) {
 		$eventData['end'] = DPCalendarHelper::getDate($event->end_date, $event->all_day)->format($format, true);
 	}
 

@@ -49,6 +49,10 @@ if ($params->get('location_show_resource_view', 1) && !\DPCalendar\Helper\DPCale
 	$resourceParams->set('header_show_timeline_week', true);
 	$resourceParams->set('header_show_timeline_month', true);
 	$resourceParams->set('header_show_timeline_year', true);
+	$resourceParams->set('timeformat_timeline_year', $params->get('location_timeformat_year', 'g:i a'));
+	$resourceParams->set('timeformat_timeline_month', $params->get('location_timeformat_month', 'g:i a'));
+	$resourceParams->set('timeformat_timeline_week', $params->get('location_timeformat_week', 'g:i a'));
+	$resourceParams->set('timeformat_timeline_day', $params->get('location_timeformat_day', 'g:i a'));
 	$resourceParams->set('show_selection', false);
 	$resourceParams->set('show_map', false);
 	$resourceParams->set('default_view', $params->get('location_default_view', 'resday'));

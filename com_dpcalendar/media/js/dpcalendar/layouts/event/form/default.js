@@ -36,7 +36,7 @@ jQuery(document).ready(function () {
 		jQuery('#jform_start_date_time, #jform_end_date_time').hide();
 	}
 
-	jQuery('#jform_start_date, #jform_start_date_time, #jform_end_date, #jform_end_date_time').change(function (e) {
+	jQuery('#jform_start_date, #jform_start_date_time, #jform_end_date, #jform_end_date_time, #jform_rooms').change(function (e) {
 		setTimeout(checkOverlapping, 2000);
 	});
 
@@ -118,31 +118,35 @@ jQuery(document).ready(function () {
 });
 
 function checkOverlapping() {
-	if (jQuery('#dp-event-form-message-box').length < 1) {
+	var box = document.getElementById('dp-event-form-message-box');
+	if (!box) {
 		return;
 	}
-	jQuery('#dp-event-form-message-box').hide();
+	box.style.display = 'none';
 
 	// Choosen doesn't update the selected value
-	var data = jQuery("#dp-event-form").find('input[name!=task], select');
 	var url = new Url();
-	jQuery.ajax({
-		type: 'post',
+	Joomla.request({
+		method: 'post',
 		url: 'index.php?option=com_dpcalendar&task=event.overlapping',
-		data: data.serialize() + '&id=' + url.query.e_id,
-		success: function (data) {
-			var json = jQuery.parseJSON(data);
-			if (json.messages != null && jQuery('#system-message-container').length) {
+		data: DPCalendar.formToString(document.getElementById("dp-event-form"), 'input:not([name=task]), select') + '&id=' + url.query.e_id,
+		onSuccess: function (data) {
+			var json = JSON.parse(data);
+			if (json.messages != null && document.getElementById('system-message-container')) {
 				Joomla.renderMessages(json.messages);
 			}
 
 			if (json.data.message) {
-				var box = jQuery('#dp-event-form-message-box');
-				box.show();
-				box.attr('class', 'alert ' + (json.data.count ? '' : 'alert-success'));
-				box.html(json.data.message);
+				box.style.display = 'block';
+				box.className = 'alert ' + (json.data.count ? '' : 'alert-success');
+				box.innerHTML = json.data.message;
 
-				jQuery('.save-button').attr("disabled", json.data.count > 0);
+				if (box.getAttribute('data-overlapping')) {
+					document.getElementById('dp-event-form-actions-apply').disabled = json.data.count > 0;
+					document.getElementById('dp-event-form-actions-save').disabled = json.data.count > 0;
+					document.getElementById('dp-event-form-actions-save2new').disabled = json.data.count > 0;
+					document.getElementById('dp-event-form-actions-save2copy').disabled = json.data.count > 0;
+				}
 			}
 		}
 	});

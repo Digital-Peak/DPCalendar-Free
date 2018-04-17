@@ -179,8 +179,8 @@ if ($event->params->get('access-delete')) {
 		$return->setVar('layout', 'empty');
 	}
 
-	$deleteUrl  = 'index.php?option=com_dpcalendar&task=event.delete&tmpl=';
-	$deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return) . '&e_id=' . $event->id;
+	$deleteUrl = 'index.php?option=com_dpcalendar&task=event.delete&tmpl=';
+	$deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return) . '&e_id=';
 
 	// Add the delete button
 	DPCalendarHelper::renderLayout(
@@ -190,7 +190,7 @@ if ($event->params->get('access-delete')) {
 			'type'    => Icon::DELETE,
 			'root'    => $bc,
 			'text'    => 'COM_DPCALENDAR_DELETE',
-			'onclick' => "location.href='" . JRoute::_($deleteUrl) . "'"
+			'onclick' => "location.href='" . JRoute::_($deleteUrl . $event->id) . "'"
 		)
 	);
 

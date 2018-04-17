@@ -189,6 +189,7 @@ if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $resourc
 	\JHtml::_('stylesheet', 'com_dpcalendar/scheduler/scheduler.min.css', ['relative' => true]);
 
 	$options['slotLabelFormat'] = null;
+	$options['slotWidth']       = $params->get('location_column_width');
 	$options['smallTimeFormat'] = Fullcalendar::convertFromPHPDate($params->get('timeformat_day', 'g:i a'));
 
 	// Load the model
@@ -248,6 +249,20 @@ $options['views']['list']       = array(
 	'listDayAltFormat'   => Fullcalendar::convertFromPHPDate($params->get('dateformat_list', 'F j, Y')),
 	'duration'           => array('days' => $params->get('list_range', 30)),
 	'noEventsMessage'    => JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
+);
+
+// Timeline views
+$options['views']['timelineYear']  = array(
+	'timeFormat' => Fullcalendar::convertFromPHPDate($params->get('timeformat_timeline_year', 'g:i a'))
+);
+$options['views']['timelineMonth'] = array(
+	'timeFormat' => Fullcalendar::convertFromPHPDate($params->get('timeformat_timeline_month', 'g:i a'))
+);
+$options['views']['timelineWeek']  = array(
+	'timeFormat' => Fullcalendar::convertFromPHPDate($params->get('timeformat_timeline_week', 'g:i a'))
+);
+$options['views']['timelineDay']   = array(
+	'timeFormat' => Fullcalendar::convertFromPHPDate($params->get('timeformat_timeline_day', 'g:i a'))
 );
 
 // Set up the month and day names

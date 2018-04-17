@@ -29,8 +29,7 @@ $root = $root->addChild(new Container('actions'));
 $root->addClass('noprint', true);
 $root->addClass('dp-actions-container', true);
 
-$calendar    = DPCalendarHelper::getCalendar($form->getValue('catid'));
-$disableSave = $params->get('event_form_check_overlaping', 0) == '2' ? ' save-button' : '';
+$calendar = DPCalendarHelper::getCalendar($form->getValue('catid'));
 if (!$event->id || !$calendar || $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == JFactory::getUser()->id)) {
 	// Create the save button
 	DPCalendarHelper::renderLayout(

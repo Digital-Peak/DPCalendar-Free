@@ -13,7 +13,7 @@
 			description="COM_CONTENT_FILTER_PUBLISHED_DESC" onchange="this.form.submit();">
 			<option value="">JOPTION_SELECT_PUBLISHED</option>
 		</field>
-		<field name="cat_id" type="category" label="JOPTION_FILTER_CATEGORY_LABEL"
+		<field name="category_id" type="category" label="JOPTION_FILTER_CATEGORY_LABEL"
 			extension="com_dpcalendar" description="JOPTION_FILTER_CATEGORY_DESC"
 			onchange="this.form.submit();" published="0,1,2">
 			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_CALENDAR</option>

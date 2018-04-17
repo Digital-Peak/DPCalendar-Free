@@ -32,8 +32,8 @@ class DPCalendarModelAdminEvents extends JModelList
 				'a.checked_out',
 				'checked_out_time',
 				'a.checked_out_time',
-				'cat_id',
-				'a.cat_id',
+				'category_id',
+				'a.category_id',
 				'category_title',
 				'state',
 				'a.state',
@@ -194,7 +194,7 @@ class DPCalendarModelAdminEvents extends JModelList
 
 		// Filter by a single or group of categories.
 		$baselevel  = 1;
-		$categoryId = $this->getState('filter.cat_id');
+		$categoryId = $this->getState('filter.category_id');
 		if (is_numeric($categoryId)) {
 			$cat_tbl = JTable::getInstance('Category', 'JTable');
 			$cat_tbl->load($categoryId);
@@ -307,5 +307,21 @@ class DPCalendarModelAdminEvents extends JModelList
 
 		// Return the result
 		return $db->loadObjectList();
+	}
+
+	protected function loadFormData()
+	{
+		$data = parent::loadFormData();
+
+		if ($data instanceof stdClass && $data->filter) {
+			if (!empty($data->filter['published'])) {
+				$data->filter['state'] = $data->filter['published'];
+			}
+			if (!empty($data->filter['category_id'])) {
+				$data->filter['cat_id'] = $data->filter['category_id'];
+			}
+		}
+
+		return $data;
 	}
 }

@@ -35,7 +35,7 @@ setInterval(function(){
 DPCalendarHelper::renderLayout('user.timezone', array('root' => $this->root));
 
 // The text before content
-$this->root->addChild(new Container('text-before'))->setContent(JHtml::_('content.prepare', $this->params->get('textbefore')));
+$this->root->addChild(new Container('text-before'))->setContent(JHtml::_('content.prepare', JText::_($this->params->get('textbefore'))));
 
 $this->params->set('use_hash', true);
 $this->params->set('header_show_print', false);
@@ -54,7 +54,7 @@ DPCalendarHelper::renderLayout(
 );
 
 // The text after content
-$this->root->addChild(new Container('text-after'))->setContent(JHtml::_('content.prepare', $this->params->get('textafter')));
+$this->root->addChild(new Container('text-after'))->setContent(JHtml::_('content.prepare', JText::_($this->params->get('textafter'))));
 
 // Render the tree
 echo DPCalendarHelper::renderElement($this->root, $this->params);

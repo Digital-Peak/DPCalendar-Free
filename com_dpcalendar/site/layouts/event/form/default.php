@@ -73,7 +73,8 @@ if ($event->original_id != '0') {
 	}
 }
 if ($params->get('event_form_check_overlaping', 0)) {
-	$root->addChild(new Alert('message-box', Alert::INFO));
+	$box = $root->addChild(new Alert('message-box', Alert::INFO));
+	$box->addAttribute('data-overlapping', $params->get('event_form_check_overlaping', 0) == '2');
 }
 
 if ($app->isSite()) {

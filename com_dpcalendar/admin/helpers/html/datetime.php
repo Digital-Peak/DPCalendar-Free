@@ -48,6 +48,9 @@ class JHtmlDateTime
 		if (!isset($options['datepair'])) {
 			$options['datepair'] = '';
 		}
+		if (!isset($options['firstDay'])) {
+			$options['firstDay'] = DPCalendarHelper::getComponentParameter('weekstart', '0');
+		}
 
 		// Handle the special case for "now".
 		$date = null;
@@ -89,6 +92,7 @@ class JHtmlDateTime
 		var picker = new Pikaday({
 			field: document.getElementById('" . $id . "'),
 			numberOfMonths: 1,
+			firstDay: " . $options['firstDay'] . ",
 			format: '" . Fullcalendar::convertFromPHPDate($dateFormat) . "',
 			" . ($date ? "defaultDate: new Date('" . $date->format('Y-m-d') . "')," : '') . "
 			i18n: {

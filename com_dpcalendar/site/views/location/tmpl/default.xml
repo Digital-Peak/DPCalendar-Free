@@ -39,6 +39,12 @@
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND
 				</option>
 			</field>
+			<field name="location_show_upcoming_events" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 			<field name="location_show_resource_view" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_DESC">
@@ -65,12 +71,21 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="location_show_upcoming_events" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-			</field>
+			<field name="location_column_width" type="text" showon="location_show_resource_view:1" validate="decimal" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_DESC"/>
+			<field name="location_timeformat_year" type="text" useglobal="true" showon="location_show_resource_view:1"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_DESC"/>
+			<field name="location_timeformat_month" type="text" useglobal="true" showon="location_show_resource_view:1"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_DESC"/>
+			<field name="location_timeformat_week" type="text" useglobal="true" showon="location_show_resource_view:1"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_DESC"/>
+			<field name="location_timeformat_day" type="text" useglobal="true" showon="location_show_resource_view:1"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_DESC"/>
 		</fieldset>
 	</fields>
 </metadata>

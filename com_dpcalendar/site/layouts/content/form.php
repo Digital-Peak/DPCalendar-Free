@@ -157,7 +157,7 @@ if (\DPCalendar\Helper\DPCalendarHelper::isCaptchaNeeded() && $captcha = $jform-
 }
 
 foreach ($hiddenFields as $hiddenField) {
-	$root->addChild(new Input($hiddenField->name, 'hidden', $hiddenField->name, $jform->getValue($hiddenField->name)));
+	$root->addChild(new Input($hiddenField->name, 'hidden', $hiddenField->name, $jform->getValue($hiddenField->fieldname, $hiddenField->group)));
 }
 
 if (!empty($displayData['return'])) {

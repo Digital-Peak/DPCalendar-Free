@@ -23,6 +23,7 @@ foreach ($this->items as $event) {
 	$description = '';
 	if ($root->getChildren()) {
 		$description = DPCalendarHelper::renderElement($root, $this->params);
+		$description = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
 	}
 
 	// Set up the locations

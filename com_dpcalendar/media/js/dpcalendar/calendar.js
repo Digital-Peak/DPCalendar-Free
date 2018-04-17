@@ -133,7 +133,7 @@ DPCalendar = window.DPCalendar || {};
 			DPCalendar.Map.clearMarkers(map.dpmap);
 		};
 
-		options['eventRender'] = function (event, e) {
+		options['eventRender'] = function (event, e, view) {
 			var element = e[0];
 			// Add a class if available
 			if (event.view_class) {
@@ -166,7 +166,7 @@ DPCalendar = window.DPCalendar || {};
 				});
 			}
 
-			if (event.fgcolor) {
+			if (event.fgcolor && view.name != 'list') {
 				element.style.color = event.fgcolor;
 			}
 

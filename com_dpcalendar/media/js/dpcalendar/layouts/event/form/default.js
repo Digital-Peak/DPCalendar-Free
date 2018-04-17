@@ -99,22 +99,33 @@ jQuery(document).ready(function () {
 		});
 	});
 
-	var form = jQuery('#dp-event-form-map-form');
-	form.hide();
-	jQuery('#dp-event-form-map-title-toggle-up').hide();
+	document.getElementById('dp-event-form-map-form').style.display = 'none';
+	document.getElementById('dp-event-form-map-title-toggle-up').style.display = 'none';
 
-	var root = jQuery('#dp-event-form-map-title-toggle');
-	root.bind('click', function (e) {
-		form.slideToggle('slow', function () {
-			if (!form.is(':visible')) {
-				root.find('i[data-direction="up"]').hide();
-				root.find('i[data-direction="down"]').show();
-			} else {
-				root.find('i[data-direction="up"]').show();
-				root.find('i[data-direction="down"]').hide();
-			}
+	// Toggle the list of calendars
+	var toggle = document.getElementById('dp-event-form-map-title-toggle');
+	if (toggle) {
+		toggle.addEventListener('click', function (event) {
+			DPCalendar.slideToggle(document.getElementById('dp-event-form-map-form'), function (fadeIn) {
+				var root = document.getElementById('dp-event-form-map-title-toggle');
+
+				if (!fadeIn) {
+					root.querySelector('i[data-direction="up"]').style.display = 'none';
+					root.querySelector('i[data-direction="down"]').style.display = 'inline';
+				} else {
+					root.querySelector('i[data-direction="up"]').style.display = 'inline';
+					root.querySelector('i[data-direction="down"]').style.display = 'none';
+				}
+			});
 		});
-	});
+	}
+
+	// Don't validate the fields of the location form together with the global form
+	var inputs = document.getElementById('dp-event-form-map-form').querySelectorAll('input');
+
+	for (var i = 0; i < inputs.length; i++) {
+		inputs[i].classList.add('novalidate');
+	}
 });
 
 function checkOverlapping() {

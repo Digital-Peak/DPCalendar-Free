@@ -73,6 +73,7 @@ $fc->addChild(
 	)
 )->addClass('dp-button', true);
 
+JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 $locationForm = JModelLegacy::getInstance('Location', 'DPCalendarModel', ['ignore_request' => true])->getForm([], false, 'location');
 $locationForm->setFieldAttribute('title', 'required', false);
 $locationForm->setFieldAttribute('rooms', 'label', 'COM_DPCALENDAR_ROOMS');
@@ -91,5 +92,3 @@ DPCalendarHelper::renderLayout(
 );
 $fc->addChild(new Input('token', 'hidden', 'location_token', JSession::getFormToken()));
 
-// Render the element tree
-echo DPCalendarHelper::renderElement($root, $params);

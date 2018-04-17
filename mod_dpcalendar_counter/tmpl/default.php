@@ -95,6 +95,7 @@ $l->setContent($item->title);
 if ($params->get('description_length') > 0 || $params->get('description_length') === null) {
 	$desc = JHtml::_('string.truncate', $item->description, $params->get('description_length'));
 	$desc = JHTML::_('content.prepare', $desc);
+	$desc = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($desc);
 	$body->addChild(new Element('description'))->setContent($desc);
 }
 

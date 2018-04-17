@@ -1226,6 +1226,27 @@ class DPCalendarHelper
 		return self::linkify($matches[1]);
 	}
 
+	public static function fixImageLinks($buffer)
+	{
+		$base = \JUri::base(true) . '/';
+
+		// Copied from SEF plugin
+		// Check for all unknown protocals (a protocol must contain at least one alpahnumeric character followed by a ":").
+		$protocols  = '[a-zA-Z0-9\-]+:';
+		$attributes = array('href=', 'src=', 'poster=');
+
+		foreach ($attributes as $attribute)
+		{
+			if (strpos($buffer, $attribute) !== false)
+			{
+				$regex  = '#\s' . $attribute . '"(?!/|' . $protocols . '|\#|\')([^"]*)"#m';
+				$buffer = preg_replace($regex, ' ' . $attribute . '"' . $base . '$1"', $buffer);
+			}
+		}
+
+		return $buffer;
+	}
+
 	public static function increaseMemoryLimit($limit)
 	{
 		$memMax = trim(@ini_get('memory_limit'));

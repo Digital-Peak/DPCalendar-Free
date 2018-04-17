@@ -160,9 +160,8 @@ if ($author && !$author->guest && $params->get('event_show_author', '1')) {
 		}
 	} else if (isset($event->contactid) && !empty($event->contactid)) {
 		// Link to the contact
-		$needle  = 'index.php?option=com_contact&view=contact&id=' . $event->contactid;
-		$item    = JFactory::getApplication()->getMenu()->getItems('link', $needle, true);
-		$cntlink = !empty($item) ? $needle . '&Itemid=' . $item->id : $needle;
+		JLoader::register('ContactHelperRoute', JPATH_SITE . '/components/com_contact/helpers/route.php');
+		$cntlink = JRoute::_(ContactHelperRoute::getContactRoute($event->contactid . ':' . $event->contactalias, $event->contactcatid));
 		$desc->addChild(new Link('link', JRoute::_($cntlink)))->setContent($desc->getContent());
 		$desc->setContent('');
 	}

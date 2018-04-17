@@ -173,18 +173,18 @@ foreach ($events as $index => $event) {
 	$desc->setContent(JHTML::_('content.prepare', $event->description));
 
 	// The description will be cut when configured
-	if ($params->get('list_description_length', null) !== null) {
+	if ($params->get('description_length', null) !== null) {
 		// Truncate
-		$descTruncated = JHtmlString::truncateComplex($desc->getContent(), $params->get('list_description_length', null));
+		$descTruncated = JHtmlString::truncateComplex($desc->getContent(), $params->get('description_length', null));
 		if ($desc != $descTruncated) {
 			// Set up for readmore
 			$desc->setContent($descTruncated);
 			$params->set('access-view', true);
 			$event->alternative_readmore = JText::_('MOD_DPCALENDAR_UPCOMING_READ_MORE');
-			$desc                        .= JLayoutHelper::render(
+			$desc->setContent(JLayoutHelper::render(
 				'joomla.content.readmore',
 				array('item' => $event, 'params' => $params, 'link' => DPCalendarHelperRoute::getEventRoute($event->id, $event->catid))
-			);
+			), true);
 		}
 	}
 

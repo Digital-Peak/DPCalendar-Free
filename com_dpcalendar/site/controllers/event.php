@@ -245,12 +245,6 @@ class DPCalendarControllerEvent extends JControllerForm
 			}
 			$end->modify($minutes);
 
-			// If we were moved from a full day
-			if ($event->all_day == 1 && $this->input->getInt('minutes') != '0') {
-				$data['all_day'] = '0';
-				$end->modify('+2 hour');
-			}
-
 			$data['start_date']         = $start->toSql();
 			$data['end_date']           = $end->toSql();
 			$data['date_range_correct'] = true;

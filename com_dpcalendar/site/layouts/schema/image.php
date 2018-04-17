@@ -11,7 +11,7 @@ use CCL\Content\Element\Basic\Meta;
 
 // The locations to display
 $event = $displayData['event'];
-if (!$event) {
+if (!$event || empty($event->images)) {
 	return;
 }
 

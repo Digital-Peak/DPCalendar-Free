@@ -70,6 +70,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$calendarBackend->calendarChangesTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendarchanges';
 			$calendarBackend->calendarInstancesTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendarinstances';
 			$calendarBackend->calendarSubscriptionsTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendarsubscriptions';
+			$calendarBackend->schedulingObjectTableName = $config->get('dbprefix') . 'dpcalendar_caldav_schedulingobjects';
 			$principalBackend = new \Sabre\DAVACL\PrincipalBackend\PDO($pdo);
 			$principalBackend->tableName = $config->get('dbprefix') . 'dpcalendar_caldav_principals';
 			$principalBackend->groupMembersTableName = $config->get('dbprefix') . 'dpcalendar_caldav_groupmembers';

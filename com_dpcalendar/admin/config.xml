@@ -1473,7 +1473,7 @@
 		<field name="icon_framework" type="list" default="Joomla"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_ICON_FRAMEWORK_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_ICON_FRAMEWORK_DESC">
-			<option value="">JNONE</option>
+			<option value="None">JNONE</option>
 			<option value="Joomla">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_ICON_FRAMEWORK_JOOMLA</option>
 			<option value="FontAwesome4">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_ICON_FRAMEWORK_FONTAWESOME4</option>
 			<option value="Glyphicons">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_ICON_FRAMEWORK_GLYPHICONS</option>

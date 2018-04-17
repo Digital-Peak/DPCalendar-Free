@@ -213,7 +213,7 @@ DPCalendar = window.DPCalendar || {};
 			Joomla.request({
 				method: 'POST',
 				url: 'index.php?option=com_dpcalendar&task=event.move',
-				data: 'id=' + event.id + '&minutes=' + delta.asMinutes() + '&allDay=' + (delta.asMinutes() == 0),
+				data: 'id=' + event.id + '&minutes=' + delta.asMinutes() + '&allDay=' + !event.start.hasTime(),
 				onSuccess: function (data) {
 					DPCalendar.loader('hide', calendar.parent()[0]);
 
@@ -253,7 +253,7 @@ DPCalendar = window.DPCalendar || {};
 			Joomla.request({
 				method: 'POST',
 				url: 'index.php?option=com_dpcalendar&task=event.move',
-				data: 'id=' + event.id + '&minutes=' + delta.asMinutes() + '&onlyEnd=1&allDay=' + (delta.asMinutes() == 0),
+				data: 'id=' + event.id + '&minutes=' + delta.asMinutes() + '&onlyEnd=1&allDay=' + !event.start.hasTime(),
 				onSuccess: function (data) {
 					DPCalendar.loader('hide', calendar.parent()[0]);
 

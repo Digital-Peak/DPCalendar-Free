@@ -46,6 +46,10 @@ class DPCalendarModelImport extends JModelLegacy
 				}
 			);
 
+			if (is_array($category)) {
+				$category = reset($category);
+			}
+
 			if ($category == null) {
 				$data                = array();
 				$data['id']          = 0;

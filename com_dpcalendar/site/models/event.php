@@ -116,20 +116,18 @@ class DPCalendarModelEvent extends JModelForm
 					$query->select('u.name AS author');
 					$query->join('LEFT', '#__users AS u on u.id = a.created_by');
 
+					$query->select('co.id AS contactid, co.alias as contactalias, co.catid as contactcatid');
+					$query->join('LEFT', '#__contact_details AS co on co.user_id = a.created_by');
+
 					// Get contact id
-					$subQuery = $db->getQuery(true)
-						->select('MAX(contact.id) AS id')
-						->from('#__contact_details AS contact')
-						->where('contact.published = 1')
-						->where('contact.user_id = a.created_by');
+					$query->where('(co.published = 1 or co.published is null)');
 
 					// Filter by language
 					if ($this->getState('filter.language')) {
-						$subQuery->where(
-							'(contact.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') .
-							') OR contact.language IS NULL)');
+						$query->where(
+							'(co.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') .
+							') OR co.language IS NULL)');
 					}
-					$query->select('(' . $subQuery . ') as contactid');
 
 					$query->where('a.id = ' . (int)$pk);
 
@@ -214,7 +212,7 @@ class DPCalendarModelEvent extends JModelForm
 					$data->price         = json_decode($data->price);
 					$data->earlybird     = json_decode($data->earlybird);
 					$data->user_discount = json_decode($data->user_discount);
-					$data->rooms         = explode(',', $data->rooms);
+					$data->rooms         = $data->rooms ? explode(',', $data->rooms) : [];
 
 					$this->_item[$pk] = $data;
 				} catch (Exception $e) {

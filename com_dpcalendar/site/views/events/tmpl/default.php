@@ -76,13 +76,15 @@ foreach ($this->items as $event) {
 	// Format the dates depending on the all day flag
 	$format = $event->all_day ? 'Y-m-d' : 'c';
 
+	$calendar = DPCalendarHelper::getCalendar($event->catid);
+
 	// Add the data
 	$eventData = array(
 		'id'          => $event->id,
 		'title'       => $this->compactMode == 0 ? htmlspecialchars_decode($event->title) : utf8_encode(chr(160)),
 		'start'       => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format($format, true),
 		'url'         => DPCalendarHelperRoute::getEventRoute($event->id, $event->catid),
-		'editable'    => DPCalendarHelper::getCalendar($event->catid)->canEdit != false,
+		'editable'    => $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $this->user->id),
 		'color'       => '#' . $event->color,
 		'fgcolor'     => $fgcolor,
 		'allDay'      => (bool)$event->all_day,

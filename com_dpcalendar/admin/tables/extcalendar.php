@@ -102,7 +102,7 @@ class DPCalendarTableExtcalendar extends JTable
 
 		// Obfuscate the password
 		if (!empty($this->params)) {
-			$params = new \Joomla\Registry\Registry(json_decode($this->params));
+			$params = new Registry($this->params);
 
 			if ($pw = $params->get('password')) {
 				$params->set('password', \DPCalendar\Helper\DPCalendarHelper::obfuscate($pw));
@@ -111,7 +111,18 @@ class DPCalendarTableExtcalendar extends JTable
 		}
 
 		// Attempt to store the user data.
-		return parent::store($updateNulls);
+		$success = parent::store($updateNulls);
+
+		if ($success) {
+			// Restore the params
+			$params = new Registry($this->params);
+			if ($pw = $params->get('password')) {
+				$params->set('password', \DPCalendar\Helper\DPCalendarHelper::deobfuscate($pw));
+			}
+			$this->params = $params->toString();
+		}
+
+		return $success;
 	}
 
 	protected function _getAssetName()

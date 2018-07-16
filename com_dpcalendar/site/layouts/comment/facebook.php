@@ -79,8 +79,13 @@ if ($params->get('comment_fb_og_url', '1') == '1') {
 }
 
 // Add an image if set
-if ($params->get('comment_fb_og_image')) {
-	$doc->addCustomTag('<meta property="og:image" content="' . $params->get('comment_fb_og_image') . '"/>');
+if ($images = $params->get('comment_fb_og_image')) {
+	if (!is_array($images)) {
+		$images = [$images];
+	}
+	foreach ($images as $image) {
+		$doc->addCustomTag('<meta property="og:image" content="' . $image . '"/>');
+	}
 }
 
 // Add the Facebook element to the passed container

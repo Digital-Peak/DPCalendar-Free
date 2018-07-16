@@ -189,14 +189,16 @@ abstract class PaymentPlugin extends \JPlugin
 		if ($booking == null || $booking->processor != $this->_name) {
 			return;
 		}
+
+		$key = strip_tags('PLG_DPCALENDARPAY_' . strtoupper($this->_name) . '_PAYMENT_STATEMENT_TEXT');
+		if (!\JFactory::getLanguage()->hasKey($key)) {
+			return;
+		}
+
 		$return            = new \stdClass();
 		$return->status    = true;
 		$return->type      = $this->_name;
-		$return->statement = \DPCalendar\Helper\DPCalendarHelper::getStringFromParams(
-			'payment_statement',
-			'PLG_DPCALENDARPAY_MANUAL_PAYMENT_STATEMENT_TEXT',
-			$this->params
-		);
+		$return->statement = \DPCalendar\Helper\DPCalendarHelper::getStringFromParams('payment_statement', $key, $this->params);
 
 		return $return;
 	}

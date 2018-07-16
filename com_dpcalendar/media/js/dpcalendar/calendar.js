@@ -134,6 +134,10 @@ DPCalendar = window.DPCalendar || {};
 		};
 
 		options['eventRender'] = function (event, e, view) {
+			// Support HTML in title
+			var title = e.find('.fc-title');
+			title.html(title.text());
+			
 			var element = e[0];
 			// Add a class if available
 			if (event.view_class) {

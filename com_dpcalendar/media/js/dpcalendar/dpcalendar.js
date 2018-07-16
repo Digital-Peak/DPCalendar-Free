@@ -12,7 +12,7 @@ if (!Element.prototype.closest) {
 			return null;
 		}
 		do {
-			if (el.matches(s)) {
+			if (el.matches(selector)) {
 				return el;
 			}
 			el = el.parentElement;

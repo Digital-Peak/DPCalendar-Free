@@ -233,6 +233,10 @@ class DPCalendarControllerEvent extends JControllerForm
 			$event = $model->getItem($data['id']);
 			$data  = ArrayHelper::fromObject($event);
 
+			if (!empty($data['tags']) && array_key_exists('tags', $data['tags'])) {
+				$data['tags'] = explode(',', $data['tags']['tags']);
+			}
+
 			$start = DPCalendarHelper::getDate($event->start_date, $event->all_day);
 			$end   = DPCalendarHelper::getDate($event->end_date, $event->all_day);
 

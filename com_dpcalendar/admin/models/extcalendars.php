@@ -6,6 +6,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
+use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 defined('_JEXEC') or die();
@@ -80,15 +81,15 @@ class DPCalendarModelExtcalendars extends JModelList
 		return parent::getStoreId($id);
 	}
 
-	public function getItems()
+	protected function _getList($query, $limitstart = 0, $limit = 0)
 	{
-		$calendars = parent::getItems();
+		$calendars = parent::_getList($query, $limitstart, $limit);
 		if (!$calendars) {
 			return $calendars;
 		}
 
 		foreach ($calendars as $calendar) {
-			$calendar->params = new \Joomla\Registry\Registry(json_decode($calendar->params));
+			$calendar->params = new Registry($calendar->params);
 
 			if ($pw = $calendar->params->get('password')) {
 				$calendar->params->set('password', \DPCalendar\Helper\DPCalendarHelper::deobfuscate($pw));

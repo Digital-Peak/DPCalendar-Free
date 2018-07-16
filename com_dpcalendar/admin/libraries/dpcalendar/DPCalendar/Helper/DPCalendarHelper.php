@@ -599,8 +599,8 @@ class DPCalendarHelper
 	{
 		$text = $params->get($key, $default);
 
-		if (\JFactory::getLanguage()->hasKey(strip_tags($text))) {
-			return \JText::_(strip_tags($text));
+		if (\JFactory::getLanguage()->hasKey(trim(strip_tags($text)))) {
+			return \JText::_(trim(strip_tags($text)));
 		}
 
 		return $text;

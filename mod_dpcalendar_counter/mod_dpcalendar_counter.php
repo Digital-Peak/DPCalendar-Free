@@ -77,7 +77,7 @@ if (empty($event)) {
 }
 
 $truncatedDescription = '';
-if ($params->get('description_length') > 0 || $params->get('description_length') === null) {
+if ($event && ($params->get('description_length') > 0 || $params->get('description_length') === null)) {
 	$truncatedDescription = JHtml::_('string.truncate', $event->description, $params->get('description_length'));
 	$truncatedDescription = JHTML::_('content.prepare', $truncatedDescription);
 	$truncatedDescription = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($truncatedDescription);

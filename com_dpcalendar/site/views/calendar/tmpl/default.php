@@ -14,9 +14,6 @@ $this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_F
 if ($this->params->get('show_event_as_popup')) {
 	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MODAL);
 }
-if ($this->params->get('show_map')) {
-	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
-}
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/calendar/default.css');
 

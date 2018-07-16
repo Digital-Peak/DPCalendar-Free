@@ -8,12 +8,9 @@
 
 defined('_JEXEC') or die();
 
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
 $this->dpdocument->loadStyleFile('dpcalendar/views/event/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/event/default.js');
-
-if ($this->params->get('event_show_map', '1')) {
-	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
-}
 
 $contentClass = '';
 if ($imageContent = $this->loadTemplate('image_full')) {

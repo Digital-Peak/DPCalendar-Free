@@ -10,6 +10,10 @@ defined('_JEXEC') or die();
 if (!$this->event->locations) {
 	return;
 }
+
+if ($this->params->get('event_show_map', '1')) {
+	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
+}
 ?>
 <div class="com-dpcalendar-event__locations">
 	<?php if ($this->params->get('event_show_map', '1') == '1' && $this->params->get('event_show_location', '2') == '1') { ?>

@@ -7,7 +7,7 @@ This is the source of DPCalendar, a Joomla calendar and event manager. Here you 
 - PHP >= 5.5.9
 
 ### INSTALLATION
-To install DPCalendar extract the component, your desired modules and the plugins zip files and install them with the Joomla installer.You can also install the whole suite with all extensions trough the Joomla installer. After a successful installation configure the component, modules and the plugins and publish them.
+To install DPCalendar extract the component, your desired modules and the plugins zip files and install them with the Joomla installer.You can also install the whole suite with all extensions through the Joomla installer. After a successful installation configure the component, modules and the plugins and publish them.
 
 ### UPGRADE
 To upgrade DPCalendar from an earlier version, just install the suite or individual extensions with the joomla installer, DPCalendar will handle the upgrade procedure by itself.

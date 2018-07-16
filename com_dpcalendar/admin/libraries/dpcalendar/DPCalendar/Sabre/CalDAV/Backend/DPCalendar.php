@@ -104,7 +104,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 			}
 
 			if (!empty($event->id)) {
-				// The event needs to be loaded trough the model to get
+				// The event needs to be loaded through the model to get
 				// locations, tags, etc.
 				$model = \JModelLegacy::getInstance('Event', 'DPCalendarModel', array('ignore_request' => true));
 				$event = $model->getItem($event->id);

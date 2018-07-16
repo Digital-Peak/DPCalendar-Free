@@ -48,7 +48,7 @@ class PlgContentDpcalendar extends JPlugin
 			$now->modify('+1 year');
 			$model->setState('list.end-date', $now->format('U'));
 
-			// Loop trough the params and set them on the model
+			// Loop through the params and set them on the model
 			foreach ($params as $string) {
 				$string = trim($string);
 				if (!$string) {

@@ -18,7 +18,7 @@ DPCalendar = window.DPCalendar || {};
 				function (json) {
 					if (json.data.latitude) {
 						document.getElementById('jform_latitude').value = json.data.latitude;
-						document.getElementById('jform_longitude').value = json.data.latitude;
+						document.getElementById('jform_longitude').value = json.data.longitude;
 
 						DPCalendar.Map.moveMarker(map, marker, json.data.latitude, json.data.longitude);
 					} else {

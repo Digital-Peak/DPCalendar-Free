@@ -48,19 +48,33 @@ foreach ($this->event->tickets as $ticket) {
 		<?php foreach ($this->event->tickets as $ticket) { ?>
 			<tr>
 				<?php if (!$limited) { ?>
-					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?>"><?php echo JHtmlString::abridge($ticket->uid, 15, 5); ?></td>
-					<td data-column="?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?>"><?php echo \DPCalendar\Helper\Booking::getStatusLabel($ticket); ?></td>
+					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?>">
+						<?php echo JHtmlString::abridge($ticket->uid, 15, 5); ?>
+					</td>
+					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?>">
+						<?php echo \DPCalendar\Helper\Booking::getStatusLabel($ticket); ?>
+					</td>
 				<?php } ?>
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?>"><?php echo $ticket->name; ?></td>
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?>"><?php echo \DPCalendar\Helper\Location::format([$ticket]); ?></td>
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?>">
+					<?php echo $ticket->name; ?>
+				</td>
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?>">
+					<?php echo \DPCalendar\Helper\Location::format([$ticket]) ?: '&nbsp;'; ?>
+				</td>
 				<?php if (!$limited) { ?>
-					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?>"><?php echo $this->dateHelper->getDate($ticket->created)->format($format, true); ?></td>
+					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?>">
+						<?php echo $this->dateHelper->getDate($ticket->created)->format($format, true); ?>
+					</td>
 					<?php if ($this->params->get('ticket_show_seat', 1)) { ?>
-						<td data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?>"><?php echo $ticket->seat; ?></td>
+						<td data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?>">
+							<?php echo $ticket->seat; ?>
+						</td>
 					<?php } ?>
 				<?php } ?>
 				<?php if (!$limited && $hasPrice) { ?>
-					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?>"><?php echo DPCalendarHelper::renderPrice($ticket->price); ?></td>
+					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?>">
+						<?php echo DPCalendarHelper::renderPrice($ticket->price); ?>
+					</td>
 				<?php } ?>
 			</tr>
 		<?php } ?>

@@ -241,7 +241,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			return;
 		}
 
-		// Loop trough the calendars to sync
+		// Loop through the calendars to sync
 		foreach ($this->fetchCalendars() as $calendar) {
 			$this->sync($calendar, true);
 		}

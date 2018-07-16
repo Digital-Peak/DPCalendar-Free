@@ -9,11 +9,11 @@
 
 			if (element.getAttribute('data-date')) {
 				options.defaultDate = new Date(element.getAttribute('data-date'));
-				element.value = moment(options.defaultDate).format(options.format);
+				element.value = moment(element.getAttribute('data-date')).format(options.format);
 			}
 
 			if (element.getAttribute('data-first-day')) {
-				options.firstDay = element.getAttribute('data-first-day');
+				options.firstDay = parseInt(element.getAttribute('data-first-day'));
 			}
 
 			options.onSelect = function () {

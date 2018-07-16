@@ -106,7 +106,7 @@ class DPCalendarModelAdminEvents extends JModelList
 
 		// Joomla resets the start and end date
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search_start', 'filter_search_start',
-			DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')), 'none', false);
+			DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'), true), 'none', false);
 		$this->setState('filter.search_start', $search);
 
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search_end', 'filter_search_end', '', 'none', false);

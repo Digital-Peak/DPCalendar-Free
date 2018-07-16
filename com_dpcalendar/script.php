@@ -381,6 +381,40 @@ from #__dpcalendar_bookings");
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
+
+		if (version_compare($version, '7.0.0') == -1) {
+			// Defaulting some params which have changed
+			$params = JComponentHelper::getParams('com_dpcalendar');
+			$params->set('sef_advanced', 0);
+			$params->set('map_provider', 'google');
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+
+			// Disable template overrides
+			$rootPath = JPATH_SITE . '/templates';
+			foreach (JFolder::folders($rootPath, '.', true, true) as $path) {
+				if (strpos($path, 'dpcalendar') === false || strpos($path, '-v6') !== false || !file_exists($path)) {
+					continue;
+				}
+				JFolder::move($path, $path . '-v6');
+				JFactory::getApplication()->enqueueMessage('We have disabled the template overrides in ' . $path . '. They do not work with version 7 anymore!',
+					'warning');
+			}
+
+			// Cleanup files
+			foreach (JFolder::files(JPATH_ROOT, '.', true, true) as $path) {
+				if (strpos($path, 'dpcalendar') === false || !file_exists($path)) {
+					continue;
+				}
+
+				if (strpos($path, '/tmpl/edit') === false
+					&& strpos($path, '/administrator/components/com_dpcalendar/models/event.php') === false) {
+					continue;
+				}
+
+				JFile::delete($path);
+			}
+		}
 	}
 
 	public function uninstall($parent)
@@ -436,11 +470,6 @@ from #__dpcalendar_bookings");
 
 	public function postflight($type, $parent)
 	{
-		if (JFile::exists(JPATH_SITE . '/components/com_jcomments/jcomments.php')) {
-			JFile::copy(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/jcomments/com_dpcalendar.plugin.php',
-				JPATH_SITE . '/components/com_jcomments/plugins/com_dpcalendar.plugin.php');
-		}
-
 		JLoader::import('joomla.filesystem.folder');
 		if (JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_falang/contentelements')) {
 			JFile::copy(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/falang/dpcalendar_events.xml',

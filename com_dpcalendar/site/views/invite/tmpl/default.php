@@ -7,31 +7,15 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Form;
-
-DPCalendarHelper::loadLibrary(array('chosen' => true, 'dpcalendar' => true));
-
-JFactory::getDocument()->addStyleDeclaration('#dp-invite-actions {margin-bottom: 10px;}');
-
-// The form element
-$tmpl = JFactory::getApplication()->input->getCmd('tmpl');
-if($tmpl)
-{
-	$tmpl = '&tmpl=' . $tmpl;
-}
-$this->root = new Form(
-	'dp-invite',
-	JRoute::_('index.php?option=com_dpcalendar' . $tmpl),
-	'adminForm',
-	'POST',
-	array('form-validate')
-);
-
-// Load the header template
-$this->loadTemplate('header');
-
-// Load the form from the layout
-DPCalendarHelper::renderLayout('content.form', array('root' => $this->root, 'jform' => $this->form, 'flat' => true, 'return' => JFactory::getApplication()->input->getBase64('return')));
-
-// Render the tree
-echo DPCalendarHelper::renderElement($this->root, $this->params);
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_FORM);
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SELECT);
+$this->dpdocument->loadStyleFile('dpcalendar/views/invite/default.css');
+$this->dpdocument->loadScriptFile('dpcalendar/views/invite/default.js');
+?>
+<div class="com-dpcalendar-invite<?php echo $this->pageclass_sfx ? ' com-dpcalendar-invite-' . $this->pageclass_sfx : ''; ?>">
+	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
+	<?php echo $this->loadTemplate('heading'); ?>
+	<?php echo $this->loadTemplate('header'); ?>
+	<?php echo $this->loadTemplate('form'); ?>
+</div>

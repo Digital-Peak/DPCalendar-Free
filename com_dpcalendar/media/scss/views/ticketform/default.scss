@@ -1,0 +1,12 @@
+.com-dpcalendar-ticketform {
+	#jform_remind_time, #jform_remind_type {
+		max-width: 100px
+	}
+
+	@import "../../layouts/block/button";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/radio";
+	@import "../../layouts/block/input";
+	@import "../../layouts/block/form";
+	@import "../../layouts/block/timezone";
+}

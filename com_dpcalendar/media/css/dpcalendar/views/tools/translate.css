@@ -1,0 +1,173 @@
+.com-dpcalendar-translate .dp-table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	empty-cells: show;
+	border: 1px solid #cbcbcb;
+	width: 100%;
+}
+
+.com-dpcalendar-translate .dp-table caption {
+	color: #000;
+	padding: 1em 0;
+	text-align: center;
+}
+
+.com-dpcalendar-translate .dp-table td,
+.com-dpcalendar-translate .dp-table th {
+	border-left: 1px solid #cbcbcb;
+	border-width: 0 0 0 1px;
+	font-size: inherit;
+	margin: 0;
+	overflow: visible;
+	padding: 0.4em 1em;
+	text-align: center;
+}
+
+.com-dpcalendar-translate .dp-table td:first-child,
+.com-dpcalendar-translate .dp-table th:first-child {
+	border-left-width: 0;
+}
+
+.com-dpcalendar-translate .dp-table thead {
+	text-align: left;
+	vertical-align: bottom;
+}
+
+.com-dpcalendar-translate .dp-table td {
+	background-color: transparent;
+}
+
+.com-dpcalendar-translate .dp-table .dp-cell-price {
+	text-align: right;
+}
+
+.com-dpcalendar-translate .dp-table-odd td {
+	background-color: #f2f2f2;
+}
+
+.com-dpcalendar-translate .dp-table tr:nth-child(2n-1) td {
+	background-color: #f2f2f2;
+}
+
+.com-dpcalendar-translate .dp-table td, .com-dpcalendar-translate .dp-table th {
+	border-bottom: 1px solid #cbcbcb;
+}
+
+.com-dpcalendar-translate .dp-table tbody > tr:last-child {
+	border-bottom-width: 0;
+}
+
+@media screen and (max-width: 767px) {
+	.com-dpcalendar-translate .dp-table,
+	.com-dpcalendar-translate .dp-table thead,
+	.com-dpcalendar-translate .dp-table tbody,
+	.com-dpcalendar-translate .dp-table th,
+	.com-dpcalendar-translate .dp-table td,
+	.com-dpcalendar-translate .dp-table tr {
+		display: block;
+	}
+	.com-dpcalendar-translate .dp-table thead {
+		display: none;
+	}
+	.com-dpcalendar-translate .dp-table tr {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.com-dpcalendar-translate .dp-table td {
+		border: none;
+		position: relative;
+		padding-left: 50%;
+		text-align: left;
+	}
+	.com-dpcalendar-translate .dp-table td:before {
+		content: attr(data-column);
+		position: absolute;
+		left: 10px;
+		padding-right: 10px;
+		font-weight: bold;
+	}
+	.com-dpcalendar-translate .dp-table td,
+	.com-dpcalendar-translate .dp-table th {
+		box-sizing: border-box;
+		border-bottom: 0;
+		text-align: left !important;
+	}
+	.com-dpcalendar-translate .dp-table td > div,
+	.com-dpcalendar-translate .dp-table th > div {
+		text-align: left;
+	}
+}
+
+.com-dpcalendar-translate .dp-button-bar {
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-translate .dp-button {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid #c0c0c0;
+	border-radius: 0.1rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	padding: 0 10px;
+	margin: 3px 0;
+	font-size: .7rem;
+	line-height: 1.5rem;
+	color: #212529;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-translate .dp-button:disabled,
+.com-dpcalendar-translate .dp-button[disabled] {
+	background-color: #cccccc;
+	color: #666666;
+}
+
+.com-dpcalendar-translate .dp-resource__name {
+	width: 100%;
+	text-align: left !important;
+}
+
+.com-dpcalendar-translate .dp-resource_success {
+	color: #155724;
+	background-color: #d4edda;
+	border-color: #c3e6cb;
+}
+
+.com-dpcalendar-translate .dp-resource_important {
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+}
+
+.com-dpcalendar-translate .dp-resource_warning {
+	color: #856404;
+	background-color: #fff3cd;
+	border-color: #ffeeba;
+}
+
+.com-dpcalendar-translate .dp-resource_info {
+	color: #0c5460;
+	background-color: #d1ecf1;
+	border-color: #bee5eb;
+}
+
+.com-dpcalendar-translate__footer {
+	text-align: center;
+}
+
+@media screen and (max-width: 767px) {
+	.com-dpcalendar-translate .dp-table td {
+		padding-left: 1em;
+	}
+}
+
+/*# sourceMappingURL=translate.css.map */

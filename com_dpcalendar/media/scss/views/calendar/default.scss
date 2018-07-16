@@ -1,0 +1,42 @@
+.com-dpcalendar-calendar {
+	@import "quickadd";
+	@import "../../vendor/fullcalendar";
+	@import "../../layouts/block/timezone";
+	@import "../../layouts/block/loader";
+	@import "../../layouts/block/toggle";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/calendar-icons";
+	@import "../../layouts/block/autocomplete";
+
+	.fc-header-toolbar h2 {
+		padding: 4px 15px 0;
+	}
+
+	&__list {
+		overflow: hidden;
+	}
+
+	&__list_hidden {
+		display: none;
+	}
+
+	&__list .dp-input {
+		margin: 0;
+	}
+
+	&_printable {
+		width: 900px !important;
+		margin: 0 auto 10px auto;
+	}
+
+	.dp-toggle {
+		text-align: center;
+		clear: both;
+		width: 100%;
+	}
+}
+
+@import "../../layouts/event/tooltip";
+@import "../../vendor/tippy";
+@import "../../vendor/tingle";
+@import "../../vendor/pikaday";

@@ -1,0 +1,413 @@
+.com-dpcalendar-timeline {
+	position: relative;
+	margin: 10px;
+	padding: 0px;
+}
+
+.com-dpcalendar-timeline__form_hidden {
+	display: none;
+}
+
+.com-dpcalendar-timeline__actions.dp-button-bar {
+	text-align: center;
+}
+
+.com-dpcalendar-timeline .dp-button-bar {
+	overflow: auto;
+}
+
+.com-dpcalendar-timeline .dp-button-bar__navigation {
+	float: left;
+}
+
+.com-dpcalendar-timeline .dp-button-bar__title {
+	display: inline-block;
+	margin-left: 5px;
+	margin-bottom: 18px;
+	font-size: 19.5px;
+	font-weight: 200;
+	line-height: 27px;
+}
+
+.com-dpcalendar-timeline .dp-button-bar__actions {
+	float: right;
+}
+
+.com-dpcalendar-timeline__form-container {
+	margin: 0 -5px;
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.com-dpcalendar-timeline__form-container > div {
+	display: flex;
+	flex: 1 1 260px;
+	margin: 0 5px 10px;
+}
+
+.com-dpcalendar-timeline__form-container .dp-input,
+.com-dpcalendar-timeline__form-container .dp-select {
+	width: 100%;
+	overflow: hidden;
+	margin-bottom: 0;
+}
+
+.com-dpcalendar-timeline__date-search .dp-input {
+	flex: 1 0 0;
+}
+
+.com-dpcalendar-timeline__date-search input + input,
+.com-dpcalendar-timeline__radius-search select + select {
+	margin-left: 10px;
+}
+
+@media screen and (max-width: 540px) {
+	.com-dpcalendar-timeline .dp-button-bar > div {
+		display: block;
+		margin: 0 auto;
+		width: 100%;
+	}
+}
+
+.com-dpcalendar-timeline .dp-event {
+	overflow: hidden;
+}
+
+.com-dpcalendar-timeline .dp-event__image {
+	float: right;
+	max-width: 300px;
+}
+
+.com-dpcalendar-timeline .dp-event__title {
+	font-weight: bold;
+	margin-right: 5px;
+}
+
+.com-dpcalendar-timeline .dp-event .dp-link_cta {
+	font-size: small;
+	margin-top: 10px;
+	padding: 2px 20px;
+}
+
+.com-dpcalendar-timeline .dp-event .dp-link_cta.dp-button {
+	background-color: #2D9EDE;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #000000;
+}
+
+.com-dpcalendar-timeline .dp-event__actions, .com-dpcalendar-timeline .dp-event__date, .com-dpcalendar-timeline .dp-event__calendar, .com-dpcalendar-timeline .dp-event__capacity, .com-dpcalendar-timeline .dp-event__price, .com-dpcalendar-timeline .dp-event__hits, .com-dpcalendar-timeline .dp-event__locations {
+	font-size: 90%;
+	margin-right: 1rem;
+	display: inline-block;
+}
+
+.com-dpcalendar-timeline .dp-event__description {
+	margin-top: 1rem;
+}
+
+.com-dpcalendar-timeline .dp-event .dp-location__description {
+	display: none;
+}
+
+@media screen and (max-width: 640px) {
+	.com-dpcalendar-timeline .dp-event__image, .com-dpcalendar-timeline .dp-event .dp-link_cta {
+		float: none;
+		text-align: center;
+		width: 100%;
+		display: block;
+		max-width: inherit;
+		margin: 10px 0;
+		padding: 0;
+	}
+}
+
+@media print {
+	.com-dpcalendar-timeline .dp-print-hide {
+		display: none !important;
+	}
+	.com-dpcalendar-timeline a:link:after, .com-dpcalendar-timeline a:visited:after {
+		display: none;
+		content: "";
+	}
+	.com-dpcalendar-timeline dt {
+		float: left !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		max-width: 150px;
+		min-width: 150px;
+	}
+	.com-dpcalendar-timeline dd {
+		float: left !important;
+		margin: 0 0 0 5px !important;
+		padding: 0 !important;
+		max-width: 350px;
+	}
+}
+
+.com-dpcalendar-timeline .dp-event-tooltip {
+	text-align: left;
+	font-size: 12px;
+}
+
+.com-dpcalendar-timeline .dp-event-tooltip .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
+}
+
+.com-dpcalendar-timeline .dp-event-tooltip__link {
+	margin-right: .4rem;
+	color: #42a1ff;
+}
+
+.com-dpcalendar-timeline .dp-event-tooltip__actions {
+	border-top: 1px solid rgba(255, 255, 255, 0.5);
+	margin-top: 5px;
+	padding-top: 4px;
+	color: #fff;
+}
+
+.com-dpcalendar-timeline .dp-event-tooltip__action {
+	color: #fff;
+	padding: 2px;
+	opacity: .85;
+}
+
+.com-dpcalendar-timeline .dp-event-tooltip__action:hover {
+	color: #fff;
+	opacity: 1;
+	text-decoration: none;
+}
+
+.com-dpcalendar-timeline .dp-figure {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	margin: 0;
+}
+
+.com-dpcalendar-timeline .dp-figure__caption {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.com-dpcalendar-timeline .dp-button-bar {
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-timeline .dp-button {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid #c0c0c0;
+	border-radius: 0.1rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	padding: 0 10px;
+	margin: 3px 0;
+	font-size: .7rem;
+	line-height: 1.5rem;
+	color: #212529;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-timeline .dp-button:disabled,
+.com-dpcalendar-timeline .dp-button[disabled] {
+	background-color: #cccccc;
+	color: #666666;
+}
+
+.com-dpcalendar-timeline .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
+}
+
+.com-dpcalendar-timeline .dp-timezone {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-timeline .dp-timezone__label {
+	font-weight: bold;
+}
+
+.com-dpcalendar-timeline .dp-timezone__select {
+	max-width: 200px;
+}
+
+.com-dpcalendar-timeline .dp-autocomplete {
+	border-right: 1px solid rgba(0, 0, 0, 0.2);
+	border-left: 1px solid rgba(0, 0, 0, 0.2);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	padding: 0;
+	background-color: #ffffff;
+	z-index: 1001;
+	max-height: 220px;
+	overflow-y: auto !important;
+	display: none;
+}
+
+.com-dpcalendar-timeline .dp-autocomplete__result {
+	margin: 0;
+	padding: 5px 10px;
+	display: block;
+}
+
+.com-dpcalendar-timeline .dp-autocomplete__result:not(:last-child) {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+.com-dpcalendar-timeline .dp-autocomplete__result_selected {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-timeline__events {
+	position: relative;
+}
+
+.com-dpcalendar-timeline__container::before {
+	content: "";
+	width: 3px;
+	background: #e1e1e1;
+	top: 0;
+	left: 21px;
+	bottom: 0;
+	position: absolute;
+}
+
+@media screen and (min-width: 768px) {
+	.com-dpcalendar-timeline__container::before {
+		left: 50%;
+	}
+}
+
+.com-dpcalendar-timeline .dp-event {
+	display: flex;
+	overflow: visible;
+	position: relative;
+	margin-bottom: 30px;
+}
+
+.com-dpcalendar-timeline .dp-event__dot {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: #e1e1e1;
+	width: 50px;
+	height: 50px;
+	position: absolute;
+	left: 20px;
+	overflow: hidden;
+	margin-top: 0;
+	margin-left: -24px;
+}
+
+@media screen and (min-width: 768px) {
+	.com-dpcalendar-timeline .dp-event__dot {
+		left: 50%;
+		margin-top: -200px;
+	}
+}
+
+.com-dpcalendar-timeline .dp-event__dot-date {
+	font-weight: bold;
+	font-size: 12px;
+	text-transform: uppercase;
+}
+
+.com-dpcalendar-timeline .dp-event__information {
+	position: relative;
+	background: #fff;
+	padding: 15px;
+	margin-top: 5px;
+	margin-left: 64px;
+	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
+	transition: all 0.3s ease;
+	width: 100%;
+}
+
+@media screen and (min-width: 768px) {
+	.com-dpcalendar-timeline .dp-event__information {
+		width: calc(50% - 68px);
+		margin-top: -195px;
+		margin-left: 0;
+	}
+}
+
+.com-dpcalendar-timeline .dp-event__information .dp-link_cta1 {
+	float: right;
+	font-size: small;
+	font-size: small;
+	margin: 0 0 0 30px;
+	padding: 0;
+}
+
+.com-dpcalendar-timeline .dp-event:first-of-type .dp-event__dot {
+	margin-top: 0;
+}
+
+.com-dpcalendar-timeline .dp-event:first-of-type .dp-event__information {
+	margin-top: 5px;
+}
+
+.com-dpcalendar-timeline .dp-event__title {
+	position: relative;
+	padding: 10px 15px;
+	margin: -15px -15px 10px;
+}
+
+.com-dpcalendar-timeline .dp-event__title .dp-link {
+	color: #fff;
+}
+
+.com-dpcalendar-timeline .dp-event__title::before {
+	content: '';
+	position: absolute;
+	top: 13px;
+	width: 14px;
+	height: 14px;
+	right: 0;
+	margin-right: -6px;
+	background-color: inherit;
+	box-shadow: -3px 3px 2px rgba(52, 58, 67, 0.05);
+	transform: rotate(45deg);
+}
+
+@media screen and (max-width: 768px) {
+	.com-dpcalendar-timeline .dp-event__title::before {
+		right: auto;
+		margin-right: -0;
+		left: 0;
+		margin-left: -6px;
+	}
+}
+
+.com-dpcalendar-timeline .dp-event__image {
+	max-width: 100%;
+	margin-bottom: 1rem;
+}
+
+@media screen and (min-width: 768px) {
+	.com-dpcalendar-timeline .dp-event:nth-child(2n) .dp-event__information {
+		margin-left: auto;
+	}
+	.com-dpcalendar-timeline .dp-event:nth-child(2n) .dp-event__title::before {
+		right: auto;
+		margin-right: -0;
+		left: 0;
+		margin-left: -6px;
+	}
+}
+
+/*# sourceMappingURL=timeline.css.map */

@@ -1,0 +1,151 @@
+.com-dpcalendar-timeline {
+	@import "_form";
+	@import "_events";
+	@import "../../misc/print";
+	@import "../../layouts/event/tooltip";
+	@import "../../layouts/block/figure";
+	@import "../../layouts/block/button";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/timezone";
+	@import "../../layouts/block/autocomplete";
+
+	$lineColor: #e1e1e1;
+	$eventSpacing: -200px;
+
+	position: relative;
+	margin: 10px;
+	padding: 0px;
+
+	&__events {
+		position: relative;
+	}
+
+	&__container::before {
+		content: "";
+		width: 3px;
+		background: $lineColor;
+		top: 0;
+		left: 21px;
+		bottom: 0;
+		position: absolute;
+
+		@media screen and (min-width: 768px) {	
+			left: 50%;
+		}
+	}
+
+	& .dp-event {
+		display: flex;
+		overflow: visible;
+		position: relative;
+		margin-bottom: 30px;
+
+		&__dot {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background: $lineColor;
+			width: 50px;
+			height: 50px;
+			position: absolute;
+			left: 20px;
+			overflow: hidden;
+			margin-top: 0;
+			margin-left: -24px;
+
+			@media screen and (min-width: 768px) {	
+				left: 50%;
+				margin-top: $eventSpacing;
+			}
+		}
+
+		&__dot-date {
+			font-weight: bold;
+			font-size: 12px;
+			text-transform: uppercase;
+		}
+
+		&__information {
+			position: relative;
+			background: #fff;
+			padding: 15px;
+			margin-top: 5px;
+			margin-left: 64px;
+			box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
+			transition: all 0.3s ease;
+			width: 100%;
+
+			@media screen and (min-width: 768px) {
+				width: calc(50% - 68px);
+				margin-top: ($eventSpacing + 5px);
+				margin-left: 0;
+			}
+
+			.dp-link_cta1 {
+				float: right;
+				font-size: small;
+				font-size: small;
+				margin: 0 0 0 30px;
+				padding: 0;
+			}
+		}
+
+		&:first-of-type {
+			.dp-event__dot {
+				margin-top: 0;
+			}
+			.dp-event__information {
+				margin-top: 5px;
+			}
+		}
+
+		&__title {
+			position: relative;
+			padding: 10px 15px;
+			margin: -15px -15px 10px;
+
+			.dp-link {
+				color: #fff;
+			}
+
+			&::before {
+				content: '';
+				position: absolute;
+				top: 13px;
+				width: 14px;
+				height: 14px;
+				right: 0;
+				margin-right: -6px;
+				background-color: inherit;
+				box-shadow: -3px 3px 2px rgba(52, 58, 67, 0.05);
+				transform: rotate(45deg);
+
+				@media screen and (max-width: 768px) {	
+					right: auto;
+					margin-right: -0;
+					left: 0;
+					margin-left: -6px;
+				}
+			}
+		}
+
+		&__image {
+			max-width: 100%;
+			margin-bottom: 1rem;
+		}
+
+		&:nth-child(2n) {
+			@media screen and (min-width: 768px) {			
+				.dp-event__information {
+					margin-left: auto;
+				}
+				.dp-event__title::before {
+					right: auto;
+					margin-right: -0;
+					left: 0;
+					margin-left: -6px;
+				}
+			}
+		}
+	}
+}

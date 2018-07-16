@@ -11,16 +11,12 @@ namespace DPCalendar\View;
 defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
-use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Basic\Heading;
 
 class BaseView extends \JViewLegacy
 {
-
 	protected $state;
 	protected $params;
 	protected $input = null;
-	protected $root = null;
 
 	/**
 	 * @var \JApplicationCms
@@ -54,12 +50,25 @@ class BaseView extends \JViewLegacy
 		$this->state  = $state;
 		$this->params = $tmp;
 
-		$this->root = new Container('dp-' . $this->getName(), array(), array('ccl-prefix' => 'dp-' . $this->getName() . '-'));
+		$this->dpdocument   = new \DPCalendar\HTML\Document\HtmlDocument();
+		$this->dateHelper   = new \DPCalendar\Helper\DateHelper();
+		$this->layoutHelper = new \DPCalendar\Helper\LayoutHelper();
+		$this->userHelper   = new \DPCalendar\Helper\UserHelper();
+		$this->router       = new \DPCalendar\Router\Router();
+		$this->translator   = new \DPCalendar\Translator\Translator();
+		$this->input        = $this->app->input;
 
-		// Add page heading when requested
-		if ($this->params->get('show_page_heading')) {
-			$this->root->addChild(new Heading('page-heading', 1))->setContent($this->params->get('page_heading'));
-		}
+		// The display data
+		$this->displayData = [
+			'document'     => $this->dpdocument,
+			'layoutHelper' => $this->layoutHelper,
+			'userHelper'   => $this->userHelper,
+			'dateHelper'   => $this->dateHelper,
+			'translator'   => $this->translator,
+			'router'       => $this->router,
+			'input'        => $this->input,
+			'params'       => $this->params
+		];
 
 		try {
 			$this->init();
@@ -168,5 +177,10 @@ class BaseView extends \JViewLegacy
 	 */
 	protected function init()
 	{
+	}
+
+	protected function translate($key)
+	{
+		return $this->translator->translate($key);
 	}
 }

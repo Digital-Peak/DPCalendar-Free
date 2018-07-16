@@ -6,10 +6,6 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Basic\Link;
-use Joomla\Registry\Registry;
-
 defined('_JEXEC') or die();
 
 $event = $displayData['event'];
@@ -18,79 +14,63 @@ if (!$event) {
 }
 $params = $displayData['params'];
 if (!$params) {
-	$params = new Registry();
+	$params = new \Joomla\Registry\Registry();
 }
-
-// The user
-$user = !empty($displayData['user']) ? $displayData['user'] : JFactory::getUser();
-
-/** @var \CCL\Content\Element\Basic\Container $root */
-$root = $displayData['root']->addChild(new Container('tooltip', array('tooltip')));
 
 // Compile the return url
-$return = JFactory::getApplication()->input->getInt('Itemid', null);
+$return = $displayData['input']->getInt('Itemid', null);
 if (!empty($return)) {
 	$uri    = clone JUri::getInstance();
-	$uri    = $uri->toString(
-		array(
-			'scheme',
-			'host',
-			'port'
-		)
-	);
-	$return = $uri . JRoute::_('index.php?Itemid=' . $return, false);
-}
-
-// Add the date
-$p = $root->addChild(new Container('date', array('date')));
-$p->setContent(
-	DPCalendarHelper::getDateStringFromEvent(
-		$event,
-		$params->get('event_date_format', 'm.d.Y'),
-		$params->get('event_time_format', 'g:i a')
-	)
-);
-
-// Add the title
-$l = $root->addChild(
-	new Link('title', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid), null, array('event-link'))
-);
-$l->setContent($event->title);
-
-// Add the description
-if ($params->get('tooltip_show_description', 1)) {
-	$root->addChild(new Container('content'))->setContent(JHtml::_('string.truncate', $event->description, 100));
-}
-
-$c = $root->addChild(new Container('links', array('links')));
-
-// Add the booking link when possible
-if (\DPCalendar\Helper\Booking::openForBooking($event)) {
-	$l = $c->addChild(
-		new Link('book', JRoute::_(DPCalendarHelperRoute::getBookingFormRouteFromEvent($event, $return), false))
-	);
-	$l->setContent(JText::_('COM_DPCALENDAR_BOOK'));
+	$uri    = $uri->toString(['scheme', 'host', 'port']);
+	$return = $uri . $displayData['router']->route('index.php?Itemid=' . $return, false);
 }
 
 $calendar = DPCalendarHelper::getCalendar($event->catid);
-
-// Add the edit link when possible
-if (($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id))
-	&& (!$event->checked_out || $user->id == $event->checked_out)) {
-	$l = $c->addChild(new Link('edit', JRoute::_(DPCalendarHelperRoute::getFormRoute($event->id, $return), false)));
-	$l->setContent(JText::_('JACTION_EDIT'));
-}
-
-// Add the delete link when possible
-if ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) {
-	$l = $c->addChild(
-		new Link(
-			'delete',
-			JRoute::_(
-				'index.php?option=com_dpcalendar&task=event.delete&e_id=' . $event->id . '&return=' . base64_encode($return),
-				false
-			)
-		)
-	);
-	$l->setContent(JText::_('JACTION_DELETE'));
-}
+$user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getUser();
+?>
+<div class="dp-event-tooltip">
+	<div class="dp-event-tooltip__date">
+		<?php echo $displayData['layoutHelper']->renderLayout(
+			'event.datestring',
+			[
+				'event'      => $event,
+				'dateFormat' => $params->get('event_date_format', 'm.d.Y'),
+				'timeFormat' => $params->get('event_time_format', 'g:i a')
+			]
+		); ?>
+	</div>
+	<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
+		<?php echo $event->title; ?>
+	</a>
+	<?php if ($params->get('tooltip_show_description', 1)) { ?>
+		<div class="dp-event-tooltip__description">
+			<?php echo JHtml::_('string.truncate', $event->description, 100); ?>
+		</div>
+	<?php } ?>
+	<div class="dp-event-tooltip__actions dp-button-bar">
+		<?php if (\DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+			<a href="<?php echo $displayData['router']->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-event-tooltip__action dp-link">
+				<?php echo $displayData['layoutHelper']->renderLayout(
+					'block.icon',
+					['icon' => \DPCalendar\HTML\Block\Icon::PLUS, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_BOOK')]
+				); ?>
+			</a>
+		<?php } ?>
+		<?php if ($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
+			<a href="<?php echo $displayData['router']->getEventFormRoute($event->id, $return); ?>" class="dp-event-tooltip__action dp-link">
+				<?php echo $displayData['layoutHelper']->renderLayout(
+					'block.icon',
+					['icon' => \DPCalendar\HTML\Block\Icon::EDIT, 'title' => $displayData['translator']->translate('JACTION_EDIT')]
+				); ?>
+			</a>
+		<?php } ?>
+		<?php if ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
+			<a href="<?php echo $displayData['router']->getEventDeleteRoute($event->id, $return); ?>" class="dp-event-tooltip__action dp-link">
+				<?php echo $displayData['layoutHelper']->renderLayout(
+					'block.icon',
+					['icon' => \DPCalendar\HTML\Block\Icon::DELETE, 'title' => $displayData['translator']->translate('JACTION_DELETE')]
+				); ?>
+			</a>
+		<?php } ?>
+	</div>
+</div>

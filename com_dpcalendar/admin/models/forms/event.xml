@@ -1,25 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form addfieldpath="/administrator/components/com_dpcalendar/models/fields"
       addrulepath="/administrator/components/com_dpcalendar/models/rules">
-	<fieldset name="content" label="COM_DPCALENDAR_CONTENT">
-		<field name="title" type="text" required="true" class="dp-form-input"
+	<fieldset name="general" label="COM_DPCALENDAR_CONTENT">
+		<field name="title" type="text" required="true" class="dp-form-input" autocomplete="0"
 		       label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_TITLE_DESC"/>
 
 		<field name="catid" type="dpcalendaredit" extension="com_dpcalendar"
 		       label="COM_DPCALENDAR_CALENDAR" description="COM_DPCALENDAR_FIELD_CALENDAR_DESC"/>
 
-		<field name="color" type="dpcolor" maxlength="6" size="6"
+		<field name="color" type="color" maxlength="6" size="6"
 		       label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"/>
 
 		<field name="url" type="url" class="dp-form-input"
 		       label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"/>
 
-		<field name="start_date" type="datetimechooser" default="NOW" required="true" datepair="end_date"
-		       validate="minmaxtime" timeclass="time timestart validate" class="start inputbox validate"
+		<field name="start_date" type="datetimechooser" default="NOW" required="true" datepair="end_date" validate="minmaxtime"
 		       label="COM_DPCALENDAR_FIELD_START_DATE_LABEL" description="COM_DPCALENDAR_FIELD_START_DATE_DESC"/>
 
-		<field name="end_date" type="datetimechooser" default="+1 hour" timepair="timepair" required="true"
-		       validate="minmaxtime" class="end inputbox validate" timeclass="time timeend validate"
+		<field name="end_date" type="datetimechooser" default="+1 hour" required="true" validate="minmaxtime"
 		       label="COM_DPCALENDAR_FIELD_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_END_DATE_DESC"/>
 
 		<field name="show_end_time" type="radio" default="1" class="dp-form-radio"
@@ -159,10 +157,16 @@
 		<field name="user_discount" type="subform" multiple="true"
 		       formsource="administrator/components/com_dpcalendar/models/forms/event_userdiscount.xml"
 		       label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL" description="COM_DPCALENDAR_FIELD_USER_DISCOUNT_DESC"/>
+		<field name="booking_options" type="subform" multiple="true"
+		       formsource="administrator/components/com_dpcalendar/models/forms/event_booking_options.xml"
+		       label="COM_DPCALENDAR_OPTIONS" description="COM_DPCALENDAR_FIELD_BOOKING_OPTIONS_DESC"/>
 		<field name="plugintype" type="plugins" folder="dpcalendarpay" default="0"
 		       label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
 			<option value="0">COM_DPCALENDAR_FIELD_PAYMENT_TYPE_ALL</option>
 		</field>
+		<field name="terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
+		       addfieldpath="/administrator/components/com_content/models/fields"
+		       label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
 		<field name="booking_information" type="editor" filter="raw"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
 		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
@@ -173,8 +177,6 @@
 
 		<field name="tags" type="tag" multiple="true"
 		       label="JTAG" description="JTAG_DESC"/>
-		<field name="publish_up" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S" label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
-		       description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
 		<field name="featured" type="list" default="0"
 		       label="JFEATURED" description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
 			<option value="0">JNO</option>
@@ -234,25 +236,17 @@
 
 	<fields name="images">
 		<fieldset name="images" label="COM_DPCALENDAR_IMAGES">
-			<field name="image1" type="media" class="dp-form-input"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
-			<field name="image1_alt" type="text" class="dp-form-input"
+			<field name="image_intro" type="media" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_INTRO_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_INTRO_DESC"/>
+			<field name="image_intro_alt" type="text" class="dp-form-input"
 			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"/>
-			<field name="image1_caption" type="text" class="dp-form-input"
+			<field name="image_intro_caption" type="text" class="dp-form-input"
 			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"/>
-			<field name="spacer1" type="spacer" hr="true"/>
-			<field name="image2" type="media" class="dp-form-input"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
-			<field name="image2_alt" type="text" class="dp-form-input"
+			<field name="image_full" type="media" class="dp-form-input"
+			       label="COM_DPCALENDAR_FIELD_IMAGE_FULL_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_FULL_DESC"/>
+			<field name="image_full_alt" type="text" class="dp-form-input"
 			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"/>
-			<field name="image2_caption" type="text" class="dp-form-input"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"/>
-			<field name="spacer2" type="spacer" hr="true"/>
-			<field name="image3" type="media" class="dp-form-input"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_DESC"/>
-			<field name="image3_alt" type="text" class="dp-form-input"
-			       label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"/>
-			<field name="image3_caption" type="text" class="dp-form-input"
+			<field name="image_full_caption" type="text" class="dp-form-input"
 			       label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"/>
 		</fieldset>
 	</fields>

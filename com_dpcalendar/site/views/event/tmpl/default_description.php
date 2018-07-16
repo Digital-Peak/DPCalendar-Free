@@ -7,33 +7,16 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Basic\Heading;
-
-if (!$this->event->description)
-{
-	// When no description, then don't render it
+if (!$this->event->description) {
 	return;
 }
-
-// Create the facebook comments box element
-$root = $this->root->addChild(new Container('container'));
-
-// Thea heading of the page
-$h = $root->addChild(new Heading('heading', 3, array('dpcalendar-heading')));
-$h->setProtectedClass('dpcalendar-heading');
-$h->setContent(JText::_('COM_DPCALENDAR_DESCRIPTION'));
-
-// The container with the event description
-$desc = $root->addChild(new Container('content'));
-
-try
-{
-	// Set the event description as content
-	$desc->setContent(JHTML::_('content.prepare', $this->event->description));
-}
-catch (Exception $e)
-{
-	// Description is somehow not valid, add a warning
-	JFactory::getApplication()->enqueueMessage(nl2br($this->escape($e->getMessage())), 'error');
-}
+?>
+<div class="com-dpcalendar-event__description">
+	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_DESCRIPTION'); ?></h3>
+	<div class="com-dpcalendar-event__description-content">
+		<?php echo JHTML::_('content.prepare', $this->event->description); ?>
+	</div>
+	<div class="com-dpcalendar-event__event-text">
+		<?php echo $this->event->displayEvent->afterDisplayContent; ?>
+	</div>
+</div>

@@ -1,15 +1,25 @@
 DPCalendar = window.DPCalendar || {};
 
-(function (DPCalendar) {
-	"use strict";
+(function (document, window, Joomla, DPCalendar, jQuery) {
+	'use strict';
+
+	document.addEventListener('DOMContentLoaded', function () {
+		[].slice.call(document.querySelectorAll('.dp-calendar')).forEach(function (el) {
+			if (!el.getAttribute('data-options')) {
+				return;
+			}
+
+			var options = Joomla.getOptions(el.getAttribute('data-options'));
+			DPCalendar.createCalendar(jQuery(el), options);
+		});
+	});
 
 	DPCalendar.createCalendar = function (calendar, options) {
-
 		var adaptScroll = function (date) {
 			if (!date) {
 				date = calendar.fullCalendar('getDate');
 			}
-			var cell = calendar[0].querySelector('th[data-date^="' + date.format("YYYY-MM-DD") + '"]');
+			var cell = calendar[0].querySelector('th[data-date^="' + date.format('YYYY-MM-DD') + '"]');
 			if (!cell) {
 				return;
 			}
@@ -28,7 +38,7 @@ DPCalendar = window.DPCalendar || {};
 			scroller.scrollLeft = cellBounds.left + cellBounds.width / 2 - scrollerBounds.left - scrollerBounds.width / 2;
 		}
 
-		DPCalendar.loader('hide', calendar.parent()[0]);
+		calendar[0].parentElement.parentElement.querySelector('.dp-loader').classList.add('dp-loader_hidden');
 
 		if (options['use_hash']) {
 			// Parsing the hash
@@ -93,27 +103,28 @@ DPCalendar = window.DPCalendar || {};
 		options['endParam'] = 'date-end';
 
 		// Translations
-		options['eventLimitText'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE', true);
-		options['allDayText'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY', true);
+		options['eventLimitText'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
+		options['allDayText'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
 		options['buttonText'] = {
-			today: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY', true),
-			month: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_MONTH', true),
-			week: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_WEEK', true),
-			day: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_DAY', true),
-			list: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_LIST', true)
+			today: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY'),
+			year: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_YEAR'),
+			month: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_MONTH'),
+			week: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_WEEK'),
+			day: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_DAY'),
+			list: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_LIST')
 		};
 
 		options['listTexts'] = {
-			until: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_UNTIL', true),
-			past: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_PAST', true),
-			today: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_TODAY', true),
-			tomorrow: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_TOMORROW', true),
-			thisWeek: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_THIS_WEEK', true),
-			nextWeek: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_NEXT_WEEK', true),
-			thisMonth: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_THIS_MONTH', true),
-			nextMonth: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_NEXT_MONTH', true),
-			future: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_FUTURE', true),
-			week: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_WEEK', true)
+			until: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_UNTIL'),
+			past: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_PAST'),
+			today: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_TODAY'),
+			tomorrow: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_TOMORROW'),
+			thisWeek: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_THIS_WEEK'),
+			nextWeek: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_NEXT_WEEK'),
+			thisMonth: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_THIS_MONTH'),
+			nextMonth: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_NEXT_MONTH'),
+			future: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_FUTURE'),
+			week: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_WEEK')
 		};
 
 		options['viewRender'] = function (view) {
@@ -126,7 +137,7 @@ DPCalendar = window.DPCalendar || {};
 
 			adaptScroll();
 
-			var map = calendar[0].parentElement.querySelector('.dpcalendar-map');
+			var map = calendar[0].parentElement.querySelector('.dp-map');
 			if (map == null || map.dpmap == null || !options['show_map']) {
 				return;
 			}
@@ -137,7 +148,7 @@ DPCalendar = window.DPCalendar || {};
 			// Support HTML in title
 			var title = e.find('.fc-title');
 			title.html(title.text());
-			
+
 			var element = e[0];
 			// Add a class if available
 			if (event.view_class) {
@@ -174,7 +185,7 @@ DPCalendar = window.DPCalendar || {};
 				element.style.color = event.fgcolor;
 			}
 
-			var map = calendar[0].parentElement.querySelector('.dpcalendar-map');
+			var map = calendar[0].parentElement.querySelector('.dp-map');
 			if (map == null || map.dpmap == null || !options['show_map']) {
 				return;
 			}
@@ -187,7 +198,7 @@ DPCalendar = window.DPCalendar || {};
 
 				var desc = event.description;
 				if (event.url) {
-					desc = desc.replace(event.title, '<a href="' + event.url + '"">' + event.title + "</a>");
+					desc = desc.replace(event.title, '<a href="' + event.url + '">' + event.title + '</a>');
 				}
 				locationData.description = desc;
 
@@ -213,16 +224,9 @@ DPCalendar = window.DPCalendar || {};
 				return false;
 			}
 
-			DPCalendar.loader('show', calendar.parent()[0]);
-			Joomla.request({
-				method: 'POST',
-				url: 'index.php?option=com_dpcalendar&task=event.move',
-				data: 'id=' + event.id + '&minutes=' + delta.asMinutes() + '&allDay=' + !event.start.hasTime(),
-				onSuccess: function (data) {
-					DPCalendar.loader('hide', calendar.parent()[0]);
-
-					var json = JSON.parse(data);
-
+			DPCalendar.request(
+				'index.php?option=com_dpcalendar&task=event.move',
+				function (json) {
 					if (json.data.url) {
 						event.url = json.data.url;
 					}
@@ -237,32 +241,22 @@ DPCalendar = window.DPCalendar || {};
 						return;
 					}
 
-					if (document.getElementById('system-message-container')) {
-						Joomla.renderMessages(json.messages);
-					}
-
 					for (var type in json.messages) {
 						if (type != 'message') {
 							revertFunc();
 							return;
 						}
 					}
-				}
-			});
+				},
+				'id=' + event.id + '&minutes=' + delta.asMinutes() + '&allDay=' + !event.start.hasTime()
+			);
 		};
 
 		// Resize support
 		options['eventResize'] = function (event, delta, revertFunc, jsEvent, ui, view) {
-			DPCalendar.loader('show', calendar.parent()[0]);
-			Joomla.request({
-				method: 'POST',
-				url: 'index.php?option=com_dpcalendar&task=event.move',
-				data: 'id=' + event.id + '&minutes=' + delta.asMinutes() + '&onlyEnd=1&allDay=' + !event.start.hasTime(),
-				onSuccess: function (data) {
-					DPCalendar.loader('hide', calendar.parent()[0]);
-
-					var json = JSON.parse(data);
-
+			DPCalendar.request(
+				'index.php?option=com_dpcalendar&task=event.move',
+				function (json) {
 					if (json.data.url) {
 						event.url = json.data.url;
 					}
@@ -277,18 +271,15 @@ DPCalendar = window.DPCalendar || {};
 						return;
 					}
 
-					if (document.getElementById('system-message-container')) {
-						Joomla.renderMessages(json.messages);
-					}
-
 					for (var type in json.messages) {
 						if (type != 'message') {
 							revertFunc();
 							return;
 						}
 					}
-				}
-			});
+				},
+				'id=' + event.id + '&minutes=' + delta.asMinutes() + '&onlyEnd=1&allDay=' + !event.start.hasTime()
+			);
 		};
 
 		// Handling clicking on an event
@@ -310,7 +301,7 @@ DPCalendar = window.DPCalendar || {};
 				DPCalendar.modal(url, calendar.data('popupwidth'), calendar.data('popupheight'), function (frame) {
 					// Check if there is a system message
 					var innerDoc = frame.contentDocument || frame.contentWindow.document;
-					if (innerDoc.getElementById('system-message').children.length < 1) {
+					if (innerDoc.getElementById('system-message-container').children.length < 1) {
 						return;
 					}
 
@@ -325,7 +316,7 @@ DPCalendar = window.DPCalendar || {};
 		};
 
 		options['dayClick'] = function (date, jsEvent, view, resource) {
-			var form = calendar[0].parentElement.querySelector('form[name=adminForm]');
+			var form = calendar[0].parentElement.querySelector('.dp-quickadd .dp-form');
 
 			if (form) {
 				jsEvent.stopPropagation();
@@ -333,17 +324,24 @@ DPCalendar = window.DPCalendar || {};
 				// Setting some defaults on the quick add popup form
 				if (view.name == 'month') {
 					date.hours(8);
+					date.minutes(0);
 				}
 
 				var start = form.querySelector('#jform_start_date');
-				start.value = date.format(start.getAttribute('format'));
+				start.value = date.format(start.getAttribute('data-format'));
+				start.actualDate = start.value;
+				start = form.querySelector('#jform_start_date_time');
+				start.value = date.format(start.getAttribute('data-format'));
+				start.actualDate = start.value;
+
+				date.add('hours', 1);
 
 				var end = form.querySelector('#jform_end_date');
-				end.value = date.format(end.getAttribute('format'));
-
-				jQuery(form.querySelector('#jform_start_date_time')).timepicker('setTime', new Date(date.toISOString()));
-				date.hours(date.hours() + 1);
-				jQuery(form.querySelector('#jform_end_date_time')).timepicker('setTime', new Date(date.toISOString()));
+				end.value = date.format(end.getAttribute('data-format'));
+				end.actualDate = end.value;
+				end = form.querySelector('#jform_end_date_time');
+				end.value = date.format(end.getAttribute('data-format'));
+				end.actualDate = end.value;
 
 				// Set location information
 				if (resource) {
@@ -429,10 +427,23 @@ DPCalendar = window.DPCalendar || {};
 				}
 			};
 		}
+		if (options['header'].left.indexOf('add') && options['event_create_url']) {
+			options['customButtons'].add = {
+				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'),
+				icon: 'icon-add',
+				click: function () {
+					location.href = options['event_create_url'];
+				}
+			};
+		}
 
 		// Spinner handling
 		options['loading'] = function (bool) {
-			DPCalendar.loader(bool ? 'show' : 'hide', calendar.parent()[0]);
+			if (bool) {
+				calendar[0].parentElement.parentElement.querySelector('.dp-loader').classList.remove('dp-loader_hidden');
+			} else {
+				calendar[0].parentElement.parentElement.querySelector('.dp-loader').classList.add('dp-loader_hidden');
+			}
 		};
 
 		calendar.data('eventSources', options['eventSources']);
@@ -470,42 +481,34 @@ DPCalendar = window.DPCalendar || {};
 
 		adaptScroll();
 
-		// Replace class names with the one from Joomla
-		var icon = document.querySelector('.fc-icon-icon-print');
-		if (icon) {
-			icon.setAttribute('class', options['icon_print']);
-		}
-
-		icon = document.querySelector('.fc-icon-icon-calendar');
-		if (icon) {
-			icon.setAttribute('class', options['icon_calendar']);
-		}
-
 		// Toggle the list of calendars
 		var root = calendar[0].parentElement;
-		var toggle = root.querySelector('.dp-calendar-toggle');
+		var toggle = root.querySelector('.com-dpcalendar-calendar__toggle');
 		if (toggle) {
-			toggle.addEventListener('click', function (event) {
-				DPCalendar.slideToggle(root.querySelector('.dp-calendar-list'), function (fadeIn) {
+			toggle.addEventListener('click', function () {
+				DPCalendar.slideToggle(root.querySelector('.com-dpcalendar-calendar__list'), function (fadeIn) {
 					if (!fadeIn) {
-						root.querySelector('i[data-direction="up"]').style.display = 'none';
-						root.querySelector('i[data-direction="down"]').style.display = 'inline';
+						root.querySelector('[data-direction="up"]').style.display = 'none';
+						root.querySelector('[data-direction="down"]').style.display = 'inline';
 					} else {
-						root.querySelector('i[data-direction="up"]').style.display = 'inline';
-						root.querySelector('i[data-direction="down"]').style.display = 'none';
+						root.querySelector('[data-direction="up"]').style.display = 'inline';
+						root.querySelector('[data-direction="down"]').style.display = 'none';
 					}
 				});
 			});
 		}
 
 		// Modify the calendar list
-		for (var i = 0; i < options['eventSources'].length; i++) {
-			var elements = calendar[0].parentElement.querySelectorAll('.dp-calendar-list input');
-			for (var j = 0; j < elements.length; j++) {
+		var elements = calendar[0].parentElement.querySelectorAll('.com-dpcalendar-calendar__list .dp-input-checkbox');
+		for (var j = 0; j < elements.length; j++) {
+			for (var i = 0; i < options['eventSources'].length; i++) {
 				if (options['eventSources'][i].url == elements[j].value) {
 					elements[j].setAttribute('checked', true);
 				}
 			}
+			elements[j].addEventListener('click', function () {
+				DPCalendar.updateCalendar(this, calendar)
+			});
 		}
 	}
 
@@ -514,10 +517,10 @@ DPCalendar = window.DPCalendar || {};
 		var eventSources = DPCalendar.isLocalStorageSupported() ? JSON.parse(localStorage.getItem(calendar.attr('id') + hash)) : [];
 
 		var source = {
-			url: input.val(),
+			url: input.value,
 			success: DPCalendar.extractEvents
 		};
-		if (input.is(':checked')) {
+		if (input.checked) {
 			calendar.fullCalendar('addEventSource', source);
 			eventSources.push(source.url);
 		} else {
@@ -546,4 +549,4 @@ DPCalendar = window.DPCalendar || {};
 		}
 		return events;
 	}
-}(DPCalendar));
+}(document, window, Joomla, DPCalendar, jQuery));

@@ -22,12 +22,10 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 
 	public function init()
 	{
-		$this->item = $this->getModel()->getItem($this->input->getInt('id'));
+		$this->location = $this->getModel()->getItem($this->input->getInt('id'));
 
-		if ($this->item->id == null) {
-			$this->set('Errors', JText::_('JERROR_ALERTNOAUTHOR'));
-
-			return false;
+		if ($this->location->id == null) {
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
 		}
 
 		JLoader::import('joomla.application.component.model');
@@ -50,7 +48,18 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		$model->setState('filter.ongoing', true);
 		$model->setState('filter.state', 1);
 		$model->setState('filter.language', JFactory::getLanguage());
-		$model->setState('filter.locations', array($this->item->id));
+		$model->setState('filter.locations', array($this->location->id));
 		$this->events = $model->getItems();
+
+		$rooms = array();
+		if ($this->location->rooms) {
+			foreach ($this->location->rooms as $room) {
+				$rooms[] = (object)array('id' => $this->location->id . '-' . $room->id, 'title' => $room->title);
+			}
+		}
+
+		$this->resources[] = (object)array('id' => $this->location->id, 'title' => $this->location->title, 'children' => $rooms);
+
+		$this->return = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;
 	}
 }

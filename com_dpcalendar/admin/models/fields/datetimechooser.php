@@ -14,21 +14,62 @@ class JFormFieldDatetimechooser extends JFormField
 
 	public function getInput()
 	{
-		JHtml::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/helpers/html');
+		$dateHelper = new \DPCalendar\Helper\DateHelper();
 
-		$options               = array();
-		$options['class']      = $this->element['class'];
-		$options['onchange']   = $this->element['onchange'];
-		$options['allDay']     = $this->element['all_day'] == '1';
-		$options['dateFormat'] = $this->element['format'];
-		$options['timeFormat'] = (string)$this->element['formatTime'];
-		$options['formated']   = $this->element['formated'];
-		$options['timepair']   = $this->element['timepair'];
-		$options['datepair']   = $this->element['datepair'];
-		$options['timeclass']  = $this->element['timeclass'];
-		$options['minTime']    = (string)$this->element['min_time'];
-		$options['maxTime']    = (string)$this->element['max_time'];
+		$dateFormat = (string)$this->element['format'];
+		if (empty($dateFormat)) {
+			$dateFormat = DPCalendarHelper::getComponentParameter('event_date_format', 'm.d.Y');
+		}
 
-		return JHtml::_('datetime.render', $this->value, $this->id, $this->name, $options);
+		$timeFormat = (string)$this->element['formatTime'];
+		if (empty($timeFormat)) {
+			$timeFormat = DPCalendarHelper::getComponentParameter('event_time_format', 'g:i a');
+		}
+
+		$allDay   = (string)$this->element['all_day'] == '1';
+		$formated = (string)$this->element['formated'];
+
+		// Handle the special case for "now".
+		$date = null;
+		if (strtoupper($this->value) == 'NOW') {
+			$date = $dateHelper->getDate();
+			$date->setTime($date->format('H', true), 0, 0);
+		} else if (strtoupper($this->value) == '+1 HOUR' || strtoupper($this->value) == '+2 MONTH') {
+			$date = $dateHelper->getDate();
+			$date->setTime($date->format('H', true), 0, 0);
+			$date->modify($this->value);
+		} else if ($this->value && $formated) {
+			$date = DPCalendarHelper::getDateFromString($this->value, null, $allDay, $dateFormat, $timeFormat);
+		} else if ($this->value) {
+			$date = $dateHelper->getDate($this->value, $allDay);
+		}
+
+		$layoutHelper = new \DPCalendar\Helper\LayoutHelper();
+		$buffer       = $layoutHelper->renderLayout('block.datepicker', [
+			'id'          => $this->id,
+			'name'        => $this->name,
+			'date'        => $date,
+			'format'      => $dateFormat,
+			'localFormat' => !$allDay,
+			'firstDay'    => DPCalendarHelper::getComponentParameter('weekstart', '0'),
+			'pair'        => (string)$this->element['datepair'],
+			'document'    => new \DPCalendar\HTML\Document\HtmlDocument(),
+			'dateHelper'  => $dateHelper
+		]);
+
+		$buffer .= $layoutHelper->renderLayout('block.timepicker', [
+			'id'         => $this->id . '_time',
+			'name'       => str_replace(']', '_time]', $this->name),
+			'date'       => $date,
+			'format'     => $timeFormat,
+			'min'        => (string)$this->element['min_time'],
+			'max'        => (string)$this->element['max_time'],
+			'step'       => DPCalendarHelper::getComponentParameter('event_form_time_step', 30),
+			'pair'       => (string)$this->element['datepair'] . '_time',
+			'document'   => new \DPCalendar\HTML\Document\HtmlDocument(),
+			'dateHelper' => $dateHelper
+		]);
+
+		return $buffer;
 	}
 }

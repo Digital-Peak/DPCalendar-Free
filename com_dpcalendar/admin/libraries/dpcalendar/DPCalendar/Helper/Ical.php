@@ -7,6 +7,8 @@
  */
 namespace DPCalendar\Helper;
 
+defined('_JEXEC') or die();
+
 class Ical
 {
 
@@ -198,29 +200,31 @@ class Ical
 
 				// Find deleted events
 				$exdates = array();
-				foreach ($cal->VEVENT as $vevent) {
-					$found = false;
-					$date  = \DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
+				if (is_array($cal->VEVENT)) {
+					foreach ($cal->VEVENT as $vevent) {
+						$found = false;
+						$date  = \DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
 
-					// Ignore starting event
-					if ($date->toSql() == $event->start_date) {
-						continue;
-					}
-
-					$dateFormatted = $event->all_day ? $date->format('Ymd') : $date->format('Ymd\THis\Z');
-
-					// Trying to find the instance for the actual recurrence id
-					// date
-					foreach ($instances as $e) {
-						if ($dateFormatted == $e->recurrence_id) {
-							$found = true;
-							break;
+						// Ignore starting event
+						if ($date->toSql() == $event->start_date) {
+							continue;
 						}
-					}
 
-					if (!$found) {
-						// No instance was found, adding it to the exdates
-						$exdates[] = $dateFormatted;
+						$dateFormatted = $event->all_day ? $date->format('Ymd') : $date->format('Ymd\THis\Z');
+
+						// Trying to find the instance for the actual recurrence id
+						// date
+						foreach ($instances as $e) {
+							if ($dateFormatted == $e->recurrence_id) {
+								$found = true;
+								break;
+							}
+						}
+
+						if (!$found) {
+							// No instance was found, adding it to the exdates
+							$exdates[] = $dateFormatted;
+						}
 					}
 				}
 				if ($exdates) {

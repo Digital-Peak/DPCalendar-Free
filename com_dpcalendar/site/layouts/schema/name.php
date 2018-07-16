@@ -6,14 +6,5 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
-
-use CCL\Content\Element\Basic\Meta;
-
-// The locations to display
-$event = $displayData['event'];
-if (!$event) {
-	return;
-}
-
-// Add the title as name
-$displayData['root']->addChild(new Meta('name', 'name', $event->title));
+?>
+<meta itemprop="name" content="<?php echo $displayData['event']->title; ?>">

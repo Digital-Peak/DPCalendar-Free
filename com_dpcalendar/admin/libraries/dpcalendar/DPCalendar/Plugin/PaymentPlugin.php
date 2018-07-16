@@ -7,6 +7,9 @@
  */
 namespace DPCalendar\Plugin;
 
+use DPCalendar\Helper\LayoutHelper;
+use DPCalendar\HTML\Document\HtmlDocument;
+use DPCalendar\Translator\Translator;
 use Omnipay\Common\GatewayInterface;
 
 defined('_JEXEC') or die();
@@ -89,10 +92,13 @@ abstract class PaymentPlugin extends \JPlugin
 		$layout = \JLayoutHelper::render(
 			'purchase.form',
 			array(
-				'booking'   => $booking,
-				'params'    => $this->params,
-				'returnUrl' => $purchaseParameters['returnUrl'],
-				'cancelUrl' => $purchaseParameters['cancelUrl']
+				'booking'      => $booking,
+				'params'       => $this->params,
+				'returnUrl'    => $purchaseParameters['returnUrl'],
+				'cancelUrl'    => $purchaseParameters['cancelUrl'],
+				'translator'   => new Translator(),
+				'layoutHelper' => new LayoutHelper(),
+				'document'     => new HtmlDocument()
 			),
 			JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/layouts'
 		);

@@ -7,10 +7,8 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewLocation extends \DPCalendar\View\LayoutView
+class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 {
-	protected $layoutName = 'location.form.default';
-
 	public function init()
 	{
 		$this->location = $this->get('Item');

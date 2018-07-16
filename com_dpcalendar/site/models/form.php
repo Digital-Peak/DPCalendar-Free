@@ -6,9 +6,6 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use CCL\Content\Element\Basic\Container;
-use DPCalendar\CCL\Visitor\InlineStyleVisitor;
-
 defined('_JEXEC') or die();
 
 JLoader::import('components.com_dpcalendar.models.adminevent', JPATH_ADMINISTRATOR);
@@ -83,22 +80,21 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$params = clone JComponentHelper::getParams('com_dpcalendar');
 			$params->set('show_header', false);
 
-			$root = new Container('dp-booking');
-			DPCalendarHelper::renderLayout(
+			$details = DPCalendarHelper::renderLayout(
 				'booking.invoice',
 				array(
-					'booking' => $booking,
-					'tickets' => $bookingModel->getTickets($booking->id),
-					'params'  => $params,
-					'root'    => $root
+					'booking'    => $booking,
+					'tickets'    => $bookingModel->getTickets($booking->id),
+					'translator' => new \DPCalendar\Translator\Translator(),
+					'dateHelper' => new \DPCalendar\Helper\DateHelper(),
+					'params'     => $params
 				)
 			);
-			$root->accept(new InlineStyleVisitor());
 
 			$additionalVars = array(
 				'acceptUrl'      => DPCalendarHelperRoute::getInviteChangeRoute($booking, true, true),
 				'declineUrl'     => DPCalendarHelperRoute::getInviteChangeRoute($booking, false, true),
-				'bookingDetails' => DPCalendarHelper::renderElement($root, $params),
+				'bookingDetails' => $details,
 				'bookingLink'    => DPCalendarHelperRoute::getBookingRoute($booking, true),
 				'bookingUid'     => $booking->uid,
 				'sitename'       => JFactory::getConfig()->get('sitename'),

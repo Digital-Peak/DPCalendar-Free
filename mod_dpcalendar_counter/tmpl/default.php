@@ -7,97 +7,93 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Basic\Link;
-use CCL\Content\Element\Basic\Element;
-use CCL\Content\Element\Basic\TextBlock;
-
-if ($item == null) {
+if ($event == null) {
 	return;
 }
 
-// Load the required JS libraries
-DPCalendarHelper::loadLibrary(array('dpcalendar' => true, 'url' => true));
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_YEARS');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_MONTHS');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_WEEKS');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_DAYS');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_HOURS');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_MINUTES');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_SECONDS');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_YEAR');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_MONTH');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_WEEK');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_DAY');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_HOUR');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_MINUTE');
+$translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_SECOND');
+
+$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
+$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_URL);
+$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MOMENT);
+$document->loadScriptFile('default.js', 'mod_dpcalendar_counter');
+$document->loadStyleFile('default.css', 'mod_dpcalendar_counter');
+
 if ($params->get('show_as_popup')) {
-	DPCalendarHelper::loadLibrary(array('modal' => true));
+	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MODAL);
 }
-
-// Load the counter library
-JHtml::_('script', 'com_dpcalendar/moment/moment.min.js', ['relative' => true], ['defer' => true]);
-JHtml::_('script', 'mod_dpcalendar_counter/default.min.js', ['relative' => true], ['defer' => true]);
-
-// Load the module stylesheet
-JHtml::_('stylesheet', 'mod_dpcalendar_counter/default.min.css', ['relative' => true]);
-
-$labelsPlural = array(
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_YEARS'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_MONTHS'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_WEEKS'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_DAYS'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_HOURS'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_MINUTES'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_SECONDS')
-);
-$labels       = array(
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_YEAR'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_MONTH'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_WEEK'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_DAY'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_HOUR'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_MINUTE'),
-	JText::script('MOD_DPCALENDAR_COUNTER_LABEL_SECOND')
-);
-
-// The root container
-$root = new Container('dp-module-counter-' . $module->id, array('root'), array('ccl-prefix' => 'dp-module-counter-'));
-$root->addAttribute('data-date', DPCalendarHelper::getDate($item->start_date, $item->all_day)->format('c', true));
-$root->addAttribute('data-modal', $params->get('show_as_popup'));
-$root->addAttribute('data-counting', !$params->get('disable_counting'));
-
-$cc = $root->addChild(new Container('container', ['container']));
-
-// Add the soon text
-$cc->addChild(new Container('soon', ['soon']))->setContent(JText::_('MOD_DPCALENDAR_COUNTER_SOON_OUTPUT'));
-
-$c = $cc->addChild(new TextBlock('year', ['cell', 'year']));
-$c->addChild(new TextBlock('number', ['year-number', 'number']));
-$c->addChild(new TextBlock('content', ['year-content', 'content']));
-$c = $cc->addChild(new TextBlock('month', ['cell', 'month']));
-$c->addChild(new TextBlock('number', ['month-number', 'number']));
-$c->addChild(new TextBlock('content', ['month-content', 'content']));
-$c = $cc->addChild(new TextBlock('week', ['cell', 'week']));
-$c->addChild(new TextBlock('number', ['week-number', 'number']));
-$c->addChild(new TextBlock('content', ['week-content', 'content']));
-$c = $cc->addChild(new TextBlock('day', ['cell', 'day']));
-$c->addChild(new TextBlock('number', ['day-number', 'number']));
-$c->addChild(new TextBlock('content', ['day-content', 'content']));
-$c = $cc->addChild(new TextBlock('hour', ['cell', 'hour']));
-$c->addChild(new TextBlock('number', ['hour-number', 'number']));
-$c->addChild(new TextBlock('content', ['hour-content', 'content']));
-$c = $cc->addChild(new TextBlock('minute', ['cell', 'minute']));
-$c->addChild(new TextBlock('number', ['minute-number', 'number']));
-$c->addChild(new TextBlock('content', ['minute-content', 'content']));
-$c = $cc->addChild(new TextBlock('second', ['cell', 'second']));
-$c->addChild(new TextBlock('number', ['second-number', 'number']));
-$c->addChild(new TextBlock('content', ['second-content', 'content']));
-
-// Add the ongoing text
-$root->addChild(new Container('ongoing', ['ongoing']))->setContent(JText::_('MOD_DPCALENDAR_COUNTER_ONGOING_OUTPUT'));
-
-// The body of the module
-$body = $root->addChild(new Container('content', ['content']));
-
-// The event content
-$l = $body->addChild(new Link('link', DPCalendarHelperRoute::getEventRoute($item->id, $item->catid)));
-$l->setContent($item->title);
-
-// Add description only if it is different than 0
-if ($params->get('description_length') > 0 || $params->get('description_length') === null) {
-	$desc = JHtml::_('string.truncate', $item->description, $params->get('description_length'));
-	$desc = JHTML::_('content.prepare', $desc);
-	$desc = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($desc);
-	$body->addChild(new Element('description'))->setContent($desc);
-}
-
-// Render the root element
-echo DPCalendarHelper::renderElement($root, $params);
+?>
+<div class="mod-dpcalendar-counter mod-dpcalendar-counter-<?php echo $module->id; ?>"
+     data-date="<?php echo $dateHelper->getDate($event->start_date, $event->all_day)->format('c', true); ?>"
+     data-modal="<?php echo $params->get('show_as_popup'); ?>"
+     data-counting="<?php echo !$params->get('disable_counting'); ?>">
+	<div class="mod-dpcalendar-counter__upcoming">
+		<div class="mod-dpcalendar-counter__intro-text">
+			<?php echo $translator->translate('MOD_DPCALENDAR_COUNTER_SOON_OUTPUT'); ?>
+		</div>
+		<span class="mod-dpcalendar-counter__year dp-counter-block">
+			<span class="dp-counter-block__number"></span>
+			<span class="dp-counter-block__content"></span>
+		</span>
+		<span class="mod-dpcalendar-counter__month dp-counter-block">
+			<span class="dp-counter-block__number"></span>
+			<span class="dp-counter-block__content"></span>
+		</span>
+		<span class="mod-dpcalendar-counter__week dp-counter-block">
+			<span class="dp-counter-block__number"></span>
+			<span class="dp-counter-block__content"></span>
+		</span>
+		<span class="mod-dpcalendar-counter__day dp-counter-block">
+			<span class="dp-counter-block__number"></span>
+			<span class="dp-counter-block__content"></span>
+		</span>
+		<span class="mod-dpcalendar-counter__hour dp-counter-block">
+			<span class="dp-counter-block__number"></span>
+			<span class="dp-counter-block__content"></span>
+		</span>
+		<span class="mod-dpcalendar-counter__minute dp-counter-block">
+			<span class="dp-counter-block__number"></span>
+			<span class="dp-counter-block__content"></span>
+		</span>
+		<span class="mod-dpcalendar-counter__second dp-counter-block">
+			<span class="dp-counter-block__number"></span>
+			<span class="dp-counter-block__content"></span>
+		</span>
+	</div>
+	<div class="mod-dpcalendar-counter__ongoing">
+		<div class="mod-dpcalendar-counter__intro-text">
+			<?php echo $translator->translate('MOD_DPCALENDAR_COUNTER_ONGOING_OUTPUT'); ?>
+		</div>
+		<a href="<?php echo $router->getEventRoute($event->id, $event->catid); ?>" class="mod-dpcalendar-counter__link dp-link">
+			<?php echo $event->title; ?>
+		</a>
+		<?php if ($event->images->image_intro) { ?>
+			<div class="mod-dpcalendar-upcoming-counter__image">
+				<figure class="dp-figure">
+					<img class="dp-image" src="<?php echo $event->images->image_intro; ?>" alt="<?php echo $event->images->image_intro_alt; ?>">
+					<?php if ($event->images->image_intro_caption) { ?>
+						<figcaption class="dp-figure__caption"><?php echo $event->images->image_intro_caption; ?></figcaption>
+					<?php } ?>
+				</figure>
+			</div>
+		<?php } ?>
+		<?php if ($truncatedDescription) { ?>
+			<div class="mod-dpcalendar-counter__description">
+				<?php echo $truncatedDescription; ?>
+			</div>
+		<?php } ?>
+	</div>
+</div>

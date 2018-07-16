@@ -1,0 +1,37 @@
+.dp-control {
+	overflow: auto;
+
+	&__label {
+		float: left;
+		width: 160px;
+		padding-top: 5px;
+		text-align: left;
+	}
+
+	&__input {
+		margin-left: 180px;
+	}
+}
+
+.control-label {
+	@extend .dp-control__label
+}
+
+.controls {
+	@extend .dp-control__input
+}
+
+@media screen and (max-width: 640px) {
+	.dp-control {
+		&__label, &__input {
+			width: 100%;
+			margin-left: 0;
+		}
+	}
+	.control-group {
+		control-label, controls {
+			width: 100%;
+			margin-left: 0;
+		}
+	}
+}

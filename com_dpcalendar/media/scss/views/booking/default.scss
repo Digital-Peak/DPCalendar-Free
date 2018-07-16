@@ -1,0 +1,34 @@
+.com-dpcalendar-booking-default {
+	@import "../../layouts/block/heading";
+	@import "../../misc/print";
+	@import "../../layouts/block/button";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/grid";
+	@import "../../layouts/block/table";
+	@import "../../layouts/block/description";
+	@import "../../layouts/block/timezone";
+
+	margin-bottom: 1rem;
+
+	.dp-option {
+		border-bottom: 1px solid #DDDDDD;
+		padding: 3px;
+	}
+
+	.dp-option:last-child, .dp-ticket:last-child {
+		border-bottom: none;
+	}
+
+	.dp-ticket {
+		padding: .5rem 0;
+
+		.dp-description {
+			padding: .5rem 0;
+			margin: 0;
+		}
+
+		+ .dp-ticket {
+			border-top: 1px solid rgba(0, 0, 0, 0.11);
+		}
+	}
+}

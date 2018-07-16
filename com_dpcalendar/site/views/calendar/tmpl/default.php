@@ -8,54 +8,34 @@
 
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Container;
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_FULLCALENDAR);
 
-// Allow access from same server
-JFactory::getApplication()->setHeader('Access-Control-Allow-Origin', JURI::base());
+if ($this->params->get('show_event_as_popup')) {
+	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MODAL);
+}
+if ($this->params->get('show_map')) {
+	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
+}
 
-// Load the required assets
-DPCalendarHelper::loadLibrary(array('dpcalendar' => true));
+$this->dpdocument->loadStyleFile('dpcalendar/views/calendar/default.css');
 
-// Load the required CSS files
-JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/views/calendar/default.min.css', ['relative' => true]);
-
-// User timezone
-DPCalendarHelper::renderLayout('user.timezone', array('root' => $this->root));
-
-// Set up the share buttons
-$sc = $this->root->addChild(new Container('share'));
-DPCalendarHelper::renderLayout('share.twitter',  array('params' => $this->params, 'root' => $sc));
-DPCalendarHelper::renderLayout('share.facebook', array('params' => $this->params, 'root' => $sc));
-DPCalendarHelper::renderLayout('share.google',   array('params' => $this->params, 'root' => $sc));
-DPCalendarHelper::renderLayout('share.linkedin', array('params' => $this->params, 'root' => $sc));
-DPCalendarHelper::renderLayout('share.xing',     array('params' => $this->params, 'root' => $sc));
-
-// The text before content
-$this->root->addChild(new Container('text-before'))->setContent(JHtml::_('content.prepare', JText::_($this->params->get('textbefore'))));
-
-$this->params->set('use_hash', true);
-
-// Load the calendar layout
-DPCalendarHelper::renderLayout(
-	'calendar.calendar',
-	array(
-		'params'            => $this->params,
-		'root'              => $this->root,
-		'calendars'         => $this->doNotListCalendars,
-		'selectedCalendars' => $this->selectedCalendars
-	)
-);
-
-// The text after content
-$this->root->addChild(new Container('text-after'))->setContent(JHtml::_('content.prepare', JText::_($this->params->get('textafter'))));
-
-// The comments container
-$cc = $this->root->addChild(new Container('comments', array('noprint')));
-$cc->setProtectedClass('noprint');
-
-// Call the comment layouts
-DPCalendarHelper::renderLayout('comment.facebook',  array('params' => $this->params, 'root' => $cc));
-DPCalendarHelper::renderLayout('comment.google',    array('params' => $this->params, 'root' => $cc));
-
-// Render the tree
-echo DPCalendarHelper::renderElement($this->root, $this->params);
+$this->loadTemplate('options');
+?>
+<div class="com-dpcalendar-calendar<?php echo $this->pageclass_sfx ? ' com-dpcalendar-calendar-' . $this->pageclass_sfx : ''; ?>">
+	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
+	<?php echo $this->loadTemplate('heading'); ?>
+	<div class="com-dpcalendar-calendar__custom-text">
+		<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('textbefore'))); ?>
+	</div>
+	<div class="com-dpcalendar-calendar__loader">
+		<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
+	</div>
+	<?php echo $this->loadTemplate('list'); ?>
+	<?php echo $this->loadTemplate('calendar'); ?>
+	<?php echo $this->loadTemplate('map'); ?>
+	<div class="com-dpcalendar-calendar__custom-text">
+		<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('textafter'))); ?>
+	</div>
+	<?php echo $this->loadTemplate('quickadd'); ?>
+</div>

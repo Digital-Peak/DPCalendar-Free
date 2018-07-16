@@ -1,0 +1,38 @@
+// Event styling
+.dp-list-hits {
+	float: right;
+}
+
+.dp-event {
+	overflow: hidden;
+
+	&__link {
+		font-weight: bold;
+		margin-right: 5px;
+	}
+
+	&__date {
+		font-size: smaller;
+	}
+
+	&__date:after {
+		content: '\a';
+		white-space: pre;
+	}
+
+	&__calendar {
+		font-size: smaller;
+		display: inline-block;
+	}
+
+	&__capacity {
+		font-size: smaller;
+		margin-left: 5px;
+	}
+
+	&__locations {
+		float: right;
+		clear: both;
+		font-size: smaller;
+	}
+}

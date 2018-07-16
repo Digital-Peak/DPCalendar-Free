@@ -584,16 +584,15 @@ abstract class DPCalendarPlugin extends \JPlugin
 			return true;
 		}
 
-		$eventId = \JFactory::getApplication()->input->getInt('e_id');
-		if (empty($eventId)) {
+		if (empty($data->id)) {
 			return true;
 		}
 
-		if (strpos($eventId, $this->identifier) !== 0) {
+		if (strpos($data->id, $this->identifier) !== 0) {
 			return true;
 		}
 
-		$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $eventId);
+		$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $data->id);
 		$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
 		if (count($id) < 2) {
 			return true;
@@ -660,6 +659,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->hits             = 0;
 		$event->capacity         = 0;
 		$event->capacity_used    = 0;
+		$event->booking_options  = null;
 		$event->description      = '';
 		$event->state            = 1;
 		$event->access           = 1;
@@ -676,6 +676,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->metadata         = new Registry();
 		$event->author           = null;
 		$event->xreference       = $event->id;
+		$event->images           = new \stdClass();
+		$event->checked_out      = null;
 
 		return $event;
 	}
@@ -831,7 +833,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 		$image = (string)$event->{'x-image'};
 		if (!empty($image)) {
-			$tmpEvent->images = json_encode(array('image1' => $image));
+			$tmpEvent->images->image_full = $image;
 		}
 
 		$location  = (string)$event->LOCATION;
@@ -950,5 +952,52 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		return $within;
+	}
+
+	protected function cleanupFormForEdit(\JForm $form, $data)
+	{
+		$form->removeField('show_end_time');
+		$form->removeField('alias');
+		$form->removeField('state');
+		$form->removeField('publish_up');
+		$form->removeField('publish_down');
+		$form->removeField('access');
+		$form->removeField('featured');
+		$form->removeField('access_content');
+		$form->removeField('language');
+		$form->removeField('metadesc');
+		$form->removeField('metakey');
+		$form->removeField('price');
+		$form->removeField('earlybird');
+		$form->removeField('image_intro', 'images');
+		$form->removeField('image_intro_alt', 'images');
+		$form->removeField('image_intro_caption', 'images');
+		$form->removeField('spacer1', 'images');
+		$form->removeField('image_full', 'images');
+		$form->removeField('image_full_alt', 'images');
+		$form->removeField('image_full_caption', 'images');
+		$form->removeField('location_ids');
+		$form->removeField('rooms');
+
+		$form->setField(
+			new \SimpleXMLElement(
+				'<fieldset name="extlocation" label="' . \JText::_('COM_DPCALENDAR_LOCATION') . '"><field
+				name="location"
+				type="text"
+				translate_description="false"
+				label="' . \JText::_('COM_DPCALENDAR_LOCATION') . '"
+				translate_label="false"
+				size="40"
+				filter="safeHtml"
+				/></fieldset>'
+			)
+		);
+		if (isset($data->locations)) {
+			$form->setValue('location', null, \DPCalendar\Helper\Location::format($data->locations));
+		}
+
+		foreach ($form->getGroup('com_fields') as $item) {
+			$form->removeField($item->fieldname, $item->group);
+		}
 	}
 }

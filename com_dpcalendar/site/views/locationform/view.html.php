@@ -8,10 +8,8 @@
 defined('_JEXEC') or die();
 
 
-class DPCalendarViewLocationForm extends \DPCalendar\View\LayoutView
+class DPCalendarViewLocationForm extends \DPCalendar\View\BaseView
 {
-	protected $layoutName = 'location.form.default';
-
 	public function display($tpl = null)
 	{
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
@@ -33,7 +31,5 @@ class DPCalendarViewLocationForm extends \DPCalendar\View\LayoutView
 		$this->location   = $this->get('Item');
 		$this->form       = $this->get('Form');
 		$this->returnPage = $this->get('ReturnPage');
-
-		$this->form->setFieldAttribute('id', 'type', 'hidden');
 	}
 }

@@ -1,60 +1,104 @@
-.dp-module-upcoming-blog-root {
+.mod-dpcalendar-upcoming-blog {
 	clear: both;
 	overflow: overlay;
 }
 
-.dp-module-upcoming-blog-root .dp-module-upcoming-modal {
-	display: none;
-	width: 700px;
-	height: 500px;
+.mod-dpcalendar-upcoming-blog__event {
+	display: block;
+	overflow: hidden;
 }
 
-.dp-module-upcoming-blog-root .dp-module-upcoming-modal iframe {
-	width: 99.6%;
-	height: 95%;
-	border: none;
+.mod-dpcalendar-upcoming-blog__event + div {
+	margin-top: .7rem;
 }
 
-.dp-module-upcoming-blog-heading {
+.mod-dpcalendar-upcoming-blog__group {
+	margin-bottom: 1rem;
+}
+
+.mod-dpcalendar-upcoming-blog__heading.dp-group-heading {
 	font-weight: bold;
-	background-color: #dddddd;
-	color: #333333;
-	padding: 5px 0px 5px 5px;
-	margin: 5px 0px 5px 0px;
+	background-color: rgba(0, 0, 0, 0.05);
+	padding: .5rem .7rem;
+	margin-bottom: .7rem;
 }
 
-.dp-module-upcoming-blog-hits {
-	float: right;
+.mod-dpcalendar-upcoming-blog__heading.dp-group-heading ~ div {
+	margin-left: .7rem;
+	margin-right: .7rem;
 }
 
-.dp-module-upcoming-blog-title {
+.mod-dpcalendar-upcoming-blog .dp-link {
+	display: block;
+}
+
+.mod-dpcalendar-upcoming-blog .dp-date__start, .mod-dpcalendar-upcoming-blog .dp-date__end,
+.mod-dpcalendar-upcoming-blog .dp-time__start,
+.mod-dpcalendar-upcoming-blog .dp-time__end {
+	font-size: .8em;
 	font-weight: bold;
-	margin-right: 5px;
+	border-radius: 2px;
+	padding: 2px 0;
+	opacity: .7;
 }
 
-.dp-module-upcoming-blog-date {
+.mod-dpcalendar-upcoming-blog .dp-figure__caption {
+	font-size: .8em;
+	opacity: .7;
+}
+
+.mod-dpcalendar-upcoming-blog .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
+}
+
+.mod-dpcalendar-upcoming-blog .dp-figure {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	margin: 0;
+}
+
+.mod-dpcalendar-upcoming-blog .dp-figure__caption {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.mod-dpcalendar-upcoming-blog .dp-grid {
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+}
+
+.mod-dpcalendar-upcoming-blog__heading {
+	margin: 0 0 12px;
+}
+
+.mod-dpcalendar-upcoming-blog__date {
 	font-size: smaller;
+	display: inline-block;
 }
 
-.dp-module-upcoming-blog-date:after {
+.mod-dpcalendar-upcoming-blog__date:after {
 	content: '\a';
 	white-space: pre;
 }
 
-.dp-module-upcoming-blog-calendar,
-.dp-module-upcoming-blog-capacity,
-.dp-module-upcoming-blog-price {
+.mod-dpcalendar-upcoming-blog .dp-date__start, .mod-dpcalendar-upcoming-blog .dp-date__end {
+	font-size: 1em;
+	font-weight: normal;
+	opacity: 1;
+}
+
+.mod-dpcalendar-upcoming-blog__calendar, .mod-dpcalendar-upcoming-blog__capacity, .mod-dpcalendar-upcoming-blog__price, .mod-dpcalendar-upcoming-blog__location {
 	font-size: smaller;
 	display: block;
 }
 
-.dp-module-upcoming-blog-location {
-	float: right;
-	clear: both;
-	font-size: smaller;
+.mod-dpcalendar-upcoming-blog .dp-location__description {
+	display: none;
 }
 
-.dp-module-upcoming-blog-location-description {
-	display: none
-}
-
+/*# sourceMappingURL=blog.css.map */

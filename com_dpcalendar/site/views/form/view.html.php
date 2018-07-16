@@ -7,10 +7,8 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewForm extends \DPCalendar\View\LayoutView
+class DPCalendarViewForm extends \DPCalendar\View\BaseView
 {
-	protected $layoutName = 'event.form.default';
-
 	public function init()
 	{
 		$user = $this->user;
@@ -33,6 +31,10 @@ class DPCalendarViewForm extends \DPCalendar\View\LayoutView
 		$this->returnPage = $this->get('ReturnPage');
 
 		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . '/models/files/');
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$this->locationForm = JModelLegacy::getInstance('Location', 'DPCalendarModel', ['ignore_request' => true])->getForm([], false, 'location');
+		$this->locationForm->setFieldAttribute('title', 'required', false);
+		$this->locationForm->setFieldAttribute('rooms', 'label', 'COM_DPCALENDAR_ROOMS');
 
 		$authorised = true;
 		if (empty($this->event->id)) {
@@ -73,6 +75,115 @@ class DPCalendarViewForm extends \DPCalendar\View\LayoutView
 
 		if (key_exists('rooms', $requestParams)) {
 			$this->form->setValue('rooms', null, $requestParams['rooms']);
+		}
+
+		if ($this->event->original_id > '0') {
+			// Hide the scheduling fields
+			$this->form->removeField('rrule');
+			$this->form->removeField('scheduling');
+			$this->form->removeField('scheduling_end_date');
+			$this->form->removeField('scheduling_interval');
+			$this->form->removeField('scheduling_repeat_count');
+			$this->form->removeField('scheduling_daily_weekdays');
+			$this->form->removeField('scheduling_weekly_days');
+			$this->form->removeField('scheduling_monthly_options');
+			$this->form->removeField('scheduling_monthly_week');
+			$this->form->removeField('scheduling_monthly_week_days');
+			$this->form->removeField('scheduling_monthly_days');
+		}
+
+		$externalEvent = !is_numeric($this->event->catid) && !empty($this->event->id);
+		$hideFieldsets = [];
+		if (!$this->params->get('event_form_change_location', 1)) {
+			$hideFieldsets[] = 'location';
+		}
+		if ($externalEvent || !$this->params->get('event_form_change_options', 1)) {
+			$hideFieldsets['params'] = 'jbasic';
+		}
+		if ($externalEvent || !$this->params->get('event_form_change_book', 1) || ($this->event->catid && !is_numeric($this->event->catid))) {
+			$hideFieldsets[] = 'booking';
+		}
+		if ($externalEvent || !$this->params->get('event_form_change_publishing', 1)) {
+			$hideFieldsets[] = 'publishing';
+		}
+		if ($externalEvent || !$this->params->get('event_form_change_metadata', 1)) {
+			$hideFieldsets['metadata'] = 'jmetadata';
+		}
+
+		foreach ($hideFieldsets as $group => $name) {
+			foreach ($this->form->getFieldset($name) as $field) {
+				if (!is_string($group)) {
+					$group = null;
+				}
+				$this->form->removeField($field->fieldname, $group);
+			}
+		}
+
+		if (!$this->params->get('save_history', 0)) {
+			// Save is not activated
+			$this->form->removeField('version_note');
+		}
+
+		if ($this->params->get('event_form_change_tags', '1') != '1') {
+			// Tags can't be changed
+			$this->form->removeField('tags');
+		}
+
+		if ((!$this->event->id && !$user->authorise('core.edit.state', 'com_dpcalendar'))
+			|| ($this->event->id && !$user->authorise('core.edit.state', 'com_dpcalendar.category.' . $this->event->catid))
+		) {
+			// Changing state is not allowed
+			$this->form->removeField('state');
+		}
+
+		// Remove fields depending on the params
+		if ($this->params->get('event_form_change_calid', '1') != '1') {
+			$this->form->setFieldAttribute('catid', 'readonly', 'readonly');
+		}
+		if ($this->params->get('event_form_change_show_end_time', '1') != '1') {
+			$this->form->removeField('show_end_time');
+		}
+		if ($this->params->get('event_form_change_color', '1') != '1') {
+			$this->form->removeField('color');
+		}
+		if ($this->params->get('event_form_change_url', '1') != '1') {
+			$this->form->removeField('url');
+		}
+		if ($this->params->get('event_form_change_images', '1') != '1') {
+			$this->form->removeGroup('images');
+		}
+		if ($this->params->get('event_form_change_description', '1') != '1') {
+			$this->form->removeField('description');
+		}
+		if ($this->params->get('event_form_change_capacity', '1') != '1') {
+			$this->form->removeField('capacity');
+		}
+		if ($this->params->get('event_form_change_capacity_used', '1') != '1') {
+			$this->form->removeField('capacity_used');
+		}
+		if ($this->params->get('event_form_change_max_tickets', '1') != '1') {
+			$this->form->removeField('max_tickets');
+		}
+		if ($this->params->get('event_form_change_price', '1') != '1') {
+			$this->form->removeField('price');
+		}
+		if ($this->params->get('event_form_change_payment', '1') != '1') {
+			$this->form->removeField('plugintype');
+		}
+		if ($this->params->get('event_form_change_access', '1') != '1') {
+			$this->form->removeField('access');
+		}
+		if ($this->params->get('event_form_change_access_content', '1') != '1') {
+			$this->form->removeField('access_content');
+		}
+		if ($this->params->get('event_form_change_featured', '1') != '1') {
+			$this->form->removeField('featured');
+		}
+
+		// Handle tabs
+		if ($this->params->get('event_form_change_location', '1') != '1') {
+			$this->form->removeField('location');
+			$this->form->removeField('location_ids');
 		}
 
 		return parent::init();

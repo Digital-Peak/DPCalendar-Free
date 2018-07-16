@@ -1,0 +1,53 @@
+& {
+	clear: both;
+	overflow: overlay;
+}
+
+&__event {
+	display: block;
+	overflow: hidden;
+	+ div {
+		margin-top: .7rem;
+	}
+}
+
+&__group {
+	margin-bottom: 1rem;
+}
+
+&__heading {
+	&.dp-group-heading {
+		font-weight: bold;
+		background-color: rgba(0, 0, 0, .05);
+		padding: .5rem .7rem;
+		margin-bottom: .7rem;
+
+		~ div {
+			margin-left: .7rem;
+			margin-right: .7rem;
+		}
+	}
+}
+
+.dp-link {
+	display: block;
+}
+
+.dp-date,
+.dp-time {
+	&__start,
+	&__end {
+		font-size: .8em;
+		font-weight: bold;
+		border-radius: 2px;
+		padding: 2px 0;
+		opacity: .7;
+	}
+}
+
+.dp-figure {
+	&__caption {
+		font-size: .8em;
+		opacity: .7;
+	}
+}

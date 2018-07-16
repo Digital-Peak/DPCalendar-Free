@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset name="content"
+	<fieldset name="general"
 	          addfieldpath="/administrator/components/com_dpcalendar/models/fields"
 	          addrulepath="/administrator/components/com_dpcalendar/models/rules">
 		<field name="id" default="0" type="text" readonly="true" class="readonly"
@@ -62,6 +62,8 @@
 		<field name="type" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_TYPE_LABEL"
 		       description="COM_DPCALENDAR_BOOKING_FIELD_TYPE_DESC"/>
+		<field name="options" type="text" class="dp-form-input"
+		       label="COM_DPCALENDAR_BOOKING_FIELD_OPTIONS_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_OPTIONS_DESC"/>
 		<field name="payer_email" type="email" class="dp-form-input"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
 

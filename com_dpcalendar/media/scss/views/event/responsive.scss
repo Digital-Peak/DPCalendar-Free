@@ -1,0 +1,17 @@
+@media screen and (max-width: 767px) {
+	display: block;
+
+	> div:not(.com-dpcalendar-event__image),
+	.dp-figure__caption {
+		padding-left: 1rem;
+		padding-right: 1rem;
+	}
+
+	&__actions, &__cta {
+		padding: 1rem;
+	}
+
+	&__description {
+		padding: 2.5rem 1rem;
+	}
+}

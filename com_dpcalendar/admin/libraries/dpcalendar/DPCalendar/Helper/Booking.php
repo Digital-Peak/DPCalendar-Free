@@ -7,10 +7,11 @@
  */
 namespace DPCalendar\Helper;
 
+defined('_JEXEC') or die();
+
 use DPCalendar\TCPDF\DPCalendar;
+use DPCalendar\Translator\Translator;
 use Joomla\Registry\Registry;
-use CCL\Content\Element\Basic\Container;
-use DPCalendar\CCL\Visitor\InlineStyleVisitor;
 
 \JLoader::import('joomla.application.component.helper');
 \JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
@@ -33,17 +34,17 @@ class Booking
 	public static function createInvoice($booking, $tickets, $params, $toFile = false)
 	{
 		try {
-			$root = new Container('dp-booking');
-			\DPCalendarHelper::renderLayout(
+			\JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+			$details = \DPCalendarHelper::renderLayout(
 				'booking.invoice',
 				array(
-					'booking' => $booking,
-					'tickets' => $tickets,
-					'params'  => $params,
-					'root'    => $root
+					'booking'    => $booking,
+					'tickets'    => $tickets,
+					'translator' => new Translator(),
+					'dateHelper' => new DateHelper(),
+					'params'     => $params
 				)
 			);
-			$root->accept(new InlineStyleVisitor());
 
 			// Disable notices (TCPDF is causing many of these)
 			error_reporting(E_ALL ^ E_NOTICE);
@@ -75,7 +76,7 @@ class Booking
 
 			// Adding the content
 			$pdf->AddPage();
-			$pdf->writeHTML(\DPCalendarHelper::renderElement($root), true, false, true, false, '');
+			$pdf->writeHTML($details, true, false, true, false, '');
 
 			$fileName = $booking->uid . '.pdf';
 			if ($toFile) {
@@ -106,23 +107,24 @@ class Booking
 	public static function createTicket($ticket, $params, $toFile = false)
 	{
 		try {
+			\JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+
 			\DPCalendarHelper::increaseMemoryLimit(130 * 1024 * 1024);
 
 			\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
 			$model = \JModelLegacy::getInstance('Event', 'DPCalendarModel', array('ignore_request' => true));
 			$event = $model->getItem($ticket->event_id);
 
-			$root = new Container('dp-ticket');
-			\DPCalendarHelper::renderLayout(
+			$details = \DPCalendarHelper::renderLayout(
 				'ticket.details',
 				array(
-					'ticket' => $ticket,
-					'event'  => $event,
-					'params' => $params,
-					'root'   => $root
+					'ticket'     => $ticket,
+					'event'      => $event,
+					'translator' => new Translator(),
+					'dateHelper' => new DateHelper(),
+					'params'     => $params
 				)
 			);
-			$root->accept(new InlineStyleVisitor());
 
 			// Disable notices (TCPDF is causing many of these)
 			error_reporting(E_ALL ^ E_NOTICE);
@@ -154,7 +156,7 @@ class Booking
 
 			// Adding the content
 			$pdf->AddPage();
-			$pdf->writeHTML(\DPCalendarHelper::renderElement($root), true, false, true, false, '');
+			$pdf->writeHTML($details, true, false, true, false, '');
 
 			if ($params->get('ticket_show_barcode', 1)) {
 				$style = array(

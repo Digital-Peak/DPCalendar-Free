@@ -26,7 +26,7 @@ class JFormFieldDpcrooms extends JFormFieldGroupedList
 			$model    = JModelLegacy::getInstance('Location', 'DPCalendarModel', array('ignore_request' => true));
 			$location = $model->getItem($locationId);
 
-			if (!$location->id) {
+			if (!$location->id || !$location->rooms) {
 				continue;
 			}
 

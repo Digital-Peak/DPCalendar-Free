@@ -15,19 +15,15 @@ class DPCalendarViewInvite extends \DPCalendar\View\BaseView
 	{
 		JFactory::getLanguage()->load('', JPATH_ADMINISTRATOR);
 
-		if (JFactory::getUser()->authorise('dpcalendar.invite', 'com_dpcalendar') !== true)
-		{
-			$this->setError(JText::_('JERROR_ALERTNOAUTHOR'));
-			return false;
+		if ($this->user->authorise('dpcalendar.invite', 'com_dpcalendar') !== true) {
+			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
 		}
 
 		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 		JForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
 
-		$this->form = JForm::getInstance('com_dpcalendar.invite', 'invite', array(
-				'control' => 'jform'
-		));
+		$this->form = JForm::getInstance('com_dpcalendar.invite', 'invite', array('control' => 'jform'));
 
-		$this->form->setValue('event_id', null, JFactory::getApplication()->input->getInt('id'));
+		$this->form->setValue('event_id', null, $this->input->getInt('id'));
 	}
 }

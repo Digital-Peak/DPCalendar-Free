@@ -11,6 +11,7 @@ defined('_JEXEC') or die();
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('behavior.multiselect');
 JHtml::_('dropdown.init');
+$this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
 
 $user		= JFactory::getUser();
 $userId		= $user->get('id');
@@ -34,8 +35,17 @@ JFactory::getDocument()->addStyleDeclaration('.ui-datepicker { z-index: 1003 !im
 		}
 		Joomla.tableOrdering(order, dirn, '');
 	}
+
+	document.addEventListener('DOMContentLoaded', function () {
+		document.querySelector('input[name="filter[search_start]"]').addEventListener('change',function (e) {
+			this.form.submit();
+		});
+		document.querySelector('input[name="filter[search_end]"]').addEventListener('change',function (e) {
+			this.form.submit();
+		});
+	});
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_dpcalendar&view=events'); ?>" method="post" name="adminForm" id="adminForm">
+<form action="<?php echo JRoute::_('index.php?option=com_dpcalendar&view=events'); ?>" method="post" name="adminForm" id="adminForm" class="com-dpcalendar-events">
 	<div id="j-sidebar-container" class="span2">
 		<?php echo $this->sidebar; ?>
 	</div>
@@ -43,39 +53,18 @@ JFactory::getDocument()->addStyleDeclaration('.ui-datepicker { z-index: 1003 !im
 		<div id="filter-bar" class="js-stools-container-bar pull-left">
 			<div class="btn-group pull-left">
 				<label class="element-invisible" for="filter_search_start"><?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_START_DATE_AFTER_LABEL'); ?>:</label>
-				<?php
-				echo JHtml::_(
-                    'datetime.render',
-                    $this->escape($this->state->get('filter.search_start')),
-                    'filter_search_start',
-                    'filter[search_start]',
-                    array(
-                        'allDay'     => true,
-                        'onchange'   => 'this.form.submit();',
-                        'formated'   => true,
-                        'dateFormat' => DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')
-                    )
-                );
-				?>
+				<?php $this->displayData['title'] = $this->translate('COM_DPCALENDAR_FIELD_START_DATE_LABEL'); ?>
+				<?php $this->displayData['name'] = 'filter[search_start]'; ?>
+				<?php $this->displayData['date'] = $this->startDate; ?>
+				<?php echo $this->layoutHelper->renderLayout('block.datepicker', $this->displayData); ?>
 			</div>
 			<div class="btn-group pull-left">
 				<label class="element-invisible" for="filter_search_end"><?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_END_DATE_BEFORE_LABEL'); ?>:</label>
-				<?php
-				echo JHtml::_(
-                    'datetime.render',
-                    $this->escape($this->state->get('filter.search_end')),
-                    'filter_search_end',
-                    'filter[search_end]',
-                    array(
-                        'allDay'     => true,
-                        'onchange'   => 'this.form.submit();',
-                        'formated'   => true,
-                        'dateFormat' => DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')
-                    )
-                );
-				?>
+				<?php $this->displayData['title'] = $this->translate('COM_DPCALENDAR_FIELD_END_DATE_LABEL'); ?>
+				<?php $this->displayData['name'] = 'filter[search_end]'; ?>
+				<?php $this->displayData['date'] = $this->endDate; ?>
+				<?php echo $this->layoutHelper->renderLayout('block.datepicker', $this->displayData); ?>
 			</div>
-			&nbsp;
 		</div>
 		<?php
 		echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this));
@@ -287,5 +276,5 @@ JFactory::getDocument()->addStyleDeclaration('.ui-datepicker { z-index: 1003 !im
 </form>
 
 <div align="center" style="clear: both">
-	<?php echo sprintf(JText::_('COM_DPCALENDAR_FOOTER'), JFactory::getApplication()->input->getVar('DPCALENDAR_VERSION'));?>
+	<?php echo sprintf(JText::_('COM_DPCALENDAR_FOOTER'), $this->input->getString('DPCALENDAR_VERSION'));?>
 </div>

@@ -7,10 +7,8 @@
  */
 namespace DPCalendar\Helper;
 
-use CCL\Content\Element\ElementInterface;
-use CCL\Content\Visitor\Html\DomBuilder;
-use CCL\Content\Visitor\Html\LinkHandler;
-use CCL\Joomla\Visitor\Html\IconStrategy\Joomla;
+defined('_JEXEC') or die();
+
 use Joomla\Registry\Registry;
 
 if (!defined('DS')) {
@@ -42,8 +40,8 @@ class DPCalendarHelper
 			}
 			$user = \JFactory::getUser();
 
-			$reg                = new Registry($calendar->params);
-			$calendar->color    = $reg->get('color', '3366CC');
+			$calendar->params   = new Registry($calendar->params);
+			$calendar->color    = $calendar->params->get('color', '3366CC');
 			$calendar->external = false;
 			$calendar->system   = 'joomla';
 			$calendar->native   = true;
@@ -150,6 +148,23 @@ class DPCalendarHelper
 		return $tmp;
 	}
 
+	public static function parseImages($event)
+	{
+		if (is_string($event->images)) {
+			$event->images = json_decode($event->images);
+		}
+
+		$images        = $event->images;
+		$event->images = new \stdClass();
+
+		$event->images->image_intro         = isset($images->image_intro) ? $images->image_intro : null;
+		$event->images->image_intro_alt     = isset($images->image_intro_alt) ? $images->image_intro_alt : null;
+		$event->images->image_intro_caption = isset($images->image_intro_caption) ? $images->image_intro_caption : null;
+		$event->images->image_full          = isset($images->image_full) ? $images->image_full : null;
+		$event->images->image_full_alt      = isset($images->image_full_alt) ? $images->image_full_alt : null;
+		$event->images->image_full_caption  = isset($images->image_full_caption) ? $images->image_full_caption : null;
+	}
+
 	public static function dayToString($day, $abbr = false)
 	{
 		$date = new \JDate();
@@ -252,7 +267,7 @@ class DPCalendarHelper
 		$date = self::getDate(null, $allDay);
 		$date = \DateTime::createFromFormat($dateFormat . ($allDay ? '' : ' ' . $timeFormat), $string, $date->getTimezone());
 		if ($date == null) {
-			throw new \Exception('Could not inteprete format: ' . ($dateFormat . ($allDay ? '' : ' ' . $timeFormat)) . ' for date string : ' . $string);
+			throw new \Exception('Could not interprete format: ' . ($dateFormat . ($allDay ? '' : ' ' . $timeFormat)) . ' for date string : ' . $string);
 		}
 
 		$date = self::getDate($date->format('U'), $allDay);
@@ -383,7 +398,7 @@ class DPCalendarHelper
 
 			$variables['calendarName']  = $calendar != null ? $calendar->title : $event->catid;
 			$variables['title']         = $event->title;
-			$variables['date']          = self::getDateStringFromEvent($event, $dateformat, $timeformat);
+			$variables['date']          = strip_tags(self::getDateStringFromEvent($event, $dateformat, $timeformat));
 			$variables['d']             = $variables['date'];
 			$variables['startDate']     = $startDate;
 			$variables['startDateIso']  = self::getDate($event->start_date, $event->all_day)->format('c');
@@ -425,22 +440,7 @@ class DPCalendarHelper
 			$variables['url']  = $event->url;
 			$variables['hits'] = $event->hits;
 
-			if (isset($event->images)) {
-				// Images
-				$images = is_string($event->images) ? json_decode($event->images) : $event->images;
-				for ($i = 1; $i <= 3; $i++) {
-					if (isset($images->{'image' . $i})) {
-						$variables['image' . $i] = $images->{'image' . $i};
-					}
-
-					if (isset($images->{'image' . $i . '_caption'})) {
-						$variables['image' . $i . 'caption'] = $images->{'image' . $i . '_caption'};
-					}
-					if (isset($images->{'image' . $i . '_alt'})) {
-						$variables['image' . $i . 'alt'] = $images->{'image' . $i . '_alt'};
-					}
-				}
-			}
+			$event->images = self::parseImages($event);
 
 			$author              = \JFactory::getUser($event->created_by);
 			$variables['author'] = $author->name;
@@ -531,68 +531,6 @@ class DPCalendarHelper
 	{
 		// Framework specific content is not loaded
 		return \JLayoutHelper::render($layout, $data, null, array('component' => 'com_dpcalendar', 'client' => 0));
-	}
-
-	public static function renderElement(ElementInterface $rootElement, $params = null)
-	{
-		if ($params == null) {
-			$params = \JComponentHelper::getParams('com_dpcalendar');
-		}
-
-		try {
-			$ff = $params->get('frontend_framework', 'BS2');
-
-			// On admin, force it to BS2
-			if (\JFactory::getApplication()->isClient('administrator')) {
-				$ff = 'BS2';
-			}
-
-			// Load the front end framework
-			$className = 'CCL\\Content\\Visitor\\Html\\Framework\\' . $ff;
-
-			if (class_exists($className)) {
-				$rootElement->accept(new $className());
-			}
-
-			// Load the icon set
-			$className = 'CCL\\Content\\Visitor\\Html\\IconStrategy\\' . $params->get('icon_framework', 'Joomla');
-
-			if ($params->get('icon_framework', 'Joomla') == 'Joomla') {
-				$className = Joomla::class;
-			}
-
-			if (class_exists($className)) {
-				$rootElement->accept(new $className());
-			}
-
-			// Add the link handler
-			$rootElement->accept(new LinkHandler());
-
-			// Add the joomla styler
-			$rootElement->accept(new \CCL\Joomla\Visitor\Html\Joomla());
-
-			$builder = new DomBuilder();
-			$rootElement->accept($builder);
-
-			// Render the tree
-			$html = $builder->render();
-
-			// Modify the output
-			$html = str_replace('&amp;', '&', $html);
-
-			return $html;
-		} catch (\Exception $e) {
-			$message = $e->getMessage();
-
-			if (JDEBUG) {
-				// $message .= PHP_EOL . $e->getTraceAsString();
-			}
-
-			// Display the exception
-			\JFactory::getApplication()->enqueueMessage(nl2br($message), 'error');
-
-			return '';
-		}
 	}
 
 	public static function getStringFromParams($key, $default, $params)
@@ -760,6 +698,7 @@ class DPCalendarHelper
 				}
 			} else {
 				$options = new Registry();
+				$options->set('userAgent', 'DPCalendar');
 				foreach (array('curl', 'socket', 'stream') as $adapter) {
 					$class = 'JHttpTransport' . ucfirst($adapter);
 					$http  = new \JHttp($options, new $class($options));
@@ -919,53 +858,6 @@ class DPCalendarHelper
 		return \JPluginHelper::isEnabled('captcha') && $accessCaptcha;
 	}
 
-	public static function loadLibrary($libraries = array('jquery' => true))
-	{
-		if (\JFactory::getDocument()->getType() != 'html') {
-			return;
-		}
-
-		if (isset($libraries['modal']) || isset($libraries['maps'])) {
-			$libraries['dpcalendar'] = true;
-		}
-
-		if (isset($libraries['dpcalendar'])) {
-			\JHtml::_('script', 'com_dpcalendar/dpcalendar/dpcalendar.min.js', ['relative' => true], ['defer' => true]);
-			\JHtml::_('stylesheet', 'com_dpcalendar/dpcalendar/dpcalendar.min.css', ['relative' => true]);
-		}
-
-		if (isset($libraries['jquery'])) {
-			\JHtml::_('jquery.framework');
-		}
-
-		if (isset($libraries['maps'])) {
-			$key = self::getComponentParameter('map_api_google_jskey', '');
-			if ($key) {
-				$key = '&key=' . $key;
-			}
-			\JHtml::_('script', 'https://maps.googleapis.com/maps/api/js?libraries=places&language=' . self::getGoogleLanguage() . $key, [],
-				['defer' => true]);
-			\JHtml::_('script', 'com_dpcalendar/dpcalendar/map.min.js', ['relative' => true], ['defer' => true]);
-		}
-
-		if (isset($libraries['chosen'])) {
-			$selector = 'select';
-			if (is_string($libraries['chosen'])) {
-				$selector = $libraries['chosen'];
-			}
-			\JHtml::_('formbehavior.chosen', $selector, null, array('disable_search_threshold' => 0));
-		}
-
-		if (isset($libraries['modal'])) {
-			\JHtml::_('script', 'com_dpcalendar/tingle/tingle.min.js', ['relative' => true], ['defer' => true]);
-			\JHtml::_('stylesheet', 'com_dpcalendar/tingle/tingle.min.css', ['relative' => true], ['defer' => true]);
-		}
-
-		if (isset($libraries['url'])) {
-			\JHtml::_('script', 'com_dpcalendar/domurl/url.min.js', ['relative' => true], ['defer' => true]);
-		}
-	}
-
 	public static function sendMessage($message, $error = false, array $data = array())
 	{
 		ob_clean();
@@ -1102,6 +994,19 @@ class DPCalendarHelper
 	{
 		$order = (array)$order;
 
+		// Move captcha to bottom
+		if (!in_array('captcha', $order)) {
+			foreach ($fields as $index => $field) {
+				if (!$field instanceof \JFormField || $field->fieldname != 'captcha') {
+					continue;
+				}
+
+				unset($fields[$index]);
+				$fields[$index] = $field;
+				break;
+			}
+		}
+
 		// Check if empty
 		if (!$order) {
 			return;
@@ -1235,10 +1140,8 @@ class DPCalendarHelper
 		$protocols  = '[a-zA-Z0-9\-]+:';
 		$attributes = array('href=', 'src=', 'poster=');
 
-		foreach ($attributes as $attribute)
-		{
-			if (strpos($buffer, $attribute) !== false)
-			{
+		foreach ($attributes as $attribute) {
+			if (strpos($buffer, $attribute) !== false) {
 				$regex  = '#\s' . $attribute . '"(?!/|' . $protocols . '|\#|\')([^"]*)"#m';
 				$buffer = preg_replace($regex, ' ' . $attribute . '"' . $base . '$1"', $buffer);
 			}

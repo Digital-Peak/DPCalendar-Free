@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset name="content" label="COM_DPCALENDAR_CONTENT"
+	<fieldset name="general" label="COM_DPCALENDAR_CONTENT"
 	          addfieldpath="/administrator/components/com_dpcalendar/models/fields"
 	          addrulepath="/administrator/components/com_dpcalendar/models/rules">
 		<field name="id" type="hidden" readonly="true"
 		       label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
 
-		<field name="geocomplete" type="geocomplete"
+		<field name="geocomplete" type="geocomplete" class="dp-form-input" autocomplete="0"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_DESC"/>
 
 		<field name="title" type="text" required="true" class="dp-form-input"
@@ -82,8 +82,6 @@
 		       label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL" description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
 
 		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
-	</fieldset>
-	<fieldset name="optional">
 		<field name="ordering" type="text"
 		       label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC"/>
 

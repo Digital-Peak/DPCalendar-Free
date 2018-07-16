@@ -7,24 +7,15 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Container;
-
 // Set the mime encoding
 JFactory::getDocument()->setMimeEncoding('application/json');
 
 $data = array();
 foreach ($this->items as $event) {
-	// The root container
-	$root = new Container('dp-event-desc-' . $event->id, array(), array('ccl-prefix' => 'dp-event-'));
-
-	// Get the tooltip
-	DPCalendarHelper::renderLayout('event.tooltip', array('root' => $root, 'event' => $event, 'params' => $this->params));
-
-	$description = '';
-	if ($root->getChildren()) {
-		$description = DPCalendarHelper::renderElement($root, $this->params);
-		$description = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
-	}
+	$displayData          = $this->displayData;
+	$displayData['event'] = $event;
+	$description          = $this->layoutHelper->renderLayout('event.tooltip', $displayData);
+	$description          = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
 
 	// Set up the locations
 	$locations   = array();
@@ -37,7 +28,7 @@ foreach ($this->items as $event) {
 				'longitude' => $location->longitude
 			);
 
-			if (!$event->rooms || !$this->input->get('l')) {
+			if (!$event->rooms) {
 				$resourceIds[] = $location->id;
 			}
 

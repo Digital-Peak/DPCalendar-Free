@@ -1,0 +1,11 @@
+.dp-figure {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	margin: 0;
+
+	&__caption {
+		width: 100%;
+		box-sizing: border-box;
+	}
+}

@@ -10,225 +10,274 @@ defined('_JEXEC') or die();
 JLoader::import('joomla.application.categories');
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-class DPCalendarRouter extends JComponentRouterBase
+class DPCalendarRouter extends JComponentRouterView
 {
-
-	public function build (&$query)
+	public function __construct($app = null, $menu = null)
 	{
-		$segments = array();
-
-		// Get a menu item based on Itemid or currently active
-		$app = JFactory::getApplication();
-		$menu = $app->getMenu();
 		$params = JComponentHelper::getParams('com_dpcalendar');
-		$advanced = $params->get('sef_advanced_link', 0);
 
-		// We need a menu item. Either the one specified in the query, or the
-		// current active one if none specified
-		if (empty($query['Itemid']))
-		{
-			$menuItem = $menu->getActive();
+		$calendar = new JComponentRouterViewconfiguration('calendar');
+		$calendar->setKey('ids');
+		$this->registerView($calendar);
+
+		$list = new JComponentRouterViewconfiguration('list');
+		$list->setKey('ids');
+		$list->addLayout('blog');
+		$this->registerView($list);
+
+		$map = new JComponentRouterViewconfiguration('map');
+		$map->setKey('ids');
+		$this->registerView($map);
+
+		$event = new JComponentRouterViewconfiguration('event');
+		$event->setKey('id');
+		$event->setParent($calendar, 'calid');
+		$this->registerView($event);
+
+		$form = new JComponentRouterViewconfiguration('form');
+		$form->setKey('e_id');
+		$this->registerView($form);
+
+		$locations = new JComponentRouterViewconfiguration('locations');
+		$locations->setKey('ids');
+		$this->registerView($locations);
+
+		$location = new JComponentRouterViewconfiguration('location');
+		$location->setKey('id');
+		$location->setParent($locations, 'id');
+		$this->registerView($location);
+
+		$profile = new JComponentRouterViewconfiguration('profile');
+		$this->registerView($profile);
+
+		parent::__construct($app, $menu);
+
+		$this->attachRule(new \DPCalendar\Router\Rules\DPCalendarRules($this));
+
+		if ($params->get('sef_advanced', 1)) {
+			$this->attachRule(new JComponentRouterRulesStandard($this));
+			$this->attachRule(new JComponentRouterRulesNomenu($this));
+		} else {
+			JLoader::register('DPCalendarRouterLegacy', __DIR__ . '/helpers/legacyrouter.php');
+			$this->attachRule(new DPCalendarRouterLegacy());
 		}
-		else
-		{
-			$menuItem = $menu->getItem($query['Itemid']);
-		}
-
-		$mView = (empty($menuItem->query['view'])) ? null : $menuItem->query['view'];
-		$mCatid = (empty($menuItem->query['calid'])) ? null : $menuItem->query['calid'];
-		$mId = (empty($menuItem->query['id'])) ? null : $menuItem->query['id'];
-
-		if (isset($query['view']))
-		{
-			$view = $query['view'];
-
-			if (empty($query['Itemid']) || $view == 'events')
-			{
-				$segments[] = $query['view'];
-			}
-
-			// We need to keep the view for forms since they never have their
-			// own menu item
-			if ($view != 'form' && $view != 'davcalendar' && $view != 'booking' && $view != 'bookingform' && $view != 'bookings' && $view != 'ticket' &&
-					 $view != 'tickets' && $view != 'pay' && $view != 'message' && $view != 'callback' && $view != 'locationform' &&
-					 $view != 'ticketform' && $view != 'location')
-			{
-				unset($query['view']);
-			}
-		}
-
-		// Are we dealing with an event that is attached to a menu item?
-		if (isset($query['view']) && ($mView == $query['view']) and (isset($query['id'])) and ($mId == intval($query['id'])))
-		{
-			unset($query['view']);
-			unset($query['calid']);
-			unset($query['id']);
-
-			return $segments;
-		}
-
-		if (isset($view) and ($view == 'calendar' or $view == 'event'))
-		{
-			if (isset($query['id']) && $mId != intval($query['id']) || $mView != $view)
-			{
-				$calid = null;
-				if ($view == 'event' && isset($query['calid']))
-				{
-					$calid = $query['calid'];
-				}
-				elseif (isset($query['id']))
-				{
-					$calid = $query['id'];
-				}
-
-				$menuCatid = $mId;
-				$category = DPCalendarHelper::getCalendar($calid);
-
-				if ($category && ! $category->external)
-				{
-					// TODO Throw error that the category either not exists or
-					// is unpublished
-					$path = $category->getPath();
-					$path = array_reverse($path);
-
-					$array = array();
-					foreach ($path as $id)
-					{
-						if ((int) $id == (int) $menuCatid)
-						{
-							break;
-						}
-
-						if ($advanced)
-						{
-							list ($tmp, $id) = explode(':', $id, 2);
-						}
-
-						$array[] = $id;
-					}
-					$segments = array_merge($segments, array_reverse($array));
-				}
-
-				if ($view == 'event')
-				{
-					if ($advanced)
-					{
-						list ($tmp, $id) = explode(':', $query['id'], 2);
-					}
-					else
-					{
-						$id = $query['id'];
-					}
-
-					$segments[] = $id;
-				}
-			}
-
-			unset($query['id']);
-			unset($query['calid']);
-		}
-
-		if (isset($query['layout']))
-		{
-			if (! empty($query['Itemid']) && isset($menuItem->query['layout']))
-			{
-				if ($query['layout'] == $menuItem->query['layout'])
-				{
-					unset($query['layout']);
-				}
-			}
-			else
-			{
-				if ($query['layout'] == 'default')
-				{
-					unset($query['layout']);
-				}
-			}
-		}
-
-		return $segments;
 	}
 
-	public function parse (&$segments)
+	public function build(&$query)
 	{
-		$vars = array();
+		$this->updateEventParentForQuery($query);
 
-		// Get the active menu item.
-		$app = JFactory::getApplication();
-		$menu = $app->getMenu();
-		$item = $menu->getActive();
-		$params = JComponentHelper::getParams('com_dpcalendar');
-		$advanced = $params->get('sef_advanced_link', 0);
+		return parent::build($query);
+	}
 
-		// Count route segments
-		$count = count($segments);
-
-		if (! empty($segments) && $segments[0] == 'events')
-		{
-			$vars['view'] = $segments[0];
-			$vars['format'] = 'raw';
-			return $vars;
+	public function parse(&$segments)
+	{
+		$active = $this->menu->getActive();
+		if (count($segments) == 1 && !empty($active->query['view']) && in_array($active->query['view'], ['calendar', 'list', 'map'])) {
+			$this->views['event']->setParent($this->views[$active->query['view']], 'calid');
 		}
 
-		// Standard routing for events.
-		if (! isset($item))
-		{
-			$vars['view'] = $segments[0];
-			$vars['id'] = $segments[$count - 1];
-			return $vars;
+		return parent::parse($segments);
+	}
+
+	private function updateEventParentForQuery($query)
+	{
+		// Check if the query is an event view
+		if (empty($query['view']) || $query['view'] != 'event' || empty($query['Itemid'])) {
+			return;
 		}
 
-		// From the categories view, we can only jump to a category.
-		$id = (isset($item->query['id']) && $item->query['id'] > 1) ? $item->query['id'] : 'root';
+		// It should have already a correct Itemid
+		$items = $this->menu->getItems('id', $query['Itemid']);
 
-		$category = DPCalendarHelper::getCalendar($id);
-
-		$categories = array();
-
-		if (method_exists($category, 'getChildren'))
-		{
-			$categories = $category->getChildren();
+		if (!$items) {
+			return;
 		}
-		$found = 0;
 
-		foreach ($segments as $segment)
-		{
-			foreach ($categories as $category)
-			{
-				if (($category->slug == $segment) || ($advanced && $category->alias == str_replace(':', '-', $segment)))
-				{
-					$vars['id'] = $category->id;
-					$vars['view'] = 'calendar';
-					$categories = $category->getChildren();
-					$found = 1;
-					break;
+		// The item
+		$item = reset($items);
+
+		// Check if the item can fit as parent
+		if (!in_array($item->query['view'], ['calendar', 'list', 'map'])) {
+			return;
+		}
+
+		// Set the active the the current active parent if applicable
+		$this->views['event']->setParent($this->views[$item->query['view']], 'calid');
+	}
+
+	public function getCalendarSegment($id, $query)
+	{
+		$category = JCategories::getInstance($this->getName())->get($id);
+
+		if (!$category) {
+			return [];
+		}
+
+		$path    = array_reverse($category->getPath(), true);
+		$path[0] = '1:root';
+
+		foreach ($path as &$segment) {
+			list($id, $segment) = explode(':', $segment, 2);
+		}
+
+		return $path;
+	}
+
+	public function getMapSegment($id, $query)
+	{
+		return $this->getCalendarSegment($id, $query);
+	}
+
+	public function getListSegment($id, $query)
+	{
+		return $this->getCalendarSegment($id, $query);
+	}
+
+	public function getEventSegment($id, $query)
+	{
+		// Hack when no menu item is available for the NomenuRules
+		if (empty($query['Itemid'])) {
+			return [0 => $id];
+		}
+
+		if (!empty($query['calid']) && !is_numeric($query['calid'])) {
+			return [0 => $id];
+		}
+
+		if (!strpos($id, ':')) {
+			$db      = JFactory::getDbo();
+			$dbquery = $db->getQuery(true);
+			$dbquery->select($dbquery->qn('alias'))
+				->from($dbquery->qn('#__dpcalendar_events'))
+				->where('id = ' . $dbquery->q($id));
+			$db->setQuery($dbquery);
+
+			$id .= ':' . $db->loadResult();
+		}
+
+		list($void, $segment) = explode(':', $id, 2);
+
+		return array($void => $segment);
+	}
+
+	public function getFormSegment($id, $query)
+	{
+		return $this->getEventSegment($id, $query);
+	}
+
+	public function getLocationSegment($id, $query)
+	{
+		// Hack when no menu item is available for the NomenuRules
+		if (empty($query['Itemid'])) {
+			return [0 => $id];
+		}
+
+		if (!strpos($id, ':')) {
+			$db      = JFactory::getDbo();
+			$dbquery = $db->getQuery(true);
+			$dbquery->select($dbquery->qn('alias'))
+				->from($dbquery->qn('#__dpcalendar_locations'))
+				->where('id = ' . $dbquery->q($id));
+			$db->setQuery($dbquery);
+
+			$id .= ':' . $db->loadResult();
+		}
+
+		list($void, $segment) = explode(':', $id, 2);
+
+		return array($void => $segment);
+	}
+
+	public function getLocationsSegment($id, $query)
+	{
+		if (!strpos($id, ':')) {
+			$db      = JFactory::getDbo();
+			$dbquery = $db->getQuery(true);
+			$dbquery->select($dbquery->qn('alias'))
+				->from($dbquery->qn('#__dpcalendar_locations'))
+				->where('id = ' . $dbquery->q($id));
+			$db->setQuery($dbquery);
+
+			$id .= ':' . $db->loadResult();
+		}
+
+		list($void, $segment) = explode(':', $id, 2);
+
+		return array($void => $segment);
+	}
+
+	public function getCalendarId($segment, $query)
+	{
+		if (isset($query['id'])) {
+			$category = JCategories::getInstance($this->getName(), array('access' => false))->get($query['id']);
+
+			if ($category) {
+				foreach ($category->getChildren() as $child) {
+					if ($child->alias == $segment) {
+						return $child->id;
+					}
 				}
 			}
-
-			if ($found == 0)
-			{
-				if ($advanced)
-				{
-					$db = JFactory::getDBO();
-					$query = 'SELECT id FROM #__dpcalendar_events WHERE catid = ' . $vars['id'] . ' AND alias = ' .
-							 $db->Quote(str_replace(':', '-', $segment));
-					$db->setQuery($query);
-					$id = $db->loadResult();
-				}
-				else
-				{
-					$id = $segment;
-				}
-
-				$vars['id'] = $id;
-				$vars['view'] = 'event';
-
-				break;
-			}
-
-			$found = 0;
 		}
 
-		return $vars;
+		return false;
+	}
+
+	public function getListId($segment, $query)
+	{
+		return $this->getCalendarId($segment, $query);
+	}
+
+	public function getMapId($segment, $query)
+	{
+		return $this->getCalendarId($segment, $query);
+	}
+
+	public function getEventId($segment, $query)
+	{
+		$calIds = [];
+
+		if ($active = $this->menu->getActive()) {
+			$calIds = $active->getParams()->get('ids');
+		}
+
+		foreach ($calIds as $index => $calId) {
+			// If the event belongs to the external calendar, return the segment as it is the id
+			if (!is_numeric($calId) && strpos($segment, $calId) === 0) {
+				return $segment;
+			}
+
+			// Remove external calendars
+			if (!is_numeric($calId)) {
+				unset($calIds[$index]);
+			}
+		}
+
+		$db      = JFactory::getDbo();
+		$dbquery = $db->getQuery(true);
+		$dbquery->select($dbquery->qn('id'))
+			->from($dbquery->qn('#__dpcalendar_events'))
+			->where('alias = ' . $dbquery->q($segment));
+
+		if (!in_array('-1', $calIds)) {
+			$dbquery->where('catid in (' . implode(',', $calIds) . ')');
+		}
+
+		$db->setQuery($dbquery);
+
+		return (int)$db->loadResult();
+	}
+
+	public function getLocationId($segment, $query)
+	{
+		$db      = JFactory::getDbo();
+		$dbquery = $db->getQuery(true);
+		$dbquery->select($dbquery->qn('id'))
+			->from($dbquery->qn('#__dpcalendar_locations'))
+			->where('alias = ' . $dbquery->q($segment));
+		$db->setQuery($dbquery);
+
+		return (int)$db->loadResult();
 	}
 }

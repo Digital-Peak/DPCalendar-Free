@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields>
+		<field name="price" type="text" required="true"
+		       label="COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL"/>
+		<field name="amount" type="text" validate="integer" required="true" label="COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL"/>
+		<field name="label" type="text" required="true" label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL_LABEL"/>
+		<field name="description" type="textarea" filter="raw"
+		       label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
+	</fields>
+</form>

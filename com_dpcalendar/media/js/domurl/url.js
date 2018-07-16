@@ -72,15 +72,26 @@
         wss: 443
     };
 
+    var _currNodeUrl;
+    function getCurrUrl() {
+        if (isNode) {
+            if (!_currNodeUrl) {
+                _currNodeUrl = ('file://' +
+                    (process.platform.match(/^win/i) ? '/' : '') +
+                    nodeRequire('fs').realpathSync('.')
+                );
+            }
+            return _currNodeUrl;
+        } else {
+            return document.location.href;
+        }
+    }
+
     function parse (self, url, absolutize) {
         var link, i, auth;
-        var currUrl = isNode ? ('file://' +
-            (process.platform.match(/^win/i) ? '/' : '') +
-            nodeRequire('fs').realpathSync('.')
-        ) : document.location.href;
 
         if (!url) {
-            url = currUrl;
+            url = getCurrUrl();
         }
 
         if (isNode) {
@@ -125,7 +136,7 @@
 
         if (!config.protocol && absolutize) {
             // is IE and path is relative
-            var base = new Url(currUrl.match(/(.*\/)/)[0]);
+            var base = new Url(getCurrUrl().match(/(.*\/)/)[0]);
             var basePath = base.path.split('/');
             var selfPath = self.path.split('/');
             var props = ['protocol', 'user', 'pass', 'host', 'port'];
@@ -150,9 +161,7 @@
 
         self.path = self.path.replace(/^\/{2,}/, '/');
 
-        self.paths((self.path.charAt(0) === '/' ?
-            self.path.slice(1) : self.path).split('/')
-        );
+        self.paths(self.paths());
 
         self.query = new QueryString(self.query);
     }

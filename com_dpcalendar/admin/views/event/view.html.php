@@ -7,20 +7,23 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewEvent extends \DPCalendar\View\LayoutView
+class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 {
-	protected $layoutName = 'event.form.default';
-
-	protected function init()
+	public function init()
 	{
 		// Set the default model
 		$this->setModel(JModelLegacy::getInstance('AdminEvent', 'DPCalendarModel'), true);
 
-		$this->state = $this->get('State');
-		$this->event = $this->get('Item');
+		$this->event      = $this->get('Item');
+		$this->form       = $this->get('Form');
+		$this->returnPage = $this->get('ReturnPage');
 
-		// Form stuff
-		$this->form = $this->get('Form');
+		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . '/models/files/');
+		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$this->locationForm = JModelLegacy::getInstance('Location', 'DPCalendarModel', ['ignore_request' => true])->getForm([], false, 'location');
+		$this->locationForm->setFieldAttribute('title', 'required', false);
+		$this->locationForm->setFieldAttribute('rooms', 'label', 'COM_DPCALENDAR_ROOMS');
+
 		$this->form->setFieldAttribute('user_id', 'type', 'hidden');
 		$this->form->setFieldAttribute('start_date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'));
 		$this->form->setFieldAttribute('start_date', 'formatTime', DPCalendarHelper::getComponentParameter('event_form_time_format', 'g:i a'));
@@ -28,6 +31,21 @@ class DPCalendarViewEvent extends \DPCalendar\View\LayoutView
 		$this->form->setFieldAttribute('end_date', 'formatTime', DPCalendarHelper::getComponentParameter('event_form_time_format', 'g:i a'));
 		$this->form->setFieldAttribute('scheduling_end_date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'));
 
+
+		if ($this->event->original_id > '0') {
+			// Hide the scheduling fields
+			$this->form->removeField('rrule');
+			$this->form->removeField('scheduling');
+			$this->form->removeField('scheduling_end_date');
+			$this->form->removeField('scheduling_interval');
+			$this->form->removeField('scheduling_repeat_count');
+			$this->form->removeField('scheduling_daily_weekdays');
+			$this->form->removeField('scheduling_weekly_days');
+			$this->form->removeField('scheduling_monthly_options');
+			$this->form->removeField('scheduling_monthly_week');
+			$this->form->removeField('scheduling_monthly_week_days');
+			$this->form->removeField('scheduling_monthly_days');
+		}
 		$this->canDo = DPCalendarHelper::getActions($this->state->get('filter.category_id'));
 
 		$this->freeInformationText = '';

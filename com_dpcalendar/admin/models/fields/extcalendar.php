@@ -32,7 +32,7 @@ class JFormFieldExtcalendar extends JFormField
 		$url    .= '&dpplugin=' . $this->element['plugin'];
 		$url    .= '&import=' . $this->element['import'];
 		$url    .= '&tmpl=component';
-		$buffer = '<iframe src="' . JRoute::_($url) . '" style="width:100%; border:0"m id="' . $this->id . '"></iframe>';
+		$buffer = '<iframe src="' . JRoute::_($url) . '" style="width:100%; border:0"m id="' . $this->id . '" name="' . $this->id . '"></iframe>';
 
 		return $buffer;
 	}

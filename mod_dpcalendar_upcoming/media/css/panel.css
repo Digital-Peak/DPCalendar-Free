@@ -1,24 +1,89 @@
-.dp-module-upcoming-panel-root {
+.mod-dpcalendar-upcoming-panel {
+	display: flex;
+	flex-wrap: wrap;
+	margin: 0 -5px;
+}
+
+.mod-dpcalendar-upcoming-panel {
 	clear: both;
 	overflow: overlay;
 }
 
-.dp-module-upcoming-panel-root .dp-module-upcoming-modal {
-	display: none;
-	width: 700px;
-	height: 500px;
+.mod-dpcalendar-upcoming-panel__event {
+	display: block;
+	overflow: hidden;
 }
 
-.dp-module-upcoming-panel-root .dp-module-upcoming-modal iframe {
-	width: 99.6%;
-	height: 95%;
-	border: none;
+.mod-dpcalendar-upcoming-panel__event + div {
+	margin-top: .7rem;
 }
 
-.dp-module-upcoming-panel-heading {
+.mod-dpcalendar-upcoming-panel__group {
+	margin-bottom: 1rem;
+}
+
+.mod-dpcalendar-upcoming-panel__heading.dp-group-heading {
 	font-weight: bold;
-	background-color: #dddddd;
-	color: #333333;
-	padding: 5px 0px 5px 5px;
-	margin: 5px 0px 5px 0px;
+	background-color: rgba(0, 0, 0, 0.05);
+	padding: .5rem .7rem;
+	margin-bottom: .7rem;
 }
+
+.mod-dpcalendar-upcoming-panel__heading.dp-group-heading ~ div {
+	margin-left: .7rem;
+	margin-right: .7rem;
+}
+
+.mod-dpcalendar-upcoming-panel .dp-link {
+	display: block;
+}
+
+.mod-dpcalendar-upcoming-panel .dp-date__start, .mod-dpcalendar-upcoming-panel .dp-date__end,
+.mod-dpcalendar-upcoming-panel .dp-time__start,
+.mod-dpcalendar-upcoming-panel .dp-time__end {
+	font-size: .8em;
+	font-weight: bold;
+	border-radius: 2px;
+	padding: 2px 0;
+	opacity: .7;
+}
+
+.mod-dpcalendar-upcoming-panel .dp-figure__caption {
+	font-size: .8em;
+	opacity: .7;
+}
+
+.mod-dpcalendar-upcoming-panel__group,
+.mod-dpcalendar-upcoming-panel > .mod-dpcalendar-upcoming-panel__event {
+	flex: 1 1 200px;
+	position: relative;
+	margin: 5px;
+}
+
+.mod-dpcalendar-upcoming-panel__event {
+	background-color: #fff;
+	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
+}
+
+.mod-dpcalendar-upcoming-panel__information {
+	padding: .7rem;
+}
+
+.mod-dpcalendar-upcoming-panel__heading .dp-group-heading ~ div {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.mod-dpcalendar-upcoming-panel .dp-figure {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	margin: 0;
+}
+
+.mod-dpcalendar-upcoming-panel .dp-figure__caption {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+/*# sourceMappingURL=panel.css.map */

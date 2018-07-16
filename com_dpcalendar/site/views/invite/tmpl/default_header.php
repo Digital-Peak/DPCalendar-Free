@@ -7,35 +7,14 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Component\Icon;
-
-// The params
-$params = $this->params;
-
-/** @var Container $root **/
-$root = $this->root->addChild(new Container('actions'));
-$root->addClass('noprint', true);
-$root->addClass('dp-actions-container', true);
-
-// Create the invite button
-DPCalendarHelper::renderLayout(
-	'content.button',
-	array(
-		'type'    => Icon::OK,
-		'root'    => $root,
-		'text'    => 'COM_DPCALENDAR_VIEW_INVITE_SEND_BUTTON',
-		'onclick' => "Joomla.submitbutton('event.invite')"
-	)
-);
-
-// Create the cancel button
-DPCalendarHelper::renderLayout(
-	'content.button',
-	array(
-		'type'    => Icon::CANCEL,
-		'root'    => $root,
-		'text'    => 'JCANCEL',
-		'onclick' => "Joomla.submitbutton('event.cancel')"
-	)
-);
+?>
+<div class="com-dpcalendar-invite__actions dp-button-bar">
+	<button type="button" class="dp-button dp-button-save" data-task="invite">
+		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::OK]); ?>
+		<?php echo $this->translate('COM_DPCALENDAR_VIEW_INVITE_SEND_BUTTON'); ?>
+	</button>
+	<button type="button" class="dp-button dp-button-cancel" data-task="cancel">
+		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::CANCEL]); ?>
+		<?php echo $this->translate('JCANCEL'); ?>
+	</button>
+</div>

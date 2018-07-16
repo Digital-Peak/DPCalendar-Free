@@ -148,12 +148,7 @@ class DPCalendarModelEvent extends JModelForm
 
 					$db->setQuery($query);
 
-					$row  = $db->loadAssoc();
-					$data = $this->getTable('Event', 'DPCalendarTable');
-					if ($row) {
-						$data->bind($row);
-						$data->setProperties($row);
-					}
+					$data = $db->loadObject();
 
 					if ($error = $db->getErrorMsg()) {
 						throw new Exception($error);
@@ -206,10 +201,13 @@ class DPCalendarModelEvent extends JModelForm
 					$registry->loadString($data->metadata);
 					$data->metadata = $registry;
 
-					$data->price         = json_decode($data->price);
-					$data->earlybird     = json_decode($data->earlybird);
-					$data->user_discount = json_decode($data->user_discount);
-					$data->rooms         = $data->rooms ? explode(',', $data->rooms) : [];
+					$data->price           = json_decode($data->price);
+					$data->earlybird       = json_decode($data->earlybird);
+					$data->user_discount   = json_decode($data->user_discount);
+					$data->booking_options = $data->booking_options ? json_decode($data->booking_options) : [];
+					$data->rooms           = $data->rooms ? explode(',', $data->rooms) : [];
+
+					\DPCalendar\Helper\DPCalendarHelper::parseImages($data);
 
 					$this->_item[$pk] = $data;
 				} catch (Exception $e) {

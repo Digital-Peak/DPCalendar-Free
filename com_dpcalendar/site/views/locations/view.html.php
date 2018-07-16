@@ -22,8 +22,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 
 	public function init()
 	{
-		if ($ids = $this->params->get('ids'))
-		{
+		if ($ids = $this->params->get('ids')) {
 			$this->getModel()->setState('filter.search', 'ids:' . implode(',', $ids));
 		}
 		$this->getModel()->setState('list.limit', 100);
@@ -51,5 +50,19 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 		$model->setState('filter.language', JFactory::getLanguage());
 		$model->setState('filter.locations', $this->params->get('ids'));
 		$this->events = $model->getItems();
+
+		$this->resources = [];
+		foreach ($this->locations as $location) {
+			$rooms = array();
+			if ($location->rooms) {
+				foreach ($location->rooms as $room) {
+					$rooms[] = (object)array('id' => $location->id . '-' . $room->id, 'title' => $room->title);
+				}
+			}
+
+			$this->resources[] = (object)array('id' => $location->id, 'title' => $location->title, 'children' => $rooms);
+		}
+
+		$this->return = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;
 	}
 }

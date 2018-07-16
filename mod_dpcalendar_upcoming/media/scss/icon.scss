@@ -1,0 +1,23 @@
+.mod-dpcalendar-upcoming-icon {
+	@import "base";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/flatcalendar";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/icon";
+
+	&__date::after {
+		content: "\A";
+		white-space: pre;
+	}
+
+	.dp-link {
+		display: block;
+	}
+
+	.dp-icon {
+		float: left;
+		margin-right: .7em;
+		svg {
+			width: 2.3em;
+		}
+	}
+
+}

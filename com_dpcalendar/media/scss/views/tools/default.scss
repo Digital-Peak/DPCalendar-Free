@@ -1,0 +1,18 @@
+.com-dpcalendar-tools {
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/quickicons";
+
+	&__icons {
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+		margin: 0 -0.5rem;
+		text-align: center;
+		font-size: 1rem;
+	}
+
+	&__footer {
+		padding: 20px;
+		text-align: center;
+	}
+}

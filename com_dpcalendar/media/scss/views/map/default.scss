@@ -1,0 +1,40 @@
+.com-dpcalendar-map {
+	@import "../../layouts/block/button";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/loader";
+	@import "../../layouts/block/timezone";
+	@import "../../layouts/event/tooltip";
+	@import "../../layouts/block/autocomplete";
+
+	padding-top: 5px;
+
+	&__form-container {
+		margin: 0 -5px;
+		display: flex;
+		flex-wrap: wrap;
+	}
+
+	&__form-container > div {
+		display: flex;
+		flex: 1 1 260px;
+		margin: 0 5px 10px;
+	}
+
+	&__form-container .dp-input,
+	&__form-container .dp-select {
+		width: 100%;
+		overflow: hidden;
+		margin-bottom: 0;
+	}
+
+	&__date-search .dp-input {
+		flex: 1 0 0;
+	}
+
+	&__date-search input + input,
+	&__radius-search select + select {
+		margin-left: 10px;
+	}
+}
+
+@import "../../vendor/tingle";

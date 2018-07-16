@@ -1,0 +1,28 @@
+.dp-description {
+	margin-bottom: 10px;
+
+	&__label {
+		float: left;
+		width: 160px;
+		clear: left;
+		text-align: left;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	&__description {
+		margin-left: 180px;
+	}
+
+	@media screen and (max-width: 767px) {
+		&__label {
+			float: none;
+			width: 100%;
+		}
+
+		&__description {
+			margin-left: 0;
+		}
+	}
+}

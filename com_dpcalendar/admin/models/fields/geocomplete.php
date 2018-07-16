@@ -11,16 +11,15 @@ JFormHelper::loadFieldClass('text');
 
 class JFormFieldGeocomplete extends JFormFieldText
 {
-
 	protected $type = 'Geocomplete';
 
 	public function getInput()
 	{
-		JHtml::_('script', 'com_dpcalendar/geocomplete/geocomplete.js', ['relative' => true]);
+		(new \DPCalendar\HTML\Document\HtmlDocument())->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
 
 		$input = parent::getInput();
 
-		$input .= '<button id="' . $this->id . '_find" class="btn hasTooltip" type="button" title="' . JText::_('JSEARCH_FILTER_SUBMIT') .
+		$input .= '<button id="' . $this->id . '_find" class="dp-button" type="button" title="' . JText::_('JSEARCH_FILTER_SUBMIT') .
 				 '"><i class="icon-search"></i></button>';
 
 		return $input;

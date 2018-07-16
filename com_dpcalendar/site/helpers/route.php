@@ -14,42 +14,41 @@ class DPCalendarHelperRoute
 
 	public static function getEventRoute($id, $calId, $full = false, $autoRoute = true, $defaultItemId = 0)
 	{
-		$needles = array(
-			'event' => array(
-				(int)$id
-			)
-		);
-		$tmpl    = '';
-		if (JFactory::getApplication()->input->getWord('tmpl')) {
-			$tmpl = '&tmpl=' . JFactory::getApplication()->input->getWord('tmpl');
-		}
-
 		// Check if we come from com_tags where the link is generated id:alias
 		$parts = explode(':', $id);
 		if (count($parts) == 2 && is_numeric($parts[0])) {
 			$id = (int)$id;
 		}
 
-		// Create the link
-		$link = ($full ? JUri::root() : '') . 'index.php?option=com_dpcalendar&view=event&id=' . $id . $tmpl;
-		if ($calId > 0 || (!is_numeric($calId) && $calId != 'root')) {
-			$needles['calendar'] = array(
-				$calId
-			);
-			$needles['list']     = array(
-				$calId
-			);
-			$needles['map']      = array(
-				$calId
-			);
+		$id = 'id=' . $id;
+		if (JFactory::getApplication()->isClient('administrator')) {
+			$id = 'e_id=' . $id;
 		}
 
-		if ($defaultItemId) {
-			$link .= '&Itemid=' . $defaultItemId;
-		} else if ($item = self::findItem($needles)) {
-			$link .= '&Itemid=' . $item;
-		} else if ($item = self::findItem()) {
-			$link .= '&Itemid=' . $item;
+		// Create the link
+		$link = ($full ? JUri::root() : '') . 'index.php?option=com_dpcalendar&view=event&' . $id;
+
+		if ($tmpl = JFactory::getApplication()->input->getWord('tmpl')) {
+			$link .= '&tmpl=' . $tmpl;
+		}
+
+		if (\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+			$link .= '&calid=' . $calId;
+		} else {
+			$needles = array('event' => array((int)$id));
+			if ($calId > 0 || (!is_numeric($calId) && $calId != 'root')) {
+				$needles['calendar'] = array($calId);
+				$needles['list']     = array($calId);
+				$needles['map']      = array($calId);
+			}
+
+			if ($defaultItemId) {
+				$link .= '&Itemid=' . $defaultItemId;
+			} else if ($item = self::findItem($needles)) {
+				$link .= '&Itemid=' . $item;
+			} else if ($item = self::findItem()) {
+				$link .= '&Itemid=' . $item;
+			}
 		}
 
 		if (!$autoRoute) {
@@ -62,12 +61,12 @@ class DPCalendarHelperRoute
 	public static function getFormRoute($id, $return = null, $append = null)
 	{
 		if ($id) {
-			$link = 'index.php?option=com_dpcalendar&task=event.edit&layout=edit&e_id=' . $id;
+			$link = 'index.php?option=com_dpcalendar&task=event.edit&e_id=' . $id;
 		} else {
 			if (JFactory::getApplication()->isAdmin()) {
 				$link = 'index.php?option=com_dpcalendar&task=event.add&e_id=0';
 			} else {
-				$link = 'index.php?option=com_dpcalendar&view=form&layout=edit&e_id=0';
+				$link = 'index.php?option=com_dpcalendar&view=form&e_id=0';
 			}
 		}
 
@@ -91,26 +90,20 @@ class DPCalendarHelperRoute
 
 	public static function getLocationRoute($location)
 	{
-		$needles = array(
-			'location'  => array(
-				(int)$location->id
-			),
-			'locations' => array(
-				(int)$location->id
-			)
-		);
-		$tmpl    = '';
-		if (JFactory::getApplication()->input->getWord('tmpl')) {
-			$tmpl = '&tmpl=' . JFactory::getApplication()->input->getWord('tmpl');
+		// Create the link
+		$link = 'index.php?option=com_dpcalendar&view=location&id=' . $location->id;
+
+		if ($tmpl = JFactory::getApplication()->input->getWord('tmpl')) {
+			$link .= '&tmpl=' . $tmpl;
 		}
 
-		// Create the link
-		$link = 'index.php?option=com_dpcalendar&view=location&id=' . $location->id . $tmpl;
-
-		if ($item = self::findItem($needles)) {
-			$link .= '&Itemid=' . $item;
-		} else if ($item = self::findItem()) {
-			$link .= '&Itemid=' . $item;
+		if (!\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+			$needles = array('location' => array((int)$location->id), 'locations' => array((int)$location->id));
+			if ($item = self::findItem($needles)) {
+				$link .= '&Itemid=' . $item;
+			} else if ($item = self::findItem()) {
+				$link .= '&Itemid=' . $item;
+			}
 		}
 
 		return JRoute::_($link, false);
@@ -119,9 +112,9 @@ class DPCalendarHelperRoute
 	public static function getLocationFormRoute($id, $return = null)
 	{
 		if ($id) {
-			$link = 'index.php?option=com_dpcalendar&task=locationform.edit&layout=edit&l_id=' . $id;
+			$link = 'index.php?option=com_dpcalendar&task=locationform.edit&l_id=' . $id;
 		} else {
-			$link = 'index.php?option=com_dpcalendar&view=locationform&layout=edit&l_id=0';
+			$link = 'index.php?option=com_dpcalendar&view=locationform&l_id=0';
 		}
 
 		$itemId = JFactory::getApplication()->input->get('Itemid', null);

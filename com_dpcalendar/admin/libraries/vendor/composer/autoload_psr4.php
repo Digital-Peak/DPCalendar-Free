@@ -25,5 +25,4 @@ return array(
     'Omnipay\\PayPal\\' => array($vendorDir . '/omnipay/paypal/src'),
     'Omnipay\\Manual\\' => array($vendorDir . '/omnipay/manual/src'),
     'DPCalendar\\' => array($baseDir . '/libraries/dpcalendar/DPCalendar'),
-    'CCL\\' => array($vendorDir . '/Digital-Peak/ccl/src/CCL'),
 );

@@ -173,7 +173,9 @@ class DPCalendarModelLocations extends JModelList
 		$location = $this->getState('filter.location');
 		$radius   = $this->getState('filter.radius');
 		if (!empty($location)) {
-			if (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
+			if (is_object($location)) {
+				$data = $location;
+			} else if (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
 				list ($latitude, $longitude) = explode(';', $location);
 				$data            = new stdClass();
 				$data->latitude  = str_replace('latitude=', '', $latitude);
@@ -181,6 +183,7 @@ class DPCalendarModelLocations extends JModelList
 			} else {
 				$data = \DPCalendar\Helper\Location::get($location, false);
 			}
+
 			if (!empty($data->latitude) && !empty($data->longitude)) {
 				$latitude  = (float)$data->latitude;
 				$longitude = (float)$data->longitude;

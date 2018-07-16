@@ -1,0 +1,159 @@
+.com-dpcalendar-ticketform #jform_remind_time, .com-dpcalendar-ticketform #jform_remind_type {
+	max-width: 100px;
+}
+
+.com-dpcalendar-ticketform .dp-button-bar {
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-ticketform .dp-button {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid #c0c0c0;
+	border-radius: 0.1rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	padding: 0 10px;
+	margin: 3px 0;
+	font-size: .7rem;
+	line-height: 1.5rem;
+	color: #212529;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-ticketform .dp-button:disabled,
+.com-dpcalendar-ticketform .dp-button[disabled] {
+	background-color: #cccccc;
+	color: #666666;
+}
+
+.com-dpcalendar-ticketform .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio.radio {
+	padding-left: 0px;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio label {
+	padding-right: 10px;
+	border-radius: 3px;
+	border: 1px solid #D1D3D4;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio input[type=radio]:empty {
+	display: none;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio input[type=radio]:empty + label {
+	position: relative;
+	float: left;
+	line-height: 2em;
+	text-indent: 3em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	margin-right: 5px;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio input[type=radio]:empty + label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio input[type=radio]:hover:not(:checked) + label:before {
+	content: '\2714';
+	text-indent: .9em;
+	color: #C2C2C2;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio input[type=radio]:hover:not(:checked) + label {
+	color: #888;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio input[type=radio]:checked + label:before {
+	content: '\2714';
+	text-indent: .9em;
+	color: #9CE2AE;
+	background-color: #4DCB6D;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio input[type=radio]:checked + label {
+	color: #777;
+}
+
+.com-dpcalendar-ticketform .dp-form-radio input[type=radio]:focus ~ label:before {
+	box-shadow: 0 0 0 3px #999;
+}
+
+.com-dpcalendar-ticketform .dp-form-input {
+	width: 100%;
+	min-height: 28px;
+	-webkit-box-sizing: border-box;
+	/* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;
+	/* Firefox, other Gecko */
+	box-sizing: border-box;
+	/* Opera/IE 8+ */
+}
+
+.com-dpcalendar-ticketform .dp-control {
+	overflow: auto;
+}
+
+.com-dpcalendar-ticketform .dp-control__label, .com-dpcalendar-ticketform .control-label {
+	float: left;
+	width: 160px;
+	padding-top: 5px;
+	text-align: left;
+}
+
+.com-dpcalendar-ticketform .dp-control__input, .com-dpcalendar-ticketform .controls {
+	margin-left: 180px;
+}
+
+@media screen and (max-width: 640px) {
+	.com-dpcalendar-ticketform .dp-control__label, .com-dpcalendar-ticketform .control-label, .com-dpcalendar-ticketform .dp-control__input, .com-dpcalendar-ticketform .controls {
+		width: 100%;
+		margin-left: 0;
+	}
+	.com-dpcalendar-ticketform .control-group control-label, .com-dpcalendar-ticketform .control-group controls {
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
+.com-dpcalendar-ticketform .dp-timezone {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-ticketform .dp-timezone__label {
+	font-weight: bold;
+}
+
+.com-dpcalendar-ticketform .dp-timezone__select {
+	max-width: 200px;
+}
+
+/*# sourceMappingURL=default.css.map */

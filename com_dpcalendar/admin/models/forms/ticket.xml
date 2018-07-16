@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fieldset name="content" label="COM_DPCALENDAR_CONTENT"
+	<fieldset name="general" label="COM_DPCALENDAR_CONTENT"
 	          addfieldpath="/administrator/components/com_dpcalendar/models/fields"
 	          addrulepath="/administrator/components/com_dpcalendar/models/rules">>
 		<field name="id" type="text" default="0" readonly="true"
@@ -11,7 +11,20 @@
 		       label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
 		<field name="user_id" type="user"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_USER_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_USER_DESC"/>
-
+		<field name="price" type="text"
+		       label="COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_PRICE_DESC"/>
+		<field name="state" type="list" default="1"
+		       label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_NEED_PAYMENT</option>
+			<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
+			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+	</fieldset>
+	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
 		<field name="country" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>
 		<field name="province" type="text" class="dp-form-input"
@@ -30,19 +43,8 @@
 		       label="COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_LABEL" description=""/>
 		<field name="longitude" type="text" validate="decimal" class="dp-form-input"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_LABEL" description=""/>
-
-		<field name="state" type="list" default="1"
-		       label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
-			<option value="1">JPUBLISHED</option>
-			<option value="0">JUNPUBLISHED</option>
-			<option value="2">JARCHIVED</option>
-			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_NEED_PAYMENT</option>
-			<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
-			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
-			<option value="-2">JTRASHED</option>
-		</field>
-		<field name="price" type="text"
-		       label="COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_PRICE_DESC"/>
+	</fieldset>
+	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
 		<field name="seat" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_SEAT_DESC"/>
 		<field name="type" type="text" class="dp-form-input"

@@ -1,0 +1,23 @@
+.mod-dpcalendar-upcoming-default {
+	@import "base";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/flatcalendar";
+
+	&__information {
+		min-height: 3.7em;
+	}
+
+	.dp-link {
+		display: block;
+	}
+
+	.dp-date {
+		&__start,
+		&__end {
+			font-size: .8em;
+			font-weight: bold;
+			border-radius: 2px;
+			padding: 2px 0;
+			opacity: .7;
+		}
+	}
+}

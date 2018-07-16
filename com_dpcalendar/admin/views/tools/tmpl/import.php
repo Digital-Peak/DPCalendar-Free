@@ -89,5 +89,5 @@ JPluginHelper::importPlugin('dpcalendar');
 <div class="clearfix"> </div>
 
 <div align="center" style="clear: both">
-	<?php echo sprintf(JText::_('COM_DPCALENDAR_FOOTER'), JFactory::getApplication()->input->getVar('DPCALENDAR_VERSION'));?>
+	<?php echo sprintf(JText::_('COM_DPCALENDAR_FOOTER'), $this->input->getString('DPCALENDAR_VERSION'));?>
 </div>

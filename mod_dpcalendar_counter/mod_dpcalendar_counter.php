@@ -11,6 +11,25 @@ if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMIN
 	return;
 }
 
+$document     = new \DPCalendar\HTML\Document\HtmlDocument();
+$dateHelper   = new \DPCalendar\Helper\DateHelper();
+$layoutHelper = new \DPCalendar\Helper\LayoutHelper();
+$userHelper   = new \DPCalendar\Helper\UserHelper();
+$router       = new \DPCalendar\Router\Router();
+$translator   = new \DPCalendar\Translator\Translator();
+$input        = $app->input;
+
+// The display data with some common helpers for the JLayouts
+$displayData = [
+	'document'     => $document,
+	'layoutHelper' => $layoutHelper,
+	'userHelper'   => $userHelper,
+	'dateHelper'   => $dateHelper,
+	'translator'   => $translator,
+	'router'       => $router,
+	'params'       => $params
+];
+
 JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
 JLoader::import('joomla.application.component.model');
@@ -50,11 +69,18 @@ $model->setState('filter.tags', $params->get('filter_tags', array()));
 $model->setState('filter.locations', $params->get('filter_locations', array()));
 $model->setState('filter.my', $params->get('show_my_only', 0));
 
-$item = $model->getItems();
-if (empty($item)) {
-	$item = null;
+$event = $model->getItems();
+if (empty($event)) {
+	$event = null;
 } else {
-	$item = reset($item);
+	$event = reset($event);
+}
+
+$truncatedDescription = '';
+if ($params->get('description_length') > 0 || $params->get('description_length') === null) {
+	$truncatedDescription = JHtml::_('string.truncate', $event->description, $params->get('description_length'));
+	$truncatedDescription = JHTML::_('content.prepare', $truncatedDescription);
+	$truncatedDescription = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($truncatedDescription);
 }
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_counter', $params->get('layout', 'default'));

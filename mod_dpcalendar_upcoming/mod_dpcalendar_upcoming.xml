@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_upcoming</name>
 	<author>Digital Peak</author>
-	<creationDate>May 2018</creationDate>
+	<creationDate>Jun 2018</creationDate>
 	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.3.7</version>
+	<version>7.0.0</version>
 	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>
@@ -98,23 +98,6 @@
 				       description="JFIELD_ALT_MODULE_LAYOUT_DESC" default="_:default"/>
 				<field name="moduleclass_sfx" type="text"
 				       label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-				<field name="frontend_framework" type="list"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_DESC">
-					<option value="">JGLOBAL_USE_GLOBAL</option>
-					<option value="BS2">MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_BS2</option>
-					<option value="BS3">MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_BS3</option>
-					<option value="BS4">MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_BS4</option>
-					<option value="UIkit2">MOD_DPCALENDAR_UPCOMING_FIELD_FRONTEND_FRAMEWORK_UIKIT2</option>
-				</field>
-				<field name="icon_framework" type="list"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_DESC">
-					<option value="">JGLOBAL_USE_GLOBAL</option>
-					<option value="Joomla">MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_JOOMLA</option>
-					<option value="FontAwesome4">MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_FONTAWESOME4</option>
-					<option value="Glyphicons">MOD_DPCALENDAR_UPCOMING_FIELD_ICON_FRAMEWORK_GLYPHICONS</option>
-				</field>
 			</fieldset>
 		</fields>
 	</config>

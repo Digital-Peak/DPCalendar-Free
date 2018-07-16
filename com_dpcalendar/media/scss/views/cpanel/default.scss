@@ -1,0 +1,68 @@
+.com-dpcalendar-cpanel {
+	@import "../../misc/variables";
+	@import "../../layouts/block/grid";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/quickicons";
+
+	&__boxes {
+		margin-bottom: 16px;
+	}
+
+	&__box {
+		display: grid;
+		background-color: #fff;
+		box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
+
+		.dp-heading {
+			background: $dpColor;
+			margin: 0;
+			padding: 13px 16px;
+			color: #000000;
+			font-size: 18px;
+		}
+	}
+
+	&__icons {
+		display: flex;
+		flex-wrap: wrap;
+		width: 100%;
+		margin: 0 -0.5rem;
+		font-size: 1rem;
+	}
+
+	&__welcome {
+		padding: 16px;
+	}
+
+	&__event {
+		border-bottom: 1px solid #ddd;
+		padding: 7px 0;
+
+		> .dp-link {
+			display: block;
+			margin-bottom: 2px;
+		}
+
+		&:last-child {
+			border-bottom: none;
+		}
+	}
+
+	&__footer {
+		padding: 20px;
+		text-align: center;
+	}
+
+	.dp-information-container {
+		$minColumnSize: 10px;
+		@import "../../layouts/block/grid";
+		padding: 8px 16px;
+	}
+
+	.dp-information {
+		&__label,
+		&__content {
+			padding: 2px 0;
+		}
+	}
+}

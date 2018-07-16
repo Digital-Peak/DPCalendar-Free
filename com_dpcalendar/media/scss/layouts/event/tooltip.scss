@@ -1,0 +1,30 @@
+.dp-event-tooltip {
+	@import "../../layouts/block/icon";
+
+	text-align: left;
+	font-size: 12px;
+
+	&__link {
+		margin-right: .4rem;
+		color: #42a1ff;
+	}
+
+	&__actions {
+		border-top: 1px solid rgba(255, 255, 255, .5);
+		margin-top: 5px;
+		padding-top: 4px;
+		color: #fff;
+	}
+
+	&__action {
+		color: #fff;
+		padding: 2px;
+		opacity: .85;
+
+		&:hover {
+			color: #fff;
+			opacity: 1;
+			text-decoration: none;
+		}
+	}
+}

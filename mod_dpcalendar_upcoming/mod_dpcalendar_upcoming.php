@@ -11,14 +11,28 @@ if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMIN
 	return;
 }
 
-// @deprecated Will be removed in the next major version
-JLoader::import('components.com_dpcalendar.helpers.schema', JPATH_ADMINISTRATOR);
+// Helpers
+$document     = new \DPCalendar\HTML\Document\HtmlDocument();
+$dateHelper   = new \DPCalendar\Helper\DateHelper();
+$layoutHelper = new \DPCalendar\Helper\LayoutHelper();
+$userHelper   = new \DPCalendar\Helper\UserHelper();
+$router       = new \DPCalendar\Router\Router();
+$translator   = new \DPCalendar\Translator\Translator();
+$params       = $params->merge(JComponentHelper::getParams('com_dpcalendar'));
+
+
+// The display data
+$displayData = [
+	'layoutHelper' => $layoutHelper,
+	'userHelper'   => $userHelper,
+	'dateHelper'   => $dateHelper,
+	'translator'   => $translator,
+	'router'       => $router,
+	'input'        => $app->input,
+	'params'       => $params
+];
 
 JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-
-$params->set('frontend_framework', $params->get('frontend_framework', DPCalendarHelper::getComponentParameter('frontend_framework', 'BS2')));
-$params->set('icon_framework', $params->get('icon_framework', DPCalendarHelper::getComponentParameter('icon_framework', 'Joomla')));
-
 JLoader::import('joomla.application.component.model');
 JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
@@ -32,10 +46,10 @@ foreach ($model->getItems() as $calendar) {
 
 $startDate = trim($params->get('start_date', ''));
 if ($startDate == 'start of day') {
-	$startDate = DPCalendarHelper::getDate();
+	$startDate = $dateHelper->getDate(null, true, 'UTC');
 	$startDate->setTime(0, 0, 0);
 } else {
-	$startDate = DPCalendarHelper::getDate($startDate);
+	$startDate = $dateHelper->getDate($startDate);
 }
 
 // Round to the last quater
@@ -47,15 +61,13 @@ if ($endDate == 'same day') {
 	$endDate = clone $startDate;
 	$endDate->setTime(23, 59, 59);
 } else if ($endDate) {
-	$tmp = DPCalendarHelper::getDate($endDate);
+	$tmp = $dateHelper->getDate($endDate);
 	$tmp->sub(new DateInterval("PT" . $tmp->format("s") . "S"));
 	$tmp->sub(new DateInterval("PT" . ($tmp->format("i") % 15) . "M"));
 	$endDate = $tmp;
 } else {
 	$endDate = null;
 }
-
-$startDate = $startDate->format('U');
 
 $model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
 $model->getState();
@@ -83,9 +95,9 @@ if (!$events && !$params->get('empty_text', 1)) {
 }
 
 // Sort the array by user date
-usort($events, function ($e1, $e2) {
-	$d1 = DPCalendarHelper::getDate($e1->start_date, $e1->all_day);
-	$d2 = DPCalendarHelper::getDate($e2->start_date, $e2->all_day);
+usort($events, function ($e1, $e2) use ($dateHelper) {
+	$d1 = $dateHelper->getDate($e1->start_date, $e1->all_day);
+	$d2 = $dateHelper->getDate($e2->start_date, $e2->all_day);
 
 	return strcmp($d1->format('c', true), $d2->format('c', true));
 });
@@ -93,7 +105,28 @@ usort($events, function ($e1, $e2) {
 JPluginHelper::importPlugin('content');
 JPluginHelper::importPlugin('dpcalendar');
 
+// The grouping option
+$grouping = $params->get('output_grouping', '');
+
+// The last computed heading
+$lastHeading = '';
+
+// The grouped events
+$groupedEvents = [];
 foreach ($events as $event) {
+	$startDate    = $dateHelper->getDate($event->start_date, $event->all_day);
+	$groupHeading = $grouping ? $startDate->format($grouping, true) : false;
+
+	if ($groupHeading && $groupHeading != $lastHeading) {
+		$lastHeading = $groupHeading;
+	}
+
+	if (!array_key_exists($lastHeading, $groupedEvents)) {
+		$groupedEvents[$lastHeading] = [];
+	}
+
+	$groupedEvents[$lastHeading][] = $event;
+
 	$event->text = $event->description;
 	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.event', &$event, &$event->params, 0));
 	$event->description = $event->text;
@@ -101,8 +134,35 @@ foreach ($events as $event) {
 	$event->realUrl = str_replace(
 		array('?tmpl=component', 'tmpl=component'),
 		'',
-		DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, false, true, $params->get('default_menu_item'))
+		$router->getEventRoute($event->id, $event->catid, false, true, $params->get('default_menu_item'))
 	);
+
+	$desc = $params->get('description_length') === '0' ? '' : JHTML::_('content.prepare', $event->description);
+
+	if ($desc && $params->get('description_length') > 0) {
+		$descTruncated = JHtmlString::truncateComplex($desc, $params->get('description_length', null));
+		if ($desc != $descTruncated) {
+			$event->alternative_readmore = JText::_('MOD_DPCALENDAR_UPCOMING_READ_MORE');
+
+			$desc = $layoutHelper->renderLayout(
+				'joomla.content.readmore',
+				[
+					'item'   => $event,
+					'params' => new \Joomla\Registry\Registry(['access-view' => true]),
+					'link'   => $router->getEventRoute($event->id, $event->catid)
+				]
+			);
+
+			$desc .= $descTruncated;
+		}
+	}
+
+	$event->truncatedDescription = $desc;
+}
+
+$return = JFactory::getApplication()->input->getInt('Itemid', null);
+if (!empty($return)) {
+	$return = $router->route('index.php?Itemid=' . $return);
 }
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', $params->get('layout', 'default'));

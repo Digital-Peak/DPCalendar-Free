@@ -12,6 +12,8 @@ if (!$price) {
 	$price = '0';
 }
 
+$price = number_format($price, 2);
+
 $currency = DPCalendarHelper::getComponentParameter('currency_symbol', '$');
 
 if (key_exists('currency', $displayData) && $displayData['currency']) {

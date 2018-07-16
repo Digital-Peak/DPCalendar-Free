@@ -2,18 +2,21 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>May 2018</creationDate>
+	<creationDate>Jun 2018</creationDate>
 	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>6.3.7</version>
+	<version>7.0.0</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
 		<folder>tmpl</folder>
 		<folder>language</folder>
 	</files>
+	<media destination="mod_dpcalendar_mini" folder="media">
+		<folder>css</folder>
+	</media>
 	<config>
 		<fields name="params"
 		        addfieldpath="/administrator/components/com_dpcalendar/models/fields"
@@ -23,18 +26,18 @@
 				       description="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_DESC"
 				       extension="com_dpcalendar" label="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_LABEL"
 				       required="true"/>
-				<field name="event_color" type="dpcolor" default="135CAE" label="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_LABEL"
-				       description="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_DESC" size="6"/>
 				<field name="compact_events" type="list" default="2"
 				       label="MOD_DPCALENDAR_MINI_FIELD_COMPACT_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_COMPACT_DESC">
 					<option value="1">JYES</option>
 					<option value="2">MOD_DPCALENDAR_MINI_FIELD_COMPACT_SINGLE</option>
 					<option value="0">JNO</option>
 				</field>
-				<field name="open_view" type="list" default="agendaDay"
+				<field name="event_color" type="dpcolor" default="135CAE" showon="compact_events:1" size="6"
+				       label="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_DESC"/>
+				<field name="open_view" type="list" default="agendaDay" showon="compact_events:1"
 				       label="MOD_DPCALENDAR_MINI_FIELD_OPENVIEW_LABEL"
-				       description="MOD_DPCALENDAR_MINI_FIELD_OPENVIEW_DESC"
-				       showon="compact_events:1">
+				       description="MOD_DPCALENDAR_MINI_FIELD_OPENVIEW_DESC">
 					<option value="month">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_MONTH</option>
 					<option value="agendaWeek">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_WEEK</option>
 					<option value="agendaDay">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_DAY</option>

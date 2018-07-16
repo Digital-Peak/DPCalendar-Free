@@ -1,0 +1,407 @@
+.com-dpcalendar-bookingform .dp-button-bar {
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-bookingform .dp-button {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid #c0c0c0;
+	border-radius: 0.1rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	padding: 0 10px;
+	margin: 3px 0;
+	font-size: .7rem;
+	line-height: 1.5rem;
+	color: #212529;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-bookingform .dp-button:disabled,
+.com-dpcalendar-bookingform .dp-button[disabled] {
+	background-color: #cccccc;
+	color: #666666;
+}
+
+.com-dpcalendar-bookingform .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
+}
+
+.com-dpcalendar-bookingform .dp-control {
+	overflow: auto;
+}
+
+.com-dpcalendar-bookingform .dp-control__label, .com-dpcalendar-bookingform .control-label {
+	float: left;
+	width: 160px;
+	padding-top: 5px;
+	text-align: left;
+}
+
+.com-dpcalendar-bookingform .dp-control__input, .com-dpcalendar-bookingform .controls {
+	margin-left: 180px;
+}
+
+@media screen and (max-width: 640px) {
+	.com-dpcalendar-bookingform .dp-control__label, .com-dpcalendar-bookingform .control-label, .com-dpcalendar-bookingform .dp-control__input, .com-dpcalendar-bookingform .controls {
+		width: 100%;
+		margin-left: 0;
+	}
+	.com-dpcalendar-bookingform .control-group control-label, .com-dpcalendar-bookingform .control-group controls {
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
+.com-dpcalendar-bookingform .dp-form-input {
+	width: 100%;
+	min-height: 28px;
+	-webkit-box-sizing: border-box;
+	/* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;
+	/* Firefox, other Gecko */
+	box-sizing: border-box;
+	/* Opera/IE 8+ */
+}
+
+.com-dpcalendar-bookingform .dp-table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	empty-cells: show;
+	border: 1px solid #cbcbcb;
+	width: 100%;
+}
+
+.com-dpcalendar-bookingform .dp-table caption {
+	color: #000;
+	padding: 1em 0;
+	text-align: center;
+}
+
+.com-dpcalendar-bookingform .dp-table td,
+.com-dpcalendar-bookingform .dp-table th {
+	border-left: 1px solid #cbcbcb;
+	border-width: 0 0 0 1px;
+	font-size: inherit;
+	margin: 0;
+	overflow: visible;
+	padding: 0.4em 1em;
+	text-align: center;
+}
+
+.com-dpcalendar-bookingform .dp-table td:first-child,
+.com-dpcalendar-bookingform .dp-table th:first-child {
+	border-left-width: 0;
+}
+
+.com-dpcalendar-bookingform .dp-table thead {
+	text-align: left;
+	vertical-align: bottom;
+}
+
+.com-dpcalendar-bookingform .dp-table td {
+	background-color: transparent;
+}
+
+.com-dpcalendar-bookingform .dp-table .dp-cell-price {
+	text-align: right;
+}
+
+.com-dpcalendar-bookingform .dp-table-odd td {
+	background-color: #f2f2f2;
+}
+
+.com-dpcalendar-bookingform .dp-table tr:nth-child(2n-1) td {
+	background-color: #f2f2f2;
+}
+
+.com-dpcalendar-bookingform .dp-table td,
+.com-dpcalendar-bookingform .dp-table th {
+	border-bottom: 1px solid #cbcbcb;
+}
+
+.com-dpcalendar-bookingform .dp-table tbody > tr:last-child {
+	border-bottom-width: 0;
+}
+
+@media screen and (max-width: 767px) {
+	.com-dpcalendar-bookingform .dp-table,
+	.com-dpcalendar-bookingform .dp-table thead,
+	.com-dpcalendar-bookingform .dp-table tbody,
+	.com-dpcalendar-bookingform .dp-table th,
+	.com-dpcalendar-bookingform .dp-table td,
+	.com-dpcalendar-bookingform .dp-table tr {
+		display: block;
+	}
+	.com-dpcalendar-bookingform .dp-table thead {
+		display: none;
+	}
+	.com-dpcalendar-bookingform .dp-table tr {
+		margin: 0;
+		padding: 0;
+		border: 0;
+	}
+	.com-dpcalendar-bookingform .dp-table td {
+		border: none;
+		position: relative;
+		padding-left: 50%;
+		text-align: left;
+	}
+	.com-dpcalendar-bookingform .dp-table td:before {
+		content: attr(data-column);
+		position: absolute;
+		left: 10px;
+		padding-right: 10px;
+		font-weight: bold;
+	}
+	.com-dpcalendar-bookingform .dp-table td,
+	.com-dpcalendar-bookingform .dp-table th {
+		box-sizing: border-box;
+		border-bottom: 0;
+		text-align: left !important;
+	}
+	.com-dpcalendar-bookingform .dp-table td > div,
+	.com-dpcalendar-bookingform .dp-table th > div {
+		text-align: left;
+	}
+}
+
+.com-dpcalendar-bookingform .dp-loader {
+	position: relative;
+	width: 100%;
+	height: 0;
+}
+
+.com-dpcalendar-bookingform .dp-loader::before {
+	content: '';
+	position: absolute;
+	right: 100%;
+	left: 0;
+	bottom: 2px;
+	z-index: 10;
+	height: 4px;
+	background-color: #2d9ede;
+	animation: 12s 0s normal none 1 running calendarLoader;
+	animation-fill-mode: forwards;
+	animation-timing-function: cubix-bezier(0, 1, 0, 1);
+}
+
+.com-dpcalendar-bookingform .dp-loader_hidden::before {
+	display: none;
+}
+
+@keyframes calendarLoader {
+	0% {
+		right: 100%;
+	}
+	50% {
+		right: 6%;
+		animation-timing-function: linear;
+	}
+	100% {
+		right: 5%;
+	}
+}
+
+.com-dpcalendar-bookingform .dp-info-box {
+	padding: 8px 35px 8px 14px;
+	margin-bottom: 18px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	color: #c09853;
+	background-color: #fcf8e3;
+	border: 1px solid #fbeed5;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.com-dpcalendar-bookingform .dp-info-box_success {
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	color: #3c763d;
+}
+
+.com-dpcalendar-bookingform .dp-info-box_error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio.radio {
+	padding-left: 0px;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio label {
+	padding-right: 10px;
+	border-radius: 3px;
+	border: 1px solid #D1D3D4;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty {
+	display: none;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty + label {
+	position: relative;
+	float: left;
+	line-height: 2em;
+	text-indent: 3em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	margin-right: 5px;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty + label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:hover:not(:checked) + label:before {
+	content: '\2714';
+	text-indent: .9em;
+	color: #C2C2C2;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:hover:not(:checked) + label {
+	color: #888;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:checked + label:before {
+	content: '\2714';
+	text-indent: .9em;
+	color: #9CE2AE;
+	background-color: #4DCB6D;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:checked + label {
+	color: #777;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:focus ~ label:before {
+	box-shadow: 0 0 0 3px #999;
+}
+
+.com-dpcalendar-bookingform .dp-timezone {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-bookingform .dp-timezone__label {
+	font-weight: bold;
+}
+
+.com-dpcalendar-bookingform .dp-timezone__select {
+	max-width: 200px;
+}
+
+.com-dpcalendar-bookingform__payment-options {
+	display: none;
+	padding: 10px 0;
+}
+
+.com-dpcalendar-bookingform .dp-payment-option {
+	padding: 10px 30px 10px 30px;
+	border: 2px solid #EEE;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-bookingform .dp-payment-option:hover {
+	background-color: #dff0d8;
+	cursor: pointer;
+}
+
+.com-dpcalendar-bookingform .dp-payment-option__input {
+	display: none;
+}
+
+.com-dpcalendar-bookingform .dp-events-list {
+	max-height: 500px;
+	overflow: auto;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-bookingform .dp-events-list .dp-table thead {
+	background-color: #2D9EDE;
+	color: #000000;
+}
+
+.com-dpcalendar-bookingform .dp-events-list .dp-table td, .com-dpcalendar-bookingform .dp-events-list .dp-table th {
+	border-left-width: 0 !important;
+}
+
+.com-dpcalendar-bookingform .dp-event_instance {
+	display: none;
+}
+
+.com-dpcalendar-bookingform .dp-ticket td,
+.com-dpcalendar-bookingform .dp-option td {
+	white-space: nowrap;
+}
+
+.com-dpcalendar-bookingform .dp-ticket__amount select,
+.com-dpcalendar-bookingform .dp-option__amount select {
+	max-width: 50px;
+}
+
+.com-dpcalendar-bookingform .dp-ticket__title,
+.com-dpcalendar-bookingform .dp-option__title {
+	width: 100%;
+	text-align: left !important;
+}
+
+.com-dpcalendar-bookingform .dp-ticket__price, .com-dpcalendar-bookingform .dp-ticket__calculated-price,
+.com-dpcalendar-bookingform .dp-option__price,
+.com-dpcalendar-bookingform .dp-option__calculated-price {
+	text-align: right !important;
+}
+
+.com-dpcalendar-bookingform .dp-ticket__price-info,
+.com-dpcalendar-bookingform .dp-option__price-info {
+	cursor: pointer;
+}
+
+.com-dpcalendar-bookingform .dp-price__live {
+	text-align: right;
+}
+
+.com-dpcalendar-bookingform .dp-price__original {
+	text-decoration: line-through;
+	text-align: right;
+}
+
+.com-dpcalendar-bookingform .dp-price_hidden {
+	display: none;
+}
+
+.com-dpcalendar-bookingform .dp-price-total {
+	text-align: right;
+	font-weight: bold;
+	border-top: 1px solid #EEE;
+	border-bottom: 1px solid #EEE;
+	padding: 10px 0px 10px 0px;
+	margin: 10px 0px 10px 0px;
+	width: 100%;
+}
+
+/*# sourceMappingURL=default.css.map */

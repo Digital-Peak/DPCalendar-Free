@@ -70,6 +70,10 @@ class DPCalendarModelLocation extends JModelAdmin
 			$form->removeField('captcha');
 		}
 
+		if (JFactory::getApplication()->isClient('site')) {
+			$form->setFieldAttribute('id', 'type', 'hidden');
+		}
+
 		$this->modifyField($form, 'country');
 		$this->modifyField($form, 'province');
 		$this->modifyField($form, 'city');

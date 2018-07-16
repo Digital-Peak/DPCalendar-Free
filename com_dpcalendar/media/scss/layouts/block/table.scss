@@ -1,0 +1,106 @@
+// Credits to purecss [https://purecss.io]
+.dp-table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	empty-cells: show;
+	border: 1px solid #cbcbcb;
+	width: 100%;
+
+	& caption {
+		color: #000;
+		padding: 1em 0;
+		text-align: center;
+	}
+
+	& td,
+	& th {
+		border-left: 1px solid #cbcbcb;
+		border-width: 0 0 0 1px;
+		font-size: inherit;
+		margin: 0;
+		overflow: visible;
+		padding: 0.4em 1em;
+		text-align: center;
+	}
+
+	& td:first-child,
+	& th:first-child {
+		border-left-width: 0;
+	}
+
+	& thead {
+		text-align: left;
+		vertical-align: bottom;
+	}
+
+	& td {
+		background-color: transparent;
+	}
+
+	& .dp-cell-price {
+		text-align: right;
+	}
+
+	&-odd td {
+		background-color: #f2f2f2;
+	}
+
+	& tr:nth-child(2n-1) td {
+		background-color: #f2f2f2;
+	}
+
+	& td, & th {
+		border-bottom: 1px solid #cbcbcb;
+	}
+
+	& tbody > tr:last-child {
+		border-bottom-width: 0;
+	}
+
+	@media screen and (max-width: 767px) {
+		&,
+		thead,
+		tbody,
+		th,
+		td,
+		tr {
+			display: block;
+		}
+
+		thead {
+			display: none;
+		}
+
+		tr {
+			margin: 0;
+			padding: 0;
+			border: 0;
+		}
+
+		td {
+			border: none;
+			position: relative;
+			padding-left: 50%;
+			text-align: left;
+		}
+
+		td:before {
+			content: attr(data-column);
+			position: absolute;
+			left: 10px;
+			padding-right: 10px;
+			font-weight: bold;
+		}
+
+		td,
+		th {
+			box-sizing: border-box;
+			border-bottom: 0;
+			text-align: left !important;
+
+			> div {
+				text-align: left;
+			}
+		}
+	}
+}

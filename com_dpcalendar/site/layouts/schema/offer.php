@@ -7,61 +7,27 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Basic\Meta;
-
-// The locations to display
-$event = $displayData['event'];
-if (!$event || !$event->price) {
+if (!is_array($displayData['event']->price) || empty($displayData['event']->price)) {
 	return;
 }
 
-$currency = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('currency', 'USD');
-
-// Set up the root container
-$root = $displayData['root']->addChild(
-	new Container('schema-offer',
-		array(),
-		array(
-			'itemscope' => 'itemscope',
-			'itemtype'  => 'https://schema.org/AggregateOffer',
-			'itemprop'  => 'offers'
-		)
-	)
-);
-
-foreach ($event->price->value as $key => $value) {
-	$label = $event->price->label[$key];
-	$desc  = $event->price->description[$key];
-
-	// Add the container for the location details
-	$c = $root->addChild(
-		new Container(
-			'offer',
-			array(),
-			array(
-				'itemscope' => 'itemscope',
-				'itemtype'  => 'https://schema.org/Offer',
-				'itemprop'  => 'offers'
-			)
-		)
-	);
-
-	$c->addChild(new Meta('price', 'price', $value));
-	$c->addChild(new Meta('price-currency', 'priceCurrency', $currency));
-	$c->addChild(new Meta('valid', 'validFrom', \DPCalendar\Helper\DPCalendarHelper::getDate($event->created)->format('c')));
-	if ($label) {
-		$c->addChild(new Meta('name', 'name', $label));
-	}
-	if ($desc) {
-		$c->addChild(new Meta('description', 'description', $desc));
-	}
-	$c->addChild(
-		new Meta(
-			'availability',
-			'availability',
-			JText::_('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . $event->capacity
-		)
-	);
-	$c->addChild(new Meta('url', 'url', DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true)));
-}
+$currency = $displayData['params']->get('currency', 'USD');
+?>
+<div itemprop="offers" itemtype="https://schema.org/AggregateOffer" itemscope>
+	<?php foreach ($displayData['event']->price->value as $key => $value) { ?>
+		<div itemprop="offers" itemtype="https://schema.org/Offer" itemscope>
+			<meta itemprop="price" content="<?php echo $value; ?>">
+			<meta itemprop="priceCurrency" content="<?php echo $currency; ?>">
+			<meta itemprop="validFrom" content="<?php echo $displayData['dateHelper']->getDate($event->created)->format('c'); ?>">
+			<?php if ($event->price->label[$key]) { ?>
+				<meta itemprop="name" content="<?php echo $event->price->label[$key]; ?>">
+			<?php } ?>
+			<?php if ($event->price->description[$key]) { ?>
+				<meta itemprop="description" content="<?php echo strip_tags($event->price->description[$key]); ?>">
+			<?php } ?>
+			<meta itemprop="availability"
+			      content="<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . $event->capacity; ?>">
+			<meta itemprop="url" content="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid, true, true); ?>">
+		</div>
+	<?php } ?>
+</div>

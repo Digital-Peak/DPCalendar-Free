@@ -225,22 +225,27 @@ class DPCalendarModelProfile extends JModelList
 		return $model->getItems();
 	}
 
-	public function change($action, $id, $type)
+	public function setUsers($users, $type)
 	{
 		$db = JFactory::getDbo();
 
-		$type == 'read' ? 'read' : 'write';
-		if ($action == 'add') {
-			$query = 'insert into #__dpcalendar_caldav_groupmembers (member_id, principal_id)
-					select ' . (int)$id . ' as member_id, id as principal_id from #__dpcalendar_caldav_principals
-							where uri=' . $db->quote('principals/' . JFactory::getUser()->username . '/calendar-proxy-' . $type);
-		} else {
-			$query = 'delete from #__dpcalendar_caldav_groupmembers
-					where member_id = ' . (int)$id . ' and principal_id = (select id from #__dpcalendar_caldav_principals
+		$query = 'delete from #__dpcalendar_caldav_groupmembers
+					where principal_id = (select id from #__dpcalendar_caldav_principals
 							where uri=' . $db->quote('principals/' . JFactory::getUser()->username . '/calendar-proxy-' . $type) . ')';
-		}
 		$db->setQuery($query);
+		$db->execute();
 
-		return $db->execute();
+		$type == 'read' ? 'read' : 'write';
+		foreach ($users as $user) {
+			if (!$user) {
+				continue;
+			}
+
+			$query = 'insert into #__dpcalendar_caldav_groupmembers (member_id, principal_id)
+					select ' . (int)$user . ' as member_id, id as principal_id from #__dpcalendar_caldav_principals
+							where uri=' . $db->quote('principals/' . JFactory::getUser()->username . '/calendar-proxy-' . $type);
+			$db->setQuery($query);
+			$db->execute();
+		}
 	}
 }

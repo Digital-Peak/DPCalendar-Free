@@ -209,36 +209,7 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 
 	public function prepareForm($eventId, $calendarId, $form, $data)
 	{
-		$form->removeField('alias');
-		$form->removeField('state');
-		$form->removeField('publish_up');
-		$form->removeField('publish_down');
-		$form->removeField('access');
-		$form->removeField('featured');
-		$form->removeField('access_content');
-		$form->removeField('language');
-		$form->removeField('location_ids');
-		$form->removeField('metadesc');
-		$form->removeField('metakey');
-		$form->removeField('price');
-		$form->removeField('earlybird');
-
-		$form->setField(
-			new SimpleXMLElement(
-				'
-				<field
-				name="location"
-				type="text"
-				description="' . JText::_('PLG_SYSTEM_DPCALENDAR_DAV_FIELD_LOCATION_DESC') . '"
-				translate_description="false"
-				label="' . JText::_('PLG_SYSTEM_DPCALENDAR_DAV_FIELD_LOCATION_LABEL') . '"
-				translate_label="false"
-				size="40"
-				filter="safeHtml"
-				/>'));
-		if (isset($data->locations)) {
-			$form->setValue('location', null, \DPCalendar\Helper\Location::format($data->locations));
-		}
+		$this->cleanupFormForEdit($form, $data);
 
 		return true;
 	}

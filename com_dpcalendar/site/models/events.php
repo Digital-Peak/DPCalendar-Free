@@ -106,7 +106,7 @@ class DPCalendarModelEvents extends JModelList
 			}
 		} else {
 			$items = parent::getItems();
-			if ($items) {
+			if ($items && $this->getState('list.ordering', 'a.start_date') == 'a.start_date') {
 				usort($items, array($this, "compareEvent"));
 			}
 		}
@@ -155,6 +155,14 @@ class DPCalendarModelEvents extends JModelList
 			if (is_string($item->price)) {
 				$item->price = json_decode($item->price);
 			}
+
+			if (is_string($item->booking_options)) {
+				$item->booking_options = json_decode($item->booking_options);
+			}
+
+			$item->booking_options = $item->booking_options ?: null;
+
+			\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
 
 			// Implement View Level Access
 			if (!JFactory::getUser()->authorise('core.admin', 'com_dpcalendar')
@@ -306,7 +314,7 @@ class DPCalendarModelEvents extends JModelList
 				$query->where('a.id in (' . implode(',', $ids) . ')');
 			} else {
 				// Immitating simple boolean search
-				$searchColumns = array(
+				$searchColumns = $this->getState('filter.search.columns', array(
 					'v.title',
 					'CONCAT_WS(v.`country`,",",v.`province`,",",v.`city`,",",v.`zip`,",",v.`street`)',
 					'a.title',
@@ -314,16 +322,19 @@ class DPCalendarModelEvents extends JModelList
 					'a.description',
 					'a.metakey',
 					'a.metadesc'
-				);
+				));
 
-				// Search in custom fields
-				// Join over Fields.
-				$query->join('LEFT', '#__fields_values AS jf ON jf.item_id = ' . $query->castAsChar('a.id'))
-					->join('LEFT', '#__fields AS f ON f.id = jf.field_id')
-					->where('(f.context IS NULL OR f.context = ' . $db->q('com_dpcalendar.event') . ')')
-					->where('(f.state IS NULL OR f.state = 1)')
-					->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
-				$searchColumns[] = 'jf.value';
+				// Only add custom fields when there is default search
+				if (!$this->getState('filter.search.columns')) {
+					// Search in custom fields
+					// Join over Fields.
+					$query->join('LEFT', '#__fields_values AS jf ON jf.item_id = ' . $query->castAsChar('a.id'))
+						->join('LEFT', '#__fields AS f ON f.id = jf.field_id')
+						->where('(f.context IS NULL OR f.context = ' . $db->q('com_dpcalendar.event') . ')')
+						->where('(f.state IS NULL OR f.state = 1)')
+						->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
+					$searchColumns[] = 'jf.value';
+				}
 
 				// Creating the search terms
 				$searchTerms = explode(' ', \Joomla\String\StringHelper::strtolower($searchString));

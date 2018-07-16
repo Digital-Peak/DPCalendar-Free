@@ -143,56 +143,15 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$form->setFieldAttribute('end_date', 'min_time', $params->get('event_form_min_time'));
 		$form->setFieldAttribute('end_date', 'max_time', $params->get('event_form_max_time'));
 
-		if (!JFactory::getUser()->authorise('core.admin', 'com_dpcalendar')) {
-			// Remove fields depending on the params
-			if ($params->get('event_form_change_calid', '1') != '1') {
-				$form->setFieldAttribute('catid', 'readonly', 'readonly');
-			}
-			if ($params->get('event_form_change_color', '1') != '1') {
-				$form->removeField('color');
-			}
-			if ($params->get('event_form_change_url', '1') != '1') {
-				$form->removeField('url');
-			}
-			if ($params->get('event_form_change_images', '1') != '1') {
-				$form->removeGroup('images');
-			}
-			if ($params->get('event_form_change_description', '1') != '1') {
-				$form->removeField('description');
-			}
-			if ($params->get('event_form_change_capacity', '1') != '1') {
-				$form->removeField('capacity');
-			}
-			if ($params->get('event_form_change_capacity_used', '1') != '1') {
-				$form->removeField('capacity_used');
-			}
-			if ($params->get('event_form_change_max_tickets', '1') != '1') {
-				$form->removeField('max_tickets');
-			}
-			if ($params->get('event_form_change_price', '1') != '1') {
-				$form->removeField('price');
+		if ($colors = $params->get('event_form_color_options')) {
+			$form->setFieldAttribute('color', 'control', 'simple');
 
-				// We need to do it a second time because of the booking form
-				$form->removeField('price');
-			}
-			if ($params->get('event_form_change_payment', '1') != '1') {
-				$form->removeField('plugintype');
-			}
-			if ($params->get('event_form_change_access', '1') != '1') {
-				$form->removeField('access');
-			}
-			if ($params->get('event_form_change_access_content', '1') != '1') {
-				$form->removeField('access_content');
-			}
-			if ($params->get('event_form_change_featured', '1') != '1') {
-				$form->removeField('featured');
+			$colorValues = '';
+			foreach ($colors as $color) {
+				$colorValues .= ',' . $color->color_option;
 			}
 
-			// Handle tabs
-			if ($params->get('event_form_change_location', '1') != '1') {
-				$form->removeField('location');
-				$form->removeField('location_ids');
-			}
+			$form->setFieldAttribute('color', 'colors', trim($colorValues, ','));
 		}
 
 		return $form;
@@ -462,7 +421,12 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['capacity'] = $this->getParams()->get('event_form_capacity');
 		}
 
-		// Only apply the default values on create
+
+		if (!empty($data['booking_options']) && is_array($data['booking_options'])) {
+			$data['booking_options'] = json_encode($data['booking_options']);
+		}
+
+			// Only apply the default values on create
 		if (empty($data['id'])) {
 			$data = array_merge($data, $this->getDefaultValues(new JObject($data)));
 		}
@@ -773,7 +737,7 @@ class DPCalendarModelAdminEventHandler extends JPlugin
 		if (key_exists('notify_changes', $data) && $data['notify_changes']) {
 			$tickets = $this->model->getTickets($event->id);
 			foreach ($tickets as $ticket) {
-				$subject = DPCalendarHelper::renderEvents(array($event), JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT'));
+				$subject = DPCalendarHelper::renderEvents(array($event), JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
 
 				$body = DPCalendarHelper::renderEvents(
 					array($event),

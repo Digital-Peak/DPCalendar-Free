@@ -7,8 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\IconStrategy\Joomla;
-
 JLoader::import('joomla.application.component.view');
 JLoader::import('libraries.dpcalendar.fullcalendar', JPATH_COMPONENT);
 

@@ -1,0 +1,26 @@
+.com-dpcalendar-list {
+	@import "_form";
+	@import "_events";
+	@import "../../misc/print";
+	@import "../../layouts/event/tooltip";
+	@import "../../layouts/block/figure";
+	@import "../../layouts/block/button";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/list";
+	@import "../../layouts/block/timezone";
+	@import "../../layouts/block/autocomplete";
+
+	&__map {
+		margin-bottom: 10px;
+		.dp-icon {
+			color: #000;
+		}
+	}
+
+	.dp-event {
+		&__title {
+			position: relative;
+			margin: 0 0 10px 0;
+		}
+	}
+}

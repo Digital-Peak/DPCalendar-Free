@@ -127,7 +127,7 @@ class DPCalendarTableEvent extends JTable
 
 			$tagsChanged = !isset($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
-			if ($hardReset || $this->price != $table->price) {
+			if ($hardReset || $this->price != $table->price || $this->booking_options != $table->booking_options) {
 				// Check for tickets
 				$db    = JFactory::getDbo();
 				$query = $db->getQuery(true);
@@ -400,6 +400,10 @@ class DPCalendarTableEvent extends JTable
 		}
 		if (empty($this->publish_down)) {
 			$this->publish_down = $this->getDbo()->getNullDate();
+		}
+
+		if ($this->color) {
+			$this->color = str_replace('#', '', $this->color);
 		}
 
 		return true;

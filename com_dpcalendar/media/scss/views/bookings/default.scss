@@ -1,0 +1,23 @@
+.com-dpcalendar-bookings {
+	.dp-buttons {
+		float: left;
+	}
+
+	.dp-form {
+		float: right;
+	}
+
+	.dp-pagination {
+		&__counter,
+		&__links {
+			float: left;
+			margin-right: 5px;
+		}
+	}
+
+	@import "../../misc/print";
+	@import "../../layouts/block/button";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/table";
+	@import "../../layouts/block/timezone";
+}

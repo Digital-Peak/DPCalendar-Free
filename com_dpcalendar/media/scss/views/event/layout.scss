@@ -1,0 +1,63 @@
+& {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+}
+
+&__header {
+	grid-column: 1 / 4;
+	grid-row: 1 / 2;
+}
+
+&__image {
+	grid-column: 1 / 3;
+	grid-row: 2 / 3;
+}
+
+&__information {
+	grid-column: 3 / 4;
+	grid-row: 2 / 3;
+	.com-dpcalendar-event:not(.has-image) & {
+		grid-column: 1 / 4;
+	}
+}
+
+&__actions {
+	grid-column: 1 / 3;
+	grid-row: 3 / 4;
+	.com-dpcalendar-event:not(.has-cta) & {
+		grid-column: 1 / 4;
+	}
+}
+
+&__cta {
+	grid-column: 3 / 4;
+	grid-row: 3 / 4;
+	.com-dpcalendar-event:not(.has-header) & {
+		grid-column: 1 / 4;
+	}
+}
+
+&__description {
+	grid-column: 1 / 3;
+	grid-row: 4 / 8;
+	.com-dpcalendar-event:not(.has-bookings):not(.has-tickets):not(.has-locations) & {
+		grid-column: 1 / 4;
+	}
+}
+
+&__booking,
+&__tags-text,
+&__locations {
+	grid-column: 3 / 4;
+	padding-top: 2.5rem;
+}
+
+&__booking {
+	grid-row: 4 / 5;
+}
+
+&__tickets,
+&__custom-text,
+&__comments {
+	grid-column: 1 / 4;
+}

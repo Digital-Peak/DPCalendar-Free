@@ -1,0 +1,13 @@
+.dp-timezone {
+	margin-top: auto;
+	margin-bottom: auto;
+	margin-bottom: 10px;
+
+	&__label {
+		font-weight: bold;
+	}
+
+	&__select {
+		max-width: 200px;
+	}
+}

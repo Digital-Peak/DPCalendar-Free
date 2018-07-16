@@ -1,0 +1,26 @@
+.com-dpcalendar-blog {
+	@import "_form";
+	@import "_events";
+	@import "../../misc/print";
+	@import "../../layouts/event/tooltip";
+	@import "../../layouts/block/figure";
+	@import "../../layouts/block/button";
+	@import "../../layouts/block/icon";
+	@import "../../layouts/block/timezone";
+	@import "../../layouts/block/autocomplete";
+
+	&__map {
+		margin-bottom: 10px;
+		.dp-icon {
+			color: #000;
+		}
+	}
+
+	&__event {
+		margin: 30px 0 30px 0;
+	}
+
+	.dp-event__description {
+		border-bottom: 1px solid rgba(0, 0, 0, .2);
+	}
+}

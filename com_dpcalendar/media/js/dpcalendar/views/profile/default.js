@@ -1,20 +1,32 @@
-jQuery(document).ready(function () {
-    jQuery('#dp-profile-form-read-users, #dp-profile-form-write-users').chosen({
-        placeholder_text_multiple: Joomla.JText._('COM_DPCALENDAR_VIEW_DAVCALENDAR_NONE_SELECTED_LABEL')
-    }).change(function (event, obj) {
-        var data = obj;
-        data['action'] = jQuery(event.target).attr('id') == 'dp-profile-form-write-users' ? 'write' : 'read';
-        data[jQuery('#dp-profile-form input[name="token"]').val()] = 1;
-        jQuery.ajax({
-            type: 'post',
-            url: 'index.php?option=com_dpcalendar&view=profile&task=profile.change',
-            data: data,
-            success: function (response) {
-            }
-        });
-    });
+(function (document, Joomla, SlimSelect) {
+	'use strict';
 
-    jQuery('.dp-profile-delete-action').click(function(e){
-	    return confirm(Joomla.JText._('COM_DPCALENDAR_CONFIRM_DELETE'));
-    });
-});
+	document.addEventListener('DOMContentLoaded', function () {
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-profile__share .dp-select')).forEach(function (select) {
+			var slim = new SlimSelect({select: select, placeholder: Joomla.JText._('COM_DPCALENDAR_VIEW_DAVCALENDAR_NONE_SELECTED_LABEL')});
+
+			select.addEventListener('change', function (event) {
+				var data = 'action=' + event.target.name.replace('-users', '') + '&' + event.target.getAttribute('data-token') + '=1&users=';
+				slim.selected().forEach(function (option) {
+					data += option + ',';
+				});
+
+				DPCalendar.request(
+					'index.php?option=com_dpcalendar&view=profile&task=profile.change',
+					function (response) {
+					},
+					data
+				);
+			});
+		});
+
+		document.querySelector('.dp-davcalendar__delete').addEventListener('click', function (e) {
+			if (confirm(Joomla.JText._('COM_DPCALENDAR_CONFIRM_DELETE'))) {
+				return true;
+			}
+
+			e.preventDefault();
+			return false;
+		});
+	});
+}(document, Joomla, SlimSelect));

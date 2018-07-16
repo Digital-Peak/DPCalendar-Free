@@ -7,28 +7,15 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Link;
-use CCL\Content\Element\Basic\Heading;
-
-// Global variables
-$event = $this->event;
-
-// The title to display
-$title = $event->title;
-
-// The heading of the page
-$h = $this->root->addChild(new Heading('event-header', 2, array('dpcalendar-heading')));
-$h->setProtectedClass('dpcalendar-heading');
-
-if ($this->input->get('tmpl') == 'component') {
-	$url = DPCalendarHelperRoute::getEventRoute($event->id, $event->catid);
-
-	// When we are shown in a modal dialog, make the title clickable
-	$link = new Link('link', str_replace(array('?tmpl=component', 'tmpl=component'), '', $url), '_parent');
-	$link->setContent($title);
-
-	$h->addChild($link);
-} else {
-	// Add the title
-	$h->setContent($title);
-}
+$url = str_replace(['?tmpl=component', 'tmpl=component'], '', $this->router->getEventRoute($this->event->id, $this->event->catid));
+?>
+<h3 class="com-dpcalendar-event__title dp-heading">
+	<?php if ($this->input->get('tmpl') == 'component') { ?>
+		<a href="<?php echo $url; ?>" class="com-dpcalendar-event__link" target="_parent"><?php echo $this->event->title; ?></a>
+	<?php } else { ?>
+		<?php echo $this->event->title; ?>
+	<?php } ?>
+</h3>
+<div class="com-dpcalendar-event__event-text">
+	<?php echo $this->event->displayEvent->afterDisplayTitle; ?>
+</div>

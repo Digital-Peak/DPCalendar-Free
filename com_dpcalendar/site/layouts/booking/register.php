@@ -7,10 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Component\Alert;
-use CCL\Content\Element\Basic\Element;
-use CCL\Content\Element\Basic\Container;
-
 // The booking
 $booking = $displayData['booking'];
 if (!$booking) {
@@ -29,9 +25,6 @@ if (!$params) {
 	$params = clone JComponentHelper::getParams('com_dpcalendar');
 }
 
-/** @var Container $root * */
-$root = $displayData['root'];
-
 // Check if we can register
 if (!JFactory::getUser()->guest
 	|| JComponentHelper::getParams('com_users')->get('allowUserRegistration') == 0
@@ -41,9 +34,6 @@ if (!JFactory::getUser()->guest
 
 // Load the language
 JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-
-// Add the information alert
-$root->addChild(new Alert('register-information', Alert::SUCCESS))->setContent(JText::_('COM_DPCALENDAR_LAYOUT_BOOKING_REGISTER_INFORMATION'));
 
 // Some styling
 JFactory::getDocument()->addStyleDeclaration(
@@ -81,11 +71,10 @@ JForm::addFieldPath($com . '/models/fields');
 
 // Load the language file
 JFactory::getLanguage()->load('com_users', JPATH_SITE);
-
-// And finally render the view!
-ob_start();
-$cont->display();
-$output = ob_get_contents();
-ob_end_clean();
-
-$root->addChild(new Element('register-container'))->setContent($output);
+?>
+<div class="dp-registration">
+	<div class="dp-info-box">
+		<?php echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_BOOKING_REGISTER_INFORMATION'); ?>
+	</div>
+	<div class="dp-registration__form"><?php $cont->display(); ?></div>
+</div>

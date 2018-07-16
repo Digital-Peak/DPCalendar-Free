@@ -7,14 +7,10 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Container;
-
-// Check if we have all the data
 if (!key_exists('item', $displayData) || !key_exists('context', $displayData)) {
 	return;
 }
 
-// Setting up for display
 $item = $displayData['item'];
 
 if (!$item) {
@@ -47,27 +43,15 @@ if (key_exists('fields', $displayData)) {
 if (!$fields) {
 	return;
 }
-
-$c = new Container('fields', array(), array('ccl-prefix' => 'fields'));
-
-// Loop through the fields and print them
-foreach ($fields as $field) {
-	// If the value is empty do nothing
-	if (!isset($field->value) || $field->value == '') {
-		continue;
-	}
-
-	DPCalendarHelper::renderLayout(
-		'content.dl',
-		array(
-			'root'    => $c,
-			'id'      => 'field-' . $field->id,
-			'label'   => $field->params->get('showlabel') ? $field->label : '',
-			'content' => $field->value
-		)
-	);
-}
-
-foreach ($c->getChildren() as $child) {
-	echo DPCalendarHelper::renderElement($child);
-}
+?>
+<div class="dp-fields">
+	<?php foreach ($fields as $field) { ?>
+		<?php if (!isset($field->value) || $field->value == '') { ?>
+			<?php continue; ?>
+		<?php } ?>
+		<dl class="dp-description">
+			<dt class="dp-description__label"><?php echo $field->params->get('showlabel') ? $field->label : ''; ?></dt>
+			<dd class="dp-description__description"><?php echo $field->value; ?></dd>
+		</dl>
+	<?php } ?>
+</div>

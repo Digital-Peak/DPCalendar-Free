@@ -7,33 +7,10 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Meta;
-
-// The locations to display
-$event = $displayData['event'];
-if (!$event || empty($event->images)) {
-	return;
-}
-
-// The images of the event
-$images = json_decode($event->images);
-if (!$images) {
-	// Nothing to set up
-	return;
-}
-
-for ($i = 1; $i <= 3; $i++) {
-	if (!isset($images->{'image' . $i})) {
-		// Image is empty, nothing todo
-		continue;
-	}
-
-	// Get the image path
-	$imagePath = $images->{'image' . $i};
-	if (!$imagePath) {
-		continue;
-	}
-
-	// Set up the root container
-	$displayData['root']->addChild(new Meta('image-' . $i, 'image', trim(JUri::base(), '/') . '/' . $imagePath));
-}
+?>
+<?php if (!empty($displayData['event']->images->image_intro)) { ?>
+	<meta itemprop="image" content="<?php echo trim(JUri::base(), '/') . '/' . $displayData['event']->images->image_intro; ?>">
+<?php } ?>
+<?php if (!empty($displayData['event']->images->image_full)) { ?>
+	<meta itemprop="image" content="<?php echo trim(JUri::base(), '/') . '/' . $displayData['event']->images->image_full; ?>">
+<?php } ?>

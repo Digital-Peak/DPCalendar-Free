@@ -7,59 +7,54 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewExtcalendar extends JViewLegacy
+class DPCalendarViewExtcalendar extends \DPCalendar\View\BaseView
 {
-
 	protected $state;
-
 	protected $item;
-
 	protected $form;
 
-	public function display ($tpl = null)
+	public function init()
 	{
 		$this->state = $this->get('State');
-		$this->item = $this->get('Item');
-		$this->form = $this->get('Form');
+		$this->item  = $this->get('Item');
+		$this->form  = $this->get('Form');
 
-		if (count($errors = $this->get('Errors')))
-		{
-			JError::raiseError(500, implode("\n", $errors));
-			return false;
-		}
-
-		$this->addToolbar();
-		parent::display($tpl);
+		$this->form->removeField('alias');
+		$this->form->removeField('ordering');
+		$this->form->removeField('created');
+		$this->form->removeField('created_by');
+		$this->form->removeField('created_by_alias');
+		$this->form->removeField('modified');
+		$this->form->removeField('modified_by');
+		$this->form->removeField('publish_up');
+		$this->form->removeField('publish_down');
+		$this->form->removeField('version');
+		$this->form->removeField('asset_id');
+		$this->form->removeField('sync_date');
+		$this->form->removeField('sync_token');
 	}
 
-	protected function addToolbar ()
+	protected function addToolbar()
 	{
 		JFactory::getApplication()->input->set('hidemainmenu', true);
 
-		$user = JFactory::getUser();
-		$userId = $user->get('id');
+		$user  = JFactory::getUser();
 		$isNew = ($this->item->id == 0);
 		$canDo = DPCalendarHelper::getActions();
 
-		if ($canDo->get('core.edit'))
-		{
+		if ($canDo->get('core.edit')) {
 			JToolbarHelper::apply('extcalendar.apply');
 			JToolbarHelper::save('extcalendar.save');
 		}
-		if ($canDo->get('core.create'))
-		{
+		if ($canDo->get('core.create')) {
 			JToolbarHelper::save2new('extcalendar.save2new');
 		}
-		if (! $isNew && $canDo->get('core.create'))
-		{
+		if (!$isNew && $canDo->get('core.create')) {
 			JToolbarHelper::save2copy('extcalendar.save2copy');
 		}
-		if (empty($this->item->id))
-		{
+		if (empty($this->item->id)) {
 			JToolbarHelper::cancel('extcalendar.cancel');
-		}
-		else
-		{
+		} else {
 			JToolbarHelper::cancel('extcalendar.cancel', 'JTOOLBAR_CLOSE');
 		}
 

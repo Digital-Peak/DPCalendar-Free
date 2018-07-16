@@ -7,33 +7,63 @@
  */
 defined('_JEXEC') or die();
 
-use CCL\Content\Element\Basic\Container;
-use CCL\Content\Element\Basic\Heading;
-
-if (!$this->params->get('event_show_tickets', 0) || !isset($this->event->tickets) || !$this->event->tickets)
-{
-	// Return when no tickets are available or should not be shown
+if (!$this->params->get('event_show_tickets', 0) || !isset($this->event->tickets) || !$this->event->tickets) {
 	return;
 }
 
-// Set some parameters for the layout
-$this->params->set('display_list_event', false);
-$this->params->set('display_list_date', false);
+$format  = $this->params->get('event_date_format', 'm.d.Y') . ' ' . $this->params->get('event_time_format', 'g:i a');
+$limited = $this->params->get('event_show_tickets') == '2';
 
-/** @var Container $root **/
-$root = $this->root->addChild(new Container('container'));
-
-// The heading
-$h = $root->addChild(new Heading('heading', 3, array('dpcalendar-heading')));
-$h->setProtectedClass('dpcalendar-heading');
-$h->setContent(JText::_('COM_DPCALENDAR_VIEW_EVENT_TICKETS_LABEL'));
-
-// Fille the event container with the tickets list
-DPCalendarHelper::renderLayout(
-	'tickets.list',
-	array(
-		'tickets'      => $this->event->tickets,
-		'params'       => $this->params,
-		'root'         => $root
-	)
-);
+$hasPrice = false;
+foreach ($this->event->tickets as $ticket) {
+	if ($ticket->price && $ticket->price != '0.00') {
+		$hasPrice = true;
+		break;
+	}
+}
+?>
+<div class="com-dpcalendar-event__tickets">
+	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_TICKETS_LABEL'); ?></h3>
+	<table class="dp-table">
+		<thead>
+		<tr>
+			<?php if (!$limited) { ?>
+				<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?></th>
+				<th><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?></th>
+			<?php } ?>
+			<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?></th>
+			<th><?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?></th>
+			<?php if (!$limited) { ?>
+				<th><?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?></th>
+				<?php if ($this->params->get('ticket_show_seat', 1)) { ?>
+					<th><?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?></th>
+				<?php } ?>
+			<?php } ?>
+			<?php if (!$limited && $hasPrice) { ?>
+				<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></th>
+			<?php } ?>
+		</tr>
+		</thead>
+		<tbody>
+		<?php foreach ($this->event->tickets as $ticket) { ?>
+			<tr>
+				<?php if (!$limited) { ?>
+					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?>"><?php echo JHtmlString::abridge($ticket->uid, 15, 5); ?></td>
+					<td data-column="?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?>"><?php echo \DPCalendar\Helper\Booking::getStatusLabel($ticket); ?></td>
+				<?php } ?>
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?>"><?php echo $ticket->name; ?></td>
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?>"><?php echo \DPCalendar\Helper\Location::format([$ticket]); ?></td>
+				<?php if (!$limited) { ?>
+					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?>"><?php echo $this->dateHelper->getDate($ticket->created)->format($format, true); ?></td>
+					<?php if ($this->params->get('ticket_show_seat', 1)) { ?>
+						<td data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?>"><?php echo $ticket->seat; ?></td>
+					<?php } ?>
+				<?php } ?>
+				<?php if (!$limited && $hasPrice) { ?>
+					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?>"><?php echo DPCalendarHelper::renderPrice($ticket->price); ?></td>
+				<?php } ?>
+			</tr>
+		<?php } ?>
+		</tbody>
+	</table>
+</div>

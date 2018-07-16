@@ -9,7 +9,8 @@
 defined('_JEXEC') or die();
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
-JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeresizer-contentwindow.min.js', ['relative' => true], ['defer' => true]);
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_IFRAME_CHILD);
 
 $input = JFactory::getApplication()->input;
 $user = JFactory::getUser();
@@ -61,21 +62,14 @@ if ($this->pluginParams->get('cache', 1) == '2')
 
 	?>
 	<script type="text/javascript">
-        Joomla.request({
-	        method: 'POST',
-            url: 'index.php?option=com_dpcalendar&task=extcalendars.sync&dpplugin=<?php echo $input->getWord('dpplugin')?>',
-	        onSuccess: function (data) {
-                var json = JSON.parse(data);
-                if(json.success && json.messages != null) {
-                    Joomla.renderMessages(json.messages);
-                }
-            }
-        });
+        DPCalendar.request(
+            'index.php?option=com_dpcalendar&task=extcalendars.sync&dpplugin=<?php echo $input->getWord('dpplugin')?>'
+        );
 	</script>
 	<?php
 }
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_dpcalendar&view=extcalendars&dpplugin=' . $input->getWord('dpplugin')) . '&tmpl=' . $input->getWord('tmpl'); ?>" method="post" name="adminForm" id="adminForm" class="dp-container">
+<form action="<?php echo JRoute::_('index.php?option=com_dpcalendar&view=extcalendars&dpplugin=' . $input->getWord('dpplugin')) . '&tmpl=' . $input->getWord('tmpl'); ?>" method="post" name="adminForm" id="adminForm" class="com-dpcalendar-extcalendars">
 		<div id="filter-bar" class="btn-toolbar">
 			<div class="filter-search btn-group pull-left">
 				<label for="filter_search" class="element-invisible"><?php echo JText::_('COM_DPCALENDAR_SEARCH_IN_TITLE');?></label>

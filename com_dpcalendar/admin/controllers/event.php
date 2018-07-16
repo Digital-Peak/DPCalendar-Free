@@ -144,6 +144,72 @@ class DPCalendarControllerEvent extends JControllerForm
 		return parent::getModel($name, $prefix, $config);
 	}
 
+	public function similar()
+	{
+		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+		$formData = $this->input->get('jform', array(), 'array');
+
+		if (empty($formData['title'])) {
+			DPCalendarHelper::sendMessage(null);
+		}
+
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$model = $this->getModel('Events');
+		$model->getState();
+		$model->setState('list.limit', 5);
+		$model->setState('category.id', $formData['catid']);
+		$model->setState('filter.ongoing', false);
+		$model->setState('filter.expand', true);
+		$model->setState('filter.language', $formData['language']);
+		$model->setState('list.start-date', 0);
+		$model->setState('filter.search.columns', ['a.title']);
+		$model->setState('filter.search', '+' . str_replace(' ', " +", strtolower($formData['title'])));
+
+		if (!isset($formData['id']) || !$formData['id']) {
+			$formData['id'] = $this->input->get('id', 0);
+		}
+
+		$data = [];
+		foreach ($model->getItems() as $e) {
+			if ($formData['id'] && ($e->id == $formData['id'] || $e->original_id == $formData['id'])) {
+				continue;
+			}
+
+			$item          = new stdClass();
+			$item->value   = $e->id;
+			$item->title   = $e->title;
+			$item->details = strip_tags(JHtml::_('string.truncate', $e->description, 100));
+
+			$data[] = $item;
+		}
+
+		DPCalendarHelper::sendMessage(null, false, $data);
+	}
+
+	public function reloadfromevent($key = null, $urlVar = 'e_id')
+	{
+		// Check for request forgeries.
+		\JSession::checkToken() or jexit(\JText::_('JINVALID_TOKEN'));
+
+		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+
+		$data = $this->getModel('Event')->getItem($this->input->getInt('template_event_id'));
+
+		if (!$data) {
+			return parent::reload($key, $urlVar);
+		}
+
+		$formData = $this->input->post->get('jform', array(), 'array');
+
+		$data->id = !empty($formData['id']) ? $formData['id'] : 0;
+
+		$this->input->set('jform', (array)$data);
+		$this->input->post->set('jform', (array)$data);
+
+		return parent::reload($key, $urlVar);
+	}
+
 	private function transformDatesToSql()
 	{
 		$data = $this->input->post->get('jform', array(), 'array');

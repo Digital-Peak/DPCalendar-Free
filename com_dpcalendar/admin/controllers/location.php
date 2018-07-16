@@ -59,12 +59,20 @@ class DPCalendarControllerLocation extends JControllerForm
 
 	public function loc()
 	{
-		$loc = \DPCalendar\Helper\Location::get($this->input->getVar('loc'), false);
-		DPCalendarHelper::sendMessage(
-			null,
-			false,
-			array('latitude' => $loc->latitude, 'longitude' => $loc->longitude, 'formated' => \DPCalendar\Helper\Location::format([$loc]))
-		);
+		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+		$loc = \DPCalendar\Helper\Location::get($this->input->getString('loc'), false);
+
+		$data             = (array)$loc;
+		$data['formated'] = \DPCalendar\Helper\Location::format([$loc]);
+		DPCalendarHelper::sendMessage(null, false, $data);
+	}
+
+	public function searchloc()
+	{
+		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+
+		DPCalendarHelper::sendMessage(null, false, \DPCalendar\Helper\Location::search(trim($this->input->getString('loc'))));
 	}
 
 	public function edit($key = null, $urlVar = 'l_id')

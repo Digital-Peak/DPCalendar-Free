@@ -16,7 +16,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 
 	public function fetch()
 	{
-		$resource = JFactory::getApplication()->input->getCmd('resource');
+		$resource = $this->input->getCmd('resource');
 
 		if (!$resource) {
 			return false;
@@ -26,7 +26,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 			'resource'  => $resource,
 			'languages' => array()
 		);
-		foreach (JFactory::getLanguage()->getKnownLanguages() as $language) {
+		foreach (JLanguageHelper::getKnownLanguages() as $language) {
 			$resourceData       = Transifex::getData('resource/' . $resource . '/stats');
 			$transifexLanguages = json_decode($resourceData['data']);
 			foreach ($transifexLanguages as $langCode => $tr) {
@@ -35,10 +35,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 					continue;
 				}
 
-				$data['languages'][] = array(
-					'tag'     => $code,
-					'percent' => (int)$tr->completed
-				);
+				$data['languages'][] = array('tag' => $code, 'percent' => (int)$tr->completed);
 			}
 		}
 
@@ -48,7 +45,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 
 	public function update()
 	{
-		$resource = JFactory::getApplication()->input->getCmd('resource');
+		$resource = $this->input->getCmd('resource');
 
 		if (!$resource) {
 			return false;
@@ -66,7 +63,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 
 			$content = Transifex::getData('resource/' . $resource . '/translation/' . $code . '?file=1');
 
-			if (empty($content['data'])) {
+			if (empty($content['data']) || $content['info']['http_code'] > 200) {
 				continue;
 			}
 

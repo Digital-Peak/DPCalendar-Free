@@ -1,0 +1,42 @@
+.mod-dpcalendar-upcoming-blog {
+	$minColumnSize: 100px !default;
+	@import "base";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/icon";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/grid";
+
+	&__heading {
+		margin: 0 0 12px;
+	}
+
+	&__date {
+		font-size: smaller;
+		display: inline-block;
+	}
+
+	&__date:after {
+		content: '\a';
+		white-space: pre;
+	}
+
+	.dp-date {
+		&__start,
+		&__end {
+			font-size: 1em;
+			font-weight: normal;
+			opacity: 1;
+		}
+	}
+
+	&__calendar,
+	&__capacity,
+	&__price,
+	&__location {
+		font-size: smaller;
+		display: block;
+	}
+
+	.dp-location__description {
+		display: none
+	}
+}

@@ -9,6 +9,7 @@
 defined('_JEXEC') or die();
 
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
+$this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
 
 $listOrder	= $this->escape($this->state->get('list.ordering'));
 $listDirn	= $this->escape($this->state->get('list.direction'));
@@ -24,37 +25,17 @@ $function = JFactory::getApplication()->input->getCmd('function', 'jSelectEvent'
 		</div>
 		<div class="btn-group pull-left">
 			<label class="element-invisible" for="filter_search_start"><?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_START_DATE_AFTER_LABEL'); ?>:</label>
-			<?php
-			echo JHtml::_(
-                'datetime.render',
-                $this->escape($this->state->get('filter.search_start')),
-                'filter_search_start',
-                'filter[search_start]',
-                array(
-                    'allDay'     => true,
-                    'onchange'   => 'this.form.submit();',
-                    'formated'   => true,
-                    'dateFormat' => $this->params->get('event_form_date_format', 'm.d.Y')
-                )
-            );
-			?>
+			<<?php $this->displayData['title'] = $this->translate('COM_DPCALENDAR_FIELD_START_DATE_LABEL'); ?>
+			<?php $this->displayData['name'] = 'filter[search_start]'; ?>
+			<?php $this->displayData['date'] = $this->startDate; ?>
+			<?php echo $this->layoutHelper->renderLayout('block.datepicker', $this->displayData); ?>
 		</div>
 		<div class="btn-group pull-left">
 			<label class="element-invisible" for="filter_search_end"><?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_END_DATE_BEFORE_LABEL'); ?>:</label>
-			<?php
-			echo JHtml::_(
-                'datetime.render',
-                $this->escape($this->state->get('filter.search_end')),
-                'filter_search_end',
-                'filter[search_end]',
-                array(
-                    'allDay'     => true,
-                    'onchange'   => 'this.form.submit();',
-                    'formated'   => true,
-                    'dateFormat' => $this->params->get('event_form_date_format', 'm.d.Y')
-                )
-            );
-			?>
+			<?php $this->displayData['title'] = $this->translate('COM_DPCALENDAR_FIELD_END_DATE_LABEL'); ?>
+			<?php $this->displayData['name'] = 'filter[search_end]'; ?>
+			<?php $this->displayData['date'] = $this->endDate; ?>
+			<?php echo $this->layoutHelper->renderLayout('block.datepicker', $this->displayData); ?>
 		</div>
 		<div class="btn-group pull-left hidden-phone">
 			<button class="btn tip" type="submit" rel="tooltip" title="<?php echo JText::_('JSEARCH_FILTER_SUBMIT'); ?>"><i class="icon-search"></i></button>

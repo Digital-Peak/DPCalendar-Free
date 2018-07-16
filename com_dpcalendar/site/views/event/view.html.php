@@ -96,14 +96,53 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event->displayEvent->afterDisplayContent = trim(implode("\n", $results));
 
 		$this->event = $event;
-		if ($this->getLayout() == 'edit') {
-			$this->_displayEdit();
-
-			return;
-		}
 
 		$model = $this->getModel();
 		$model->hit();
+
+		$this->roomTitles = [];
+		if ($event->locations && !empty($this->event->rooms)) {
+			foreach ($event->locations as $location) {
+				foreach ($this->event->rooms as $room) {
+					list($locationId, $roomId) = explode('-', $room, 2);
+
+					foreach ($location->rooms as $lroom) {
+						if ($locationId != $location->id || $roomId != $lroom->id) {
+							continue;
+						}
+
+						$this->roomTitles[$room] = $lroom->title;
+					}
+				}
+			}
+		}
+
+		$this->avatar     = '';
+		$this->authorName = '';
+		$author           = JFactory::getUser($event->created_by);
+		if ($author) {
+			$this->authorName = $event->created_by_alias ? $event->created_by_alias : $author->name;
+
+			if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php')) {
+				// Set the community builder username as content
+				include_once(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php');
+				$cbUser = CBuser::getInstance($event->created_by);
+				if ($cbUser) {
+					$this->authorName = $cbUser->getField('formatname', null, 'html', 'none', 'list', 0, true);
+				}
+			}
+
+			$this->avatar = DPCalendarHelper::getAvatar($author->id, $author->email, $this->params);
+		}
+
+		$this->event->contact_link = '';
+		if (!empty($event->contactid)) {
+			JLoader::register('ContactHelperRoute', JPATH_SITE . '/components/com_contact/helpers/route.php');
+			$this->event->contact_link = JRoute::_(
+				ContactHelperRoute::getContactRoute($event->contactid . ':' . $event->contactalias, $event->contactcatid)
+			);
+		}
+		$this->displayData['event'] = $this->event;
 
 		return parent::init();
 	}

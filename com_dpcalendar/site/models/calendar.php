@@ -112,4 +112,34 @@ class DPCalendarModelCalendar extends JModelLegacy
 
 		return $this->allItems;
 	}
+
+	public function getQuickAddForm(Registry $params)
+	{
+		JLoader::import('joomla.form.form');
+
+		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
+		JForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
+
+		$format = $params->get('event_form_date_format', 'm.d.Y') . ' ' . $params->get('event_form_time_format', 'g:i a');
+		$date   = \DPCalendar\Helper\DPCalendarHelper::getDate();
+
+		$form = JForm::getInstance('com_dpcalendar.event', 'event', array('control' => 'jform'));
+		$form->setValue('start_date', null, $date->format($format, false));
+		$date->modify('+1 hour');
+		$form->setValue('end_date', null, $date->format($format, false));
+
+		$form->setFieldAttribute('start_date', 'format', $params->get('event_form_date_format', 'm.d.Y'));
+		$form->setFieldAttribute('start_date', 'formatTime', $params->get('event_form_time_format', 'g:i a'));
+		$form->setFieldAttribute('start_date', 'formated', true);
+		$form->setFieldAttribute('end_date', 'format', $params->get('event_form_date_format', 'm.d.Y'));
+		$form->setFieldAttribute('end_date', 'formatTime', $params->get('event_form_time_format', 'g:i a'));
+		$form->setFieldAttribute('end_date', 'formated', true);
+
+		$form->setFieldAttribute('start_date', 'min_time', $params->get('event_form_min_time'));
+		$form->setFieldAttribute('start_date', 'max_time', $params->get('event_form_max_time'));
+		$form->setFieldAttribute('end_date', 'min_time', $params->get('event_form_min_time'));
+		$form->setFieldAttribute('end_date', 'max_time', $params->get('event_form_max_time'));
+
+		return $form;
+	}
 }

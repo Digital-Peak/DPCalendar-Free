@@ -1,0 +1,35 @@
+.fc-timelineYear-view .fc-time-area col {
+	min-width: 100px;
+}
+
+.fc-timelineMonth-view .fc-time-area col {
+	min-width: 100px;
+}
+
+.fc-timelineWeek-view .fc-time-area col {
+	min-width: 150px;
+}
+
+.fc-timelineDay-view .fc-time-area col {
+	min-width: 100px;
+}
+
+.fc-day-grid-event > .fc-content,
+.fc-timeline-event > .fc-content {
+	white-space: normal;
+	overflow: visible;
+}
+
+@media screen and (max-width: 540px) {
+	.fc-header-toolbar {
+		& > div {
+			display: block;
+			margin: 0 auto;
+			width: 100%;
+		}
+
+		& > * > * {
+			float: none;
+		}
+	}
+}

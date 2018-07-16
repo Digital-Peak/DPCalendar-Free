@@ -7,24 +7,34 @@
  */
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.libraries.dpcalendar.view', JPATH_ADMINISTRATOR);
-
 class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
 {
-
-	protected $icon = 'dpcalendar';
-
 	protected $title = 'COM_DPCALENDAR_VIEW_CPANEL';
 
-	protected function init ()
+	protected function init()
 	{
-		if (! DPCalendarHelper::getComponentParameter('downloadid') && ! DPCalendarHelper::isFree())
-		{
-			JFactory::getApplication()->enqueueMessage(
-					'Please define the download ID in the <a href="index.php?option=com_config&view=component&component=com_dpcalendar">component parameters</a> to enable DPCalendar updates trough the Joomla updater.
-							You can get the download ID from <a href="https://joomla.digital-peak.com/my-account/download-id" target="_blank">your account at joomla.digital.peak</a>.');
-		}
 		$this->getModel()->refreshUpdateSite();
+
+		$model = $this->getModel();
+
+		$this->upcomingEvents     = $model->getEvents(\DPCalendar\Helper\DPCalendarHelper::getDate());
+		$this->newEvents          = $model->getEvents(0, 'a.created', 'desc');
+		$this->lastModifiedEvents = $model->getEvents(0, 'a.modified', 'desc');
+
+		$this->totalEvents       = $model->getTotalEvents();
+		$this->totalBookings     = $model->getTotalBookings();
+		$this->calendars         = $model->getCalendars();
+		$this->calendarsInternal = [];
+		$this->calendarsExternal = [];
+
+		foreach ($this->calendars as $calendar) {
+			if ($calendar->external) {
+				$this->calendarsExternal[] = $calendar;
+			} else {
+				$this->calendarsInternal[] = $calendar;
+			}
+		}
+
 		parent::init();
 	}
 }

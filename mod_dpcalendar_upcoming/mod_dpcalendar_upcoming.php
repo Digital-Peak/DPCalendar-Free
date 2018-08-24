@@ -153,7 +153,7 @@ foreach ($events as $event) {
 				]
 			);
 
-			$desc .= $descTruncated;
+			$desc = $descTruncated . $desc;
 		}
 	}
 

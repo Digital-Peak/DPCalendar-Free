@@ -52,9 +52,9 @@ class DPCalendarRouter extends JComponentRouterView
 
 		parent::__construct($app, $menu);
 
-		$this->attachRule(new \DPCalendar\Router\Rules\DPCalendarRules($this));
 
 		if ($params->get('sef_advanced', 1)) {
+			$this->attachRule(new \DPCalendar\Router\Rules\DPCalendarRules($this));
 			$this->attachRule(new JComponentRouterRulesStandard($this));
 			$this->attachRule(new JComponentRouterRulesNomenu($this));
 		} else {

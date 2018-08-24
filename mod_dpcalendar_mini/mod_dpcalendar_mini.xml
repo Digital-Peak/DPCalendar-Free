@@ -2,12 +2,12 @@
 <extension type="module" version="3.7" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>Jul 2018</creationDate>
+	<creationDate>Aug 2018</creationDate>
 	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.0.3</version>
+	<version>7.0.4</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -32,7 +32,7 @@
 					<option value="2">MOD_DPCALENDAR_MINI_FIELD_COMPACT_SINGLE</option>
 					<option value="0">JNO</option>
 				</field>
-				<field name="event_color" type="dpcolor" default="135CAE" showon="compact_events:1" size="6"
+				<field name="event_color" type="color" default="135CAE" showon="compact_events:1" size="6"
 				       label="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_CALENDAR_COLOR_DESC"/>
 				<field name="open_view" type="list" default="agendaDay" showon="compact_events:1"

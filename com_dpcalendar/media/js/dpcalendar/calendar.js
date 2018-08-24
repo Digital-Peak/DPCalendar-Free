@@ -173,9 +173,8 @@ DPCalendar = window.DPCalendar || {};
 					performance: true,
 					popperOptions: {
 						modifiers: {
-							preventOverflow: {
-								enabled: false
-							}
+							preventOverflow: {enabled: false},
+							hide: {enabled: false}
 						}
 					}
 				});
@@ -540,7 +539,7 @@ DPCalendar = window.DPCalendar || {};
 
 	DPCalendar.extractEvents = function (events) {
 		// Handling the messages in the returned data
-		if (events.length && events[0].messages.message != null && document.getElementById('system-message-container')) {
+		if (events.length && events[0].messages != null && document.getElementById('system-message-container')) {
 			Joomla.renderMessages(events[0].messages);
 		}
 

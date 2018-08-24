@@ -396,12 +396,12 @@
 	opacity: .7;
 }
 
-.com-dpcalendar-event .dp-description__label {
+.com-dpcalendar-event.has-image .dp-description__label {
 	float: none;
 	width: 100%;
 }
 
-.com-dpcalendar-event .dp-description__description {
+.com-dpcalendar-event.has-image .dp-description__description {
 	margin-left: 0;
 }
 
@@ -459,6 +459,13 @@
 	}
 	.com-dpcalendar-event__description {
 		padding: 2.5rem 1rem;
+	}
+	.com-dpcalendar-event .dp-description__label {
+		float: none;
+		width: 100%;
+	}
+	.com-dpcalendar-event .dp-description__description {
+		margin-left: 0;
 	}
 }
 

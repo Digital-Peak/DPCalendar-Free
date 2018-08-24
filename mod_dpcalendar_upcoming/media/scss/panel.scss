@@ -1,5 +1,6 @@
 .mod-dpcalendar-upcoming-panel {
 	@import "base";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
 
 	display: flex;
 	flex-wrap: wrap;
@@ -27,6 +28,4 @@
 			padding-right: 0;
 		}
 	}
-
-	@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
 }

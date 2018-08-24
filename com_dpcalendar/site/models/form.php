@@ -180,7 +180,6 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		$form->setFieldAttribute('scheduling_end_date', 'format', $params->get('event_form_date_format', 'm.d.Y'));
 		$form->setFieldAttribute('xreference', 'readonly', true);
 
-
 		// User field doesn't work on front
 		if (JFactory::getApplication()->isClient('site'))
 		{

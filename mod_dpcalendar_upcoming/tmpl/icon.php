@@ -51,7 +51,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 					</span>
 				</div>
 				<?php if ($event->images->image_intro) { ?>
-					<div class="mod-dpcalendar-upcoming-blog__image">
+					<div class="mod-dpcalendar-upcoming-icon__image">
 						<figure class="dp-figure">
 							<img class="dp-image" src="<?php echo $event->images->image_intro; ?>"
 								 alt="<?php echo $event->images->image_intro_alt; ?>">

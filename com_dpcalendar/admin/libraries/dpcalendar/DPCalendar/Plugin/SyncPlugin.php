@@ -205,18 +205,6 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		}
 	}
 
-	protected function fetchCalendars($calendarIds = null)
-	{
-		$calendars = parent::fetchCalendars($calendarIds);
-		if ($this->params->get('cache', 1) == 2) {
-			foreach ($calendars as $calendar) {
-				$this->sync($calendar);
-			}
-		}
-
-		return $calendars;
-	}
-
 	public function onEventsFetch($calendarId, \JDate $startDate = null, \JDate $endDate = null, Registry $options = null)
 	{
 		if ($this->params->get('cache', 1) == 2) {

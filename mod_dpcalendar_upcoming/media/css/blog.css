@@ -42,6 +42,15 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-blog .dp-figure {
+	width: 100%;
+}
+
+.mod-dpcalendar-upcoming-blog .dp-figure .dp-image {
+	object-fit: cover;
+	height: 100px;
+}
+
 .mod-dpcalendar-upcoming-blog .dp-figure__caption {
 	font-size: .8em;
 	opacity: .7;

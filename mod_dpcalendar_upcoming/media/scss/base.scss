@@ -46,6 +46,13 @@
 }
 
 .dp-figure {
+	width: 100%;
+
+	.dp-image {
+		object-fit: cover;
+		height: 100px;
+	}
+
 	&__caption {
 		font-size: .8em;
 		opacity: .7;

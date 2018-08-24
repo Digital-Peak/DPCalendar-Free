@@ -45,7 +45,7 @@ class DPCalendarHelper
 			$user = \JFactory::getUser();
 
 			$calendar->params   = new Registry($calendar->params);
-			$calendar->color    = $calendar->params->get('color', '3366CC');
+			$calendar->color    = str_replace('#', '', $calendar->params->get('color', '3366CC'));
 			$calendar->external = false;
 			$calendar->system   = 'joomla';
 			$calendar->native   = true;

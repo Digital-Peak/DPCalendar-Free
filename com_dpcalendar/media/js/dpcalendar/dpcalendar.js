@@ -247,7 +247,7 @@ if (!String.prototype.endsWith) {
 
 				var json = JSON.parse(res);
 
-				if (json.messages != null && json.messages.message != null && document.getElementById('system-message-container')) {
+				if (json.messages != null && json.messages && document.getElementById('system-message-container')) {
 					Joomla.renderMessages(json.messages);
 				}
 

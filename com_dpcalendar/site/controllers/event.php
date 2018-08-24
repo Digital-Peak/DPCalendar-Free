@@ -366,7 +366,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 			// If the calendar is native, then we are editing an event in
 			// advanced cache mode
-			if ($calendar->native) {
+			if ($calendar->native && !empty($data['xreference'])) {
 				$validData['id'] = $data['xreference'];
 			}
 

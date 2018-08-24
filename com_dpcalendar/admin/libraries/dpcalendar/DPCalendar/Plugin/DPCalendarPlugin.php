@@ -341,6 +341,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 */
 	public function prepareForm($eventId, $calendarId, $form, $data)
 	{
+		$this->cleanupFormForEdit($calendarId, $form, $data);
 	}
 
 	public function onEventFetch($eventId)
@@ -435,26 +436,6 @@ abstract class DPCalendarPlugin extends \JPlugin
 		return $this->fetchCalendars($ids);
 	}
 
-	public function onEventBeforeDisplay(&$event)
-	{
-	}
-
-	public function onEventAfterDisplay(&$event)
-	{
-	}
-
-	public function onEventBeforeCreate(&$event)
-	{
-	}
-
-	public function onEventAfterCreate(&$event)
-	{
-	}
-
-	public function onEventBeforeSave(&$event)
-	{
-	}
-
 	/**
 	 * This function is called when an external event is going
 	 * to be saved.
@@ -510,14 +491,6 @@ abstract class DPCalendarPlugin extends \JPlugin
 		return $newEventId;
 	}
 
-	public function onEventAfterSave(&$event)
-	{
-	}
-
-	public function onEventBeforeDelete($event)
-	{
-	}
-
 	/**
 	 * This function is called when an external event is going
 	 * to be deleted.
@@ -556,10 +529,6 @@ abstract class DPCalendarPlugin extends \JPlugin
 		return $success;
 	}
 
-	public function onEventAfterDelete($event)
-	{
-	}
-
 	public function onDPCalendarDoAction($action, $pluginName, $data = null)
 	{
 		if (str_replace('dpcalendar_', '', $this->_name) != $pluginName) {
@@ -584,21 +553,34 @@ abstract class DPCalendarPlugin extends \JPlugin
 			return true;
 		}
 
-		if (empty($data->id)) {
+		$catId = $data->catid;
+		if (empty($catId) && $formField = $form->getField('catid')) {
+			$catId = $formField->getAttribute('default', null);
+
+			// Choose the first category available
+			$xml = new \DOMDocument();
+			$xml->loadHTML($formField->__get('input'));
+			$options = $xml->getElementsByTagName('option');
+
+			if (!$catId && $firstChoice = $options->item(0)) {
+				$catId = $firstChoice->getAttribute('value');
+			}
+		}
+
+		if (!$catId || strpos($catId, $this->identifier) !== 0) {
 			return true;
 		}
 
-		if (strpos($data->id, $this->identifier) !== 0) {
-			return true;
+		$eventId = '';
+		if ($data->id) {
+			$id = str_replace($this->identifier . ':', $this->identifier . '-', $data->id);
+			$id = explode('-', str_replace($this->identifier . '-', '', $id), 2);
+			if (count($id) == 2) {
+				$eventId = [1];
+			}
 		}
 
-		$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $data->id);
-		$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
-		if (count($id) < 2) {
-			return true;
-		}
-
-		return $this->prepareForm($id[1], $id[0], $form, $data);
+		return $this->prepareForm($eventId, str_replace($this->identifier . '-', '', $catId), $form, $data);
 	}
 
 	protected function createCalendar($id, $title, $description, $color = '3366CC')
@@ -954,8 +936,27 @@ abstract class DPCalendarPlugin extends \JPlugin
 		return $within;
 	}
 
-	protected function cleanupFormForEdit(\JForm $form, $data)
+	protected function cleanupFormForEdit($ccalendarId, \JForm $form, $data)
 	{
+		$hideFieldsets['params']   = 'jbasic';
+		$hideFieldsets[]           = 'booking';
+		$hideFieldsets[]           = 'publishing';
+		$hideFieldsets['metadata'] = 'jmetadata';
+
+		foreach ($hideFieldsets as $group => $name) {
+			foreach ($form->getFieldset($name) as $field) {
+				if (!is_string($group)) {
+					$group = null;
+				}
+
+				if ($field->fieldname == 'xreference') {
+					continue;
+				}
+
+				$form->removeField($field->fieldname, $group);
+			}
+		}
+
 		$form->removeField('show_end_time');
 		$form->removeField('alias');
 		$form->removeField('state');

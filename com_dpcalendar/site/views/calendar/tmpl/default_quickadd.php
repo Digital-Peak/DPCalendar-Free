@@ -17,7 +17,7 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
 ?>
 <div class="com-dpcalendar-calendar__quickadd dp-quickadd">
 	<form action="<?php echo $this->router->getEventFormRoute(0, JUri::getInstance()->toString()); ?>" method="post"
-	      class="dp-form form-validate timepair">
+	      class="dp-form form-validate">
 		<?php echo $this->quickaddForm->renderField('start_date'); ?>
 		<?php echo $this->quickaddForm->renderField('end_date'); ?>
 		<?php echo $this->quickaddForm->renderField('title'); ?>

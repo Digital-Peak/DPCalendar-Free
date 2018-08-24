@@ -48,9 +48,30 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-timeline .dp-figure {
+	width: 100%;
+}
+
+.mod-dpcalendar-upcoming-timeline .dp-figure .dp-image {
+	object-fit: cover;
+	height: 100px;
+}
+
 .mod-dpcalendar-upcoming-timeline .dp-figure__caption {
 	font-size: .8em;
 	opacity: .7;
+}
+
+.mod-dpcalendar-upcoming-timeline .dp-figure {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	margin: 0;
+}
+
+.mod-dpcalendar-upcoming-timeline .dp-figure__caption {
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .mod-dpcalendar-upcoming-timeline::before {

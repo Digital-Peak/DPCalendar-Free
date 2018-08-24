@@ -54,10 +54,19 @@ DPCalendar = window.DPCalendar || {};
 			}));
 		});
 
-		// Because of com_fields, we need to call it with a delay
 		document.getElementById('jform_catid').addEventListener('change', function (e) {
+			// If there is an external calendar, reload the form
+			for (var i = 0; i < e.target.length; i++) {
+				if (e.target.value && isNaN(parseInt(e.target.options[i].value))) {
+					Joomla.loadingLayer('show');
+					document.querySelector('input[name=task]').value = 'event.reload';
+					this.form.submit();
+					return true;
+				}
+			}
+
+			// Because of com_fields, we need to call it with a delay
 			setTimeout(checkOverlapping, 2000);
-			return true;
 		});
 
 		setTimeout(checkOverlapping, 2000);
@@ -293,6 +302,7 @@ DPCalendar = window.DPCalendar || {};
 				case 'UNTIL':
 					var untilField = document.getElementById('jform_scheduling_end_date');
 					untilField.value = moment.utc(parts[1]).format(untilField.getAttribute('format'));
+					untilField.setAttribute('data-date', parts[1].substr(0, 8));
 					break;
 			}
 		});

@@ -1,6 +1,7 @@
 .mod-dpcalendar-upcoming-default {
 	@import "base";
 	@import "../../../com_dpcalendar/media/scss/layouts/block/flatcalendar";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
 
 	&__information {
 		min-height: 3.7em;

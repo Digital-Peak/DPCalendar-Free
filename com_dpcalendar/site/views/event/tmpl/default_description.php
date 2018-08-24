@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-if (!$this->event->description) {
+if (!$this->event->description && !$this->event->displayEvent->afterDisplayContent) {
 	return;
 }
 ?>

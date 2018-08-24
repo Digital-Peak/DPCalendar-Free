@@ -42,6 +42,15 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-icon .dp-figure {
+	width: 100%;
+}
+
+.mod-dpcalendar-upcoming-icon .dp-figure .dp-image {
+	object-fit: cover;
+	height: 100px;
+}
+
 .mod-dpcalendar-upcoming-icon .dp-figure__caption {
 	font-size: .8em;
 	opacity: .7;
@@ -94,6 +103,18 @@
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
+}
+
+.mod-dpcalendar-upcoming-icon .dp-figure {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	margin: 0;
+}
+
+.mod-dpcalendar-upcoming-icon .dp-figure__caption {
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .mod-dpcalendar-upcoming-icon__date::after {

@@ -207,13 +207,6 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 		return parent::onContentPrepareForm($form, $data);
 	}
 
-	public function prepareForm($eventId, $calendarId, $form, $data)
-	{
-		$this->cleanupFormForEdit($form, $data);
-
-		return true;
-	}
-
 	protected function createCalDAVEvent($uid, $icalData, $calendarId)
 	{
 		return $this->getBackend()->createCalendarObject(array($calendarId), $uid . '.ics', $icalData);

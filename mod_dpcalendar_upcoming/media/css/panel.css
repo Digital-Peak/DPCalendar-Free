@@ -48,9 +48,30 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-panel .dp-figure {
+	width: 100%;
+}
+
+.mod-dpcalendar-upcoming-panel .dp-figure .dp-image {
+	object-fit: cover;
+	height: 100px;
+}
+
 .mod-dpcalendar-upcoming-panel .dp-figure__caption {
 	font-size: .8em;
 	opacity: .7;
+}
+
+.mod-dpcalendar-upcoming-panel .dp-figure {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	margin: 0;
+}
+
+.mod-dpcalendar-upcoming-panel .dp-figure__caption {
+	width: 100%;
+	box-sizing: border-box;
 }
 
 .mod-dpcalendar-upcoming-panel__group,
@@ -72,18 +93,6 @@
 .mod-dpcalendar-upcoming-panel__heading .dp-group-heading ~ div {
 	padding-left: 0;
 	padding-right: 0;
-}
-
-.mod-dpcalendar-upcoming-panel .dp-figure {
-	display: flex;
-	flex-direction: column;
-	text-align: center;
-	margin: 0;
-}
-
-.mod-dpcalendar-upcoming-panel .dp-figure__caption {
-	width: 100%;
-	box-sizing: border-box;
 }
 
 /*# sourceMappingURL=panel.css.map */

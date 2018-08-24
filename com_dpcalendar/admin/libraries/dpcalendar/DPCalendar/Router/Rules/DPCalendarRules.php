@@ -125,7 +125,7 @@ class DPCalendarRules extends \JComponentRouterRulesMenu
 		foreach ($this->lookup as $languageName => $items) {
 			foreach ($items as $viewName => $calIds) {
 				foreach ((array)$calIds as $calId => $menuItemId) {
-					if ($cal->id == $calId) {
+					if ($calId && $cal->id == $calId) {
 						$query['Itemid'] = $menuItemId;
 
 						return;

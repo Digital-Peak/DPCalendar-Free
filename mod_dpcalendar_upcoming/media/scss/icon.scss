@@ -2,6 +2,7 @@
 	@import "base";
 	@import "../../../com_dpcalendar/media/scss/layouts/block/flatcalendar";
 	@import "../../../com_dpcalendar/media/scss/layouts/block/icon";
+	@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
 
 	&__date::after {
 		content: "\A";

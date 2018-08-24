@@ -80,6 +80,9 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 	public function getForm($data = array(), $loadData = true)
 	{
+		// Load plugins for form manipulation
+		JPluginHelper::importPlugin('dpcalendar');
+
 		// Get the form.
 		$form = $this->loadForm('com_dpcalendar.event', 'event', array('control' => 'jform', 'load_data' => $loadData));
 		if (empty($form)) {

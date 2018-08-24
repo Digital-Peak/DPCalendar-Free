@@ -44,7 +44,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 						<?php echo $dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>
 					</div>
 					<?php if ($event->images->image_intro) { ?>
-						<div class="mod-dpcalendar-upcoming-blog__image">
+						<div class="mod-dpcalendar-upcoming-timeline__image">
 							<figure class="dp-figure">
 								<img class="dp-image" src="<?php echo $event->images->image_intro; ?>"
 									 alt="<?php echo $event->images->image_intro_alt; ?>">

@@ -92,21 +92,20 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			$this->form->removeField('scheduling_monthly_days');
 		}
 
-		$externalEvent = !is_numeric($this->event->catid) && !empty($this->event->id);
 		$hideFieldsets = [];
 		if (!$this->params->get('event_form_change_location', 1)) {
 			$hideFieldsets[] = 'location';
 		}
-		if ($externalEvent || !$this->params->get('event_form_change_options', 1)) {
+		if (!$this->params->get('event_form_change_options', 1)) {
 			$hideFieldsets['params'] = 'jbasic';
 		}
-		if ($externalEvent || !$this->params->get('event_form_change_book', 1) || ($this->event->catid && !is_numeric($this->event->catid))) {
+		if (!$this->params->get('event_form_change_book', 1)) {
 			$hideFieldsets[] = 'booking';
 		}
-		if ($externalEvent || !$this->params->get('event_form_change_publishing', 1)) {
+		if (!$this->params->get('event_form_change_publishing', 1)) {
 			$hideFieldsets[] = 'publishing';
 		}
-		if ($externalEvent || !$this->params->get('event_form_change_metadata', 1)) {
+		if (!$this->params->get('event_form_change_metadata', 1)) {
 			$hideFieldsets['metadata'] = 'jmetadata';
 		}
 

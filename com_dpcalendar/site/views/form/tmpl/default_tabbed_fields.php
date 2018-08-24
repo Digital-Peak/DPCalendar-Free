@@ -7,6 +7,7 @@
  */
 
 defined('_JEXEC') or die();
+
 ?>
 <div class="com-dpcalendar-eventform__tabbed-fields dp-tabs">
 	<?php $checked = 'checked="checked"'; ?>
@@ -17,7 +18,7 @@ defined('_JEXEC') or die();
 		<label for="dp-tab-<?php echo $name; ?>" class="dp-tabs__label">
 			<?php echo $this->translate($fieldSet->label); ?>
 		</label>
-		<div class="dp-tabs__tab dp-tabs__tab-<?php echo $name; ?> timepair">
+		<div class="dp-tabs__tab dp-tabs__tab-<?php echo $name; ?>">
 			<?php foreach ($fields as $field) { ?>
 				<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
 			<?php } ?>

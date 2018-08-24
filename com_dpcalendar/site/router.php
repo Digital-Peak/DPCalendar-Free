@@ -52,7 +52,6 @@ class DPCalendarRouter extends JComponentRouterView
 
 		parent::__construct($app, $menu);
 
-
 		if ($params->get('sef_advanced', 1)) {
 			$this->attachRule(new \DPCalendar\Router\Rules\DPCalendarRules($this));
 			$this->attachRule(new JComponentRouterRulesStandard($this));
@@ -141,7 +140,8 @@ class DPCalendarRouter extends JComponentRouterView
 			return [0 => $id];
 		}
 
-		if (!empty($query['calid']) && !is_numeric($query['calid'])) {
+		// Return the id when an external event, except when the id is numeric, then it is database caching
+		if (!empty($query['calid']) && !is_numeric($query['calid']) && !is_numeric($id)) {
 			return [0 => $id];
 		}
 
@@ -247,11 +247,6 @@ class DPCalendarRouter extends JComponentRouterView
 			if (!is_numeric($calId) && strpos($segment, $calId) === 0) {
 				return $segment;
 			}
-
-			// Remove external calendars
-			if (!is_numeric($calId)) {
-				unset($calIds[$index]);
-			}
 		}
 
 		$db      = JFactory::getDbo();
@@ -260,8 +255,13 @@ class DPCalendarRouter extends JComponentRouterView
 			->from($dbquery->qn('#__dpcalendar_events'))
 			->where('alias = ' . $dbquery->q($segment));
 
-		if (!in_array('-1', $calIds)) {
-			$dbquery->where('catid in (' . implode(',', $calIds) . ')');
+		if ($calIds && !in_array('-1', $calIds)) {
+			// Loop over the calids, they can be string as with DB cache of external events
+			$condition = 'catid in (';
+			foreach ($calIds as $calId) {
+				$condition .= $db->q($calId) . ',';
+			}
+			$dbquery->where(trim($condition, ',') . ')');
 		}
 
 		$db->setQuery($dbquery);

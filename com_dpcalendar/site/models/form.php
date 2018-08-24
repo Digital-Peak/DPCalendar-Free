@@ -65,7 +65,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 
 			$booking = $bookingModel->save(
 				array(
-					'event_id' => array($event->id => $amount),
+					'event_id' => [$event->id => ['tickets' => $amount]],
 					'name'     => $u->name,
 					'email'    => $u->email,
 					'user_id'  => $u->id
@@ -187,11 +187,11 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$form->setFieldAttribute('created_by', 'type', 'sql');
 			$form->setFieldAttribute('created_by', 'key_field', 'value');
 			$form->setFieldAttribute('created_by', 'value_field', 'text');
-			$form->setFieldAttribute('created_by', 'query', 'select id as value, name as text from #__users');
+			$form->setFieldAttribute('created_by', 'query', 'select id as value, name as text from #__users union all select null, null');
 			$form->setFieldAttribute('modified_by', 'type', 'sql');
 			$form->setFieldAttribute('modified_by', 'key_field', 'value');
 			$form->setFieldAttribute('modified_by', 'value_field', 'text');
-			$form->setFieldAttribute('modified_by', 'query', 'select id as value, name as text from #__users');
+			$form->setFieldAttribute('modified_by', 'query', 'select id as value, name as text from #__users union all select null, null');
 		}
 
 		return $return;

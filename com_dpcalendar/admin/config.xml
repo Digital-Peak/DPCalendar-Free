@@ -393,12 +393,6 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-		<field name="list_show_icon" type="radio" class="btn-group" default="0"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_ICON_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_ICON_DESC">
-			<option value="1">JYES</option>
-			<option value="0">JNO</option>
-		</field>
 		<field name="list_show_map" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
@@ -1053,13 +1047,6 @@
 		</field>
 		<field name="ticket_form_remind_time" type="list" default="1"
 		       label="COM_DPCALENDAR_TICKET_FIELD_REMIND_TIME_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
-			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
-			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
-			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
-		</field>
-		<field name="ticket_form_remind_type" type="list" default="1"
-		       label="COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
 			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>

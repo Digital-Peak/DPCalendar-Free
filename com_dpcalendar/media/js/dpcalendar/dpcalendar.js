@@ -68,10 +68,10 @@ if (!String.prototype.endsWith) {
 
 	DPCalendar.print = function (selector) {
 		var printContents = document.querySelector(selector).outerHTML;
-		var originalContents = document.body.outerHTML;
 		document.body.outerHTML = printContents;
 		window.print();
-		document.body.outerHTML = originalContents;
+		// Page needs to be reloaded, otherwise all listeners are lost
+		window.location.reload(false);
 	};
 
 	DPCalendar.slideToggle = function (el, fn) {

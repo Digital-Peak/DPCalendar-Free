@@ -103,6 +103,10 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$this->roomTitles = [];
 		if ($event->locations && !empty($this->event->rooms)) {
 			foreach ($event->locations as $location) {
+				if (empty($location->rooms)) {
+					continue;
+				}
+
 				foreach ($this->event->rooms as $room) {
 					list($locationId, $roomId) = explode('-', $room, 2);
 
@@ -194,7 +198,9 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			$metadesc = JHtmlString::truncate($this->event->description, 200, true, false);
 		}
 		if ($metadesc) {
-			$this->document->setDescription($this->event->title . ' ' . DPCalendarHelper::getDateStringFromEvent($this->event) . ' ' . $metadesc);
+			$this->document->setDescription($this->event->title . ' '
+				. DPCalendarHelper::getDateStringFromEvent($this->event, $this->params->get('event_date_format', 'm.d.Y'),
+					$this->params->get('event_time_format', 'g:i a'), true) . ' ' . $metadesc);
 		}
 
 		if ($this->event->metakey) {

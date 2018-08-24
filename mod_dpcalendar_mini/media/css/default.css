@@ -1,3 +1,7 @@
+.mod-dpcalendar-mini .fc-title {
+	overflow-wrap: break-word;
+}
+
 .mod-dpcalendar-mini .fc-timelineYear-view .fc-time-area col {
 	min-width: 100px;
 }

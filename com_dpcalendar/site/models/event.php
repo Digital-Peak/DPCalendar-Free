@@ -150,10 +150,6 @@ class DPCalendarModelEvent extends JModelForm
 
 					$data = $db->loadObject();
 
-					if ($error = $db->getErrorMsg()) {
-						throw new Exception($error);
-					}
-
 					if (empty($data)) {
 						throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 					}

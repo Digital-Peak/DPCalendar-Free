@@ -18,7 +18,7 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 		$app = JFactory::getApplication();
 
 		$calendar = null;
-		$id       = $app->isClient('adminsitrator') ? 0 : $app->input->get('id');
+		$id       = $app->isClient('administrator') ? 0 : $app->input->get('id');
 		if (!empty($id) && $this->value) {
 			$calendar = DPCalendarHelper::getCalendar($this->value);
 		}

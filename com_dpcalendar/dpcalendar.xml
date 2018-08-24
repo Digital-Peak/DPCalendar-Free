@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.0.2</version>
+	<version>7.0.3</version>
 	<description>COM_DPCALENDAR_XML_DESCRIPTION</description>
 	<install>
 		<sql>
@@ -50,7 +50,6 @@
 			<menu link="option=com_categories&amp;extension=com_dpcalendar" view="categories">COM_DPCALENDAR_SUBMENU_CALENDARS</menu>
 			<menu view="locations">COM_DPCALENDAR_SUBMENU_LOCATIONS</menu>
 			<menu view="tools">COM_DPCALENDAR_SUBMENU_TOOLS</menu>
-			<menu view="support">COM_DPCALENDAR_SUBMENU_SUPPORT</menu>
 		</submenu>
 		<files folder="admin">
 			<filename>access.xml</filename>

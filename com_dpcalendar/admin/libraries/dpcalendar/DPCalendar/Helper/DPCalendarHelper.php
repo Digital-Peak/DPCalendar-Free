@@ -22,6 +22,10 @@ if (!defined('DS')) {
 \JLoader::import('joomla.filesystem.folder');
 \JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');
 
+if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
+	\JLoader::registerAlias('JFormFieldCategoryEdit', '\\Joomla\\Component\\Categories\\Administrator\\Field\\CategoryeditField');
+}
+
 class DPCalendarHelper
 {
 
@@ -275,21 +279,21 @@ class DPCalendarHelper
 		return $date;
 	}
 
-	public static function getDateStringFromEvent($event, $dateFormat = null, $timeFormat = null)
+	public static function getDateStringFromEvent($event, $dateFormat = null, $timeFormat = null, $noTags = false)
 	{
-		return \JLayoutHelper::render(
+		$text = \JLayoutHelper::render(
 			'event.datestring',
-			array(
-				'event'      => $event,
-				'dateFormat' => $dateFormat,
-				'timeFormat' => $timeFormat
-			),
-			null,
-			array(
-				'component' => 'com_dpcalendar',
-				'client'    => 0
-			)
+			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat], null, ['component' => 'com_dpcalendar', 'client' => 0]
 		);
+
+		if (!$noTags) {
+			return $text;
+		}
+
+		$text = strip_tags($text);
+		$text = preg_replace("/\s\s+/", ' ', $text);
+
+		return trim($text);
 	}
 
 	public static function dateStringToDatepickerFormat($dateString)
@@ -807,7 +811,7 @@ class DPCalendarHelper
 
 	public static function isJoomlaVersion($version, $operator = '==')
 	{
-		$release = \JVersion::RELEASE;
+		$release = (new \JVersion())->getShortVersion();
 		switch ($operator) {
 			case '>=':
 				return substr($release, 0, strlen($version)) >= $version;

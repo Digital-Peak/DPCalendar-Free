@@ -1218,12 +1218,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Digital-Peak/TCPDF.git",
-                "reference": "25cc8725deda7e4c2c4a93becd9dc3be41ee4eae"
+                "reference": "62f554b869530af95de393391c5d40f4953c70d5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Digital-Peak/TCPDF/zipball/25cc8725deda7e4c2c4a93becd9dc3be41ee4eae",
-                "reference": "25cc8725deda7e4c2c4a93becd9dc3be41ee4eae",
+                "url": "https://api.github.com/repos/Digital-Peak/TCPDF/zipball/62f554b869530af95de393391c5d40f4953c70d5",
+                "reference": "62f554b869530af95de393391c5d40f4953c70d5",
                 "shasum": ""
             },
             "require": {
@@ -1232,7 +1232,6 @@
             "type": "library",
             "autoload": {
                 "classmap": [
-                    "fonts",
                     "config",
                     "include",
                     "tcpdf.php",
@@ -1252,13 +1251,13 @@
                 ]
             },
             "license": [
-                "LGPLv3"
+                "LGPL-3.0"
             ],
             "authors": [
                 {
                     "name": "Nicola Asuni",
                     "email": "info@tecnick.com",
-                    "homepage": "http://nicolaasuni.tecnick.com"
+                    "role": "lead"
                 }
             ],
             "description": "TCPDF is a PHP class for generating PDF documents and barcodes.",
@@ -1275,7 +1274,7 @@
             "support": {
                 "source": "https://github.com/Digital-Peak/TCPDF/tree/min"
             },
-            "time": "2015-12-01T09:26:48+00:00"
+            "time": "2018-07-19T12:56:32+00:00"
         }
     ],
     "packages-dev": [],

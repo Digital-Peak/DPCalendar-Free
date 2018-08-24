@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.0.2</version>
+	<version>7.0.3</version>
 	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>
@@ -18,6 +18,7 @@
 		<folder>css</folder>
 		<folder>js</folder>
 	</media>
+	<scriptfile>script.php</scriptfile>
 	<config>
 		<fields name="params" addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 			<fieldset name="basic">

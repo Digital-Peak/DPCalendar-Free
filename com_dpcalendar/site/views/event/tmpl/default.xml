@@ -666,14 +666,6 @@
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
 				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 			</field>
-			<field name="ticket_form_remind_type" type="list" useglobal="true" default="1"
-			       label="COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
-				<option value="">JGLOBAL_USE_GLOBAL</option>
-				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
-				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
-			</field>
 		</fieldset>
 	</fields>
 </metadata>

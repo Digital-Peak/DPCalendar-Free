@@ -87,6 +87,10 @@
 	color: #666666;
 }
 
+.com-dpcalendar-calendar .fc-title {
+	overflow-wrap: break-word;
+}
+
 .com-dpcalendar-calendar .fc-timelineYear-view .fc-time-area col {
 	min-width: 100px;
 }

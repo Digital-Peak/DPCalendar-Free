@@ -20,4 +20,10 @@ if (key_exists('currency', $displayData) && $displayData['currency']) {
 	$currency = $displayData['currency'];
 }
 
+if ($currency == '$') {
+	echo htmlentities($currency . ' ' . $price);
+
+	return;
+}
+
 echo htmlentities($price . ' ' . $currency);

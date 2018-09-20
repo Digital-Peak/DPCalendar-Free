@@ -35,7 +35,7 @@ DPCalendar = window.DPCalendar || {};
 						);
 					}
 				},
-				DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone'))
+				DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)'))
 			);
 		};
 

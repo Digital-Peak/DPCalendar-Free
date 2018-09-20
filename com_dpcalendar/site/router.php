@@ -47,6 +47,16 @@ class DPCalendarRouter extends JComponentRouterView
 		$location->setParent($locations, 'id');
 		$this->registerView($location);
 
+		$form = new JComponentRouterViewconfiguration('locationform');
+		$form->setKey('t_id');
+		$this->registerView($form);
+
+		$bookings = new JComponentRouterViewconfiguration('bookings');
+		$this->registerView($bookings);
+
+		$tickets = new JComponentRouterViewconfiguration('tickets');
+		$this->registerView($tickets);
+
 		$profile = new JComponentRouterViewconfiguration('profile');
 		$this->registerView($profile);
 

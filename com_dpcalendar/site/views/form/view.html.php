@@ -106,6 +106,7 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			$hideFieldsets[] = 'publishing';
 		}
 		if (!$this->params->get('event_form_change_metadata', 1)) {
+			$hideFieldsets[] = 'jmetadata';
 			$hideFieldsets['metadata'] = 'jmetadata';
 		}
 

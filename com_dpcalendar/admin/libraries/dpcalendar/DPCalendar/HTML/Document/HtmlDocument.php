@@ -87,6 +87,9 @@ class HtmlDocument
 			$this->loadScriptFile('dpcalendar/calendar.js');
 		}
 		if ($name == self::LIBRARY_SCHEDULER) {
+			\JHtml::_('behavior.core');
+			\JHtml::_('jquery.framework');
+			$this->loadScriptFile('dpcalendar/dpcalendar.js');
 			$this->loadScriptFile('scheduler/scheduler.js');
 			$this->loadStyleFile('scheduler/scheduler.css');
 		}

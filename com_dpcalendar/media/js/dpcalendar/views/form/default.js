@@ -59,8 +59,7 @@ DPCalendar = window.DPCalendar || {};
 			for (var i = 0; i < e.target.length; i++) {
 				if (e.target.value && isNaN(parseInt(e.target.options[i].value))) {
 					Joomla.loadingLayer('show');
-					document.querySelector('input[name=task]').value = 'event.reload';
-					this.form.submit();
+					Joomla.submitbutton('event.reload');
 					return true;
 				}
 			}
@@ -105,10 +104,8 @@ DPCalendar = window.DPCalendar || {};
 			DPCalendar.autocomplete.create(titleInput);
 
 			titleInput.addEventListener('dp-autocomplete-select', function (e) {
-				var task = document.querySelector('input[name=task]');
-				task.value = 'event.reloadfromevent';
 				document.querySelector('input[name=template_event_id]').value = e.detail.value;
-				task.form.submit();
+				Joomla.submitbutton('event.reloadfromevent');
 			});
 
 			var url = new Url();
@@ -130,8 +127,7 @@ DPCalendar = window.DPCalendar || {};
 
 		document.getElementById('jform_location_ids').addEventListener('change', function (e) {
 			Joomla.loadingLayer('show');
-			document.querySelector('input[name=task]').value = 'event.reload';
-			this.form.submit();
+			Joomla.submitbutton('event.reload');
 		});
 
 		document.querySelector('.com-dpcalendar-eventform__location-form .dp-button-cancel').addEventListener('click', function () {

@@ -63,14 +63,14 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 			$toMove[$i] = $option;
 
 			// Move subitems as well
-			for ($i += 1; $i < count($options); $i++) {
-				$child = $options[$i];
+			for ($j = $i + 1; $j < count($options); $j++) {
+				$child = $options[$j];
 
 				if (!isset($child->level) || !isset($option->level) || $child->level <= $option->level) {
 					break;
 				}
-				$toMove[$i] = $child;
-				unset($options[$i]);
+				$toMove[$j] = $child;
+				$i          = $j;
 			}
 		}
 

@@ -757,7 +757,7 @@ class DPCalendarHelper
 		}
 
 		foreach ($items as $item) {
-			\JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.' . $name, &$item, &$item->params));
+			\JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.' . $name, &$item, &$item->params, 0));
 			$line = array();
 			foreach ($fieldsToLabels as $fieldName => $fieldLabel) {
 				$line[] = $valueParser($fieldName, $item);

@@ -202,6 +202,7 @@ class DPCalendarModelEvent extends JModelForm
 					$data->user_discount   = json_decode($data->user_discount);
 					$data->booking_options = $data->booking_options ? json_decode($data->booking_options) : [];
 					$data->rooms           = $data->rooms ? explode(',', $data->rooms) : [];
+					$data->plugintype      = $data->plugintype ? explode(',', $data->plugintype) : [];
 
 					\DPCalendar\Helper\DPCalendarHelper::parseImages($data);
 

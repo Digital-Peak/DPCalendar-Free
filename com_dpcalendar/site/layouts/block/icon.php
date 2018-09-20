@@ -7,14 +7,20 @@
  */
 defined('_JEXEC') or die();
 
-$file = \Joomla\CMS\HTML\HTMLHelper::image('com_dpcalendar/icons/' . $displayData['icon'] . '.svg', '', null, true, 1);
-if (!$file) {
-	return;
+$path = JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() . '/images/com_dpcalendar/icons/' . $displayData['icon'] . '.svg';
+if (!file_exists($path)) {
+	$path = JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() . '/images/icons/' . $displayData['icon'] . '.svg';
+}
+if (!file_exists($path)) {
+	$path = JPATH_ROOT . '/media/com_dpcalendar/images/icons/' . $displayData['icon'] . '.svg';
+}
+if (!file_exists($path)) {
+	return '';
 }
 
-$content = @file_get_contents(JPATH_ROOT . substr($file, strpos($file, '/media')));
+$content = @file_get_contents($path);
 if (!empty($displayData['title'])) {
 	$content = str_replace('><path', '><title>' . $displayData['title'] . '</title><path', $content);
 }
 ?>
-<span class="dp-icon do-icon_<?php echo $displayData['icon']; ?>"><?php echo $content; ?></span>
+<span class="dp-icon dp-icon_<?php echo $displayData['icon']; ?>"><?php echo $content; ?></span>

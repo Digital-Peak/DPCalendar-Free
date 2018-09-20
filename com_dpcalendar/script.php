@@ -164,6 +164,9 @@ class Com_DPCalendarInstallerScript
 				JFile::delete($path);
 			}
 		}
+		if (version_compare($version, '7.0.6') == -1) {
+			JFile::delete(JPATH_ROOT . '/components/com_dpcalendar/views/ticketform/tmpl/default.xml');
+		}
 	}
 
 	public function uninstall($parent)

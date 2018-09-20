@@ -68,11 +68,26 @@ DPCalendar = window.DPCalendar || {};
 			DPCalendar.request(
 				'task=' + task + '&loc=' + encodeURIComponent(e.detail.value),
 				function (json) {
-					if (json.data) {
-						setGeoResult(json.data);
-
-						DPCalendar.Map.moveMarker(map, marker, json.data.latitude, json.data.longitude);
+					if (!json.data) {
+						return;
 					}
+					setGeoResult(json.data);
+
+					if (!marker) {
+						marker = DPCalendar.Map.createMarker(
+							map,
+							{
+								latitude: document.getElementById('jform_latitude').value,
+								longitude: document.getElementById('jform_longitude').value
+							}
+						);
+					}
+
+					if (!marker) {
+						return;
+					}
+
+					DPCalendar.Map.moveMarker(map, marker, json.data.latitude, json.data.longitude);
 				}
 			);
 		});

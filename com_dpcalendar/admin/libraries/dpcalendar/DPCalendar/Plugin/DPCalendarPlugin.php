@@ -549,11 +549,17 @@ abstract class DPCalendarPlugin extends \JPlugin
 			return false;
 		}
 
-		if (!in_array($form->getName(), array('com_dpcalendar.event'))) {
+		if ($form->getName() != 'com_dpcalendar.event') {
 			return true;
 		}
 
-		$catId = $data->catid;
+		$data = (object)$data;
+
+		$catId = null;
+		if (!empty($data->catid)) {
+			$catId = $data->catid;
+		}
+
 		if (empty($catId) && $formField = $form->getField('catid')) {
 			$catId = $formField->getAttribute('default', null);
 

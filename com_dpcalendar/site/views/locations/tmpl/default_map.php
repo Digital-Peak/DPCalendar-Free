@@ -7,6 +7,10 @@
  */
 defined('_JEXEC') or die();
 
+if (!$this->params->get('locations_show_map', 1)) {
+	return;
+}
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
 ?>
 <div class="com-dpcalendar-locations__map">
 	<div class="dp-map"

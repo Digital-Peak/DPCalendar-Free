@@ -265,6 +265,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data->user_discount = json_encode($newData);
 		}
 
+		if (!empty($data->plugintype) && is_string($data->plugintype)) {
+			$data->plugintype = explode(',', $data->plugintype);
+		}
+
 		return $data;
 	}
 
@@ -424,12 +428,15 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['capacity'] = $this->getParams()->get('event_form_capacity');
 		}
 
-
 		if (!empty($data['booking_options']) && is_array($data['booking_options'])) {
 			$data['booking_options'] = json_encode($data['booking_options']);
 		}
 
-			// Only apply the default values on create
+		if (!empty($data['plugintype']) && is_array($data['plugintype'])) {
+			$data['plugintype'] = implode(',', $data['plugintype']);
+		}
+
+		// Only apply the default values on create
 		if (empty($data['id'])) {
 			$data = array_merge($data, $this->getDefaultValues(new JObject($data)));
 		}
@@ -594,6 +601,9 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 		if (!$item->get('plugintype')) {
 			$data['plugintype'] = $params->get('event_form_plugintype');
+		}
+		if (!$item->get('terms')) {
+			$data['terms'] = $params->get('event_form_terms');
 		}
 		if (!$item->get('access')) {
 			$data['access'] = $params->get('event_form_access');

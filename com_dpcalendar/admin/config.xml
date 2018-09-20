@@ -757,11 +757,15 @@
 		       label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
 		<field name="event_form_price" type="text"
 		       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
-		<field name="event_form_plugintype" type="plugins" folder="dpcalendarpay"
+		<field name="event_form_plugintype" type="plugins" folder="dpcalendarpay" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
 			<option value=""></option>
 			<option value="0">COM_DPCALENDAR_FIELD_PAYMENT_TYPE_ALL</option>
 		</field>
+		<field name="event_form_terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
+		       addfieldpath="/administrator/components/com_content/models/fields"
+		       label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
+
 		<field name="event_form_featured" type="list" label="JFEATURED"
 		       description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
 			<option value=""></option>
@@ -1056,19 +1060,25 @@
 
 	<fieldset name="locations" label="COM_DPCALENDAR_LOCATIONS"
 	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
-		<field name="locations_map_zoom" type="text" default="4"
+		<field name="locations_show_map" type="radio" class="btn-group"
+		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="locations_map_zoom" type="text" default="4" showon="locations_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
-		<field name="locations_map_width" type="text" default="100%"
+		<field name="locations_map_width" type="text" default="100%" showon="locations_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
-		<field name="locations_map_height" type="text"
+		<field name="locations_map_height" type="text" showon="locations_show_map:1"
 		       default="250px" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
-		<field name="locations_map_latitude" type="text" validate="decimal"
+		<field name="locations_map_latitude" type="text" validate="decimal" showon="locations_show_map:1"
 		       default="47" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
-		<field name="locations_map_longitude" type="text" validate="decimal"
+		<field name="locations_map_longitude" type="text" validate="decimal" showon="locations_show_map:1"
 		       default="4" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="locations_expand" type="list" class="btn-group"
@@ -1129,19 +1139,25 @@
 
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION"
 	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
-		<field name="location_map_zoom" type="text" default="4"
+		<field name="location_show_map" type="radio" class="btn-group"
+		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="location_map_zoom" type="text" default="4" showon="location_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
-		<field name="location_map_width" type="text" default="100%"
+		<field name="location_map_width" type="text" default="100%" showon="location_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
-		<field name="location_map_height" type="text" default="250px"
+		<field name="location_map_height" type="text" default="250px" showon="location_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
-		<field name="location_map_latitude" type="text"
+		<field name="location_map_latitude" type="text" showon="location_show_map:1"
 		       default="47" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
-		<field name="location_map_longitude" type="text"
+		<field name="location_map_longitude" type="text" showon="location_show_map:1"
 		       default="4" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="location_format" type="filelist" default="format_us"

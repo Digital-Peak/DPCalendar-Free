@@ -205,7 +205,7 @@
 			       label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
 			<field name="event_form_price" type="text" useglobal="true" size="6"
 			       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
-			<field name="event_form_plugintype" type="plugins" folder="dpcalendarpay" useglobal="true"
+			<field name="event_form_plugintype" type="plugins" folder="dpcalendarpay"  multiple="true" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
 
 				<option value="0">COM_DPCALENDAR_FIELD_PAYMENT_TYPE_ALL</option>

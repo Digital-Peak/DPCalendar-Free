@@ -160,7 +160,7 @@
 		<field name="booking_options" type="subform" multiple="true"
 		       formsource="administrator/components/com_dpcalendar/models/forms/event_booking_options.xml"
 		       label="COM_DPCALENDAR_OPTIONS" description="COM_DPCALENDAR_FIELD_BOOKING_OPTIONS_DESC"/>
-		<field name="plugintype" type="plugins" folder="dpcalendarpay" default="0"
+		<field name="plugintype" type="plugins" folder="dpcalendarpay" default="0" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
 			<option value="0">COM_DPCALENDAR_FIELD_PAYMENT_TYPE_ALL</option>
 		</field>

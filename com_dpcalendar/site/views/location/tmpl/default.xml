@@ -16,13 +16,19 @@
 	<fields name="params"
 	        addrulepath="/administrator/components/com_dpcalendar/models/rules">
 		<fieldset name="basic">
-			<field name="location_map_zoom" type="text" size="5" useglobal="true"
+			<field name="location_show_map" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="location_map_zoom" type="text" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
-			<field name="location_map_width" type="text" size="10" useglobal="true"
+			<field name="location_map_width" type="text" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
-			<field name="location_map_height" type="text" size="10" useglobal="true"
+			<field name="location_map_height" type="text" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
 			<field name="location_map_latitude" type="text" validate="decimal" useglobal="true"

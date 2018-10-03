@@ -61,6 +61,12 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		$data = $this->input->post->get('jform', array(), 'array');
 
+		if (!key_exists('color', $data)) {
+			$data['color'] = '';
+		}
+
+		$this->input->post->set('jform', $data);
+
 		$result = false;
 		if (!is_numeric($data['catid'])) {
 			JPluginHelper::importPlugin('dpcalendar');

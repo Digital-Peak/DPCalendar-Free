@@ -9,9 +9,9 @@ namespace DPCalendar\Router;
 
 class Router
 {
-	public function route($url)
+	public function route($url, $xhtml = true)
 	{
-		return \JRoute::_($url);
+		return \JRoute::_($url, $xhtml);
 	}
 
 	public function getCalendarRoute($calId)

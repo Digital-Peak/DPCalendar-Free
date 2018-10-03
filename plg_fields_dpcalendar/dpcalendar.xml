@@ -2,12 +2,12 @@
 <extension type="plugin" version="3.7.0" group="fields" method="upgrade">
 	<name>plg_fields_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>Sep 2018</creationDate>
+	<creationDate>Oct 2018</creationDate>
 	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.0.6</version>
+	<version>7.0.7</version>
 	<description>PLG_FIELDS_DPCALENDAR_XML_DESCRIPTION</description>
 	<files>
 		<filename plugin="dpcalendar">dpcalendar.php</filename>

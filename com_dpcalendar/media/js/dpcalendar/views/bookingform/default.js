@@ -145,7 +145,7 @@ DPCalendar = window.DPCalendar || {};
 
 	DPCalendar.updateBookingMail = function (input) {
 		DPCalendar.request(
-			'index.php?option=com_dpcalendar&task=booking.mail',
+			'task=booking.mail',
 			function (json) {
 				if (json.success) {
 					document.getElementById('jform_name').value = json.data.name;

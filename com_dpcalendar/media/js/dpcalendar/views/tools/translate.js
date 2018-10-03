@@ -3,7 +3,7 @@
 
 	var callFetch = function (resource, next, queue) {
 		DPCalendar.request(
-			'index.php?option=com_dpcalendar&task=translate.fetch',
+			'task=translate.fetch',
 			function (json) {
 				for (var i in json.languages) {
 					var language = json.languages[i];
@@ -33,7 +33,7 @@
 
 	var callUpdate = function (resource, next, queue) {
 		DPCalendar.request(
-			'index.php?option=com_dpcalendar&task=translate.update',
+			'task=translate.update',
 			function (json) {
 				resource.querySelector('.dp-resource__icon i').setAttribute('class', 'icon-checkmark-circle');
 

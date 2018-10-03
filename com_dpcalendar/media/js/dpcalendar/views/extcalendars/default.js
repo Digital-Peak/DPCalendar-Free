@@ -24,7 +24,7 @@
 		var root = document.querySelector('.com-dpcalendar-extcalendars');
 		if (root && root.getAttribute('data-sync') == 2) {
 			DPCalendar.request(
-				'index.php?option=com_dpcalendar&task=extcalendars.sync&dpplugin=' + root.getAttribute('data-sync-plugin')
+				'task=extcalendars.sync&dpplugin=' + root.getAttribute('data-sync-plugin')
 			);
 
 		}

@@ -224,7 +224,7 @@ DPCalendar = window.DPCalendar || {};
 			}
 
 			DPCalendar.request(
-				'index.php?option=com_dpcalendar&task=event.move',
+				'task=event.move',
 				function (json) {
 					if (json.data.url) {
 						event.url = json.data.url;
@@ -254,7 +254,7 @@ DPCalendar = window.DPCalendar || {};
 		// Resize support
 		options['eventResize'] = function (event, delta, revertFunc, jsEvent, ui, view) {
 			DPCalendar.request(
-				'index.php?option=com_dpcalendar&task=event.move',
+				'task=event.move',
 				function (json) {
 					if (json.data.url) {
 						event.url = json.data.url;

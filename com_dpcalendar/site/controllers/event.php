@@ -316,6 +316,10 @@ class DPCalendarControllerEvent extends JControllerForm
 			$data['all_day'] = 0;
 		}
 
+		if (!key_exists('color', $data)) {
+			$data['color'] = '';
+		}
+
 		$app        = JFactory::getApplication();
 		$dateFormat = $app->getParams()->get('event_form_date_format', 'm.d.Y');
 		$timeFormat = $app->getParams()->get('event_form_time_format', 'g:i a');

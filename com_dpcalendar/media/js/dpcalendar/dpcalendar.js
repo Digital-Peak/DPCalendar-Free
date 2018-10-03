@@ -235,7 +235,7 @@ if (!String.prototype.endsWith) {
 		DPCalendar.requestCounter++;
 
 		Joomla.request({
-			url: 'index.php?option=com_dpcalendar&' + url,
+			url: Joomla.getOptions('system.paths').base + '/index.php?option=com_dpcalendar&' + url,
 			method: 'POST',
 			data: data,
 			onSuccess: function (res) {

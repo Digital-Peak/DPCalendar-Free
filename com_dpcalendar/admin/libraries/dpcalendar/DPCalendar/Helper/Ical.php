@@ -274,6 +274,7 @@ class Ical
 		$text[] = 'X-HITS:' . $event->hits;
 		$text[] = 'X-URL:' . $event->url;
 		$text[] = 'X-COLOR:' . $event->color;
+		$text[] = 'X-SHOW-END-TIME:' . $event->show_end_time;
 
 		$text[] = 'END:VEVENT';
 

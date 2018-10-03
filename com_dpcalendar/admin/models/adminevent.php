@@ -151,10 +151,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 			$colorValues = '';
 			foreach ($colors as $color) {
-				$colorValues .= ',' . $color->color_option;
+				$colorValues .= $color->color_option . ',';
 			}
 
-			$form->setFieldAttribute('color', 'colors', trim($colorValues, ','));
+			if ($colorValues) {
+				$colorValues = substr($colorValues, 0, strlen($colorValues) - 1);
+			}
+
+			$form->setFieldAttribute('color', 'colors', $colorValues);
 		}
 
 		return $form;

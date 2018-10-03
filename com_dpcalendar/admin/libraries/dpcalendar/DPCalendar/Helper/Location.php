@@ -326,12 +326,28 @@ class Location
 				continue;
 			}
 
+			// Normalize some data
+			if ($feature->properties->osm_key == 'place' && $feature->properties->osm_value == 'city' && empty($feature->properties->city)) {
+				$feature->properties->city = $feature->properties->name;
+				$feature->properties->name = null;
+			}
+			if ($feature->properties->osm_key == 'place' && $feature->properties->osm_value == 'county' && empty($feature->properties->county)) {
+				$feature->properties->county = $feature->properties->name;
+				$feature->properties->name = null;
+			}
+
 			$item        = new \stdClass();
 			$item->value = $feature->geometry->coordinates[1] . ',' . $feature->geometry->coordinates[0];
 
 			$item->title = [];
 			if (!empty($feature->properties->country)) {
 				$item->title[] = $feature->properties->country;
+			}
+			if (!empty($feature->properties->state)) {
+				$item->title[] = $feature->properties->state;
+			}
+			if (!empty($feature->properties->county)) {
+				$item->title[] = $feature->properties->county;
 			}
 			if (!empty($feature->properties->city)) {
 				$item->title[] = $feature->properties->city;
@@ -342,17 +358,14 @@ class Location
 			if (!empty($feature->properties->street)) {
 				$item->title[] = $feature->properties->street;
 			}
+			if (!empty($feature->properties->housenumber)) {
+				$item->title[] = $feature->properties->housenumber;
+			}
 			$item->title = implode(', ', $item->title);
 
 			$item->details = [];
 			if (!empty($feature->properties->name)) {
 				$item->details[] = $feature->properties->name;
-			}
-			if (!empty($feature->properties->key)) {
-				$item->details[] = ucfirst($feature->properties->key);
-			}
-			if (!empty($feature->properties->value)) {
-				$item->details[] = ucfirst($feature->properties->value);
 			}
 			$item->details = implode(' ', $item->details);
 

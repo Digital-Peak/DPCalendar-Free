@@ -12,7 +12,7 @@
 				});
 
 				DPCalendar.request(
-					'index.php?option=com_dpcalendar&view=profile&task=profile.change',
+					'view=profile&task=profile.change',
 					function (response) {
 					},
 					data

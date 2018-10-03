@@ -824,6 +824,11 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$tmpEvent->images->image_full = $image;
 		}
 
+		$showEndTime = $event->{'x-show-end-time'};
+		if ($showEndTime) {
+			$tmpEvent->show_end_time = (string)$showEndTime != '0';
+		}
+
 		$location  = (string)$event->LOCATION;
 		$locations = array();
 		if (!empty($location)) {

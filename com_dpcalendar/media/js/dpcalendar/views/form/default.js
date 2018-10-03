@@ -153,7 +153,7 @@ DPCalendar = window.DPCalendar || {};
 			data['id'] = 0;
 
 			DPCalendar.request(
-				'index.php?option=com_dpcalendar&task=locationform.save',
+				'task=locationform.save',
 				function (json) {
 					if (json.data.id != null && json.data.display != null) {
 						var select = document.getElementById('jform_location_ids');
@@ -211,7 +211,7 @@ DPCalendar = window.DPCalendar || {};
 		// Chosen doesn't update the selected value
 		var url = new Url();
 		DPCalendar.request(
-			'index.php?option=com_dpcalendar&task=event.overlapping',
+			'task=event.overlapping',
 			function (json) {
 				if (json.data.message) {
 					box.style.display = 'block';

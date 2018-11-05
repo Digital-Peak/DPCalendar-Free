@@ -116,9 +116,10 @@ if ($params->get('calendar_height', 0) > 0) {
 	$options['height'] = 'auto';
 }
 
-$options['slotEventOverlap'] = (boolean)$params->get('overlap_events', 1);
-$options['slotMinutes']      = $params->get('agenda_slot_minutes', 30);
-$options['slotLabelFormat']  = $this->dateHelper->convertPHPDateToMoment($params->get('axisformat', 'g:i a'));
+$options['slotEventOverlap']  = (boolean)$params->get('overlap_events', 1);
+$options['slotDuration']      = '00:' . $params->get('agenda_slot_minutes', 30) . ':00';
+$options['slotLabelInterval'] = '00:' . $params->get('agenda_slot_minutes', 30) . ':00';
+$options['slotLabelFormat']   = $this->dateHelper->convertPHPDateToMoment($params->get('axisformat', 'g:i a'));
 
 // Set up the header
 $options['header'] = array('left' => array(), 'center' => array(), 'right' => array());

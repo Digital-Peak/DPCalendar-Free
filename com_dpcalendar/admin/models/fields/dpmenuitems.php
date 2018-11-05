@@ -67,13 +67,26 @@ class JFormFieldDPMenuItems extends JFormFieldList
 
 			$params = new \Joomla\Registry\Registry($item->params);
 
-			if (!array_intersect($params->get('ids', []), ['-1', $id])) {
+			$ids = [];
+			foreach ($params->get('ids', []) as $calendarId) {
+				$ids[] = $calendarId;
+
+				$cal = DPCalendarHelper::getCalendar($calendarId);
+				if (!$cal || !method_exists($cal, 'getChildren')) {
+					continue;
+				}
+
+				foreach ($cal->getChildren(true) as $child) {
+					$ids[] = $child->id;
+				}
+			}
+
+			if (!in_array($id, $ids)) {
 				continue;
 			}
 
 			$options[] = \JHtml::_('select.option', $item->id, $item->title);
 		}
-
 
 		return $options;
 	}

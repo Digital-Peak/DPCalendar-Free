@@ -33,6 +33,8 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 
 		if ($return = $this->input->get('return', null, 'base64')) {
 			$this->setRedirect(base64_decode($return));
+		} else {
+			$this->setRedirect(JUri::base());
 		}
 
 		return $result;
@@ -93,19 +95,14 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = null)
 	{
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$itemId = JFactory::getApplication()->input->getInt('Itemid');
-		$return = $this->getReturnPage();
+		$itemId = $this->input->getInt('Itemid');
 
 		if ($itemId) {
 			$append .= '&Itemid=' . $itemId;
 		}
 
-		if ($return) {
-			$append .= '&return=' . base64_encode($return);
-		}
-
-		if (JFactory::getApplication()->input->getCmd('tmpl')) {
-			$append .= '&tmpl=' . JFactory::getApplication()->input->getCmd('tmpl');
+		if ($this->input->getCmd('tmpl')) {
+			$append .= '&tmpl=' . $this->input->getCmd('tmpl');
 		}
 
 		return $append;

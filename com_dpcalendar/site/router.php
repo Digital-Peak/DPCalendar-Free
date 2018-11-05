@@ -48,7 +48,7 @@ class DPCalendarRouter extends JComponentRouterView
 		$this->registerView($location);
 
 		$form = new JComponentRouterViewconfiguration('locationform');
-		$form->setKey('t_id');
+		$form->setKey('l_id');
 		$this->registerView($form);
 
 		$bookings = new JComponentRouterViewconfiguration('bookings');
@@ -217,6 +217,11 @@ class DPCalendarRouter extends JComponentRouterView
 		return array($void => $segment);
 	}
 
+	public function getLocationformSegment($id, $query)
+	{
+		return $this->getLocationSegment($id, $query);
+	}
+
 	public function getCalendarId($segment, $query)
 	{
 		if (isset($query['id'])) {
@@ -270,6 +275,15 @@ class DPCalendarRouter extends JComponentRouterView
 			$condition = 'catid in (';
 			foreach ($calIds as $calId) {
 				$condition .= $db->q($calId) . ',';
+
+				$cal = DPCalendarHelper::getCalendar($calId);
+				if (!$cal || !method_exists($cal, 'getChildren')) {
+					continue;
+				}
+
+				foreach ($cal->getChildren(true) as $child) {
+					$condition .= $db->q($child->id) . ',';
+				}
 			}
 			$dbquery->where(trim($condition, ',') . ')');
 		}

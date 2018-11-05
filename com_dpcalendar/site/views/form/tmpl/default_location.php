@@ -30,7 +30,7 @@ defined('_JEXEC') or die();
 		</button>
 		<button type="button" class="dp-button dp-button-cancel">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::CANCEL]); ?>
-			<?php echo $this->translate('CANCEL'); ?>
+			<?php echo $this->translate('JCANCEL'); ?>
 		</button>
 		<?php echo $this->locationForm->renderField('title'); ?>
 		<?php echo $this->locationForm->renderField('country'); ?>

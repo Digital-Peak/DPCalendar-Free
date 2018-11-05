@@ -35,9 +35,9 @@ if ($tickets) {
 		<div class="dp-booking-info__discount">
 			<?php if ($event->earlybird) { ?>
 				<?php foreach ($event->earlybird->value as $index => $value) { ?>
-					<?php if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $event, $index, -2) == 1000) {
-						continue;
-					} ?>
+					<?php if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $event, $index, -2) == 1000) { ?>
+						<?php continue; ?>
+					<?php } ?>
 					<div class="dp-earlybird dp-info-box">
 						<span class="dp-earlybird__label">
 							<?php echo $event->earlybird->label[$index] ?: $this->translate('COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL'); ?>
@@ -68,9 +68,9 @@ if ($tickets) {
 			<?php } ?>
 			<?php if ($event->user_discount) { ?>
 				<?php foreach ($event->user_discount->value as $index => $value) { ?>
-					<?php if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $event, -2, $index) == 1000) {
-						continue;
-					} ?>
+					<?php if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $event, -2, $index) == 1000) { ?>
+						<?php continue; ?>
+					<?php } ?>
 					<div class="dp-userdiscount dp-info-box">
 						<span class="dp-userdiscount__label">
 							<?php echo $event->user_discount->label[$index] ?: $this->translate('COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL'); ?>

@@ -88,7 +88,7 @@ DPCalendar = window.DPCalendar || {};
 
 		Joomla.submitbutton = function (task) {
 			var form = document.getElementsByName('adminForm')[0];
-			if (form && (task.indexOf('cancel') > -1 || task.indexOf('delete') > -1 || document.formvalidator.isValid(form))) {
+			if (form && (task.indexOf('reload') > -1 || task.indexOf('cancel') > -1 || task.indexOf('delete') > -1 || document.formvalidator.isValid(form))) {
 				Joomla.submitform(task, form);
 			}
 		};
@@ -137,15 +137,22 @@ DPCalendar = window.DPCalendar || {};
 		});
 
 		document.querySelector('.com-dpcalendar-eventform__location-form .dp-button-save').addEventListener('click', function () {
+			var fill = function (data, name) {
+				var input = document.getElementById('location_' + name);
+				if (!input) {
+					return;
+				}
+				data['jform'][name] = input.value;
+			};
 			var data = [];
 			data['jform'] = [];
-			data['jform']['title'] = document.getElementById('location_title').value;
-			data['jform']['country'] = document.getElementById('location_country').value;
-			data['jform']['province'] = document.getElementById('location_province').value;
-			data['jform']['city'] = document.getElementById('location_city').value;
-			data['jform']['zip'] = document.getElementById('location_zip').value;
-			data['jform']['street'] = document.getElementById('location_street').value;
-			data['jform']['number'] = document.getElementById('location_number').value;
+			fill(data, 'title');
+			fill(data, 'country');
+			fill(data, 'province');
+			fill(data, 'city');
+			fill(data, 'zip');
+			fill(data, 'street');
+			fill(data, 'number');
 			data['jform']['state'] = 1;
 			data['jform']['language'] = '*';
 			data[document.querySelector('[name="location_token"]').value] = '1';

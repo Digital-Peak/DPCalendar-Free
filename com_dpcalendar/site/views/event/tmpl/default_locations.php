@@ -37,12 +37,13 @@ if ($this->params->get('event_show_map', '1')) {
 				<h4 class="dp-heading dp-heading_small">
 					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
 					<?php if ($this->user->authorise('core.edit', 'com_dpcalendar')) { ?>
-						<a href="<?php echo $this->router->getLocationFormRoute($location->id, JUri::getInstance()); ?>" class="dp-link">
+						<a href="<?php echo $this->router->getLocationFormRoute($location->id, JUri::getInstance()); ?>"
+						   class="dp-link dp-location__edit-link">
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EDIT]); ?>
 						</a>
 					<?php } ?>
-					<a href="<?php echo $this->router->getLocationRoute($location); ?>" class="dp-link"
-					   name="<?php echo 'dp-location-' . $location->id; ?>">
+					<a href="<?php echo $this->router->getLocationRoute($location); ?>"
+					   class="dp-link dp-location__detail-link" name="<?php echo 'dp-location-' . $location->id; ?>">
 						<?php echo $location->title; ?>
 					</a>
 				</h4>

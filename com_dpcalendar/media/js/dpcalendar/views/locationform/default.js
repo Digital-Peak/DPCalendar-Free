@@ -7,34 +7,29 @@ DPCalendar = window.DPCalendar || {};
 		var geoComplete = document.getElementById('jform_geocomplete');
 		var map = document.querySelector('.dp-map').dpmap;
 
-		var listener = function (e) {
-			geoComplete.value = '';
-			var task = 'location.loc';
-			if (window.location.href.indexOf('administrator') == -1) {
-				task = 'locationform.loc';
-			}
-			DPCalendar.request(
-				'task=' + task + '&loc=' + encodeURIComponent(getAddresString()),
-				function (json) {
-					if (json.data.latitude) {
-						document.getElementById('jform_latitude').value = json.data.latitude;
-						document.getElementById('jform_longitude').value = json.data.longitude;
-
-						DPCalendar.Map.moveMarker(map, marker, json.data.latitude, json.data.longitude);
-					} else {
-						document.getElementById('jform_latitude').value = 0;
-						document.getElementById('jform_longitude').value = 0;
-					}
+		[].slice.call(document.querySelectorAll('#jform_street,#jform_number,#jform_zip,#jform_city,#jform_country,#jform_province')).forEach(function (input) {
+			input.addEventListener('change', function (e) {
+				geoComplete.value = '';
+				var task = 'location.loc';
+				if (window.location.href.indexOf('administrator') == -1) {
+					task = 'locationform.loc';
 				}
-			);
-		};
+				DPCalendar.request(
+					'task=' + task + '&loc=' + encodeURIComponent(getAddresString()),
+					function (json) {
+						if (json.data.latitude) {
+							document.getElementById('jform_latitude').value = json.data.latitude;
+							document.getElementById('jform_longitude').value = json.data.longitude;
 
-		document.getElementById('jform_street').addEventListener('change', listener);
-		document.getElementById('jform_number').addEventListener('change', listener);
-		document.getElementById('jform_zip').addEventListener('change', listener);
-		document.getElementById('jform_city').addEventListener('change', listener);
-		document.getElementById('jform_country').addEventListener('change', listener);
-		document.getElementById('jform_province').addEventListener('change', listener);
+							DPCalendar.Map.moveMarker(map, marker, json.data.latitude, json.data.longitude);
+						} else {
+							document.getElementById('jform_latitude').value = 0;
+							document.getElementById('jform_longitude').value = 0;
+						}
+					}
+				);
+			});
+		});
 
 		var marker = DPCalendar.Map.createMarker(
 			map,
@@ -130,34 +125,27 @@ DPCalendar = window.DPCalendar || {};
 	});
 
 	function getAddresString() {
-		var street = '';
-		var city = '';
-		var province = '';
-		var country = '';
-		if (document.getElementById('jform_street').value) {
-			street = document.getElementById('jform_street').value;
+		var getValue = function (name) {
+			var tmp = document.getElementById('jform_' + name);
+			return tmp ? tmp.value + ', ' : '';
+		};
 
-			if (document.getElementById('jform_number').value) {
-				street += ' ' + document.getElementById('jform_number').value;
+		var street = getValue('street');
+		if (street) {
+			var number = getValue('number');
+			if (number) {
+				street = street.substr(0, street.length - 2) + number;
 			}
-
-			street += ', ';
 		}
-		if (document.getElementById('jform_city').value) {
-			city = document.getElementById('jform_city').value;
-			if (document.getElementById('jform_zip').value) {
-				city += ' ' + document.getElementById('jform_zip').value;
+		var city = getValue('city');
+		if (city) {
+			var zip = getValue('zip');
+			if (zip) {
+				city += city.substr(0, city.length - 2) + zip;
 			}
+		}
 
-			city += ', ';
-		}
-		if (document.getElementById('jform_province').value) {
-			province = document.getElementById('jform_province').value + ', ';
-		}
-		if (document.getElementById('jform_country').value) {
-			country = document.getElementById('jform_country').value + ', ';
-		}
-		return street + city + province + country;
+		return street + city + getValue('province') + getValue('country');
 	}
 
 	function setGeoResult(result) {
@@ -169,12 +157,24 @@ DPCalendar = window.DPCalendar || {};
 			input.value = '';
 		});
 
-		document.getElementById('jform_number').value = result.number;
-		document.getElementById('jform_street').value = result.street;
-		document.getElementById('jform_city').value = result.city;
-		document.getElementById('jform_province').value = result.province;
-		document.getElementById('jform_country').value = result.country;
-		document.getElementById('jform_zip').value = result.zip;
+		if (document.getElementById('jform_number')) {
+			document.getElementById('jform_number').value = result.number;
+		}
+		if (document.getElementById('jform_street')) {
+			document.getElementById('jform_street').value = result.street;
+		}
+		if (document.getElementById('jform_city')) {
+			document.getElementById('jform_city').value = result.city;
+		}
+		if (document.getElementById('jform_province')) {
+			document.getElementById('jform_province').value = result.province;
+		}
+		if (document.getElementById('jform_country')) {
+			document.getElementById('jform_country').value = result.country;
+		}
+		if (document.getElementById('jform_zip')) {
+			document.getElementById('jform_zip').value = result.zip;
+		}
 
 		document.getElementById('jform_latitude').value = result.latitude;
 		document.getElementById('jform_longitude').value = result.longitude;

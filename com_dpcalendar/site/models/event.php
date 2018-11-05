@@ -117,14 +117,9 @@ class DPCalendarModelEvent extends JModelForm
 					$query->join('LEFT', '#__users AS u on u.id = a.created_by');
 
 					$query->select('co.id AS contactid, co.alias as contactalias, co.catid as contactcatid');
-					$query->join('LEFT', '#__contact_details AS co on co.user_id = a.created_by and (co.published = 1 or co.published is null)');
-
-					// Filter by language
-					if ($this->getState('filter.language')) {
-						$query->where(
-							'(co.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') .
-							') OR co.language IS NULL)');
-					}
+					$query->join('LEFT', '#__contact_details AS co on co.user_id = a.created_by
+					and (co.published = 1 or co.published is null)
+					and (co.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR co.language IS NULL)');
 
 					$query->where('a.id = ' . (int)$pk);
 

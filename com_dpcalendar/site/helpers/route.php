@@ -117,9 +117,11 @@ class DPCalendarHelperRoute
 			$link = 'index.php?option=com_dpcalendar&view=locationform&l_id=0';
 		}
 
-		$itemId = JFactory::getApplication()->input->get('Itemid', null);
-		if (!empty($itemId)) {
-			$link .= '&Itemid=' . $itemId;
+		if (!\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+			$itemId = JFactory::getApplication()->input->get('Itemid', null);
+			if (!empty($itemId)) {
+				$link .= '&Itemid=' . $itemId;
+			}
 		}
 
 		if (JFactory::getApplication()->input->getWord('tmpl')) {

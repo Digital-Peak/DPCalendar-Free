@@ -47,6 +47,10 @@ if (!String.prototype.endsWith) {
 				if (closeFunction) {
 					closeFunction(modal.modalBox.children[0].querySelector('iframe'));
 				}
+			},
+			beforeOpen: function() {
+				// Workaround for https://github.com/robinparisi/tingle/issues
+				document.getSelection().removeAllRanges();
 			}
 		});
 

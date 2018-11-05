@@ -8,53 +8,48 @@
 
 defined('_JEXEC') or die();
 
-$published = $this->state->get('filter.state');
-
-JHtml::_('script', 'com_dpcalendar/jscolor/jscolor.js', ['relative' => true], ['defer' => true]);
 ?>
 <div class="modal hide fade" id="collapseModal">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">x</button>
-		<h3><?php echo JText::_('COM_DPCALENDAR_BATCH_OPTIONS');?></h3>
+		<h3><?php echo JText::_('COM_DPCALENDAR_BATCH_OPTIONS'); ?></h3>
 	</div>
 	<div class="modal-body">
 		<p><?php echo JText::_('COM_DPCALENDAR_BATCH_TIP'); ?></p>
 		<div class="control-group">
 			<div class="controls">
-				<?php echo JHtml::_('batch.access');?>
+				<?php echo JLayoutHelper::render('joomla.html.batch.access', []); ?>
 			</div>
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<?php echo JHtml::_('batch.language'); ?>
+				<?php echo JLayoutHelper::render('joomla.html.batch.language', []); ?>
 			</div>
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<label title="<?php echo JText::_('COM_DPCALENDAR_BATCH_COLOR_DESC')?>"
-					class="hasTooltip" for="batch-color" id="batch-color-lbl"><?php echo JText::_('COM_DPCALENDAR_COLOR')?></label>
+				<label title="<?php echo JText::_('COM_DPCALENDAR_BATCH_COLOR_DESC'); ?>"
+					   class="hasTooltip" for="batch-color" id="batch-color-lbl"><?php echo JText::_('COM_DPCALENDAR_COLOR'); ?></label>
 				<input id="batch-color-id" class="color {required:false} inputbox" name="batch[color_id]" maxlength="6"/>
 			</div>
 		</div>
 		<div class="control-group">
 			<div class="controls">
-				<?php echo JHtml::_('batch.tag');?>
+				<?php echo JLayoutHelper::render('joomla.html.batch.tag', []); ?>
 			</div>
 		</div>
-		<?php if ($published >= 0)
-		{ ?>
-		<div class="control-group">
-			<div class="controls">
-				<?php echo JHtml::_('batch.item', 'com_dpcalendar');?>
+		<?php if ($this->state->get('filter.state') >= 0) { ?>
+			<div class="control-group">
+				<div class="controls">
+					<?php echo JLayoutHelper::render('joomla.html.batch.language', ['extension' => 'com_dpcalendar']); ?>
+				</div>
 			</div>
-		</div>
-		<?php
-		} ?>
+		<?php } ?>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" type="button"
-			onclick="document.id('batch-category-id').value='';document.id('batch-access').value='';document.id('batch-language-id').value='';document.id('batch-tag-id)').value=''"
-			data-dismiss="modal">
+				onclick="document.id('batch-category-id').value='';document.id('batch-access').value='';document.id('batch-language-id').value='';document.id('batch-tag-id)').value=''"
+				data-dismiss="modal">
 			<?php echo JText::_('JCANCEL'); ?>
 		</button>
 		<button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('event.batch');">

@@ -10,13 +10,11 @@ defined('_JEXEC') or die();
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/tools/default.css');
 ?>
-<div class="com-dpcalendar-tools">
-	<div id="j-sidebar-container" class="span2">
-		<?php echo $this->sidebar; ?>
-	</div>
-	<div id="j-main-container" class="span10">
+<div class="com-dpcalendar-tools-default">
+	<div id="j-sidebar-container" class="com-dpcalendar-tools-default__sidebar span2"><?php echo $this->sidebar; ?></div>
+	<div id="j-main-container" class="com-dpcalendar-tools-default__content span10">
 		<div id="cpanel">
-		    <div class="com-dpcalendar-tools__icons">
+		    <div class="com-dpcalendar-tools-default__icons">
 		            <div class="dp-quick-icon">
 		                <a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&view=tools&layout=import" >
 			                <?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DOWNLOAD]); ?>
@@ -37,9 +35,8 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/tools/default.css');
 		            </div>
 		    </div>
 		</div>
-		<div class="com-dpcalendar-tools__footer">
+		<div class="com-dpcalendar-tools-default__footer">
 			<?php echo sprintf(JText::_('COM_DPCALENDAR_FOOTER'), $this->input->getString('DPCALENDAR_VERSION'));?>
 		</div>
 	</div>
 </div>
-

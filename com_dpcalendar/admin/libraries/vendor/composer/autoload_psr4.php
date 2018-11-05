@@ -24,5 +24,6 @@ return array(
     'Omnipay\\Stripe\\' => array($vendorDir . '/omnipay/stripe/src'),
     'Omnipay\\PayPal\\' => array($vendorDir . '/omnipay/paypal/src'),
     'Omnipay\\Manual\\' => array($vendorDir . '/omnipay/manual/src'),
+    'League\\Pipeline\\' => array($vendorDir . '/league/pipeline/src'),
     'DPCalendar\\' => array($baseDir . '/libraries/dpcalendar/DPCalendar'),
 );

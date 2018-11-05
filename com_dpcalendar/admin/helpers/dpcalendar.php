@@ -66,7 +66,10 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 			$level     = 'category';
 		}
 
-		$actions = JAccess::getActions('com_dpcalendar', $level);
+		$actions = JAccess::getActionsFromFile(
+			JPATH_ADMINISTRATOR . '/components/com_dpcalendar/access.xml',
+			"/access/section[@name='" . $level . "']/"
+		);
 
 		foreach ($actions as $action) {
 			$result->set($action->name, $user->authorise($action->name, $assetName));
@@ -148,15 +151,5 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 		}
 
 		return $items;
-	}
-
-	public static function where()
-	{
-		$e     = new Exception();
-		$trace = '<pre>' . $e->getTraceAsString() . '</pre>';
-
-		echo $trace;
-
-		return $trace;
 	}
 }

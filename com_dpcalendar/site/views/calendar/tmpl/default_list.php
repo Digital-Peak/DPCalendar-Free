@@ -25,10 +25,15 @@ if ($params->get('show_selection', 1) == 2) {
 		<dl class="com-dpcalendar-calendar__calendar-description dp-description">
 			<dt class="dp-description__label">
 				<label for="cal-<?php echo $calendar->id; ?>">
-					<input type="checkbox" name="<?php echo $calendar->id; ?>" value="<?php echo $value; ?>"  id="cal-<?php echo $calendar->id; ?>"class="dp-input dp-input-checkbox">
+					<input type="checkbox" name="<?php echo $calendar->id; ?>" value="<?php echo $value; ?>" id="cal-<?php echo $calendar->id; ?>"
+						   class="dp-input dp-input-checkbox">
 					<span style="color: #<?php echo $calendar->color; ?>">
 						<?php echo str_pad(' ' . $calendar->title, strlen(' ' . $calendar->title) + $calendar->level - 1, '-', STR_PAD_LEFT); ?>
 						<?php if ((!empty($calendar->icalurl) || !$calendar->external) && $params->get('show_export_links', 1)) { ?>
+							<a href="<?php echo str_replace('http', 'webcal', $this->router->getCalendarIcalRoute($calendar->id)); ?>"
+							   class="dp-link">
+								[<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_SUBSCRIBE'); ?>]
+							</a>
 							<a href="<?php echo $this->router->getCalendarIcalRoute($calendar->id); ?>" class="dp-link">
 								[<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ICAL'); ?>]
 							</a>
@@ -53,11 +58,11 @@ if ($params->get('show_selection', 1) == 2) {
 </div>
 <div class="com-dpcalendar-calendar__toggle dp-toggle">
 	<div class="dp-toggle__up dp-toggle_<?php echo $params->get('show_selection', 1) == 3 ? '' : 'hidden'; ?>"
-	     data-direction="up">
+		 data-direction="up">
 		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::UP]); ?>
 	</div>
 	<div class="dp-toggle__down dp-toggle_<?php echo $params->get('show_selection', 1) == 3 ? 'hidden' : ''; ?>"
-	     data-direction="down">
+		 data-direction="down">
 		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DOWN]); ?>
 	</div>
 </div>

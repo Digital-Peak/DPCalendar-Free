@@ -39,7 +39,7 @@ class DPCalendarController extends JControllerLegacy
 		if ($vName == 'form' && ! $this->checkEditId('com_dpcalendar.edit.event', $id))
 		{
 			// Somehow the person just went to the form - we don't allow that.
-			return JError::raiseError(403, JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+			throw new Exception(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
 		}
 
 		return parent::display($cachable, $safeurlparams);

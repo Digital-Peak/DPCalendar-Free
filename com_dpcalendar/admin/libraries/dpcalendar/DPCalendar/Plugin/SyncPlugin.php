@@ -178,7 +178,6 @@ abstract class SyncPlugin extends DPCalendarPlugin
 				if (!$model->save((array)$event)) {
 					$this->log($model->getError());
 				}
-				$model->detach();
 			}
 
 			$syncDateStart->modify('+' . $this->params->get('sync_steps', '1 year'));

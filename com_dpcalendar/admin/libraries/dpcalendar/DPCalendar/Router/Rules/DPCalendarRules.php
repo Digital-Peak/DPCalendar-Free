@@ -143,7 +143,7 @@ class DPCalendarRules extends \JComponentRouterRulesMenu
 					$selectedCalendars[] = $child->id;
 				}
 			}
-			if (array_intersect($selectedCalendars, ['-1', $cal->id])) {
+			if (array_intersect($selectedCalendars, ['-1', $calendar->id])) {
 				$query['Itemid'] = $active->id;
 
 				return;

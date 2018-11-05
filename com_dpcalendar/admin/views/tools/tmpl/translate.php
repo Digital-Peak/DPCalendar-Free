@@ -16,9 +16,9 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/tools/translate.js');
 
 $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_TEXT'), 'warning');
 ?>
-<div class="com-dpcalendar-translate">
-	<div id="j-sidebar-container" class="com-dpcalendar-translate__sidebar span2"><?php echo $this->sidebar; ?></div>
-	<div id="j-main-container" class="com-dpcalendar-translate__content span10">
+<div class="com-dpcalendar-tools-translate">
+	<div id="j-sidebar-container" class="com-dpcalendar-tools-translate__sidebar span2"><?php echo $this->sidebar; ?></div>
+	<div id="j-main-container" class="com-dpcalendar-tools-translate__content span10">
 		<table class="dp-resource-table dp-table">
 			<thead>
 			<tr>
@@ -52,8 +52,8 @@ $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE
 			<?php } ?>
 			</tbody>
 		</table>
-	</div>
-	<div class="com-dpcalendar-translate__footer">
-		<?php echo JText::sprintf('COM_DPCALENDAR_FOOTER', $this->input->getString('DPCALENDAR_VERSION')); ?>
+		<div class="com-dpcalendar-tools-translate__footer">
+			<?php echo JText::sprintf('COM_DPCALENDAR_FOOTER', $this->input->getString('DPCALENDAR_VERSION')); ?>
+		</div>
 	</div>
 </div>

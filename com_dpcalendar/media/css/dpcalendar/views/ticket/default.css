@@ -56,10 +56,8 @@
 	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	padding: 0 10px;
+	padding: 4px 10px;
 	margin: 3px 0;
-	font-size: .7rem;
-	line-height: 1.5rem;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);

@@ -33,7 +33,7 @@ if ($this->params->get('event_form_change_location', 1)) {
 
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
 
-$action = $this->router->route('index.php?option=com_dpcalendar&view=form&e_id=' . $this->event->id);
+$action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id);
 ?>
 <div class="com-dpcalendar-eventform<?php echo $this->pageclass_sfx ? ' com-dpcalendar-eventform-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>

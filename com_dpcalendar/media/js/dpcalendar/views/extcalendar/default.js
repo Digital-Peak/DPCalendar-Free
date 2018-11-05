@@ -2,9 +2,14 @@
 	'use strict';
 
 	document.addEventListener('DOMContentLoaded', function () {
-		[].slice.call(document.querySelectorAll('.com-dpcalendar-extcalendar select')).forEach(function (select) {
-			new SlimSelect({select: select});
-		});
+		new Choices('.com-dpcalendar-extcalendar select', {
+				itemSelectText: '',
+				noChoicesText: '',
+				shouldSortItems: false,
+				shouldSort: false,
+				removeItemButton: true
+			}
+		);
 
 		Joomla.submitbutton = function (task) {
 			var form = document.getElementsByName('adminForm')[0];

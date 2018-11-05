@@ -43,7 +43,7 @@ class DPCalendarViewForm extends JViewLegacy
 
 		if ($authorised !== true)
 		{
-			JError::raiseError(403, JText::_('JERROR_ALERTNOAUTHOR'));
+			throw new Exception('JERROR_ALERTNOAUTHOR', 403);
 			return false;
 		}
 
@@ -55,7 +55,7 @@ class DPCalendarViewForm extends JViewLegacy
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseWarning(500, implode("\n", $errors));
+			JFactory::getApplication()->enqueueMessage(implode("\n", $errors), 500);
 			return false;
 		}
 

@@ -54,8 +54,8 @@
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:checked + label:before {
 	content: '\2714';
 	text-indent: .9em;
-	color: #9CE2AE;
-	background-color: #4DCB6D;
+	color: #cdeacd;
+	background-color: #46a546;
 }
 
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:checked + label {
@@ -175,10 +175,8 @@
 	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	padding: 0 10px;
+	padding: 4px 10px;
 	margin: 3px 0;
-	font-size: .7rem;
-	line-height: 1.5rem;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -229,19 +227,23 @@
 	overflow: auto;
 }
 
-.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-label {
+.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label {
 	float: left;
 	width: 160px;
 	padding-top: 5px;
 	text-align: left;
 }
 
-.com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .controls {
+.com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls {
 	margin-left: 180px;
 }
 
+.com-dpcalendar-eventform .control-group .form-text {
+	display: none;
+}
+
 @media screen and (max-width: 640px) {
-	.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-label, .com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .controls {
+	.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label, .com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -289,6 +291,43 @@
 
 .com-dpcalendar-eventform .dp-autocomplete__result_selected {
 	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-eventform .choices {
+	font-size: inherit;
+}
+
+.com-dpcalendar-eventform .choices__inner, .com-dpcalendar-eventform .choices__input {
+	min-height: unset;
+	padding: 0 !important;
+	background-color: inherit;
+	font-size: inherit;
+}
+
+.com-dpcalendar-eventform .choices__input, .com-dpcalendar-eventform .choices__input:focus {
+	border: 0 !important;
+	box-shadow: unset;
+}
+
+.com-dpcalendar-eventform .choices__list--multiple .choices__item {
+	margin: 3px;
+	padding: 2px 10px;
+	border-radius: 2px;
+	background-color: #2D9EDE;
+	border: 1px solid #1d82bb;
+	color: #000;
+}
+
+.com-dpcalendar-eventform .choices__list--dropdown {
+	z-index: 1000;
+}
+
+.com-dpcalendar-eventform .choices__list--dropdown .choices__item {
+	padding: 3px;
+}
+
+.com-dpcalendar-eventform .choices__button {
+	background-image: url("../../../../images/icons/times-solid.svg") !important;
 }
 
 .com-dpcalendar-eventform__location .dp-map {

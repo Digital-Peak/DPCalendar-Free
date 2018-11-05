@@ -16,7 +16,7 @@ $this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_M
 <div class="com-dpcalendar-calendar__map dp-map"
 	 data-width="<?php echo $this->params->get('map_width', '100%'); ?>"
 	 data-height="<?php echo $this->params->get('map_height', '350px'); ?>"
-	 data-zoom="<?php echo $this->params->get('map_zoom', 6); ?>"
+	 data-zoom="<?php echo $this->params->get('map_zoom', 4); ?>"
 	 data-latitude="<?php echo $this->params->get('map_lat', 47); ?>"
 	 data-longitude="<?php echo $this->params->get('map_long', 4); ?>">
 </div>

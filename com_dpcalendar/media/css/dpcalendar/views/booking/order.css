@@ -24,10 +24,8 @@
 	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	padding: 0 10px;
+	padding: 4px 10px;
 	margin: 3px 0;
-	font-size: .7rem;
-	line-height: 1.5rem;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -145,19 +143,23 @@
 	overflow: auto;
 }
 
-.com-dpcalendar-booking-order .dp-control__label, .com-dpcalendar-booking-order .control-label {
+.com-dpcalendar-booking-order .dp-control__label, .com-dpcalendar-booking-order .control-group .control-label {
 	float: left;
 	width: 160px;
 	padding-top: 5px;
 	text-align: left;
 }
 
-.com-dpcalendar-booking-order .dp-control__input, .com-dpcalendar-booking-order .controls {
+.com-dpcalendar-booking-order .dp-control__input, .com-dpcalendar-booking-order .control-group .controls {
 	margin-left: 180px;
 }
 
+.com-dpcalendar-booking-order .control-group .form-text {
+	display: none;
+}
+
 @media screen and (max-width: 640px) {
-	.com-dpcalendar-booking-order .dp-control__label, .com-dpcalendar-booking-order .control-label, .com-dpcalendar-booking-order .dp-control__input, .com-dpcalendar-booking-order .controls {
+	.com-dpcalendar-booking-order .dp-control__label, .com-dpcalendar-booking-order .control-group .control-label, .com-dpcalendar-booking-order .dp-control__input, .com-dpcalendar-booking-order .control-group .controls {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -212,7 +214,7 @@
 	margin-bottom: 10px;
 }
 
-.com-dpcalendar-booking-order .com-dpcalendar-booking__event-info .dp-control__input, .com-dpcalendar-booking-order .com-dpcalendar-booking__event-info .controls {
+.com-dpcalendar-booking-order .com-dpcalendar-booking__event-info .dp-control__input, .com-dpcalendar-booking-order .com-dpcalendar-booking__event-info .control-group .controls, .com-dpcalendar-booking-order .control-group .com-dpcalendar-booking__event-info .controls {
 	min-height: 28px;
 }
 

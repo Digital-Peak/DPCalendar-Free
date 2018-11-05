@@ -17,13 +17,13 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/locations/default.css');
 	</div>
 	<?php echo $this->loadTemplate('resource'); ?>
 	<?php echo $this->loadTemplate('map'); ?>
-	<?php if ($this->params->get('locations_expand', 1) == 0) { ?>
+	<?php if ($this->params->get('locations_expand', 2) == 0) { ?>
 		<?php echo $this->loadTemplate('details_simple'); ?>
 	<?php } ?>
-	<?php if ($this->params->get('locations_expand', 1) == 1) { ?>
+	<?php if ($this->params->get('locations_expand', 2) == 1) { ?>
 		<?php echo $this->loadTemplate('details_limited'); ?>
 	<?php } ?>
-	<?php if ($this->params->get('locations_expand', 1) == 2) { ?>
+	<?php if ($this->params->get('locations_expand', 2) == 2) { ?>
 		<?php echo $this->loadTemplate('details_full'); ?>
 	<?php } ?>
 	<?php echo $this->loadTemplate('events'); ?>

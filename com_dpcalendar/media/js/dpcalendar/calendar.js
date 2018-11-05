@@ -10,34 +10,17 @@ DPCalendar = window.DPCalendar || {};
 			}
 
 			var options = Joomla.getOptions(el.getAttribute('data-options'));
+			options = Object.assign(options, el.dataset);
+
+			if (typeof options.hiddenDays == 'string') {
+				options.hiddenDays = JSON.parse(options.hiddenDays);
+			}
+
 			DPCalendar.createCalendar(jQuery(el), options);
 		});
 	});
 
 	DPCalendar.createCalendar = function (calendar, options) {
-		var adaptScroll = function (date) {
-			if (!date) {
-				date = calendar.fullCalendar('getDate');
-			}
-			var cell = calendar[0].querySelector('th[data-date^="' + date.format('YYYY-MM-DD') + '"]');
-			if (!cell) {
-				return;
-			}
-
-			var scroller = calendar[0].querySelector('.fc-time-area .fc-scroller');
-
-			if (!scroller) {
-				return;
-			}
-
-			scroller.scrollLeft = 0;
-
-			var scrollerBounds = scroller.getBoundingClientRect();
-			var cellBounds = cell.getBoundingClientRect();
-
-			scroller.scrollLeft = cellBounds.left + cellBounds.width / 2 - scrollerBounds.left - scrollerBounds.width / 2;
-		}
-
 		calendar[0].parentElement.parentElement.querySelector('.dp-loader').classList.add('dp-loader_hidden');
 
 		if (options['use_hash']) {
@@ -134,8 +117,6 @@ DPCalendar = window.DPCalendar || {};
 			if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&") != newHash) {
 				window.location.hash = newHash;
 			}
-
-			adaptScroll();
 
 			var map = calendar[0].parentElement.querySelector('.dp-map');
 			if (map == null || map.dpmap == null || !options['show_map']) {
@@ -404,7 +385,6 @@ DPCalendar = window.DPCalendar || {};
 							} else {
 								calendar.fullCalendar('gotoDate', d);
 							}
-							adaptScroll(d);
 							this.destroy();
 						}
 					});
@@ -477,8 +457,6 @@ DPCalendar = window.DPCalendar || {};
 
 		// Loading the calendar
 		calendar.fullCalendar(options);
-
-		adaptScroll();
 
 		// Toggle the list of calendars
 		var root = calendar[0].parentElement;

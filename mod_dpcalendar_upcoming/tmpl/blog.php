@@ -14,7 +14,6 @@ if (!$events) {
 }
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
-
 ?>
 <div class="mod-dpcalendar-upcoming mod-dpcalendar-upcoming-blog mod-dpcalendar-upcoming-<?php echo $module->id; ?>">
 	<?php foreach ($groupedEvents as $groupHeading => $events) { ?>
@@ -33,17 +32,6 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 				</h3>
 				<div class="dp-grid">
 					<div class="mod-dpcalendar-upcoming-blog__information">
-						<?php if (\DPCalendar\Helper\Booking::openForBooking($event)) { ?>
-							<a href="<?php echo $router->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-link">
-								<?php echo $layoutHelper->renderLayout(
-									'block.icon',
-									[
-										'icon'  => \DPCalendar\HTML\Block\Icon::PLUS,
-										'title' => $translator->translate('MOD_DPCALENDAR_UPCOMING_BLOG_BOOK')
-									]
-								); ?>
-							</a>
-						<?php } ?>
 						<?php if ($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
 							<a href="<?php echo $router->getEventFormRoute($event->id, $return); ?>" class="dp-link">
 								<?php echo $layoutHelper->renderLayout(
@@ -100,6 +88,12 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 						<div class="mod-dpcalendar-upcoming-blog__price">
 							<?php echo $translator->translate($event->price ? 'MOD_DPCALENDAR_UPCOMING_BLOG_PAID_EVENT' : 'MOD_DPCALENDAR_UPCOMING_BLOG_FREE_EVENT'); ?>
 						</div>
+						<?php if (\DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+							<a href="<?php echo $router->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-link dp-link_cta dp-button">
+								<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PLUS]); ?>
+								<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BOOK'); ?>
+							</a>
+						<?php } ?>
 					</div>
 					<?php if ($event->images->image_intro) { ?>
 						<div class="mod-dpcalendar-upcoming-blog__image">

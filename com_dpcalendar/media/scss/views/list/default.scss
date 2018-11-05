@@ -22,5 +22,20 @@
 			position: relative;
 			margin: 0 0 10px 0;
 		}
+
+		@media screen and (min-width: 640px) {
+			&__image .dp-image {
+				width: 150px;
+				height: 50px;
+				object-fit: cover;
+			}
+		}
+
+		@media screen and (max-width: 640px) {
+			&__image .dp-image {
+				max-height: 100px;
+				object-fit: cover;
+			}
+		}
 	}
 }

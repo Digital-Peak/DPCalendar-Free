@@ -6,7 +6,7 @@
 		<field name="color" type="color" default="A32929" size="6"
 		       label="COM_DPCALENDAR_EXTCALENDAR_FIELD_COLOR_LABEL"
 		       description="COM_DPCALENDAR_EXTCALENDAR_FIELD_COLOR_DESC"/>
-		<field name="color_force" type="radio" default="0" class="dp-form-radio"
+		<field name="color_force" type="dpradio" default="0" class="dp-form-radio"
 		       label="COM_DPCALENDAR_EXTCALENDAR_FIELD_COLOR_FORCE_LABEL"
 		       description="COM_DPCALENDAR_EXTCALENDAR_FIELD_COLOR_FORCE_DESC">
 			<option value="0">JNO</option>

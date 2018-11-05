@@ -30,6 +30,24 @@ class DPCalendarViewTools extends \DPCalendar\View\BaseView
 				}
 			}
 		}
+		if (strpos($this->getLayout(), 'import') !== false) {
+			JPluginHelper::importPlugin('dpcalendar');
+
+			$tmp             = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+			$this->calendars = [];
+			if (!empty($tmp)) {
+				foreach ($tmp as $tmpCalendars) {
+					foreach ($tmpCalendars as $calendar) {
+						$this->calendars[] = $calendar;
+					}
+				}
+			}
+
+			$this->plugins = JPluginHelper::getPlugin('dpcalendar');
+			foreach ($this->plugins as $plugin) {
+				JFactory::getLanguage()->load('plg_dpcalendar_' . $plugin->name, JPATH_PLUGINS . '/dpcalendar/' . $plugin->name);
+			}
+		}
 	}
 
 	protected function addToolbar()

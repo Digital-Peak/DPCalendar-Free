@@ -84,11 +84,8 @@ abstract class CalDAVPlugin extends SyncPlugin
 			$event->bind($data);
 			$event->id             = $eventId;
 			$event->category_title = $calendar->title;
-			if (isset($data['location'])) {
-				$event->locations = array(\DPCalendar\Helper\Location::get($data['location'], false));
-			}
-			if (isset($data['location_ids']) && is_array($data['location_ids'])) {
-				$event->locations = \DPCalendar\Helper\Location::getLocations($data['location_ids']);
+			if (isset($data['location_ids'])) {
+				$event->locations = \DPCalendar\Helper\Location::getLocations((array)$data['location_ids']);
 			}
 			$ical = \DPCalendar\Helper\Ical::createIcalFromEvents(array($event));
 
@@ -119,7 +116,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 					}
 				}
 				if ($vevent === null) {
-					$vevent = \Sabre\VObject\Component::create('VEVENT');
+					$vevent = $c->createComponent('VEVENT');
 					$c->add($vevent);
 					$vevent->UID = $eventId;
 					if (!empty($event->original_id) && $event->original_id != '-1') {
@@ -166,7 +163,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 				if (isset($event->locations) && !empty($event->locations)) {
 					$vevent->LOCATION = \DPCalendar\Helper\Location::format($event->locations);
 					foreach ($event->locations as $loc) {
-						if (!empty($loc->latitued) && !empty($loc->longitude)) {
+						if (!empty($loc->latitude) && !empty($loc->longitude)) {
 							$vevent->GEO = $loc->latitude . ';' . $loc->longitude;
 						}
 					}
@@ -189,7 +186,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 			return $this->createEvent($id, $calendarId)->id;
 		} catch (\Exception $e) {
-			\JError::raiseWarning(0, $e->getMessage());
+			\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
 			return false;
 		}

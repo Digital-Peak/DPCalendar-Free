@@ -234,7 +234,7 @@ class JHtmlDPCalendaricon
 
 	public static function create ($event, $params)
 	{
-		$uri = JFactory::getURI();
+		$uri = JUri::getInstance();
 
 		$url = JRoute::_(DPCalendarHelperRoute::getFormRoute(0, $uri));
 		$text = '<i class="icon-plus"></i> ' . JText::_('JNEW');
@@ -246,7 +246,7 @@ class JHtmlDPCalendaricon
 	public static function edit ($event)
 	{
 		$user = JFactory::getUser();
-		$uri = JFactory::getURI();
+		$uri = JUri::getInstance();
 
 		if ($event->state < 0)
 		{
@@ -304,7 +304,7 @@ class JHtmlDPCalendaricon
 		$overlib .= '&lt;br /&gt;';
 		$overlib .= htmlspecialchars($author, ENT_COMPAT, 'UTF-8');
 
-		$return = clone JFactory::getURI();
+		$return = clone JUri::getInstance();
 		if (JFactory::getApplication()->input->getCmd('view', null) == 'event')
 		{
 			$return->setVar('layout', 'empty');
@@ -327,7 +327,7 @@ class JHtmlDPCalendaricon
 			return null;
 		}
 
-		$return = clone JFactory::getURI();
+		$return = clone JUri::getInstance();
 		if (JFactory::getApplication()->input->getCmd('view', null) == 'event')
 		{
 			$return->setVar('layout', 'empty');
@@ -346,7 +346,7 @@ class JHtmlDPCalendaricon
 	public static function editLocation ($location)
 	{
 		$user = JFactory::getUser();
-		$uri = JFactory::getURI();
+		$uri = JUri::getInstance();
 
 		if ($location->state < 0)
 		{

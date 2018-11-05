@@ -52,7 +52,7 @@
 		<field name="telephone" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_DESC"/>
 
-		<field name="series" type="radio" class="dp-form-radio" default="0"
+		<field name="series" type="dpradio" class="dp-form-radio" default="0"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_SERIES_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_SERIES_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>

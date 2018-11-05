@@ -8,6 +8,8 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\Utilities\ArrayHelper;
+
 JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 JHtml::_('behavior.multiselect');
 JHtml::_('dropdown.init');
@@ -45,11 +47,11 @@ JFactory::getDocument()->addStyleDeclaration('.ui-datepicker { z-index: 1003 !im
 		});
 	});
 </script>
-<form action="<?php echo JRoute::_('index.php?option=com_dpcalendar&view=events'); ?>" method="post" name="adminForm" id="adminForm" class="com-dpcalendar-events">
-	<div id="j-sidebar-container" class="span2">
+<form action="<?php echo JRoute::_('index.php?option=com_dpcalendar&view=events'); ?>" method="post" name="adminForm" id="adminForm" class="com-dpcalendar-events row">
+	<div id="j-sidebar-container" class="span2 col-md-2">
 		<?php echo $this->sidebar; ?>
 	</div>
-	<div id="j-main-container" class="span10">
+	<div id="j-main-container" class="span10 col-md-10">
 		<div id="filter-bar" class="js-stools-container-bar pull-left">
 			<div class="btn-group pull-left">
 				<label class="element-invisible" for="filter_search_start"><?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_START_DATE_AFTER_LABEL'); ?>:</label>
@@ -129,7 +131,7 @@ JFactory::getDocument()->addStyleDeclaration('.ui-datepicker { z-index: 1003 !im
 									0	=> array('star-empty',	'events.featured',	'COM_DPCALENDAR_VIEW_EVENTS_UNFEATURED',	'COM_DPCALENDAR_VIEW_EVENTS_TOGGLE_TO_FEATURE'),
 									1	=> array('star',		'events.unfeatured',	'COM_DPCALENDAR_FEATURED',		'COM_DPCALENDAR_VIEW_EVENTS_TOGGLE_TO_UNFEATURE'),
 							);
-							$state	= JArrayHelper::getValue($states, (int) $item->featured, $states[1]);
+							$state	= ArrayHelper::getValue($states, (int) $item->featured, $states[1]);
 							$icon	= $state[0];
 							if ($canChange)
 							{

@@ -988,25 +988,9 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$form->removeField('image_full', 'images');
 		$form->removeField('image_full_alt', 'images');
 		$form->removeField('image_full_caption', 'images');
-		$form->removeField('location_ids');
 		$form->removeField('rooms');
+		$form->setFieldAttribute('location_ids', 'multiple', false);
 
-		$form->setField(
-			new \SimpleXMLElement(
-				'<fieldset name="extlocation" label="' . \JText::_('COM_DPCALENDAR_LOCATION') . '"><field
-				name="location"
-				type="text"
-				translate_description="false"
-				label="' . \JText::_('COM_DPCALENDAR_LOCATION') . '"
-				translate_label="false"
-				size="40"
-				filter="safeHtml"
-				/></fieldset>'
-			)
-		);
-		if (isset($data->locations)) {
-			$form->setValue('location', null, \DPCalendar\Helper\Location::format($data->locations));
-		}
 
 		foreach ($form->getGroup('com_fields') as $item) {
 			$form->removeField($item->fieldname, $item->group);

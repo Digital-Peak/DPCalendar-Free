@@ -11,16 +11,15 @@
 
 	&__map {
 		margin-bottom: 10px;
+
 		.dp-icon {
 			color: #000;
 		}
 	}
 
 	&__event {
-		margin: 30px 0 30px 0;
-	}
-
-	.dp-event__description {
+		margin: 30px 0;
+		padding-bottom: 10px;
 		border-bottom: 1px solid rgba(0, 0, 0, .2);
 	}
 }

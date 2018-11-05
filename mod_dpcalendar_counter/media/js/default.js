@@ -33,7 +33,7 @@ DPCalendar = window.DPCalendar || {};
 					var diff = start.diff(now, type);
 					var key = '';
 
-					if (diff > 0) {
+					if (diff > 0 || type == 'second') {
 						key = 'MOD_DPCALENDAR_COUNTER_LABEL_' + type.toUpperCase();
 						if (diff > 1) {
 							key += 'S';

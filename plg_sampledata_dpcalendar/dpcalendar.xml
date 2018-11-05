@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.9" type="plugin" group="sampledata" method="upgrade">
+	<name>plg_sampledata_dpcalendar</name>
+	<author>Digital Peak</author>
+	<creationDate>Jul 2018</creationDate>
+	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>7.0.3</version>
+	<description>PLG_SAMPLEDATA_DPCALENDAR_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="dpcalendar">dpcalendar.php</filename>
+		<folder>language</folder>
+	</files>
+	<media destination="plg_sampledata_dpcalendar" folder="media">
+		<folder>images</folder>
+	</media>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="erase" type="radio" default="0" class="btn-group"
+				       label="PLG_SAMPLEDATA_DPCALENDAR_PARAMS_ERASE_LABEL" description="PLG_SAMPLEDATA_DPCALENDAR_PARAMS_ERASE_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="until" type="text" default="6 month"
+				       label="PLG_SAMPLEDATA_DPCALENDAR_PARAMS_UNTIL_LABEL"
+				       description="PLG_SAMPLEDATA_DPCALENDAR_PARAMS_UNTIL_DESC"/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

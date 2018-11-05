@@ -12,7 +12,7 @@ if (!$price) {
 	$price = '0';
 }
 
-$price = number_format($price, 2);
+$price = number_format(trim($price), 2);
 
 $currency = DPCalendarHelper::getComponentParameter('currency_symbol', '$');
 

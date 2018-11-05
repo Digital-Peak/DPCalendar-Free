@@ -46,8 +46,8 @@ class HtmlDocument
 			}
 		}
 		if ($name == self::LIBRARY_SELECT) {
-			$this->loadScriptFile('slim-select/slimselect.js');
-			$this->loadStyleFile('slim-select/slimselect.css');
+			$this->loadScriptFile('choices/choices.js');
+			$this->loadStyleFile('choices/choices.css');
 		}
 		if ($name == self::LIBRARY_DPCORE) {
 			\JHtml::_('behavior.core');

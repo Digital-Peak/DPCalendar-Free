@@ -163,11 +163,11 @@ class DPCalendarModelLocations extends JModelList
 		$latitude  = $this->getState('filter.latitude');
 		$longitude = $this->getState('filter.longitude');
 		if ($latitude && $longitude) {
-			$latitude  = str_replace('+', '', round($latitude, 6));
-			$longitude = str_replace('+', '', round($longitude, 6));
+			$latitude  = round(str_replace('+', '', $latitude), 8);
+			$longitude = round(str_replace('+', '', $longitude), 8);
 			$query->where(
-				'((a.latitude like ' . $db->quote($latitude) . ' or a.latitude like ' . $db->quote('+' . $latitude) . ') and (a.longitude like ' .
-				$db->quote($longitude) . ' or a.longitude like ' . $db->quote('+' . $longitude) . '))');
+				'((a.latitude = ' . (float)$latitude . ' or a.latitude like ' . $db->quote('+' . $latitude) . ') and (a.longitude = ' .
+				(float)$longitude . ' or a.longitude like ' . $db->quote('+' . $longitude) . '))');
 		}
 
 		$location = $this->getState('filter.location');

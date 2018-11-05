@@ -47,6 +47,10 @@ class ComposerStaticInit80249a1b60293e970126aef8684d3cd5
             'Omnipay\\PayPal\\' => 15,
             'Omnipay\\Manual\\' => 15,
         ),
+        'L' => 
+        array (
+            'League\\Pipeline\\' => 16,
+        ),
         'D' => 
         array (
             'DPCalendar\\' => 11,
@@ -125,6 +129,10 @@ class ComposerStaticInit80249a1b60293e970126aef8684d3cd5
         'Omnipay\\Manual\\' => 
         array (
             0 => __DIR__ . '/..' . '/omnipay/manual/src',
+        ),
+        'League\\Pipeline\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/league/pipeline/src',
         ),
         'DPCalendar\\' => 
         array (

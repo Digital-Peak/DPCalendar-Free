@@ -50,7 +50,7 @@ if (!$fields) {
 			<?php continue; ?>
 		<?php } ?>
 		<dl class="dp-description <?php echo $field->params->get('render_class'); ?>">
-			<dt class="dp-description__label"><?php echo $field->params->get('showlabel') ? $field->label : ''; ?></dt>
+			<dt class="dp-description__label"><?php echo $field->params->get('showlabel', 1) ? JText::_($field->label) : ''; ?></dt>
 			<dd class="dp-description__description"><?php echo $field->value; ?></dd>
 		</dl>
 	<?php } ?>

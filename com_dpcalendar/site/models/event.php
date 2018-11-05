@@ -151,7 +151,7 @@ class DPCalendarModelEvent extends JModelForm
 
 					// Check for published state if filter set.
 					if (((is_numeric($published)) || (is_numeric($archived))) && (($data->state != $published) && ($data->state != $archived))) {
-						JError::raiseError(404, JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'));
+						throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 					}
 
 					if (!DPCalendarHelper::isFree()) {

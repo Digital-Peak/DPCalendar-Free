@@ -98,6 +98,10 @@ DPCalendar = window.DPCalendar || {};
 	};
 
 	DPCalendar.Map.moveMarker = function (map, marker, latitude, longitude) {
+		if (!marker) {
+			return;
+		}
+
 		marker.setPosition(new google.maps.LatLng(latitude, longitude));
 
 		map.dpBounds = new google.maps.LatLngBounds();

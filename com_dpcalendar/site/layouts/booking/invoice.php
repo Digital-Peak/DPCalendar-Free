@@ -99,7 +99,7 @@ foreach ($fields as $key => $field) {
 			<tr>
 				<td><?php echo $displayData['translator']->translate('COM_DPCALENDAR_INVOICE_DATE'); ?></td>
 				<?php $format = $params->get('event_date_format', 'm.d.Y') . ' ' . $params->get('event_time_format', 'g:i a'); ?>
-				<td><?php echo $displayData['dateHelper']->getDate($booking->book_date)->format($format); ?></td>
+				<td><?php echo $displayData['dateHelper']->getDate($booking->book_date)->format($format, true); ?></td>
 			</tr>
 			<tr>
 				<td><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></td>
@@ -125,34 +125,44 @@ foreach ($fields as $key => $field) {
 		<?php } ?>
 	</table>
 	<h3 style="border-bottom: 1px solid #eee"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_INVOICE_TICKET_DETAILS'); ?></h3>
-	<table style="width:100%">
-		<thead>
-		<tr>
-			<th style="width:50%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?></th>
-			<th style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?></th>
-			<th style="width:13%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></th>
-			<?php if ($params->get('ticket_show_seat', 1)) { ?>
-				<th style="width:7%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?></th>
-			<?php } ?>
-		</tr>
-		</thead>
-		<?php foreach ($tickets as $ticket) { ?>
+	<?php foreach ($tickets as $ticket) { ?>
+		<table style="width:100%; border-collapse:collapse">
+			<tr>
+				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?></td>
+				<td style="width:70%"><?php echo $ticket->uid; ?></td>
+			</tr>
+			<tr>
+				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_EVENT'); ?></td>
+				<td style="width:70%">
+					<?php echo $ticket->event_title; ?>
+					<?php echo $displayData['dateHelper']->getDateStringFromEvent($ticket, $params->get('event_date_format', 'm.d.Y'),
+						$params->get('event_time_format', 'g:i a')); ?>
+				</td>
+			</tr>
 			<?php if (!empty($ticket->event_prices)) { ?>
 				<?php $prices = !is_string($ticket->event_prices) ? $ticket->event_prices : json_decode($ticket->event_prices); ?>
 				<?php if (!empty($prices->label[$ticket->type])) { ?>
 					<tr>
-						<td colspan="4"><h4><?php echo $prices->label[$ticket->type]; ?></h4></td>
+						<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL'); ?></td>
+						<td style="width:70%"><?php echo $prices->label[$ticket->type]; ?></td>
 					</tr>
 				<?php } ?>
 			<?php } ?>
 			<tr>
-				<td style="width:50%"><?php echo $ticket->uid; ?></td>
-				<td style="width:30%"><?php echo $ticket->name; ?></td>
-				<td style="width:13%"><?php echo DPCalendarHelper::renderPrice($ticket->price, $params->get('currency_symbol', '$')); ?></td>
-				<?php if ($params->get('ticket_show_seat', 1)) { ?>
-					<td style="width:7%"><?php echo $ticket->seat; ?></td>
-				<?php } ?>
+				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?></td>
+				<td style="width:70%"><?php echo $ticket->name; ?></td>
 			</tr>
-		<?php } ?>
-	</table>
+			<tr>
+				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></td>
+				<td style="width:70%"><?php echo DPCalendarHelper::renderPrice($ticket->price, $params->get('currency_symbol', '$')); ?></td>
+			</tr>
+			<?php if ($params->get('ticket_show_seat', 1)) { ?>
+				<tr>
+					<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?></td>
+					<td style="width:70%"><?php echo $ticket->seat; ?></td>
+				</tr>
+			<?php } ?>
+			<tr><td></td><td></td></tr>
+		</table>
+	<?php } ?>
 </div>

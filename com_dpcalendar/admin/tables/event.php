@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use Joomla\String\StringHelper;
+use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarTableEvent extends JTable
 {
@@ -432,7 +433,7 @@ class DPCalendarTableEvent extends JTable
 		$k = $this->_tbl_key;
 
 		// Sanitize input.
-		JArrayHelper::toInteger($pks);
+		ArrayHelper::toInteger($pks);
 		$userId = (int)$userId;
 		$state  = (int)$state;
 

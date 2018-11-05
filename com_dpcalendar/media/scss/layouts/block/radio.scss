@@ -1,3 +1,5 @@
+@import "../../misc/variables";
+
 .dp-form-radio {
 	&.radio {
 		padding-left: 0px;
@@ -51,8 +53,8 @@
 	& input[type=radio]:checked + label:before {
 		content: '\2714';
 		text-indent: .9em;
-		color: #9CE2AE;
-		background-color: #4DCB6D;
+		color: lighten(#46a546, 40%);
+		background-color: #46a546;
 	}
 
 	& input[type=radio]:checked + label {

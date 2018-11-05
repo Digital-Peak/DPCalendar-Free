@@ -333,7 +333,7 @@ class Location
 			}
 			if ($feature->properties->osm_key == 'place' && $feature->properties->osm_value == 'county' && empty($feature->properties->county)) {
 				$feature->properties->county = $feature->properties->name;
-				$feature->properties->name = null;
+				$feature->properties->name   = null;
 			}
 
 			$item        = new \stdClass();

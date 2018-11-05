@@ -51,6 +51,12 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 					<div class="mod-dpcalendar-upcoming-panel__date">
 						<?php echo $dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>
 					</div>
+					<?php if (\DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+						<a href="<?php echo $router->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-link dp-link_cta dp-button">
+							<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PLUS]); ?>
+							<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BOOK'); ?>
+						</a>
+					<?php } ?>
 					<div class="mod-dpcalendar-upcoming-panel__description">
 						<?php echo $event->truncatedDescription; ?>
 					</div>

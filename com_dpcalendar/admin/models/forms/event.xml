@@ -20,19 +20,19 @@
 		<field name="end_date" type="datetimechooser" default="+1 hour" required="true" validate="minmaxtime"
 		       label="COM_DPCALENDAR_FIELD_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_END_DATE_DESC"/>
 
-		<field name="show_end_time" type="radio" default="1" class="dp-form-radio"
+		<field name="show_end_time" type="dpradio" default="1" class="dp-form-radio"
 		       label="COM_DPCALENDAR_FIELD_SHOW_END_TIME_LABEL" description="COM_DPCALENDAR_FIELD_SHOW_END_TIME_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 
-		<field name="all_day" type="radio" default="0" class="dp-form-radio"
+		<field name="all_day" type="dpradio" default="0" class="dp-form-radio"
 		       label="COM_DPCALENDAR_FIELD_ALL_DAY_LABEL" description="COM_DPCALENDAR_FIELD_ALL_DAY_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 
-		<field type="radio" name="scheduling" default="0" class="dp-form-radio"
+		<field type="dpradio" name="scheduling" default="0" class="dp-form-radio"
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_DESC">
 			<option value="0">JNO</option>
 			<option value="DAILY">COM_DPCALENDAR_FIELD_SCHEDULING_DAILY</option>
@@ -48,7 +48,7 @@
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_DESC"/>
 		<field name="scheduling_repeat_count" type="text"
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_REPEAT_COUNT_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_REPEAT_COUNT_DESC"/>
-		<field name="scheduling_daily_weekdays" type="radio" default="0" class="dp-form-radio"
+		<field name="scheduling_daily_weekdays" type="dpradio" default="0" class="dp-form-radio"
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_DAILY_WEEK_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_DAILY_WEEK_DAYS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
@@ -63,7 +63,7 @@
 			<option value="SA">SATURDAY</option>
 			<option value="SU">SUNDAY</option>
 		</field>
-		<field name="scheduling_monthly_options" type="radio" default="by_week" class="dp-form-radio"
+		<field name="scheduling_monthly_options" type="dpradio" default="by_week" class="dp-form-radio"
 		       label="" description="">
 			<option value="by_day">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_DAY</option>
 			<option value="by_week">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_WEEK</option>

@@ -1,4 +1,4 @@
-.com-dpcalendar-translate {
+.com-dpcalendar-tools-translate {
 	@import "../../layouts/block/table";
 	@import "../../layouts/block/button";
 
@@ -34,6 +34,7 @@
 	}
 
 	&__footer {
+		padding: 20px;
 		text-align: center;
 	}
 

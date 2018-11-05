@@ -13,7 +13,6 @@ use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarTableLocation extends JTable
 {
-
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_locations', 'id', $db);

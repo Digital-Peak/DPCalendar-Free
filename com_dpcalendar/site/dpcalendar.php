@@ -7,11 +7,11 @@
  */
 defined('_JEXEC') or die();
 
-if (version_compare(PHP_VERSION, '5.5.9') < 0)
-{
-	JError::raiseWarning(0,
-			'You have PHP version ' . PHP_VERSION . ' installed. This version is end of life and contains some security wholes!!
-					 		Please upgrade your PHP version to at least 5.3.x. DPCalendar can not run on this version.');
+if (version_compare(PHP_VERSION, '5.5.9') < 0) {
+	JFactory::getApplication()->enqueueMessage(
+		'You have PHP version ' . PHP_VERSION . ' installed. This version is end of life and contains some security wholes!!
+					 		Please upgrade your PHP version to at least 5.3.x. DPCalendar can not run on this version.', 'warning');
+
 	return;
 }
 

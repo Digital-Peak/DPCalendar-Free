@@ -7,6 +7,24 @@ DPCalendar = window.DPCalendar || {};
 		var geoComplete = document.getElementById('jform_geocomplete');
 		var map = document.querySelector('.dp-map').dpmap;
 
+		var getMarker = function () {
+			if (!map.dpMarkers.length) {
+				DPCalendar.Map.createMarker(
+					map,
+					{
+						latitude: document.getElementById('jform_latitude').value,
+						longitude: document.getElementById('jform_longitude').value
+					}
+				);
+			}
+
+			if (!map.dpMarkers.length) {
+				return;
+			}
+
+			return map.dpMarkers[0];
+		};
+
 		[].slice.call(document.querySelectorAll('#jform_street,#jform_number,#jform_zip,#jform_city,#jform_country,#jform_province')).forEach(function (input) {
 			input.addEventListener('change', function (e) {
 				geoComplete.value = '';
@@ -21,7 +39,7 @@ DPCalendar = window.DPCalendar || {};
 							document.getElementById('jform_latitude').value = json.data.latitude;
 							document.getElementById('jform_longitude').value = json.data.longitude;
 
-							DPCalendar.Map.moveMarker(map, marker, json.data.latitude, json.data.longitude);
+							DPCalendar.Map.moveMarker(map, getMarker(), json.data.latitude, json.data.longitude);
 						} else {
 							document.getElementById('jform_latitude').value = 0;
 							document.getElementById('jform_longitude').value = 0;
@@ -31,7 +49,7 @@ DPCalendar = window.DPCalendar || {};
 			});
 		});
 
-		var marker = DPCalendar.Map.createMarker(
+		DPCalendar.Map.createMarker(
 			map,
 			{
 				latitude: document.getElementById('jform_latitude').value,
@@ -68,21 +86,7 @@ DPCalendar = window.DPCalendar || {};
 					}
 					setGeoResult(json.data);
 
-					if (!marker) {
-						marker = DPCalendar.Map.createMarker(
-							map,
-							{
-								latitude: document.getElementById('jform_latitude').value,
-								longitude: document.getElementById('jform_longitude').value
-							}
-						);
-					}
-
-					if (!marker) {
-						return;
-					}
-
-					DPCalendar.Map.moveMarker(map, marker, json.data.latitude, json.data.longitude);
+					DPCalendar.Map.moveMarker(map, getMarker(), json.data.latitude, json.data.longitude);
 				}
 			);
 		});
@@ -134,14 +138,14 @@ DPCalendar = window.DPCalendar || {};
 		if (street) {
 			var number = getValue('number');
 			if (number) {
-				street = street.substr(0, street.length - 2) + number;
+				street = street.substr(0, street.length - 2) + ' ' + number;
 			}
 		}
 		var city = getValue('city');
 		if (city) {
 			var zip = getValue('zip');
 			if (zip) {
-				city += city.substr(0, city.length - 2) + zip;
+				city += city.substr(0, city.length - 2) + ' ' + zip;
 			}
 		}
 
@@ -183,5 +187,4 @@ DPCalendar = window.DPCalendar || {};
 			document.getElementById('jform_title').value = result.formated;
 		}
 	}
-
 }(document, Joomla, DPCalendar));

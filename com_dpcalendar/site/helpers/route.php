@@ -22,7 +22,7 @@ class DPCalendarHelperRoute
 
 		$id = 'id=' . $id;
 		if (JFactory::getApplication()->isClient('administrator')) {
-			$id = 'e_id=' . $id;
+			$id = 'e_' . $id;
 		}
 
 		// Create the link
@@ -63,7 +63,7 @@ class DPCalendarHelperRoute
 		if ($id) {
 			$link = 'index.php?option=com_dpcalendar&task=event.edit&e_id=' . $id;
 		} else {
-			if (JFactory::getApplication()->isAdmin()) {
+			if (JFactory::getApplication()->isClient('administrator')) {
 				$link = 'index.php?option=com_dpcalendar&task=event.add&e_id=0';
 			} else {
 				$link = 'index.php?option=com_dpcalendar&view=form&e_id=0';

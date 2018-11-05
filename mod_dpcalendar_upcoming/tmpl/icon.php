@@ -14,7 +14,6 @@ if (!$events) {
 }
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
-
 ?>
 <div class="mod-dpcalendar-upcoming mod-dpcalendar-upcoming-icon mod-dpcalendar-upcoming-<?php echo $module->id; ?>">
 	<?php foreach ($groupedEvents as $groupHeading => $events) { ?>
@@ -60,6 +59,12 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 							<?php } ?>
 						</figure>
 					</div>
+				<?php } ?>
+				<?php if (\DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+					<a href="<?php echo $router->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-link dp-link_cta dp-button">
+						<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PLUS]); ?>
+						<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BOOK'); ?>
+					</a>
 				<?php } ?>
 				<div class="mod-dpcalendar-upcoming-icon__description">
 					<?php echo $event->truncatedDescription; ?>

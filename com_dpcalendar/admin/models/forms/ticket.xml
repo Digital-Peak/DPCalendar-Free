@@ -50,7 +50,7 @@
 		<field name="type" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_TYPE_DESC"/>
 
-		<field name="public" type="radio" class="dp-form-radio"
+		<field name="public" type="dpradio" class="dp-form-radio"
 		       label="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_DESC"
 		       default="1">
 			<option value="1">JYES</option>

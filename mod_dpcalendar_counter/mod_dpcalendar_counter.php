@@ -43,7 +43,13 @@ foreach ($model->getItems() as $calendar) {
 	$ids[] = $calendar->id;
 }
 
-$startDate = DPCalendarHelper::getDate();
+$startDate = trim($params->get('start_date', ''));
+if ($startDate == 'start of day') {
+	$startDate = $dateHelper->getDate(null, true, 'UTC');
+	$startDate->setTime(0, 0, 0);
+} else {
+	$startDate = $dateHelper->getDate($startDate);
+}
 
 // Round to the last quater
 $startDate->sub(new DateInterval("PT" . $startDate->format("s") . "S"));

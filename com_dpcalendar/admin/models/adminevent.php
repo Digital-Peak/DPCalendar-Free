@@ -14,29 +14,9 @@ JLoader::import('joomla.application.component.modeladmin');
 
 class DPCalendarModelAdminEvent extends JModelAdmin
 {
-
 	protected $text_prefix = 'COM_DPCALENDAR';
 	protected $name = 'event';
-	private $eventHandler = null;
 
-	/**
-	 * This is a temp holder of the event instance which gets deleted.
-	 * For some reason, Joomla deletes all instance variables after the delete operation.
-	 * This variable will hold the event for notifications only.
-	 *
-	 * @var JTable
-	 */
-	private $tmpDeleteEvent = null;
-
-	public function __construct($config = array())
-	{
-		parent::__construct($config);
-
-		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
-			$dispatcher         = JEventDispatcher::getInstance();
-			$this->eventHandler = new DPCalendarModelAdminEventHandler($dispatcher, $this);
-		}
-	}
 
 	protected function populateState()
 	{
@@ -208,11 +188,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			}
 		}
 
+		// Scheduling end is set by the rrule
+		$data->set('scheduling_end_date', null);
+
 		if (!$data->get('id') && !isset($data->capacity)) {
 			$data->set('capacity', 0);
 		}
 
-		if ((!isset($data->location_ids) || !$data->location_ids) && isset($data->location_ids) && $data->location_ids) {
+		if ((!isset($data->location_ids) || !$data->location_ids) && isset($data->locations) && $data->locations) {
 			$data->location_ids = array();
 			foreach ($data->locations as $location) {
 				$data->location_ids[] = $location->id;
@@ -291,12 +274,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			if ($item != null) {
 				// Convert the params field to an array.
 				$registry = new JRegistry();
-				$registry->loadString($item->metadata);
+				if (!empty($item->metadata)) {
+					$registry->loadString($item->metadata);
+				}
 				$item->metadata = $registry->toArray();
 
 				// Convert the images field to an array.
 				$registry = new JRegistry();
-				if (isset($item->images)) {
+				if (!empty($item->images)) {
 					$registry->loadString($item->images);
 				}
 				$item->images = $registry->toArray();
@@ -341,9 +326,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 				$oldEventIds[$oldEvent->id] = $oldEvent->id;
 			}
 		}
-		$this->setState('dpcalendar.event.oldEventIds', serialize($oldEventIds));
-		$this->setState('dpcalendar.event.locationids', $locationIds);
-		$this->setState('dpcalendar.event.data', $data);
 
 		if ($data['all_day'] == 1 && !isset($data['date_range_correct'])) {
 			$data['start_date'] = DPCalendarHelper::getDate($data['start_date'], $data['all_day'])->toSql(true);
@@ -428,7 +410,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		// Disable booking when it can't be changed
-		if (!isset($data['capacity']) || !$this->getParams()->get('event_form_change_capacity', '1')) {
+		if (!array_key_exists('capacity', $data) || !$this->getParams()->get('event_form_change_capacity', '1')) {
 			$data['capacity'] = $this->getParams()->get('event_form_capacity');
 		}
 
@@ -445,7 +427,106 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data = array_merge($data, $this->getDefaultValues(new JObject($data)));
 		}
 
-		return parent::save($data);
+		$success = parent::save($data);
+
+		if (!$success) {
+			return $success;
+		}
+
+		$id    = $this->getState($this->getName() . '.id');
+		$event = $this->getItem($id);
+		JFactory::getApplication()->setUserState('dpcalendar.event.id', $id);
+
+		$db = JFactory::getDbo();
+		$db->setQuery('select id from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
+		$rows   = $db->loadObjectList();
+		$values = '';
+
+		// Load the fields helper class
+		JLoader::import('components.com_fields.helpers.fields', JPATH_ADMINISTRATOR);
+
+		$fieldModel = JModelLegacy::getInstance('Field', 'FieldsModel', array('ignore_request' => true));
+
+		// Loading the fields
+		$fields = FieldsHelper::getFields('com_dpcalendar.event', $event);
+
+		$allIds = $oldEventIds;
+		foreach ($rows as $tmp) {
+			$allIds[(int)$tmp->id] = (int)$tmp->id;
+			if ($locationIds) {
+				foreach ($locationIds as $location) {
+					$values .= '(' . (int)$tmp->id . ',' . (int)$location . '),';
+				}
+			}
+
+			if (key_exists($tmp->id, $oldEventIds)) {
+				unset($oldEventIds[$tmp->id]);
+			}
+
+			// Save the values on the child events
+			if ($fieldModel && $fields && $tmp->id != $event->id) {
+				foreach ($fields as $field) {
+					$value = $field->value;
+					if (isset($data['com_fields']) && key_exists($field->name, $data['com_fields'])) {
+						$value = $data['com_fields'][$field->name];
+					}
+					$fieldModel->setFieldValue($field->id, $tmp->id, $value);
+				}
+			}
+		}
+		$values = trim($values, ',');
+
+		if ($fieldModel && $fields) {
+			// Clear the custom fields for deleted child events
+			foreach ($oldEventIds as $childId) {
+				foreach ($fields as $field) {
+					$fieldModel->setFieldValue($field->id, $childId, null);
+				}
+			}
+		}
+
+		// Delete the location associations for the events which do not exist
+		// anymore
+		if (!$this->getState($this->getName() . '.new')) {
+			$db->setQuery('delete from #__dpcalendar_events_location where event_id in (' . implode(',', $allIds) . ')');
+			$db->execute();
+		}
+
+		// Insert the new associations
+		if (!empty($values)) {
+			$db->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $values);
+			$db->execute();
+		}
+
+		$this->sendMail($this->getState($this->getName() . '.new') ? 'create' : 'edit', array($event));
+
+		// Notify the ticket holders
+		if (key_exists('notify_changes', $data) && $data['notify_changes']) {
+			$tickets = $this->model->getTickets($event->id);
+			foreach ($tickets as $ticket) {
+				$subject = DPCalendarHelper::renderEvents(array($event), JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
+
+				$body = DPCalendarHelper::renderEvents(
+					array($event),
+					JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_EDIT_TICKETS_BODY'),
+					null,
+					array(
+						'ticketLink' => DPCalendarHelperRoute::getTicketRoute($ticket, true),
+						'sitename'   => JFactory::getConfig()->get('sitename'),
+						'user'       => JFactory::getUser()->name
+					)
+				);
+
+				$mailer = JFactory::getMailer();
+				$mailer->setSubject($subject);
+				$mailer->setBody($body);
+				$mailer->IsHTML(true);
+				$mailer->addRecipient($ticket->email);
+				$mailer->Send();
+			}
+		}
+
+		return $success;
 	}
 
 	protected function prepareTable($table)
@@ -551,11 +632,39 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		return true;
 	}
 
-	public function detach()
+	public function publish(&$pks, $value = 1)
 	{
-		if ($this->eventHandler) {
-			JEventDispatcher::getInstance()->detach($this->eventHandler);
+		$success = parent::publish($pks, $value);
+
+		if ($success) {
+			$events = [];
+			foreach ($pks as $pk) {
+				$event    = $this->getItem($pk);
+				$events[] = $event;
+			}
+
+			$this->sendMail('edit', $events);
 		}
+
+		return $success;
+	}
+
+
+	public function delete(&$pks)
+	{
+		$success = parent::delete($pks);
+
+		if ($success) {
+			$events = [];
+			foreach ($pks as $pk) {
+				$event    = $this->getItem($pk);
+				$events[] = $event;
+			}
+
+			$this->sendMail('delete', $events);
+		}
+
+		return $success;
 	}
 
 	public function getTickets($eventId)
@@ -644,190 +753,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		return $params;
-	}
-}
-
-class DPCalendarModelAdminEventHandler extends JPlugin
-{
-
-	private $model = null;
-
-	public function __construct(&$subject, $model)
-	{
-		parent::__construct($subject);
-
-		$this->model = $model;
-	}
-
-	public function onContentBeforeSave($context, $event, $isNew)
-	{
-		if ($context != 'com_dpcalendar.event' && $context != 'com_dpcalendar.form') {
-			return;
-		}
-
-		JPluginHelper::importPlugin('dpcalendar');
-		if ($isNew) {
-			return JFactory::getApplication()->triggerEvent('onEventBeforeCreate', array(&$event));
-		} else {
-			return JFactory::getApplication()->triggerEvent('onEventBeforeSave', array(&$event));
-		}
-	}
-
-	public function onContentAfterSave($context, $event, $isNew, $data)
-	{
-		if ($context != 'com_dpcalendar.event' && $context != 'com_dpcalendar.form') {
-			return;
-		}
-
-		$id = (int)$event->id;
-
-		JFactory::getApplication()->setUserState('dpcalendar.event.id', $id);
-
-		$oldEventIds = unserialize($this->model->getState('dpcalendar.event.oldEventIds'));
-		$locationIds = $this->model->getState('dpcalendar.event.locationids');
-
-		$db = JFactory::getDbo();
-		$db->setQuery('select id from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
-		$rows   = $db->loadObjectList();
-		$values = '';
-
-		// Load the fields helper class
-		JLoader::import('components.com_fields.helpers.fields', JPATH_ADMINISTRATOR);
-
-		$fieldModel = JModelLegacy::getInstance('Field', 'FieldsModel', array('ignore_request' => true));
-
-		// Loading the fields
-		$fields = FieldsHelper::getFields($context, $event);
-
-		$allIds = $oldEventIds;
-		foreach ($rows as $tmp) {
-			$allIds[(int)$tmp->id] = (int)$tmp->id;
-			if ($locationIds) {
-				foreach ($locationIds as $location) {
-					$values .= '(' . (int)$tmp->id . ',' . (int)$location . '),';
-				}
-			}
-
-			if (key_exists($tmp->id, $oldEventIds)) {
-				unset($oldEventIds[$tmp->id]);
-			}
-
-			// Save the values on the child events
-			if ($fieldModel && $fields && $tmp->id != $event->id) {
-				foreach ($fields as $field) {
-					$value = $field->value;
-					if (isset($data['com_fields']) && key_exists($field->name, $data['com_fields'])) {
-						$value = $data['com_fields'][$field->name];
-					}
-					$fieldModel->setFieldValue($field->id, $tmp->id, $value);
-				}
-			}
-		}
-		$values = trim($values, ',');
-
-		if ($fieldModel && $fields) {
-			// Clear the custom fields for deleted child events
-			foreach ($oldEventIds as $childId) {
-				foreach ($fields as $field) {
-					$fieldModel->setFieldValue($field->id, $childId, null);
-				}
-			}
-		}
-
-		// Delete the location associations for the events which do not exist
-		// anymore
-		if (!$isNew) {
-			$db->setQuery('delete from #__dpcalendar_events_location where event_id in (' . implode(',', $allIds) . ')');
-			$db->query();
-		}
-
-		// Insert the new associations
-		if (!empty($values)) {
-			$db->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $values);
-			$db->query();
-		}
-
-		$this->sendMail($isNew ? 'create' : 'edit', array($event));
-
-		// Notify the ticket holders
-		$data = $this->model->getState('dpcalendar.event.data');
-		if (key_exists('notify_changes', $data) && $data['notify_changes']) {
-			$tickets = $this->model->getTickets($event->id);
-			foreach ($tickets as $ticket) {
-				$subject = DPCalendarHelper::renderEvents(array($event), JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
-
-				$body = DPCalendarHelper::renderEvents(
-					array($event),
-					JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_EDIT_TICKETS_BODY'),
-					null,
-					array(
-						'ticketLink' => DPCalendarHelperRoute::getTicketRoute($ticket, true),
-						'sitename'   => JFactory::getConfig()->get('sitename'),
-						'user'       => JFactory::getUser()->name
-					)
-				);
-
-				$mailer = JFactory::getMailer();
-				$mailer->setSubject($subject);
-				$mailer->setBody($body);
-				$mailer->IsHTML(true);
-				$mailer->addRecipient($ticket->email);
-				$mailer->Send();
-			}
-		}
-
-		JPluginHelper::importPlugin('dpcalendar');
-		if ($isNew) {
-			return JFactory::getApplication()->triggerEvent('onEventAfterCreate', array(&$event));
-		} else {
-			return JFactory::getApplication()->triggerEvent('onEventAfterSave', array(&$event));
-		}
-	}
-
-	public function onContentBeforeDelete($context, $event)
-	{
-		if ($context != 'com_dpcalendar.event' && $context != 'com_dpcalendar.form') {
-			return;
-		}
-
-		$this->tmpDeleteEvent = clone $event;
-
-		JPluginHelper::importPlugin('dpcalendar');
-
-		return JFactory::getApplication()->triggerEvent('onEventBeforeDelete', array($event));
-	}
-
-	public function onContentAfterDelete($context, $event)
-	{
-		if ($context != 'com_dpcalendar.event' && $context != 'com_dpcalendar.form') {
-			return;
-		}
-
-		$this->sendMail('delete', array($this->tmpDeleteEvent && $this->tmpDeleteEvent->id == $event->id ? $this->tmpDeleteEvent : $event));
-		$this->tmpDeleteEvent = null;
-
-		JPluginHelper::importPlugin('dpcalendar');
-
-		return JFactory::getApplication()->triggerEvent('onEventAfterDelete', array($event));
-	}
-
-	public function onContentChangeState($context, $pks, $value)
-	{
-		if ($context != 'com_dpcalendar.event' && $context != 'com_dpcalendar.form') {
-			return;
-		}
-
-		$events = array();
-
-		$model = new DPCalendarModelAdminEvent();
-		foreach ($pks as $pk) {
-			$event    = $model->getItem($pk);
-			$events[] = $event;
-
-			JFactory::getApplication()->triggerEvent('onEventAfterSave', array($event));
-		}
-
-		$this->sendMail('edit', $events);
 	}
 
 	private function sendMail($action, $events)

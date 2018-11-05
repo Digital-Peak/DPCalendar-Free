@@ -49,7 +49,7 @@
 
 	document.addEventListener('DOMContentLoaded', function () {
 		var queue = [];
-		[].slice.call(document.querySelectorAll('.com-dpcalendar-translate .dp-resource')).forEach(function (resource) {
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-tools-translate .dp-resource')).forEach(function (resource) {
 			queue.push(resource);
 		});
 
@@ -59,7 +59,7 @@
 	Joomla.submitbutton = function (task) {
 		if (task == 'translate.update') {
 			var queue = [];
-			[].slice.call(document.querySelectorAll('.com-dpcalendar-translate .dp-resource:nth-child(-n+6)')).forEach(function (resource) {
+			[].slice.call(document.querySelectorAll('.com-dpcalendar-tools-translate .dp-resource:nth-child(-n+6)')).forEach(function (resource) {
 				resource.querySelector('.dp-resource__icon i').setAttribute('class', 'icon-loop');
 				queue.push(resource);
 			});

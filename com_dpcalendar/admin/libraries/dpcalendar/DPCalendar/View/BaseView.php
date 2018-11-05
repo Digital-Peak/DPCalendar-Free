@@ -82,12 +82,10 @@ class BaseView extends \JViewLegacy
 		}
 
 		if ($errors = $this->getErrors()) {
-			\JError::raiseError(500, implode("\n", $errors));
-
-			return false;
+			throw new \Exception(implode("\n", $errors), 500);
 		}
 
-		if ($this->app->isSite()) {
+		if ($this->app->isClient('site')) {
 			$this->prepareDocument();
 		} else {
 			$this->addToolbar();

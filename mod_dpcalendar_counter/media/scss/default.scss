@@ -1,7 +1,8 @@
 .mod-dpcalendar-counter {
+	@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
+
 	&__ongoing {
 		overflow: hidden;
-		text-align: center;
 	}
 
 	&__intro-text {
@@ -18,13 +19,11 @@
 
 		&__number {
 			display: block;
-			text-align: center;
 			font-size: 1.4em;
 		}
 
 		&__content {
 			display: block;
-			text-align: center;
 			font-size: .9em;
 		}
 
@@ -32,6 +31,4 @@
 			display: none;
 		}
 	}
-
-	@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
 }

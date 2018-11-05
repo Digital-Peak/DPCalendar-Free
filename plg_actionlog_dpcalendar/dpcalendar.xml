@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.9" type="plugin" group="actionlog" method="upgrade">
+	<name>plg_actionlog_dpcalendar</name>
+	<author>Digital Peak</author>
+	<creationDate>Nov 2018</creationDate>
+	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
+	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>7.1.0</version>
+	<description>PLG_ACTIONLOG_DPCALENDAR_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="dpcalendar">dpcalendar.php</filename>
+		<folder>language</folder>
+	</files>
+</extension>

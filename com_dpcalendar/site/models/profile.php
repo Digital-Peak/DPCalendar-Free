@@ -197,23 +197,19 @@ class DPCalendarModelProfile extends JModelList
 	public function getEvents()
 	{
 		$calendars = $this->getItems();
-		if (empty($calendars)) {
-			return array();
-		}
-		$ids = array();
+		$ids       = [];
 		foreach ($calendars as $calendar) {
 			$ids['cd-' . $calendar->id] = 'cd-' . $calendar->id;
 		}
 
 		$model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
 		$model->getState();
-		$model->setState('filter.parentIds', array('root'));
-		$ids = array();
+		$model->setState('filter.parentIds', ['root']);
 		foreach ($model->getItems() as $calendar) {
 			$ids[$calendar->id] = $calendar->id;
 		}
 
-		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('category.id', $ids);
 		$model->setState('category.recursive', true);
@@ -221,6 +217,7 @@ class DPCalendarModelProfile extends JModelList
 		$model->setState('list.start-date', DPCalendarHelper::getDate()->format('U'));
 		$model->setState('list.ordering', 'start_date');
 		$model->setState('filter.my', 1);
+		$model->setState('filter.expand', 1);
 
 		return $model->getItems();
 	}

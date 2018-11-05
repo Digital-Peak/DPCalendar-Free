@@ -1,3 +1,6 @@
+@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
+@import "../../../com_dpcalendar/media/scss/misc/variables";
+
 & {
 	clear: both;
 	overflow: overlay;
@@ -29,8 +32,18 @@
 	}
 }
 
-.dp-link {
-	display: block;
+.dp-link_cta {
+	display: inline-block;
+	font-size: small;
+	margin-top: 10px;
+	padding: 2px 15px;
+
+	&.dp-button {
+		background-color: $dpColor;
+		font-weight: bold;
+		text-transform: uppercase;
+		color: #000000;
+	}
 }
 
 .dp-date,

@@ -101,8 +101,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			$this->setMessage($this->getError(), 'error');
 
 			$this->setRedirect(
-				JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->getRedirectToListAppend(),
-					false)
+				JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->getRedirectToListAppend(), false)
 			);
 
 			return false;
@@ -192,7 +191,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		$hash = $this->input->getString('urlhash');
 		if ($hash) {
-			$hash . '#' . trim($hash, '#');
+			$hash = '#' . trim($hash, '#');
 		}
 
 		if ($itemId) {
@@ -211,7 +210,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		$return = $this->input->getVar('return', null, 'default', 'base64');
 		$hash   = $this->input->getString('urlhash');
 		if ($hash) {
-			$hash . '#' . trim($hash, '#');
+			$hash = '#' . trim($hash, '#');
 		}
 
 		if (empty($return) || !JUri::isInternal(base64_decode($return))) {
@@ -361,7 +360,6 @@ class DPCalendarControllerEvent extends JControllerForm
 			$model     = $this->getModel();
 			$form      = $model->getForm($data, true);
 			$validData = $model->validate($form, $data);
-			$model->detach();
 
 			if (isset($validData['all_day']) && $validData['all_day'] == 1) {
 				$validData['start_date'] = DPCalendarHelper::getDate($validData['start_date'])->toSql(true);

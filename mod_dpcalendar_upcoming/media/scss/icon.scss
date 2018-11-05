@@ -4,21 +4,24 @@
 	@import "../../../com_dpcalendar/media/scss/layouts/block/icon";
 	@import "../../../com_dpcalendar/media/scss/layouts/block/figure";
 
-	&__date::after {
-		content: "\A";
-		white-space: pre;
-	}
+	&__information {
+		min-height: 3.7em;
 
-	.dp-link {
-		display: block;
-	}
+		.dp-link {
+			display: block;
+		}
 
-	.dp-icon {
-		float: left;
-		margin-right: .7em;
-		svg {
-			width: 2.3em;
+		&__date::after {
+			content: "\A";
+			white-space: pre;
+		}
+
+		> .dp-icon {
+			float: left;
+			margin-right: .7em;
+			svg {
+				width: 2.3em;
+			}
 		}
 	}
-
 }

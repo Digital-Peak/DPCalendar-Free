@@ -108,14 +108,11 @@ class DPCalendarModelImport extends JModelLegacy
 				$model->getState();
 
 				if (!$model->save($eventData)) {
-					JError::raiseWarning(0, $model->getError());
-					$model->detach();
+					JFactory::getApplication()->enqueueMessage($model->getError(), 'warning');
 					continue;
 				}
 
 				$eventData['id'] ? $counterUpdated++ : $counter++;
-
-				$model->detach();
 			}
 			$msgs[] = sprintf(JText::_('COM_DPCALENDAR_N_ITEMS_CREATED'), $counter, $cal->title);
 			$msgs[] = sprintf(JText::_('COM_DPCALENDAR_N_ITEMS_UPDATED'), $counterUpdated, $cal->title);

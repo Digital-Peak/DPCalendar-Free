@@ -18,8 +18,13 @@
 			}
 		};
 
-		[].slice.call(document.querySelectorAll('.com-dpcalendar-invite select')).forEach(function (select) {
-			new SlimSelect({select: select});
-		});
+		new Choices('.com-dpcalendar-invite select', {
+				itemSelectText: '',
+				noChoicesText: '',
+				shouldSortItems: false,
+				shouldSort: false,
+				removeItemButton: true
+			}
+		);
 	});
 }(document, Joomla));

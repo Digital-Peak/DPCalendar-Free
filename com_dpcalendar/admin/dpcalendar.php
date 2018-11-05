@@ -10,12 +10,14 @@ defined('_JEXEC') or die();
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 if (!JFactory::getUser()->authorise('core.manage', 'com_dpcalendar')) {
-	return JError::raiseWarning(404, JText::_('JERROR_ALERTNOAUTHOR'));
+	return JFactory::getApplication()->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'warning');
 }
 
 if (version_compare(PHP_VERSION, '5.5.9') < 0) {
-	JError::raiseWarning(0,
-		'You have PHP version ' . PHP_VERSION . ' installed. Please upgrade your PHP version to at least 5.5.9. DPCalendar can not run on this version.');
+	JFactory::getApplication()->enqueueMessage(
+		'You have PHP version ' . PHP_VERSION . ' installed. Please upgrade your PHP version to at least 5.5.9. DPCalendar can not run on this version.',
+		'warning'
+	);
 
 	return;
 }

@@ -91,6 +91,10 @@ DPCalendar = window.DPCalendar || {};
 	};
 
 	DPCalendar.Map.moveMarker = function (map, marker, latitude, longitude) {
+		if (!marker) {
+			return;
+		}
+
 		marker.setLatLng([latitude, longitude]);
 
 		map.dpBounds = new L.latLngBounds();

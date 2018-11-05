@@ -7,7 +7,13 @@
  */
 defined('_JEXEC') or die();
 
-Jloader::import('components.com_categories.models.fields.categoryedit', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+
+if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
+	Jloader::import('components.com_categories.models.fields.categoryedit', JPATH_ADMINISTRATOR);
+} else {
+	JLoader::registerAlias('JFormFieldCategoryEdit', '\\Joomla\\Component\\Categories\\Administrator\\Field\\CategoryeditField');
+}
 
 class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 {
@@ -20,7 +26,7 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 		$calendar = null;
 		$id       = $app->isClient('administrator') ? 0 : $app->input->get('id');
 		if (!empty($id) && $this->value) {
-			$calendar = DPCalendarHelper::getCalendar($this->value);
+			$calendar = \DPCalendar\Helper\DPCalendarHelper::getCalendar($this->value);
 		}
 
 		$options = array();

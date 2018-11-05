@@ -167,8 +167,26 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 		if ($this->params->get('event_form_change_price', '1') != '1') {
 			$this->form->removeField('price');
 		}
+		if ($this->params->get('event_form_change_booking_closing_date', '1') != '1') {
+			$this->form->removeField('booking_closing_date');
+		}
+		if ($this->params->get('event_form_change_earlybird', '1') != '1') {
+			$this->form->removeField('earlybird');
+		}
+		if ($this->params->get('event_form_change_user_discount', '1') != '1') {
+			$this->form->removeField('user_discount');
+		}
+		if ($this->params->get('event_form_change_booking_options', '1') != '1') {
+			$this->form->removeField('booking_options');
+		}
 		if ($this->params->get('event_form_change_payment', '1') != '1') {
 			$this->form->removeField('plugintype');
+		}
+		if ($this->params->get('event_form_change_terms', '1') != '1') {
+			$this->form->removeField('terms');
+		}
+		if ($this->params->get('event_form_change_booking_information', '1') != '1') {
+			$this->form->removeField('booking_information');
 		}
 		if ($this->params->get('event_form_change_access', '1') != '1') {
 			$this->form->removeField('access');

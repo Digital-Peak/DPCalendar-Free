@@ -545,14 +545,23 @@
     return retVal;
   }
 
+  function removeIframeListeners(iframe) {
+    var iframeId = iframe.id;
+    delete settings[iframeId];
+  }
+
   function closeIFrame(iframe) {
     var iframeId = iframe.id;
-
     log(iframeId,'Removing iFrame: '+iframeId);
-    if (iframe.parentNode) { iframe.parentNode.removeChild(iframe); }
+
+    try {
+      // Catch race condition error with React
+      if (iframe.parentNode) { iframe.parentNode.removeChild(iframe); }
+    } catch (e) {}
+    
     chkCallback(iframeId,'closedCallback',iframeId);
     log(iframeId,'--');
-    delete settings[iframeId];
+    removeIframeListeners(iframe);
   }
 
   function getPagePosition(iframeId) {
@@ -590,6 +599,13 @@
 
   function setSize(messageData) {
     function setDimension(dimension) {
+      if (!messageData.id) {
+        log(
+            'undefined',
+            'messageData id not set'
+        );
+        return;
+      }
       messageData.iframe.style[dimension] = messageData[dimension] + 'px';
       log(
         messageData.id,
@@ -658,7 +674,7 @@
       function warning() {
         if (settings[id] && !settings[id].loaded && !errorShown) {
           errorShown = true;
-          warn(id, 'IFrame has not responded within '+ settings[id].warningTimeout/1000 +' seconds. Check iFrameResizer.contentWindow.js has been loaded in iFrame. This message can be ingored if everything is working, or you can set the warningTimeout option to a higher value or zero to suppress this warning.');
+          warn(id, 'IFrame has not responded within '+ settings[id].warningTimeout/1000 +' seconds. Check iFrameResizer.contentWindow.js has been loaded in iFrame. This message can be ignored if everything is working, or you can set the warningTimeout option to a higher value or zero to suppress this warning.');
         }
       }
 
@@ -745,6 +761,8 @@
       log(iframeId,'IFrame scrolling ' + (settings[iframeId] && settings[iframeId].scrolling ? 'enabled' : 'disabled') + ' for ' + iframeId);
       iframe.style.overflow = false === (settings[iframeId] && settings[iframeId].scrolling) ? 'hidden' : 'auto';
       switch(settings[iframeId] && settings[iframeId].scrolling) {
+        case 'omit':
+          break;
         case true:
           iframe.scrolling = 'yes';
           break;
@@ -784,6 +802,8 @@
         settings[iframeId].iframe.iFrameResizer = {
 
           close        : closeIFrame.bind(null,settings[iframeId].iframe),
+
+          removeListeners: removeIframeListeners.bind(null,settings[iframeId].iframe),
 
           resize       : trigger.bind(null,'Window resize', 'resize', settings[iframeId].iframe),
 

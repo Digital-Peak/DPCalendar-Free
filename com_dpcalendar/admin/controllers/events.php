@@ -5,7 +5,10 @@
  * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\Utilities\ArrayHelper;
 
 JLoader::import('joomla.application.component.controlleradmin');
 
@@ -36,8 +39,8 @@ class DPCalendarControllerEvents extends JControllerAdmin
 				'unfeatured' => 0
 		);
 		$task = $this->getTask();
-		$value = JArrayHelper::getValue($values, $task, 0, 'int');
-		JArrayHelper::toInteger($ids);
+		$value = ArrayHelper::getValue($values, $task, 0, 'int');
+		ArrayHelper::toInteger($ids);
 
 		$this->getModel()
 			->getDbo()
@@ -53,13 +56,13 @@ class DPCalendarControllerEvents extends JControllerAdmin
 			{
 				// Prune items that you can't change.
 				unset($ids[$i]);
-				JError::raiseNotice(403, JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'));
+				JFactory::getApplication()->enqueueMessage(JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'), 'warning');
 			}
 		}
 
 		if (empty($ids))
 		{
-			JError::raiseWarning(500, JText::_('JERROR_NO_ITEMS_SELECTED'));
+			JFactory::getApplication()->enqueueMessage(JText::_('JERROR_NO_ITEMS_SELECTED'), 'warning');
 		}
 		else
 		{
@@ -69,7 +72,7 @@ class DPCalendarControllerEvents extends JControllerAdmin
 			// Publish the items.
 			if (! $model->featured($ids, $value))
 			{
-				JError::raiseWarning(500, $model->getError());
+				JFactory::getApplication()->enqueueMessage($model->getError(), 'warning');
 			}
 		}
 

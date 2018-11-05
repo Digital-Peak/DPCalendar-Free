@@ -22,13 +22,13 @@ class DPCalendarViewCalendar extends JViewLegacy
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			JError::raiseWarning(500, implode("\n", $errors));
+			JFactory::getApplication()->enqueueMessage(implode("\n", $errors), 'warning');
 			return false;
 		}
 
 		if ($items === false)
 		{
-			return JError::raiseError(404, JText::_('JGLOBAL_CATEGORY_NOT_FOUND'));
+			throw new Exception(JText::_('JGLOBAL_CATEGORY_NOT_FOUND'), 404);
 		}
 
 		$app = JFactory::getApplication();

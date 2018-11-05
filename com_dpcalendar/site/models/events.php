@@ -498,14 +498,6 @@ class DPCalendarModelEvents extends JModelList
 		return '(' . $searchQuery . ')';
 	}
 
-	protected function _getList($query, $limitstart = 0, $limit = 0)
-	{
-		$this->_db->setQuery($query, $limitstart, $limit);
-		$result = $this->_db->loadObjectList();
-
-		return $result;
-	}
-
 	public function setStateFromParams(Registry $params)
 	{
 		// Filter for my

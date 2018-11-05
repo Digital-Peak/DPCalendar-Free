@@ -160,7 +160,7 @@ foreach ($events as $event) {
 	$event->truncatedDescription = $desc;
 }
 
-$return = JFactory::getApplication()->input->getInt('Itemid', null);
+$return = $app->input->getInt('Itemid', null);
 if (!empty($return)) {
 	$return = $router->route('index.php?Itemid=' . $return);
 }

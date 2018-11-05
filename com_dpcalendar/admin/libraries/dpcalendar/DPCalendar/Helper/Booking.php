@@ -83,6 +83,7 @@ class Booking
 				$fileName = JPATH_ROOT . '/tmp/' . $fileName;
 				\JFile::delete($fileName);
 			}
+			ob_end_clean();
 			$pdf->Output($fileName, $toFile ? 'F' : 'D');
 
 			return $fileName;

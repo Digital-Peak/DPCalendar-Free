@@ -93,8 +93,16 @@ DPCalendar = window.DPCalendar || {};
 			}
 		};
 
-		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select')).forEach(function (select) {
-			new SlimSelect({select: select});
+
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color)')).forEach(function (select) {
+			select._choicejs = new Choices(select, {
+					itemSelectText: '',
+					noChoicesText: '',
+					shouldSortItems: false,
+					shouldSort: false,
+					removeItemButton: select.id != 'jform_catid'
+				}
+			);
 		});
 
 		if (parseInt(document.getElementById('jform_id').value) == 0) {
@@ -126,6 +134,10 @@ DPCalendar = window.DPCalendar || {};
 		}
 
 		document.getElementById('jform_location_ids').addEventListener('change', function (e) {
+			if (!document.getElementById('jform_rooms')) {
+				return true;
+			}
+
 			Joomla.loadingLayer('show');
 			Joomla.submitbutton('event.reload');
 		});
@@ -164,13 +176,7 @@ DPCalendar = window.DPCalendar || {};
 				function (json) {
 					if (json.data.id != null && json.data.display != null) {
 						var select = document.getElementById('jform_location_ids');
-
-						// Add the option
-						var option = document.createElement('option');
-						option.value = json.data.id;
-						option.selected = true;
-						option.innerText = json.data.display;
-						select.appendChild(option);
+						select._choicejs.setChoices([{value: json.data.id, label: json.data.display, selected: true}], 'value', 'label');
 
 						updateLocationFrame();
 

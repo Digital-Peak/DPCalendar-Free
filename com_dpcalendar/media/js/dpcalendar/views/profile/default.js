@@ -1,13 +1,20 @@
-(function (document, Joomla, SlimSelect) {
+(function (document, Joomla, Choices) {
 	'use strict';
 
 	document.addEventListener('DOMContentLoaded', function () {
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-profile__share .dp-select')).forEach(function (select) {
-			var slim = new SlimSelect({select: select, placeholder: Joomla.JText._('COM_DPCALENDAR_VIEW_DAVCALENDAR_NONE_SELECTED_LABEL')});
+			var choice = new Choices(select, {
+					noResultsText: Joomla.JText._('COM_DPCALENDAR_VIEW_DAVCALENDAR_NONE_SELECTED_LABEL'),
+					itemSelectText: '',
+					noChoicesText: '',
+					shouldSortItems: false,
+					shouldSort: false, removeItemButton: true
+				}
+			);
 
 			select.addEventListener('change', function (event) {
 				var data = 'action=' + event.target.name.replace('-users', '') + '&' + event.target.getAttribute('data-token') + '=1&users=';
-				slim.selected().forEach(function (option) {
+				choice.getValue(true).forEach(function (option) {
 					data += option + ',';
 				});
 
@@ -29,4 +36,4 @@
 			return false;
 		});
 	});
-}(document, Joomla, SlimSelect));
+}(document, Joomla, Choices));

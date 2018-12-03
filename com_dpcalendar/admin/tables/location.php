@@ -16,6 +16,8 @@ class DPCalendarTableLocation extends JTable
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_locations', 'id', $db);
+
+		$this->setColumnAlias('published', 'state');
 	}
 
 	public function bind($array, $ignore = '')

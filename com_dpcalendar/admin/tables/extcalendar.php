@@ -16,6 +16,8 @@ class DPCalendarTableExtcalendar extends JTable
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_extcalendars', 'id', $db);
+
+		$this->setColumnAlias('published', 'state');
 	}
 
 	public function delete($pk = null)

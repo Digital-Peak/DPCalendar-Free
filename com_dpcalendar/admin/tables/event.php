@@ -29,6 +29,8 @@ class DPCalendarTableEvent extends JTable
 		}
 		parent::__construct('#__dpcalendar_events', 'id', $db);
 
+		$this->setColumnAlias('published', 'state');
+
 		$this->access         = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('event_form_access', $this->access);
 		$this->access_content = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('event_form_access_content');
 	}

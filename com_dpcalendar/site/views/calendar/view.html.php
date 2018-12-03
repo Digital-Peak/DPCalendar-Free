@@ -61,19 +61,11 @@ class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 
 			// Add the locations
 			foreach ($model->getItems() as $location) {
-				$rooms = array();
 				if ($location->rooms) {
 					foreach ($location->rooms as $room) {
-						$rooms[] = (object)array('id' => $location->id . '-' . $room->id, 'title' => $room->title);
+						$this->resources[] = (object)array('id' => $location->id . '-' . $room->id, 'title' => $room->title);
 					}
 				}
-
-				$resource = (object)array('id' => $location->id, 'title' => $location->title);
-
-				if ($rooms) {
-					$resource->children = $rooms;
-				}
-				$this->resources[] = $resource;
 			}
 		}
 

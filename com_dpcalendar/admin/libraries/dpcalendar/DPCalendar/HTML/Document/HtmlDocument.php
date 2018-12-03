@@ -106,7 +106,10 @@ class HtmlDocument
 			if ($provider == 'google') {
 				$key = DPCalendarHelper::getComponentParameter('map_api_google_jskey', '');
 				if (!$key) {
-					\JFactory::getApplication()->enqueueMessage("Can't load Google maps without an API key. More information can be found in our documentation at <a href='https:://joomla.digital-peak.com'>joomla.digital-peak.com</a>.", 'warning');
+					\JFactory::getApplication()->enqueueMessage(
+						"Can't load Google maps without an API key. More information can be found in our documentation at <a href='https://joomla.digital-peak.com' target='_blank'>joomla.digital-peak.com</a>.",
+						'warning'
+					);
 				} else {
 					$key = '&key=' . $key;
 					\JHtml::_(

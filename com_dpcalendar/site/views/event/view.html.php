@@ -162,15 +162,16 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$app     = JFactory::getApplication();
 		$menus   = $app->getMenu();
 		$pathway = $app->getPathway();
-		$title   = null;
 
 		// Because the application sets a default page title,
 		// we need to get it from the menu item itself
 		$menu = $menus->getActive();
 
-		$title = $this->params->get('page_title', '');
+		if ($title = $this->params->get('page_title', '')) {
+			$this->document->setTitle($title);
+		}
 
-		$id = (int)@$menu->query['id'];
+		$id = $menu && array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
 
 		// If the menu item does not concern this newsfeed
 		if ($menu && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] != 'event' || $id != $this->event->id)) {

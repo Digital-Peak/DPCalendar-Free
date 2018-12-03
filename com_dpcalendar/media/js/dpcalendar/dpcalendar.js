@@ -101,11 +101,14 @@ if (typeof Object.assign != 'function') {
 	};
 
 	DPCalendar.print = function (selector) {
-		var printContents = document.querySelector(selector).outerHTML;
-		document.body.outerHTML = printContents;
+		document.body.outerHTML = document.querySelector(selector).outerHTML;
 		window.print();
-		// Page needs to be reloaded, otherwise all listeners are lost
-		window.location.reload(false);
+
+		// The after print action does block reloading so we are trying till a reload can be performed, hacky
+		setInterval(function () {
+			// Page needs to be reloaded, otherwise all listeners are lost
+			window.location.reload(false);
+		}, 1000);
 	};
 
 	DPCalendar.slideToggle = function (el, fn) {
@@ -349,7 +352,7 @@ if (typeof Object.assign != 'function') {
 		var tzSwitcher = document.querySelector('.dp-timezone .dp-select');
 		if (tzSwitcher) {
 			if (typeof Choices != 'undefined') {
-				new Choices(tzSwitcher, {itemSelectText: '', noChoicesText: '', shouldSortItems: false, shouldSort: false, removeItemButton: true});
+				new Choices(tzSwitcher, {itemSelectText: '', noChoicesText: '', shouldSortItems: false, shouldSort: false});
 			}
 			tzSwitcher.addEventListener('change', function () {
 				this.form.submit();

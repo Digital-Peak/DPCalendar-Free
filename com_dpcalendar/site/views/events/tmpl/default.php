@@ -14,7 +14,7 @@ $data = array();
 foreach ($this->items as $event) {
 	$displayData          = $this->displayData;
 	$displayData['event'] = $event;
-	$description          = $this->layoutHelper->renderLayout('event.tooltip', $displayData);
+	$description          = trim($this->layoutHelper->renderLayout('event.tooltip', $displayData));
 	$description          = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
 
 	// Set up the locations

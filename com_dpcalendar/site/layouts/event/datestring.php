@@ -12,6 +12,10 @@ $event = $displayData['event'];
 $dateFormat = !empty($displayData['dateFormat']) ? $displayData['dateFormat'] : DPCalendarHelper::getComponentParameter('event_date_format', 'm.d.Y');
 $timeFormat = !empty($displayData['timeFormat']) ? $displayData['timeFormat'] : DPCalendarHelper::getComponentParameter('event_time_format', 'g:i a');
 
+$translator = !empty($displayData['translator']) ? $displayData['translator'] : new \DPCalendar\Translator\Translator();
+$dateFormat = $translator->translate($dateFormat);
+$timeFormat = $translator->translate($timeFormat);
+
 // These are the dates to display
 $startDate = DPCalendarHelper::getDate($event->start_date, $event->all_day)->format($dateFormat, true);
 $startTime = DPCalendarHelper::getDate($event->start_date, $event->all_day)->format($timeFormat, true);

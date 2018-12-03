@@ -6,6 +6,7 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
+
 ?>
 <div class="dp-flatcalendar">
 	<span class="dp-flatcalendar__day"><?php echo $displayData['date']->format('j', true); ?></span>

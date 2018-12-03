@@ -196,7 +196,7 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 
 	public function onContentPrepareForm($form, $data)
 	{
-		if ($form->getName() == 'com_users.profile') {
+		if ($form->getName() == 'com_users.profile' || (JFactory::getApplication()->isClient('administrator') && $form->getName() == 'com_users.user')) {
 
 			// Load the language
 			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');

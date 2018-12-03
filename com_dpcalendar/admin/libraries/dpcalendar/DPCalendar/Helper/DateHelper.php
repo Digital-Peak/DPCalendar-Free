@@ -136,6 +136,6 @@ class DateHelper
 			$newFormat .= $chr;
 		}
 
-		return $newFormat;
+		return \JText::_($newFormat);
 	}
 }

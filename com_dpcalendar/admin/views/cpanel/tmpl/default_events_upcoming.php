@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
 	<div class="dp-information-container">
 		<?php foreach ($this->upcomingEvents as $event) { ?>
 			<div class="com-dpcalendar-cpanel__event">
-				<a href="<?php echo $this->router->getEventRoute($event->id, $event->catid); ?>" class="dp-link">
+				<a href="index.php?option=com_dpcalendar&view=event&e_id=<?php echo $event->id; ?>" class="dp-link">
 					<?php echo $event->title; ?>
 				</a>
 				<div class="dp-information dp-grid">

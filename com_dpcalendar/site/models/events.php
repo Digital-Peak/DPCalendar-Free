@@ -291,8 +291,8 @@ class DPCalendarModelEvents extends JModelList
 		if ($this->getState('filter.ongoing', 0) == 1) {
 			$now           = DPCalendarHelper::getDate();
 			$dateCondition .= ' or ' . $db->quote($now->toSql()) . ' between a.start_date and a.end_date';
-			$dateCondition .= ' or (a.start_date=' . $db->quote($now->format('Y-m-d')) . ' and all_day=1)';
-			$dateCondition .= ' or (a.end_date=' . $db->quote($now->format('Y-m-d')) . ' and all_day=1)';
+			$dateCondition .= ' or (a.start_date=' . $db->quote($now->format('Y-m-d')) . ' and a.all_day=1)';
+			$dateCondition .= ' or (a.end_date=' . $db->quote($now->format('Y-m-d')) . ' and a.all_day=1)';
 		}
 		$query->where('(' . $dateCondition . ')');
 

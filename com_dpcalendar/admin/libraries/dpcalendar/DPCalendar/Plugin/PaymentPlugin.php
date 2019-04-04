@@ -24,6 +24,7 @@ defined('_JEXEC') or die();
  */
 abstract class PaymentPlugin extends \JPlugin
 {
+	protected $sendNotificationsOnCallback = true;
 	protected $autoloadLanguage = true;
 
 	/**
@@ -185,7 +186,8 @@ abstract class PaymentPlugin extends \JPlugin
 		$data = json_decode(str_replace('\u0000*\u0000_', '', json_encode($data)), true);
 		unset($data['errors']);
 
-		\JModelLegacy::getInstance('Booking', 'DPCalendarModel', array('event_after_save' => 'dontusethisevent'))->save($data, false, false);
+		\JModelLegacy::getInstance('Booking', 'DPCalendarModel', array('event_after_save' => 'dontusethisevent'))->save($data, false,
+			$this->sendNotificationsOnCallback);
 
 		return true;
 	}

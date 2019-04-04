@@ -25,8 +25,9 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 			<div class="mod-dpcalendar-upcoming-timeline__event">
 				<div class="mod-dpcalendar-upcoming-timeline__dot"></div>
 				<div class="mod-dpcalendar-upcoming-timeline__information">
-					<h3 class="mod-dpcalendar-upcoming-timeline__title" style="background-color: #<?php echo $event->color; ?>;">
-						<a href="<?php echo $event->realUrl; ?>" class="dp-event-url dp-link"><?php echo $event->title; ?></a>
+					<h3 class="mod-dpcalendar-upcoming-timeline__title" style="background-color: #<?php echo $event->color; ?>">
+						<a href="<?php echo $event->realUrl; ?>" class="dp-event-url dp-link"
+						   style="color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($event->color); ?>"><?php echo $event->title; ?></a>
 					</h3>
 					<?php if ($params->get('show_location') && isset($event->locations) && $event->locations) { ?>
 						<?php foreach ($event->locations as $location) { ?>

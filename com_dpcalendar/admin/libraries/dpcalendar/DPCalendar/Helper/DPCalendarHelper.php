@@ -87,7 +87,7 @@ class DPCalendarHelper
 			return;
 		}
 		$calendar = self::getCalendar($calendarId);
-		if (!$calendar->id) {
+		if (!$calendar || !$calendar->id) {
 			return;
 		}
 
@@ -1196,5 +1196,15 @@ class DPCalendarHelper
 		}
 
 		return trim(@ini_get('memory_limit')) == $limit;
+	}
+
+	public static function getOppositeBWColor($color)
+	{
+		$r   = hexdec(substr($color, 0, 2));
+		$g   = hexdec(substr($color, 2, 2));
+		$b   = hexdec(substr($color, 4, 2));
+		$yiq = (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+
+		return ($yiq >= 128) ? '000000' : 'ffffff';
 	}
 }

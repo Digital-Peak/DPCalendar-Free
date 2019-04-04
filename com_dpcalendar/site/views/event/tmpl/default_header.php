@@ -28,7 +28,7 @@ $googleUrl .= '&details=' . urlencode(JHtml::_('string.truncate', $event->descri
 $googleUrl .= '&hl=' . DPCalendarHelper::getFrLanguage() . '&ctz=' . $startDate->getTimezone()->getName();
 $googleUrl .= '&sf=true&output=xml';
 
-$icalUrl = $this->router->route('index.php?option=com_dpcalendar&view=event&format=raw&id=' . $event->id);
+$icalUrl = $this->router->route('index.php?option=com_dpcalendar&view=event&format=raw&id=' . $event->id . '&calid=' . $event->catid);
 
 $checkinUrl = 'index.php?option=com_dpcalendar&task=event.checkin';
 $checkinUrl .= '&e_id=' . $event->id;

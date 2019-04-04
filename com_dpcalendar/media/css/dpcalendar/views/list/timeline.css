@@ -382,14 +382,6 @@
 	}
 }
 
-.com-dpcalendar-timeline .dp-event__information .dp-link_cta1 {
-	float: right;
-	font-size: small;
-	font-size: small;
-	margin: 0 0 0 30px;
-	padding: 0;
-}
-
 .com-dpcalendar-timeline .dp-event:first-of-type .dp-event__dot {
 	margin-top: 0;
 }
@@ -402,10 +394,6 @@
 	position: relative;
 	padding: 10px 15px;
 	margin: -15px -15px 10px;
-}
-
-.com-dpcalendar-timeline .dp-event__title .dp-link {
-	color: #fff;
 }
 
 .com-dpcalendar-timeline .dp-event__title::before {

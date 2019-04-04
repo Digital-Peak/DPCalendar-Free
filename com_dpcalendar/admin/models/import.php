@@ -72,7 +72,7 @@ class DPCalendarModelImport extends JModelLegacy
 			$counterUpdated = 0;
 			$filter         = strtolower($input->get('filter_search', ''));
 			foreach ($events as $event) {
-				$text = strtolower($event->title . ' ' . $event->description . ' ' . $event->url . ' ' . $event->location);
+				$text = strtolower($event->title . ' ' . $event->description . ' ' . $event->url);
 				if (!empty($filter) && strpos($text, $filter) === false) {
 					continue;
 				}
@@ -112,7 +112,7 @@ class DPCalendarModelImport extends JModelLegacy
 					continue;
 				}
 
-				$eventData['id'] ? $counterUpdated++ : $counter++;
+				!empty($eventData['id']) ? $counterUpdated++ : $counter++;
 			}
 			$msgs[] = sprintf(JText::_('COM_DPCALENDAR_N_ITEMS_CREATED'), $counter, $cal->title);
 			$msgs[] = sprintf(JText::_('COM_DPCALENDAR_N_ITEMS_UPDATED'), $counterUpdated, $cal->title);

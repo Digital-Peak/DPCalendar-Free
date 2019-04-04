@@ -78,8 +78,7 @@ if ($calendarLink && $params->get('event_show_calendar', '1') == '2') {
 			<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_URL'); ?></dt>
 			<dd class="dp-description__description">
 				<?php $u = JUri::getInstance($this->event->url); ?>
-				<a href="<?php echo $this->event->url; ?>"
-				   class="dp-link"
+				<a href="<?php echo $this->event->url; ?>" class="dp-link"
 				   target="<?php echo $u->getHost() && JUri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
 					<?php echo $this->event->url; ?>
 				</a>

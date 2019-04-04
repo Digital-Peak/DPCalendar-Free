@@ -7,11 +7,13 @@
  */
 defined('_JEXEC') or die();
 
+$style = 'background-color: #' . $displayData['color'] . ';';
+$style .= 'box-shadow: 0 2px 0 #' . $displayData['color'] . ';';
+$style .= 'color: #' . \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($displayData['color']) . ';';
 ?>
 <div class="dp-flatcalendar">
 	<span class="dp-flatcalendar__day"><?php echo $displayData['date']->format('j', true); ?></span>
-	<span class="dp-flatcalendar__month"
-	      style="background-color: #<?php echo $displayData['color']; ?>; box-shadow: 0 2px 0 #<?php echo $displayData['color']; ?>">
+	<span class="dp-flatcalendar__month" style="<?php echo $style; ?>">
 		<?php echo $displayData['date']->format('M', true); ?>
 	</span>
 </div>

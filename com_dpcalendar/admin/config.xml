@@ -398,6 +398,13 @@
 		<field name="list_description_length" type="text"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DESC_COUNT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DESC_COUNT_DESC"/>
+		<field name="list_manage_search_form" type="list" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_DESC">
+			<option value="1">JSHOW</option>
+			<option value="2">COM_DPCALENDAR_EXPAND</option>
+			<option value="0">JHIDE</option>
+		</field>
 		<field name="list_show_hits" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_DESC">
@@ -484,8 +491,7 @@
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
-			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND
-			</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
 		</field>
 		<field name="event_show_url" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL"
@@ -1435,19 +1441,20 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="booking_send_mail_new" type="radio" class="btn-group"
+		<field name="booking_send_mail_new" type="list"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEND_MAIL_NEW_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEND_MAIL_NEW_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEND_MAIL_NEW_FREE</option>
 		</field>
 		<field name="booking_include_ics" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_ICS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_ICS_DESC" showon="booking_send_mail_new:1">
+		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_ICS_DESC" showon="booking_send_mail_new!:0">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="booking_include_tickets" type="radio" class="btn-group" showon="booking_send_mail_new:1"
+		<field name="booking_include_tickets" type="radio" class="btn-group" showon="booking_send_mail_new!:0"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_TICKETS_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_TICKETS_DESC">
 			<option value="0">JNO</option>

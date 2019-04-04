@@ -316,6 +316,13 @@ class Booking
 			$vars['currencySymbol']    = \DPCalendarHelper::getComponentParameter('currency_symbol', '$');
 			$vars['currencySeparator'] = \DPCalendarHelper::getComponentParameter('currency_separator', '.');
 			$vars['price_formatted']   = \DPCalendarHelper::renderPrice($vars['price'], $vars['currencySymbol'], $vars['currencySeparator']);
+
+			if (!empty($booking->jcfields)) {
+				foreach ($booking->jcfields as $field) {
+					$vars['field-' . $field->name] = $field;
+				}
+			}
+
 			foreach ($statement as $b) {
 				if ($b->status && $booking->type = $b->type) {
 					$buffer .= \DPCalendarHelper::renderEvents(array(), $b->statement, $params, $vars);

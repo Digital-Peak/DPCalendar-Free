@@ -7,14 +7,15 @@
  */
 defined('_JEXEC') or die();
 
-if (!is_array($displayData['event']->price) || empty($displayData['event']->price)) {
+$event = $displayData['event'];
+if (!$event->price || !is_array($event->price->value) || empty($event->price->value)) {
 	return;
 }
 
 $currency = $displayData['params']->get('currency', 'USD');
 ?>
 <div itemprop="offers" itemtype="https://schema.org/AggregateOffer" itemscope>
-	<?php foreach ($displayData['event']->price->value as $key => $value) { ?>
+	<?php foreach ($event->price->value as $key => $value) { ?>
 		<div itemprop="offers" itemtype="https://schema.org/Offer" itemscope>
 			<meta itemprop="price" content="<?php echo $value; ?>">
 			<meta itemprop="priceCurrency" content="<?php echo $currency; ?>">
@@ -26,7 +27,7 @@ $currency = $displayData['params']->get('currency', 'USD');
 				<meta itemprop="description" content="<?php echo strip_tags($event->price->description[$key]); ?>">
 			<?php } ?>
 			<meta itemprop="availability"
-			      content="<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . $event->capacity; ?>">
+				  content="<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . $event->capacity; ?>">
 			<meta itemprop="url" content="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid, true, true); ?>">
 		</div>
 	<?php } ?>

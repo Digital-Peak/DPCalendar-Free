@@ -51,6 +51,7 @@ class HtmlDocument
 		}
 		if ($name == self::LIBRARY_DPCORE) {
 			\JHtml::_('behavior.core');
+			$this->loadScriptFile('dpcalendar/polyfill.js');
 			$this->loadScriptFile('dpcalendar/dpcalendar.js');
 		}
 		if ($name == self::LIBRARY_URL) {
@@ -73,6 +74,7 @@ class HtmlDocument
 		if ($name == self::LIBRARY_FULLCALENDAR) {
 			\JHtml::_('behavior.core');
 			\JHtml::_('jquery.framework');
+			$this->loadScriptFile('dpcalendar/polyfill.js');
 			$this->loadScriptFile('dpcalendar/dpcalendar.js');
 			$this->loadScriptFile('popper/popper.js');
 			$this->loadScriptFile('tippy/tippy.js');
@@ -89,6 +91,7 @@ class HtmlDocument
 		if ($name == self::LIBRARY_SCHEDULER) {
 			\JHtml::_('behavior.core');
 			\JHtml::_('jquery.framework');
+			$this->loadScriptFile('dpcalendar/polyfill.js');
 			$this->loadScriptFile('dpcalendar/dpcalendar.js');
 			$this->loadScriptFile('scheduler/scheduler.js');
 			$this->loadStyleFile('scheduler/scheduler.css');
@@ -100,6 +103,7 @@ class HtmlDocument
 		}
 		if ($name == self::LIBRARY_MAP) {
 			\JHtml::_('behavior.core');
+			$this->loadScriptFile('dpcalendar/polyfill.js');
 			$this->loadScriptFile('dpcalendar/dpcalendar.js');
 
 			$provider = DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap');

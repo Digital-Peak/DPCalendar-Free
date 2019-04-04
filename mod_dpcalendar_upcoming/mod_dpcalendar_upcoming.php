@@ -18,7 +18,7 @@ $layoutHelper = new \DPCalendar\Helper\LayoutHelper();
 $userHelper   = new \DPCalendar\Helper\UserHelper();
 $router       = new \DPCalendar\Router\Router();
 $translator   = new \DPCalendar\Translator\Translator();
-$params       = JComponentHelper::getParams('com_dpcalendar')->merge($params);
+$params       = (clone JComponentHelper::getParams('com_dpcalendar'))->merge($params);
 
 
 // The display data

@@ -140,10 +140,6 @@
 	margin: -15px -15px 10px;
 }
 
-.mod-dpcalendar-upcoming-timeline__title .dp-link {
-	color: #fff;
-}
-
 .mod-dpcalendar-upcoming-timeline__title::before {
 	content: '';
 	position: absolute;

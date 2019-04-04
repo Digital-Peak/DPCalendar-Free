@@ -281,7 +281,7 @@ DPCalendar = window.DPCalendar || {};
 				DPCalendar.modal(url, calendar.data('popupwidth'), calendar.data('popupheight'), function (frame) {
 					// Check if there is a system message
 					var innerDoc = frame.contentDocument || frame.contentWindow.document;
-					if (innerDoc.getElementById('system-message-container').children.length < 1) {
+					if (!innerDoc.getElementById('system-message-container') || innerDoc.getElementById('system-message-container').children.length < 1) {
 						return;
 					}
 

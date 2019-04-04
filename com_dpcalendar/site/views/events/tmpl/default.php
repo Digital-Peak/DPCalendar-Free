@@ -57,11 +57,7 @@ foreach ($this->items as $event) {
 
 	// Black or white computation
 	if ($this->params->get('adjust_fg_color', '0') == '2') {
-		$r       = hexdec(substr($event->color, 0, 2));
-		$g       = hexdec(substr($event->color, 2, 2));
-		$b       = hexdec(substr($event->color, 4, 2));
-		$yiq     = (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
-		$fgcolor = ($yiq >= 128) ? '#000000' : '#ffffff';
+		$fgcolor = '#' . \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($event->color);
 	}
 
 	// Format the dates depending on the all day flag

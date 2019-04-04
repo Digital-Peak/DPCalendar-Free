@@ -33,6 +33,10 @@ class SendNewBookingMail implements StageInterface
 			return $payload;
 		}
 
+		if ((float)$payload->item->price > 0 && $payload->mailParams->get('booking_send_mail_new', 1) == 2) {
+			return $payload;
+		}
+
 		// If a payment is required include the payment statement from the plugin
 		$oldDetails = $payload->mailVariables['bookingDetails'];
 		if ($payload->item->state == 3 || $payload->item->state == 4) {

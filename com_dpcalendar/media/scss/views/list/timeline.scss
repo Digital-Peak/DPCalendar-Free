@@ -80,14 +80,6 @@
 				margin-top: ($eventSpacing + 5px);
 				margin-left: 0;
 			}
-
-			.dp-link_cta1 {
-				float: right;
-				font-size: small;
-				font-size: small;
-				margin: 0 0 0 30px;
-				padding: 0;
-			}
 		}
 
 		&:first-of-type {
@@ -103,10 +95,6 @@
 			position: relative;
 			padding: 10px 15px;
 			margin: -15px -15px 10px;
-
-			.dp-link {
-				color: #fff;
-			}
 
 			&::before {
 				content: '';

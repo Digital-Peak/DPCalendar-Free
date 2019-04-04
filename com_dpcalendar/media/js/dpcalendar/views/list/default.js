@@ -14,7 +14,7 @@ DPCalendar = window.DPCalendar || {};
 
 		var geoComplete = root.querySelector('.dp-input_location');
 
-		if (DPCalendar.autocomplete) {
+		if (DPCalendar.autocomplete && geoComplete) {
 			DPCalendar.autocomplete.create(geoComplete);
 
 			geoComplete.addEventListener('dp-autocomplete-select', function (e) {
@@ -35,7 +35,7 @@ DPCalendar = window.DPCalendar || {};
 			});
 		}
 
-		if (DPCalendar.Map && geoComplete.getAttribute('data-latitude') && geoComplete.getAttribute('data-longitude')) {
+		if (DPCalendar.Map && geoComplete && geoComplete.getAttribute('data-latitude') && geoComplete.getAttribute('data-longitude')) {
 			DPCalendar.Map.drawCircle(
 				root.querySelector('.dp-map').dpmap,
 				{latitude: geoComplete.getAttribute('data-latitude'), longitude: geoComplete.getAttribute('data-longitude')},

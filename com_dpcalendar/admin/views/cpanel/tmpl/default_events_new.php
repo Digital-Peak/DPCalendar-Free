@@ -18,7 +18,7 @@ defined('_JEXEC') or die();
 				<?php $date = $this->dateHelper->getDate($event->created)->format(
 					$this->params->get('event_date_format', 'm.d.Y') . ' ' . $this->params->get('event_time_format', 'g:i a'), true
 				); ?>
-				<a href="<?php echo $this->router->getEventRoute($event->id, $event->catid); ?>" class="dp-link">
+				<a href="index.php?option=com_dpcalendar&view=event&e_id=<?php echo $event->id; ?>" class="dp-link">
 					<?php echo $event->title; ?>
 				</a>
 				<div class="dp-information dp-grid">

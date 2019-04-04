@@ -2180,7 +2180,7 @@ function addDoubleTapListener(obj, handler, id) {
 	obj[_pre + _touchend + id] = onTouchEnd;
 	obj[_pre + 'dblclick' + id] = handler;
 
-	obj.addEventListener(_touchstart, onTouchStart, false);
+	obj.addEventListener(_touchstart, onTouchStart, {passive: true});
 	obj.addEventListener(_touchend, onTouchEnd, false);
 
 	// On some platforms (notably, chrome<55 on win10 + touchscreen + mouse),
@@ -2668,7 +2668,7 @@ function addOne(obj, type, fn, context) {
 	} else if ('addEventListener' in obj) {
 
 		if (type === 'mousewheel') {
-			obj.addEventListener('onwheel' in obj ? 'wheel' : 'mousewheel', handler, false);
+			obj.addEventListener('onwheel' in obj ? 'wheel' : 'mousewheel', handler, {passive: true});
 
 		} else if ((type === 'mouseenter') || (type === 'mouseleave')) {
 			handler = function (e) {

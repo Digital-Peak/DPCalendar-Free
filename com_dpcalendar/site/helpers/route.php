@@ -20,13 +20,8 @@ class DPCalendarHelperRoute
 			$id = (int)$id;
 		}
 
-		$id = 'id=' . $id;
-		if (JFactory::getApplication()->isClient('administrator')) {
-			$id = 'e_' . $id;
-		}
-
 		// Create the link
-		$link = ($full ? JUri::root() : '') . 'index.php?option=com_dpcalendar&view=event&' . $id;
+		$link = ($full ? JUri::root() : '') . 'index.php?option=com_dpcalendar&view=event&id=' . $id;
 
 		if ($tmpl = JFactory::getApplication()->input->getWord('tmpl')) {
 			$link .= '&tmpl=' . $tmpl;

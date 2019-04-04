@@ -18,13 +18,15 @@
 			}
 		};
 
-		new Choices('.com-dpcalendar-invite select', {
-				itemSelectText: '',
-				noChoicesText: '',
-				shouldSortItems: false,
-				shouldSort: false,
-				removeItemButton: true
-			}
-		);
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-invite select:not(.dp-timezone__select)')).forEach(function (select) {
+			select._choicejs = new Choices(select, {
+					itemSelectText: '',
+					noChoicesText: '',
+					shouldSortItems: false,
+					shouldSort: false,
+					removeItemButton: true
+				}
+			);
+		})
 	});
 }(document, Joomla));

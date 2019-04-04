@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -506,10 +506,10 @@ class DPCalendarControllerEvent extends JControllerForm
 		$events = $model->getItems();
 
 		if (!isset($data['id']) || !$data['id']) {
-			$data['id'] = $this->input->get('id', 0);
+			$data['id'] = $this->input->get('id');
 		}
 		foreach ($events as $key => $e) {
-			if ($e->id != $data['id'] && $e->original_id != $data['id']) {
+			if ($e->id != $data['id'] && ($e->original_id == 0 || $e->original_id != $data['id'])) {
 				continue;
 			}
 			unset($events[$key]);

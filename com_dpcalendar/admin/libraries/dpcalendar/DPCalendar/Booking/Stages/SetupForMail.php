@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -44,7 +44,10 @@ class SetupForMail implements StageInterface
 			)
 		);
 
-		$payload->mailVariables = array(
+		$payload->item->book_date_formatted = DPCalendarHelper::getDate($payload->item->book_date)
+			->format($params->get('event_date_format', 'm.d.Y') . ' ' . $params->get('event_time_format', 'g:i a'), true);
+		$payload->mailVariables             = array(
+			'booking'        => $payload->item,
 			'bookingDetails' => $details,
 			'bookingLink'    => \DPCalendarHelperRoute::getBookingRoute($payload->item, true),
 			'bookingUid'     => $payload->item->uid,

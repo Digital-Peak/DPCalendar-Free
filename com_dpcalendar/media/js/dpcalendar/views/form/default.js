@@ -212,6 +212,11 @@ DPCalendar = window.DPCalendar || {};
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform__location-form input')).forEach(function (input) {
 			input.classList.add('novalidate');
 		});
+
+		var rooms = document.querySelector('.com-dpcalendar-eventform .dp-field-rooms');
+		if (rooms && rooms.querySelectorAll('.choices__item[data-value]').length == 0) {
+			rooms.style.display = 'none';
+		}
 	});
 
 	function checkOverlapping() {
@@ -239,11 +244,16 @@ DPCalendar = window.DPCalendar || {};
 					}
 				}
 			},
-			DPCalendar.formToQueryString(document.querySelector('.com-dpcalendar-eventform__form'), 'input:not([name=task]), select') + '&id=' + url.query.e_id
+			DPCalendar.formToQueryString(document.querySelector('.com-dpcalendar-eventform__form'), 'input:not([name=task]), select') + (url.query.e_id ? '&id=' + url.query.e_id : '')
 		);
 	}
 
 	function updateFormFromRule() {
+		if (!document.getElementById('jform_scheduling')) {
+			changeVisiblity();
+			return;
+		}
+
 		var rrule = document.getElementById('jform_rrule').value;
 		if (!rrule) {
 			changeVisiblity();
@@ -319,6 +329,10 @@ DPCalendar = window.DPCalendar || {};
 	}
 
 	function updateRuleFromForm() {
+		if (!document.getElementById('jform_scheduling')) {
+			return;
+		}
+
 		var rule = '';
 		if (document.getElementById('jform_scheduling1').checked) {
 			rule = 'FREQ=DAILY';
@@ -422,6 +436,17 @@ DPCalendar = window.DPCalendar || {};
 
 	function changeVisiblity() {
 		if (!document.getElementById('jform_scheduling')) {
+			document.querySelector('.dp-field-scheduling-end-date').style.display = 'none';
+			document.querySelector('.dp-field-scheduling-interval').style.display = 'none';
+			document.querySelector('.dp-field-scheduling-repeat-count').style.display = 'none';
+			document.querySelector('.dp-field-rrule').style.display = 'none';
+			document.querySelector('.dp-field-scheduling-daily-weekdays').style.display = 'none';
+			document.querySelector('.dp-field-scheduling-weekly-days').style.display = 'none';
+			document.querySelector('.dp-field-scheduling-monthly-options').style.display = 'none';
+			document.querySelector('.dp-field-scheduling-monthly-week').style.display = 'none';
+			document.querySelector('.dp-field-scheduling-monthly-week-days').style.display = 'none';
+			document.querySelector('.dp-field-scheduling-monthly-days').style.display = 'none';
+
 			return;
 		}
 

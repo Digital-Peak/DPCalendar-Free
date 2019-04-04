@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -18,7 +18,7 @@ $layoutHelper = new \DPCalendar\Helper\LayoutHelper();
 $userHelper   = new \DPCalendar\Helper\UserHelper();
 $router       = new \DPCalendar\Router\Router();
 $translator   = new \DPCalendar\Translator\Translator();
-$params       = $params->merge(JComponentHelper::getParams('com_dpcalendar'));
+$params       = JComponentHelper::getParams('com_dpcalendar')->merge($params);
 
 
 // The display data
@@ -73,6 +73,7 @@ $model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_re
 $model->getState();
 $model->setState('list.limit', $params->get('max_events', 5));
 $model->setState('list.direction', $params->get('order', 'asc'));
+$model->setState('list.ordering', 'a.' . $params->get('sort', 'start_date'));
 $model->setState('category.id', $ids);
 $model->setState('category.recursive', true);
 $model->setState('filter.search', $params->get('filter', ''));
@@ -94,13 +95,15 @@ if (!$events && !$params->get('empty_text', 1)) {
 	return;
 }
 
+if ($params->get('sort', 'start_date') == 'start_date') {
 // Sort the array by user date
-usort($events, function ($e1, $e2) use ($dateHelper) {
-	$d1 = $dateHelper->getDate($e1->start_date, $e1->all_day);
-	$d2 = $dateHelper->getDate($e2->start_date, $e2->all_day);
+	usort($events, function ($e1, $e2) use ($dateHelper) {
+		$d1 = $dateHelper->getDate($e1->start_date, $e1->all_day);
+		$d2 = $dateHelper->getDate($e2->start_date, $e2->all_day);
 
-	return strcmp($d1->format('c', true), $d2->format('c', true));
-});
+		return strcmp($d1->format('c', true), $d2->format('c', true));
+	});
+}
 
 JPluginHelper::importPlugin('content');
 JPluginHelper::importPlugin('dpcalendar');

@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_upcoming</name>
 	<author>Digital Peak</author>
-	<creationDate>Dec 2018</creationDate>
-	<copyright>(C) 2007 - 2018 Digital Peak. All rights reserved.</copyright>
+	<creationDate>Jan 2019</creationDate>
+	<copyright>(C) 2007 - 2019 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.1.3</version>
+	<version>7.1.4</version>
 	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>
@@ -40,6 +40,12 @@
 				       label="MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_DESC">
 					<option value="asc">MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_ASCENDING</option>
 					<option value="desc">MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_DESCENDING</option>
+				</field>
+				<field name="sort" type="list" default="start_date"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SORT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SORT_DESC">
+					<option value="start_date">MOD_DPCALENDAR_UPCOMING_FIELD_SORT_START_DATE</option>
+					<option value="modified">MOD_DPCALENDAR_UPCOMING_FIELD_SORT_MODIFIED</option>
+					<option value="created">MOD_DPCALENDAR_UPCOMING_FIELD_SORT_ADDED</option>
 				</field>
 				<field name="filter" type="text" size="80" default=""
 				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_DESC"/>

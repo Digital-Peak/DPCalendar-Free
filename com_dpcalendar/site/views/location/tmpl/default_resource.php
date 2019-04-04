@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -77,26 +77,30 @@ $options['header']['center'] = implode(',', $options['header']['center']);
 $options['header']['right']  = implode(',', $options['header']['right']);
 
 $options['height']          = 'auto';
-$options['slotLabelFormat'] = null;
+$options['slotLabelFormat'] = $this->dateHelper->convertPHPDateToMoment($this->params->get('location_axisformat', 'g:i a'));
 $options['slotWidth']       = $this->params->get('location_column_width');
 $options['smallTimeFormat'] = $this->dateHelper->convertPHPDateToMoment($this->params->get('timeformat_day', 'g:i a'));
 
 $options['resources']         = $this->resources;
 $options['resourceLabelText'] = $this->translate('COM_DPCALENDAR_LAYOUT_CALENDAR_LOCATIONS_AND_ROOMS');
 
-$options['views']                  = array();
-$options['views']['timelineYear']  = array(
-	'timeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_timeformat_year', 'g:i a'))
-);
-$options['views']['timelineMonth'] = array(
+$options['views']                  = [];
+$options['views']['timelineYear']  = [
+	'titleFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_titleformat_year', 'Y')),
+	'timeFormat'  => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_timeformat_year', 'g:i a'))
+];
+$options['views']['timelineMonth'] = [
+	'titleFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_titleformat_month', 'F Y')),
 	'timeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_timeformat_month', 'g:i a'))
-);
-$options['views']['timelineWeek']  = array(
-	'timeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_timeformat_week', 'g:i a'))
-);
-$options['views']['timelineDay']   = array(
-	'timeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_timeformat_day', 'g:i a'))
-);
+];
+$options['views']['timelineWeek']  = [
+	'titleFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_titleformat_week', 'M j Y')),
+	'timeFormat'  => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_timeformat_week', 'g:i a'))
+];
+$options['views']['timelineDay']   = [
+	'titleFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_titleformat_day', 'F j Y')),
+	'timeFormat'  => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_timeformat_day', 'g:i a'))
+];
 
 // Set up the month and day names
 $options['monthNames']      = array();

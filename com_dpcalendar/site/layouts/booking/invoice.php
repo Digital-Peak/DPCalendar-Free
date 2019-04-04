@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -150,17 +150,22 @@ foreach ($fields as $key => $field) {
 				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?></td>
 				<td style="width:70%"><?php echo $ticket->name; ?></td>
 			</tr>
-			<tr>
-				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></td>
-				<td style="width:70%"><?php echo DPCalendarHelper::renderPrice($ticket->price, $params->get('currency_symbol', '$')); ?></td>
-			</tr>
+			<?php if ($ticket->price && $ticket->price != '0.00') { ?>
+				<tr>
+					<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></td>
+					<td style="width:70%"><?php echo DPCalendarHelper::renderPrice($ticket->price, $params->get('currency_symbol', '$')); ?></td>
+				</tr>
+			<?php } ?>
 			<?php if ($params->get('ticket_show_seat', 1)) { ?>
 				<tr>
 					<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?></td>
 					<td style="width:70%"><?php echo $ticket->seat; ?></td>
 				</tr>
 			<?php } ?>
-			<tr><td></td><td></td></tr>
+			<tr>
+				<td></td>
+				<td></td>
+			</tr>
 		</table>
 	<?php } ?>
 </div>

@@ -2,7 +2,7 @@
 /**
  * @package    DPCalendar
  * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -93,7 +93,7 @@ if ($tickets) {
 				</dt>
 				<dd class="dp-description__description dp-event-price">
 					<span class="dp-event-price__regular<?php echo $discounted != $value ? ' dp-event-price__regular_has-discount' : ''; ?>">
-						<?php echo DPCalendarHelper::renderPrice($value); ?>
+						<?php echo $value === '' ? '' : DPCalendarHelper::renderPrice($value); ?>
 					</span>
 					<?php if ($discounted != $value) { ?>
 						<span class="dp-event-price__discount"><?php echo DPCalendarHelper::renderPrice($discounted); ?></span>

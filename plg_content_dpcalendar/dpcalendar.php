@@ -107,6 +107,13 @@ class PlgContentDpcalendar extends JPlugin
 			// Get the events
 			$events = $model->getItems();
 
+			JPluginHelper::importPlugin('content');
+			foreach ($events as $event) {
+				$event->text = $event->description;
+				JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$event->params, 0]);
+				$event->description = $event->text;
+			}
+
 			// Render the output
 			$output = DPCalendarHelper::renderEvents($events, '{{#events}}' . substr($item->text, $start, $end - $start) . '{{/events}}');
 

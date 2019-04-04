@@ -42,7 +42,21 @@ class Ical
 		return self::createIcalFromEvents($items, $asDownload);
 	}
 
-	public static function createIcalFromEvents($events, $asDownload = false)
+	/**
+	 * Creates an ical from the given events. If needed it can force the current browser request to delete the file.
+	 *
+	 * The instances of a recurring series are stripped out and it is expected that the original event is included
+	 * in the events data. If this is not the case the force flag will generate ical content of the available event
+	 * data, even when they are instances of a series.
+	 *
+	 * @param      $events
+	 * @param bool $asDownload
+	 * @param bool $forceEvents
+	 *
+	 * @return string
+	 * @throws \Exception
+	 */
+	public static function createIcalFromEvents($events, $asDownload = false, $forceEvents = false)
 	{
 		\JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
 
@@ -65,7 +79,7 @@ class Ical
 		$calendars = array();
 		foreach ($events as $key => $event) {
 			// Strip out series events as we collect them later
-			if ($event->original_id > 0) {
+			if ($event->original_id > 0 && !$forceEvents) {
 				unset($events[$key]);
 			}
 			if (key_exists($event->catid, $calendars)) {
@@ -79,7 +93,6 @@ class Ical
 		}
 		// $text[] = 'X-WR-CALNAME:'.implode('; ', $calendars);
 
-		$now = \DPCalendarHelper::getDate()->format('Ymd\THis\Z');
 		foreach ($events as $key => $event) {
 			$text = array_merge($text, self::addEventData($event));
 		}
@@ -144,7 +157,7 @@ class Ical
 			$text[] = 'RRULE:' . $event->rrule;
 
 			if ($event->id && is_numeric($event->catid)) {
-				// Finde deleted events and add them as EXDATE
+				// Find deleted events and add them as EXDATE
 				\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
 				$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
 				$model->setState('category.id', $event->catid);
@@ -162,7 +175,7 @@ class Ical
 
 				$instances = $model->getItems();
 
-				// Chech for modified events
+				// Check for modified events
 				foreach ($instances as $key => $e) {
 					// If for some reasons the event doesn't belong to the
 					// series, ignore it

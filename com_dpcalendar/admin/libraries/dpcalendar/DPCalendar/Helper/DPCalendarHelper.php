@@ -486,6 +486,12 @@ class DPCalendarHelper
 				$variables['header'] = $groupHeading;
 			}
 
+			if (!empty($event->jcfields)) {
+				foreach ($event->jcfields as $field) {
+					$variables['field-' . $field->name] = $field;
+				}
+			}
+
 			$configuration['events'][] = $variables;
 		}
 
@@ -526,9 +532,9 @@ class DPCalendarHelper
 		}
 	}
 
-	public static function renderPrice($price, $currencySymbol = null)
+	public static function renderPrice($price, $currencySymbol = null, $separator = null)
 	{
-		return self::renderLayout('format.price', array('price' => $price, 'currency' => $currencySymbol));
+		return self::renderLayout('format.price', ['price' => $price, 'currency' => $currencySymbol, 'separator' => $separator]);
 	}
 
 	public static function renderLayout($layout, $data = array())
@@ -879,11 +885,21 @@ class DPCalendarHelper
 		\JFactory::getApplication()->close();
 	}
 
+	/**
+	 * Sends a mail to all users of the given component parameter groups.
+	 * The user objects are returned where a mail is sent to.
+	 *
+	 * @param $subject
+	 * @param $message
+	 * @param $group
+	 *
+	 * @return array
+	 */
 	public static function sendMail($subject, $message, $group)
 	{
 		$groups = self::getComponentParameter($group);
 		if (empty($groups)) {
-			return;
+			return [];
 		}
 		if (!is_array($groups)) {
 			$groups = array($groups);
@@ -894,7 +910,8 @@ class DPCalendarHelper
 			$users = array_merge($users, \JAccess::getUsersByGroup($groupId));
 		}
 
-		$users = array_unique($users);
+		$users     = array_unique($users);
+		$userMails = [];
 		foreach ($users as $user) {
 			$u = \JUser::getTable();
 			if ($u->load($user)) {
@@ -904,8 +921,11 @@ class DPCalendarHelper
 				$mailer->IsHTML(true);
 				$mailer->addRecipient($u->email);
 				$mailer->Send();
+				$userMails[$user] = $u;
 			}
 		}
+
+		return $userMails;
 	}
 
 	/**

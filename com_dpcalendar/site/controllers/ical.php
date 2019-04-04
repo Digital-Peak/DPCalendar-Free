@@ -6,9 +6,9 @@
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
-use Joomla\Registry\Registry;
-
 defined('_JEXEC') or die();
+
+use Joomla\Registry\Registry;
 
 JLoader::import('joomla.application.component.controller');
 

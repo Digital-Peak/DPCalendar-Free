@@ -27,7 +27,9 @@ if (DPCalendarHelper::isFree()) {
 	$this->translator->translateJS('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');
 }
 
-$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
+if (!empty($this->event->tickets)) {
+	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
+}
 ?>
 <div class="com-dpcalendar-eventform">
 	<?php if ($this->event->original_id == '-1') { ?>

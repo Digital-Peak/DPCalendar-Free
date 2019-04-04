@@ -69,7 +69,7 @@ class SendNewBookingMail implements StageInterface
 			$files = array();
 			if ($payload->mailParams->get('booking_include_ics', 1)) {
 				$icsFile = JPATH_ROOT . '/tmp/' . $payload->item->uid . '.ics';
-				$content = Ical::createIcalFromEvents($payload->events, false);
+				$content = Ical::createIcalFromEvents($payload->eventsWithTickets, false, true);
 				if (!$content || !\JFile::write($icsFile, $content)) {
 					$icsFile = null;
 				} else {

@@ -40,12 +40,17 @@ class SendNotificationMail implements StageInterface
 			$payload->mailVariables
 		);
 
-		DPCalendarHelper::sendMail($subject, $body, 'notification_groups_book');
+		$emails = DPCalendarHelper::sendMail($subject, $body, 'notification_groups_book');
 
 		if ($payload->mailParams->get('booking_send_mail_author', 1)) {
 			// Send to the authors of the events
 			$authors = array();
 			foreach ($payload->eventsWithTickets as $e) {
+				// Ignore already sent out mails
+				if (array_key_exists($e->created_by, $emails)) {
+					continue;
+				}
+
 				$authors[$e->created_by] = $e->created_by;
 			}
 			foreach ($authors as $authorId) {

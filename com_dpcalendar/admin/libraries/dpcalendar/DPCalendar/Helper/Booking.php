@@ -188,24 +188,36 @@ class Booking
 		}
 	}
 
-	public static function getSeriesEvents($event)
+	/**
+	 * Returns the series events. If there are more than the given limit
+	 * an exception is thrown.
+	 *
+	 * @param $event
+	 * @param $limit
+	 *
+	 * @return array
+	 * @throws \Exception
+	 */
+	public static function getSeriesEvents($event, $limit = 20)
 	{
 		if (!$event) {
-			return array();
+			return [];
 		}
 
-		$events = array(
-			$event->id => $event
-		);
+		$events = [$event->id => $event];
 		if ($event->original_id != '0') {
-			$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+			$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 			if (!$model) {
-				$model = \JModelLegacy::getInstance('AdminEvents', 'DPCalendarModel', array('ignore_request' => true));
+				$model = \JModelLegacy::getInstance('AdminEvents', 'DPCalendarModel', ['ignore_request' => true]);
 			}
 			$model->getState();
 			$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
 			$model->setState('list.limit', 10000);
 			$model->setState('filter.expand', true);
+
+			if ($model->getTotal() > $limit) {
+				throw new \Exception('Too many series events!', 1);
+			}
 
 			$series = $model->getItems();
 			foreach ($series as $e) {
@@ -299,9 +311,11 @@ class Booking
 				$params = \JComponentHelper::getParams('com_dpcalendar');
 			}
 
-			$vars                   = (array)$booking;
-			$vars['currency']       = \DPCalendarHelper::getComponentParameter('currency', 'USD');
-			$vars['currencySymbol'] = \DPCalendarHelper::getComponentParameter('currency_symbol', '$');
+			$vars                      = (array)$booking;
+			$vars['currency']          = \DPCalendarHelper::getComponentParameter('currency', 'USD');
+			$vars['currencySymbol']    = \DPCalendarHelper::getComponentParameter('currency_symbol', '$');
+			$vars['currencySeparator'] = \DPCalendarHelper::getComponentParameter('currency_separator', '.');
+			$vars['price_formatted']   = \DPCalendarHelper::renderPrice($vars['price'], $vars['currencySymbol'], $vars['currencySeparator']);
 			foreach ($statement as $b) {
 				if ($b->status && $booking->type = $b->type) {
 					$buffer .= \DPCalendarHelper::renderEvents(array(), $b->statement, $params, $vars);

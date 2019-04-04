@@ -76,6 +76,7 @@
 .com-dpcalendar-timeline .dp-event__image {
 	float: right;
 	max-width: 300px;
+	padding: 0 10px;
 }
 
 .com-dpcalendar-timeline .dp-event__title {

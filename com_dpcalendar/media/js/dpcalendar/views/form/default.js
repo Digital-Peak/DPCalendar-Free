@@ -89,6 +89,12 @@ DPCalendar = window.DPCalendar || {};
 		Joomla.submitbutton = function (task) {
 			var form = document.getElementsByName('adminForm')[0];
 			if (form && (task.indexOf('reload') > -1 || task.indexOf('cancel') > -1 || task.indexOf('delete') > -1 || document.formvalidator.isValid(form))) {
+
+				var text = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
+				if (text && (task.indexOf('save') > -1 || task.indexOf('apply') > -1) && confirm(text)) {
+					document.getElementById('jform_notify_changes').value = 1;
+				}
+
 				Joomla.submitform(task, form);
 			}
 		};

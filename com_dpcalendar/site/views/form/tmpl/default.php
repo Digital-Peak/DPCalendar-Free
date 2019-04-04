@@ -31,7 +31,9 @@ if ($this->params->get('event_form_change_location', 1)) {
 	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
 }
 
-$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
+if (!empty($this->event->tickets)) {
+	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
+}
 
 $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id);
 ?>

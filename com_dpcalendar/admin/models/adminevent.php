@@ -427,6 +427,24 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data = array_merge($data, $this->getDefaultValues(new JObject($data)));
 		}
 
+		// Automatic handling of alias for empty fields
+		$input = JFactory::getApplication()->input;
+		if (empty($data['alias'])
+			&& in_array($input->get('task'), array('apply', 'save', 'save2new'))
+			&& (!isset($data['id']) || (int)$data['id'] == 0)) {
+			if (JFactory::getConfig()->get('unicodeslugs') == 1) {
+				$data['alias'] = JFilterOutput::stringURLUnicodeSlug($data['title']);
+			} else {
+				$data['alias'] = JFilterOutput::stringURLSafe($data['title']);
+			}
+
+			$table = $this->getTable();
+			$table->load(array('alias' => $data['alias'], 'catid' => $data['catid']));
+
+			list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
+			$data['alias'] = $alias;
+		}
+
 		$success = parent::save($data);
 
 		if (!$success) {
@@ -502,7 +520,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		// Notify the ticket holders
 		if (key_exists('notify_changes', $data) && $data['notify_changes']) {
-			$tickets = $this->model->getTickets($event->id);
+			$tickets = $this->getTickets($event->id);
 			foreach ($tickets as $ticket) {
 				$subject = DPCalendarHelper::renderEvents(array($event), JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
 

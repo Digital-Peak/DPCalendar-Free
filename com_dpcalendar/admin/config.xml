@@ -1476,6 +1476,8 @@
 		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CURRENCY_DESC"/>
 		<field name="currency_symbol" type="text" default="$"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SYMBOL_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SYMBOL_DESC"/>
+		<field name="currency_separator" type="text" default="."
+		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEPARATOR_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEPARATOR_DESC"/>
 		<field name="invoice_address" type="textarea" default="Your company address"
 		       rows="10" cols="10"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INVOICE_COMPANY_ADDRESS_LABEL"

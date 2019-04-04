@@ -30,7 +30,7 @@ class SendPaidBookingMail implements StageInterface
 	{
 		if (!$payload->oldItem
 			|| ($payload->oldItem->state != 3 && $payload->oldItem->state != 4)
-			|| $payload->item->state == 1
+			|| $payload->item->state != 1
 			|| !$payload->mailParams->get('booking_send_mail_paid', 1)) {
 			return $payload;
 		}

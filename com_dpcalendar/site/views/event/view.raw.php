@@ -11,17 +11,14 @@ JLoader::import('joomla.application.component.view');
 
 class DPCalendarViewEvent extends JViewLegacy
 {
-
 	public function display($tpl = null)
 	{
 		$event = $this->get('Item');
-		if ($event->original_id > 0)
-		{
+		if ($event->original_id > 0) {
 			// Download the series
 			$event = $this->getModel()->getItem($event->original_id);
 		}
-		\DPCalendar\Helper\Ical::createIcalFromEvents(array(
-				$event
-		), true);
+
+		\DPCalendar\Helper\Ical::createIcalFromEvents([$event], true);
 	}
 }

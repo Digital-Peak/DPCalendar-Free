@@ -49,7 +49,7 @@ if (!$fields) {
 		<?php if (!isset($field->value) || $field->value == '') { ?>
 			<?php continue; ?>
 		<?php } ?>
-		<dl class="dp-description <?php echo $field->params->get('render_class'); ?>">
+		<dl class="dp-description dp-field-<?php echo $field->name; ?> <?php echo $field->params->get('render_class'); ?>">
 			<dt class="dp-description__label"><?php echo $field->params->get('showlabel', 1) ? JText::_($field->label) : ''; ?></dt>
 			<dd class="dp-description__description"><?php echo $field->value; ?></dd>
 		</dl>

@@ -329,10 +329,7 @@ class DPCalendarModelEvents extends JModelList
 					// Search in custom fields
 					// Join over Fields.
 					$query->join('LEFT', '#__fields_values AS jf ON jf.item_id = ' . $query->castAsChar('a.id'))
-						->join('LEFT', '#__fields AS f ON f.id = jf.field_id')
-						->where('(f.context IS NULL OR f.context = ' . $db->q('com_dpcalendar.event') . ')')
-						->where('(f.state IS NULL OR f.state = 1)')
-						->where('(f.access IS NULL OR f.access IN (' . $groups . '))');
+						->join('LEFT', '#__fields AS f ON f.id = jf.field_id and f.context = ' . $db->q('com_dpcalendar.event').' and f.state = 1 and f.access IN (' . $groups . ')');
 					$searchColumns[] = 'jf.value';
 				}
 

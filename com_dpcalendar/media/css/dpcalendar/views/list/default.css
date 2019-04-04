@@ -70,6 +70,7 @@
 .com-dpcalendar-list .dp-event__image {
 	float: right;
 	max-width: 300px;
+	padding: 0 10px;
 }
 
 .com-dpcalendar-list .dp-event__title {

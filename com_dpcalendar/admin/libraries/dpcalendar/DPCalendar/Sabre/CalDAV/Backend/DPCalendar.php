@@ -313,6 +313,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
 			$this->log('Update calendar ' . $calendarId . 'with propatch');
 			\DPCalendarHelper::increaseEtag(str_replace('dp-', '', $calendarId));
+
 			return;
 		}
 
@@ -359,10 +360,8 @@ class DPCalendar extends CalDAV\Backend\PDO
 		/*
 		 * Most CalDAV clients do not support this attribute, means it will
 		 * revert the description when updating a native DPCalendar event.
-		 * if (isset($vEvent->{'X-ALT-DESC'}) &&
-		 * $vEvent->{'X-ALT-DESC'}->getValue())
-		 * {
-		 * $dpEvent->description = $vEvent->{'X-ALT-DESC'}->getValue();
+		 * if (isset($vEvent->{'X-ALT-DESC'}) && $vEvent->{'X-ALT-DESC'}->getValue()) {
+		 *     $dpEvent->description = $vEvent->{'X-ALT-DESC'}->getValue();
 		 * }
 		 */
 
@@ -451,7 +450,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 	private function log($message)
 	{
-		$path = JPATH_ROOT . '/logs/dpcalendar.debug.log';
+		$path = \JFactory::getApplication()->get('log_path') . '/dpcalendar.debug.log';
 		file_put_contents($path, date('c') . ' ' . $message . PHP_EOL, FILE_APPEND);
 	}
 }

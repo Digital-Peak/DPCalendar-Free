@@ -27,7 +27,8 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 				<?php if ($event->images->image_intro) { ?>
 					<div class="mod-dpcalendar-upcoming-panel__image">
 						<figure class="dp-figure">
-							<img class="dp-image" src="<?php echo $event->images->image_intro; ?>" alt="<?php echo $event->images->image_intro_alt; ?>">
+							<img class="dp-image" src="<?php echo $event->images->image_intro; ?>"
+								 alt="<?php echo $event->images->image_intro_alt; ?>">
 							<?php if ($event->images->image_intro_caption) { ?>
 								<figcaption class="dp-figure__caption"><?php echo $event->images->image_intro_caption; ?></figcaption>
 							<?php } ?>
@@ -51,7 +52,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 					<div class="mod-dpcalendar-upcoming-panel__date">
 						<?php echo $dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>
 					</div>
-					<?php if (\DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+					<?php if ($params->get('show_booking', 1) && \DPCalendar\Helper\Booking::openForBooking($event)) { ?>
 						<a href="<?php echo $router->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-link dp-link_cta dp-button">
 							<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PLUS]); ?>
 							<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BOOK'); ?>

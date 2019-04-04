@@ -47,6 +47,15 @@ class DPCalendarEventSync extends JApplicationCli
 		// Disabling session handling otherwise it will result in an error
 		JFactory::getConfig()->set('session_handler', 'none');
 
+		// Run as super admin
+		$user        = JFactory::getUser();
+		$user->guest = false;
+		$reflection  = new ReflectionClass($user);
+		$property    = $reflection->getProperty('isRoot');
+		$property->setAccessible(true);
+		$property->setValue($user, true);
+		JFactory::getSession()->set('user', $user);
+
 		try {
 			JPluginHelper::importPlugin('dpcalendar');
 			JFactory::getApplication()->triggerEvent('onEventsSync');

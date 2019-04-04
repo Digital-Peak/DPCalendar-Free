@@ -88,7 +88,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 						<div class="mod-dpcalendar-upcoming-blog__price">
 							<?php echo $translator->translate($event->price ? 'MOD_DPCALENDAR_UPCOMING_BLOG_PAID_EVENT' : 'MOD_DPCALENDAR_UPCOMING_BLOG_FREE_EVENT'); ?>
 						</div>
-						<?php if (\DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+						<?php if ($params->get('show_booking', 1) && \DPCalendar\Helper\Booking::openForBooking($event)) { ?>
 							<a href="<?php echo $router->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-link dp-link_cta dp-button">
 								<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PLUS]); ?>
 								<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BOOK'); ?>

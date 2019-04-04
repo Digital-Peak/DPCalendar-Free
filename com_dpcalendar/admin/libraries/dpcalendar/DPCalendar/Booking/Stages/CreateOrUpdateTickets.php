@@ -87,8 +87,16 @@ class CreateOrUpdateTickets implements StageInterface
 						// Increase the seat
 						$ticket->seat++;
 						$event->book(true);
-						$t                  = $this->model->getItem();
-						$t->event_prices    = $prices;
+						$t                = $this->model->getItem();
+						$t->event_calid   = $event->catid;
+						$t->event_title   = $event->title;
+						$t->start_date    = $event->start_date;
+						$t->end_date      = $event->end_date;
+						$t->all_day       = $event->all_day;
+						$t->show_end_time = $event->show_end_time;
+						$t->event_prices  = $event->price;
+						$t->event_options = $event->booking_options;
+
 						$payload->tickets[] = $t;
 					} else {
 						$this->setError($this->getError() . PHP_EOL . $this->model->getError());

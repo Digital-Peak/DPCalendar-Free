@@ -147,7 +147,7 @@ foreach ($fields as $key => $field) {
 				<?php } ?>
 			<?php } ?>
 			<tr>
-				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?></td>
+				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?></td>
 				<td style="width:70%"><?php echo $ticket->name; ?></td>
 			</tr>
 			<tr>

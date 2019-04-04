@@ -95,7 +95,7 @@ class DPCalendarModelProfile extends JModelList
 			if (stripos($search, 'id:') === 0) {
 				$query->where('c.id = ' . (int)substr($search, 3));
 			} else {
-				$search = $db->Quote('%' . $db->escape(\Joomla\String\StringHelper::strtolower($search), true) . '%');
+				$search = $db->quote('%' . $db->escape(\Joomla\String\StringHelper::strtolower($search), true) . '%');
 				$query->where('(LOWER(c.displayname) LIKE ' . $search . ' OR LOWER(c.description) LIKE ' . $search . ')');
 			}
 		}

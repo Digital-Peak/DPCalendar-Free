@@ -404,6 +404,12 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+		<field name="list_show_booking" type="radio" default="1" class="btn-group"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_BOOKING_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_BOOKING_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="list_show_map" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
@@ -649,6 +655,12 @@
 		<field name="event_form_change_show_end_time" type="radio" class="btn-group" default="1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SHOW_END_TIME_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SHOW_END_TIME_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="event_form_change_scheduling" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULING_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULING_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>

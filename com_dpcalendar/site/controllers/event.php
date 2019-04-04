@@ -216,7 +216,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		if (empty($return) || !JUri::isInternal(base64_decode($return))) {
 			return JURI::base();
 		} else {
-			return JRoute::_(base64_decode($return)) . $hash;
+			return JRoute::_(base64_decode($return), false) . $hash;
 		}
 	}
 

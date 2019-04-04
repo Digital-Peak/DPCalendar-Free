@@ -31,7 +31,7 @@ foreach ($this->event->tickets as $ticket) {
 				<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?></th>
 				<th><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?></th>
 			<?php } ?>
-			<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?></th>
+			<th><?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?></th>
 			<th><?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?></th>
 			<?php if (!$limited) { ?>
 				<th><?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?></th>
@@ -55,7 +55,7 @@ foreach ($this->event->tickets as $ticket) {
 						<?php echo \DPCalendar\Helper\Booking::getStatusLabel($ticket); ?>
 					</td>
 				<?php } ?>
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?>">
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?>">
 					<?php echo $ticket->name; ?>
 				</td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?>">

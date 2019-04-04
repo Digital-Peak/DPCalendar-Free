@@ -144,7 +144,7 @@ class DPCalendarModelLocations extends JModelList
 			} else if (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
 			} else {
-				$search = $db->Quote('%' . $db->escape($search, true) . '%');
+				$search = $db->quote('%' . $db->escape($search, true) . '%');
 
 				$query->where('(a.title LIKE ' . $search . ' OR a.alias LIKE ' . $search . ')');
 			}

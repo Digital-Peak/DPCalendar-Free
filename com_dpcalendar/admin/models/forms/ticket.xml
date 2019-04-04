@@ -6,7 +6,7 @@
 		<field name="id" type="text" default="0" readonly="true"
 		       label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
 		<field name="name" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NAME_DESC"/>
+		       label="COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NAME_DESC"/>
 		<field name="email" type="email" class="dp-form-input" required="true"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
 		<field name="user_id" type="user"

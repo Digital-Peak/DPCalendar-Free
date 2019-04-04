@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 		<button type="button" class="close" data-dismiss="modal">x</button>
 		<h3><?php echo JText::_('COM_DPCALENDAR_BATCH_OPTIONS'); ?></h3>
 	</div>
-	<div class="modal-body">
+	<div class="modal-body" style="padding: 20px;">
 		<p><?php echo JText::_('COM_DPCALENDAR_BATCH_TIP'); ?></p>
 		<div class="control-group">
 			<div class="controls">
@@ -45,6 +45,11 @@ defined('_JEXEC') or die();
 				</div>
 			</div>
 		<?php } ?>
+		<div class="control-group">
+			<div class="controls">
+				<?php echo JHtml::_('batch.item', 'com_dpcalendar'); ?>
+			</div>
+		</div>
 	</div>
 	<div class="modal-footer">
 		<button class="btn" type="button"

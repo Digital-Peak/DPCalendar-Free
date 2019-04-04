@@ -18,7 +18,7 @@ DPCalendar = window.DPCalendar || {};
 			DPCalendar.autocomplete.create(geoComplete);
 
 			geoComplete.addEventListener('dp-autocomplete-select', function (e) {
-				root.querySelector('.dp-form').submit();
+				root.querySelector('.dp-form:not(.dp-timezone)').submit();
 			});
 
 			geoComplete.addEventListener('dp-autocomplete-change', function (e) {
@@ -48,7 +48,7 @@ DPCalendar = window.DPCalendar || {};
 			button.addEventListener('click', function (event) {
 				event.preventDefault();
 
-				DPCalendar.slideToggle(root.querySelector('.dp-form'));
+				DPCalendar.slideToggle(root.querySelector('.dp-form:not(.dp-timezone)'));
 
 				return false;
 			});
@@ -65,14 +65,14 @@ DPCalendar = window.DPCalendar || {};
 			});
 		});
 
-		var button = root.querySelector('.dp-form .dp-button-search');
+		var button = root.querySelector('.dp-form:not(.dp-timezone) .dp-button-search');
 		if (button) {
 			button.addEventListener('click', function (e) {
-				root.querySelector('.dp-form').submit();
+				root.querySelector('.dp-form:not(.dp-timezone)').submit();
 			});
 		}
 
-		var button = root.querySelector('.dp-form .dp-button-clear');
+		var button = root.querySelector('.dp-form:not(.dp-timezone) .dp-button-clear');
 		if (button) {
 			button.addEventListener('click', function (e) {
 				e.preventDefault();
@@ -84,19 +84,19 @@ DPCalendar = window.DPCalendar || {};
 				root.querySelector('[name=radius]').value = 20;
 				root.querySelector('[name=length-type]').value = 'm';
 
-				root.querySelector('.dp-form').submit();
+				root.querySelector('.dp-form:not(.dp-timezone)').submit();
 
 				return false;
 			});
 		}
 
-		var button = root.querySelector('.dp-form .dp-button-current-location');
+		var button = root.querySelector('.dp-form:not(.dp-timezone) .dp-button-current-location');
 		if (button) {
 			button.addEventListener('click', function (e) {
 				e.preventDefault();
 
 				DPCalendar.currentLocation(function (address) {
-					var form = e.target.closest('.dp-form');
+					var form = e.target.closest('.dp-form:not(.dp-timezone)');
 					form.querySelector('[name=location]').value = address;
 					form.submit();
 				});

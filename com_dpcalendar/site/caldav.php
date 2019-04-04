@@ -64,6 +64,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 			JFactory::getApplication()->input->set('format', 'raw');
 
 			$authBackend = new \DPCalendar\Sabre\DAV\Auth\Backend\Joomla(JFactory::getDbo());
+			$authBackend->setRealm('');
 			$calendarBackend = new \DPCalendar\Sabre\CalDAV\Backend\DPCalendar($pdo);
 			$calendarBackend->calendarTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendars';
 			$calendarBackend->calendarObjectTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendarobjects';

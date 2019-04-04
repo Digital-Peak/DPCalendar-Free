@@ -421,6 +421,10 @@ DPCalendar = window.DPCalendar || {};
 	}
 
 	function changeVisiblity() {
+		if (!document.getElementById('jform_scheduling')) {
+			return;
+		}
+
 		// no scheduling
 		if (document.getElementById('jform_scheduling0').checked) {
 			document.querySelector('.dp-field-scheduling-end-date').style.display = 'none';

@@ -29,9 +29,9 @@ class Router
 		return \DPCalendarHelperRoute::getEventRoute($id, $calId, $full, $autoRoute, $defaultItemId);
 	}
 
-	public function getEventFormRoute($id, $return = null, $append = null)
+	public function getEventFormRoute($id, $return = null, $append = null, $xhtml = true)
 	{
-		return \JRoute::_(\DPCalendarHelperRoute::getFormRoute($id, $return, $append));
+		return \JRoute::_(\DPCalendarHelperRoute::getFormRoute($id, $return, $append),$xhtml);
 	}
 
 	public function getEventDeleteRoute($id, $return = null)

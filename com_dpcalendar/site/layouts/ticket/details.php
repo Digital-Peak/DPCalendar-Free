@@ -18,7 +18,7 @@ if ($imageUrl && !filter_var($imageUrl, FILTER_VALIDATE_URL)) {
 }
 
 $fields   = array();
-$fields[] = (object)array('id' => 'name', 'name' => 'name');
+$fields[] = (object)array('id' => 'name', 'name' => 'name', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL');
 $fields[] = (object)array('id' => 'email', 'name' => 'email');
 
 if ($params->get('ticket_show_seat', 1)) {

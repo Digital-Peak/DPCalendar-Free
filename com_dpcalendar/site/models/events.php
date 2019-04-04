@@ -271,19 +271,19 @@ class DPCalendarModelEvents extends JModelList
 		$query->where('a.state != -2');
 
 		// Filter by start and end dates.
-		$nullDate = $db->Quote($db->getNullDate());
+		$nullDate = $db->quote($db->getNullDate());
 		$date     = JFactory::getDate();
-		$nowDate  = $db->Quote($date->toSql());
+		$nowDate  = $db->quote($date->toSql());
 
 		if ($this->getState('filter.publish_date')) {
 			$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
 			$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
 		}
 
-		$startDate     = $db->Quote(DPCalendarHelper::getDate($this->getState('list.start-date'))->toSql());
+		$startDate     = $db->quote(DPCalendarHelper::getDate($this->getState('list.start-date'))->toSql());
 		$dateCondition = 'a.start_date  >= ' . $startDate;
 		if ($this->getState('list.end-date', null) !== null) {
-			$endDate       = $db->Quote(DPCalendarHelper::getDate($this->getState('list.end-date'))->toSql());
+			$endDate       = $db->quote(DPCalendarHelper::getDate($this->getState('list.end-date'))->toSql());
 			$dateCondition = '(a.end_date between ' . $startDate . ' and ' . $endDate . ' or a.start_date between ' . $startDate . ' and ' . $endDate .
 				' or (a.start_date < ' . $startDate . ' and a.end_date > ' . $endDate . '))';
 		}
@@ -298,7 +298,7 @@ class DPCalendarModelEvents extends JModelList
 
 		// Filter by language
 		if ($this->getState('filter.language')) {
-			$query->where('a.language in (' . $db->Quote(JFactory::getLanguage()->getTag()) . ',' . $db->Quote('*') . ')');
+			$query->where('a.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
 		}
 
 		// Filter for featured events
@@ -435,12 +435,12 @@ class DPCalendarModelEvents extends JModelList
 		}
 		$search = $this->getState('filter.search_start');
 		if (!empty($search)) {
-			$search = $db->Quote($db->escape($search, true));
+			$search = $db->quote($db->escape($search, true));
 			$query->where('a.start_date >= ' . $search);
 		}
 		$search = $this->getState('filter.search_end');
 		if (!empty($search)) {
-			$search = $db->Quote($db->escape($search, true));
+			$search = $db->quote($db->escape($search, true));
 			$query->where('a.end_date <= ' . $search);
 		}
 

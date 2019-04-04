@@ -50,6 +50,7 @@ class SetupForMail implements StageInterface
 			'bookingUid'     => $payload->item->uid,
 			'sitename'       => $this->application->get('sitename'),
 			'user'           => $payload->item->name,
+			'tickets'        => $payload->tickets,
 			'countTickets'   => count($payload->tickets)
 		);
 

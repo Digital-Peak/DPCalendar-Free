@@ -107,9 +107,38 @@ class DPCalendarModelAdminEvents extends JModelList
 		// Joomla resets the start and end date
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search_start', 'filter_search_start',
 			DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'), true), 'none', false);
+		try {
+			DPCalendarHelper::getDateFromString(
+				$search,
+				null,
+				true,
+				DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')
+			);
+		} catch (Exception $e) {
+			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+			$search = DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'), true);
+
+			JFactory::getApplication()->setUserState($this->context . '.filter.search_start', $search);
+		}
 		$this->setState('filter.search_start', $search);
 
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search_end', 'filter_search_end', '', 'none', false);
+
+		if ($search) {
+			try {
+				DPCalendarHelper::getDateFromString(
+					$search,
+					null,
+					true,
+					DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')
+				);
+			} catch (Exception $e) {
+				JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+				$search = '';
+
+				JFactory::getApplication()->setUserState($this->context . '.filter.search_end', $search);
+			}
+		}
 		$this->setState('filter.search_end', $search);
 	}
 

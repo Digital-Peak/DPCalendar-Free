@@ -224,7 +224,7 @@ $options['event_create_form']     = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
 $options['use_hash']              = true;
 if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
-	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->return);
+	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->return, null, false);
 }
 
 // Set the actual date

@@ -26,8 +26,8 @@
 			<option value="">JGLOBAL_SORT_BY</option>
 			<option value="a.state ASC">JSTATUS_ASC</option>
 			<option value="a.state DESC">JSTATUS_DESC</option>
-			<option value="a.name ASC">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
-			<option value="a.name DESC">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
+			<option value="a.name ASC">COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL</option>
+			<option value="a.name DESC">COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL</option>
 			<option value="event_title ASC">COM_DPCALENDAR_EVENT</option>
 			<option value="event_title DESC">COM_DPCALENDAR_EVENT</option>
 			<option value="booking_name ASC">JAUTHOR_ASC</option>

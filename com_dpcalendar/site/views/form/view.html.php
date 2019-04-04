@@ -143,6 +143,9 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 		if ($this->params->get('event_form_change_show_end_time', '1') != '1') {
 			$this->form->removeField('show_end_time');
 		}
+		if ($this->params->get('event_form_change_scheduling', '1') != '1') {
+			$this->form->removeField('scheduling');
+		}
 		if ($this->params->get('event_form_change_color', '1') != '1') {
 			$this->form->removeField('color');
 		}

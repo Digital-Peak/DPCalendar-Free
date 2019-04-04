@@ -78,24 +78,26 @@ DPCalendar = window.DPCalendar || {};
 			if (DPCalendar.autocomplete) {
 				var geoComplete = map.querySelector('.dp-input_location');
 
-				DPCalendar.autocomplete.create(geoComplete);
+				if (geoComplete) {
+					DPCalendar.autocomplete.create(geoComplete);
 
-				geoComplete.addEventListener('dp-autocomplete-select', function (e) {
-					update(map);
-				});
+					geoComplete.addEventListener('dp-autocomplete-select', function (e) {
+						update(map);
+					});
 
-				geoComplete.addEventListener('dp-autocomplete-change', function (e) {
-					var task = 'location.searchloc';
-					if (window.location.href.indexOf('administrator') == -1) {
-						task = 'locationform.searchloc';
-					}
-					DPCalendar.request(
-						'task=' + task + '&loc=' + encodeURIComponent(e.target.value.trim()),
-						function (json) {
-							DPCalendar.autocomplete.setItems(geoComplete, json.data);
+					geoComplete.addEventListener('dp-autocomplete-change', function (e) {
+						var task = 'location.searchloc';
+						if (window.location.href.indexOf('administrator') == -1) {
+							task = 'locationform.searchloc';
 						}
-					);
-				});
+						DPCalendar.request(
+							'task=' + task + '&loc=' + encodeURIComponent(e.target.value.trim()),
+							function (json) {
+								DPCalendar.autocomplete.setItems(geoComplete, json.data);
+							}
+						);
+					});
+				}
 			}
 
 			var button = map.querySelector('.dp-button-search');

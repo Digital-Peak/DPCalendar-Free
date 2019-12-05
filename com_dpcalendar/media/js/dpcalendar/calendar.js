@@ -375,7 +375,7 @@ DPCalendar = window.DPCalendar || {};
 					form.querySelector('input[name="jform[location_ids][]"]').value = [parts[0]];
 
 					if (parts.length > 1) {
-						form.querySelector('input[name="jform[rooms][]"]').value = [resource.id];
+						form.querySelector('input[name="jform[rooms][]"]').value = [info.resource.id];
 					}
 				}
 
@@ -476,7 +476,9 @@ DPCalendar = window.DPCalendar || {};
 			if (localStorage.getItem(localStorageId) == null) {
 				localStorage.setItem(localStorageId, JSON.stringify(options['calendarIds']));
 			} else {
-				options['calendarIds'] = JSON.parse(localStorage.getItem(localStorageId));
+				options['calendarIds'] = JSON.parse(localStorage.getItem(localStorageId)).filter(function (calId) {
+					return options['calendarIds'].indexOf(calId) !== -1;
+				});
 			}
 		}
 

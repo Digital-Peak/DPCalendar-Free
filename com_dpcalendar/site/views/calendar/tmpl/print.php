@@ -30,7 +30,8 @@ $this->loadTemplate('options');
 	<div class="com-dpcalendar-calendar__content">
 		<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 		<?php echo $this->loadTemplate('list'); ?>
-		<div class="com-dpcalendar-calendar__calendar dp-calendar" data-options="DPCalendar.view.calendar.options"></div>
+		<div class="com-dpcalendar-calendar__calendar dp-calendar"
+			 data-options="DPCalendar.view.calendar.<?php echo $this->input->getInt('Itemid', 0); ?>.options"></div>
 		<?php echo $this->loadTemplate('map'); ?>
 	</div>
 	<div class="com-dpcalendar-calendar__custom-text">

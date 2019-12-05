@@ -61,6 +61,14 @@ class SetupForMail implements StageInterface
 			$payload->mailVariables['field-' . $field->name] = $field;
 		}
 
+		if ($payload->eventsWithTickets) {
+			foreach ($payload->eventsWithTickets as $event) {
+				$event->text = $event->description;
+				$this->application->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$params, 0]);
+				$event->description = $event->text;
+			}
+		}
+
 		// Show the logo and address in the tickets
 		$params->set('show_header', true);
 

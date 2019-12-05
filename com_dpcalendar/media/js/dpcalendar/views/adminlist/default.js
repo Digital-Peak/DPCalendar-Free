@@ -52,6 +52,12 @@
 			});
 		}
 
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-events .dp-event .dp-link-featured')).forEach(function (link) {
+			link.addEventListener('click', function (e) {
+				return listItemTask('cb' + link.getAttribute('data-cb'), link.getAttribute('data-state'));
+			});
+		});
+
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-events-modal .dp-link')).forEach(function (link) {
 			link.addEventListener('click', function (e) {
 				if (!window.parent) {

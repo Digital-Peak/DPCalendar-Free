@@ -152,6 +152,10 @@
 	min-height: 60px;
 }
 
+.com-dpcalendar-adminlist .dp-events-table .dp-event__color {
+	padding: 5px;
+}
+
 .pika-single th,
 .pika-single td {
 	border-style: solid;

@@ -15,28 +15,28 @@ class Ical
 	public static function createIcalFromCalendar($calendarId, $asDownload = false)
 	{
 		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
-		$model->setState('category.id', $calendarId);
-		$model->setState('category.recursive', false);
-		$model->setState('list.limit', 100000);
-		$model->setState('filter.ongoing', true);
-		$model->setState('filter.state', 1);
-		$model->setState('filter.language', \JFactory::getLanguage());
-		$model->setState('filter.publish_date', true);
-		$model->setState('list.start-date', '0');
-		$model->setState('list.ordering', 'start_date');
-		$model->setState('list.direction', 'asc');
+		$eventsModel = \JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$eventsModel->setState('category.id', $calendarId);
+		$eventsModel->setState('category.recursive', false);
+		$eventsModel->setState('list.limit', 100000);
+		$eventsModel->setState('filter.ongoing', true);
+		$eventsModel->setState('filter.state', 1);
+		$eventsModel->setState('filter.language', \JFactory::getLanguage());
+		$eventsModel->setState('filter.publish_date', true);
+		$eventsModel->setState('list.start-date', '0');
+		$eventsModel->setState('list.ordering', 'start_date');
+		$eventsModel->setState('list.direction', 'asc');
 
-		$model->setState('filter.expand', false);
+		$eventsModel->setState('filter.expand', false);
 
 		// In some cases we need to increase the memory limit as we try to fetch
 		// all events, then uncomment the following line.
 		// ini_set('memory_limit', '512M');
 
-		$items = $model->getItems();
+		$items = $eventsModel->getItems();
 
 		if (!is_array($items)) {
-			$items = array();
+			$items = [];
 		}
 
 		return self::createIcalFromEvents($items, $asDownload);
@@ -56,11 +56,11 @@ class Ical
 	 * @return string
 	 * @throws \Exception
 	 */
-	public static function createIcalFromEvents($events, $asDownload = false, $forceEvents = false)
+	public static function createIcalFromEvents($events, $asDownload = false, $forceEvents = false, \DPCalendarModelEvents $eventsModel = null)
 	{
 		\JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
 
-		$text   = array();
+		$text   = [];
 		$text[] = 'BEGIN:VCALENDAR';
 		$text[] = 'VERSION:2.0';
 		$text[] = 'PRODID:DPCALENDAR';
@@ -76,7 +76,7 @@ class Ical
 		}
 		$text[] = 'X-WR-TIMEZONE:' . $userTz;
 
-		$calendars = array();
+		$calendars = [];
 		foreach ($events as $key => $event) {
 			// Strip out series events as we collect them later
 			if ($event->original_id > 0 && !$forceEvents) {
@@ -94,7 +94,7 @@ class Ical
 		// $text[] = 'X-WR-CALNAME:'.implode('; ', $calendars);
 
 		foreach ($events as $key => $event) {
-			$text = array_merge($text, self::addEventData($event));
+			$text = array_merge($text, self::addEventData($event, $eventsModel));
 		}
 		$text[] = 'END:VCALENDAR';
 
@@ -127,10 +127,10 @@ class Ical
 		return $newText;
 	}
 
-	private static function addEventData($event)
+	private static function addEventData($event, \DPCalendarModelEvents $eventsModel = null)
 	{
-		$childsToAdd = array();
-		$text        = array();
+		$childsToAdd = [];
+		$text        = [];
 		$text[]      = 'BEGIN:VEVENT';
 
 		// Creating date objects of the dates
@@ -158,22 +158,24 @@ class Ical
 
 			if ($event->id && is_numeric($event->catid)) {
 				// Find deleted events and add them as EXDATE
-				\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-				$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
-				$model->setState('category.id', $event->catid);
-				$model->setState('category.recursive', false);
-				$model->setState('list.limit', 100000);
-				$model->setState('filter.ongoing', true);
-				$model->setState('filter.state', 1);
-				$model->setState('filter.language', \JFactory::getLanguage());
-				$model->setState('filter.publish_date', true);
-				$model->setState('list.start-date', $start);
-				$model->setState('list.ordering', 'start_date');
-				$model->setState('list.direction', 'asc');
-				$model->setState('filter.expand', true);
-				$model->setState('filter.children', $event->id);
+				if ($eventsModel == null) {
+					\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+					$eventsModel = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+				}
+				$eventsModel->setState('category.id', $event->catid);
+				$eventsModel->setState('category.recursive', false);
+				$eventsModel->setState('list.limit', 100000);
+				$eventsModel->setState('filter.ongoing', true);
+				$eventsModel->setState('filter.state', 1);
+				$eventsModel->setState('filter.language', \JFactory::getLanguage());
+				$eventsModel->setState('filter.publish_date', true);
+				$eventsModel->setState('list.start-date', $start);
+				$eventsModel->setState('list.ordering', 'start_date');
+				$eventsModel->setState('list.direction', 'asc');
+				$eventsModel->setState('filter.expand', true);
+				$eventsModel->setState('filter.children', $event->id);
 
-				$instances = $model->getItems();
+				$instances = $eventsModel->getItems();
 
 				// Check for modified events
 				foreach ($instances as $key => $e) {
@@ -190,7 +192,7 @@ class Ical
 				}
 
 				// Creating the rrule event text to parse
-				$rruleText   = array();
+				$rruleText   = [];
 				$rruleText[] = 'BEGIN:VCALENDAR';
 				$rruleText[] = 'BEGIN:VEVENT';
 				$rruleText[] = 'UID:' . time();
@@ -212,32 +214,29 @@ class Ical
 				$cal = $cal->expand($start, new \DateTime('2038-01-01'));
 
 				// Find deleted events
-				$exdates = array();
-				if (is_array($cal->VEVENT)) {
-					foreach ($cal->VEVENT as $vevent) {
-						$found = false;
-						$date  = \DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
+				$exdates = [];
+				foreach ($cal->VEVENT as $vevent) {
+					$found = false;
+					$date  = \DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
 
-						// Ignore starting event
-						if ($date->toSql() == $event->start_date) {
-							continue;
+					// Ignore starting event
+					if ($date->toSql() == $event->start_date) {
+						continue;
+					}
+
+					$dateFormatted = $event->all_day ? $date->format('Ymd') : $date->format('Ymd\THis\Z');
+
+					// Trying to find the instance for the actual recurrence id date
+					foreach ($instances as $e) {
+						if ($dateFormatted == $e->recurrence_id) {
+							$found = true;
+							break;
 						}
+					}
 
-						$dateFormatted = $event->all_day ? $date->format('Ymd') : $date->format('Ymd\THis\Z');
-
-						// Trying to find the instance for the actual recurrence id
-						// date
-						foreach ($instances as $e) {
-							if ($dateFormatted == $e->recurrence_id) {
-								$found = true;
-								break;
-							}
-						}
-
-						if (!$found) {
-							// No instance was found, adding it to the exdates
-							$exdates[] = $dateFormatted;
-						}
+					if (!$found) {
+						// No instance was found, adding it to the exdates
+						$exdates[] = $dateFormatted;
 					}
 				}
 				if ($exdates) {
@@ -292,7 +291,7 @@ class Ical
 		$text[] = 'END:VEVENT';
 
 		foreach ($childsToAdd as $child) {
-			$text = array_merge($text, self::addEventData($child));
+			$text = array_merge($text, self::addEventData($child, $eventsModel));
 		}
 
 		return $text;

@@ -154,7 +154,7 @@ DPCalendar = window.DPCalendar || {};
 			}
 
 			var map = calendar.parentElement.querySelector('.dp-map');
-			if (map == null || !options['show_map']) {
+			if (!DPCalendar.Map || map == null || !options['show_map']) {
 				return;
 			}
 			DPCalendar.Map.clearMarkers(map);
@@ -202,7 +202,7 @@ DPCalendar = window.DPCalendar || {};
 			}
 
 			var map = calendar.parentElement.querySelector('.dp-map');
-			if (map == null || !options['show_map']) {
+			if (!DPCalendar.Map || map == null || !options['show_map']) {
 				return;
 			}
 
@@ -246,10 +246,13 @@ DPCalendar = window.DPCalendar || {};
 			}
 
 			DPCalendar.request(
-				'task=event.move',
+				'task=event.move&Itemid=' + Joomla.getOptions('DPCalendar.itemid'),
 				function (json) {
 					if (json.data.url) {
 						info.event.setProp('url', json.data.url);
+					}
+					if (json.data.description) {
+						info.event.setExtendedProp('description', json.data.description);
 					}
 
 					if (!json.success) {
@@ -280,10 +283,13 @@ DPCalendar = window.DPCalendar || {};
 			}
 
 			DPCalendar.request(
-				'task=event.move',
+				'task=event.move&Itemid=' + Joomla.getOptions('DPCalendar.itemid'),
 				function (json) {
 					if (json.data.url) {
 						info.event.setProp('url', json.data.url);
+					}
+					if (json.data.description) {
+						info.event.setExtendedProp('description', json.data.description);
 					}
 
 					if (!json.success) {
@@ -471,7 +477,7 @@ DPCalendar = window.DPCalendar || {};
 		};
 
 		// Initializing local storage of event sources
-		var localStorageId = calendar.getAttribute('data-options') + '-calendar-state';
+		var localStorageId = calendar.getAttribute('data-options') + '-calendar-state-' + md5(options['calendarIds']);
 		if (DPCalendar.isLocalStorageSupported()) {
 			if (localStorage.getItem(localStorageId) == null) {
 				localStorage.setItem(localStorageId, JSON.stringify(options['calendarIds']));

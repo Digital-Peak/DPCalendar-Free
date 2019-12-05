@@ -7,6 +7,10 @@
  */
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\LayoutHelper;
+use DPCalendar\Router\Router;
+use DPCalendar\Translator\Translator;
+use Joomla\CMS\Factory;
 use Joomla\Utilities\ArrayHelper;
 
 JLoader::import('joomla.application.component.controllerform');
@@ -281,10 +285,21 @@ class DPCalendarControllerEvent extends JControllerForm
 			$event = $model->getItem($data['id']);
 
 			if ($event->start_date == $data['start_date'] && $event->end_date == $data['end_date']) {
+				$displayData          = [
+					'router'       => new Router(),
+					'layoutHelper' => new LayoutHelper(),
+					'translator'   => new Translator(),
+					'input'        => $this->input,
+					'params'       => Factory::getApplication()->getMenu()->getActive()->getParams()
+				];
+				$displayData['event'] = $event;
+				$description          = trim($displayData['layoutHelper']->renderLayout('event.tooltip', $displayData));
+				$description          = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
+
 				DPCalendarHelper::sendMessage(
 					JText::_('JLIB_APPLICATION_SAVE_SUCCESS'),
 					false,
-					array('url' => DPCalendarHelperRoute::getEventRoute($data['id'], $data['catid']))
+					['url' => DPCalendarHelperRoute::getEventRoute($data['id'], $data['catid']), 'description' => $description]
 				);
 
 				return;

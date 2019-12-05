@@ -31,7 +31,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 						<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
 					<?php } ?>
 				</div>
-				<?php if ($name == 'general') { ?>
+				<?php if ($name == 'general' && $this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 					<div class="com-dpcalendar-locationform__map dp-map"></div>
 				<?php } ?>
 			</div>

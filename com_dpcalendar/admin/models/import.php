@@ -125,4 +125,65 @@ class DPCalendarModelImport extends JModelLegacy
 	{
 		return parent::getTable($type, $prefix, $config);
 	}
+
+	public function patch($fileName, $revert = false)
+	{
+		JLoader::import('joomla.filesystem.folder');
+		JLoader::import('joomla.filesystem.file');
+
+		if (!$this->canPatch()) {
+			$this->setError("Patch executable not available");
+
+			return false;
+		}
+
+		$content = file_get_contents($fileName);
+		$tokens  = [
+			'com_dpcalendar/admin/' => 'administrator/components/com_dpcalendar/',
+			'com_dpcalendar/site/'  => 'components/com_dpcalendar/',
+			'com_dpcalendar/media/' => 'media/com_dpcalendar/'
+		];
+
+		foreach (\Joomla\CMS\Filesystem\Folder::folders(JPATH_ROOT . '/modules', 'dpcalendar') as $folder) {
+			$tokens[$folder . '/media/'] = 'media/' . $folder . '/';
+			$tokens[$folder . '/']       = 'modules/' . $folder . '/';
+		}
+		foreach (\Joomla\CMS\Filesystem\Folder::folders(JPATH_PLUGINS) as $folder) {
+			$tokens['plg_' . $folder . '_'] = 'plugins/' . $folder . '/';
+		}
+
+		foreach ($tokens as $search => $replace) {
+			$content = str_replace('--- ' . $search, '--- ' . $replace, $content);
+			$content = str_replace('+++ ' . $search, '+++ ' . $replace, $content);
+		}
+
+		file_put_contents($fileName . '.mod', $content);
+
+		// Dry run
+		$result = shell_exec('patch --dry-run -p0 ' . ($revert ? '-R' : '') . ' -d' . JPATH_ROOT . '/ -i ' . $fileName . '.mod');
+		if (!$result || strpos($result, 'Skip this patch?') !== false) {
+			$this->setError("Can't apply patch " . $fileName . " Output is:" . PHP_EOL . PHP_EOL . $result);
+			JFile::delete($fileName . '.mod');
+
+			return false;
+		}
+
+		$result = shell_exec('patch -b -p0 ' . ($revert ? '-R' : '') . ' -d' . JPATH_ROOT . '/ -i ' . $fileName . '.mod');
+		JFile::delete($fileName . '.mod');
+		$result = explode(PHP_EOL, $result);
+
+		$files = [];
+		foreach ($result as $line) {
+			if (strpos($line, 'patching file ') === 0) {
+				$files[] = str_replace('patching file ', '', $line);
+			}
+		}
+
+		return $files;
+	}
+
+	public function canPatch()
+	{
+		return strpos(shell_exec('patch --version'), 'GNU patch') !== false;
+	}
 }

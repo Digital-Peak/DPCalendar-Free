@@ -46,9 +46,7 @@ DPCalendar = window.DPCalendar || {};
 				return;
 			}
 
-			var e = document.createEvent('CustomEvent');
-			e.initCustomEvent('dp-autocomplete-change');
-			input.dispatchEvent(e);
+			input.dispatchEvent(new CustomEvent('dp-autocomplete-change'));
 		}));
 
 		input.addEventListener('blur', function (e) {
@@ -101,9 +99,7 @@ DPCalendar = window.DPCalendar || {};
 
 				input.value = item.title;
 
-				var event = document.createEvent('CustomEvent');
-				event.initCustomEvent('dp-autocomplete-select', false, false, item);
-				input.dispatchEvent(event);
+				input.dispatchEvent(new CustomEvent('dp-autocomplete-select', {detail: item}));
 
 				root.parentElement.removeChild(root);
 

@@ -158,9 +158,7 @@ DPCalendar = window.DPCalendar || {};
 		});
 
 		document.querySelector('.com-dpcalendar-eventform__location-form .dp-button-cancel').addEventListener('click', function () {
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('click');
-			document.querySelector('.com-dpcalendar-eventform__toggle').dispatchEvent(event);
+			document.querySelector('.com-dpcalendar-eventform__toggle').dispatchEvent(new CustomEvent('click'));
 		});
 
 		document.querySelector('.com-dpcalendar-eventform__location-form .dp-button-save').addEventListener('click', function () {

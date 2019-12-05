@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 ?>
 <div class="com-dpcalendar-eventform__location">
-	<?php if ($this->params->get('event_form_show_map', 1)) { ?>
+	<?php if ($this->params->get('event_form_show_map', 1) && $this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 		<div class="dp-map"
 			 data-zoom="<?php echo $this->params->get('map_zoom', 6); ?>"
 			 data-latitude="<?php echo $this->params->get('map_lat', 47); ?>"

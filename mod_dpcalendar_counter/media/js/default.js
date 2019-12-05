@@ -71,8 +71,7 @@ DPCalendar = window.DPCalendar || {};
 						computeDateString('second', element, start, now);
 					}, 1000, element);
 				}
-			}
-			else {
+			} else {
 				element.querySelector('.mod-dpcalendar-counter__upcoming').style.display = 'none';
 			}
 		}

@@ -926,6 +926,7 @@ class PlgSampledataDPCalendar extends JPlugin
 						$data['params']['timeformat_week']  = 'H:i';
 						$data['params']['timeformat_day']   = 'H:i';
 						$data['params']['timeformat_list']  = 'H:i';
+						$data['params']['weekstart']        = 1;
 					case 'view=list':
 					case 'view=list&layout=blog':
 					case 'view=list&layout=timeline':

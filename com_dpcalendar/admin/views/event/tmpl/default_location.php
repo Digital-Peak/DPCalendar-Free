@@ -8,11 +8,13 @@
 defined('_JEXEC') or die();
 ?>
 <div class="com-dpcalendar-eventform__location">
-	<div class="dp-map"
-	     data-zoom="<?php echo $this->params->get('map_zoom', 6); ?>"
-	     data-latitude="<?php echo $this->params->get('map_lat', 47); ?>"
-	     data-longitude="<?php echo $this->params->get('map_long', 4); ?>">
-	</div>
+	<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
+		<div class="dp-map"
+			 data-zoom="<?php echo $this->params->get('map_zoom', 6); ?>"
+			 data-latitude="<?php echo $this->params->get('map_lat', 47); ?>"
+			 data-longitude="<?php echo $this->params->get('map_long', 4); ?>">
+		</div>
+	<?php } ?>
 	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_FORM_CREATE_LOCATION'); ?>
 		<span class="com-dpcalendar-eventform__toggle dp-toggle">
 			<span class="dp-toggle__up dp-toggle_hidden" data-direction="up">

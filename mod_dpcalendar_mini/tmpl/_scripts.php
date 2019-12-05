@@ -34,6 +34,7 @@ $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 
 $document->addScriptOptions('calendar.names', $dateHelper->getNames());
 $document->addScriptOptions('timezone', $dateHelper->getDate()->getTimezone()->getName());
+$document->addScriptOptions('itemid', $app->input->getInt('Itemid', 0));
 
 // The options which will be passed to the js library
 $options                   = [];

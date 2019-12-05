@@ -66,6 +66,7 @@ class HtmlDocument
 		}
 		if ($name == self::LIBRARY_AUTOCOMPLETE) {
 			$this->loadScriptFile('popper/popper.js');
+			$this->loadScriptFile('dpcalendar/polyfill.js');
 			$this->loadScriptFile('dpcalendar/layouts/block/autocomplete.js');
 		}
 		if ($name == self::LIBRARY_MD5) {
@@ -99,12 +100,12 @@ class HtmlDocument
 			$this->loadScriptFile('pikaday/pikaday.js');
 			$this->loadStyleFile('pikaday/pikaday.css');
 		}
-		if ($name == self::LIBRARY_MAP) {
+		$provider = DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap');
+		if ($name == self::LIBRARY_MAP && $provider != 'none') {
 			\JHtml::_('behavior.core');
 			$this->loadScriptFile('dpcalendar/polyfill.js');
 			$this->loadScriptFile('dpcalendar/dpcalendar.js');
 
-			$provider = DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap');
 			if ($provider == 'google') {
 				$key = DPCalendarHelper::getComponentParameter('map_api_google_jskey', '');
 				if (!$key) {
@@ -184,7 +185,7 @@ class HtmlDocument
 		}
 
 		$path = str_replace('.js', '.min.js', $path);
-		\JHtml::_('script', $extension . '/' . $path, ['relative' => true], ['defer' => true]);
+		\JHtml::_('script', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto'], ['defer' => true]);
 	}
 
 	public function addScript($content)
@@ -200,7 +201,7 @@ class HtmlDocument
 	public function loadStyleFile($path, $extension = 'com_dpcalendar')
 	{
 		$path = str_replace('.css', '.min.css', $path);
-		\JHtml::_('stylesheet', $extension . '/' . $path, ['relative' => true]);
+		\JHtml::_('stylesheet', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto']);
 	}
 
 	public function addStyle($content)

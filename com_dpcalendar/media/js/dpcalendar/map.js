@@ -73,9 +73,7 @@ DPCalendar = window.DPCalendar || {};
 
 		element.dpmap = map;
 
-		var e = document.createEvent('CustomEvent');
-		e.initCustomEvent('dp-map-loaded');
-		element.dispatchEvent(e);
+		element.dispatchEvent(new CustomEvent('dp-map-loaded'));
 
 		if (Array.isArray(element.dpCachedMarkers)) {
 			element.dpCachedMarkers.forEach(function (marker) {

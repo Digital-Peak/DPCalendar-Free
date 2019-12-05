@@ -125,9 +125,7 @@ DPCalendar = window.DPCalendar || {};
 		geoComplete.parentElement.querySelector('.dp-button').addEventListener('click', function (e) {
 			e.preventDefault();
 
-			var event = document.createEvent('CustomEvent');
-			event.initCustomEvent('dp-autocomplete-change', false, false, {value: geoComplete.value.trim()});
-			geoComplete.dispatchEvent(event);
+			geoComplete.dispatchEvent(new CustomEvent('dp-autocomplete-change', {value: geoComplete.value.trim()}));
 
 			return false;
 		});

@@ -30,6 +30,7 @@ class DPCalendarViewTools extends \DPCalendar\View\BaseView
 				}
 			}
 		}
+
 		if (strpos($this->getLayout(), 'import') !== false) {
 			JPluginHelper::importPlugin('dpcalendar');
 
@@ -48,6 +49,14 @@ class DPCalendarViewTools extends \DPCalendar\View\BaseView
 				JFactory::getLanguage()->load('plg_dpcalendar_' . $plugin->name, JPATH_PLUGINS . '/dpcalendar/' . $plugin->name);
 			}
 		}
+
+		if (strpos($this->getLayout(), 'patch') !== false) {
+			$this->canPatch = JModelLegacy::getInstance('Import', 'DPCalendarModel')->canPatch();
+
+			if (!$this->canPatch) {
+				$this->app->enqueueMessage('Patch executable not available!!', 'error');
+			}
+		}
 	}
 
 	protected function addToolbar()
@@ -56,6 +65,11 @@ class DPCalendarViewTools extends \DPCalendar\View\BaseView
 			JToolbarHelper::custom('import.add', 'new.png', 'new.png', 'COM_DPCALENDAR_VIEW_TOOLS_IMPORT', false);
 			$this->title = 'COM_DPCALENDAR_MANAGER_TOOLS_IMPORT';
 			$this->icon  = 'import';
+		}
+		if (strpos($this->getLayout(), 'patch') !== false && DPCalendarHelper::getActions()->get('core.manage') && $this->canPatch) {
+			JToolbarHelper::custom('import.patch', 'new.png', 'new.png', 'COM_DPCALENDAR_VIEW_TOOLS_PATCH', false);
+			$this->title = 'COM_DPCALENDAR_VIEW_TOOLS_PATCH';
+			$this->icon  = 'patch';
 		}
 		if (strpos($this->getLayout(), 'translate') !== false) {
 			JToolbarHelper::custom('translate.update', 'new.png', 'new.png', 'COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_UPDATE', false);

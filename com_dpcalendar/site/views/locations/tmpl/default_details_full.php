@@ -20,20 +20,22 @@ defined('_JEXEC') or die();
 					<?php echo $location->title; ?>
 				</a>
 			</h2>
-			<div class="dp-location__buttons dp-button-bar">
-				<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
-						data-href="<?php echo \DPCalendar\Helper\Location::getMapLink($location); ?>">
-					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAP]); ?>
-					<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_SITE_LINK'); ?>
-					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
-				</button>
-				<button type="button" class="dp-button dp-button-action dp-button-map-directions" data-target="new"
-						data-href="<?php echo \DPCalendar\Helper\Location::getDirectionsLink($location); ?>">
-					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DIRECTIONS]); ?>
-					<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
-					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
-				</button>
-			</div>
+			<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
+				<div class="dp-location__buttons dp-button-bar">
+					<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
+							data-href="<?php echo \DPCalendar\Helper\Location::getMapLink($location); ?>">
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAP]); ?>
+						<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_SITE_LINK'); ?>
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
+					</button>
+					<button type="button" class="dp-button dp-button-action dp-button-map-directions" data-target="new"
+							data-href="<?php echo \DPCalendar\Helper\Location::getDirectionsLink($location); ?>">
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DIRECTIONS]); ?>
+						<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
+					</button>
+				</div>
+			<?php } ?>
 			<div class="dp-location__details"
 				 data-latitude="<?php echo $location->latitude; ?>"
 				 data-longitude="<?php echo $location->longitude; ?>"

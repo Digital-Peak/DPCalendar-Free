@@ -75,11 +75,8 @@
 }
 
 &__tickets {
-	grid-row: 8 / 9;
-}
-
-&__tickets {
 	grid-column: 1 / 4;
+	grid-row: 9 / 10;
 }
 
 &__custom-text-after {

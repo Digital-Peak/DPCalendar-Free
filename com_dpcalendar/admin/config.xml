@@ -311,6 +311,11 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+		<field name="map_include_ongoing" type="radio" class="btn-group" default="0"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="map_date_format" type="text" default="m.d.Y"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>
@@ -1452,6 +1457,7 @@
 			<option value="openstreetmap">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP</option>
 			<option value="google">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_GOOGLE</option>
 			<option value="mapbox">COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX</option>
+			<option value="none">JNONE</option>
 		</field>
 		<field name="map_api_google_key" type="text" showon="map_provider:google"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_GOOGLE_KEY_LABEL"

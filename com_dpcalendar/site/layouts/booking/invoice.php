@@ -11,7 +11,7 @@ $booking = $displayData['booking'];
 $tickets = $displayData['tickets'];
 $params  = $displayData['params'];
 $user    = JFactory::getUser($booking->user_id);
-$plugin  = JPluginHelper::getPlugin('dpcalendarpay', $booking->processor);
+$plugin  = $booking->processor ? JPluginHelper::getPlugin('dpcalendarpay', $booking->processor) : null;
 if ($plugin) {
 	JFactory::getLanguage()->load('plg_dpcalendarpay_' . $booking->processor, JPATH_PLUGINS . '/dpcalendarpay/' . $booking->processor);
 }
@@ -113,6 +113,12 @@ foreach ($fields as $key => $field) {
 				<td><?php echo $displayData['translator']->translate('JSTATUS'); ?></td>
 				<td><?php echo \DPCalendar\Helper\Booking::getStatusLabel($booking); ?></td>
 			</tr>
+			<?php if ($plugin) { ?>
+				<tr>
+					<td><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PROCESSOR_LABEL'); ?></td>
+					<td><?php echo $displayData['translator']->translate('PLG_DPCALENDARPAY_' . $plugin->name . '_TITLE'); ?></td>
+				</tr>
+			<?php } ?>
 		</table>
 	<?php } ?>
 	<h3 style="border-bottom: 1px solid #eee"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_INVOICE_BOOKING_DETAILS'); ?></h3>

@@ -1,8 +1,9 @@
 /*!
-FullCalendar Resources Common Plugin v4.2.0
+FullCalendar Resources Common Plugin v4.3.1
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory) :
@@ -48,6 +49,70 @@ Docs & License: https://fullcalendar.io/scheduler
         };
         return __assign.apply(this, arguments);
     };
+
+    function massageEventDragMutation(eventMutation, hit0, hit1) {
+        var resource0 = hit0.dateSpan.resourceId;
+        var resource1 = hit1.dateSpan.resourceId;
+        if (resource0 && resource1 &&
+            resource0 !== resource1) {
+            eventMutation.resourceMutation = {
+                matchResourceId: resource0,
+                setResourceId: resource1
+            };
+        }
+    }
+    /*
+    TODO: all this would be much easier if we were using a hash!
+    */
+    function applyEventDefMutation(eventDef, mutation, calendar) {
+        var resourceMutation = mutation.resourceMutation;
+        if (resourceMutation && computeResourceEditable(eventDef, calendar)) {
+            var index = eventDef.resourceIds.indexOf(resourceMutation.matchResourceId);
+            if (index !== -1) {
+                var resourceIds = eventDef.resourceIds.slice(); // copy
+                resourceIds.splice(index, 1); // remove
+                if (resourceIds.indexOf(resourceMutation.setResourceId) === -1) { // not already in there
+                    resourceIds.push(resourceMutation.setResourceId); // add
+                }
+                eventDef.resourceIds = resourceIds;
+            }
+        }
+    }
+    /*
+    HACK
+    TODO: use EventUi system instead of this
+    */
+    function computeResourceEditable(eventDef, calendar) {
+        var resourceEditable = eventDef.resourceEditable;
+        if (resourceEditable == null) {
+            var source = eventDef.sourceId && calendar.state.eventSources[eventDef.sourceId];
+            if (source) {
+                resourceEditable = source.extendedProps.resourceEditable; // used the Source::extendedProps hack
+            }
+            if (resourceEditable == null) {
+                resourceEditable = calendar.opt('eventResourceEditable');
+                if (resourceEditable == null) {
+                    resourceEditable = calendar.opt('editable'); // TODO: use defaults system instead
+                }
+            }
+        }
+        return resourceEditable;
+    }
+    function transformEventDrop(mutation, calendar) {
+        var resourceMutation = mutation.resourceMutation;
+        if (resourceMutation) {
+            return {
+                oldResource: calendar.getResourceById(resourceMutation.matchResourceId),
+                newResource: calendar.getResourceById(resourceMutation.setResourceId)
+            };
+        }
+        else {
+            return {
+                oldResource: null,
+                newResource: null
+            };
+        }
+    }
 
     var ResourceDataAdder = /** @class */ (function () {
         function ResourceDataAdder() {
@@ -153,6 +218,17 @@ Docs & License: https://fullcalendar.io/scheduler
         }
         parts.unshift(origEventUi);
         return core.combineEventUis(parts);
+    }
+    // for making sure events that have editable resources are always draggable in resource views
+    function transformIsDraggable(val, eventDef, eventUi, view) {
+        if (!val) {
+            if (view.viewSpec.class.needsResourceData) {
+                if (computeResourceEditable(eventDef, view.calendar)) {
+                    return true;
+                }
+            }
+        }
+        return val;
     }
 
     var RESOURCE_SOURCE_PROPS = {
@@ -422,70 +498,6 @@ Docs & License: https://fullcalendar.io/scheduler
         }
         def.resourceIds = resourceIds;
         def.resourceEditable = resourceRelatedProps.resourceEditable;
-    }
-
-    function massageEventDragMutation(eventMutation, hit0, hit1) {
-        var resource0 = hit0.dateSpan.resourceId;
-        var resource1 = hit1.dateSpan.resourceId;
-        if (resource0 && resource1 &&
-            resource0 !== resource1) {
-            eventMutation.resourceMutation = {
-                matchResourceId: resource0,
-                setResourceId: resource1
-            };
-        }
-    }
-    /*
-    TODO: all this would be much easier if we were using a hash!
-    */
-    function applyEventDefMutation(eventDef, mutation, calendar) {
-        var resourceMutation = mutation.resourceMutation;
-        if (resourceMutation && computeResourceEditable(eventDef, calendar)) {
-            var index = eventDef.resourceIds.indexOf(resourceMutation.matchResourceId);
-            if (index !== -1) {
-                var resourceIds = eventDef.resourceIds.slice(); // copy
-                resourceIds.splice(index, 1); // remove
-                if (resourceIds.indexOf(resourceMutation.setResourceId) === -1) { // not already in there
-                    resourceIds.push(resourceMutation.setResourceId); // add
-                }
-                eventDef.resourceIds = resourceIds;
-            }
-        }
-    }
-    /*
-    HACK
-    TODO: use EventUi system instead of this
-    */
-    function computeResourceEditable(eventDef, calendar) {
-        var resourceEditable = eventDef.resourceEditable;
-        if (resourceEditable == null) {
-            var source = eventDef.sourceId && calendar.state.eventSources[eventDef.sourceId];
-            if (source) {
-                resourceEditable = source.extendedProps.resourceEditable; // used the Source::extendedProps hack
-            }
-            if (resourceEditable == null) {
-                resourceEditable = calendar.opt('eventResourceEditable');
-                if (resourceEditable == null) {
-                    resourceEditable = calendar.opt('editable'); // TODO: use defaults system instead
-                }
-            }
-        }
-        return resourceEditable;
-    }
-    function transformEventDrop(mutation, calendar) {
-        var resourceMutation = mutation.resourceMutation;
-        if (resourceMutation) {
-            return {
-                oldResource: calendar.getResourceById(resourceMutation.matchResourceId),
-                newResource: calendar.getResourceById(resourceMutation.setResourceId)
-            };
-        }
-        else {
-            return {
-                oldResource: null,
-                newResource: null
-            };
-        }
     }
 
     function transformDateSelectionJoin(hit0, hit1) {
@@ -801,7 +813,7 @@ Docs & License: https://fullcalendar.io/scheduler
         });
     };
 
-    var RELEASE_DATE = '2019-06-02'; // for Scheduler
+    var RELEASE_DATE = '2019-08-10'; // for Scheduler
     var UPGRADE_WINDOW = 365 + 7; // days. 1 week leeway, for tz shift reasons too
     var LICENSE_INFO_URL = 'http://fullcalendar.io/scheduler/license/';
     var PRESET_LICENSE_KEYS = [
@@ -850,15 +862,15 @@ Docs & License: https://fullcalendar.io/scheduler
         return false;
     }
     function isImmuneUrl(url) {
-        return /\w+\:\/\/fullcalendar\.io\/|\/demos\/[\w-]+\.html$/.test(url);
+        return /\w+\:\/\/fullcalendar\.io\/|\/examples\/[\w-]+\.html$/.test(url);
     }
 
     var optionChangeHandlers = {
         resources: handleResources
     };
-    function handleResources(newSourceInput, calendar, deepEquals) {
+    function handleResources(newSourceInput, calendar, deepEqual) {
         var oldSourceInput = calendar.state.resourceSource._raw;
-        if (!deepEquals(oldSourceInput, newSourceInput)) {
+        if (!deepEqual(oldSourceInput, newSourceInput)) {
             calendar.dispatch({
                 type: 'RESET_RESOURCE_SOURCE',
                 resourceSourceInput: newSourceInput
@@ -1535,6 +1547,7 @@ Docs & License: https://fullcalendar.io/scheduler
     var main = core.createPlugin({
         reducers: [resourcesReducers],
         eventDefParsers: [parseEventDef],
+        isDraggableTransformers: [transformIsDraggable],
         eventDragMutationMassagers: [massageEventDragMutation],
         eventDefMutationAppliers: [applyEventDefMutation],
         dateSelectionTransformers: [transformDateSelectionJoin],
@@ -1560,7 +1573,6 @@ Docs & License: https://fullcalendar.io/scheduler
     exports.buildResourceFields = buildResourceFields;
     exports.buildResourceTextFunc = buildResourceTextFunc;
     exports.buildRowNodes = buildRowNodes;
-    exports.computeResourceEditable = computeResourceEditable;
     exports.default = main;
     exports.flattenResources = flattenResources;
     exports.isGroupsEqual = isGroupsEqual;
@@ -1569,10 +1581,11 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Resources Common Plugin v4.2.0
+FullCalendar Resources Common Plugin v4.3.1
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory) :
@@ -1618,6 +1631,70 @@ Docs & License: https://fullcalendar.io/scheduler
         };
         return __assign.apply(this, arguments);
     };
+
+    function massageEventDragMutation(eventMutation, hit0, hit1) {
+        var resource0 = hit0.dateSpan.resourceId;
+        var resource1 = hit1.dateSpan.resourceId;
+        if (resource0 && resource1 &&
+            resource0 !== resource1) {
+            eventMutation.resourceMutation = {
+                matchResourceId: resource0,
+                setResourceId: resource1
+            };
+        }
+    }
+    /*
+    TODO: all this would be much easier if we were using a hash!
+    */
+    function applyEventDefMutation(eventDef, mutation, calendar) {
+        var resourceMutation = mutation.resourceMutation;
+        if (resourceMutation && computeResourceEditable(eventDef, calendar)) {
+            var index = eventDef.resourceIds.indexOf(resourceMutation.matchResourceId);
+            if (index !== -1) {
+                var resourceIds = eventDef.resourceIds.slice(); // copy
+                resourceIds.splice(index, 1); // remove
+                if (resourceIds.indexOf(resourceMutation.setResourceId) === -1) { // not already in there
+                    resourceIds.push(resourceMutation.setResourceId); // add
+                }
+                eventDef.resourceIds = resourceIds;
+            }
+        }
+    }
+    /*
+    HACK
+    TODO: use EventUi system instead of this
+    */
+    function computeResourceEditable(eventDef, calendar) {
+        var resourceEditable = eventDef.resourceEditable;
+        if (resourceEditable == null) {
+            var source = eventDef.sourceId && calendar.state.eventSources[eventDef.sourceId];
+            if (source) {
+                resourceEditable = source.extendedProps.resourceEditable; // used the Source::extendedProps hack
+            }
+            if (resourceEditable == null) {
+                resourceEditable = calendar.opt('eventResourceEditable');
+                if (resourceEditable == null) {
+                    resourceEditable = calendar.opt('editable'); // TODO: use defaults system instead
+                }
+            }
+        }
+        return resourceEditable;
+    }
+    function transformEventDrop(mutation, calendar) {
+        var resourceMutation = mutation.resourceMutation;
+        if (resourceMutation) {
+            return {
+                oldResource: calendar.getResourceById(resourceMutation.matchResourceId),
+                newResource: calendar.getResourceById(resourceMutation.setResourceId)
+            };
+        }
+        else {
+            return {
+                oldResource: null,
+                newResource: null
+            };
+        }
+    }
 
     var ResourceDataAdder = /** @class */ (function () {
         function ResourceDataAdder() {
@@ -1723,6 +1800,17 @@ Docs & License: https://fullcalendar.io/scheduler
         }
         parts.unshift(origEventUi);
         return core.combineEventUis(parts);
+    }
+    // for making sure events that have editable resources are always draggable in resource views
+    function transformIsDraggable(val, eventDef, eventUi, view) {
+        if (!val) {
+            if (view.viewSpec.class.needsResourceData) {
+                if (computeResourceEditable(eventDef, view.calendar)) {
+                    return true;
+                }
+            }
+        }
+        return val;
     }
 
     var RESOURCE_SOURCE_PROPS = {
@@ -1992,70 +2080,6 @@ Docs & License: https://fullcalendar.io/scheduler
         }
         def.resourceIds = resourceIds;
         def.resourceEditable = resourceRelatedProps.resourceEditable;
-    }
-
-    function massageEventDragMutation(eventMutation, hit0, hit1) {
-        var resource0 = hit0.dateSpan.resourceId;
-        var resource1 = hit1.dateSpan.resourceId;
-        if (resource0 && resource1 &&
-            resource0 !== resource1) {
-            eventMutation.resourceMutation = {
-                matchResourceId: resource0,
-                setResourceId: resource1
-            };
-        }
-    }
-    /*
-    TODO: all this would be much easier if we were using a hash!
-    */
-    function applyEventDefMutation(eventDef, mutation, calendar) {
-        var resourceMutation = mutation.resourceMutation;
-        if (resourceMutation && computeResourceEditable(eventDef, calendar)) {
-            var index = eventDef.resourceIds.indexOf(resourceMutation.matchResourceId);
-            if (index !== -1) {
-                var resourceIds = eventDef.resourceIds.slice(); // copy
-                resourceIds.splice(index, 1); // remove
-                if (resourceIds.indexOf(resourceMutation.setResourceId) === -1) { // not already in there
-                    resourceIds.push(resourceMutation.setResourceId); // add
-                }
-                eventDef.resourceIds = resourceIds;
-            }
-        }
-    }
-    /*
-    HACK
-    TODO: use EventUi system instead of this
-    */
-    function computeResourceEditable(eventDef, calendar) {
-        var resourceEditable = eventDef.resourceEditable;
-        if (resourceEditable == null) {
-            var source = eventDef.sourceId && calendar.state.eventSources[eventDef.sourceId];
-            if (source) {
-                resourceEditable = source.extendedProps.resourceEditable; // used the Source::extendedProps hack
-            }
-            if (resourceEditable == null) {
-                resourceEditable = calendar.opt('eventResourceEditable');
-                if (resourceEditable == null) {
-                    resourceEditable = calendar.opt('editable'); // TODO: use defaults system instead
-                }
-            }
-        }
-        return resourceEditable;
-    }
-    function transformEventDrop(mutation, calendar) {
-        var resourceMutation = mutation.resourceMutation;
-        if (resourceMutation) {
-            return {
-                oldResource: calendar.getResourceById(resourceMutation.matchResourceId),
-                newResource: calendar.getResourceById(resourceMutation.setResourceId)
-            };
-        }
-        else {
-            return {
-                oldResource: null,
-                newResource: null
-            };
-        }
     }
 
     function transformDateSelectionJoin(hit0, hit1) {
@@ -2371,7 +2395,7 @@ Docs & License: https://fullcalendar.io/scheduler
         });
     };
 
-    var RELEASE_DATE = '2019-06-02'; // for Scheduler
+    var RELEASE_DATE = '2019-08-10'; // for Scheduler
     var UPGRADE_WINDOW = 365 + 7; // days. 1 week leeway, for tz shift reasons too
     var LICENSE_INFO_URL = 'http://fullcalendar.io/scheduler/license/';
     var PRESET_LICENSE_KEYS = [
@@ -2420,15 +2444,15 @@ Docs & License: https://fullcalendar.io/scheduler
         return false;
     }
     function isImmuneUrl(url) {
-        return /\w+\:\/\/fullcalendar\.io\/|\/demos\/[\w-]+\.html$/.test(url);
+        return /\w+\:\/\/fullcalendar\.io\/|\/examples\/[\w-]+\.html$/.test(url);
     }
 
     var optionChangeHandlers = {
         resources: handleResources
     };
-    function handleResources(newSourceInput, calendar, deepEquals) {
+    function handleResources(newSourceInput, calendar, deepEqual) {
         var oldSourceInput = calendar.state.resourceSource._raw;
-        if (!deepEquals(oldSourceInput, newSourceInput)) {
+        if (!deepEqual(oldSourceInput, newSourceInput)) {
             calendar.dispatch({
                 type: 'RESET_RESOURCE_SOURCE',
                 resourceSourceInput: newSourceInput
@@ -3105,6 +3129,7 @@ Docs & License: https://fullcalendar.io/scheduler
     var main = core.createPlugin({
         reducers: [resourcesReducers],
         eventDefParsers: [parseEventDef],
+        isDraggableTransformers: [transformIsDraggable],
         eventDragMutationMassagers: [massageEventDragMutation],
         eventDefMutationAppliers: [applyEventDefMutation],
         dateSelectionTransformers: [transformDateSelectionJoin],
@@ -3130,7 +3155,6 @@ Docs & License: https://fullcalendar.io/scheduler
     exports.buildResourceFields = buildResourceFields;
     exports.buildResourceTextFunc = buildResourceTextFunc;
     exports.buildRowNodes = buildRowNodes;
-    exports.computeResourceEditable = computeResourceEditable;
     exports.default = main;
     exports.flattenResources = flattenResources;
     exports.isGroupsEqual = isGroupsEqual;
@@ -3139,10 +3163,11 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Resource Day Grid Plugin v4.2.0
+FullCalendar Resource Day Grid Plugin v4.3.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core'), require('@fullcalendar/resource-common'), require('@fullcalendar/daygrid')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core', '@fullcalendar/resource-common', '@fullcalendar/daygrid'], factory) :
@@ -3351,10 +3376,11 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Resource Time Grid Plugin v4.2.0
+FullCalendar Resource Time Grid Plugin v4.3.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core'), require('@fullcalendar/resource-common'), require('@fullcalendar/timegrid'), require('@fullcalendar/resource-daygrid')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core', '@fullcalendar/resource-common', '@fullcalendar/timegrid', '@fullcalendar/resource-daygrid'], factory) :
@@ -3570,10 +3596,11 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Timeline Plugin v4.2.0
+FullCalendar Timeline Plugin v4.3.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core'], factory) :
@@ -4092,7 +4119,7 @@ Docs & License: https://fullcalendar.io/scheduler
             this.scrollJoiner.update();
         };
         HeaderBodyLayout.prototype.queryHeadHeight = function () {
-            return this.headerScroller.enhancedScroll.canvas.contentEl.offsetHeight; // flawed?
+            return this.headerScroller.enhancedScroll.canvas.contentEl.getBoundingClientRect().height;
         };
         return HeaderBodyLayout;
     }());
@@ -5072,13 +5099,13 @@ Docs & License: https://fullcalendar.io/scheduler
         };
         // Scrolling
         // ------------------------------------------------------------------------------------------
-        TimeAxis.prototype.computeDateScroll = function (timeMs) {
+        TimeAxis.prototype.computeDateScroll = function (duration) {
             var dateEnv = this.dateEnv;
             var dateProfile = this.props.dateProfile;
             var left = 0;
             if (dateProfile) {
                 left = this.dateToCoord(dateEnv.add(core.startOfDay(dateProfile.activeRange.start), // startOfDay needed?
-                core.createDuration(timeMs)));
+                duration));
                 // hack to overcome the left borders of non-first slat
                 if (!this.isRtl && left) {
                     left += 1;
@@ -5100,7 +5127,6 @@ Docs & License: https://fullcalendar.io/scheduler
         return TimeAxis;
     }(core.Component));
 
-    // import { computeResourceEditable } from '@fullcalendar/resource-common' ... CAN'T HAVE THIS DEP! COPIED AND PASTED BELOW!
     var TimelineLaneEventRenderer = /** @class */ (function (_super) {
         __extends(TimelineLaneEventRenderer, _super);
         function TimelineLaneEventRenderer(context, masterContainerEl, timeAxis) {
@@ -5110,12 +5136,13 @@ Docs & License: https://fullcalendar.io/scheduler
             return _this;
         }
         TimelineLaneEventRenderer.prototype.renderSegHtml = function (seg, mirrorInfo) {
+            var view = this.context.view;
             var eventRange = seg.eventRange;
             var eventDef = eventRange.def;
             var eventUi = eventRange.ui;
-            var isDraggable = eventUi.startEditable || computeResourceEditable(eventDef, this.timeAxis.calendar);
-            var isResizableFromStart = seg.isStart && eventUi.durationEditable && this.context.options.eventResizableFromStart;
-            var isResizableFromEnd = seg.isEnd && eventUi.durationEditable;
+            var isDraggable = view.computeEventDraggable(eventDef, eventUi);
+            var isResizableFromStart = seg.isStart && view.computeEventStartResizable(eventDef, eventUi);
+            var isResizableFromEnd = seg.isEnd && view.computeEventEndResizable(eventDef, eventUi);
             var classes = this.getSegClasses(seg, isDraggable, isResizableFromStart || isResizableFromEnd, mirrorInfo);
             classes.unshift('fc-timeline-event', 'fc-h-event');
             var timeText = this.getTimeText(eventRange);
@@ -5124,17 +5151,19 @@ Docs & License: https://fullcalendar.io/scheduler
                     ' href="' + core.htmlEscape(eventDef.url) + '"' :
                     '') +
                 '>' +
-                '<div class="fc-content">' +
                 (timeText ?
-                    '<span class="fc-time">' +
+                    '<span class="fc-time-wrap">' +
+                        '<span class="fc-time">' +
                         core.htmlEscape(timeText) +
+                        '</span>' +
                         '</span>'
                     :
                         '') +
+                '<span class="fc-title-wrap">' +
                 '<span class="fc-title fc-sticky">' +
                 (eventDef.title ? core.htmlEscape(eventDef.title) : '&nbsp;') +
                 '</span>' +
-                '</div>' +
+                '</span>' +
                 (isResizableFromStart ?
                     '<div class="fc-resizer fc-start-resizer"></div>' :
                     '') +
@@ -5269,23 +5298,6 @@ Docs & License: https://fullcalendar.io/scheduler
     }
     function timeRowSegsCollide(seg0, seg1) {
         return (seg0.left < seg1.right) && (seg0.right > seg1.left);
-    }
-    // HACK
-    function computeResourceEditable(eventDef, calendar) {
-        var resourceEditable = eventDef.resourceEditable;
-        if (resourceEditable == null) {
-            var source = eventDef.sourceId && calendar.state.eventSources[eventDef.sourceId];
-            if (source) {
-                resourceEditable = source.extendedProps.resourceEditable; // used the Source::extendedProps hack
-            }
-            if (resourceEditable == null) {
-                resourceEditable = calendar.opt('eventResourceEditable');
-                if (resourceEditable == null) {
-                    resourceEditable = true; // TODO: use defaults system instead
-                }
-            }
-        }
-        return resourceEditable;
     }
 
     var TimelineLaneFillRenderer = /** @class */ (function (_super) {
@@ -5495,8 +5507,8 @@ Docs & License: https://fullcalendar.io/scheduler
         };
         // Scroll System
         // ------------------------------------------------------------------------------------------
-        TimelineView.prototype.computeDateScroll = function (timeMs) {
-            return this.timeAxis.computeDateScroll(timeMs);
+        TimelineView.prototype.computeDateScroll = function (duration) {
+            return this.timeAxis.computeDateScroll(duration);
         };
         TimelineView.prototype.applyScroll = function (scroll, isResize) {
             _super.prototype.applyScroll.call(this, scroll, isResize); // will call applyDateScroll
@@ -5580,10 +5592,11 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Resource Timeline Plugin v4.2.0
+FullCalendar Resource Timeline Plugin v4.3.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
+
 (function (global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('@fullcalendar/core'), require('@fullcalendar/timeline'), require('@fullcalendar/resource-common')) :
     typeof define === 'function' && define.amd ? define(['exports', '@fullcalendar/core', '@fullcalendar/timeline', '@fullcalendar/resource-common'], factory) :
@@ -6187,7 +6200,7 @@ Docs & License: https://fullcalendar.io/scheduler
             _this.resourceAreaHeadEl = _this.el.querySelector('thead .fc-resource-area');
             _this.setResourceAreaWidth(_this.opt('resourceAreaWidth'));
             _this.initResourceAreaWidthDragging();
-            _this.miscHeight = _this.el.offsetHeight;
+            _this.miscHeight = _this.el.getBoundingClientRect().height;
             _this.spreadsheet = new Spreadsheet(_this.context, _this.resourceAreaHeadEl, _this.el.querySelector('tbody .fc-resource-area'));
             _this.timeAxis = new TimelinePlugin.TimeAxis(_this.context, _this.el.querySelector('thead .fc-time-area'), _this.el.querySelector('tbody .fc-time-area'));
             var timeAxisRowContainer = core.createElement('div', { className: 'fc-rows' }, '<table><tbody /></table>');
@@ -6340,7 +6353,7 @@ Docs & License: https://fullcalendar.io/scheduler
             var timeAxisHeadEl = this.timeAxis.header.tableEl;
             spreadsheetHeadEl.style.height = '';
             timeAxisHeadEl.style.height = '';
-            var max = Math.max(spreadsheetHeadEl.offsetHeight, timeAxisHeadEl.offsetHeight);
+            var max = Math.max(spreadsheetHeadEl.getBoundingClientRect().height, timeAxisHeadEl.getBoundingClientRect().height);
             spreadsheetHeadEl.style.height =
                 timeAxisHeadEl.style.height = max + 'px';
         };
@@ -6436,8 +6449,8 @@ Docs & License: https://fullcalendar.io/scheduler
                 this.timeAxis.updateStickyScrollers();
             }
         };
-        ResourceTimelineView.prototype.computeDateScroll = function (timeMs) {
-            return this.timeAxis.computeDateScroll(timeMs);
+        ResourceTimelineView.prototype.computeDateScroll = function (duration) {
+            return this.timeAxis.computeDateScroll(duration);
         };
         ResourceTimelineView.prototype.queryDateScroll = function () {
             return this.timeAxis.queryDateScroll();

@@ -5,7 +5,6 @@
  * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/tools/default.css');
@@ -31,6 +30,12 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/tools/default.css');
 					<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&view=tools&layout=translate">
 						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LANGUAGE]); ?>
 						<span><?php echo JText::_('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE'); ?></span>
+					</a>
+				</div>
+				<div class="dp-quick-icon">
+					<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&view=tools&layout=patch">
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::BULLSEYE]); ?>
+						<span><?php echo JText::_('COM_DPCALENDAR_VIEW_TOOLS_PATCH'); ?></span>
 					</a>
 				</div>
 			</div>

@@ -57,12 +57,22 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 			</a>
 		<?php } ?>
 		<?php if ($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
-			<a href="<?php echo $displayData['router']->getEventFormRoute($event->id, $return); ?>" class="dp-event-tooltip__action dp-link">
+			<?php if ($event->checked_out && $user->id != $event->checked_out) { ?>
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
-					['icon' => \DPCalendar\HTML\Block\Icon::EDIT, 'title' => $displayData['translator']->translate('JACTION_EDIT')]
+					[
+						'icon'  => \DPCalendar\HTML\Block\Icon::LOCK,
+						'title' => JText::sprintf('COM_DPCALENDAR_VIEW_EVENT_CHECKED_OUT_BY', JFactory::getUser($event->checked_out)->name)
+					]
 				); ?>
-			</a>
+			<?php } else { ?>
+				<a href="<?php echo $displayData['router']->getEventFormRoute($event->id, $return); ?>" class="dp-event-tooltip__action dp-link">
+					<?php echo $displayData['layoutHelper']->renderLayout(
+						'block.icon',
+						['icon' => \DPCalendar\HTML\Block\Icon::EDIT, 'title' => $displayData['translator']->translate('JACTION_EDIT')]
+					); ?>
+				</a>
+			<?php } ?>
 		<?php } ?>
 		<?php if ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
 			<a href="<?php echo $displayData['router']->getEventDeleteRoute($event->id, $return); ?>" class="dp-event-tooltip__action dp-link">

@@ -108,7 +108,7 @@ class DPCalendarHelper
 
 	public static function getFrLanguage()
 	{
-		$language = \JFactory::getApplication()->getCfg('language');
+		$language = \JFactory::getApplication()->get('language');
 
 		$user = \JFactory::getUser();
 		if ($user->get('id')) {

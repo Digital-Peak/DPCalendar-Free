@@ -32,8 +32,10 @@ $calendar = DPCalendarHelper::getCalendar($this->form->getValue('catid'));
 		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::CANCEL]); ?>
 		<?php echo $this->translate('JCANCEL'); ?>
 	</button>
-	<button type="button" class="dp-button dp-button-delete" data-task="delete">
-		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DELETE]); ?>
-		<?php echo $this->translate('JACTION_DELETE'); ?>
-	</button>
+	<?php if ($calendar && $calendar->canDelete) { ?>
+		<button type="button" class="dp-button dp-button-delete" data-task="delete">
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DELETE]); ?>
+			<?php echo $this->translate('JACTION_DELETE'); ?>
+		</button>
+	<?php } ?>
 </div>

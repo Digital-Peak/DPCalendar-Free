@@ -1,5 +1,5 @@
 /**!
-* tippy.js v4.3.3
+* tippy.js v4.3.5
 * (c) 2017-2019 atomiks
 * MIT License
 */
@@ -29,7 +29,7 @@
     return _extends.apply(this, arguments);
   }
 
-  var version = "4.3.3";
+  var version = "4.3.5";
 
   var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
   var ua = isBrowser ? navigator.userAgent : '';
@@ -602,6 +602,9 @@
     popper.className = POPPER_CLASS;
     popper.id = "tippy-".concat(id);
     popper.style.zIndex = '' + props.zIndex;
+    popper.style.position = 'absolute';
+    popper.style.top = '0';
+    popper.style.left = '0';
 
     if (props.role) {
       popper.setAttribute('role', props.role);
@@ -784,7 +787,6 @@
     var showTimeoutId;
     var hideTimeoutId;
     var scheduleHideAnimationFrameId;
-    var startTransitionAnimationFrameId;
     var isScheduledToShow = false;
     var isBeingDestroyed = false;
     var previousPlacement;
@@ -936,14 +938,19 @@
 
     function makeSticky() {
       setTransitionDuration([popper], isIE ? 0 : instance.props.updateDuration);
+      var prevRefRect = reference.getBoundingClientRect();
 
       function updatePosition() {
-        instance.popperInstance.scheduleUpdate();
+        var currentRefRect = reference.getBoundingClientRect(); // Only schedule an update if the reference rect has changed
+
+        if (prevRefRect.top !== currentRefRect.top || prevRefRect.right !== currentRefRect.right || prevRefRect.bottom !== currentRefRect.bottom || prevRefRect.left !== currentRefRect.left) {
+          instance.popperInstance.scheduleUpdate();
+        }
+
+        prevRefRect = currentRefRect;
 
         if (instance.state.isMounted) {
           requestAnimationFrame(updatePosition);
-        } else {
-          setTransitionDuration([popper], 0);
         }
       }
 
@@ -1109,6 +1116,9 @@
 
       if (isCursorOverReference || !instance.props.interactive) {
         instance.popperInstance.reference = _extends({}, instance.popperInstance.reference, {
+          // This will exist in next Popper.js feature release to fix #532
+          // @ts-ignore
+          referenceNode: reference,
           // These `client` values don't get used by Popper.js if they are 0
           clientWidth: 0,
           clientHeight: 0,
@@ -1277,6 +1287,7 @@
     function runMountCallback() {
       if (!hasMountCallbackRun && currentMountCallback) {
         hasMountCallbackRun = true;
+        reflow(popper);
         currentMountCallback();
       }
     }
@@ -1413,6 +1424,15 @@
           instance.popperInstance.enableEventListeners();
         }
       }
+
+      var appendTo = instance.props.appendTo;
+      var parentNode = appendTo === 'parent' ? reference.parentNode : invokeWithArgsOrReturn(appendTo, [reference]);
+
+      if (!parentNode.contains(popper)) {
+        parentNode.appendChild(popper);
+        instance.props.onMount(instance);
+        instance.state.isMounted = true;
+      }
     }
     /**
      * Setup before show() is invoked (delays, etc.)
@@ -1474,7 +1494,9 @@
       clearDelayTimeouts();
 
       if (!instance.state.isVisible) {
-        return removeFollowCursorListener();
+        removeFollowCursorListener();
+        removeDocumentClickListener();
+        return;
       }
 
       isScheduledToShow = false;
@@ -1561,7 +1583,7 @@
       validateOptions(options, defaultProps);
       removeTriggersFromReference();
       var prevProps = instance.props;
-      var nextProps = evaluateProps(reference, _extends({}, instance.props, options, {
+      var nextProps = evaluateProps(reference, _extends({}, instance.props, {}, options, {
         ignoreAttributes: true
       }));
       nextProps.ignoreAttributes = hasOwnProperty(options, 'ignoreAttributes') ? options.ignoreAttributes || false : prevProps.ignoreAttributes;
@@ -1641,15 +1663,6 @@
           return;
         }
 
-        var appendTo = instance.props.appendTo;
-        var parentNode = appendTo === 'parent' ? reference.parentNode : invokeWithArgsOrReturn(appendTo, [reference]);
-
-        if (!parentNode.contains(popper)) {
-          parentNode.appendChild(popper);
-          instance.props.onMount(instance);
-          instance.state.isMounted = true;
-        }
-
         var isInLooseFollowCursorMode = getIsInLooseFollowCursorMode();
 
         if (isInLooseFollowCursorMode && lastMouseMoveEvent) {
@@ -1657,31 +1670,26 @@
         } else if (!isInLooseFollowCursorMode) {
           // Double update will apply correct mutations
           instance.popperInstance.update();
-        } // Wait for the next tick
+        }
 
+        if (instance.popperChildren.backdrop) {
+          instance.popperChildren.content.style.transitionDelay = Math.round(duration / 12) + 'ms';
+        }
 
-        startTransitionAnimationFrameId = requestAnimationFrame(function () {
-          reflow(popper);
+        if (instance.props.sticky) {
+          makeSticky();
+        }
 
-          if (instance.popperChildren.backdrop) {
-            instance.popperChildren.content.style.transitionDelay = Math.round(duration / 12) + 'ms';
+        setTransitionDuration([popper], instance.props.updateDuration);
+        setTransitionDuration(transitionableElements, duration);
+        setVisibilityState(transitionableElements, 'visible');
+        onTransitionedIn(duration, function () {
+          if (instance.props.aria) {
+            getEventListenersTarget().setAttribute("aria-".concat(instance.props.aria), popper.id);
           }
 
-          if (instance.props.sticky) {
-            makeSticky();
-          }
-
-          setTransitionDuration([popper], instance.props.updateDuration);
-          setTransitionDuration(transitionableElements, duration);
-          setVisibilityState(transitionableElements, 'visible');
-          onTransitionedIn(duration, function () {
-            if (instance.props.aria) {
-              getEventListenersTarget().setAttribute("aria-".concat(instance.props.aria), popper.id);
-            }
-
-            instance.props.onShown(instance);
-            instance.state.isShown = true;
-          });
+          instance.props.onShown(instance);
+          instance.state.isShown = true;
         });
       };
 
@@ -1703,7 +1711,6 @@
         return;
       }
 
-      cancelAnimationFrame(startTransitionAnimationFrameId);
       removeDocumentClickListener();
       popper.style.visibility = 'hidden';
       instance.state.isVisible = false;
@@ -1853,7 +1860,7 @@
       globalEventListenersBound = true;
     }
 
-    var props = _extends({}, defaultProps, options); // If they are specifying a virtual positioning reference, we need to polyfill
+    var props = _extends({}, defaultProps, {}, options); // If they are specifying a virtual positioning reference, we need to polyfill
     // some native DOM props
 
 

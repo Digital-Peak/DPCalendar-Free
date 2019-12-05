@@ -87,7 +87,7 @@ class Location
 
 	public static function getMapLink($locations)
 	{
-		if (!$locations) {
+		if (!$locations || DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'none') {
 			return '';
 		}
 
@@ -170,7 +170,7 @@ class Location
 			self::fillObjectFromGoogle($location, $locObject);
 		} else if ($provider == 'mapbox') {
 			self::fillObjectFromMapbox($location, $locObject);
-		} else {
+		} else if ($provider != 'none') {
 			self::fillObjectFromOpenStreetMap($location, $locObject);
 		}
 
@@ -193,6 +193,10 @@ class Location
 
 	public static function search($address)
 	{
+		if (DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'none') {
+			return [];
+		}
+
 		if (DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'google') {
 			return self::searchInGoogle($address);
 		}

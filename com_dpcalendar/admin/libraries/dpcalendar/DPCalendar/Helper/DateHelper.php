@@ -35,9 +35,13 @@ class DateHelper
 
 		$rule->loadFromArray($parts);
 
-		$textTransformer = new \Recurr\Transformer\TextTransformer(
-			new \Recurr\Transformer\Translator(substr(DPCalendarHelper::getFrLanguage(), 0, 2))
-		);
+		$translator = new \Recurr\Transformer\Translator();
+		try {
+			$translator->loadLocale(substr(DPCalendarHelper::getFrLanguage(), 0, 2));
+		} catch (\InvalidArgumentException $e) {
+			//Translation doesn't exist, ignore it
+		}
+		$textTransformer = new \Recurr\Transformer\TextTransformer($translator);
 
 		$string = ucfirst($textTransformer->transform($rule));
 

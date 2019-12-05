@@ -30,11 +30,15 @@ use Sabre\VObject\Reader;
  */
 abstract class DPCalendarPlugin extends \JPlugin
 {
-
 	public $extCalendarsCache = null;
 	protected $identifier = null;
 	protected $cachingEnabled = true;
 	protected $autoloadLanguage = true;
+
+	public function getIdentifier()
+	{
+		return $this->identifier;
+	}
 
 	public function fetchEvent($eventId, $calendarId)
 	{

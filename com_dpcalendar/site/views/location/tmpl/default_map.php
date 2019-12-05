@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-if (!$this->params->get('location_show_map', 1)) {
+if (!$this->params->get('location_show_map', 1) || $this->params->get('map_provider', 'openstreetmap') == 'none') {
 	return;
 }
 $this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
@@ -16,13 +16,13 @@ $description = '<a href="' . $this->router->getLocationRoute($this->location) . 
 ?>
 <div class="com-dpcalendar-location__map dp-location">
 	<div class="dp-map dp-location__details"
-	     data-width="<?php echo $this->params->get('location_map_width', '100%'); ?>"
-	     data-height="<?php echo $this->params->get('location_map_height', '250px'); ?>"
-	     data-zoom="<?php echo $this->params->get('location_map_zoom', 10); ?>"
-	     data-latitude="<?php echo $this->location->latitude; ?>"
-	     data-longitude="<?php echo $this->location->longitude; ?>"
-	     data-title="<?php echo $this->location->title; ?>"
-	     data-description="<?php echo $this->escape($description); ?>"
-	     data-color="<?php echo $this->location->color; ?>">
+		 data-width="<?php echo $this->params->get('location_map_width', '100%'); ?>"
+		 data-height="<?php echo $this->params->get('location_map_height', '250px'); ?>"
+		 data-zoom="<?php echo $this->params->get('location_map_zoom', 10); ?>"
+		 data-latitude="<?php echo $this->location->latitude; ?>"
+		 data-longitude="<?php echo $this->location->longitude; ?>"
+		 data-title="<?php echo $this->location->title; ?>"
+		 data-description="<?php echo $this->escape($description); ?>"
+		 data-color="<?php echo $this->location->color; ?>">
 	</div>
 </div>

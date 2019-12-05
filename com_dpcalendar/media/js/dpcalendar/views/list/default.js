@@ -88,8 +88,10 @@ DPCalendar = window.DPCalendar || {};
 					input.value = '';
 				});
 
-				root.querySelector('[name=radius]').value = 20;
-				root.querySelector('[name=length-type]').value = 'm';
+				if (geoComplete) {
+					root.querySelector('[name=radius]').value = 20;
+					root.querySelector('[name=length-type]').value = 'm';
+				}
 
 				root.querySelector('.dp-form:not(.dp-timezone)').submit();
 

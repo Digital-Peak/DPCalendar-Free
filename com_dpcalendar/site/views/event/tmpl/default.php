@@ -16,6 +16,9 @@ $contentClass = '';
 if ($imageContent = $this->loadTemplate('image_full')) {
 	$contentClass .= ' has-image';
 }
+if ($taxesContent = $this->loadTemplate('taxes')) {
+	$contentClass .= ' has-taxes';
+}
 if ($informationContent = $this->loadTemplate('information')) {
 	$contentClass .= ' has-information';
 }
@@ -34,6 +37,9 @@ if ($bookingsContent = $this->loadTemplate('bookings')) {
 if ($seriesContent = $this->loadTemplate('series')) {
 	$contentClass .= ' has-series';
 }
+if ($scheduleContent = $this->loadTemplate('schedule')) {
+	$contentClass .= ' has-schedule';
+}
 if ($ticketsContent = $this->loadTemplate('tickets')) {
 	$contentClass .= ' has-tickets';
 }
@@ -50,6 +56,7 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 			<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('event_textbefore'))); ?>
 		</div>
 	</div>
+	<?php echo $taxesContent; ?>
 	<?php echo $imageContent; ?>
 	<?php echo $informationContent; ?>
 	<?php echo $headerContent; ?>
@@ -57,6 +64,7 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 	<?php echo $descriptionContent; ?>
 	<?php echo $bookingsContent; ?>
 	<?php echo $seriesContent; ?>
+	<?php echo $scheduleContent; ?>
 	<?php echo $locationsContent; ?>
 	<?php echo $ticketsContent; ?>
 	<div class="com-dpcalendar-event__custom-text com-dpcalendar-event__custom-text-after">

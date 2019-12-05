@@ -33,6 +33,10 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 
 		if ($return = $this->input->get('return', null, 'base64')) {
 			$this->setRedirect(base64_decode($return));
+		} else if ($result) {
+			$this->setRedirect(
+				DPCalendarHelperRoute::getLocationRoute($this->getModel()->getItem(JFactory::getApplication()->getUserState('dpcalendar.location.id')))
+			);
 		} else {
 			$this->setRedirect(JUri::base());
 		}

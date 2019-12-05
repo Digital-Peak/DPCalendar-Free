@@ -110,7 +110,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const INFO = 'info';
+	const INFO = 'info-circle-solid';
 
 	/**
 	 * The users icon.

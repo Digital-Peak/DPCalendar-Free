@@ -84,6 +84,14 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-icon .dp-location__description {
+	display: none;
+}
+
+.mod-dpcalendar-upcoming-icon__map {
+	margin-top: 5px;
+}
+
 .mod-dpcalendar-upcoming-icon .dp-flatcalendar {
 	float: left;
 	font-size: 0.7em;

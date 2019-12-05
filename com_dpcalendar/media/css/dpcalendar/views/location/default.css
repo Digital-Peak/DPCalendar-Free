@@ -21,10 +21,6 @@
 	}
 }
 
-.com-dpcalendar-location .fc-title {
-	overflow-wrap: break-word;
-}
-
 .com-dpcalendar-location .fc-timelineYear-view .fc-time-area col {
 	min-width: 100px;
 }
@@ -41,10 +37,23 @@
 	min-width: 100px;
 }
 
+.com-dpcalendar-location .fc-title {
+	overflow-wrap: break-word;
+}
+
 .com-dpcalendar-location .fc-day-grid-event > .fc-content,
 .com-dpcalendar-location .fc-timeline-event > .fc-content {
 	white-space: normal;
 	overflow: visible;
+}
+
+.com-dpcalendar-location .fc-bgevent-skeleton {
+	pointer-events: none;
+}
+
+.com-dpcalendar-location .fc-bgevent-skeleton .fc-bgevent {
+	pointer-events: auto;
+	cursor: pointer;
 }
 
 .com-dpcalendar-location .fc-header-toolbar {

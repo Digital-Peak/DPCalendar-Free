@@ -30,12 +30,6 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 		$this->form       = $this->get('Form');
 		$this->returnPage = $this->get('ReturnPage');
 
-		JForm::addFieldPath(JPATH_COMPONENT_ADMINISTRATOR . '/models/files/');
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		$this->locationForm = JModelLegacy::getInstance('Location', 'DPCalendarModel', ['ignore_request' => true])->getForm([], false, 'location');
-		$this->locationForm->setFieldAttribute('title', 'required', false);
-		$this->locationForm->setFieldAttribute('rooms', 'label', 'COM_DPCALENDAR_ROOMS');
-
 		$authorised = true;
 		if (empty($this->event->id)) {
 			$tmp        = $this->app->triggerEvent('onCalendarsFetch', array(null, 'cd'));

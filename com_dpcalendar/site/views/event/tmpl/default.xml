@@ -124,6 +124,11 @@
 			<field name="event_textafter" type="textarea"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
 			       rows="5" cols="50" filter="safehtml"/>
+			<field name="event_count_clicks" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 		</fieldset>
 		<fieldset name="form" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_LABEL">
 			<field name="event_form_date_format" type="text" useglobal="true"
@@ -154,6 +159,21 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
+			<field name="event_form_map_zoom" type="text" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
+			<field name="event_form_map_width" type="text" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
+			<field name="event_form_map_height" type="text" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
+			<field name="event_form_map_latitude" type="text" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+			<field name="event_form_map_longitude" type="text" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 
 			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TABS_LABEL"/>
 			<field name="event_form_change_location" type="list" useglobal="true"
@@ -346,7 +366,7 @@
 			       label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
 			<field name="event_form_price" type="text" useglobal="true" size="6"
 			       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
-			<field name="event_form_plugintype" type="plugins" folder="dpcalendarpay" multiple="true" useglobal="true"
+			<field name="event_form_plugintype" type="plugins" folder="dpcalendarpay" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
 				<option value="0">COM_DPCALENDAR_FIELD_PAYMENT_TYPE_ALL</option>
 			</field>
@@ -492,6 +512,8 @@
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
 				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 			</field>
+			<field name="booking_form_default_country" type="dpcountries" class="dp-form-input dp-select"
+			       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>
 		</fieldset>
 		<fieldset name="ticket" label="COM_DPCALENDAR_TICKET"
 		          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">

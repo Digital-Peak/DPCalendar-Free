@@ -403,13 +403,13 @@ class DPCalendarHelperRoute
 		}
 		if ($needles) {
 			$active = $menus->getActive();
-			if ($active && $active->component == 'com_dpcalendar' && isset($active->query) && isset($active->query['view']) &&
-				isset($needles[$active->query['view']])
-			) {
+			if ($active
+				&& $active->component == 'com_dpcalendar'
+				&& isset($active->query)
+				&& isset($active->query['view'])
+				&& isset($needles[$active->query['view']])) {
 				// Move the actual item to the first position
-				$tmp = array(
-					$active->query['view'] => $needles[$active->query['view']]
-				);
+				$tmp = array($active->query['view'] => $needles[$active->query['view']]);
 				unset($needles[$active->query['view']]);
 				$needles = array_merge($tmp, $needles);
 			}

@@ -37,33 +37,43 @@ if ($params->get('show_as_popup')) {
 }
 ?>
 <div class="mod-dpcalendar-counter mod-dpcalendar-counter-<?php echo $module->id; ?>"
-     data-date="<?php echo $dateHelper->getDate($event->start_date, $event->all_day)->format('c', true); ?>"
-     data-modal="<?php echo $params->get('show_as_popup'); ?>"
-     data-counting="<?php echo !$params->get('disable_counting'); ?>">
+	 data-date="<?php echo $dateHelper->getDate($event->start_date, $event->all_day)->format('c', true); ?>"
+	 data-modal="<?php echo $params->get('show_as_popup'); ?>"
+	 data-counting="<?php echo !$params->get('disable_counting'); ?>">
 	<div class="mod-dpcalendar-counter__upcoming">
 		<div class="mod-dpcalendar-counter__intro-text">
 			<?php echo $translator->translate('MOD_DPCALENDAR_COUNTER_SOON_OUTPUT'); ?>
 		</div>
-		<span class="mod-dpcalendar-counter__year dp-counter-block">
-			<span class="dp-counter-block__number"></span>
-			<span class="dp-counter-block__content"></span>
-		</span>
-		<span class="mod-dpcalendar-counter__month dp-counter-block">
-			<span class="dp-counter-block__number"></span>
-			<span class="dp-counter-block__content"></span>
-		</span>
-		<span class="mod-dpcalendar-counter__week dp-counter-block">
-			<span class="dp-counter-block__number"></span>
-			<span class="dp-counter-block__content"></span>
-		</span>
-		<span class="mod-dpcalendar-counter__day dp-counter-block">
-			<span class="dp-counter-block__number"></span>
-			<span class="dp-counter-block__content"></span>
-		</span>
-		<span class="mod-dpcalendar-counter__hour dp-counter-block">
-			<span class="dp-counter-block__number"></span>
-			<span class="dp-counter-block__content"></span>
-		</span>
+		<?php if ($params->get('show_field_year', 1)) { ?>
+			<span class="mod-dpcalendar-counter__year dp-counter-block">
+				<span class="dp-counter-block__number"></span>
+				<span class="dp-counter-block__content"></span>
+			</span>
+		<?php } ?>
+		<?php if ($params->get('show_field_month', 1)) { ?>
+			<span class="mod-dpcalendar-counter__month dp-counter-block">
+				<span class="dp-counter-block__number"></span>
+				<span class="dp-counter-block__content"></span>
+			</span>
+		<?php } ?>
+		<?php if ($params->get('show_field_week', 1)) { ?>
+			<span class="mod-dpcalendar-counter__week dp-counter-block">
+				<span class="dp-counter-block__number"></span>
+				<span class="dp-counter-block__content"></span>
+			</span>
+		<?php } ?>
+		<?php if ($params->get('show_field_day', 1)) { ?>
+			<span class="mod-dpcalendar-counter__day dp-counter-block">
+				<span class="dp-counter-block__number"></span>
+				<span class="dp-counter-block__content"></span>
+			</span>
+		<?php } ?>
+		<?php if ($params->get('show_field_hour', 1)) { ?>
+			<span class="mod-dpcalendar-counter__hour dp-counter-block">
+				<span class="dp-counter-block__number"></span>
+				<span class="dp-counter-block__content"></span>
+			</span>
+		<?php } ?>
 		<span class="mod-dpcalendar-counter__minute dp-counter-block">
 			<span class="dp-counter-block__number"></span>
 			<span class="dp-counter-block__content"></span>

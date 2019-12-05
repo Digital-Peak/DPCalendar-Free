@@ -53,9 +53,7 @@
 
 .com-dpcalendar-tickets .dp-table {
 	border-collapse: collapse;
-	border-spacing: 0;
 	empty-cells: show;
-	border: 1px solid #cbcbcb;
 	width: 100%;
 }
 
@@ -67,21 +65,14 @@
 
 .com-dpcalendar-tickets .dp-table td,
 .com-dpcalendar-tickets .dp-table th {
-	border-left: 1px solid #cbcbcb;
-	border-width: 0 0 0 1px;
 	font-size: inherit;
 	margin: 0;
 	overflow: visible;
-	padding: 0.4em 1em;
+	padding: 0.7em 1em;
 	text-align: center;
 }
 
-.com-dpcalendar-tickets .dp-table td:first-child,
-.com-dpcalendar-tickets .dp-table th:first-child {
-	border-left-width: 0;
-}
-
-.com-dpcalendar-tickets .dp-table thead {
+.com-dpcalendar-tickets .dp-table__thead, .com-dpcalendar-tickets .dp-table thead {
 	text-align: left;
 	vertical-align: bottom;
 }
@@ -102,33 +93,22 @@
 	background-color: #f2f2f2;
 }
 
-.com-dpcalendar-tickets .dp-table td, .com-dpcalendar-tickets .dp-table th {
-	border-bottom: 1px solid #cbcbcb;
-}
-
-.com-dpcalendar-tickets .dp-table tbody > tr:last-child {
-	border-bottom-width: 0;
-}
-
 @media screen and (max-width: 767px) {
 	.com-dpcalendar-tickets .dp-table,
-	.com-dpcalendar-tickets .dp-table thead,
-	.com-dpcalendar-tickets .dp-table tbody,
+	.com-dpcalendar-tickets .dp-table tbody:not(.dp-table__thead),
 	.com-dpcalendar-tickets .dp-table th,
 	.com-dpcalendar-tickets .dp-table td,
 	.com-dpcalendar-tickets .dp-table tr {
 		display: block;
 	}
-	.com-dpcalendar-tickets .dp-table thead {
+	.com-dpcalendar-tickets .dp-table__thead, .com-dpcalendar-tickets .dp-table thead {
 		display: none;
 	}
 	.com-dpcalendar-tickets .dp-table tr {
 		margin: 0;
 		padding: 0;
-		border: 0;
 	}
 	.com-dpcalendar-tickets .dp-table td {
-		border: none;
 		position: relative;
 		padding-left: 50%;
 		text-align: left;
@@ -143,7 +123,6 @@
 	.com-dpcalendar-tickets .dp-table td,
 	.com-dpcalendar-tickets .dp-table th {
 		box-sizing: border-box;
-		border-bottom: 0;
 		text-align: left !important;
 	}
 	.com-dpcalendar-tickets .dp-table td > div,

@@ -12,6 +12,11 @@
 
 		<field name="price" type="text"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_PRICE_DESC"/>
+		<field name="tax" type="text"
+		       label="COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_TAX_DESC"/>
+		<field name="tax_rate" type="text"
+		       label="COM_DPCALENDAR_BOOKING_FIELD_TAX_RATE_LABEL"
+		       description="COM_DPCALENDAR_BOOKING_FIELD_TAX_RATE_DESC"/>
 		<field name="processor" type="plugins" folder="dpcalendarpay"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_PROCESSOR_LABEL">
 			<option value=""></option>
@@ -33,7 +38,7 @@
 		       label="COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NAME_DESC"/>
 		<field name="email" type="email" required="true" class="dp-form-input"
 		       label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
-		<field name="country" type="text" class="dp-form-input"
+		<field name="country" type="dpcountries" class="dp-form-input dp-select"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>
 		<field name="province" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL" description=""/>

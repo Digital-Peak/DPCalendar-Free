@@ -1,8 +1,6 @@
 .com-dpcalendar-tools-translate .dp-table {
 	border-collapse: collapse;
-	border-spacing: 0;
 	empty-cells: show;
-	border: 1px solid #cbcbcb;
 	width: 100%;
 }
 
@@ -14,21 +12,14 @@
 
 .com-dpcalendar-tools-translate .dp-table td,
 .com-dpcalendar-tools-translate .dp-table th {
-	border-left: 1px solid #cbcbcb;
-	border-width: 0 0 0 1px;
 	font-size: inherit;
 	margin: 0;
 	overflow: visible;
-	padding: 0.4em 1em;
+	padding: 0.7em 1em;
 	text-align: center;
 }
 
-.com-dpcalendar-tools-translate .dp-table td:first-child,
-.com-dpcalendar-tools-translate .dp-table th:first-child {
-	border-left-width: 0;
-}
-
-.com-dpcalendar-tools-translate .dp-table thead {
+.com-dpcalendar-tools-translate .dp-table__thead, .com-dpcalendar-tools-translate .dp-table thead {
 	text-align: left;
 	vertical-align: bottom;
 }
@@ -49,33 +40,22 @@
 	background-color: #f2f2f2;
 }
 
-.com-dpcalendar-tools-translate .dp-table td, .com-dpcalendar-tools-translate .dp-table th {
-	border-bottom: 1px solid #cbcbcb;
-}
-
-.com-dpcalendar-tools-translate .dp-table tbody > tr:last-child {
-	border-bottom-width: 0;
-}
-
 @media screen and (max-width: 767px) {
 	.com-dpcalendar-tools-translate .dp-table,
-	.com-dpcalendar-tools-translate .dp-table thead,
-	.com-dpcalendar-tools-translate .dp-table tbody,
+	.com-dpcalendar-tools-translate .dp-table tbody:not(.dp-table__thead),
 	.com-dpcalendar-tools-translate .dp-table th,
 	.com-dpcalendar-tools-translate .dp-table td,
 	.com-dpcalendar-tools-translate .dp-table tr {
 		display: block;
 	}
-	.com-dpcalendar-tools-translate .dp-table thead {
+	.com-dpcalendar-tools-translate .dp-table__thead, .com-dpcalendar-tools-translate .dp-table thead {
 		display: none;
 	}
 	.com-dpcalendar-tools-translate .dp-table tr {
 		margin: 0;
 		padding: 0;
-		border: 0;
 	}
 	.com-dpcalendar-tools-translate .dp-table td {
-		border: none;
 		position: relative;
 		padding-left: 50%;
 		text-align: left;
@@ -90,7 +70,6 @@
 	.com-dpcalendar-tools-translate .dp-table td,
 	.com-dpcalendar-tools-translate .dp-table th {
 		box-sizing: border-box;
-		border-bottom: 0;
 		text-align: left !important;
 	}
 	.com-dpcalendar-tools-translate .dp-table td > div,

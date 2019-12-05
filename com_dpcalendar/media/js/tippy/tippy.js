@@ -1,13 +1,14 @@
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 /**!
 * tippy.js v4.3.5
 * (c) 2017-2019 atomiks
 * MIT License
 */
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('popper.js')) :
-  typeof define === 'function' && define.amd ? define(['popper.js'], factory) :
-  (global = global || self, global.tippy = factory(global.Popper));
-}(this, function (Popper) { 'use strict';
+  (typeof exports === "undefined" ? "undefined" : _typeof(exports)) === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('popper.js')) : typeof define === 'function' && define.amd ? define(['popper.js'], factory) : (global = global || self, global.tippy = factory(global.Popper));
+})(this, function (Popper) {
+  'use strict';
 
   Popper = Popper && Popper.hasOwnProperty('default') ? Popper['default'] : Popper;
 
@@ -30,13 +31,11 @@
   }
 
   var version = "4.3.5";
-
   var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
   var ua = isBrowser ? navigator.userAgent : '';
   var isIE = /MSIE |Trident\//.test(ua);
   var isUCBrowser = /UCBrowser\//.test(ua);
   var isIOS = isBrowser && /iPhone|iPad|iPod/.test(navigator.platform) && !window.MSStream;
-
   var defaultProps = {
     a11y: true,
     allowHTML: true,
@@ -95,7 +94,6 @@
 
   };
   var POPPER_INSTANCE_DEPENDENCIES = ['arrow', 'arrowType', 'boundary', 'distance', 'flip', 'flipBehavior', 'flipOnUpdate', 'offset', 'placement', 'popperOptions'];
-
   var elementProto = isBrowser ? Element.prototype : {};
   var matches = elementProto.matches || elementProto.matchesSelector || elementProto.webkitMatchesSelector || elementProto.mozMatchesSelector || elementProto.msMatchesSelector;
   /**
@@ -109,6 +107,7 @@
    * Ponyfill for Element.prototype.closest
    */
 
+
   function closest(element, selector) {
     return closestCallback(element, function (el) {
       return matches.call(el, selector);
@@ -117,6 +116,7 @@
   /**
    * Works like Element.prototype.closest, but uses a callback instead
    */
+
 
   function closestCallback(element, callback) {
     while (element) {
@@ -128,9 +128,9 @@
     }
 
     return null;
-  }
+  } // Passive event listener config
 
-  // Passive event listener config
+
   var PASSIVE = {
     passive: true // Popper `preventOverflow` padding
 
@@ -156,8 +156,8 @@
   var BACKDROP_SELECTOR = ".".concat(BACKDROP_CLASS);
   var ARROW_SELECTOR = ".".concat(ARROW_CLASS);
   var ROUND_ARROW_SELECTOR = ".".concat(ROUND_ARROW_CLASS);
-
   var isUsingTouch = false;
+
   function onDocumentTouch() {
     if (isUsingTouch) {
       return;
@@ -173,7 +173,9 @@
       document.addEventListener('mousemove', onDocumentMouseMove);
     }
   }
+
   var lastMouseMoveTime = 0;
+
   function onDocumentMouseMove() {
     var now = performance.now(); // Chrome 60+ is 1 mousemove per animation frame, use 20ms time difference
 
@@ -188,6 +190,7 @@
 
     lastMouseMoveTime = now;
   }
+
   function onWindowBlur() {
     var _document = document,
         activeElement = _document.activeElement;
@@ -199,6 +202,7 @@
   /**
    * Adds the needed global event listeners
    */
+
 
   function bindGlobalEventListeners() {
     document.addEventListener('touchstart', onDocumentTouch, PASSIVE);
@@ -235,6 +239,7 @@
    * Polyfills the virtual reference (plain object) with Element.prototype props
    * Mutating because DOM elements are mutated, adds `_tippy` property
    */
+
 
   function polyfillElementPrototypeProperties(virtualReference) {
     var polyfills = {
@@ -273,13 +278,13 @@
       virtualReference[key] = polyfills[key];
     }
   }
-
   /**
    * Determines if a value is a "bare" virtual element (before mutations done
    * by `polyfillElementPrototypeProperties()`). JSDOM elements show up as
    * [object Object], we can check if the value is "element-like" if it has
    * `addEventListener`
    */
+
 
   function isBareVirtualElement(value) {
     return {}.toString.call(value) === '[object Object]' && !value.addEventListener;
@@ -288,6 +293,7 @@
    * Determines if the value is a reference element
    */
 
+
   function isReferenceElement(value) {
     return !!value._tippy && !matches.call(value, POPPER_SELECTOR);
   }
@@ -295,12 +301,14 @@
    * Safe .hasOwnProperty check, for prototype-less objects
    */
 
+
   function hasOwnProperty(obj, key) {
     return {}.hasOwnProperty.call(obj, key);
   }
   /**
    * Returns an array of elements based on the value
    */
+
 
   function getArrayOfElements(value) {
     if (isSingular(value)) {
@@ -326,6 +334,7 @@
    * Returns a value at a given index depending on if it's an array or number
    */
 
+
   function getValue(value, index, defaultValue) {
     if (Array.isArray(value)) {
       var v = value[index];
@@ -339,6 +348,7 @@
    * argument here, a more generic function would pass all arguments. Only
    * `onMouseMove` uses this which takes the event object for now.
    */
+
 
   function debounce(fn, ms) {
     // Avoid wrapping in `setTimeout` if ms is 0 anyway
@@ -359,12 +369,14 @@
    * in `popperOptions`
    */
 
+
   function getModifier(obj, key) {
     return obj && obj.modifiers && obj.modifiers[key];
   }
   /**
    * Determines if an array or string includes a value
    */
+
 
   function includes(a, b) {
     return a.indexOf(b) > -1;
@@ -373,12 +385,14 @@
    * Determines if the value is a real element
    */
 
+
   function isRealElement(value) {
     return value instanceof Element;
   }
   /**
    * Determines if the value is singular-like
    */
+
 
   function isSingular(value) {
     return !!(value && hasOwnProperty(value, 'isVirtual')) || isRealElement(value);
@@ -387,6 +401,7 @@
    * Firefox extensions don't allow setting .innerHTML directly, this will trick it
    */
 
+
   function innerHTML() {
     return 'innerHTML';
   }
@@ -394,12 +409,14 @@
    * Evaluates a function if one, or returns the value
    */
 
+
   function invokeWithArgsOrReturn(value, args) {
     return typeof value === 'function' ? value.apply(null, args) : value;
   }
   /**
    * Sets a popperInstance `flip` modifier's enabled state
    */
+
 
   function setFlipModifierEnabled(modifiers, value) {
     modifiers.filter(function (m) {
@@ -411,6 +428,7 @@
    * Always returns true for virtual objects
    */
 
+
   function canReceiveFocus(element) {
     return isRealElement(element) ? matches.call(element, 'a[href],area[href],button,details,input,textarea,select,iframe,[tabindex]') && !element.hasAttribute('disabled') : true;
   }
@@ -418,12 +436,14 @@
    * Returns a new `div` element
    */
 
+
   function div() {
     return document.createElement('div');
   }
   /**
    * Applies a transition duration to a list of elements
    */
+
 
   function setTransitionDuration(els, value) {
     els.forEach(function (el) {
@@ -436,6 +456,7 @@
    * Sets the visibility state to elements so they can begin to transition
    */
 
+
   function setVisibilityState(els, state) {
     els.forEach(function (el) {
       if (el) {
@@ -447,6 +468,7 @@
    * Evaluates the props object by merging data attributes and
    * disabling conflicting options where necessary
    */
+
 
   function evaluateProps(reference, props) {
     var out = _extends({}, props, {
@@ -463,6 +485,7 @@
    * Validates an object of options with the valid default props object
    */
 
+
   function validateOptions(options, defaultProps) {
     Object.keys(options).forEach(function (option) {
       if (!hasOwnProperty(defaultProps, option)) {
@@ -470,10 +493,10 @@
       }
     });
   }
-
   /**
    * Sets the innerHTML of an element
    */
+
 
   function setInnerHTML(element, html) {
     element[innerHTML()] = isRealElement(html) ? html[innerHTML()] : html;
@@ -481,6 +504,7 @@
   /**
    * Sets the content of a tooltip
    */
+
 
   function setContent(contentEl, props) {
     if (isRealElement(props.content)) {
@@ -495,6 +519,7 @@
    * Returns the child elements of a popper element
    */
 
+
   function getChildren(popper) {
     return {
       tooltip: popper.querySelector(TOOLTIP_SELECTOR),
@@ -507,6 +532,7 @@
    * Adds `data-inertia` attribute
    */
 
+
   function addInertia(tooltip) {
     tooltip.setAttribute('data-inertia', '');
   }
@@ -514,12 +540,14 @@
    * Removes `data-inertia` attribute
    */
 
+
   function removeInertia(tooltip) {
     tooltip.removeAttribute('data-inertia');
   }
   /**
    * Creates an arrow element and returns it
    */
+
 
   function createArrowElement(arrowType) {
     var arrow = div();
@@ -537,6 +565,7 @@
    * Creates a backdrop element and returns it
    */
 
+
   function createBackdropElement() {
     var backdrop = div();
     backdrop.className = BACKDROP_CLASS;
@@ -547,6 +576,7 @@
    * Adds interactive-related attributes
    */
 
+
   function addInteractive(popper, tooltip) {
     popper.setAttribute('tabindex', '-1');
     tooltip.setAttribute('data-interactive', '');
@@ -555,6 +585,7 @@
    * Removes interactive-related attributes
    */
 
+
   function removeInteractive(popper, tooltip) {
     popper.removeAttribute('tabindex');
     tooltip.removeAttribute('data-interactive');
@@ -562,6 +593,7 @@
   /**
    * Add/remove transitionend listener from tooltip
    */
+
 
   function updateTransitionEndListener(tooltip, action, listener) {
     // UC Browser hasn't adopted the `transitionend` event despite supporting
@@ -573,6 +605,7 @@
    * Returns the popper's placement, ignoring shifting (top-start, etc)
    */
 
+
   function getBasicPlacement(popper) {
     var fullPlacement = popper.getAttribute(PLACEMENT_ATTRIBUTE);
     return fullPlacement ? fullPlacement.split('-')[0] : '';
@@ -581,12 +614,14 @@
    * Triggers reflow
    */
 
+
   function reflow(popper) {
     void popper.offsetHeight;
   }
   /**
    * Adds/removes theme from tooltip's classList
    */
+
 
   function updateTheme(tooltip, action, theme) {
     theme.split(' ').forEach(function (themeName) {
@@ -596,6 +631,7 @@
   /**
    * Constructs the popper element and returns it
    */
+
 
   function createPopperElement(id, props) {
     var popper = div();
@@ -646,6 +682,7 @@
   /**
    * Updates the popper element based on the new props
    */
+
 
   function updatePopperElement(popper, prevProps, nextProps) {
     var _getChildren = getChildren(popper),
@@ -714,6 +751,7 @@
    * Hides all visible poppers on the document
    */
 
+
   function hideAll() {
     var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
         excludedReferenceOrInstance = _ref.exclude,
@@ -740,6 +778,7 @@
    * region
    */
 
+
   function isCursorOutsideInteractiveBorder(popperPlacement, popperRect, event, props) {
     if (!popperPlacement) {
       return true;
@@ -759,6 +798,7 @@
    * Returns the distance offset, taking into account the default offset due to
    * the transform: translate() rule (10px) in CSS
    */
+
 
   function getOffsetDistanceInPx(distance) {
     return -(distance - 10) + 'px';
@@ -1777,11 +1817,12 @@
       instance.state.isDestroyed = true;
     }
   }
-
   /**
    * Groups an array of instances by taking control of their props during
    * certain lifecycles.
    */
+
+
   function group(instances) {
     var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
         _ref$delay = _ref.delay,
@@ -1920,6 +1961,4 @@
   }
 
   return tippy;
-
-}));
-//# sourceMappingURL=index.js.map
+});

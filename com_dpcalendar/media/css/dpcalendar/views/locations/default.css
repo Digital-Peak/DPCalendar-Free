@@ -1,7 +1,3 @@
-.com-dpcalendar-locations .fc-title {
-	overflow-wrap: break-word;
-}
-
 .com-dpcalendar-locations .fc-timelineYear-view .fc-time-area col {
 	min-width: 100px;
 }
@@ -18,10 +14,23 @@
 	min-width: 100px;
 }
 
+.com-dpcalendar-locations .fc-title {
+	overflow-wrap: break-word;
+}
+
 .com-dpcalendar-locations .fc-day-grid-event > .fc-content,
 .com-dpcalendar-locations .fc-timeline-event > .fc-content {
 	white-space: normal;
 	overflow: visible;
+}
+
+.com-dpcalendar-locations .fc-bgevent-skeleton {
+	pointer-events: none;
+}
+
+.com-dpcalendar-locations .fc-bgevent-skeleton .fc-bgevent {
+	pointer-events: auto;
+	cursor: pointer;
 }
 
 .com-dpcalendar-locations .fc-header-toolbar {

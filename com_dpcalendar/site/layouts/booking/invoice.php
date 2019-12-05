@@ -103,7 +103,13 @@ foreach ($fields as $key => $field) {
 			</tr>
 			<tr>
 				<td><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></td>
-				<td><?php echo DPCalendarHelper::renderPrice($booking->price, $params->get('currency_symbol', '$')); ?></td>
+				<td>
+					<?php echo DPCalendarHelper::renderPrice($booking->price, $params->get('currency_symbol', '$')); ?>
+					<?php if ($booking->tax && $booking->tax != '0.00') { ?>
+						(<?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL'); ?>
+						<?php echo DPCalendarHelper::renderPrice($booking->tax, $params->get('currency_symbol', '$')); ?>)
+					<?php } ?>
+				</td>
 			</tr>
 			<tr>
 				<td><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_TICKETS_LABEL'); ?></td>

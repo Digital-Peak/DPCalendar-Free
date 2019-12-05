@@ -14,6 +14,7 @@ class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
 	protected function init()
 	{
 		$this->getModel()->refreshUpdateSite();
+		\DPCalendar\Helper\Location::getCountryForIp();
 
 		$model = $this->getModel();
 

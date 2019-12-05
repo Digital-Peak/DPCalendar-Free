@@ -134,7 +134,7 @@ foreach ($events as $event) {
 	$groupedEvents[$lastHeading][] = $event;
 
 	$event->text = $event->description;
-	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.event', &$event, &$event->params, 0));
+	$app->triggerEvent('onContentPrepare', array('com_dpcalendar.event', &$event, &$event->params, 0));
 	$event->description = $event->text;
 
 	$event->realUrl = str_replace(
@@ -147,6 +147,12 @@ foreach ($events as $event) {
 
 	if ($desc && $params->get('description_length') > 0) {
 		$descTruncated = JHtmlString::truncateComplex($desc, $params->get('description_length', null));
+
+		// Move the dots inside the last tag
+		if (\DPCalendar\Helper\DPCalendarHelper::endsWith($descTruncated, '...') && $pos = strrpos($descTruncated, '</')) {
+			$descTruncated = trim(substr_replace($descTruncated, '...</', $pos, 2), '.');
+		}
+
 		if ($desc != $descTruncated) {
 			$event->alternative_readmore = JText::_('MOD_DPCALENDAR_UPCOMING_READ_MORE');
 
@@ -170,6 +176,27 @@ foreach ($events as $event) {
 		$date = $dateHelper->getDate($event->series_min_start_date);
 	}
 	$event->ongoing_start_date = $date < $now ? $date : null;
+
+	if ($params->get('show_display_events')) {
+		$event->displayEvent                    = new stdClass();
+		$results                                = $app->triggerEvent(
+			'onContentAfterTitle',
+			['com_dpcalendar.event', &$event, &$event->params, 0]
+		);
+		$event->displayEvent->afterDisplayTitle = trim(implode("\n", $results));
+
+		$results                                   = $app->triggerEvent(
+			'onContentBeforeDisplay',
+			['com_dpcalendar.event', &$event, &$event->params, 0]
+		);
+		$event->displayEvent->beforeDisplayContent = trim(implode("\n", $results));
+
+		$results                                  = $app->triggerEvent(
+			'onContentAfterDisplay',
+			['com_dpcalendar.event', &$event, &$event->params, 0]
+		);
+		$event->displayEvent->afterDisplayContent = trim(implode("\n", $results));
+	}
 }
 
 $return = $app->input->getInt('Itemid', null);

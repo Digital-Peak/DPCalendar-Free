@@ -223,19 +223,19 @@
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MAP_NO_PRINT</option>
 		</field>
-		<field name="map_zoom" type="text" default="4" showon="show_map:1"
+		<field name="map_zoom" type="text" default="4" showon="show_map:1[OR]show_map:2"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
-		<field name="map_width" type="text" default="100%" showon="show_map:1"
+		<field name="map_width" type="text" default="100%" showon="show_map:1[OR]show_map:2"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
-		<field name="map_height" type="text" default="350px" showon="show_map:1"
+		<field name="map_height" type="text" default="350px" showon="show_map:1[OR]show_map:2"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
-		<field name="map_lat" type="text" default="47" showon="show_map:1"
+		<field name="map_lat" type="text" default="47" showon="show_map:1[OR]show_map:2"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
-		<field name="map_long" type="text" default="4" showon="show_map:1"
+		<field name="map_long" type="text" default="4" showon="show_map:1[OR]show_map:2"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="first_hour" type="text" default="6"
@@ -439,6 +439,12 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+		<field name="list_show_display_events" type="radio" default="0" class="btn-group"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_DATA_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_DATA_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="list_show_map" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
@@ -596,7 +602,7 @@
 		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="event_textafter" type="textarea" rows="5" cols="50" filter="safehtml"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
-		<field name="count_clicks" type="radio" class="btn-group" default="1"
+		<field name="event_count_clicks" type="radio" class="btn-group" default="1"
 		       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
@@ -652,6 +658,22 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
+		<field name="event_form_map_zoom" type="text" default="10" showon="event_form_show_map:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
+		<field name="event_form_map_width" type="text" default="100%" showon="event_form_show_map:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
+		<field name="event_form_map_height" type="text" default="250px" showon="event_form_show_map:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
+		<field name="event_form_map_latitude" type="text" showon="event_form_show_map:1"
+		       default="47" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+		<field name="event_form_map_longitude" type="text" showon="event_form_show_map:1"
+		       default="4" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
+
 		<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TABS_LABEL"/>
 		<field name="event_form_change_location" type="radio" class="btn-group" default="1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_LOCATION_DESC">
@@ -1004,6 +1026,8 @@
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
 			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 		</field>
+		<field name="booking_form_default_country" type="dpcountries" class="dp-form-input dp-select"
+		       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>
 	</fieldset>
 
 	<fieldset name="ticket" label="COM_DPCALENDAR_TICKET"
@@ -1160,6 +1184,12 @@
 		<field name="locations_expand_events" type="radio" class="btn-group" default="1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="locations_show_my_only" type="radio" class="btn-group" default="0"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_SHOW_MY_ONLY_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_SHOW_MY_ONLY_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
@@ -1415,6 +1445,27 @@
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
 			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 		</field>
+		<field name="location_form_show_map" type="radio" class="btn-group"
+		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="location_form_map_zoom" type="text" default="10" showon="location_form_show_map:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
+		<field name="location_form_map_width" type="text" default="100%" showon="location_form_show_map:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
+		<field name="location_form_map_height" type="text" default="250px" showon="location_form_show_map:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
+		<field name="location_form_map_latitude" type="text" showon="location_form_show_map:1"
+		       default="47" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+		<field name="location_form_map_longitude" type="text" showon="location_form_show_map:1"
+		       default="4" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 	</fieldset>
 
 	<fieldset name="profile" label="COM_DPCALENDAR_FIELD_CONFIG_PROFILE_LABEL"
@@ -1549,7 +1600,7 @@
 		<field name="bookingsys_paid_booking_mail" type="editor" default="COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_PAYED_BODY"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_PAID_MAIL_TEXT_LABEL" filter="raw"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_PAID_MAIL_TEXT_DESC"/>
-		<field name="ordertext" type="editor" filter="raw"
+		<field name="ordertext" type="editor" filter="raw" default="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_TEXT"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ORDERTEXT_DESC"/>
 		<field name="canceltext" type="editor" filter="raw"

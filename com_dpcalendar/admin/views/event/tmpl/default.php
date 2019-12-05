@@ -32,6 +32,9 @@ if (!empty($this->event->tickets)) {
 }
 ?>
 <div class="com-dpcalendar-eventform">
+	<div class="com-dpcalendar-eventform__loader">
+		<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
+	</div>
 	<?php if ($this->event->original_id == '-1') { ?>
 		<h4 class="dp-info-box"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_ORIGINAL_WARNING'); ?></h4>
 	<?php } else if (!empty($this->event->original_id)) { ?>
@@ -44,10 +47,10 @@ if (!empty($this->event->tickets)) {
 	<?php } ?>
 	<?php if ($this->params->get('event_form_check_overlaping', 0)) { ?>
 		<div class="com-dpcalendar-eventform__overlapping dp-info-box"
-		     data-overlapping="<?php echo $this->params->get('event_form_check_overlaping', 0) == '2'; ?>"></div>
+			 data-overlapping="<?php echo $this->params->get('event_form_check_overlaping', 0) == '2'; ?>"></div>
 	<?php } ?>
 	<form class="com-dpcalendar-eventform__form dp-form form-validate" method="post" name="adminForm"
-	      action="<?php echo $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id); ?>">
+		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id); ?>">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', array('active' => 'general')); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
 			<?php echo JHtml::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
@@ -55,7 +58,7 @@ if (!empty($this->event->tickets)) {
 				<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
 			<?php } ?>
 			<?php if ($name == 'location') { ?>
-				<?php echo $this->loadTemplate('location'); ?>
+				<?php echo $this->loadTemplate('map'); ?>
 			<?php } ?>
 			<?php echo JHtml::_('bootstrap.endTab'); ?>
 		<?php } ?>

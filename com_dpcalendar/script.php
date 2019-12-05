@@ -9,17 +9,20 @@ defined('_JEXEC') or die();
 
 JLoader::register('DPCalendarHelper', dirname(__FILE__) . '/admin/helpers/dpcalendar.php');
 
-class Com_DPCalendarInstallerScript
+class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScript
 {
-
-	public function install($parent)
-	{
-	}
+	protected $minimumPhp = '5.6.0';
+	protected $minimumJoomla = '3.9.0';
 
 	public function update($parent)
 	{
 		$path    = JPATH_ADMINISTRATOR . '/components/com_dpcalendar/dpcalendar.xml';
 		$version = null;
+
+		if ($version == 'DP_DEPLOY_VERSION') {
+			return;
+		}
+
 		if (file_exists($path)) {
 			$manifest = simplexml_load_file($path);
 			$version  = (string)$manifest->version;
@@ -47,7 +50,7 @@ class Com_DPCalendarInstallerScript
 			// Upgrade SabreDAV
 			$db->setQuery("select id, calendardata from `#__dpcalendar_caldav_calendarobjects`");
 			$events = $db->loadObjectList();
-			JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+			JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 			foreach ($events as $event) {
 				try {
 					$vobj = Sabre\VObject\Reader::read($event->calendardata);
@@ -179,28 +182,9 @@ class Com_DPCalendarInstallerScript
 		}
 	}
 
-	public function uninstall($parent)
-	{
-	}
-
 	public function preflight($type, $parent)
 	{
-		// Check if the local Joomla version does fit the minimum requirement
-		if (version_compare(JVERSION, '3.9') == -1) {
-			JFactory::getApplication()->enqueueMessage(
-				'This DPCalendar version does only run on Joomla 3.9 and above, please upgrade your Joomla version first and then try again.',
-				'error');
-			JFactory::getApplication()->redirect('index.php?option=com_installer&view=install');
-
-			return false;
-		}
-
-		if (version_compare(PHP_VERSION, '5.5.9') < 0) {
-			JFactory::getApplication()->enqueueMessage(
-				'You have PHP with version ' . PHP_VERSION . ' installed. Please upgrade your PHP version to at least 5.5.9. DPCalendar can not run on this version.',
-				'error');
-			JFactory::getApplication()->redirect('index.php?option=com_installer&view=install');
-
+		if (!parent::preflight($type, $parent)) {
 			return false;
 		}
 
@@ -210,7 +194,7 @@ class Com_DPCalendarInstallerScript
 			$manifest = simplexml_load_file($path);
 			$version  = (string)$manifest->version;
 		}
-		if (!empty($version) && version_compare($version, '6.0.0') < 0) {
+		if (!empty($version) && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '6.0.0') < 0) {
 			JFactory::getApplication()->enqueueMessage(
 				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 6.0.0 running. Please install the latest release from version 6 first.',
 				'error');
@@ -230,7 +214,7 @@ class Com_DPCalendarInstallerScript
 				JPATH_ADMINISTRATOR . '/components/com_falang/contentelements/dpcalendar_locations.xml');
 		}
 
-		if ($type == 'install') {
+		if ($type == 'install' || $type == 'discover_install') {
 			$this->run("update `#__extensions` set enabled=1 where type = 'plugin' and element = 'dpcalendar'");
 			$this->run("update `#__extensions` set enabled=1 where type = 'plugin' and element = 'manual'");
 

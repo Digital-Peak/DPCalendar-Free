@@ -30,7 +30,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 		} else {
 			$calendar = \DPCalendarHelper::getCalendar($oldEvent->catid);
 
-			\JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+			\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
 			$c = \Sabre\VObject\Reader::read($this->getOriginalData($eventId, $calendarId));
 
@@ -99,7 +99,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 				$eventId = substr($eventId, 0, strrpos($eventId, '_'));
 				$ical    = str_replace($uid, $eventId, $ical);
 
-				\JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+				\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
 				$c      = \Sabre\VObject\Reader::read($this->getOriginalData($eventId, $calendarId));
 				$vevent = null;

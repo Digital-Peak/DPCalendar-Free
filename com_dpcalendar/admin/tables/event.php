@@ -167,7 +167,7 @@ class DPCalendarTableEvent extends JTable
 		$isNew = empty($this->id);
 
 		// Create the UID
-		JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+		JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 		if (!$this->uid) {
 			$this->uid = strtoupper(Sabre\VObject\UUIDUtil::getUUID());
 		}

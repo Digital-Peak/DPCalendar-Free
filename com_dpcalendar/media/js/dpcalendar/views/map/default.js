@@ -1,160 +1,141 @@
 DPCalendar = window.DPCalendar || {};
 
 (function (document, Joomla, DPCalendar) {
-	'use strict';
+  'use strict';
 
-	document.addEventListener('DOMContentLoaded', function () {
-		var update = function (root) {
-			var map = root.querySelector('.dp-map');
-			if (map == null) {
-				return;
-			}
+  document.addEventListener('DOMContentLoaded', function () {
+    var update = function update(root) {
+      var map = root.querySelector('.dp-map');
 
-			var mapHandler = function () {
-				DPCalendar.request(
-					'view=map&layout=events&format=raw',
-					function (json) {
-						DPCalendar.Map.clearMarkers(map);
+      if (map == null) {
+        return;
+      }
 
-						json.data.events.forEach(function (event) {
-							event.location.forEach(function (location) {
-								var locationData = JSON.parse(JSON.stringify(location));
-								locationData.title = event.title;
-								locationData.color = event.color;
-								locationData.description = event.description;
+      var mapHandler = function mapHandler() {
+        DPCalendar.request('view=map&layout=events&format=raw', function (json) {
+          DPCalendar.Map.clearMarkers(map);
+          json.data.events.forEach(function (event) {
+            event.location.forEach(function (location) {
+              var locationData = JSON.parse(JSON.stringify(location));
+              locationData.title = event.title;
+              locationData.color = event.color;
+              locationData.description = event.description;
+              DPCalendar.Map.createMarker(map, locationData);
+            });
+          });
 
-								DPCalendar.Map.createMarker(map, locationData);
-							});
-						});
+          if (json.data.location && root.querySelector('.dp-input[name=radius]').value != -1) {
+            DPCalendar.Map.drawCircle(map, json.data.location, root.querySelector('.dp-input[name=radius]').value, root.querySelector('.dp-input[name="length-type"]').value);
+          }
+        }, DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)')));
+      };
 
-						if (json.data.location && root.querySelector('.dp-input[name=radius]').value != -1) {
-							DPCalendar.Map.drawCircle(
-								map,
-								json.data.location,
-								root.querySelector('.dp-input[name=radius]').value,
-								root.querySelector('.dp-input[name="length-type"]').value
-							);
-						}
-					},
-					DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)'))
-				);
-			};
+      map.addEventListener('dp-map-loaded', mapHandler);
 
-			map.addEventListener('dp-map-loaded', mapHandler);
-			if (map.dpmap) {
-				mapHandler();
-			}
-		};
+      if (map.dpmap) {
+        mapHandler();
+      }
+    };
 
-		[].slice.call(document.querySelectorAll('.dp-search-map')).forEach(function (map) {
-			[].slice.call(map.querySelectorAll('.dp-input, .dp-select:not(.dp-timezone__select)')).forEach(function (input) {
-				input.addEventListener('change', function (event) {
-					event.preventDefault();
+    [].slice.call(document.querySelectorAll('.dp-search-map')).forEach(function (map) {
+      [].slice.call(map.querySelectorAll('.dp-input, .dp-select:not(.dp-timezone__select)')).forEach(function (input) {
+        input.addEventListener('change', function (event) {
+          event.preventDefault();
+          update(map);
+          return false;
+        });
+      });
+      map.addEventListener('click', function (event) {
+        if (!event.target || !event.target.matches('.dp-event-tooltip__link')) {
+          return true;
+        }
 
-					update(map);
+        if (window.innerWidth < 600) {
+          return true;
+        }
 
-					return false;
-				});
-			});
+        event.preventDefault();
+        var root = this.closest('.dp-search-map');
 
-			map.addEventListener('click', function (event) {
-				if (!event.target || !event.target.matches('.dp-event-tooltip__link')) {
-					return true;
-				}
+        if (root.dataset.popup == 1) {
+          // Opening the modal box
+          var url = new Url(event.target.getAttribute('href'));
+          url.query.tmpl = 'component';
+          DPCalendar.modal(url, root.dataset.popupwidth, root.dataset.popupheight);
+        } else {
+          window.location = DPCalendar.encode(event.target.getAttribute('href'));
+        }
 
-				if (window.innerWidth < 600) {
-					return true;
-				}
+        return false;
+      });
+      update(map);
 
-				event.preventDefault();
+      if (DPCalendar.autocomplete) {
+        var geoComplete = map.querySelector('.dp-input_location');
 
-				var root = this.closest('.dp-search-map');
-				if (root.dataset.popup == 1) {
-					// Opening the modal box
-					var url = new Url(event.target.getAttribute('href'));
-					url.query.tmpl = 'component';
-					DPCalendar.modal(url, root.dataset.popupwidth, root.dataset.popupheight);
-				} else {
-					window.location = DPCalendar.encode(event.target.getAttribute('href'));
-				}
-				return false;
-			});
+        if (geoComplete) {
+          DPCalendar.autocomplete.create(geoComplete);
+          geoComplete.addEventListener('dp-autocomplete-select', function (e) {
+            update(map);
+          });
+          geoComplete.addEventListener('dp-autocomplete-change', function (e) {
+            var task = 'location.searchloc';
 
-			update(map)
+            if (window.location.href.indexOf('administrator') == -1) {
+              task = 'locationform.searchloc';
+            }
 
-			if (DPCalendar.autocomplete) {
-				var geoComplete = map.querySelector('.dp-input_location');
+            DPCalendar.request('task=' + task + '&loc=' + encodeURIComponent(e.target.value.trim()), function (json) {
+              DPCalendar.autocomplete.setItems(geoComplete, json.data);
+            });
+          });
+        }
+      }
 
-				if (geoComplete) {
-					DPCalendar.autocomplete.create(geoComplete);
+      var button = map.querySelector('.dp-button-search');
 
-					geoComplete.addEventListener('dp-autocomplete-select', function (e) {
-						update(map);
-					});
+      if (button) {
+        button.addEventListener('click', function (e) {
+          e.preventDefault();
+          update(map);
+          return false;
+        });
+      }
 
-					geoComplete.addEventListener('dp-autocomplete-change', function (e) {
-						var task = 'location.searchloc';
-						if (window.location.href.indexOf('administrator') == -1) {
-							task = 'locationform.searchloc';
-						}
-						DPCalendar.request(
-							'task=' + task + '&loc=' + encodeURIComponent(e.target.value.trim()),
-							function (json) {
-								DPCalendar.autocomplete.setItems(geoComplete, json.data);
-							}
-						);
-					});
-				}
-			}
+      var button = map.querySelector('.dp-button-clear');
 
-			var button = map.querySelector('.dp-button-search');
-			if (button) {
-				button.addEventListener('click', function (e) {
-					e.preventDefault();
+      if (button) {
+        button.addEventListener('click', function (e) {
+          e.preventDefault();
+          [].slice.call(map.querySelectorAll('.dp-input:not([name="Itemid"])')).forEach(function (input) {
+            input.value = '';
+          });
+          var radius = map.querySelector('[name=radius]');
+          radius.value = radius.getAttribute('data-default') ? radius.getAttribute('data-default') : 20;
+          var length = map.querySelector('[name=length-type]');
+          length.value = length.getAttribute('data-default') ? length.getAttribute('data-default') : 'm';
+          update(map);
+          return false;
+        });
+      }
 
-					update(map);
+      var button = map.querySelector('.dp-button-current-location');
 
-					return false;
-				});
-			}
+      if (button) {
+        button.addEventListener('click', function (e) {
+          e.preventDefault();
+          DPCalendar.currentLocation(function (address) {
+            var form = e.target.closest('.dp-form');
+            form.querySelector('[name=location]').value = address;
+            update(map);
+          });
+          return false;
+        });
 
-			var button = map.querySelector('.dp-button-clear');
-			if (button) {
-				button.addEventListener('click', function (e) {
-					e.preventDefault();
-
-					[].slice.call(map.querySelectorAll('.dp-input:not([name="Itemid"])')).forEach(function (input) {
-						input.value = '';
-					});
-
-
-					map.querySelector('[name=radius]').value = 20;
-					map.querySelector('[name=length-type]').value = 'm';
-
-					update(map);
-
-					return false;
-				});
-			}
-
-			var button = map.querySelector('.dp-button-current-location');
-			if (button) {
-				button.addEventListener('click', function (e) {
-					e.preventDefault();
-
-					DPCalendar.currentLocation(function (address) {
-						var form = e.target.closest('.dp-form');
-						form.querySelector('[name=location]').value = address;
-						update(map);
-					});
-
-					return false;
-				});
-
-				if (!'geolocation' in navigator) {
-					button.style.display = 'none';
-				}
-			}
-		});
-	});
+        if (!'geolocation' in navigator) {
+          button.style.display = 'none';
+        }
+      }
+    });
+  });
 })(document, Joomla, DPCalendar);

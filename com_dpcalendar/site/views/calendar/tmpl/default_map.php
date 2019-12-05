@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-if (!$this->params->get('show_map', 1)) {
+if (!$this->params->get('show_map', 1) || ($this->params->get('show_map', 1) == 2 && $this->getLayout() == 'print')) {
 	return;
 }
 

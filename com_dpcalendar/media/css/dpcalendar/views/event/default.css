@@ -161,9 +161,7 @@
 
 .com-dpcalendar-event .dp-table {
 	border-collapse: collapse;
-	border-spacing: 0;
 	empty-cells: show;
-	border: 1px solid #cbcbcb;
 	width: 100%;
 }
 
@@ -175,21 +173,14 @@
 
 .com-dpcalendar-event .dp-table td,
 .com-dpcalendar-event .dp-table th {
-	border-left: 1px solid #cbcbcb;
-	border-width: 0 0 0 1px;
 	font-size: inherit;
 	margin: 0;
 	overflow: visible;
-	padding: 0.4em 1em;
+	padding: 0.7em 1em;
 	text-align: center;
 }
 
-.com-dpcalendar-event .dp-table td:first-child,
-.com-dpcalendar-event .dp-table th:first-child {
-	border-left-width: 0;
-}
-
-.com-dpcalendar-event .dp-table thead {
+.com-dpcalendar-event .dp-table__thead, .com-dpcalendar-event .dp-table thead {
 	text-align: left;
 	vertical-align: bottom;
 }
@@ -210,33 +201,22 @@
 	background-color: #f2f2f2;
 }
 
-.com-dpcalendar-event .dp-table td, .com-dpcalendar-event .dp-table th {
-	border-bottom: 1px solid #cbcbcb;
-}
-
-.com-dpcalendar-event .dp-table tbody > tr:last-child {
-	border-bottom-width: 0;
-}
-
 @media screen and (max-width: 767px) {
 	.com-dpcalendar-event .dp-table,
-	.com-dpcalendar-event .dp-table thead,
-	.com-dpcalendar-event .dp-table tbody,
+	.com-dpcalendar-event .dp-table tbody:not(.dp-table__thead),
 	.com-dpcalendar-event .dp-table th,
 	.com-dpcalendar-event .dp-table td,
 	.com-dpcalendar-event .dp-table tr {
 		display: block;
 	}
-	.com-dpcalendar-event .dp-table thead {
+	.com-dpcalendar-event .dp-table__thead, .com-dpcalendar-event .dp-table thead {
 		display: none;
 	}
 	.com-dpcalendar-event .dp-table tr {
 		margin: 0;
 		padding: 0;
-		border: 0;
 	}
 	.com-dpcalendar-event .dp-table td {
-		border: none;
 		position: relative;
 		padding-left: 50%;
 		text-align: left;
@@ -251,7 +231,6 @@
 	.com-dpcalendar-event .dp-table td,
 	.com-dpcalendar-event .dp-table th {
 		box-sizing: border-box;
-		border-bottom: 0;
 		text-align: left !important;
 	}
 	.com-dpcalendar-event .dp-table td > div,
@@ -295,24 +274,29 @@
 	grid-template-rows: auto auto auto auto auto auto auto 1fr;
 }
 
-.com-dpcalendar-event__heading {
+.com-dpcalendar-event__taxes {
 	grid-column: 1 / 4;
 	grid-row: 1 / 2;
 }
 
-.com-dpcalendar-event__header {
+.com-dpcalendar-event__heading {
 	grid-column: 1 / 4;
 	grid-row: 2 / 3;
 }
 
+.com-dpcalendar-event__header {
+	grid-column: 1 / 4;
+	grid-row: 3 / 4;
+}
+
 .com-dpcalendar-event__image {
 	grid-column: 1 / 3;
-	grid-row: 3 / 4;
+	grid-row: 4 / 5;
 }
 
 .com-dpcalendar-event__information {
 	grid-column: 3 / 4;
-	grid-row: 3 / 4;
+	grid-row: 4 / 5;
 }
 
 .com-dpcalendar-event:not(.has-image) .com-dpcalendar-event__information {
@@ -321,7 +305,7 @@
 
 .com-dpcalendar-event__actions {
 	grid-column: 1 / 3;
-	grid-row: 4 / 5;
+	grid-row: 5 / 6;
 }
 
 .com-dpcalendar-event:not(.has-cta) .com-dpcalendar-event__actions {
@@ -330,7 +314,7 @@
 
 .com-dpcalendar-event__cta {
 	grid-column: 3 / 4;
-	grid-row: 4 / 5;
+	grid-row: 5 / 6;
 }
 
 .com-dpcalendar-event:not(.has-header) .com-dpcalendar-event__cta {
@@ -339,7 +323,7 @@
 
 .com-dpcalendar-event__description {
 	grid-column: 1 / 3;
-	grid-row: 5 / 9;
+	grid-row: 6 / 10;
 }
 
 .com-dpcalendar-event__description .com-dpcalendar-event:not(.has-bookings):not(.has-series):not(.has-locations) .com-dpcalendar-event__description {
@@ -355,25 +339,33 @@
 }
 
 .com-dpcalendar-event__booking {
-	grid-row: 5 / 6;
-}
-
-.com-dpcalendar-event__series {
 	grid-row: 6 / 7;
 }
 
-.com-dpcalendar-event__locations {
+.com-dpcalendar-event__schedule {
 	grid-row: 7 / 8;
+}
+
+.com-dpcalendar-event__series {
+	grid-row: 8 / 9;
+}
+
+.com-dpcalendar-event__locations {
+	grid-row: 9 / 10;
 }
 
 .com-dpcalendar-event__tickets {
 	grid-column: 1 / 4;
-	grid-row: 9 / 10;
+	grid-row: 11 / 12;
 }
 
 .com-dpcalendar-event__custom-text-after {
 	grid-column: 1 / 4;
-	grid-row: 9 / 10;
+	grid-row: 11 / 12;
+}
+
+.com-dpcalendar-event__taxes.dp-info-box {
+	margin: 0;
 }
 
 .com-dpcalendar-event__image, .com-dpcalendar-event__information {
@@ -506,6 +498,34 @@
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
+}
+
+.com-dpcalendar-event .dp-schedule-list__item {
+	padding: 0.9em 1.2em;
+	position: relative;
+	color: rgba(0, 0, 0, 0.7);
+	border-left: 2px solid #c0c0c0;
+}
+
+.com-dpcalendar-event .dp-schedule-list__item::after {
+	width: 10px;
+	height: 10px;
+	display: block;
+	top: 1em;
+	position: absolute;
+	left: -7px;
+	border-radius: 10px;
+	content: '';
+	border: 2px solid #c0c0c0;
+	background: #ffffff;
+}
+
+.com-dpcalendar-event .dp-schedule-list__item:last-child {
+	border-image: linear-gradient(to bottom, #c0c0c0 60%, rgba(192, 192, 192, 0)) 1 100%;
+}
+
+.com-dpcalendar-event .dp-schedule-list__item .dp-schedule__duration {
+	font-style: italic;
 }
 
 @media screen and (max-width: 767px) {

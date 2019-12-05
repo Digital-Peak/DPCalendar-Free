@@ -1,52 +1,54 @@
 (function (document, Joomla) {
-	'use strict';
+  'use strict';
 
-	document.addEventListener('DOMContentLoaded', function () {
-		var names = Joomla.getOptions('DPCalendar.calendar.names');
+  document.addEventListener('DOMContentLoaded', function () {
+    var names = Joomla.getOptions('DPCalendar.calendar.names');
+    moment.updateLocale('en', {
+      months: names['monthNames'],
+      monthsShort: names['monthNamesShort'],
+      weekdays: names['dayNames'],
+      weekdaysShort: names['dayNamesShort'],
+      weekdaysMin: names['dayNamesMin']
+    });
+    [].slice.call(document.querySelectorAll('.dp-datepicker')).forEach(function (picker) {
+      var element = picker.querySelector('.dp-datepicker__input');
+      var options = {
+        trigger: picker.querySelector('.dp-datepicker__button')
+      };
+      options.format = element.getAttribute('data-format');
+      options.field = element;
 
-		moment.updateLocale('en', {
-			months: names['monthNames'],
-			monthsShort: names['monthNamesShort'],
-			weekdays: names['dayNames'],
-			weekdaysShort: names['dayNamesShort'],
-			weekdaysMin: names['dayNamesMin']
-		});
+      if (element.getAttribute('data-date')) {
+        options.defaultDate = new Date(element.getAttribute('data-date'));
+        element.value = moment(element.getAttribute('data-date')).format(options.format);
+      }
 
-		[].slice.call(document.querySelectorAll('.dp-datepicker')).forEach(function (element) {
-			var options = {};
-			options.format = element.getAttribute('data-format');
-			options.field = element;
+      if (element.getAttribute('data-first-day')) {
+        options.firstDay = parseInt(element.getAttribute('data-first-day'));
+      }
 
-			if (element.getAttribute('data-date')) {
-				options.defaultDate = new Date(element.getAttribute('data-date'));
-				element.value = moment(element.getAttribute('data-date')).format(options.format);
-			}
+      options.onSelect = function () {
+        var end = document.getElementById('jform_' + element.getAttribute('data-pair'));
 
-			if (element.getAttribute('data-first-day')) {
-				options.firstDay = parseInt(element.getAttribute('data-first-day'));
-			}
+        if (!end || !element.actualDate) {
+          return;
+        }
 
-			options.onSelect = function () {
-				var end = document.getElementById('jform_' + element.getAttribute('data-pair'));
-				if (!end || !element.actualDate) {
-					return;
-				}
-				var diff = moment.utc(element.value, options.format).diff(moment.utc(element.actualDate, options.format));
-				var date = moment.utc(end.value, options.format);
-				date.add(diff, 'ms');
-				end.value = date.format(options.format);
-				element.actualDate = element.value;
-				element.focus();
-			};
-			element.actualDate = element.value;
+        var diff = moment.utc(element.value, options.format).diff(moment.utc(element.actualDate, options.format));
+        var date = moment.utc(end.value, options.format);
+        date.add(diff, 'ms');
+        end.value = date.format(options.format);
+        element.actualDate = element.value;
+        element.focus();
+      };
 
-			options.i18n = {
-				months: names['monthNames'],
-				weekdays: names['dayNames'],
-				weekdaysShort: names['dayNamesShort']
-			};
-
-			new Pikaday(options);
-		});
-	});
+      element.actualDate = element.value;
+      options.i18n = {
+        months: names['monthNames'],
+        weekdays: names['dayNames'],
+        weekdaysShort: names['dayNamesShort']
+      };
+      new Pikaday(options);
+    });
+  });
 })(document, Joomla);

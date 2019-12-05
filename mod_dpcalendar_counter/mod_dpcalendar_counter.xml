@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_counter</name>
 	<author>Digital Peak</author>
-	<creationDate>Oct 2019</creationDate>
+	<creationDate>28 Nov 2019</creationDate>
 	<copyright>(C) 2007 - 2019 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.2.7</version>
+	<version>7.3.0</version>
 	<description>MOD_DPCALENDAR_COUNTER_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_counter">mod_dpcalendar_counter.php</filename>
@@ -36,6 +36,31 @@
 				</field>
 				<field name="show_my_only" type="radio" default="0" class="btn-group"
 				       label="MOD_DPCALENDAR_COUNTER_SHOW_MY_ONLY_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_MY_ONLY_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_field_year" type="radio" default="1" class="btn-group"
+				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_YEAR_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_YEAR_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_field_month" type="radio" default="1" class="btn-group"
+				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_MONTH_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_MONTH_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_field_week" type="radio" default="1" class="btn-group"
+				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_WEEK_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_WEEK_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_field_day" type="radio" default="1" class="btn-group"
+				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_DAY_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_DAY_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_field_hour" type="radio" default="1" class="btn-group"
+				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_HOUR_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_HOUR_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>

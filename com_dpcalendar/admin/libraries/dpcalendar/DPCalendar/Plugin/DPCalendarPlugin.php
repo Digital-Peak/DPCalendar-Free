@@ -50,7 +50,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$s = substr($eventId, $pos + 1);
 		if ($s == 0) {
 			$uid = substr($eventId, 0, $pos);
-			\JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+			\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
 			$content = $this->getContent($calendarId, \DPCalendarHelper::getDate('2000-01-01'), null, new Registry());
 			if (is_array($content)) {
@@ -135,7 +135,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$options = new Registry();
 		}
 
-		\JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+		\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 		$cal = null;
 
 		try {
@@ -615,6 +615,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$calendar->canBook         = false;
 		$calendar->sync_date       = null;
 		$calendar->sync_token      = null;
+		$calendar->params          = new Registry();
 		$calendar->native          = $this->params->get('cache', 1) == 2;
 
 		return $calendar;
@@ -654,6 +655,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->booking_options  = null;
 		$event->booking_series   = 0;
 		$event->description      = '';
+		$event->schedule         = '';
 		$event->state            = 1;
 		$event->access           = 1;
 		$event->access_content   = 1;

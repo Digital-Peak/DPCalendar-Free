@@ -1,249 +1,258 @@
 DPCalendar = window.DPCalendar || {};
 
 (function (document, Joomla, DPCalendar) {
-	'use strict';
+  'use strict';
 
-	DPCalendar.Map = {};
+  DPCalendar.Map = {};
 
-	DPCalendar.Map.create = function (element) {
-		if (typeof L === 'undefined') {
-			return;
-		}
-		element.classList.add('dp-map_loading');
+  DPCalendar.Map.create = function (element) {
+    if (typeof L === 'undefined') {
+      return;
+    }
 
-		var options = element.dataset;
+    element.classList.add('dp-map_loading');
+    var options = element.dataset;
+    var map = L.map(element, {
+      attributionControl: true,
+      fullscreenControl: true,
+      gestureHandling: true,
+      gestureHandlingOptions: {
+        duration: 2000,
+        text: {
+          touch: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_TOUCH'),
+          scroll: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_SCROLL'),
+          scrollMac: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_SCROLLMAC')
+        }
+      }
+    }).setView([options.latitude ? options.latitude : 47, options.longitude ? options.longitude : 4], options.zoom ? options.zoom : 4);
+    map.attributionControl.setPrefix('');
+    map.attributionControl.addAttribution(Joomla.getOptions('DPCalendar.map.tiles.attribution'));
 
-		var map = L.map(element, {
-			attributionControl: true,
-			fullscreenControl: true,
-			gestureHandling: true,
-			gestureHandlingOptions: {
-				duration: 2000,
-				text: {
-					touch: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_TOUCH'),
-					scroll: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_SCROLL'),
-					scrollMac: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_SCROLLMAC')
-				}
-			}
-		}).setView(
-			[options.latitude ? options.latitude : 47, options.longitude ? options.longitude : 4],
-			options.zoom ? options.zoom : 4
-		);
+    if (Joomla.getOptions('DPCalendar.map.tiles.url') == 'google') {
+      var type = google.maps.MapTypeId.ROADMAP;
 
-		map.attributionControl.setPrefix('');
-		map.attributionControl.addAttribution(Joomla.getOptions('DPCalendar.map.tiles.attribution'));
+      switch (options.type) {
+        case 2:
+          type = google.maps.MapTypeId.SATELLITE;
+          break;
 
-		if (Joomla.getOptions('DPCalendar.map.tiles.url') == 'google') {
-			var type = google.maps.MapTypeId.ROADMAP;
-			switch (options.type) {
-				case 2:
-					type = google.maps.MapTypeId.SATELLITE;
-					break;
-				case 3:
-					type = google.maps.MapTypeId.HYBRID;
-					break;
-				case 4:
-					type = google.maps.MapTypeId.TERRAIN;
-					break;
-			}
-			var tiles = L.gridLayer.googleMutant({type: type});
-			tiles.addTo(map);
-			tiles.addEventListener('spawned', function (e) {
-				google.maps.event.addListenerOnce(e.mapObject, 'idle', function () {
-					element.classList.remove('dp-map_loading');
-					element.classList.add('dp-map_loaded');
-				});
-			});
-		} else {
-			var tiles = L.tileLayer(Joomla.getOptions('DPCalendar.map.tiles.url'), {id: 'mapbox.streets'});
-			tiles.on('load', function () {
-				element.classList.remove('dp-map_loading');
-				element.classList.add('dp-map_loaded');
-			});
-			tiles.addTo(map);
-		}
+        case 3:
+          type = google.maps.MapTypeId.HYBRID;
+          break;
 
-		// Marker cluster
-		map.dpMarkersCluster = L.markerClusterGroup();
-		map.addLayer(map.dpMarkersCluster);
+        case 4:
+          type = google.maps.MapTypeId.TERRAIN;
+          break;
+      }
 
-		map.dpBounds = new L.latLngBounds();
-		map.dpMarkers = [];
-		map.dpElement = element;
+      var tiles = L.gridLayer.googleMutant({
+        type: type
+      });
+      tiles.addTo(map);
+      tiles.addEventListener('spawned', function (e) {
+        google.maps.event.addListenerOnce(e.mapObject, 'idle', function () {
+          element.classList.remove('dp-map_loading');
+          element.classList.add('dp-map_loaded');
+        });
+      });
+    } else {
+      var _tiles = L.tileLayer(Joomla.getOptions('DPCalendar.map.tiles.url'), {
+        id: 'mapbox.streets'
+      });
 
-		element.dpmap = map;
+      _tiles.on('load', function () {
+        element.classList.remove('dp-map_loading');
+        element.classList.add('dp-map_loaded');
+      });
 
-		element.dispatchEvent(new CustomEvent('dp-map-loaded'));
+      _tiles.addTo(map);
+    } // Marker cluster
 
-		if (Array.isArray(element.dpCachedMarkers)) {
-			element.dpCachedMarkers.forEach(function (marker) {
-				DPCalendar.Map.createMarker(element, marker.data, marker.dragCallback);
-			});
-			element.dpCachedMarkers = null;
-		}
 
-		return map;
-	};
+    map.dpMarkersCluster = L.markerClusterGroup();
+    map.addLayer(map.dpMarkersCluster);
+    map.dpBounds = new L.latLngBounds();
+    map.dpMarkers = [];
+    map.dpElement = element;
+    element.dpmap = map;
+    element.dispatchEvent(new CustomEvent('dp-map-loaded'));
 
-	DPCalendar.Map.createMarker = function (map, data, dragCallback) {
-		var latitude = data.latitude;
-		var longitude = data.longitude;
-		if (latitude == null || latitude == '') {
-			return;
-		}
+    if (Array.isArray(element.dpCachedMarkers)) {
+      element.dpCachedMarkers.forEach(function (marker) {
+        DPCalendar.Map.createMarker(element, marker.data, marker.dragCallback);
+      });
+      element.dpCachedMarkers = null;
+    }
 
-		if (map.dpmap == null) {
-			if (map.dpCachedMarkers == null) {
-				map.dpCachedMarkers = [];
-			}
-			map.dpCachedMarkers.push({data: data, dragCallback: dragCallback});
+    return map;
+  };
 
-			return;
-		}
+  DPCalendar.Map.createMarker = function (map, data, dragCallback) {
+    var latitude = data.latitude;
+    var longitude = data.longitude;
 
-		if (!data.color) {
-			data.color = '000000';
-		}
+    if (latitude == null || latitude == '') {
+      return;
+    }
 
-		var markerParams = {draggable: dragCallback != null};
-		markerParams.icon = L.divIcon({
-			className: "dp-location-marker",
-			html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#' + String(data.color).replace('#', '') + '" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
-			iconSize: [25, 30],
-			iconAnchor: [10, 35]
-		});
+    if (map.dpmap == null) {
+      if (map.dpCachedMarkers == null) {
+        map.dpCachedMarkers = [];
+      }
 
-		var marker = L.marker([latitude, longitude], markerParams);
+      map.dpCachedMarkers.push({
+        data: data,
+        dragCallback: dragCallback
+      });
+      return;
+    }
 
-		var desc = data.description ? data.description : data.title;
-		if (desc) {
-			var popup = marker.bindPopup(desc);
-			marker.on('click', function (e) {
-				popup.openPopup();
-			});
-		}
+    if (!data.color) {
+      data.color = '000000';
+    }
 
-		if (dragCallback) {
-			marker.on('dragend', function (event) {
-				dragCallback(event.target.getLatLng().lat, event.target.getLatLng().lng);
-			});
-		}
+    var markerParams = {
+      draggable: dragCallback != null
+    };
+    markerParams.icon = L.divIcon({
+      className: "dp-location-marker",
+      html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#' + String(data.color).replace('#', '') + '" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
+      iconSize: [25, 30],
+      iconAnchor: [10, 35]
+    });
+    var marker = L.marker([latitude, longitude], markerParams);
+    var desc = data.description ? data.description : data.title;
 
-		map.dpmap.dpMarkersCluster.addLayer(marker);
-		map.dpmap.dpMarkers.push(marker);
-		map.dpmap.dpBounds.extend(marker.getLatLng());
-		map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
+    if (desc) {
+      var popup = marker.bindPopup(desc);
+      marker.on('click', function (e) {
+        popup.openPopup();
+      });
+    }
 
-		return marker;
-	};
+    if (dragCallback) {
+      marker.on('dragend', function (event) {
+        dragCallback(event.target.getLatLng().lat, event.target.getLatLng().lng);
+      });
+    }
 
-	DPCalendar.Map.clearMarkers = function (map) {
-		if (map == null || map.dpmap == null || map.dpmap.dpMarkers == null) {
-			return;
-		}
+    map.dpmap.dpMarkersCluster.addLayer(marker);
+    map.dpmap.dpMarkers.push(marker);
+    map.dpmap.dpBounds.extend(marker.getLatLng()); // Zoom out when needed to fit all markers
 
-		map.dpmap.dpMarkers.forEach(function (marker) {
-			map.dpmap.dpMarkersCluster.removeLayer(marker);
-		});
+    var boundsZoom = map.dpmap.getBoundsZoom(map.dpmap.dpBounds);
 
-		map.dpmap.dpMarkers = [];
-		map.dpmap.dpCachedMarkers = [];
-		map.dpmap.dpBounds = new L.latLngBounds();
+    if (boundsZoom < map.dpmap.getZoom()) {
+      map.dpmap.setZoom(boundsZoom);
+    }
 
-		var options = map.dpmap.dpElement.dataset;
-		map.dpmap.panTo([options.latitude ? options.latitude : 47, options.longitude ? options.longitude : 4]);
-	};
+    map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
+    return marker;
+  };
 
-	DPCalendar.Map.moveMarker = function (map, marker, latitude, longitude) {
-		if (!marker || map.dpmap == null) {
-			return;
-		}
+  DPCalendar.Map.clearMarkers = function (map) {
+    if (map == null || map.dpmap == null || map.dpmap.dpMarkers == null) {
+      return;
+    }
 
-		marker.setLatLng([latitude, longitude]);
+    map.dpmap.dpMarkers.forEach(function (marker) {
+      map.dpmap.dpMarkersCluster.removeLayer(marker);
+    });
+    map.dpmap.dpMarkers = [];
+    map.dpmap.dpCachedMarkers = [];
+    map.dpmap.dpBounds = new L.latLngBounds();
+    var options = map.dpmap.dpElement.dataset;
+    map.dpmap.panTo([options.latitude ? options.latitude : 47, options.longitude ? options.longitude : 4]);
+  };
 
-		map.dpmap.dpBounds = new L.latLngBounds();
+  DPCalendar.Map.moveMarker = function (map, marker, latitude, longitude) {
+    if (!marker || map.dpmap == null) {
+      return;
+    }
 
-		map.dpmap.dpMarkers.forEach(function (m) {
-			map.dpmap.dpBounds.extend(marker.getLatLng());
-		});
+    marker.setLatLng([latitude, longitude]);
+    map.dpmap.dpBounds = new L.latLngBounds();
+    map.dpmap.dpMarkers.forEach(function (m) {
+      map.dpmap.dpBounds.extend(marker.getLatLng());
+    });
+    map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
+  };
 
-		map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
-	};
+  DPCalendar.Map.drawCircle = function (map, location, radius, type) {
+    if (map.dpmap == null) {
+      return;
+    }
 
-	DPCalendar.Map.drawCircle = function (map, location, radius, type) {
-		if (map.dpmap == null) {
-			return;
-		}
+    if (type == 'mile') {
+      radius = radius * 1.60934;
+    }
 
-		if (type == 'mile') {
-			radius = radius * 1.60934;
-		}
-		map.dpmap.dpMarkers.push(L.circle([location.latitude, location.longitude], radius * 1000).addTo(map.dpmap));
-		map.dpmap.dpMarkers.push(L.circleMarker([location.latitude, location.longitude], {
-			radius: 10,
-			color: '#000000',
-			fillColor: '#000000',
-			fillOpacity: 1
-		}).addTo(map.dpmap));
-		map.dpmap.panTo([location.latitude, location.longitude]);
-	};
+    map.dpmap.dpMarkers.push(L.circle([location.latitude, location.longitude], radius * 1000).addTo(map.dpmap));
+    map.dpmap.dpMarkers.push(L.circleMarker([location.latitude, location.longitude], {
+      radius: 10,
+      color: '#000000',
+      fillColor: '#000000',
+      fillOpacity: 1
+    }).addTo(map.dpmap));
+    map.dpmap.panTo([location.latitude, location.longitude]);
+  };
 
-	document.addEventListener('DOMContentLoaded', function () {
-		// Set up the maps
-		var createMap = function (mapElement) {
-			var options = mapElement.dataset;
+  document.addEventListener('DOMContentLoaded', function () {
+    // Set up the maps
+    var createMap = function createMap(mapElement) {
+      var options = mapElement.dataset;
 
-			if (options.width) {
-				mapElement.style.width = options.width;
-			}
+      if (options.width) {
+        mapElement.style.width = options.width;
+      }
 
-			if (options.height) {
-				mapElement.style.height = options.height;
-			}
+      if (options.height) {
+        mapElement.style.height = options.height;
+      }
 
-			DPCalendar.Map.create(mapElement);
+      DPCalendar.Map.create(mapElement);
+      var locationsContainer = mapElement.closest('.dp-location');
 
-			var locationsContainer = mapElement.closest('.dp-location');
+      if (locationsContainer == null) {
+        locationsContainer = mapElement.closest('.dp-locations');
+      }
 
-			if (locationsContainer == null) {
-				locationsContainer = mapElement.closest('.dp-locations');
-			}
-			if (locationsContainer == null) {
-				return;
-			}
+      if (locationsContainer == null) {
+        return;
+      }
 
-			[].slice.call(locationsContainer.querySelectorAll('.dp-location__details')).forEach(function (location) {
-				var data = location.dataset;
+      [].slice.call(locationsContainer.querySelectorAll('.dp-location__details')).forEach(function (location) {
+        var data = location.dataset;
+        var desc = location.parentElement.querySelector('.dp-location__description');
 
-				var desc = location.parentElement.querySelector('.dp-location__description');
-				if (!data.description && desc) {
-					data.description = desc.innerHTML;
-				}
-				DPCalendar.Map.createMarker(mapElement, data);
-			});
-		};
+        if (!data.description && desc) {
+          data.description = desc.innerHTML;
+        }
 
-		[].slice.call(document.querySelectorAll('.dp-map')).forEach(function (mapElement) {
-			if (DPCalendar.Map == null) {
-				return;
-			}
-			if ('IntersectionObserver' in window) {
-				var observer = new IntersectionObserver(
-					function (entries, observer) {
-						entries.forEach(function (entry) {
-							if (!entry.isIntersecting) {
-								return;
-							}
-							observer.unobserve(mapElement);
+        DPCalendar.Map.createMarker(mapElement, data);
+      });
+    };
 
-							createMap(mapElement);
-						});
-					}
-				);
-				observer.observe(mapElement)
-			} else {
-				createMap(mapElement);
-			}
-		});
-	});
+    [].slice.call(document.querySelectorAll('.dp-map')).forEach(function (mapElement) {
+      if (DPCalendar.Map == null) {
+        return;
+      }
+
+      if ('IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(function (entries, observer) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) {
+              return;
+            }
+
+            observer.unobserve(mapElement);
+            createMap(mapElement);
+          });
+        });
+        observer.observe(mapElement);
+      } else {
+        createMap(mapElement);
+      }
+    });
+  });
 })(document, Joomla, DPCalendar);

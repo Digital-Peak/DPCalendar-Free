@@ -39,6 +39,9 @@ $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->
 ?>
 <div class="com-dpcalendar-eventform<?php echo $this->pageclass_sfx ? ' com-dpcalendar-eventform-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
+	<div class="com-dpcalendar-eventform__loader">
+		<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
+	</div>
 	<?php echo $this->loadTemplate('heading'); ?>
 	<?php echo $this->loadTemplate('information'); ?>
 	<?php echo $this->loadTemplate('overlapping'); ?>

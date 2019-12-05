@@ -13,6 +13,10 @@ class LayoutHelper
 {
 	public function renderLayout($layout, $data = [])
 	{
+		if (!array_key_exists('layoutHelper', $data) && strpos($layout, 'joomla.') !== 0) {
+			$data['layoutHelper'] = $this;
+		}
+
 		return \JLayoutHelper::render($layout, $data, null, array('component' => 'com_dpcalendar', 'client' => 0));
 	}
 }

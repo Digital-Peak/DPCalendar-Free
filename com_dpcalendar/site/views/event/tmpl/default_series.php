@@ -34,4 +34,3 @@ if (!$this->seriesEvents || !$this->params->get('event_show_series', 1)) {
 		); ?>
 	</p>
 </div>
-

@@ -159,8 +159,12 @@ class DPCalendarModelEvents extends JModelList
 			if (is_string($item->booking_options)) {
 				$item->booking_options = json_decode($item->booking_options);
 			}
-
 			$item->booking_options = $item->booking_options ?: null;
+
+			if (is_string($item->schedule)) {
+				$item->schedule = json_decode($item->schedule);
+			}
+			$item->schedule = $item->schedule ?: null;
 
 			\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
 
@@ -532,7 +536,7 @@ class DPCalendarModelEvents extends JModelList
 	{
 		// Initialise variables.
 		$app    = JFactory::getApplication();
-		$params = $app->getParams();
+		$params = $app->isClient('site') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
 
 		// List state information
 		if ($app->input->getInt('limit', null) === null) {
@@ -581,7 +585,7 @@ class DPCalendarModelEvents extends JModelList
 			$this->setState('filter.publish_date', true);
 		}
 
-		$this->setState('filter.language', $app->getLanguageFilter());
+		$this->setState('filter.language', $app->isClient('site') ? $app->getLanguageFilter() : $app->getLanguage()->getCalendar());
 		$this->setState('filter.search', $this->getUserStateFromRequest('com_dpcalendar.filter.search', 'filter-search'));
 
 		// Filter for

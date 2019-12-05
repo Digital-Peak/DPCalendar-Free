@@ -7,15 +7,10 @@
  */
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.libraries.dpcalendar.view', JPATH_ADMINISTRATOR);
-
 class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 {
-
 	protected $items;
-
 	protected $pagination;
-
 	protected $state;
 
 	public function init ()

@@ -12,7 +12,6 @@ if (!$price) {
 	$price = '0';
 }
 
-
 $separator = DPCalendarHelper::getComponentParameter('currency_separator', '.');
 
 if (key_exists('separator', $displayData) && $displayData['separator']) {

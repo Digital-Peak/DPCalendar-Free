@@ -28,6 +28,7 @@ class HtmlDocument
 	const LIBRARY_DATEPICKER = 'date';
 	const LIBRARY_AUTOCOMPLETE = 'autocomplete';
 	const LIBRARY_SELECT = 'select';
+	const LIBRARY_TOOLTIP = 'tooltip';
 	const LIBRARY_FORM = 'form';
 	const LIBRARY_IFRAME_CHILD = 'iframe-child';
 	const LIBRARY_IFRAME_PARENT = 'iframe-parent';
@@ -48,6 +49,11 @@ class HtmlDocument
 		if ($name == self::LIBRARY_SELECT) {
 			$this->loadScriptFile('choices/choices.js');
 			$this->loadStyleFile('choices/choices.css');
+		}
+		if ($name == self::LIBRARY_TOOLTIP) {
+			$this->loadScriptFile('popper/popper.js');
+			$this->loadScriptFile('tippy/tippy.js');
+			$this->loadStyleFile('tippy/tippy.css');
 		}
 		if ($name == self::LIBRARY_DPCORE) {
 			\JHtml::_('behavior.core');

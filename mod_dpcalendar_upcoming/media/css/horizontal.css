@@ -1,9 +1,3 @@
-.mod-dpcalendar-upcoming-horizontal {
-	display: flex;
-	flex-wrap: wrap;
-	margin: 0 -5px;
-}
-
 .mod-dpcalendar-upcoming-horizontal .dp-figure {
 	text-align: center;
 	margin: 0;
@@ -90,6 +84,25 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-horizontal .dp-location__description {
+	display: none;
+}
+
+.mod-dpcalendar-upcoming-horizontal__map {
+	margin-top: 5px;
+}
+
+.mod-dpcalendar-upcoming-horizontal .dp-figure {
+	text-align: center;
+	margin: 0;
+}
+
+.mod-dpcalendar-upcoming-horizontal .dp-figure__caption {
+	display: block;
+	width: 100%;
+	box-sizing: border-box;
+}
+
 .mod-dpcalendar-upcoming-horizontal .dp-flatcalendar {
 	float: left;
 	font-size: 0.7em;
@@ -132,19 +145,13 @@
 	color: #2f2f2f;
 }
 
-.mod-dpcalendar-upcoming-horizontal .dp-figure {
-	text-align: center;
-	margin: 0;
-}
-
-.mod-dpcalendar-upcoming-horizontal .dp-figure__caption {
-	display: block;
-	width: 100%;
-	box-sizing: border-box;
+.mod-dpcalendar-upcoming-horizontal .mod-dpcalendar-upcoming-horizontal__events {
+	display: flex;
+	flex-wrap: wrap;
 }
 
 .mod-dpcalendar-upcoming-horizontal__group,
-.mod-dpcalendar-upcoming-horizontal > .mod-dpcalendar-upcoming-horizontal__event {
+.mod-dpcalendar-upcoming-horizontal .mod-dpcalendar-upcoming-horizontal__event {
 	flex: 1 1 200px;
 	position: relative;
 	margin: 5px;

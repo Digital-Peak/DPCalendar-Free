@@ -19,7 +19,6 @@ JLoader::registerAlias('DPCalendarHelperBooking', '\\DPCalendar\\Helper\\Booking
 
 class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 {
-
 	protected $identifier = 'cd';
 
 	public function onUserAfterSave($user, $isNew, $success, $msg)
@@ -199,8 +198,8 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 
 	public function onContentPrepareForm($form, $data)
 	{
-		if ($form->getName() == 'com_users.profile' || (JFactory::getApplication()->isClient('administrator') && $form->getName() == 'com_users.user')) {
-
+		if ($this->params->get('add_dpcalendar_user_fields', 1)
+			&& ($form->getName() == 'com_users.profile' || (JFactory::getApplication()->isClient('administrator') && $form->getName() == 'com_users.user'))) {
 			// Load the language
 			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
@@ -333,7 +332,7 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 	{
 		$config = JFactory::getConfig();
 
-		JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+		JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
 		$pdo = new \PDO('mysql:host=' . $config->get('host') . ';dbname=' . $config->get('db'), $config->get('user'),
 			$config->get('password'));

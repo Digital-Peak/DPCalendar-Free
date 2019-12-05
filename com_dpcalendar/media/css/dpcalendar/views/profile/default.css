@@ -36,6 +36,14 @@
 	font-size: smaller;
 }
 
+.com-dpcalendar-profile .dp-event__state_unpublished {
+	padding-left: 10px;
+	padding-right: 10px;
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+}
+
 @media print {
 	.com-dpcalendar-profile .dp-print-hide {
 		display: none !important;

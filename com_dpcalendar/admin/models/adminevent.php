@@ -18,7 +18,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	protected $text_prefix = 'COM_DPCALENDAR';
 	protected $name = 'event';
 
-
 	protected function populateState()
 	{
 		parent::populateState();
@@ -429,6 +428,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['booking_options'] = json_encode($data['booking_options']);
 		}
 
+		if (!empty($data['schedule']) && is_array($data['schedule'])) {
+			$data['schedule'] = json_encode($data['schedule']);
+		}
+
 		if (!empty($data['plugintype']) && is_array($data['plugintype'])) {
 			$data['plugintype'] = implode(',', $data['plugintype']);
 		}
@@ -440,7 +443,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		// Automatic handling of alias for empty fields
 		if (empty($data['alias'])
-			&& in_array($app->input->get('task'), array('apply', 'save', 'save2new'))
+			&& in_array($app->input->get('task'), array('apply', 'save', 'save2new', 'save2copy'))
 			&& (!isset($data['id']) || (int)$data['id'] == 0)) {
 			if (JFactory::getConfig()->get('unicodeslugs') == 1) {
 				$data['alias'] = JFilterOutput::stringURLUnicodeSlug($data['title']);
@@ -513,8 +516,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			}
 		}
 
-		// Delete the location associations for the events which do not exist
-		// anymore
+		// Delete the location associations for the events which do not exist anymore
 		if (!$this->getState($this->getName() . '.new')) {
 			$db->setQuery('delete from #__dpcalendar_events_location where event_id in (' . implode(',', $allIds) . ')');
 			$db->execute();
@@ -524,6 +526,13 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if (!empty($values)) {
 			$db->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $values);
 			$db->execute();
+		}
+
+		if (!empty($event->location_ids)) {
+			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+			$model->setState('list.limit', 100);
+			$model->setState('filter.search', 'ids:' . implode($event->location_ids, ','));
+			$event->locations = $model->getItems();
 		}
 
 		$this->sendMail($this->getState($this->getName() . '.new') ? 'create' : 'edit', array($event));

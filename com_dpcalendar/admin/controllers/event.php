@@ -185,9 +185,9 @@ class DPCalendarControllerEvent extends JControllerForm
 
 			$item          = new stdClass();
 			$item->value   = $e->id;
-			$item->title   = $e->title . ' [' . DPCalendarHelper::getDateStringFromEvent($e) . ']';
-			$item->details = strip_tags(JHtml::_('string.truncate', $e->description, 100));
-
+			$item->title   = $e->title;
+			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' . strip_tags(JHtml::_('string.truncate', $e->description,
+					100));
 			$data[] = $item;
 		}
 

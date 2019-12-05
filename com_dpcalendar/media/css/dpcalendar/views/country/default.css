@@ -1,0 +1,31 @@
+.com-dpcalendar-country .dp-control {
+	overflow: auto;
+}
+
+.com-dpcalendar-country .dp-control__label, .com-dpcalendar-country .control-group .control-label {
+	float: left;
+	width: 160px;
+	padding-top: 5px;
+	text-align: left;
+}
+
+.com-dpcalendar-country .dp-control__input, .com-dpcalendar-country .control-group .controls {
+	margin-left: 180px;
+}
+
+.com-dpcalendar-country .control-group .form-text {
+	display: none;
+}
+
+@media screen and (max-width: 640px) {
+	.com-dpcalendar-country .dp-control__label, .com-dpcalendar-country .control-group .control-label, .com-dpcalendar-country .dp-control__input, .com-dpcalendar-country .control-group .controls {
+		width: 100%;
+		margin-left: 0;
+	}
+	.com-dpcalendar-country .control-group control-label, .com-dpcalendar-country .control-group controls {
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
+/*# sourceMappingURL=default.css.map */

@@ -20,6 +20,12 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
+			<field name="locations_show_my_only" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_SHOW_MY_ONLY_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_SHOW_MY_ONLY_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
 			<field name="locations_show_map" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">

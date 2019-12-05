@@ -16,17 +16,34 @@ use League\Pipeline\StageInterface;
 
 class FetchLocationData implements StageInterface
 {
+	/**
+	 * @var \DPCalendarModelCountry
+	 */
+	private $model;
+
+	public function __construct(\DPCalendarModelCountry $model)
+	{
+		$this->model = $model;
+	}
+
 	public function __invoke($payload)
 	{
+		// Convert the country id to string
+		$locationData = ArrayHelper::toObject($payload->data);
+		if (!empty($locationData->country)) {
+			$locationData->country = $this->model->getItem($locationData->country)->short_code;
+		}
+
 		// Fetch the latitude/longitude
-		$location = Location::format(array(ArrayHelper::toObject($payload->data)));
-		if ($location && (!isset($data['longitude']) || !$payload->data['longitude'])) {
-			$data['latitude']  = null;
-			$data['longitude'] = null;
-			$location          = Location::get($location, false);
+		$location = Location::format([$locationData]);
+		if ($location && empty($payload->data['latitude'])) {
+			$payload->data['latitude']  = null;
+			$payload->data['longitude'] = null;
+
+			$location                   = Location::get($location, false);
 			if ($location->latitude) {
-				$data['latitude']  = $location->latitude;
-				$data['longitude'] = $location->longitude;
+				$payload->data['latitude']  = $location->latitude;
+				$payload->data['longitude'] = $location->longitude;
 			}
 		}
 

@@ -5,7 +5,6 @@
  * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 ?>
@@ -23,7 +22,7 @@ defined('_JEXEC') or die();
 				<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
 			<?php } ?>
 			<?php if ($name == 'location' && $this->params->get('event_form_change_location', 1)) { ?>
-				<?php echo $this->loadTemplate('location'); ?>
+				<?php echo $this->loadTemplate('map'); ?>
 			<?php } ?>
 		</div>
 		<?php $checked = ''; ?>

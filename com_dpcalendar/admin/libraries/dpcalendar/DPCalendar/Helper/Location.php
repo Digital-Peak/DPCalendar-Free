@@ -7,6 +7,8 @@
  */
 namespace DPCalendar\Helper;
 
+use GeoIp2\Database\Reader;
+
 defined('_JEXEC') or die();
 
 \JTable::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
@@ -131,7 +133,13 @@ class Location
 
 		if ($fill) {
 			try {
-				self::$locationCache->setState('filter.search', \JApplicationHelper::stringURLSafe($location));
+				$coordinates = explode(',', $location);
+				if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+					self::$locationCache->setState('filter.latitude', $coordinates[0]);
+					self::$locationCache->setState('filter.longitude', $coordinates[1]);
+				} else {
+					self::$locationCache->setState('filter.search', \JApplicationHelper::stringURLSafe($location));
+				}
 				$locations = self::$locationCache->getItems();
 				if ($locations) {
 					$locObject = $locations[0];
@@ -152,7 +160,7 @@ class Location
 			$locObject            = new \stdClass();
 			$locObject->id        = 0;
 			$locObject->title     = $title;
-			$locObject->alias     = \JApplicationHelper::stringURLSafe($location);
+			$locObject->alias     = \JApplicationHelper::stringURLSafe($title);
 			$locObject->state     = 1;
 			$locObject->language  = '*';
 			$locObject->country   = '';
@@ -245,6 +253,88 @@ class Location
 		return substr(md5($location->latitude . '-' . $location->longitude . '-' . $location->title), 0, 6);
 	}
 
+	public static function getCountryForIp()
+	{
+		self::checkGeoDatabase();
+
+		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
+		if (!file_exists($geoDBFile)) {
+			return '';
+		}
+
+		\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+
+		try {
+			$reader = new Reader($geoDBFile);
+
+			return $model->getItem(['short_code' => $reader->country($_SERVER['REMOTE_ADDR'])->country->isoCode]);
+		} catch (\Exception $e) {
+		}
+	}
+
+	private static function checkGeoDatabase()
+	{
+		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
+
+		// Don't update when the file was fetched 10 days ago
+		if (file_exists($geoDBFile) && (time() - filemtime($geoDBFile) < (60 * 60 * 24 * 10))) {
+			return;
+		}
+
+		// Only update when we are in admin
+		if (file_exists($geoDBFile) && !\JFactory::getApplication()->isClient('admin')) {
+			return;
+		}
+
+		$content = DPCalendarHelper::fetchContent('http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz');
+
+		if (empty($content)) {
+			throw new \Exception("Can't download the geolocation database.");
+		}
+
+		// Sometimes you get a rate limit exceeded
+		if (stristr($content, 'Rate limited exceeded') !== false) {
+			throw new \Exception("You hit the rate limit of maxmind.");
+		}
+
+		$ret = file_put_contents($geoDBFile . '.gz', $content);
+
+		if ($ret === false) {
+			throw new \Exception("Could not write the geolocation database.");
+		}
+
+		unset($content);
+
+		// Decompress the file
+		$uncompressed = '';
+
+		$zp = @gzopen($geoDBFile . '.gz', 'rb');
+
+		if ($zp === false) {
+			throw new \Exception("Can't uncompress the geolocation database file.");
+		}
+
+		if ($zp !== false) {
+			while (!gzeof($zp)) {
+				$uncompressed .= @gzread($zp, 102400);
+			}
+
+			@gzclose($zp);
+
+			@unlink($geoDBFile . '.gz');
+		}
+
+		try {
+			file_put_contents($geoDBFile, $uncompressed);
+			new Reader($geoDBFile);
+		} catch (\Exception $e) {
+			unlink($geoDBFile);
+
+			throw $e;
+		}
+	}
+
 	private static function searchInGoogle($address)
 	{
 		$key = trim(\DPCalendarHelper::getComponentParameter('map_api_google_key'));
@@ -319,7 +409,6 @@ class Location
 		}
 
 		$content = \DPCalendar\Helper\DPCalendarHelper::fetchContent($url . 'q=' . urlencode($address));
-
 		if (empty($content)) {
 			return [];
 		}

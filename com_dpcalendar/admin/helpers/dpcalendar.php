@@ -13,7 +13,7 @@ if (!defined('DS')) {
 
 JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');
 
-JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
 class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 {
@@ -35,6 +35,8 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 				'index.php?option=com_dpcalendar&view=bookings',
 				$vName == 'bookings'
 			);
+			JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_TAXRATES'), 'index.php?option=com_dpcalendar&view=taxrates', $vName == 'taxrates');
+			JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_COUNTRIES'), 'index.php?option=com_dpcalendar&view=countries', $vName == 'countries');
 		}
 		JHtmlSidebar::addEntry(
 			JText::_('JGLOBAL_FIELDS'),

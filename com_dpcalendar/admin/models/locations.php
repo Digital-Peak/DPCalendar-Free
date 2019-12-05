@@ -95,7 +95,8 @@ class DPCalendarModelLocations extends JModelList
 				$location->color = \DPCalendar\Helper\Location::getColor($location);
 			}
 
-			if (!is_string($location->rooms)) {
+			if (!is_string($location->rooms) || $location->rooms == '{}') {
+				$location->rooms = [];
 				continue;
 			}
 			$location->rooms = json_decode($location->rooms);
@@ -164,8 +165,8 @@ class DPCalendarModelLocations extends JModelList
 			$query->where('a.created_by = ' . $db->quote($createdBy));
 		}
 
-		$latitude  = $this->getState('filter.latitude');
-		$longitude = $this->getState('filter.longitude');
+		$latitude  = trim($this->getState('filter.latitude'));
+		$longitude = trim($this->getState('filter.longitude'));
 		if ($latitude && $longitude) {
 			$latitude  = round(str_replace('+', '', $latitude), 8);
 			$longitude = round(str_replace('+', '', $longitude), 8);
@@ -209,6 +210,10 @@ class DPCalendarModelLocations extends JModelList
 			} else if ($radius > -1) {
 				$query->where('1 = 0');
 			}
+		}
+
+		if ($this->getState('filter.my')) {
+			$query->where('a.created_by = ' . (int)$user->id);
 		}
 
 		// Add the list ordering clause.

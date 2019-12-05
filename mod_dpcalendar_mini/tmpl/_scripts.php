@@ -59,7 +59,6 @@ if ($bd && !(count($bd) == 1 && !$bd[0])) {
 	);
 }
 
-$options['eventColor']            = '#' . str_replace('#', '', $params->get('event_color', '135CAE'));
 $options['firstDay']              = (int)$params->get('weekstart', 0);
 $options['scrollTime']            = $params->get('first_hour', 6) . ':00:00';
 $options['weekNumbersWithinDays'] = false;

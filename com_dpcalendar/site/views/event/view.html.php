@@ -25,6 +25,9 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
 
+		// Use the options from the event
+		$this->params->merge($event->params);
+
 		if ($this->params->get('event_redirect_to_url', 0) && $event->url) {
 			$this->app->redirect($event->url);
 		}
@@ -63,41 +66,29 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event->displayEvent                    = new stdClass();
 		$results                                = JFactory::getApplication()->triggerEvent(
 			'onContentAfterTitle',
-			array(
-				'com_dpcalendar.event',
-				&$event,
-				&$event->params,
-				0
-			)
+			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->afterDisplayTitle = trim(implode("\n", $results));
 
 		$results                                   = JFactory::getApplication()->triggerEvent(
 			'onContentBeforeDisplay',
-			array(
-				'com_dpcalendar.event',
-				&$event,
-				&$event->params,
-				0
-			)
+			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->beforeDisplayContent = trim(implode("\n", $results));
 
 		$results                                  = JFactory::getApplication()->triggerEvent(
 			'onContentAfterDisplay',
-			array(
-				'com_dpcalendar.event',
-				&$event,
-				&$event->params,
-				0
-			)
+			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->afterDisplayContent = trim(implode("\n", $results));
 
 		$this->event = $event;
 
 		$model = $this->getModel();
-		$model->hit();
+
+		if ($this->params->get('event_count_clicks', 1)) {
+			$model->hit();
+		}
 
 		$this->roomTitles = [];
 		if ($event->locations && !empty($this->event->rooms)) {
@@ -162,6 +153,16 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 
 		if ($this->originalEvent && $this->originalEvent->booking_series) {
 			$this->noBookingMessage = $this->getBookingMessage($this->originalEvent);
+		}
+
+		// Taxes stuff
+		$this->taxRate = null;
+		if ($this->country = \DPCalendar\Helper\Location::getCountryForIp()) {
+			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model         = \JModelLegacy::getInstance('Taxrate', 'DPCalendarModel', ['ignore_request' => true]);
+			$this->taxRate = $model->getItemByCountry($this->country->id);
+
+			$this->app->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 		}
 
 		return parent::init();
@@ -283,6 +284,4 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			}
 		}
 	}
-
-
 }

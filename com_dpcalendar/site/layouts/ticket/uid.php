@@ -7,5 +7,5 @@
  */
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 echo strtoupper(Sabre\VObject\UUIDUtil::getUUID());

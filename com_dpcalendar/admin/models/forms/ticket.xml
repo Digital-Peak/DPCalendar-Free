@@ -25,7 +25,7 @@
 		</field>
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
-		<field name="country" type="text" class="dp-form-input"
+		<field name="country" type="dpcountries" class="dp-form-input dp-select"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>
 		<field name="province" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL" description=""/>

@@ -33,22 +33,11 @@ class SetupForMail implements StageInterface
 		$params = clone \JComponentHelper::getParams('com_dpcalendar');
 		$params->set('show_header', false);
 
-		$details = DPCalendarHelper::renderLayout(
-			'booking.invoice',
-			array(
-				'booking'    => $payload->item,
-				'tickets'    => $payload->tickets,
-				'translator' => new \DPCalendar\Translator\Translator(),
-				'dateHelper' => new \DPCalendar\Helper\DateHelper(),
-				'params'     => $params
-			)
-		);
-
 		$payload->item->book_date_formatted = DPCalendarHelper::getDate($payload->item->book_date)
 			->format($params->get('event_date_format', 'm.d.Y') . ' ' . $params->get('event_time_format', 'g:i a'), true);
 		$payload->mailVariables             = array(
 			'booking'        => $payload->item,
-			'bookingDetails' => $details,
+			'bookingDetails' => $payload->item->invoice,
 			'bookingLink'    => \DPCalendarHelperRoute::getBookingRoute($payload->item, true),
 			'bookingUid'     => $payload->item->uid,
 			'sitename'       => $this->application->get('sitename'),

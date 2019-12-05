@@ -57,7 +57,7 @@ class Ical
 	 */
 	public static function createIcalFromEvents($events, $asDownload = false, $forceEvents = false, \DPCalendarModelEvents $eventsModel = null)
 	{
-		\JLoader::import('components.com_dpcalendar.libraries.vendor.autoload', JPATH_ADMINISTRATOR);
+		\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
 		$text   = [];
 		$text[] = 'BEGIN:VCALENDAR';
@@ -288,7 +288,8 @@ class Ical
 
 		$text[] = 'X-ACCESS:' . $event->access;
 		$text[] = 'X-HITS:' . $event->hits;
-		$text[] = 'X-URL:' . $event->url;
+		$text[] = 'X-URL:' . ($event->url ?:
+				\DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
 		$text[] = 'X-COLOR:' . $event->color;
 		$text[] = 'X-SHOW-END-TIME:' . $event->show_end_time;
 

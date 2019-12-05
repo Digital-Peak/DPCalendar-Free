@@ -73,30 +73,6 @@ if ($this->params->get('event_show_map', '1')) {
 					 data-title="<?php echo $location->title; ?>"
 					 data-description="&lt;a href='<?php echo DPCalendarHelperRoute::getLocationRoute($location); ?>'&gt;<?php echo $location->title; ?>&lt;/a&gt;"
 					 data-color="<?php echo $location->color; ?>">
-					<?php if ($location->country) { ?>
-						<dl class="dp-description">
-							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'); ?></dt>
-							<dd class="dp-description__description dp-location__country"><?php echo $location->country; ?></dd>
-						</dl>
-					<?php } ?>
-					<?php if ($location->province) { ?>
-						<dl class="dp-description">
-							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL'); ?></dt>
-							<dd class="dp-description__description dp-location__province"><?php echo $location->province; ?></dd>
-						</dl>
-					<?php } ?>
-					<?php if ($location->city) { ?>
-						<dl class="dp-description">
-							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL'); ?></dt>
-							<dd class="dp-description__description dp-location__city">
-								<?php if ($this->params->get('location_format', 'format_us') == 'format_us') { ?>
-									<?php echo $location->city . ' ' . $location->zip; ?>
-								<?php } else { ?>
-									<?php echo $location->zip . ' ' . $location->city; ?>
-								<?php } ?>
-							</dd>
-						</dl>
-					<?php } ?>
 					<?php if ($location->street) { ?>
 						<dl class="dp-description">
 							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL'); ?></dt>
@@ -107,6 +83,36 @@ if ($this->params->get('event_show_map', '1')) {
 									<?php echo $location->street . ' ' . $location->number; ?>
 								<?php } ?>
 							</dd>
+						</dl>
+					<?php } ?>
+					<?php if ($location->city) { ?>
+						<dl class="dp-description">
+							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL'); ?></dt>
+							<dd class="dp-description__description dp-location__city">
+								<?php if ($this->params->get('location_format', 'format_us') == 'format_us') { ?>
+									<?php echo $location->city; ?>
+								<?php } else { ?>
+									<?php echo $location->zip . ' ' . $location->city; ?>
+								<?php } ?>
+							</dd>
+						</dl>
+					<?php } ?>
+					<?php if ($location->province) { ?>
+						<dl class="dp-description">
+							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL'); ?></dt>
+							<dd class="dp-description__description dp-location__province">
+								<?php if ($this->params->get('location_format', 'format_us') == 'format_us') { ?>
+									<?php echo $location->province . ' ' . $location->zip; ?>
+								<?php } else { ?>
+									<?php echo $location->province; ?>
+								<?php } ?>
+							</dd>
+						</dl>
+					<?php } ?>
+					<?php if ($location->country) { ?>
+						<dl class="dp-description">
+							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'); ?></dt>
+							<dd class="dp-description__description dp-location__country"><?php echo $location->country; ?></dd>
 						</dl>
 					<?php } ?>
 					<?php if ($location->url) { ?>

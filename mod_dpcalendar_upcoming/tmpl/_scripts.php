@@ -15,5 +15,9 @@ if ($params->get('show_as_popup')) {
 	$document->loadScriptFile('default.js', 'mod_dpcalendar_upcoming');
 }
 
+if ($params->get('show_map')) {
+	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
+}
+
 // Load the stylesheet
 $document->loadStyleFile(str_replace('_:', '', $params->get('layout', 'default')) . '.css', 'mod_dpcalendar_upcoming');

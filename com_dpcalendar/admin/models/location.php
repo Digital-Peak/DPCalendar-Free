@@ -9,11 +9,8 @@ defined('_JEXEC') or die();
 
 use Joomla\Utilities\ArrayHelper;
 
-JLoader::import('joomla.application.component.modeladmin');
-
 class DPCalendarModelLocation extends JModelAdmin
 {
-
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
 	protected function canDelete($record)
@@ -31,13 +28,22 @@ class DPCalendarModelLocation extends JModelAdmin
 	{
 		$item = parent::getItem($pk);
 
-		if ($item->rooms) {
+		if ($item->rooms && $item->rooms != '{}') {
 			$item->rooms = json_decode($item->rooms);
+		} else {
+			$item->rooms = [];
 		}
 
 		if (empty($item->color)) {
 			$item->color = \DPCalendar\Helper\Location::getColor($item);
 		}
+
+		// Convert the params field to an array.
+		$registry = new JRegistry();
+		if (!empty($item->metadata)) {
+			$registry->loadString($item->metadata);
+		}
+		$item->metadata = $registry;
 
 		return $item;
 	}
@@ -95,6 +101,7 @@ class DPCalendarModelLocation extends JModelAdmin
 
 		if ($success && $this->getState('location.new') === true) {
 			$data['id'] = $this->getState('location.id');
+			JFactory::getApplication()->setUserState('dpcalendar.location.id', $data['id']);
 
 			// Load the language
 			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
@@ -156,6 +163,11 @@ class DPCalendarModelLocation extends JModelAdmin
 
 		if (empty($data)) {
 			$data = $this->getItem();
+		}
+
+		// Forms can't handle registry objects on load
+		if (isset($data->metadata) && $data->metadata instanceof Registry) {
+			$data->metadata = $data->metadata->toArray();
 		}
 
 		$this->preprocessData('com_dpcalendar.location', $data);

@@ -51,7 +51,7 @@ foreach ($tmp as $date => $events) {
 		'#year=' . $year . '&month=' . $month . '&day=' . $day . '&view=' . JFactory::getApplication()->input->get('openview', 'agendaDay')
 	);
 
-	$description = '<ul>';
+	$description = '<ul class="dp-events-list">';
 	foreach ($events as $event) {
 		$description .= '<li>' . htmlspecialchars($event->title) . '</li>';
 	}
@@ -65,7 +65,8 @@ foreach ($tmp as $date => $events) {
 		'url'         => $url,
 		'allDay'      => true,
 		'description' => $description,
-		'view_class'  => 'dp-event-compact'
+		'view_class'  => 'dp-event-compact',
+		'rendering'   => 'background'
 	);
 }
 

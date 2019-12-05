@@ -15,10 +15,13 @@ if ($params->get('show_event_as_popup')) {
 }
 
 $document->loadStyleFile('default.css', 'mod_dpcalendar_mini');
+$document->addStyle('.mod-dpcalendar-mini-' . $module->id . ' .fc-bgevent { background-color: ' . $params->get('event_color', '#135CAE') . '}');
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_mini', '_scripts');
+
+$compact = $params->get('compact_events', 2) == 1 ? 'compact' : 'expanded';
 ?>
-<div class="mod-dpcalendar-mini mod-dpcalendar-mini-<?php echo $module->id; ?>">
+<div class="mod-dpcalendar-mini mod-dpcalendar-mini_<?php echo $compact; ?> mod-dpcalendar-mini-<?php echo $module->id; ?>">
 	<div class="mod-dpcalendar-mini__loader">
 		<?php echo $layoutHelper->renderLayout('block.loader', $displayData); ?>
 	</div>

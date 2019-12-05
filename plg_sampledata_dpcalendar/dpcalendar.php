@@ -50,6 +50,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				$this->clearTable('events_location');
 				$this->clearTable('bookings');
 				$this->clearTable('tickets');
+				$this->clearTable('taxrates');
 				$this->clearTable('caldav_calendars');
 				$this->clearTable('caldav_calendarinstances');
 
@@ -417,6 +418,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'rrule'        => 'FREQ=WEEKLY;BYDAY=SA',
 				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_full_alt":"","image_full_caption":""}',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_8_DESC',
+				'schedule'     => '{"schedule0":{"title":"Intro","duration":"10","description":"Welcome the attendees."},"schedule1":{"title":"Warmup","duration":"20","description":"Making yourself ready."},"schedule2":{"title":"Exercise","duration":"60","description":"Training the different styles."},"schedule3":{"title":"Feedback","duration":"10","description":"Discussion round amongst the attendees."}}',
 				'capacity'     => null,
 				'max_tickets'  => 2,
 				'location_ids' => $locationIds[0]
@@ -581,40 +583,57 @@ class PlgSampledataDPCalendar extends JPlugin
 		try {
 			$this->setUp();
 
+			// Create tax rate
+			$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+			\JModelLegacy::getInstance('Taxrate', 'DPCalendarModel', ['ignore_request' => true])->save([
+				'title'     => 'VAT',
+				'rate'      => 10,
+				'state'     => 1,
+				'countries' => '{"countries0":{"country":"' . $model->getItem(['short_code' => 'US'])->id . '"}}'
+			]);
+
 			// Festival
 			$this->createBooking([
-				'name'     => 'Chuck Norris',
-				'email'    => 'chuck@example.com',
-				'country'  => 'United States',
-				'city'     => 'Texas',
-				'event_id' => [4 => ['tickets' => [0 => 1]]]
+				'name'      => 'Chuck Norris',
+				'email'     => 'chuck@example.com',
+				'country'   => 'US',
+				'city'      => 'Texas',
+				'latitude'  => 31.81603810,
+				'longitude' => -99.51209860,
+				'event_id'  => [4 => ['tickets' => [0 => 1]]]
 			]);
 
 			// Hike
 			$this->createBooking([
-				'name'     => 'Arnold Schwarzenegger',
-				'email'    => 'arnold@example.com',
-				'country'  => 'United States',
-				'city'     => 'Texas',
-				'event_id' => [5 => ['tickets' => [0 => 2]]]
+				'name'      => 'Arnold Schwarzenegger',
+				'email'     => 'arnold@example.com',
+				'country'   => 'US',
+				'city'      => 'Texas',
+				'latitude'  => 31.81603810,
+				'longitude' => -99.51209860,
+				'event_id'  => [5 => ['tickets' => [0 => 2]]]
 			]);
 
 			// Swimming
 			$this->createBooking([
-				'name'     => 'Jean-Claude van Damme',
-				'email'    => 'jean@example.com',
-				'country'  => 'Belgium',
-				'city'     => 'Sint-Agatha-Berchem',
-				'event_id' => [6 => ['tickets' => [0 => 1]]]
+				'name'      => 'Jean-Claude van Damme',
+				'email'     => 'jean@example.com',
+				'country'   => 'BE',
+				'city'      => 'Sint-Agatha-Berchem',
+				'latitude'  => 50.86492310,
+				'longitude' => 4.29467340,
+				'event_id'  => [6 => ['tickets' => [0 => 1]]]
 			]);
 
 			// Basketball
 			$this->createBooking([
-				'name'     => 'Bruce Lee',
-				'email'    => 'lee@example.com',
-				'country'  => 'United States',
-				'city'     => 'New York',
-				'event_id' => [7 => ['tickets' => [0 => 2, 1 => 0, 2 => 1]]]
+				'name'      => 'Bruce Lee',
+				'email'     => 'lee@example.com',
+				'country'   => 'US',
+				'city'      => 'New York',
+				'latitude'  => 40.71272810,
+				'longitude' => -74.00601520,
+				'event_id'  => [7 => ['tickets' => [0 => 2, 1 => 0, 2 => 1]]]
 			]);
 
 			$response            = [];
@@ -1000,6 +1019,9 @@ class PlgSampledataDPCalendar extends JPlugin
 				$data['event_id'][$this->getEvent($eventIds[$eventId][$code])->id] = $tickets;
 				unset($data['event_id'][$eventId]);
 			}
+
+			$model           = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+			$data['country'] = $model->getItem(['short_code' => $data['country']])->id;
 
 			$model = JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
 

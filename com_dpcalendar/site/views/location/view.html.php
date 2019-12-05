@@ -73,5 +73,20 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		}
 
 		$this->document->setTitle($title);
+
+		$metadesc = trim($this->location->metadata->get('metadesc'));
+		if (!$metadesc) {
+			$metadesc = JHtmlString::truncate($this->location->description, 100, true, false);
+		}
+		if ($metadesc) {
+			$this->document->setDescription($metadesc);
+		}
+
+		$mdata = $this->location->metadata->toArray();
+		foreach ($mdata as $k => $v) {
+			if ($v) {
+				$this->document->setMetadata($k, $v);
+			}
+		}
 	}
 }

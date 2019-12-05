@@ -76,7 +76,8 @@ foreach ($this->items as $event) {
 		'fgcolor'     => $fgcolor,
 		'allDay'      => (bool)$event->all_day,
 		'description' => $description,
-		'location'    => $locations
+		'location'    => $locations,
+		'classNames'  => ['dp-event-' . $event->id, 'dp-event-calendar-' . $event->catid],
 	);
 
 	if ($event->show_end_time || $event->all_day) {

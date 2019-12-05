@@ -205,6 +205,7 @@ class DPCalendarModelEvent extends JModelForm
 					$data->earlybird       = json_decode($data->earlybird);
 					$data->user_discount   = json_decode($data->user_discount);
 					$data->booking_options = $data->booking_options ? json_decode($data->booking_options) : [];
+					$data->schedule        = $data->schedule ? json_decode($data->schedule) : [];
 					$data->rooms           = $data->rooms ? explode(',', $data->rooms) : [];
 					$data->plugintype      = $data->plugintype ? explode(',', $data->plugintype) : [];
 

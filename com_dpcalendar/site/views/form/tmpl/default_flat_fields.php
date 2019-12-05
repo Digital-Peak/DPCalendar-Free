@@ -5,7 +5,6 @@
  * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 $fields = $this->form->getFieldset();
@@ -15,7 +14,7 @@ $fields = $this->form->getFieldset();
 	<?php foreach ($fields as $field) { ?>
 		<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
 		<?php if ($field->fieldname == 'rooms' && $this->params->get('event_form_change_location', 1)) { ?>
-			<?php echo $this->loadTemplate('location'); ?>
+			<?php echo $this->loadTemplate('map'); ?>
 		<?php } ?>
 	<?php } ?>
 </div>

@@ -26,18 +26,28 @@ class SetupForNew implements StageInterface
 	 */
 	private $user = null;
 
-	public function __construct(\JApplicationCms $application, \JUser $user)
+	/**
+	 * @var \DPCalendarModelTaxrate
+	 */
+	private $model = null;
+
+	public function __construct(\JApplicationCms $application, \JUser $user, \DPCalendarModelTaxrate $model)
 	{
 		$this->application = $application;
 		$this->user        = $user;
+		$this->model       = $model;
 	}
 
 	public function __invoke($payload)
 	{
 		// Default some data
 		$payload->data['price']    = 0;
+		$payload->data['tax']      = 0.00;
 		$payload->data['id']       = 0;
 		$payload->data['currency'] = DPCalendarHelper::getComponentParameter('currency', 'USD');
+
+		$taxRate                   = $this->model->getItemByCountry($payload->data['country']);
+		$payload->data['tax_rate'] = $taxRate ? $taxRate->rate : 0;
 
 		// On front we force the user id to the logged in user
 		if ($this->application->isClient('site') && !$payload->invite) {
@@ -52,6 +62,16 @@ class SetupForNew implements StageInterface
 
 		if ($amountTickets == 0) {
 			throw new \Exception(\JText::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
+		}
+
+		// Publish if the price is 0
+		if (!$payload->data['price']) {
+			$payload->data['state'] = 1;
+		}
+
+		if ($taxRate) {
+			$payload->data['tax']   = ($payload->data['price'] / 100) * $taxRate->rate;
+			$payload->data['price'] = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);
 		}
 
 		return $payload;
@@ -120,11 +140,6 @@ class SetupForNew implements StageInterface
 
 		if ($newTickets) {
 			$payload->eventsWithTickets[] = $event;
-		}
-
-		// Publish if we don't know the state and no payment is required
-		if (!isset($payload->data['state']) && !$paymentRequired) {
-			$payload->data['state'] = 1;
 		}
 
 		return $amountTickets;

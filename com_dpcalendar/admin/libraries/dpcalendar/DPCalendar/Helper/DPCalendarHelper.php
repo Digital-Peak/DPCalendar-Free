@@ -546,9 +546,10 @@ class DPCalendarHelper
 	public static function getStringFromParams($key, $default, $params)
 	{
 		$text = $params->get($key, $default);
+		$text = trim(strip_tags($text));
 
-		if (\JFactory::getLanguage()->hasKey(trim(strip_tags($text)))) {
-			return \JText::_(trim(strip_tags($text)));
+		if (\JFactory::getLanguage()->hasKey($text)) {
+			return \JText::_($text);
 		}
 
 		return $text;

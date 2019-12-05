@@ -14,6 +14,10 @@ class DPCalendarViewEvent extends JViewLegacy
 	public function display($tpl = null)
 	{
 		$event = $this->get('Item');
+		if (!$event || !$event->id) {
+			return false;
+		}
+
 		if ($event->original_id > 0) {
 			// Download the series
 			$event = $this->getModel()->getItem($event->original_id);

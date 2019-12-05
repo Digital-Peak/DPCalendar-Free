@@ -34,17 +34,21 @@ class Booking
 	public static function createInvoice($booking, $tickets, $params, $toFile = false)
 	{
 		try {
-			\JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-			$details = \DPCalendarHelper::renderLayout(
-				'booking.invoice',
-				array(
-					'booking'    => $booking,
-					'tickets'    => $tickets,
-					'translator' => new Translator(),
-					'dateHelper' => new DateHelper(),
-					'params'     => $params
-				)
-			);
+			$details = $booking->invoice;
+
+			if (!$details) {
+				\JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+				$details = \DPCalendarHelper::renderLayout(
+					'booking.invoice',
+					array(
+						'booking'    => $booking,
+						'tickets'    => $tickets,
+						'translator' => new Translator(),
+						'dateHelper' => new DateHelper(),
+						'params'     => $params
+					)
+				);
+			}
 
 			// Disable notices (TCPDF is causing many of these)
 			error_reporting(E_ALL ^ E_NOTICE);
@@ -353,7 +357,7 @@ class Booking
 	public static function getPriceWithDiscount($price, $event, $earlyBirdIndex = -1, $userGroupIndex = -1)
 	{
 		if (!$price) {
-			return $price;
+			return 0;
 		}
 		$newPrice = $price;
 

@@ -11,7 +11,6 @@ JLoader::import('joomla.application.component.controlleradmin');
 
 class DPCalendarControllerLocations extends JControllerAdmin
 {
-
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
 	public function getModel ($name = 'Location', $prefix = 'DPCalendarModel', $config = array('ignore_request' => true))

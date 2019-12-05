@@ -5,7 +5,6 @@
  * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 $url = 'http://extensions.joomla.org/extensions/extension/calendars-a-events/events/dpcalendar' . (DPCalendarHelper::isFree() ? '-lite' : '');

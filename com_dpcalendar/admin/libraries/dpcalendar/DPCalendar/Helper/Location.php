@@ -76,6 +76,15 @@ class Location
 		'zh-TW'
 	];
 
+	public static function getDirectionsLink($location)
+	{
+		if (DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'openstreetmap') {
+			return 'https://www.openstreetmap.org/directions?route=;' . $location->latitude . ',' . $location->longitude;
+		}
+
+		return 'https://www.google.com/maps/dir/?api=1&destination=' . self::format([$location]);
+	}
+
 	public static function getMapLink($locations)
 	{
 		if (!$locations) {
@@ -100,7 +109,7 @@ class Location
 		$format = \DPCalendarHelper::getComponentParameter('location_format', 'format_us');
 		$format = str_replace('.php', '', $format);
 
-		return \DPCalendarHelper::renderLayout('location.' . $format, array('locations' => $locations));
+		return \DPCalendarHelper::renderLayout('location.' . $format, ['locations' => $locations]);
 	}
 
 	/**
@@ -168,8 +177,7 @@ class Location
 		if ($fill) {
 			try {
 				$table = \JTable::getInstance('Location', 'DPCalendarTable');
-				$table->bind((array)$locObject);
-				if (!$table->store()) {
+				if (!$table->save((array)$locObject)) {
 					\JFactory::getApplication()->enqueueMessage($table->getError(), 'warning');
 				}
 				$locObject->id = $table->id;

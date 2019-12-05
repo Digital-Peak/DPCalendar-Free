@@ -1,13 +1,19 @@
 .mod-dpcalendar-upcoming-blog .dp-figure {
-	display: flex;
-	flex-direction: column;
 	text-align: center;
 	margin: 0;
 }
 
 .mod-dpcalendar-upcoming-blog .dp-figure__caption {
+	display: block;
 	width: 100%;
 	box-sizing: border-box;
+}
+
+.mod-dpcalendar-upcoming-blog .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
 }
 
 .mod-dpcalendar-upcoming-blog {
@@ -42,9 +48,8 @@
 
 .mod-dpcalendar-upcoming-blog .dp-link_cta {
 	display: inline-block;
-	font-size: small;
 	margin-top: 10px;
-	padding: 2px 15px;
+	padding: 5px 15px;
 }
 
 .mod-dpcalendar-upcoming-blog .dp-link_cta.dp-button {
@@ -52,16 +57,17 @@
 	font-weight: bold;
 	text-transform: uppercase;
 	color: #000000;
+	border: 0;
 }
 
-.mod-dpcalendar-upcoming-blog .dp-date__start, .mod-dpcalendar-upcoming-blog .dp-date__end,
-.mod-dpcalendar-upcoming-blog .dp-time__start,
-.mod-dpcalendar-upcoming-blog .dp-time__end {
-	font-size: .8em;
-	font-weight: bold;
-	border-radius: 2px;
+.mod-dpcalendar-upcoming-blog__date {
+	font-style: italic;
 	padding: 2px 0;
-	opacity: .7;
+}
+
+.mod-dpcalendar-upcoming-blog__rrule, .mod-dpcalendar-upcoming-blog__price {
+	font-style: italic;
+	padding: 2px 0;
 }
 
 .mod-dpcalendar-upcoming-blog .dp-figure {
@@ -69,12 +75,12 @@
 }
 
 .mod-dpcalendar-upcoming-blog .dp-figure .dp-image {
+	width: 100%;
 	object-fit: cover;
 	height: 100px;
 }
 
 .mod-dpcalendar-upcoming-blog .dp-figure__caption {
-	font-size: .8em;
 	opacity: .7;
 }
 
@@ -86,13 +92,12 @@
 }
 
 .mod-dpcalendar-upcoming-blog .dp-figure {
-	display: flex;
-	flex-direction: column;
 	text-align: center;
 	margin: 0;
 }
 
 .mod-dpcalendar-upcoming-blog .dp-figure__caption {
+	display: block;
 	width: 100%;
 	box-sizing: border-box;
 }
@@ -107,8 +112,8 @@
 	margin: 0 0 12px;
 }
 
-.mod-dpcalendar-upcoming-blog__date {
-	font-size: smaller;
+.mod-dpcalendar-upcoming-blog__date, .mod-dpcalendar-upcoming-blog__rrule {
+	font-weight: inherit;
 	display: inline-block;
 }
 
@@ -118,13 +123,11 @@
 }
 
 .mod-dpcalendar-upcoming-blog .dp-date__start, .mod-dpcalendar-upcoming-blog .dp-date__end, .mod-dpcalendar-upcoming-blog .dp-time__start, .mod-dpcalendar-upcoming-blog .dp-time__end {
-	font-size: 1em;
 	font-weight: normal;
 	opacity: 1;
 }
 
 .mod-dpcalendar-upcoming-blog__calendar, .mod-dpcalendar-upcoming-blog__capacity, .mod-dpcalendar-upcoming-blog__price, .mod-dpcalendar-upcoming-blog__location {
-	font-size: smaller;
 	display: block;
 }
 

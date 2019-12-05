@@ -23,7 +23,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 		<?php } ?>
 		<?php foreach ($events as $index => $event) { ?>
 			<?php $startDate = $dateHelper->getDate($event->start_date, $event->all_day); ?>
-			<div class="mod-dpcalendar-upcoming-horizontal__event <?php echo !$groupHeading ? 'mod-dpcalendar-upcoming-horizontal__group' : ''; ?>">
+			<div class="mod-dpcalendar-upcoming-horizontal__event  dp-event dp-event_<?php echo $event->ongoing_start_date ? 'started' : 'future'; ?> <?php echo !$groupHeading ? 'mod-dpcalendar-upcoming-horizontal__group' : ''; ?>">
 				<?php echo $layoutHelper->renderLayout('block.flatcalendar', ['date' => $startDate, 'color' => $event->color]); ?>
 				<div class="mod-dpcalendar-upcoming-horizontal__information">
 					<a href="<?php echo $event->realUrl; ?>" class="dp-event-url dp-link"><?php echo $event->title; ?></a>
@@ -40,8 +40,50 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 						<?php } ?>
 					<?php } ?>
 					<div class="mod-dpcalendar-upcoming-horizontal__date">
+						<?php echo $layoutHelper->renderLayout(
+							'block.icon',
+							['icon' => \DPCalendar\HTML\Block\Icon::CLOCK, 'title' => $translator->translate('COM_DPCALENDAR_DATE')]
+						); ?>
 						<?php echo $dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>
 					</div>
+					<?php if ($event->rrule) { ?>
+						<div class="mod-dpcalendar-upcoming-horizontal__rrule">
+							<?php echo $layoutHelper->renderLayout(
+								'block.icon',
+								[
+									'icon'  => \DPCalendar\HTML\Block\Icon::RECURRING,
+									'title' => $translator->translate('MOD_DPCALENDAR_UPCOMING_SERIES')
+								]
+							); ?>
+							<?php echo $dateHelper->transformRRuleToString($event->rrule, $event->start_date); ?>
+						</div>
+					<?php } ?>
+					<?php if ($params->get('show_price') && $event->price) { ?>
+						<?php foreach ($event->price->value as $key => $value) { ?>
+							<?php $discounted = \DPCalendar\Helper\Booking::getPriceWithDiscount($value, $event); ?>
+							<div class="mod-dpcalendar-upcoming-horizontal__price dp-event-price">
+								<?php echo $layoutHelper->renderLayout(
+									'block.icon',
+									[
+										'icon'  => \DPCalendar\HTML\Block\Icon::MONEY,
+										'title' => $translator->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL')
+									]
+								); ?>
+								<span class="dp-event-price__label">
+									<?php echo $event->price->label[$key] ?: $translator->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL'); ?>
+								</span>
+								<span class="dp-event-price__regular<?php echo $discounted != $value ? ' dp-event-price__regular_has-discount' : ''; ?>">
+									<?php echo $value === '' ? '' : DPCalendarHelper::renderPrice($value); ?>
+								</span>
+								<?php if ($discounted != $value) { ?>
+									<span class="dp-event-price__discount"><?php echo DPCalendarHelper::renderPrice($discounted); ?></span>
+								<?php } ?>
+								<span class="dp-event-price__description">
+									<?php echo $event->price->description[$key]; ?>
+								</span>
+							</div>
+						<?php } ?>
+					<?php } ?>
 				</div>
 				<?php if ($event->images->image_intro) { ?>
 					<div class="mod-dpcalendar-upcoming-horizontal__image">

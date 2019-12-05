@@ -8,8 +8,6 @@
 defined('_JEXEC') or die();
 
 ?>
-<h3 class="com-dpcalendar-location__title dp-heading">
-	<a href="<?php echo \DPCalendar\Helper\Location::getMapLink($this->location); ?>" class="dp-link" target="_blank">
-		<?php echo $this->location->title; ?>
-	</a>
-</h3>
+<h2 class="com-dpcalendar-location__title dp-heading">
+	<?php echo $this->location->title; ?>
+</h2>

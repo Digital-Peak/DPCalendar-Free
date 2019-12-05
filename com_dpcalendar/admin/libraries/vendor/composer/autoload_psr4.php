@@ -19,6 +19,8 @@ return array(
     'Sabre\\DAVACL\\' => array($vendorDir . '/sabre/dav/lib/DAVACL'),
     'Sabre\\CardDAV\\' => array($vendorDir . '/sabre/dav/lib/CardDAV'),
     'Sabre\\CalDAV\\' => array($vendorDir . '/sabre/dav/lib/CalDAV'),
+    'Recurr\\Test\\' => array($vendorDir . '/simshaun/recurr/tests'),
+    'Recurr\\' => array($vendorDir . '/simshaun/recurr/src/Recurr'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Omnipay\\TwoCheckout\\' => array($vendorDir . '/omnipay/2checkout/src'),
     'Omnipay\\Stripe\\' => array($vendorDir . '/omnipay/stripe/src'),

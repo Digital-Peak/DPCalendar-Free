@@ -2,6 +2,11 @@
 	'use strict';
 
 	document.addEventListener('DOMContentLoaded', function () {
+		if (!document.querySelector('.com-dpcalendar-booking__form')) {
+			// Form is not available
+			return;
+		}
+
 		document.querySelector('.com-dpcalendar-booking__ticket-actions .dp-button-save').addEventListener('click', function (event) {
 			event.preventDefault();
 

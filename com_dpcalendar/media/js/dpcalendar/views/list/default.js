@@ -37,7 +37,7 @@ DPCalendar = window.DPCalendar || {};
 
 		if (DPCalendar.Map && geoComplete && geoComplete.getAttribute('data-latitude') && geoComplete.getAttribute('data-longitude')) {
 			DPCalendar.Map.drawCircle(
-				root.querySelector('.dp-map').dpmap,
+				root.querySelector('.dp-map'),
 				{latitude: geoComplete.getAttribute('data-latitude'), longitude: geoComplete.getAttribute('data-longitude')},
 				root.querySelector('.dp-input[name=radius]').value,
 				root.querySelector('.dp-input[name="length-type"]').value

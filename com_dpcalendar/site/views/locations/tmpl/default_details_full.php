@@ -11,19 +11,35 @@ defined('_JEXEC') or die();
 <div class="com-dpcalendar-locations__details">
 	<?php foreach ($this->locations as $location) { ?>
 		<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
-		<div class=dp-location">
-			<h3 class="dp-heading">
-				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
-				<a href="<?php echo $this->router->getLocationRoute($location, JUri::getInstance()); ?>" class="dp-link">
+		<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
+			<h2 class="dp-heading">
+				<span class="dp-heading__icon" style="color: #<?php echo $location->color; ?>">
+					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
+				</span>
+				<a href="<?php echo $this->router->getLocationRoute($location, JUri::getInstance()); ?>" class="dp-link dp-heading__link">
 					<?php echo $location->title; ?>
 				</a>
-			</h3>
+			</h2>
+			<div class="dp-location__buttons dp-button-bar">
+				<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
+						data-href="<?php echo \DPCalendar\Helper\Location::getMapLink($location); ?>">
+					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAP]); ?>
+					<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_SITE_LINK'); ?>
+					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
+				</button>
+				<button type="button" class="dp-button dp-button-action dp-button-map-directions" data-target="new"
+						data-href="<?php echo \DPCalendar\Helper\Location::getDirectionsLink($location); ?>">
+					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DIRECTIONS]); ?>
+					<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
+					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
+				</button>
+			</div>
 			<div class="dp-location__details"
-			     data-latitude="<?php echo $location->latitude; ?>"
-			     data-longitude="<?php echo $location->longitude; ?>"
-			     data-title="<?php echo $location->title; ?>"
-			     data-description="<?php echo $this->escape($description); ?>"
-			     data-color="<?php echo \DPCalendar\Helper\Location::getColor($location); ?>">
+				 data-latitude="<?php echo $location->latitude; ?>"
+				 data-longitude="<?php echo $location->longitude; ?>"
+				 data-title="<?php echo $location->title; ?>"
+				 data-description="<?php echo $this->escape($description); ?>"
+				 data-color="<?php echo $location->color; ?>">
 				<?php if ($location->country) { ?>
 					<dl class="dp-description">
 						<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'); ?></dt>
@@ -79,9 +95,11 @@ defined('_JEXEC') or die();
 					</dl>
 				<?php } ?>
 			</div>
-			<?php echo trim(implode("\n",
-				$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$params, 0]))); ?>
-			<?php echo JHTML::_('content.prepare', $location->description); ?>
+			<div class="dp-location__description">
+				<?php echo trim(implode("\n",
+					$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$params, 0]))); ?>
+				<?php echo JHTML::_('content.prepare', $location->description); ?>
+			</div>
 		</div>
 	<?php } ?>
 </div>

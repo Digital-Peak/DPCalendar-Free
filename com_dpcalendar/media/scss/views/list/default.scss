@@ -12,6 +12,7 @@
 
 	&__map {
 		margin-bottom: 10px;
+
 		.dp-icon {
 			color: #000;
 		}
@@ -23,8 +24,11 @@
 			margin: 0 0 10px 0;
 		}
 
-		@media screen and (min-width: 640px) {
-			&__image .dp-image {
+		&__image {
+			float: right;
+			padding: 0 10px;
+
+			.dp-image {
 				width: 150px;
 				height: 50px;
 				object-fit: cover;
@@ -32,8 +36,13 @@
 		}
 
 		@media screen and (max-width: 640px) {
-			&__image .dp-image {
-				max-height: 100px;
+			&__image {
+				float: none;
+			}
+
+			&__image .dp-image, .dp-figure {
+				width: 100%;
+				max-height: 150px;
 				object-fit: cover;
 			}
 		}

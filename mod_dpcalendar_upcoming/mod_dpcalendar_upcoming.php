@@ -80,7 +80,7 @@ $model->setState('category.id', $ids);
 $model->setState('category.recursive', true);
 $model->setState('filter.search', $params->get('filter', ''));
 $model->setState('filter.ongoing', $params->get('ongoing', 0));
-$model->setState('filter.expand', true);
+$model->setState('filter.expand', $params->get('expand', 1));
 $model->setState('filter.state', 1);
 $model->setState('filter.language', JFactory::getLanguage());
 $model->setState('filter.publish_date', true);
@@ -109,6 +109,7 @@ if ($params->get('sort', 'start_date') == 'start_date') {
 
 JPluginHelper::importPlugin('content');
 JPluginHelper::importPlugin('dpcalendar');
+$now = $dateHelper->getDate();
 
 // The grouping option
 $grouping = $params->get('output_grouping', '');
@@ -161,8 +162,14 @@ foreach ($events as $event) {
 			$desc = $descTruncated . $desc;
 		}
 	}
-
 	$event->truncatedDescription = $desc;
+
+	// Determine if the event is running
+	$date = $dateHelper->getDate($event->start_date);
+	if (!empty($event->series_min_start_date) && !$params->get('expand', 1)) {
+		$date = $dateHelper->getDate($event->series_min_start_date);
+	}
+	$event->ongoing_start_date = $date < $now ? $date : null;
 }
 
 $return = $app->input->getInt('Itemid', null);

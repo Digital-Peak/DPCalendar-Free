@@ -56,6 +56,11 @@
 	#jform_scheduling_end_date_time {
 		display: none;
 	}
+
+	&__location-form {
+		border: 1px solid #c0c0c0;
+		padding: 10px;
+	}
 }
 
 @import "../../vendor/pikaday";

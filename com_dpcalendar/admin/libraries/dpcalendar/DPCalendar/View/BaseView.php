@@ -10,6 +10,7 @@ namespace DPCalendar\View;
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Translator\Translator;
 use Joomla\Registry\Registry;
 
 class BaseView extends \JViewLegacy
@@ -27,6 +28,11 @@ class BaseView extends \JViewLegacy
 	 * @var \JUser
 	 */
 	protected $user = null;
+
+	/**
+	 * @var Translator
+	 */
+	protected $translator = null;
 
 	public function display($tpl = null)
 	{
@@ -92,10 +98,12 @@ class BaseView extends \JViewLegacy
 
 			// Only render the sidebar when we are not editing a form
 			if (!($this->getModel() instanceof \JModelAdmin) && $this->input->get('tmpl') != 'component') {
-				$this->sidebar       = \JHtmlSidebar::render();
-				$this->filterForm    = $this->get('FilterForm');
-				$this->activeFilters = $this->get('ActiveFilters');
+				$this->sidebar = \JHtmlSidebar::render();
+			} else {
+				$this->sidebar = null;
 			}
+			$this->filterForm    = $this->get('FilterForm');
+			$this->activeFilters = $this->get('ActiveFilters');
 		}
 
 		parent::display($tpl);

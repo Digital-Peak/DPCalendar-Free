@@ -91,6 +91,10 @@ class DPCalendarModelLocations extends JModelList
 		$locations = parent::getItems();
 
 		foreach ($locations as $location) {
+			if (empty($location->color)) {
+				$location->color = \DPCalendar\Helper\Location::getColor($location);
+			}
+
 			if (!is_string($location->rooms)) {
 				continue;
 			}

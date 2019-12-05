@@ -24,15 +24,73 @@
 	overflow: visible;
 }
 
+.mod-dpcalendar-mini .fc-header-toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.mod-dpcalendar-mini .fc-header-toolbar h2 {
+	font-size: 19.5px;
+	font-weight: 200;
+}
+
+.mod-dpcalendar-mini .fc-header-toolbar .fc-right {
+	order: 1;
+}
+
+.mod-dpcalendar-mini .fc-header-toolbar .fc-clear {
+	display: none;
+}
+
+.mod-dpcalendar-mini .fc-button-primary {
+	padding: 5px;
+	border: 1px solid #c0c0c0;
+	border-radius: .1rem;
+	font-weight: 400;
+	background-color: #fefefe;
+	color: #000;
+	background-image: none;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.mod-dpcalendar-mini .fc-button-primary.fc-corner-right {
+	border-top-right-radius: .1rem;
+	border-bottom-right-radius: .1rem;
+}
+
+.mod-dpcalendar-mini .fc-button-primary.fc-corner-left {
+	border-top-left-radius: .1rem;
+	border-bottom-left-radius: .1rem;
+}
+
+.mod-dpcalendar-mini .fc-button-primary:not(:disabled):active:focus, .mod-dpcalendar-mini .fc-button-primary:not(:disabled).fc-button-active:focus {
+	-webkit-box-shadow: unset;
+	box-shadow: unset;
+}
+
+.mod-dpcalendar-mini .fc-button-group .fc-button {
+	border-radius: .1rem;
+}
+
+.mod-dpcalendar-mini .fc-button-group .fc-button + .fc-button {
+	margin-left: 3px;
+}
+
 @media screen and (max-width: 540px) {
+	.mod-dpcalendar-mini .fc-header-toolbar {
+		flex-direction: column;
+	}
 	.mod-dpcalendar-mini .fc-header-toolbar > div {
-		display: block;
-		margin: 0 auto;
-		width: 100%;
+		margin: 4px auto;
 	}
 	.mod-dpcalendar-mini .fc-header-toolbar > * > * {
 		float: none;
 	}
+}
+
+.mod-dpcalendar-mini .fc-event {
+	border-radius: 0;
 }
 
 .mod-dpcalendar-mini .dp-loader {

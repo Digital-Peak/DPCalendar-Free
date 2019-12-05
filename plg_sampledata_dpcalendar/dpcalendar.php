@@ -19,6 +19,8 @@ class PlgSampledataDPCalendar extends JPlugin
 
 	private static $lorem = '<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>';
 
+	private static $europeanDateFormatLanguages = ['de-DE', 'fr-FR'];
+
 	private $languageCache = [];
 
 	public function onSampledataGetOverview()
@@ -308,7 +310,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			if (!DPCalendarHelper::isFree()) {
 				$start->modify('-1 month');
 			}
-			$start->setTime(8, 0, 0);
+			$start->setTime(13, 0, 0);
 
 			$end = clone $start;
 			$end->modify('+2 hours');
@@ -824,6 +826,22 @@ class PlgSampledataDPCalendar extends JPlugin
 				}
 			}
 
+			if (in_array($code, self::$europeanDateFormatLanguages)) {
+				switch ($data['module']) {
+					case 'mod_dpcalendar_map':
+					case 'mod_dpcalendar_upcoming':
+						$data['params']['date_format'] = 'd.m.Y';
+						$data['params']['time_format'] = 'H:i';
+						break;
+					case 'mod_dpcalendar_upcoming':
+						$data['params']['timeformat_month'] = 'H:i';
+						$data['params']['timeformat_week']  = 'H:i';
+						$data['params']['timeformat_day']   = 'H:i';
+						$data['params']['timeformat_list']  = 'H:i';
+						break;
+				}
+			}
+
 			if ($data['module'] == 'mod_menu') {
 				$data['params'] = ['menutype' => 'dpcalendar-' . $code];
 			}
@@ -863,6 +881,26 @@ class PlgSampledataDPCalendar extends JPlugin
 			}
 			if (!empty($data['params']) && !empty($data['params']['textbefore'])) {
 				$data['params']['textbefore'] = $language->_($data['params']['textbefore']);
+			}
+
+			if (in_array($code, self::$europeanDateFormatLanguages)) {
+				switch ($data['link']) {
+					case 'view=calendar':
+						$data['params']['timeformat_month'] = 'H:i';
+						$data['params']['timeformat_week']  = 'H:i';
+						$data['params']['timeformat_day']   = 'H:i';
+						$data['params']['timeformat_list']  = 'H:i';
+					case 'view=list':
+					case 'view=list&layout=blog':
+					case 'view=list&layout=timeline':
+						$data['params']['list_title_format'] = 'd.m.Y';
+					case 'view=map':
+						$data['params']['map_date_format'] = 'H:i';
+					case 'view=event&id=':
+						$data['params']['event_date_format'] = 'd.m.Y';
+						$data['params']['event_time_format'] = 'H:i';
+						break;
+				}
 			}
 
 			if (!empty($data['id'])) {

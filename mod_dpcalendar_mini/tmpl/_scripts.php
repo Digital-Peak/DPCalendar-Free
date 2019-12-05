@@ -32,6 +32,8 @@ $translator->translateJS('JCANCEL');
 $translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 
+$document->addScriptOptions('calendar.names', $dateHelper->getNames());
+
 // The options which will be passed to the js library
 $options                   = array();
 $options['eventSources']   = array();
@@ -65,16 +67,15 @@ $options['fixedWeekCount'] = (boolean)$params->get('fixed_week_count', 1);
 $bd = $params->get('business_hours_days', array());
 if ($bd && !(count($bd) == 1 && !$bd[0])) {
 	$options['businessHours'] = array(
-		'start' => $params->get('business_hours_start', ''),
-		'end'   => $params->get('business_hours_end', ''),
-		'dow'   => $params->get('business_hours_days', array())
+		'startTime'  => $params->get('business_hours_start', ''),
+		'endTime'    => $params->get('business_hours_end', ''),
+		'daysOfWeek' => $params->get('business_hours_days', array())
 	);
 }
 
 $options['eventColor']            = '#' . $params->get('event_color', '135CAE');
 $options['firstDay']              = $params->get('weekstart', 0);
 $options['firstHour']             = $params->get('first_hour', 6);
-$options['nextDayThreshold']      = '00:00:00';
 $options['weekNumbersWithinDays'] = false;
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;
@@ -151,25 +152,25 @@ if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $resourc
 $options['views']               = array();
 $options['views']['month']      = array(
 	'titleFormat'            => $dateHelper->convertPHPDateToMoment($params->get('titleformat_month', 'F Y')),
-	'timeFormat'             => $dateHelper->convertPHPDateToMoment($params->get('timeformat_month', 'g:i a')),
+	'eventTimeFormat'        => $dateHelper->convertPHPDateToMoment($params->get('timeformat_month', 'g:i a')),
 	'columnHeaderFormat'     => $dateHelper->convertPHPDateToMoment($params->get('columnformat_month', 'D')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
 );
 $options['views']['agendaWeek'] = array(
 	'titleFormat'            => $dateHelper->convertPHPDateToMoment($params->get('titleformat_week', 'M j Y')),
-	'timeFormat'             => $dateHelper->convertPHPDateToMoment($params->get('timeformat_week', 'g:i a')),
+	'eventTimeFormat'        => $dateHelper->convertPHPDateToMoment($params->get('timeformat_week', 'g:i a')),
 	'columnHeaderFormat'     => $dateHelper->convertPHPDateToMoment($params->get('columnformat_week', 'D n/j')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 );
 $options['views']['agendaDay']  = array(
 	'titleFormat'            => $dateHelper->convertPHPDateToMoment($params->get('titleformat_day', 'F j Y')),
-	'timeFormat'             => $dateHelper->convertPHPDateToMoment($params->get('timeformat_day', 'g:i a')),
+	'eventTimeFormat'        => $dateHelper->convertPHPDateToMoment($params->get('timeformat_day', 'g:i a')),
 	'columnHeaderFormat'     => $dateHelper->convertPHPDateToMoment($params->get('columnformat_day', 'l')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
 );
 $options['views']['list']       = array(
 	'titleFormat'        => $dateHelper->convertPHPDateToMoment($params->get('titleformat_list', 'M j Y')),
-	'timeFormat'         => $dateHelper->convertPHPDateToMoment($params->get('timeformat_list', 'g:i a')),
+	'eventTimeFormat'    => $dateHelper->convertPHPDateToMoment($params->get('timeformat_list', 'g:i a')),
 	'columnHeaderFormat' => $dateHelper->convertPHPDateToMoment($params->get('columnformat_list', 'D')),
 	'listDayFormat'      => $dateHelper->convertPHPDateToMoment($params->get('dayformat_list', 'l')),
 	'listDayAltFormat'   => $dateHelper->convertPHPDateToMoment($params->get('dateformat_list', 'F j, Y')),

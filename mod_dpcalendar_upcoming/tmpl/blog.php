@@ -24,7 +24,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 		<?php } ?>
 		<?php foreach ($events as $index => $event) { ?>
 			<?php $displayData['event'] = $event; ?>
-			<div class="mod-dpcalendar-upcoming-blog__event">
+			<div class="mod-dpcalendar-upcoming-blog__event dp-event dp-event_<?php echo $event->ongoing_start_date ? 'started' : 'future'; ?>">
 				<h3 class="mod-dpcalendar-upcoming-blog__heading">
 					<a href="<?php echo $event->realUrl; ?>" target="_parent" class="dp-event-url dp-link">
 						<?php echo $event->title; ?>
@@ -49,9 +49,14 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 							</a>
 						<?php } ?>
 						<div class="mod-dpcalendar-upcoming-blog__date">
-							(<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BLOG_DATE'); ?>:
-							<?php echo $dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>)
+							<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BLOG_DATE'); ?>:
+							<?php echo $dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>
 						</div>
+						<?php if ($event->rrule) { ?>
+							<div class="mod-dpcalendar-upcoming-blog__rrule">
+								<?php echo $dateHelper->transformRRuleToString($event->rrule, $event->start_date); ?>
+							</div>
+						<?php } ?>
 						<div class="mod-dpcalendar-upcoming-blog__calendar">
 							<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BLOG_CALENDAR'); ?>:
 							<?php echo $calendar != null ? $calendar->title : $event->catid; ?>
@@ -85,9 +90,11 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 								<?php echo ($event->capacity - $event->capacity_used) . '/' . (int)$event->capacity; ?>
 							<?php } ?>
 						</div>
-						<div class="mod-dpcalendar-upcoming-blog__price">
-							<?php echo $translator->translate($event->price ? 'MOD_DPCALENDAR_UPCOMING_BLOG_PAID_EVENT' : 'MOD_DPCALENDAR_UPCOMING_BLOG_FREE_EVENT'); ?>
-						</div>
+						<?php if ($params->get('show_price')) { ?>
+							<div class="mod-dpcalendar-upcoming-blog__price">
+								<?php echo $translator->translate($event->price ? 'MOD_DPCALENDAR_UPCOMING_BLOG_PAID_EVENT' : 'MOD_DPCALENDAR_UPCOMING_BLOG_FREE_EVENT'); ?>
+							</div>
+						<?php } ?>
 						<?php if ($params->get('show_booking', 1) && \DPCalendar\Helper\Booking::openForBooking($event)) { ?>
 							<a href="<?php echo $router->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-link dp-link_cta dp-button">
 								<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PLUS]); ?>

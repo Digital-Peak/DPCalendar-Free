@@ -100,7 +100,7 @@ DPCalendar = window.DPCalendar || {};
 		};
 
 
-		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color)')).forEach(function (select) {
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_tags):not(#jform_tags)')).forEach(function (select) {
 			select._choicejs = new Choices(select, {
 					itemSelectText: '',
 					noChoicesText: '',
@@ -426,7 +426,7 @@ DPCalendar = window.DPCalendar || {};
 			map.dpmap.invalidateSize();
 		}
 
-		DPCalendar.Map.clearMarkers(map.dpmap);
+		DPCalendar.Map.clearMarkers(map);
 		[].slice.call(document.querySelectorAll('#jform_location_ids option:checked')).forEach(function (option) {
 			var content = option.innerHTML;
 			var parts = content.substring(content.lastIndexOf('[') + 1, content.lastIndexOf(']')).split(':');
@@ -436,7 +436,7 @@ DPCalendar = window.DPCalendar || {};
 			if (parts[0] == 0 && parts[1] == 0) {
 				return;
 			}
-			DPCalendar.Map.createMarker(map.dpmap, {latitude: parts[0], longitude: parts[1], title: content});
+			DPCalendar.Map.createMarker(map, {latitude: parts[0], longitude: parts[1], title: content});
 		});
 	}
 

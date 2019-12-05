@@ -14,6 +14,9 @@
 
 .com-dpcalendar-timeline .dp-button-bar {
 	overflow: auto;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 .com-dpcalendar-timeline .dp-button-bar__navigation {
@@ -23,14 +26,17 @@
 .com-dpcalendar-timeline .dp-button-bar__title {
 	display: inline-block;
 	margin-left: 5px;
-	margin-bottom: 18px;
+	margin-bottom: 0;
 	font-size: 19.5px;
 	font-weight: 200;
-	line-height: 27px;
 }
 
 .com-dpcalendar-timeline .dp-button-bar__actions {
 	float: right;
+}
+
+.com-dpcalendar-timeline__button-bar.dp-button-bar {
+	display: block;
 }
 
 .com-dpcalendar-timeline__form-container {
@@ -62,21 +68,16 @@
 }
 
 @media screen and (max-width: 540px) {
+	.com-dpcalendar-timeline .dp-button-bar {
+		flex-direction: column;
+	}
 	.com-dpcalendar-timeline .dp-button-bar > div {
-		display: block;
-		margin: 0 auto;
-		width: 100%;
+		margin: 4px auto;
 	}
 }
 
 .com-dpcalendar-timeline .dp-event {
 	overflow: hidden;
-}
-
-.com-dpcalendar-timeline .dp-event__image {
-	float: right;
-	max-width: 300px;
-	padding: 0 10px;
 }
 
 .com-dpcalendar-timeline .dp-event__title {
@@ -85,9 +86,8 @@
 }
 
 .com-dpcalendar-timeline .dp-event .dp-link_cta {
-	font-size: small;
 	margin-top: 10px;
-	padding: 2px 20px;
+	padding: 5px 20px;
 }
 
 .com-dpcalendar-timeline .dp-event .dp-link_cta.dp-button {
@@ -95,16 +95,12 @@
 	font-weight: bold;
 	text-transform: uppercase;
 	color: #000000;
+	border: 0;
 }
 
-.com-dpcalendar-timeline .dp-event__actions, .com-dpcalendar-timeline .dp-event__date, .com-dpcalendar-timeline .dp-event__calendar, .com-dpcalendar-timeline .dp-event__capacity, .com-dpcalendar-timeline .dp-event__price, .com-dpcalendar-timeline .dp-event__hits, .com-dpcalendar-timeline .dp-event__locations {
-	font-size: 90%;
+.com-dpcalendar-timeline .dp-event__actions, .com-dpcalendar-timeline .dp-event__date, .com-dpcalendar-timeline .dp-event__rrule, .com-dpcalendar-timeline .dp-event__calendar, .com-dpcalendar-timeline .dp-event__capacity, .com-dpcalendar-timeline .dp-event__price, .com-dpcalendar-timeline .dp-event__hits, .com-dpcalendar-timeline .dp-event__locations {
 	margin-right: 1rem;
 	display: inline-block;
-}
-
-.com-dpcalendar-timeline .dp-event__description {
-	margin-top: 1rem;
 }
 
 .com-dpcalendar-timeline .dp-event .dp-location__description {
@@ -112,14 +108,12 @@
 }
 
 @media screen and (max-width: 640px) {
-	.com-dpcalendar-timeline .dp-event__image, .com-dpcalendar-timeline .dp-event .dp-link_cta {
+	.com-dpcalendar-timeline .dp-event .dp-link_cta {
 		float: none;
 		text-align: center;
 		width: 100%;
 		display: block;
-		max-width: inherit;
 		margin: 10px 0;
-		padding: 0;
 	}
 }
 
@@ -183,13 +177,12 @@
 }
 
 .com-dpcalendar-timeline .dp-figure {
-	display: flex;
-	flex-direction: column;
 	text-align: center;
 	margin: 0;
 }
 
 .com-dpcalendar-timeline .dp-figure__caption {
+	display: block;
 	width: 100%;
 	box-sizing: border-box;
 }
@@ -418,8 +411,10 @@
 	}
 }
 
-.com-dpcalendar-timeline .dp-event__image {
-	max-width: 100%;
+.com-dpcalendar-timeline .dp-event__image .dp-image {
+	width: 100%;
+	height: 200px;
+	object-fit: cover;
 	margin-bottom: 1rem;
 }
 

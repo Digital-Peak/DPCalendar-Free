@@ -550,7 +550,7 @@ if (typeof self !== 'undefined') {
 var result = Object(_ponyfill_js__WEBPACK_IMPORTED_MODULE_0__[/* default */ "a"])(root);
 /* harmony default export */ __webpack_exports__["a"] = (result);
 
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(3), __webpack_require__(16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(3), __webpack_require__(14)(module)))
 
 /***/ }),
 /* 3 */
@@ -702,7 +702,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = exports.TEMPLATES = void 0;
 
-var _classnames = _interopRequireDefault(__webpack_require__(29));
+var _classnames = _interopRequireDefault(__webpack_require__(27));
 
 var _utils = __webpack_require__(0);
 
@@ -1643,25 +1643,23 @@ var _fuse = _interopRequireDefault(__webpack_require__(11));
 
 var _deepmerge = _interopRequireDefault(__webpack_require__(12));
 
-__webpack_require__(13);
+var _store = _interopRequireDefault(__webpack_require__(13));
 
-var _store = _interopRequireDefault(__webpack_require__(15));
-
-var _components = __webpack_require__(22);
+var _components = __webpack_require__(20);
 
 var _constants = __webpack_require__(1);
 
 var _templates = __webpack_require__(5);
 
-var _choices = __webpack_require__(30);
+var _choices = __webpack_require__(28);
 
-var _items = __webpack_require__(31);
+var _items = __webpack_require__(29);
 
-var _groups = __webpack_require__(32);
+var _groups = __webpack_require__(30);
 
-var _misc = __webpack_require__(33);
+var _misc = __webpack_require__(31);
 
-var _general = __webpack_require__(34);
+var _general = __webpack_require__(32);
 
 var _utils = __webpack_require__(0);
 
@@ -2114,13 +2112,13 @@ function () {
       var label = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
       var replaceChoices = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
 
-      if (!this._isSelectElement || !choices.length || !value) {
+      if (!this._isSelectElement || !value) {
         return this;
       } // Clear choices if needed
 
 
       if (replaceChoices) {
-        this._clearChoices();
+        this.clearChoices();
       }
 
       this.containerOuter.removeLoadingState();
@@ -2152,6 +2150,11 @@ function () {
       this._setLoading(false);
 
       return this;
+    }
+  }, {
+    key: "clearChoices",
+    value: function clearChoices() {
+      this._store.dispatch((0, _choices.clearChoices)());
     }
   }, {
     key: "clearStore",
@@ -3096,7 +3099,7 @@ function () {
       var target = event.target,
           shiftKey = event.shiftKey; // If we have our mouse down on the scrollbar and are on IE11...
 
-      if (target === this.choiceList && (0, _utils.isIE11)()) {
+      if (this.choiceList.element.contains(target) && (0, _utils.isIE11)()) {
         this._isScrollingOnIe = true;
       }
 
@@ -3450,11 +3453,6 @@ function () {
           keyCode: keyCode
         });
       }
-    }
-  }, {
-    key: "_clearChoices",
-    value: function _clearChoices() {
-      this._store.dispatch((0, _choices.clearChoices)());
     }
   }, {
     key: "_addGroup",
@@ -5009,65 +5007,6 @@ var deepmerge_1 = deepmerge;
 "use strict";
 
 
-__webpack_require__(14);
-
-/***/ }),
-/* 14 */
-/***/ (function(module, exports) {
-
-// Polyfill for creating CustomEvents on IE9/10/11
-
-// code pulled from:
-// https://github.com/d4tocchini/customevent-polyfill
-// https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent#Polyfill
-
-try {
-    var ce = new window.CustomEvent('test');
-    ce.preventDefault();
-    if (ce.defaultPrevented !== true) {
-        // IE has problems with .preventDefault() on custom events
-        // http://stackoverflow.com/questions/23349191
-        throw new Error('Could not prevent default');
-    }
-} catch(e) {
-  var CustomEvent = function(event, params) {
-    var evt, origPrevent;
-    params = params || {
-      bubbles: false,
-      cancelable: false,
-      detail: undefined
-    };
-
-    evt = document.createEvent("CustomEvent");
-    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-    origPrevent = evt.preventDefault;
-    evt.preventDefault = function () {
-      origPrevent.call(this);
-      try {
-        Object.defineProperty(this, 'defaultPrevented', {
-          get: function () {
-            return true;
-          }
-        });
-      } catch(e) {
-        this.defaultPrevented = true;
-      }
-    };
-    return evt;
-  };
-
-  CustomEvent.prototype = window.Event.prototype;
-  window.CustomEvent = CustomEvent; // expose definition to window
-}
-
-
-/***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -5075,7 +5014,7 @@ exports.default = void 0;
 
 var _redux = __webpack_require__(6);
 
-var _index = _interopRequireDefault(__webpack_require__(17));
+var _index = _interopRequireDefault(__webpack_require__(15));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5297,7 +5236,7 @@ function () {
 exports.default = Store;
 
 /***/ }),
-/* 16 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = function(originalModule) {
@@ -5327,7 +5266,7 @@ module.exports = function(originalModule) {
 
 
 /***/ }),
-/* 17 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5340,13 +5279,13 @@ exports.default = void 0;
 
 var _redux = __webpack_require__(6);
 
-var _items = _interopRequireDefault(__webpack_require__(18));
+var _items = _interopRequireDefault(__webpack_require__(16));
 
-var _groups = _interopRequireDefault(__webpack_require__(19));
+var _groups = _interopRequireDefault(__webpack_require__(17));
 
-var _choices = _interopRequireDefault(__webpack_require__(20));
+var _choices = _interopRequireDefault(__webpack_require__(18));
 
-var _general = _interopRequireDefault(__webpack_require__(21));
+var _general = _interopRequireDefault(__webpack_require__(19));
 
 var _utils = __webpack_require__(0);
 
@@ -5378,7 +5317,7 @@ var _default = rootReducer;
 exports.default = _default;
 
 /***/ }),
-/* 18 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5454,7 +5393,7 @@ function items() {
 }
 
 /***/ }),
-/* 19 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5496,7 +5435,7 @@ function groups() {
 }
 
 /***/ }),
-/* 20 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5628,7 +5567,7 @@ function choices() {
 }
 
 /***/ }),
-/* 21 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5666,7 +5605,7 @@ var _default = general;
 exports.default = _default;
 
 /***/ }),
-/* 22 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5712,22 +5651,22 @@ Object.defineProperty(exports, "WrappedSelect", {
   }
 });
 
-var _dropdown = _interopRequireDefault(__webpack_require__(23));
+var _dropdown = _interopRequireDefault(__webpack_require__(21));
 
-var _container = _interopRequireDefault(__webpack_require__(24));
+var _container = _interopRequireDefault(__webpack_require__(22));
 
-var _input = _interopRequireDefault(__webpack_require__(25));
+var _input = _interopRequireDefault(__webpack_require__(23));
 
-var _list = _interopRequireDefault(__webpack_require__(26));
+var _list = _interopRequireDefault(__webpack_require__(24));
 
-var _wrappedInput = _interopRequireDefault(__webpack_require__(27));
+var _wrappedInput = _interopRequireDefault(__webpack_require__(25));
 
-var _wrappedSelect = _interopRequireDefault(__webpack_require__(28));
+var _wrappedSelect = _interopRequireDefault(__webpack_require__(26));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /***/ }),
-/* 23 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5821,7 +5760,7 @@ function () {
 exports.default = Dropdown;
 
 /***/ }),
-/* 24 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6070,7 +6009,7 @@ function () {
 exports.default = Container;
 
 /***/ }),
-/* 25 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6277,7 +6216,7 @@ function () {
 exports.default = Input;
 
 /***/ }),
-/* 26 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6404,7 +6343,7 @@ function () {
 exports.default = List;
 
 /***/ }),
-/* 27 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6486,7 +6425,7 @@ function (_WrappedElement) {
 exports.default = WrappedInput;
 
 /***/ }),
-/* 28 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6584,7 +6523,7 @@ function (_WrappedElement) {
 exports.default = WrappedSelect;
 
 /***/ }),
-/* 29 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -6641,7 +6580,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 
 
 /***/ }),
-/* 30 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6708,7 +6647,7 @@ var clearChoices = function clearChoices() {
 exports.clearChoices = clearChoices;
 
 /***/ }),
-/* 31 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6766,7 +6705,7 @@ var highlightItem = function highlightItem(id, highlighted) {
 exports.highlightItem = highlightItem;
 
 /***/ }),
-/* 32 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6793,7 +6732,7 @@ var addGroup = function addGroup(value, id, active, disabled) {
 exports.addGroup = addGroup;
 
 /***/ }),
-/* 33 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6822,7 +6761,7 @@ var resetTo = function resetTo(state) {
 exports.resetTo = resetTo;
 
 /***/ }),
-/* 34 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

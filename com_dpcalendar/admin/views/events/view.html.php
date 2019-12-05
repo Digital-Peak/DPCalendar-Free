@@ -7,23 +7,17 @@
  */
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.libraries.dpcalendar.view', JPATH_ADMINISTRATOR);
+use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 {
-
 	protected $items;
-
 	protected $pagination;
-
-	protected $state;
-
 	protected $authors;
 
 	public function init()
 	{
 		$this->setModel(JModelLegacy::getInstance('AdminEvents', 'DPCalendarModel'), true);
-		$this->state      = $this->get('State');
 		$this->items      = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->authors    = $this->get('Authors');
@@ -53,10 +47,6 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 
 	protected function addToolbar()
 	{
-		if (strpos($this->getLayout(), 'modal') !== false) {
-			return;
-		}
-
 		$state = $this->get('State');
 		$canDo = DPCalendarHelper::getActions($state->get('filter.category_id'));
 		$user  = JFactory::getUser();
@@ -94,5 +84,20 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 			$bar->appendButton('Custom', $dhtml, 'batch');
 		}
 		parent::addToolbar();
+	}
+
+	protected function getState($item)
+	{
+		$states = [
+			0 => [
+				'star-empty',
+				'events.featured',
+				'COM_DPCALENDAR_VIEW_EVENTS_UNFEATURED',
+				'COM_DPCALENDAR_VIEW_EVENTS_TOGGLE_TO_FEATURE'
+			],
+			1 => ['star', 'events.unfeatured', 'COM_DPCALENDAR_FEATURED', 'COM_DPCALENDAR_VIEW_EVENTS_TOGGLE_TO_UNFEATURE'],
+		];
+
+		return ArrayHelper::getValue($states, (int)$item->featured, $states[1]);
 	}
 }

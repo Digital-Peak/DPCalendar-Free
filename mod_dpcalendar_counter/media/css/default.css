@@ -1,11 +1,10 @@
 .mod-dpcalendar-counter .dp-figure {
-	display: flex;
-	flex-direction: column;
 	text-align: center;
 	margin: 0;
 }
 
 .mod-dpcalendar-counter .dp-figure__caption {
+	display: block;
 	width: 100%;
 	box-sizing: border-box;
 }

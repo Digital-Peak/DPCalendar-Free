@@ -5,24 +5,39 @@ DPCalendar = window.DPCalendar || {};
 
 	document.addEventListener('DOMContentLoaded', function () {
 		var geoComplete = document.getElementById('jform_geocomplete');
-		var map = document.querySelector('.dp-map').dpmap;
+		var map = document.querySelector('.dp-map');
 
 		var getMarker = function () {
-			if (!map.dpMarkers.length) {
+			if (!map.dpmap.dpMarkers.length) {
 				DPCalendar.Map.createMarker(
 					map,
 					{
 						latitude: document.getElementById('jform_latitude').value,
-						longitude: document.getElementById('jform_longitude').value
+						longitude: document.getElementById('jform_longitude').value,
+						color: document.getElementById('jform_color').value
+					},
+					function (latitude, longitude) {
+						var task = 'location';
+						if (window.location.href.indexOf('administrator') == -1) {
+							task = 'locationform';
+						}
+						DPCalendar.request(
+							'task=' + task + '.loc&loc=' + latitude + ',' + longitude,
+							function (json) {
+								if (json.data) {
+									setGeoResult(json.data);
+								}
+							}
+						);
 					}
 				);
 			}
 
-			if (!map.dpMarkers.length) {
+			if (!map.dpmap.dpMarkers.length) {
 				return;
 			}
 
-			return map.dpMarkers[0];
+			return map.dpmap.dpMarkers[0];
 		};
 
 		[].slice.call(document.querySelectorAll('#jform_street,#jform_number,#jform_zip,#jform_city,#jform_country,#jform_province')).forEach(function (input) {
@@ -49,28 +64,20 @@ DPCalendar = window.DPCalendar || {};
 			});
 		});
 
-		DPCalendar.Map.createMarker(
-			map,
-			{
-				latitude: document.getElementById('jform_latitude').value,
-				longitude: document.getElementById('jform_longitude').value
-			},
-			function (latitude, longitude) {
-				var task = 'location';
-				if (window.location.href.indexOf('administrator') == -1) {
-					task = 'locationform';
-				}
-				DPCalendar.request(
-					'task=' + task + '.loc&loc=' + latitude + ',' + longitude,
-					function (json) {
-						if (json.data) {
-							setGeoResult(json.data);
-						}
-					}
-				);
-			}
-		);
+		if (window.jQuery) {
+			// Color field doesn't fire native events
+			jQuery('#jform_color').change(function (e) {
+				DPCalendar.Map.clearMarkers(map);
+				getMarker();
+			});
+		} else {
+			document.getElementById('jform_color').addEventListener('change', function (e) {
+				DPCalendar.Map.clearMarkers(map);
+				getMarker();
+			});
+		}
 
+		getMarker();
 		DPCalendar.autocomplete.create(geoComplete);
 
 		geoComplete.addEventListener('dp-autocomplete-select', function (e) {

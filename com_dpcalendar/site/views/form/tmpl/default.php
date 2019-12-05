@@ -40,7 +40,6 @@ $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->
 <div class="com-dpcalendar-eventform<?php echo $this->pageclass_sfx ? ' com-dpcalendar-eventform-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
 	<?php echo $this->loadTemplate('heading'); ?>
-	<?php echo $this->loadTemplate('header'); ?>
 	<?php echo $this->loadTemplate('information'); ?>
 	<?php echo $this->loadTemplate('overlapping'); ?>
 	<form class="com-dpcalendar-eventform__form dp-form form-validate" method="post" name="adminForm" action="<?php echo $action; ?>">
@@ -56,4 +55,5 @@ $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->
 		<input type="hidden" name="template_event_id" class="dp-input dp-input-hidden">
 		<?php echo JHtml::_('form.token'); ?>
 	</form>
+	<?php echo $this->loadTemplate('actions'); ?>
 </div>

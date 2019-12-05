@@ -22,7 +22,7 @@ foreach ($this->event->tickets as $ticket) {
 	}
 }
 ?>
-<div class="com-dpcalendar-event__tickets">
+<div class="com-dpcalendar-event__tickets com-dpcalendar-event_small">
 	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_TICKETS_LABEL'); ?></h3>
 	<table class="dp-table">
 		<thead>

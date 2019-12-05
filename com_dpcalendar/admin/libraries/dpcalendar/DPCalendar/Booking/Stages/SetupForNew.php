@@ -34,8 +34,6 @@ class SetupForNew implements StageInterface
 
 	public function __invoke($payload)
 	{
-		$amountTickets = 0;
-
 		// Default some data
 		$payload->data['price']    = 0;
 		$payload->data['id']       = 0;
@@ -46,71 +44,10 @@ class SetupForNew implements StageInterface
 			$payload->data['user_id'] = $this->user->id;
 		}
 
+		$amountTickets = 0;
 		foreach ($payload->events as $event) {
-			// Flag if a payment is required
-			$paymentRequired = false;
-
-			// The booking options
-			$payload->data['options'] = [];
-			if (!empty($payload->data['event_id'][$event->id]['options'])) {
-				$amount = $payload->data['event_id'][$event->id]['options'];
-
-				foreach ($event->booking_options as $key => $option) {
-					$key = preg_replace('/\D/', '', $key);
-
-					if (!array_key_exists($key, $amount) || empty($amount[$key])) {
-						continue;
-					}
-
-					$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key];
-
-					$payload->data['price'] += $amount[$key] * $option->price;
-					$payload->data['state'] = 3;
-				}
-			}
-			$payload->data['options'] = implode(',', $payload->data['options']);
-
-			// The tickets to process
-			$amount = $payload->data['event_id'][$event->id]['tickets'];
-
-			$newTickets = false;
-			if (!$event->price) {
-				// Free event
-				$event->amount_tickets[0] = $this->getAmountTickets($event, $payload, $amount, 0);
-				$amountTickets            += $event->amount_tickets[0];
-
-				if (!$newTickets && $event->amount_tickets[0]) {
-					$newTickets = true;
-				}
-			} else {
-				foreach ($event->price->value as $index => $value) {
-					$event->amount_tickets[$index] = $this->getAmountTickets($event, $payload, $amount, $index);
-					$amountTickets                 += $event->amount_tickets[$index];
-
-					// Determine the price
-					$paymentRequired = Booking::paymentRequired($event);
-					if ($event->amount_tickets[$index] && $paymentRequired) {
-						// Set state to payment required
-						$payload->data['state'] = 3;
-
-						// Determine the price based on the amount of tickets
-						$payload->data['price'] += Booking::getPriceWithDiscount($value, $event) * $event->amount_tickets[$index];
-					}
-
-					if (!$newTickets && $event->amount_tickets[$index]) {
-						$newTickets = true;
-					}
-				}
-			}
-
-			// Publish if we don't know the state and no payment is required
-			if (!isset($payload->data['state']) && !$paymentRequired) {
-				$payload->data['state'] = 1;
-			}
-
-			if ($newTickets) {
-				$payload->eventsWithTickets[] = $event;
-			}
+			$this->handleOptions($payload, $event);
+			$amountTickets = $this->handleTickets($payload, $event, $amountTickets);
 		}
 
 		if ($amountTickets == 0) {
@@ -118,6 +55,79 @@ class SetupForNew implements StageInterface
 		}
 
 		return $payload;
+	}
+
+	private function handleOptions($payload, $event)
+	{
+		// The booking options
+		$payload->data['options'] = [];
+		if (!empty($payload->data['event_id'][$event->id]['options'])) {
+			$amount = $payload->data['event_id'][$event->id]['options'];
+
+			foreach ($event->booking_options as $key => $option) {
+				$key = preg_replace('/\D/', '', $key);
+
+				if (!array_key_exists($key, $amount) || empty($amount[$key])) {
+					continue;
+				}
+
+				$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key];
+
+				$payload->data['price'] += $amount[$key] * $option->price;
+				$payload->data['state'] = 3;
+			}
+		}
+		$payload->data['options'] = implode(',', $payload->data['options']);
+	}
+
+	private function handleTickets($payload, $event, $amountTickets)
+	{
+		// Flag if a payment is required
+		$paymentRequired = false;
+
+		// The tickets to process
+		$amount = $payload->data['event_id'][$event->id]['tickets'];
+
+		$newTickets = false;
+		if (!$event->price) {
+			// Free event
+			$event->amount_tickets[0] = $this->getAmountTickets($event, $payload, $amount, 0);
+			$amountTickets            += $event->amount_tickets[0];
+
+			if (!$newTickets && $event->amount_tickets[0]) {
+				$newTickets = true;
+			}
+		} else {
+			foreach ($event->price->value as $index => $value) {
+				$event->amount_tickets[$index] = $this->getAmountTickets($event, $payload, $amount, $index);
+				$amountTickets                 += $event->amount_tickets[$index];
+
+				// Determine the price
+				$paymentRequired = Booking::paymentRequired($event);
+				if ($event->amount_tickets[$index] && $paymentRequired) {
+					// Set state to payment required
+					$payload->data['state'] = 3;
+
+					// Determine the price based on the amount of tickets
+					$payload->data['price'] += Booking::getPriceWithDiscount($value, $event) * $event->amount_tickets[$index];
+				}
+
+				if (!$newTickets && $event->amount_tickets[$index]) {
+					$newTickets = true;
+				}
+			}
+		}
+
+		if ($newTickets) {
+			$payload->eventsWithTickets[] = $event;
+		}
+
+		// Publish if we don't know the state and no payment is required
+		if (!isset($payload->data['state']) && !$paymentRequired) {
+			$payload->data['state'] = 1;
+		}
+
+		return $amountTickets;
 	}
 
 	private function getAmountTickets($event, $payload, $amount, $index)

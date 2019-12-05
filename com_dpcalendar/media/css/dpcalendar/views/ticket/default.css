@@ -94,7 +94,7 @@
 	margin-left: 180px;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 540px) {
 	.com-dpcalendar-ticket .dp-description__label {
 		float: none;
 		width: 100%;

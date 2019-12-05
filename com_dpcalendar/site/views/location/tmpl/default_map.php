@@ -23,6 +23,6 @@ $description = '<a href="' . $this->router->getLocationRoute($this->location) . 
 	     data-longitude="<?php echo $this->location->longitude; ?>"
 	     data-title="<?php echo $this->location->title; ?>"
 	     data-description="<?php echo $this->escape($description); ?>"
-	     data-color="<?php echo \DPCalendar\Helper\Location::getColor($this->location); ?>">
+	     data-color="<?php echo $this->location->color; ?>">
 	</div>
 </div>

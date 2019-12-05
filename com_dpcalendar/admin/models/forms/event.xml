@@ -148,6 +148,11 @@
 		       label="COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_MAX_TICKETS_DESC"/>
 		<field name="booking_closing_date" type="text"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_DESC"/>
+		<field name="booking_series" type="dpradio" default="0" class="dp-form-radio"
+		       label="COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_SERIES_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="price" type="subform" multiple="true"
 		       formsource="administrator/components/com_dpcalendar/models/forms/event_price.xml"
 		       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
@@ -172,65 +177,42 @@
 		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
-		<field name="alias" type="text"
-		       label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_FIELD_ALIAS_DESC"/>
-
-		<field name="tags" type="tag" multiple="true"
-		       label="JTAG" description="JTAG_DESC"/>
-		<field name="featured" type="list" default="0"
-		       label="JFEATURED" description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
+		<field name="alias" type="text" label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_FIELD_ALIAS_DESC"/>
+		<field name="tags" type="tag" multiple="true" label="JTAG" description="JTAG_DESC"/>
+		<field name="featured" type="list" default="0" label="JFEATURED" description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="hits" type="text" readonly="true" filter="unset"
-		       label="JGLOBAL_HITS" description="COM_DPCALENDAR_HITS_DESC"/>
-		<field name="state" type="list" class="chzn-color-state" filter="intval" default="1"
-		       label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
+		<field name="hits" type="text" readonly="true" filter="unset" label="JGLOBAL_HITS" description="COM_DPCALENDAR_HITS_DESC"/>
+		<field name="state" type="list" class="chzn-color-state" filter="intval" default="1" label="JSTATUS"
+		       description="COM_DPCALENDAR_FIELD_STATE_DESC">
 			<option value="1">JPUBLISHED</option>
 			<option value="0">JUNPUBLISHED</option>
 			<option value="2">JARCHIVED</option>
 			<option value="-3">COM_DPCALENDAR_FIELD_VALUE_REPORTED</option>
 			<option value="-2">JTRASHED</option>
 		</field>
-
-		<field name="access" type="accesslevel" default="1"
-		       label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>
-
-		<field name="access_content" type="accesslevel" default="1"
-		       label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"/>
-		<field name="language" type="contentlanguage"
-		       label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
+		<field name="access" type="accesslevel" default="1" label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>
+		<field name="access_content" type="accesslevel" default="1" label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"/>
+		<field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
 			<option value="*">JALL</option>
 		</field>
-
-		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
-		       label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
-
-		<field name="created_by" type="user"
-		       label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_Desc"/>
-
-		<field name="created_by_alias" type="text"
-		       label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
-
-		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
-		       label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_DPCALENDAR_FIELD_MODIFIED_DESC"/>
-
-		<field name="modified_by" type="user" readonly="true" filter="unset"
-		       label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"/>
-
+		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" label="JGLOBAL_FIELD_CREATED_LABEL"
+		       description="JGLOBAL_FIELD_CREATED_DESC"/>
+		<field name="created_by" type="user" label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_Desc"/>
+		<field name="created_by_alias" type="text" label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
+		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" label="JGLOBAL_FIELD_MODIFIED_LABEL"
+		       description="COM_DPCALENDAR_FIELD_MODIFIED_DESC"/>
+		<field name="modified_by" type="user" readonly="true" filter="unset" label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"/>
 		<field name="checked_out" type="hidden" filter="unset"/>
-
 		<field name="checked_out_time" type="hidden" filter="unset"/>
-
-		<field name="publish_up" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S"
-		       label="JGLOBAL_FIELD_PUBLISH_UP_LABEL" description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
-
-		<field name="publish_down" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
-		       label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL" description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
-
-		<field name="version_note" type="text" labelclass="control-label"
-		       label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC"/>
-
+		<field name="publish_up" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S" label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
+		       description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
+		<field name="publish_down" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL"
+		       description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
+		<field name="version_note" type="text" labelclass="control-label" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL"
+		       description="JGLOBAL_FIELD_VERSION_NOTE_DESC"/>
 		<field type="hidden" name="notify_changes" default="0"/>
 	</fieldset>
 	<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">

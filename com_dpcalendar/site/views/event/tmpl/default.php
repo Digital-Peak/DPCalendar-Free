@@ -28,11 +28,11 @@ if ($ctaContent = $this->loadTemplate('cta')) {
 if ($descriptionContent = $this->loadTemplate('description')) {
 	$contentClass .= ' has-description';
 }
-if ($tagsContent = $this->loadTemplate('tags')) {
-	$contentClass .= ' has-tags';
-}
 if ($bookingsContent = $this->loadTemplate('bookings')) {
 	$contentClass .= ' has-bookings';
+}
+if ($seriesContent = $this->loadTemplate('series')) {
+	$contentClass .= ' has-series';
 }
 if ($ticketsContent = $this->loadTemplate('tickets')) {
 	$contentClass .= ' has-tickets';
@@ -42,6 +42,7 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 }
 ?>
 <div class="com-dpcalendar-event <?php echo $this->pageclass_sfx ? ' com-dpcalendar-event-' . $this->pageclass_sfx : ''; ?> <?php echo $contentClass; ?>">
+	<?php echo $this->loadTemplate('heading'); ?>
 	<div class="com-dpcalendar-event__header">
 		<?php echo $this->loadTemplate('title'); ?>
 		<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
@@ -54,8 +55,8 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 	<?php echo $headerContent; ?>
 	<?php echo $ctaContent; ?>
 	<?php echo $descriptionContent; ?>
-	<?php echo $tagsContent; ?>
 	<?php echo $bookingsContent; ?>
+	<?php echo $seriesContent; ?>
 	<?php echo $locationsContent; ?>
 	<?php echo $ticketsContent; ?>
 	<div class="com-dpcalendar-event__custom-text">

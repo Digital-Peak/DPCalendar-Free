@@ -363,6 +363,12 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_show_series" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 			<field name="event_show_bookings" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">

@@ -4,44 +4,34 @@
 .dp-event {
 	overflow: hidden;
 
-	&__image {
-		float: right;
-		max-width: 300px;
-		padding: 0 10px;
-	}
-
 	&__title {
 		font-weight: bold;
 		margin-right: 5px;
 	}
 
 	.dp-link_cta {
-		font-size: small;
 		margin-top: 10px;
-		padding: 2px 20px;
+		padding: 5px 20px;
 
 		&.dp-button {
 			background-color: $dpColor;
 			font-weight: bold;
 			text-transform: uppercase;
 			color: #000000;
+			border: 0;
 		}
 	}
 
 	&__actions,
 	&__date,
+	&__rrule,
 	&__calendar,
 	&__capacity,
 	&__price,
 	&__hits,
 	&__locations {
-		font-size: 90%;
 		margin-right: 1rem;
 		display: inline-block;
-	}
-
-	&__description {
-		margin-top: 1rem;
 	}
 
 	.dp-location__description {
@@ -49,14 +39,12 @@
 	}
 
 	@media screen and (max-width: 640px) {
-		&__image, .dp-link_cta {
+		.dp-link_cta {
 			float: none;
 			text-align: center;
 			width: 100%;
 			display: block;
-			max-width: inherit;
 			margin: 10px 0;
-			padding: 0;
 		}
 	}
 }

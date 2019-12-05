@@ -17,9 +17,36 @@
 		}
 	}
 
-	&__event {
+	.dp-event {
 		margin: 30px 0;
 		padding-bottom: 10px;
 		border-bottom: 1px solid rgba(0, 0, 0, .2);
+
+		&__description, &__image {
+			margin-top: 1rem;
+		}
+
+		&__image {
+			float: right;
+			padding: 0 10px;
+
+			.dp-image {
+				width: 300px;
+				height: 150px;
+				object-fit: cover;
+			}
+		}
+
+		@media screen and (max-width: 640px) {
+			&__image {
+				float: none;
+			}
+
+			&__image .dp-image, .dp-figure {
+				width: 100%;
+				max-height: 200px;
+				object-fit: cover;
+			}
+		}
 	}
 }

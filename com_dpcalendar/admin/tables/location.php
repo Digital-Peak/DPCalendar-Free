@@ -143,6 +143,11 @@ class DPCalendarTableLocation extends JTable
 			$this->modified = $this->getDbo()->getNullDate();
 		}
 
+		if (empty($this->color)) {
+			$this->color = \DPCalendar\Helper\Location::getColor($this);
+		}
+		$this->color = str_replace('#', '', $this->color);
+
 		return true;
 	}
 

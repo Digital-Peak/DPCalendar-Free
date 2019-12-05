@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_upcoming</name>
 	<author>Digital Peak</author>
-	<creationDate>Apr 2019</creationDate>
+	<creationDate>Jun 2019</creationDate>
 	<copyright>(C) 2007 - 2019 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.1.7</version>
+	<version>7.2.0</version>
 	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>
@@ -57,6 +57,12 @@
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
+				<field name="show_price" type="radio" default="0" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_PRICE_LABEL"
+				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_PRICE_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
 				<field name="show_booking" type="radio" default="1" class="btn-group"
 				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_BOOKING_LABEL"
 				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_BOOKING_DESC">
@@ -65,6 +71,11 @@
 				</field>
 				<field name="ongoing" type="radio" default="0" class="btn-group"
 				       label="MOD_DPCALENDAR_UPCOMING_FIELD_ONGOING_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_ONGOING_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="expand" type="radio" default="1" class="btn-group"
+				       label="MOD_DPCALENDAR_UPCOMING_FIELD_EXPAND_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_EXPAND_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>

@@ -73,7 +73,6 @@ class HtmlDocument
 		}
 		if ($name == self::LIBRARY_FULLCALENDAR) {
 			\JHtml::_('behavior.core');
-			\JHtml::_('jquery.framework');
 			$this->loadScriptFile('dpcalendar/polyfill.js');
 			$this->loadScriptFile('dpcalendar/dpcalendar.js');
 			$this->loadScriptFile('popper/popper.js');
@@ -90,7 +89,6 @@ class HtmlDocument
 		}
 		if ($name == self::LIBRARY_SCHEDULER) {
 			\JHtml::_('behavior.core');
-			\JHtml::_('jquery.framework');
 			$this->loadScriptFile('dpcalendar/polyfill.js');
 			$this->loadScriptFile('dpcalendar/dpcalendar.js');
 			$this->loadScriptFile('scheduler/scheduler.js');
@@ -114,6 +112,8 @@ class HtmlDocument
 						"Can't load Google maps without an API key. More information can be found in our documentation at <a href='https://joomla.digital-peak.com' target='_blank'>joomla.digital-peak.com</a>.",
 						'warning'
 					);
+
+					return;
 				} else {
 					$key = '&key=' . $key;
 					\JHtml::_(
@@ -122,17 +122,27 @@ class HtmlDocument
 						[],
 						['defer' => true]
 					);
-					$this->loadScriptFile('dpcalendar/map/google.js');
 				}
-			}
 
-			if ($provider == 'openstreetmap') {
-				\JText::script('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP');
+				$this->addScriptOptions('map.tiles.url', 'google');
+			} else if ($provider == 'mapbox') {
+				$this->addScriptOptions(
+					'map.tiles.attribution',
+					'<a href="https://www.mapbox.com/">&copy; '
+					. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX')
+					. '</a> | <a href="https://www.openstreetmap.org/">&copy; '
+					. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
+				);
 
-				$this->loadScriptFile('leaflet/leaflet.js');
-				$this->loadStyleFile('leaflet/leaflet.css');
-				$this->loadScriptFile('dpcalendar/map/leaflet.js');
-
+				$this->addScriptOptions(
+					'map.tiles.url',
+					'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token='
+					. DPCalendarHelper::getComponentParameter(
+						'map_api_mapbox_token',
+						'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
+					)
+				);
+			} else {
 				$this->addScriptOptions(
 					'map.tiles.attribution',
 					'<a href="https://www.openstreetmap.org/">&copy; ' . \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
@@ -144,30 +154,17 @@ class HtmlDocument
 				);
 			}
 
-			if ($provider == 'mapbox') {
-				\JText::script('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX');
+			\JText::script('COM_DPCALENDAR_LEAFLET_TEXT_TOUCH');
+			\JText::script('COM_DPCALENDAR_LEAFLET_TEXT_SCROLL');
+			\JText::script('COM_DPCALENDAR_LEAFLET_TEXT_SCROLLMAC');
+			\JText::script('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP');
 
-				$this->loadScriptFile('leaflet/leaflet.js');
-				$this->loadStyleFile('leaflet/leaflet.css');
-				$this->loadScriptFile('dpcalendar/map/leaflet.js');
+			$this->loadScriptFile('leaflet/leaflet.js');
+			$this->loadStyleFile('leaflet/leaflet.css');
+			$this->loadScriptFile('dpcalendar/map.js');
 
-				$this->addScriptOptions(
-					'map.tiles.attribution',
-					'<a href="https://www.mapbox.com/">&copy; '
-					. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX')
-					. '</a> | <a href="https://www.openstreetmap.org/">&copy; '
-					. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
-				);
-
-
-				$this->addScriptOptions(
-					'map.tiles.url',
-					'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token='
-					. DPCalendarHelper::getComponentParameter(
-						'map_api_mapbox_token',
-						'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
-					)
-				);
+			if ($provider == 'google') {
+				$this->loadScriptFile('leaflet/leaflet-google.js');
 			}
 		}
 		if ($name == self::LIBRARY_IFRAME_PARENT) {

@@ -2,6 +2,16 @@
 	'use strict';
 
 	document.addEventListener('DOMContentLoaded', function () {
+		var names = Joomla.getOptions('DPCalendar.calendar.names');
+
+		moment.updateLocale('en', {
+			months: names['monthNames'],
+			monthsShort: names['monthNamesShort'],
+			weekdays: names['dayNames'],
+			weekdaysShort: names['dayNamesShort'],
+			weekdaysMin: names['dayNamesMin']
+		});
+
 		[].slice.call(document.querySelectorAll('.dp-datepicker')).forEach(function (element) {
 			var options = {};
 			options.format = element.getAttribute('data-format');
@@ -30,7 +40,6 @@
 			};
 			element.actualDate = element.value;
 
-			var names = Joomla.getOptions('DPCalendar.calendar.names');
 			options.i18n = {
 				months: names['monthNames'],
 				weekdays: names['dayNames'],

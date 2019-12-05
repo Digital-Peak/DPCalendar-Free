@@ -95,7 +95,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$server->setBaseUri($uri);
 
 			$server->addPlugin(new \Sabre\DAV\Auth\Plugin($authBackend, 'SabreDAV'));
-			$server->addPlugin(new \Sabre\DAVACL\Plugin());
+			$server->addPlugin(new \DPCalendar\Sabre\DAVACL\Joomla());
 			$server->addPlugin(new \Sabre\CalDAV\Plugin());
 			$server->addPlugin(new \Sabre\DAV\Sync\Plugin());
 			$server->addPlugin(new \Sabre\CalDAV\Schedule\Plugin());

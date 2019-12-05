@@ -37,6 +37,8 @@ $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 
+$this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());
+
 // Set up the params
 $params = $this->params;
 
@@ -57,17 +59,6 @@ foreach ($this->selectedCalendars as $calendar) {
 // Set the default view
 $options['defaultView'] = $params->get('default_view', 'month');
 
-// Translate to the fullcalendar view names
-$mapping                = array(
-	'day'   => 'agendaDay',
-	'week'  => 'agendaWeek',
-	'month' => 'month'
-);
-$options['defaultView'] = $params->get('default_view', 'month');
-if (key_exists($params->get('default_view', 'month'), $mapping)) {
-	$options['defaultView'] = $mapping[$params->get('default_view', 'month')];
-}
-
 // Some general calendar options
 $options['weekNumbers']    = (boolean)$params->get('week_numbers');
 $options['weekends']       = (boolean)$params->get('weekend', 1);
@@ -76,15 +67,14 @@ $options['fixedWeekCount'] = (boolean)$params->get('fixed_week_count', 1);
 $bd = $params->get('business_hours_days', array());
 if ($bd && !(count($bd) == 1 && !$bd[0])) {
 	$options['businessHours'] = array(
-		'start' => $params->get('business_hours_start', ''),
-		'end'   => $params->get('business_hours_end', ''),
-		'dow'   => $params->get('business_hours_days', array())
+		'startTime'  => $params->get('business_hours_start', ''),
+		'endTime'    => $params->get('business_hours_end', ''),
+		'daysOfWeek' => $params->get('business_hours_days', array())
 	);
 }
 
 $options['firstDay']              = $params->get('weekstart', 0);
 $options['firstHour']             = $params->get('first_hour', 6);
-$options['nextDayThreshold']      = '00:00:00';
 $options['weekNumbersWithinDays'] = false;
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;
@@ -143,10 +133,10 @@ if ($params->get('header_show_month', 1)) {
 	$options['header']['right'][] = 'month';
 }
 if ($params->get('header_show_week', 1)) {
-	$options['header']['right'][] = 'agendaWeek';
+	$options['header']['right'][] = 'week';
 }
 if ($params->get('header_show_day', 1)) {
-	$options['header']['right'][] = 'agendaDay';
+	$options['header']['right'][] = 'day';
 } else {
 	$options['navLinks'] = false;
 }
@@ -167,55 +157,34 @@ if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $this->r
 }
 
 // Set up the views
-$options['views']               = array();
-$options['views']['month']      = array(
+$options['views']          = array();
+$options['views']['month'] = array(
 	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_month', 'F Y')),
-	'timeFormat'             => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_month', 'g:i a')),
+	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_month', 'g:i a')),
 	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_month', 'D')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
 );
-$options['views']['agendaWeek'] = array(
+$options['views']['week']  = array(
 	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_week', 'M j Y')),
-	'timeFormat'             => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_week', 'g:i a')),
+	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_week', 'g:i a')),
 	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_week', 'D n/j')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 );
-$options['views']['agendaDay']  = array(
+$options['views']['day']   = array(
 	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_day', 'F j Y')),
-	'timeFormat'             => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_day', 'g:i a')),
+	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_day', 'g:i a')),
 	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_day', 'l')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
 );
-$options['views']['list']       = array(
+$options['views']['list']  = array(
 	'titleFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_list', 'M j Y')),
-	'timeFormat'         => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_list', 'g:i a')),
+	'eventTimeFormat'    => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_list', 'g:i a')),
 	'columnHeaderFormat' => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_list', 'D')),
 	'listDayFormat'      => $this->dateHelper->convertPHPDateToMoment($params->get('dayformat_list', 'l')),
 	'listDayAltFormat'   => $this->dateHelper->convertPHPDateToMoment($params->get('dateformat_list', 'F j, Y')),
-	'duration'           => array('days' => $params->get('list_range', 30)),
+	'duration'           => array('days' => (int)$params->get('list_range', 30)),
 	'noEventsMessage'    => $this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
 );
-
-// Set up the month and day names
-$options['monthNames']      = array();
-$options['monthNamesShort'] = array();
-$options['dayNames']        = array();
-$options['dayNamesShort']   = array();
-$options['dayNamesMin']     = array();
-for ($i = 0; $i < 7; $i++) {
-	$options['dayNames'][]      = DPCalendarHelper::dayToString($i, false);
-	$options['dayNamesShort'][] = DPCalendarHelper::dayToString($i, true);
-
-	if (function_exists('mb_substr')) {
-		$options['dayNamesMin'][] = mb_substr(DPCalendarHelper::dayToString($i, true), 0, 2);
-	} else {
-		$options['dayNamesMin'][] = substr(DPCalendarHelper::dayToString($i, true), 0, 2);
-	}
-}
-for ($i = 1; $i <= 12; $i++) {
-	$options['monthNames'][]      = DPCalendarHelper::monthToString($i, false);
-	$options['monthNamesShort'][] = DPCalendarHelper::monthToString($i, true);
-}
 
 // Some DPCalendar specific options
 $options['show_event_as_popup']   = $params->get('show_event_as_popup');

@@ -100,7 +100,8 @@ class DPCalendarModelImport extends JModelLegacy
 				$table = JTable::getInstance('Event', 'DPCalendarTable');
 				$table->load(array('xreference' => $xreference));
 				if ($table->id) {
-					$eventData['id'] = $table->id;
+					$eventData['id']          = $table->id;
+					$eventData['original_id'] = $table->original_id;
 				}
 
 				JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');

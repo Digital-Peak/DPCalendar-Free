@@ -14,6 +14,7 @@
 		height: 100%;
 		width: 100%;
 	}
+
 	.dp-image {
 		object-fit: cover;
 		height: 100%;
@@ -22,7 +23,6 @@
 }
 
 &__information, &__cta {
-	padding: 1rem 1.5rem;
 	overflow: auto;
 
 	.dp-link {
@@ -35,29 +35,23 @@
 	box-sizing: border-box;
 }
 
-&__actions {
+&__cta_disabled {
+	font-style: italic;
+}
+
+&__information, &__actions, &__cta, &__description, &_small {
 	padding: 1rem;
 }
 
-&__description {
-	padding: 1.5rem 0 1.5rem 1rem;
-}
-
-&__booking,
-&__tags-text,
-&__locations {
-	padding: 1.5rem;
-}
-
-&__booking + &__locations,
-&__booking + &__tags-text,
-&__tags-text + &__locations {
+&_small + &_small {
 	padding-top: 0;
 }
 
-&__locations .dp-map {
-	width: 100%;
-	height: 200px;
+&__locations {
+	.dp-map {
+		width: 100%;
+		height: 200px;
+	}
 }
 
 &__booking {
@@ -130,6 +124,7 @@
 
 .dp-figure {
 	width: 100%;
+
 	&__caption {
 		padding: 3px 1rem;
 	}
@@ -141,4 +136,10 @@
 	font-weight: bold;
 	text-align: center;
 	opacity: .7;
+}
+
+.dp-event-list {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
 }

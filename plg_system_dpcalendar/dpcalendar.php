@@ -5,11 +5,14 @@
  * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
 	return;
 }
+
+use Joomla\Registry\Registry;
 
 JLoader::registerAlias('DPCalendarHelperLocation', '\\DPCalendar\\Helper\\Location', '6.0');
 JLoader::registerAlias('DPCalendarHelperBooking', '\\DPCalendar\\Helper\\Booking', '6.0');
@@ -316,6 +319,7 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 				continue;
 			}
 
+			$calendar->params    = new Registry();
 			$calendar->canCreate = $caldavCalendar->canEdit;
 			$calendar->canEdit   = $caldavCalendar->canEdit;
 			$calendar->canDelete = $caldavCalendar->canEdit;

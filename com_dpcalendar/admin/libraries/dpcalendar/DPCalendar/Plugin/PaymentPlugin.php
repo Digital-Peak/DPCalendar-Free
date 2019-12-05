@@ -64,6 +64,9 @@ abstract class PaymentPlugin extends \JPlugin
 		if ($t = \JFactory::getApplication()->input->get('tmpl')) {
 			$tmpl = '&tmpl=' . $t;
 		}
+		if ($t = \JFactory::getApplication()->input->getInt('Itemid')) {
+			$tmpl .= '&Itemid=' . $t;
+		}
 
 		$purchaseParameters              = array();
 		$purchaseParameters['amount']    = $booking->price;

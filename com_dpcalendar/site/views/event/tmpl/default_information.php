@@ -39,6 +39,11 @@ if ($calendarLink && $params->get('event_show_calendar', '1') == '2') {
 					$params->get('event_date_format', 'm.d.Y'),
 					$params->get('event_time_format', 'g:i a')
 				); ?>
+				<?php if ($this->event->rrule) { ?>
+					<div class="com-dpcalendar-event__rrule">
+						<?php echo $this->dateHelper->transformRRuleToString($this->event->rrule, $this->event->start_date); ?>
+					</div>
+				<?php } ?>
 			</dd>
 		</dl>
 	<?php } ?>
@@ -88,4 +93,5 @@ if ($calendarLink && $params->get('event_show_calendar', '1') == '2') {
 	<div class="com-dpcalendar-event__event-text">
 		<?php echo $this->event->displayEvent->beforeDisplayContent; ?>
 	</div>
+	<?php echo $this->loadTemplate('tags'); ?>
 </div>

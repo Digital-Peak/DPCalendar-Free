@@ -16,14 +16,32 @@ if (!$this->params->get('location_show_upcoming_events', 1)) {
 	<div class="com-dpcalendar-location__event-list">
 		<?php foreach ($this->events as $event) { ?>
 			<?php $date = $this->dateHelper->getDateStringFromEvent($event, $this->params->get('date_format'), $this->params->get('time_format')); ?>
-			<p class="dp-event" style="border-color: #<?php echo $event->color ?>">
-				<span class="dp-event__date"><?php echo $date; ?></span>
+			<div class="dp-event" style="border-color: #<?php echo $event->color ?>">
 				<a href="<?php echo $this->router->getEventRoute($event->id, $event->catid); ?>" class="dp-link dp-event__link">
 					<?php echo $event->title; ?>
 				</a>
+				<div class="dp-event__date">
+					<?php echo $this->layoutHelper->renderLayout(
+						'block.icon',
+						['icon' => \DPCalendar\HTML\Block\Icon::CLOCK, 'title' => $this->translate('COM_DPCALENDAR_DATE')]
+					); ?>
+					<?php echo $date; ?>
+				</div>
+				<?php if ($event->rrule) { ?>
+					<div class="dp-event__rrule">
+						<?php echo $this->layoutHelper->renderLayout(
+							'block.icon',
+							[
+								'icon'  => \DPCalendar\HTML\Block\Icon::RECURRING,
+								'title' => $this->translate('COM_DPCALENDAR_BOOKING_FIELD_SERIES_LABEL')
+							]
+						); ?>
+						<?php echo $this->dateHelper->transformRRuleToString($event->rrule, $event->start_date); ?>
+					</div>
+				<?php } ?>
 				<?php $this->displayData['event'] = $event; ?>
 				<?php echo $this->layoutHelper->renderLayout('schema.event', $this->displayData); ?>
-			</p>
+			</div>
 		<?php } ?>
 	</div>
 </div>

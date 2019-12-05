@@ -305,6 +305,12 @@
 	</fieldset>
 	<fieldset name="map" label="COM_DPCALENDAR_FIELD_CONFIG_MAP_LABEL"
 	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="map_expand" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="map_date_format" type="text" default="m.d.Y"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>
@@ -386,6 +392,17 @@
 		<field name="show_my_only_list" type="radio" class="btn-group"
 		       default="0" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MY_ONLY_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MY_ONLY_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="list_include_ongoing" type="radio" default="0" class="btn-group"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
+		<field name="list_expand" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
@@ -473,78 +490,90 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_calendar" type="list" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LABEL"
+		<field name="event_show_calendar" type="list" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LINK_MONTH</option>
 		</field>
-		<field name="event_show_date" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_LABEL"
+		<field name="event_show_date" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_location" type="list" class="btn-group"
-		       default="2" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
+		<field name="event_show_location" type="list" class="btn-group" default="2"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
 		</field>
-		<field name="event_show_url" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL"
+		<field name="event_show_url" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_author" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_LABEL"
+		<field name="event_show_author" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_price" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_LABEL"
+		<field name="event_show_price" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_capacity" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_LABEL"
+		<field name="event_show_capacity" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_capacity_used" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_LABEL"
+		<field name="event_show_capacity_used" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_bookings" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
+		<field name="event_show_bookings" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_tickets" type="list" class="btn-group"
-		       default="0" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL"
+		<field name="event_show_series" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="event_show_bookings" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="event_show_tickets" type="list" class="btn-group" default="0"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LIMITED
 			</option>
 		</field>
-		<field name="event_show_copy" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_LABEL"
+		<field name="event_show_copy" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_map" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL"
+		<field name="event_show_map" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
@@ -558,12 +587,10 @@
 		<field name="event_map_long" type="text" default="4" validate="decimal"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-		<field name="event_textbefore" type="textarea"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"
-		       rows="5" cols="50" filter="safehtml"/>
-		<field name="event_textafter" type="textarea"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
-		       rows="5" cols="50" filter="safehtml"/>
+		<field name="event_textbefore" type="textarea" rows="5" cols="50" filter="safehtml"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
+		<field name="event_textafter" type="textarea" rows="5" cols="50" filter="safehtml"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 		<field name="count_clicks" type="radio" class="btn-group" default="1"
 		       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
 			<option value="0">JNO</option>
@@ -803,11 +830,9 @@
 			<option value="0">JNO</option>
 		</field>
 		<field name="event_form_color" type="color"
-		       label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"
-		/>
+		       label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"/>
 		<field name="event_form_url" type="url"
-		       label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"
-		/>
+		       label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"/>
 		<field name="event_form_access" type="accesslevel" label="JFIELD_ACCESS_LABEL"
 		       description="JFIELD_ACCESS_DESC" class="inputbox">
 			<option value=""></option>
@@ -836,6 +861,10 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field name="event_form_location_ids" type="sql" multiple="true"
+		       key_field="id" value_field="title"
+		       query="SELECT id, concat(title,' [',IFNULL(latitude, '0'),':',IFNULL(longitude, '0'),']') as title FROM #__dpcalendar_locations where state = 1 order by title"
+		       label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC"/>
 		<field name="event_form_language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC" class="inputbox">
 			<option value=""></option>
@@ -1122,8 +1151,13 @@
 		</field>
 	</fieldset>
 
-	<fieldset name="locations" label="COM_DPCALENDAR_LOCATIONS"
-	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+	<fieldset name="locations" label="COM_DPCALENDAR_LOCATIONS" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="locations_expand_events" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="locations_show_map" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
@@ -1217,8 +1251,13 @@
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DESC"/>
 	</fieldset>
 
-	<fieldset name="location" label="COM_DPCALENDAR_LOCATION"
-	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+	<fieldset name="location" label="COM_DPCALENDAR_LOCATION" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="location_expand_events" type="radio" class="btn-group" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="location_show_map" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
@@ -1527,6 +1566,9 @@
 		<field name="notification_groups_book" type="usergroup" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_DESC"/>
+		<field name="notification_groups_location_create" type="usergroup" multiple="true"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_DESC"/>
 		<field name="notification_author" type="radio" class="btn-group" default="0"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DESC">

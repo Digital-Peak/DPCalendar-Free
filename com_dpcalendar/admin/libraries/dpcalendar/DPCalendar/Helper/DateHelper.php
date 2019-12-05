@@ -9,8 +9,41 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use DPCalendarHelper;
+
 class DateHelper
 {
+	public function transformRRuleToString($rrule, $startDate)
+	{
+		if (!$rrule) {
+			return '';
+		}
+
+		$start = $this->getDate($startDate);
+		$rule  = new \Recurr\Rule('', $start, null, $start->getTimezone()->getName());
+		$parts = $rule->parseString($rrule);
+
+		// Parser can't handle both
+		if (isset($parts['UNTIL']) && isset($parts['COUNT'])) {
+			unset($parts['UNTIL']);
+		}
+
+		//Only add the date so we have no tz issues
+		if (isset($parts['UNTIL'])) {
+			$parts['UNTIL'] = substr($parts['UNTIL'], 0, 8);
+		}
+
+		$rule->loadFromArray($parts);
+
+		$textTransformer = new \Recurr\Transformer\TextTransformer(
+			new \Recurr\Transformer\Translator(substr(DPCalendarHelper::getFrLanguage(), 0, 2))
+		);
+
+		$string = ucfirst($textTransformer->transform($rule));
+
+		return $string;
+	}
+
 	public function getDate($date = null, $allDay = null, $tz = null)
 	{
 		if ($date instanceof \JDate) {
@@ -49,16 +82,25 @@ class DateHelper
 
 	public function getNames()
 	{
-		$options                  = array();
-		$options['monthNames']    = array();
-		$options['dayNames']      = array();
-		$options['dayNamesShort'] = array();
+		$options                    = [];
+		$options['monthNames']      = [];
+		$options['monthNamesShort'] = [];
+		$options['dayNames']        = [];
+		$options['dayNamesShort']   = [];
+		$options['dayNamesMin']     = [];
 		for ($i = 0; $i < 7; $i++) {
 			$options['dayNames'][]      = DPCalendarHelper::dayToString($i, false);
 			$options['dayNamesShort'][] = DPCalendarHelper::dayToString($i, true);
+
+			if (function_exists('mb_substr')) {
+				$options['dayNamesMin'][] = mb_substr(DPCalendarHelper::dayToString($i, true), 0, 2);
+			} else {
+				$options['dayNamesMin'][] = substr(DPCalendarHelper::dayToString($i, true), 0, 2);
+			}
 		}
 		for ($i = 1; $i <= 12; $i++) {
-			$options['monthNames'][] = DPCalendarHelper::monthToString($i, false);
+			$options['monthNames'][]      = DPCalendarHelper::monthToString($i, false);
+			$options['monthNamesShort'][] = DPCalendarHelper::monthToString($i, true);
 		}
 
 		return $options;

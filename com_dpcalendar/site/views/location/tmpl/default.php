@@ -12,8 +12,8 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/location/default.css');
 <div class="com-dpcalendar-location<?php echo $this->pageclass_sfx ? ' com-dpcalendar-location-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
 	<?php echo $this->loadTemplate('heading'); ?>
-	<?php echo $this->loadTemplate('header'); ?>
 	<?php echo $this->loadTemplate('title'); ?>
+	<?php echo $this->loadTemplate('header'); ?>
 	<div class="com-dpcalendar-location__loader">
 		<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 	</div>

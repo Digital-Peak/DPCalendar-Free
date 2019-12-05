@@ -36,6 +36,11 @@ class ComposerStaticInit80249a1b60293e970126aef8684d3cd5
             'Sabre\\CardDAV\\' => 14,
             'Sabre\\CalDAV\\' => 13,
         ),
+        'R' => 
+        array (
+            'Recurr\\Test\\' => 12,
+            'Recurr\\' => 7,
+        ),
         'P' => 
         array (
             'Psr\\Log\\' => 8,
@@ -110,6 +115,14 @@ class ComposerStaticInit80249a1b60293e970126aef8684d3cd5
         array (
             0 => __DIR__ . '/..' . '/sabre/dav/lib/CalDAV',
         ),
+        'Recurr\\Test\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/simshaun/recurr/tests',
+        ),
+        'Recurr\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/simshaun/recurr/src/Recurr',
+        ),
         'Psr\\Log\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
@@ -164,6 +177,13 @@ class ComposerStaticInit80249a1b60293e970126aef8684d3cd5
             'Guzzle' => 
             array (
                 0 => __DIR__ . '/..' . '/guzzle/guzzle/src',
+            ),
+        ),
+        'D' => 
+        array (
+            'Doctrine\\Common\\Collections\\' => 
+            array (
+                0 => __DIR__ . '/..' . '/doctrine/collections/lib',
             ),
         ),
     );

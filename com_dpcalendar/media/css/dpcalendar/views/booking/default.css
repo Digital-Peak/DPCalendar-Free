@@ -71,12 +71,6 @@
 	vertical-align: -2px;
 }
 
-.com-dpcalendar-booking-default .dp-grid {
-	display: grid;
-	grid-gap: 1rem;
-	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-}
-
 .com-dpcalendar-booking-default .dp-table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -196,7 +190,7 @@
 	margin-left: 180px;
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: 540px) {
 	.com-dpcalendar-booking-default .dp-description__label {
 		float: none;
 		width: 100%;

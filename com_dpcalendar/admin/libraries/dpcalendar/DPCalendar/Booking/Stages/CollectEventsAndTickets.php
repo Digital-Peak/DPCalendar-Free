@@ -38,6 +38,10 @@ class CollectEventsAndTickets implements StageInterface
 			return $payload;
 		}
 
+		if (!$payload->data['event_id']) {
+			return $payload;
+		}
+
 		foreach ((array)$payload->data['event_id'] as $eId => $types) {
 			$event = $this->model->getEvent($eId);
 

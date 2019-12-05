@@ -11,6 +11,7 @@ defined('_JEXEC') or die();
 <div class="com-dpcalendar-eventform__location">
 	<?php if ($this->params->get('event_form_show_map', 1)) { ?>
 		<div class="dp-map"
+			 data-lazy="false"
 			 data-zoom="<?php echo $this->params->get('map_zoom', 6); ?>"
 			 data-latitude="<?php echo $this->params->get('map_lat', 47); ?>"
 			 data-longitude="<?php echo $this->params->get('map_long', 4); ?>">
@@ -27,14 +28,6 @@ defined('_JEXEC') or die();
 		</span>
 	</h3>
 	<div class="com-dpcalendar-eventform__location-form">
-		<button type="button" class="dp-button dp-button-save">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::OK]); ?>
-			<?php echo $this->translate('JAPPLY'); ?>
-		</button>
-		<button type="button" class="dp-button dp-button-cancel">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::CANCEL]); ?>
-			<?php echo $this->translate('JCANCEL'); ?>
-		</button>
 		<?php echo $this->locationForm->renderField('title'); ?>
 		<?php echo $this->locationForm->renderField('country'); ?>
 		<?php echo $this->locationForm->renderField('province'); ?>
@@ -45,5 +38,13 @@ defined('_JEXEC') or die();
 		<?php echo $this->locationForm->renderField('telephone'); ?>
 		<?php echo $this->locationForm->renderField('url'); ?>
 		<input type="hidden" name="location_token" value="<?php echo JSession::getFormToken(); ?>" class="dp-input dp-input-hidden">
+		<button type="button" class="dp-button dp-button-save">
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::OK]); ?>
+			<?php echo $this->translate('JAPPLY'); ?>
+		</button>
+		<button type="button" class="dp-button dp-button-cancel">
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::CANCEL]); ?>
+			<?php echo $this->translate('JCANCEL'); ?>
+		</button>
 	</div>
 </div>

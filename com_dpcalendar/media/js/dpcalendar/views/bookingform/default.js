@@ -63,6 +63,12 @@ DPCalendar = window.DPCalendar || {};
 					&& total.innerHTML
 					&& options.length > 1
 					&& !document.querySelectorAll('.dp-payment-option__input:checked').length) {
+
+					var form = document.getElementsByName('adminForm')[0];
+					if (form && !document.formvalidator.isValid(form)) {
+						return false;
+					}
+
 					DPCalendar.slideToggle(document.querySelector('.com-dpcalendar-bookingform__payment-options'));
 
 					[].slice.call(document.querySelectorAll('.dp-payment-option')).forEach(function (option) {

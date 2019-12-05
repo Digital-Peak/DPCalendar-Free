@@ -210,6 +210,7 @@ class Booking
 			if (!$model) {
 				$model = \JModelLegacy::getInstance('AdminEvents', 'DPCalendarModel', ['ignore_request' => true]);
 			}
+
 			$model->getState();
 			$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
 			$model->setState('list.limit', 10000);
@@ -246,6 +247,7 @@ class Booking
 		if (!$event || \DPCalendarHelper::isFree()) {
 			return false;
 		}
+
 		if ($event->capacity !== null && $event->capacity_used >= $event->capacity) {
 			return false;
 		}
@@ -279,7 +281,7 @@ class Booking
 			return \DPCalendarHelper::getDate($event->start_date);
 		}
 
-		// Check if it is a realative date
+		// Check if it is a relative date
 		if (strpos($event->booking_closing_date, '-') === 0 || strpos($event->booking_closing_date, '+') === 0) {
 			$date = \DPCalendarHelper::getDate($event->start_date);
 			$date->modify($event->booking_closing_date);

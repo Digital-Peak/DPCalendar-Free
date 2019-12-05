@@ -64,6 +64,13 @@ class Icon
 	const DELETE = 'trash-alt';
 
 	/**
+	 * The directions icon.
+	 *
+	 * @var string
+	 */
+	const DIRECTIONS = 'directions-solid';
+
+	/**
 	 * The down icon.
 	 *
 	 * @var string
@@ -83,6 +90,13 @@ class Icon
 	 * @var string
 	 */
 	const EDIT = 'pencil-alt';
+
+	/**
+	 * The external link icon.
+	 *
+	 * @var string
+	 */
+	const EXTERNAL = 'external-link-square-alt-solid';
 
 	/**
 	 * The file icon.
@@ -134,6 +148,13 @@ class Icon
 	const MAIL = 'envelope';
 
 	/**
+	 * The map icon.
+	 *
+	 * @var string
+	 */
+	const MAP = 'map-marked-solid';
+
+	/**
 	 * The money icon.
 	 *
 	 * @var string
@@ -167,6 +188,13 @@ class Icon
 	 * @var string
 	 */
 	const PRINTING = 'print';
+
+	/**
+	 * The recurring icon.
+	 *
+	 * @var string
+	 */
+	const RECURRING = 'redo';
 
 	/**
 	 * The search icon.

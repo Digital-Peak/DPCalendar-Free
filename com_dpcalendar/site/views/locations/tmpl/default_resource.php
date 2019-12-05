@@ -28,6 +28,8 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 
+$this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());
+
 $options                 = array();
 $options['eventSources'] = array();
 foreach ($this->ids as $calendar) {
@@ -40,17 +42,7 @@ foreach ($this->ids as $calendar) {
 	);
 }
 
-// Translate to the fullcalendar view names
-$mapping                = [
-	'resday'   => 'timelineDay',
-	'resweek'  => 'timelineWeek',
-	'resmonth' => 'timelineMonth',
-	'resyear'  => 'timelineYear'
-];
 $options['defaultView'] = $this->params->get('locations_default_view', 'resday');
-if (key_exists($this->params->get('locations_default_view', 'resday'), $mapping)) {
-	$options['defaultView'] = $mapping[$this->params->get('locations_default_view', 'resday')];
-}
 // Set up the header
 $options['header']           = array('left' => array(), 'center' => array(), 'right' => array());
 $options['header']['left'][] = 'prev';
@@ -67,10 +59,10 @@ if ($this->params->get('locations_header_show_create', 1)) {
 if ($this->params->get('locations_header_show_title', 1)) {
 	$options['header']['center'][] = 'title';
 }
-$options['header']['right'][] = 'timelineDay';
-$options['header']['right'][] = 'timelineWeek';
-$options['header']['right'][] = 'timelineMonth';
-$options['header']['right'][] = 'timelineYear';
+$options['header']['right'][] = 'resday';
+$options['header']['right'][] = 'resweek';
+$options['header']['right'][] = 'resmonth';
+$options['header']['right'][] = 'resyear';
 
 $options['header']['left']   = implode(',', $options['header']['left']);
 $options['header']['center'] = implode(',', $options['header']['center']);
@@ -84,22 +76,22 @@ $options['smallTimeFormat'] = $this->dateHelper->convertPHPDateToMoment($this->p
 $options['resources']         = $this->resources;
 $options['resourceLabelText'] = $this->translate('COM_DPCALENDAR_LAYOUT_CALENDAR_LOCATIONS_AND_ROOMS');
 
-$options['views']                  = [];
-$options['views']['timelineYear']  = [
-	'titleFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_year', 'Y')),
-	'timeFormat'  => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_year', 'g:i a'))
+$options['views']             = [];
+$options['views']['resyear']  = [
+	'titleFormat'     => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_year', 'Y')),
+	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_year', 'g:i a'))
 ];
-$options['views']['timelineMonth'] = [
-	'titleFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_month', 'F Y')),
-	'timeFormat'  => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_month', 'g:i a'))
+$options['views']['resmonth'] = [
+	'titleFormat'     => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_month', 'F Y')),
+	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_month', 'g:i a'))
 ];
-$options['views']['timelineWeek']  = [
-	'titleFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_week', 'M j Y')),
-	'timeFormat'  => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_week', 'g:i a'))
+$options['views']['resweek']  = [
+	'titleFormat'     => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_week', 'M j Y')),
+	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_week', 'g:i a'))
 ];
-$options['views']['timelineDay']   = [
-	'titleFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_day', 'F j Y')),
-	'timeFormat'  => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_day', 'g:i a'))
+$options['views']['resday']   = [
+	'titleFormat'     => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_day', 'F j Y')),
+	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_day', 'g:i a'))
 ];
 
 // Set up the month and day names

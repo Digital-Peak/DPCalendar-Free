@@ -15,7 +15,7 @@ if ($this->params->get('event_show_map', '1')) {
 	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
 }
 ?>
-<div class="com-dpcalendar-event__locations">
+<div class="com-dpcalendar-event__locations com-dpcalendar-event_small">
 	<?php if ($this->params->get('event_show_map', '1') == '1' && $this->params->get('event_show_location', '2') == '1') { ?>
 		<div class="dp-location">
 			<div class="dp-map" data-zoom="<?php echo $this->params->get('event_map_zoom', 4); ?>"></div>
@@ -25,7 +25,7 @@ if ($this->params->get('event_show_map', '1')) {
 					 data-longitude="<?php echo $location->longitude; ?>"
 					 data-title="<?php echo $location->title; ?>"
 					 data-description="&lt;a href='<?php echo DPCalendarHelperRoute::getLocationRoute($location); ?>'&gt;<?php echo $location->title; ?>&lt;/a&gt;"
-					 data-color="<?php echo \DPCalendar\Helper\Location::getColor($location); ?>">
+					 data-color="<?php echo $location->color; ?>">
 				</div>
 			<?php } ?>
 		</div>
@@ -47,6 +47,20 @@ if ($this->params->get('event_show_map', '1')) {
 						<?php echo $location->title; ?>
 					</a>
 				</h4>
+				<div class="dp-button-bar">
+					<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
+							data-href="<?php echo \DPCalendar\Helper\Location::getMapLink($location); ?>">
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAP]); ?>
+						<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_SITE_LINK'); ?>
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
+					</button>
+					<button type="button" class="dp-button dp-button-action dp-button-map-directions" data-target="new"
+							data-href="<?php echo \DPCalendar\Helper\Location::getDirectionsLink($location); ?>">
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DIRECTIONS]); ?>
+						<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
+					</button>
+				</div>
 				<?php if ($this->params->get('event_show_map', '1') == '1') { ?>
 					<div class="dp-map" data-zoom="<?php echo $this->params->get('event_map_zoom', 4); ?>"></div>
 				<?php } ?>
@@ -55,7 +69,7 @@ if ($this->params->get('event_show_map', '1')) {
 					 data-longitude="<?php echo $location->longitude; ?>"
 					 data-title="<?php echo $location->title; ?>"
 					 data-description="&lt;a href='<?php echo DPCalendarHelperRoute::getLocationRoute($location); ?>'&gt;<?php echo $location->title; ?>&lt;/a&gt;"
-					 data-color="<?php echo \DPCalendar\Helper\Location::getColor($location); ?>">
+					 data-color="<?php echo $location->color; ?>">
 					<?php if ($location->country) { ?>
 						<dl class="dp-description">
 							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'); ?></dt>
@@ -101,9 +115,11 @@ if ($this->params->get('event_show_map', '1')) {
 						</dl>
 					<?php } ?>
 				</div>
-				<?php echo trim(implode("\n",
-					$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$params, 0]))); ?>
-				<?php echo JHTML::_('content.prepare', $location->description); ?>
+				<div class="dp-location__description">
+					<?php echo trim(implode("\n",
+						$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$params, 0]))); ?>
+					<?php echo JHTML::_('content.prepare', $location->description); ?>
+				</div>
 			</div>
 		<?php } ?>
 	<?php } ?>

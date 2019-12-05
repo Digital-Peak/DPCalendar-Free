@@ -141,6 +141,15 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$form->setFieldAttribute('color', 'colors', $colorValues);
 		}
 
+		if ($eventId && $item && $item->original_id > 0) {
+			$form->removeField('booking_series');
+			if ($item->booking_series) {
+				foreach ($form->getFieldset('booking') as $field) {
+					$form->removeField($field->fieldname);
+				}
+			}
+		}
+
 		return $form;
 	}
 
@@ -744,6 +753,9 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 		if (!$item->get('featured')) {
 			$data['featured'] = $params->get('event_form_featured');
+		}
+		if (!$item->get('location_ids')) {
+			$data['location_ids'] = $params->get('event_form_location_ids',[]);
 		}
 		if (!$item->get('language')) {
 			$data['language'] = $params->get('event_form_language');

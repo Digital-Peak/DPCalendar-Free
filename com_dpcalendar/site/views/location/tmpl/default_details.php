@@ -69,7 +69,9 @@ if (!$this->params->get('locations_expand', 1)) {
 			</dl>
 		<?php } ?>
 	</div>
-	<?php echo trim(implode("\n",
-		$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$this->location, &$params, 0]))); ?>
-	<?php echo JHTML::_('content.prepare', $this->location->description); ?>
+	<div class="dp-location__description">
+		<?php echo trim(implode("\n",
+			$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$this->location, &$params, 0]))); ?>
+		<?php echo JHTML::_('content.prepare', $this->location->description); ?>
+	</div>
 </div>

@@ -11,7 +11,6 @@ JLoader::import('components.com_dpcalendar.helpers.schema', JPATH_ADMINISTRATOR)
 
 class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 {
-
 	protected $event;
 
 	public function init()
@@ -148,7 +147,72 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		}
 		$this->displayData['event'] = $this->event;
 
+		$this->seriesEvents      = [];
+		$this->seriesEventsTotal = 0;
+		$this->originalEvent     = null;
+
+		if ($event->original_id > 0 || $event->original_id == '-1') {
+			$seriesModel             = $model->getSeriesEventsModel($this->event);
+			$this->seriesEvents      = $seriesModel->getItems();
+			$this->seriesEventsTotal = $seriesModel->getTotal();
+			$this->originalEvent     = $model->getItem($event->original_id);
+		}
+
+		$this->noBookingMessage = $this->getBookingMessage($event);
+
+		if ($this->originalEvent && $this->originalEvent->booking_series) {
+			$this->noBookingMessage = $this->getBookingMessage($this->originalEvent);
+		}
+
 		return parent::init();
+	}
+
+	/**
+	 * Returns a booking message. If the string is null, then booking is possible.
+	 * If it is an empty string then no booking is activated. If it is a string, then
+	 * no booking is possible while the string represents the warning message.
+	 *
+	 * @param $event
+	 *
+	 * @return string|null
+	 */
+	private function getBookingMessage($event)
+	{
+		// Handle no event
+		if (!$event) {
+			return '';
+		}
+
+		// When booking is disabled or not available
+		if ($event->capacity == '0' || \DPCalendarHelper::isFree()) {
+			return '';
+		}
+
+		// Check permissions
+		$calendar = \DPCalendarHelper::getCalendar($event->catid);
+		if (!$calendar || !$calendar->canBook) {
+			return '';
+		}
+
+		// Check if full
+		if ($event->capacity > 0 && $event->capacity_used >= $event->capacity) {
+			return $this->translate('COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_CAPACITY_FULL');
+		}
+
+		// Check if registration ended
+		$now                = \DPCalendarHelper::getDate();
+		$regstrationEndDate = \DPCalendar\Helper\Booking::getRegistrationEndDate($event);
+		if ($regstrationEndDate->format('U') < $now->format('U')) {
+			return JText::sprintf(
+				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_END',
+				$regstrationEndDate->format($this->params->get('event_date_format', 'm.d.Y'), true),
+				$regstrationEndDate->format('H:i') != '00:00' ? $regstrationEndDate->format($this->params->get('event_time_format', 'h:i a'),
+					true) : ''
+			);
+		}
+
+		// All fine
+		return null;
 	}
 
 	protected function prepareDocument()
@@ -194,9 +258,9 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			}
 		}
 
-		$metadesc = trim($this->event->metadesc);
+		$metadesc = trim($this->event->metadata->get('metadesc'));
 		if (!$metadesc) {
-			$metadesc = JHtmlString::truncate($this->event->description, 200, true, false);
+			$metadesc = JHtmlString::truncate($this->event->description, 100, true, false);
 		}
 		if ($metadesc) {
 			$this->document->setDescription($this->event->title . ' '
@@ -219,4 +283,6 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			}
 		}
 	}
+
+
 }

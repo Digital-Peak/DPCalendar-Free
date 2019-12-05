@@ -197,7 +197,7 @@ class DPCalendarModelEvents extends JModelList
 		if ($this->getState('filter.expand')) {
 			$query->where('a.original_id > -1');
 		} else {
-			$query->where('(a.original_id in (-1, 0) or (a.original_id > 0 and a.modified > ' . $this->getDbo()->quote($this->getDbo()->getNullDate()) . '))');
+			$query->where('a.original_id in (-1, 0)');
 		}
 
 		// Join over the categories.
@@ -210,6 +210,11 @@ class DPCalendarModelEvents extends JModelList
 			$query->join('LEFT', '#__dpcalendar_tickets AS t ON t.event_id = a.id and t.user_id = ' . (int)$user->id);
 		}
 
+		// Join on series max/min
+		$query->select('ser.min_date AS series_min_start_date, ser.max_date AS series_max_end_date');
+		$query->join('LEFT',
+			'(select original_id, max(end_date) as max_date, min(start_date) as min_date from #__dpcalendar_events group by original_id) ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id');
+
 		// Join locations
 		$query->select("GROUP_CONCAT(v.id SEPARATOR ', ') location_ids");
 		$query->join('LEFT', '#__dpcalendar_events_location AS rel ON a.id = rel.event_id');
@@ -220,6 +225,17 @@ class DPCalendarModelEvents extends JModelList
 		if ($categoryIds = $this->getState('category.id', 0)) {
 			if (!is_array($categoryIds)) {
 				$categoryIds = array($categoryIds);
+			}
+			if (in_array('root', $categoryIds)) {
+				JPluginHelper::importPlugin('dpcalendar');
+				$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+				if (!empty($tmp)) {
+					foreach ($tmp as $tmpCalendars) {
+						foreach ($tmpCalendars as $calendar) {
+							$categoryIds[] = $calendar->id;
+						}
+					}
+				}
 			}
 			$cats = array();
 			foreach ($categoryIds as $categoryId) {
@@ -293,6 +309,10 @@ class DPCalendarModelEvents extends JModelList
 			$dateCondition .= ' or ' . $db->quote($now->toSql()) . ' between a.start_date and a.end_date';
 			$dateCondition .= ' or (a.start_date=' . $db->quote($now->format('Y-m-d')) . ' and a.all_day=1)';
 			$dateCondition .= ' or (a.end_date=' . $db->quote($now->format('Y-m-d')) . ' and a.all_day=1)';
+
+			if (!$this->getState('filter.expand')) {
+				$dateCondition .= ' or ' . $db->quote($now->toSql()) . ' between ser.min_date and ser.max_date';
+			}
 		}
 		$query->where('(' . $dateCondition . ')');
 
@@ -329,7 +349,8 @@ class DPCalendarModelEvents extends JModelList
 					// Search in custom fields
 					// Join over Fields.
 					$query->join('LEFT', '#__fields_values AS jf ON jf.item_id = ' . $query->castAsChar('a.id'))
-						->join('LEFT', '#__fields AS f ON f.id = jf.field_id and f.context = ' . $db->q('com_dpcalendar.event').' and f.state = 1 and f.access IN (' . $groups . ')');
+						->join('LEFT',
+							'#__fields AS f ON f.id = jf.field_id and f.context = ' . $db->q('com_dpcalendar.event') . ' and f.state = 1 and f.access IN (' . $groups . ')');
 					$searchColumns[] = 'jf.value';
 				}
 

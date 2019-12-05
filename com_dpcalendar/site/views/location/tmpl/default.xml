@@ -13,9 +13,14 @@
 			       required="true"/>
 		</fieldset>
 	</fields>
-	<fields name="params"
-	        addrulepath="/administrator/components/com_dpcalendar/models/rules">
+	<fields name="params" addrulepath="/administrator/components/com_dpcalendar/models/rules">
 		<fieldset name="basic">
+			<field name="location_expand_events" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
 			<field name="location_show_map" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">

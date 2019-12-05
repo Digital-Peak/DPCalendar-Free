@@ -134,15 +134,73 @@
 	overflow: visible;
 }
 
+.com-dpcalendar-calendar .fc-header-toolbar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.com-dpcalendar-calendar .fc-header-toolbar h2 {
+	font-size: 19.5px;
+	font-weight: 200;
+}
+
+.com-dpcalendar-calendar .fc-header-toolbar .fc-right {
+	order: 1;
+}
+
+.com-dpcalendar-calendar .fc-header-toolbar .fc-clear {
+	display: none;
+}
+
+.com-dpcalendar-calendar .fc-button-primary {
+	padding: 5px;
+	border: 1px solid #c0c0c0;
+	border-radius: .1rem;
+	font-weight: 400;
+	background-color: #fefefe;
+	color: #000;
+	background-image: none;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-calendar .fc-button-primary.fc-corner-right {
+	border-top-right-radius: .1rem;
+	border-bottom-right-radius: .1rem;
+}
+
+.com-dpcalendar-calendar .fc-button-primary.fc-corner-left {
+	border-top-left-radius: .1rem;
+	border-bottom-left-radius: .1rem;
+}
+
+.com-dpcalendar-calendar .fc-button-primary:not(:disabled):active:focus, .com-dpcalendar-calendar .fc-button-primary:not(:disabled).fc-button-active:focus {
+	-webkit-box-shadow: unset;
+	box-shadow: unset;
+}
+
+.com-dpcalendar-calendar .fc-button-group .fc-button {
+	border-radius: .1rem;
+}
+
+.com-dpcalendar-calendar .fc-button-group .fc-button + .fc-button {
+	margin-left: 3px;
+}
+
 @media screen and (max-width: 540px) {
+	.com-dpcalendar-calendar .fc-header-toolbar {
+		flex-direction: column;
+	}
 	.com-dpcalendar-calendar .fc-header-toolbar > div {
-		display: block;
-		margin: 0 auto;
-		width: 100%;
+		margin: 4px auto;
 	}
 	.com-dpcalendar-calendar .fc-header-toolbar > * > * {
 		float: none;
 	}
+}
+
+.com-dpcalendar-calendar .fc-event {
+	border-radius: 0;
 }
 
 .com-dpcalendar-calendar .dp-timezone {
@@ -254,6 +312,7 @@
 .com-dpcalendar-calendar .fc-print-button span {
 	height: 100%;
 	opacity: .8;
+	padding-left: 4px;
 }
 
 .com-dpcalendar-calendar .fc-add-button span:before,
@@ -262,8 +321,8 @@
 	display: block;
 	content: '';
 	width: 14px;
-	height: 28px;
-	background-size: 14px 26px;
+	height: 20px;
+	background-size: 14px 20px;
 	background-repeat: no-repeat;
 }
 

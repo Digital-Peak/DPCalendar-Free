@@ -7,10 +7,17 @@
  */
 defined('_JEXEC') or die();
 
-if (!\DPCalendar\Helper\Booking::openForBooking($this->event)) {
+// Booking is disabled when the message is an empty string
+if ($this->noBookingMessage === '') {
 	return;
 }
 ?>
+<?php if ($this->noBookingMessage) { ?>
+	<div class="com-dpcalendar-event__cta com-dpcalendar-event__cta_disabled dp-print-hide">
+		<?php echo $this->noBookingMessage; ?>
+	</div>
+	<?php return; ?>
+<?php } ?>
 <div class="com-dpcalendar-event__cta dp-event-cta dp-print-hide">
 	<a href="<?php echo $this->router->getBookingFormRouteFromEvent($this->event, JUri::getInstance()->toString()); ?>"
 	   class="dp-button dp-button_cta">

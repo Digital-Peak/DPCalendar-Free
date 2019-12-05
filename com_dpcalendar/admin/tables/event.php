@@ -272,6 +272,7 @@ class DPCalendarTableEvent extends JTable
 					$this->_db->qn('capacity_used') . ' = ' . $this->_db->q($this->capacity_used),
 					$this->_db->qn('max_tickets') . ' = ' . $this->_db->q($this->max_tickets),
 					$this->_db->qn('booking_closing_date') . ' = ' . $this->_db->q($this->booking_closing_date),
+					$this->_db->qn('booking_series') . ' = ' . $this->_db->q($this->booking_series),
 					$this->_db->qn('price') . ' = ' . $this->_db->q($this->price),
 					$this->_db->qn('earlybird') . ' = ' . $this->_db->q($this->earlybird),
 					$this->_db->qn('user_discount') . ' = ' . $this->_db->q($this->user_discount),

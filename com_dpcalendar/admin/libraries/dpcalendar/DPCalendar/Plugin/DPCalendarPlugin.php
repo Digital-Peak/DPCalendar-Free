@@ -648,6 +648,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->capacity         = 0;
 		$event->capacity_used    = 0;
 		$event->booking_options  = null;
+		$event->booking_series   = 0;
 		$event->description      = '';
 		$event->state            = 1;
 		$event->access           = 1;

@@ -127,7 +127,8 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		$db->setQuery('update #__dpcalendar_events set publish_down = now() where catid = ' . $db->q($calendar->id));
 		$db->execute();
 
-		$foundEvents = array();
+		$foundEvents     = [];
+		$processedEvents = [];
 		while (true) {
 			// Fetching in steps to safe memory
 			$syncDateEnd = clone $syncDateStart;
@@ -135,6 +136,13 @@ abstract class SyncPlugin extends DPCalendarPlugin
 
 			$events = $this->fetchEvents($calendarId, $syncDateStart, $syncDateEnd, $options);
 			foreach ($events as $index => $event) {
+				// Check if we have processed the event already, mainly on recurring events
+				if (array_key_exists($event->id, $processedEvents)) {
+					continue;
+				}
+
+				$processedEvents[$event->id] = $event;
+
 				// Saving the id as reference
 				$event->id    = null;
 				$event->alias = null;
@@ -142,7 +150,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 				// Find an existing event with the same keys
 				$table = \JTable::getInstance('Event', 'DPCalendarTable');
 
-				$keys = array('catid' => $calendar->id, 'uid'   => $event->uid);
+				$keys = array('catid' => $calendar->id, 'uid' => $event->uid);
 				if ($event->recurrence_id) {
 					// Search the parent
 					$table->load($keys);
@@ -158,7 +166,8 @@ abstract class SyncPlugin extends DPCalendarPlugin
 
 				// Check if the event was edited since last sync
 				if ($syncDate && $event->modified && $syncDate->format('U') >= \DPCalendarHelper::getDate($event->modified)->format('U')) {
-					if ($table->id) {
+					// Trashed events can be delivered separate
+					if ($table->id && $table->state == $event->state) {
 						$foundEvents[$table->id] = $table->id;
 					}
 					continue;

@@ -20,7 +20,8 @@ $tmpl   = $this->input->getCmd('tmpl') ? '&tmpl=' . $this->input->getCmd('tmpl')
 $action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id . $tmpl);
 ?>
 <div class="com-dpcalendar-locationform">
-	<form class="com-dpcalendar-locationform__form dp-form form-validate" method="post" name="adminForm" id="adminForm" action="<?php echo $action; ?>">
+	<form class="com-dpcalendar-locationform__form dp-form form-validate" method="post" name="adminForm" id="adminForm"
+		  action="<?php echo $action; ?>">
 		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', array('active' => 'general')); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
 			<?php echo JHtml::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
@@ -31,7 +32,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 					<?php } ?>
 				</div>
 				<?php if ($name == 'general') { ?>
-					<div class="com-dpcalendar-locationform__map dp-map"></div>
+					<div class="com-dpcalendar-locationform__map dp-map" data-lazy="false"></div>
 				<?php } ?>
 			</div>
 			<?php echo JHtml::_('bootstrap.endTab'); ?>

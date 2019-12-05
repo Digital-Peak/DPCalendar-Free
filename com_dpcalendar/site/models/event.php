@@ -113,6 +113,11 @@ class DPCalendarModelEvent extends JModelForm
 					$query->select('c.access AS category_access');
 					$query->join('LEFT', '#__categories AS c on c.id = a.catid');
 
+					// Join on series max/min
+					$query->select('min(ser.start_date) AS series_min_start_date, max(ser.end_date) AS series_max_end_date');
+					$query->join('LEFT',
+						'#__dpcalendar_events AS ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id');
+
 					$query->select('u.name AS author');
 					$query->join('LEFT', '#__users AS u on u.id = a.created_by');
 
@@ -140,7 +145,6 @@ class DPCalendarModelEvent extends JModelForm
 					if (!$user->authorise('core.admin', 'com_dpcalendar')) {
 						$query->where('a.access IN (' . implode(',', $groups) . ')');
 					}
-
 					$db->setQuery($query);
 
 					$data = $db->loadObject();
@@ -169,13 +173,18 @@ class DPCalendarModelEvent extends JModelForm
 					$locationQuery->from('#__dpcalendar_locations AS a');
 
 					$locationQuery->join('RIGHT',
-						'#__dpcalendar_events_location AS rel on rel.event_id = ' . (int)$pk . ' and rel.location_id = a.id');
+						'#__dpcalendar_events_location AS rel on rel.event_id = ' . (int)$pk . ' and rel.location_id = a.id'
+					);
 					$locationQuery->where('state = 1');
 					$locationQuery->order('ordering asc');
 					$db->setQuery($locationQuery);
 					$data->locations = $db->loadObjectList();
 					foreach ($data->locations as $location) {
 						$location->rooms = json_decode($location->rooms);
+
+						if (empty($location->color)) {
+							$location->color = \DPCalendar\Helper\Location::getColor($location);
+						}
 					}
 
 					// Convert parameter fields to objects.
@@ -258,5 +267,16 @@ class DPCalendarModelEvent extends JModelForm
 		$event = $this->getTable('Event', 'DPCalendarTable');
 
 		return $event->hit($id);
+	}
+
+	public function getSeriesEventsModel($event)
+	{
+		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$model->getState();
+		$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
+		$model->setState('list.limit', 5);
+		$model->setState('filter.expand', true);
+
+		return $model;
 	}
 }

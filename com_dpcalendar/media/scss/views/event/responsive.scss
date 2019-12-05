@@ -7,12 +7,8 @@
 		padding-right: 1rem;
 	}
 
-	&__actions, &__cta {
-		padding: 1rem;
-	}
-
-	&__description {
-		padding: 2.5rem 1rem;
+	&__description + &_small {
+		padding-top: 0;
 	}
 
 	.dp-description {

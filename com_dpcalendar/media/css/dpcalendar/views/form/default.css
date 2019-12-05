@@ -409,6 +409,11 @@
 	display: none;
 }
 
+.com-dpcalendar-eventform__location-form {
+	border: 1px solid #c0c0c0;
+	padding: 10px;
+}
+
 .pika-single th,
 .pika-single td {
 	border-style: solid;

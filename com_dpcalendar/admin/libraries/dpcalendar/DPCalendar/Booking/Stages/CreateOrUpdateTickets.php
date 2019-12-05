@@ -60,33 +60,64 @@ class CreateOrUpdateTickets implements StageInterface
 			return $payload;
 		}
 
+		$events = $payload->events;
+
+		// Check if series
+		if (count($payload->events) == 1) {
+			$event = reset($payload->events);
+
+			if ($event->original_id == '-1' && $event->booking_series) {
+				$events = Booking::getSeriesEvents($event);
+
+				foreach ($events as $e) {
+					$e->amount_tickets = $event->amount_tickets;
+				}
+			}
+		}
+
 		$payload->tickets = [];
-		foreach ($payload->events as $event) {
+		foreach ($events as $event) {
 			$prices = $event->price;
 
 			if (!$prices) {
 				// Free event
 				$prices = new \JObject(array('value' => array(0 => 0)));
 			}
+
 			foreach ($prices->value as $index => $value) {
 				for ($i = 0; $i < $event->amount_tickets[$index]; $i++) {
 					$ticket             = (object)$payload->data;
 					$ticket->id         = 0;
 					$ticket->uid        = 0;
 					$ticket->booking_id = $payload->item->id;
-					$ticket->price      = Booking::getPriceWithDiscount($value, $event);
+					$ticket->price      = $event->booking_series ? 0 : Booking::getPriceWithDiscount($value, $event);
 					$ticket->seat       = $event->capacity_used + 1;
 					$ticket->state      = $payload->item->state;
 					$ticket->created    = DPCalendarHelper::getDate()->toSql();
 					$ticket->type       = $index;
 
+					if ($payload->item->jcfields) {
+						$ticket->com_fields = [];
+						foreach ($payload->item->jcfields as $field) {
+							$relatedTicketFieldName = $field->params->get('ticket_field');
+							if (!$relatedTicketFieldName) {
+								continue;
+							}
+							$ticket->com_fields[$relatedTicketFieldName] = $field->value;
+						}
+					}
+
 					$ticket->event_id = $event->id;
 
-					// Save the ticket
-					if ($this->model->save((array)$ticket)) {
+					// Do not create a ticket for the original event just increase the counter
+					if ($event->original_id == -1) {
+						$table = $this->model->getTable('Event');
+						$table->bind($event);
+						$table->book(true);
+					} else if ($this->model->save((array)$ticket)) {
 						// Increase the seat
 						$ticket->seat++;
-						$event->book(true);
+
 						$t                = $this->model->getItem();
 						$t->event_calid   = $event->catid;
 						$t->event_title   = $event->title;
@@ -98,6 +129,10 @@ class CreateOrUpdateTickets implements StageInterface
 						$t->event_options = $event->booking_options;
 
 						$payload->tickets[] = $t;
+
+						$table = $this->model->getTable('Event');
+						$table->bind($event);
+						$table->book(true);
 					} else {
 						$this->setError($this->getError() . PHP_EOL . $this->model->getError());
 					}

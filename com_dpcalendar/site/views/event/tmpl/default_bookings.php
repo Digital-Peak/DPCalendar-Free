@@ -29,7 +29,7 @@ if ($tickets) {
 	);
 }
 ?>
-<div class="com-dpcalendar-event__booking dp-booking-info">
+<div class="com-dpcalendar-event__booking com-dpcalendar-event_small dp-booking-info">
 	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_BOOKING_INFORMATION'); ?></h3>
 	<?php if ($this->params->get('event_show_price', '1') && $event->price) { ?>
 		<div class="dp-booking-info__discount">

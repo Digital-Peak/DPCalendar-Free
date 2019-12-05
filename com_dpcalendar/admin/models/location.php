@@ -35,6 +35,10 @@ class DPCalendarModelLocation extends JModelAdmin
 			$item->rooms = json_decode($item->rooms);
 		}
 
+		if (empty($item->color)) {
+			$item->color = \DPCalendar\Helper\Location::getColor($item);
+		}
+
 		return $item;
 	}
 
@@ -83,6 +87,45 @@ class DPCalendarModelLocation extends JModelAdmin
 		$this->modifyField($form, 'url');
 
 		return $form;
+	}
+
+	public function save($data)
+	{
+		$success = parent::save($data);
+
+		if ($success && $this->getState('location.new') === true) {
+			$data['id'] = $this->getState('location.id');
+
+			// Load the language
+			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+
+			// Create the subject
+			$subject = DPCalendarHelper::renderEvents(
+				[],
+				JText::_('COM_DPCALENDAR_NOTIFICATION_LOCATION_SUBJECT_CREATE'),
+				null,
+				['location' => $data]
+			);
+
+			// Create the body
+			$body = DPCalendarHelper::renderEvents(
+				[],
+				JText::_('COM_DPCALENDAR_NOTIFICATION_LOCATION_CREATE_BODY'),
+				null,
+				[
+					'location'         => $data,
+					'backLinkFull'     => DPCalendarHelperRoute::getLocationRoute((object)$data, true),
+					'formattedAddress' => \DPCalendar\Helper\Location::format([(object)$data]),
+					'sitename'         => JFactory::getConfig()->get('sitename'),
+					'user'             => JFactory::getUser()->name
+				]
+			);
+
+			// Send the notification to the groups
+			DPCalendarHelper::sendMail($subject, $body, 'notification_groups_location_create');
+		}
+
+		return $success;
 	}
 
 	private function modifyField(JForm $form, $name)

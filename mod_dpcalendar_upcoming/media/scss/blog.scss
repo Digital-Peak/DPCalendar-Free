@@ -9,8 +9,8 @@
 		margin: 0 0 12px;
 	}
 
-	&__date {
-		font-size: smaller;
+	&__date, &__rrule {
+		font-weight: inherit;
 		display: inline-block;
 	}
 
@@ -22,7 +22,6 @@
 	.dp-date, .dp-time {
 		&__start,
 		&__end {
-			font-size: 1em;
 			font-weight: normal;
 			opacity: 1;
 		}
@@ -32,7 +31,6 @@
 	&__capacity,
 	&__price,
 	&__location {
-		font-size: smaller;
 		display: block;
 	}
 

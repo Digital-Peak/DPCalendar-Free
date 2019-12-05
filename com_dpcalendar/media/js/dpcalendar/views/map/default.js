@@ -9,11 +9,11 @@ DPCalendar = window.DPCalendar || {};
 				'view=map&layout=events&format=raw',
 				function (json) {
 					var map = root.querySelector('.dp-map');
-					if (map == null || map.dpmap == null) {
+					if (map == null) {
 						return;
 					}
 
-					DPCalendar.Map.clearMarkers(map.dpmap);
+					DPCalendar.Map.clearMarkers(map);
 
 					json.data.events.forEach(function (event) {
 						event.location.forEach(function (location) {
@@ -22,13 +22,13 @@ DPCalendar = window.DPCalendar || {};
 							locationData.color = event.color;
 							locationData.description = event.description;
 
-							DPCalendar.Map.createMarker(map.dpmap, locationData);
+							DPCalendar.Map.createMarker(map, locationData);
 						});
 					});
 
 					if (json.data.location && root.querySelector('.dp-input[name=radius]').value != -1) {
 						DPCalendar.Map.drawCircle(
-							map.dpmap,
+							map,
 							json.data.location,
 							root.querySelector('.dp-input[name=radius]').value,
 							root.querySelector('.dp-input[name="length-type"]').value
@@ -73,7 +73,7 @@ DPCalendar = window.DPCalendar || {};
 				return false;
 			});
 
-			update(map);
+			update(map)
 
 			if (DPCalendar.autocomplete) {
 				var geoComplete = map.querySelector('.dp-input_location');

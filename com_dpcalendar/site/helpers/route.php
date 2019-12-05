@@ -83,10 +83,10 @@ class DPCalendarHelperRoute
 		return $link;
 	}
 
-	public static function getLocationRoute($location)
+	public static function getLocationRoute($location, $full = false)
 	{
 		// Create the link
-		$link = 'index.php?option=com_dpcalendar&view=location&id=' . $location->id;
+		$link = ($full ? JUri::root() : '') . 'index.php?option=com_dpcalendar&view=location&id=' . $location->id;
 
 		if ($tmpl = JFactory::getApplication()->input->getWord('tmpl')) {
 			$link .= '&tmpl=' . $tmpl;
@@ -208,7 +208,12 @@ class DPCalendarHelperRoute
 		}
 		$args['return'] = base64_encode($return);
 
-		return self::getUrl($args, true);
+		$needles             = $needles = ['event' => [$event->id]];
+		$needles['calendar'] = [$event->catid];
+		$needles['list']     = [$event->catid];
+		$needles['map']      = [$event->catid];
+
+		return self::getUrl($args, true, $needles);
 	}
 
 	public static function getTicketRoute($ticket, $full = false)
@@ -428,11 +433,11 @@ class DPCalendarHelperRoute
 		return null;
 	}
 
-	private static function getUrl($arguments = array(), $route = true)
+	private static function getUrl($arguments = array(), $route = true, $needles = [])
 	{
 		$uri = clone JUri::getInstance();
-		if (JFactory::getDocument()->getType() != 'html') {
-			$uri = JUri::getInstance(JUri::root() . 'index.php');
+		if (JFactory::getDocument()->getType() != 'html' || JFactory::getApplication()->isClient('site')) {
+			$uri = JUri::getInstance('index.php');
 		}
 		$uri->setQuery('');
 		$input = JFactory::getApplication()->input;
@@ -440,7 +445,7 @@ class DPCalendarHelperRoute
 		if ($input->get('option') != 'com_dpcalendar' || strpos($uri->getPath(), 'index.php') !== false) {
 			$arguments['option'] = 'com_dpcalendar';
 
-			if ($itemId = self::findItem(array())) {
+			if ($itemId = self::findItem($needles)) {
 				$arguments['Itemid'] = $itemId;
 			}
 		}

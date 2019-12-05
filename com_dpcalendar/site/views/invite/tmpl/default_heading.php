@@ -12,5 +12,5 @@ if (!$this->params->get('show_page_heading')) {
 }
 ?>
 <div class="com-dpcalendar-invite__heading">
-	<h1 class="dp-page-heading"><?php echo $this->escape($this->params->get('page_heading')); ?></h1>
+	<h1 class="dp-page-heading page-header"><?php echo $this->escape($this->params->get('page_heading')); ?></h1>
 </div>

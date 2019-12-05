@@ -2,7 +2,7 @@ Hello
 This is the source of DPCalendar, a Joomla calendar and event manager. Here you will find the component, some modules and plugins of DPCalendar.
 
 ### PREREQUISITS
-- Joomla 3.7 and above
+- Joomla 3.9 and above
 - MySQL >= 5.5.0
 - PHP >= 5.5.9
 

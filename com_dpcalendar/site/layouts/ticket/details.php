@@ -88,20 +88,22 @@ foreach ($fields as $key => $field) {
 		<tr>
 			<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_DATE'); ?></td>
 			<td style="width:70%">
-				<?php echo $displayData['dateHelper']->getDateStringFromEvent(
+				<?php echo strip_tags($displayData['dateHelper']->getDateStringFromEvent(
 					$event,
 					$params->get('event_date_format', 'm.d.Y'),
 					$params->get('event_time_format', 'g:i a')
-				); ?>
+				)); ?>
 			</td>
 		</tr>
 		<?php if ($event->locations) { ?>
 			<tr>
-				<td><?php echo $displayData['translator']->translate('COM_DPCALENDAR_LOCATION'); ?></td>
-				<td>
-					<?php foreach ($event->locations as $location) { ?>
-						<p><?php echo \DPCalendar\Helper\Location::format($location); ?></p>
+				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_LOCATION'); ?></td>
+				<td style="width:70%">
+					<?php $formattedLocations = []; ?>
+					<?php foreach ($event->locations as $index => $location) { ?>
+						<?php $formattedLocations[] = \DPCalendar\Helper\Location::format($location); ?>
 					<?php } ?>
+					<?php echo implode(', ', $formattedLocations); ?>
 				</td>
 			</tr>
 		<?php } ?>
@@ -109,13 +111,13 @@ foreach ($fields as $key => $field) {
 	<h3 style="border-bottom: 1px solid #eee"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_INVOICE_TICKET_DETAILS'); ?></h3>
 	<table style="width:100%">
 		<tr>
-			<td><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?></td>
-			<td><?php echo $ticket->uid; ?></td>
+			<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?></td>
+			<td style="width:70%"><?php echo $ticket->uid; ?></td>
 		</tr>
 		<?php if ($event->price && key_exists($ticket->type, $event->price->label) && $event->price->label[$ticket->type]) { ?>
 			<tr>
-				<td><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL'); ?></td>
-				<td><?php echo $event->price->label[$ticket->type] . ($event->price->description[$ticket->type] ?: ''); ?></td>
+				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL'); ?></td>
+				<td style="width:70%"><?php echo $event->price->label[$ticket->type] . ' ' . ($event->price->description[$ticket->type] ?: ''); ?></td>
 			</tr>
 		<?php } ?>
 		<?php foreach ($fields as $field) { ?>

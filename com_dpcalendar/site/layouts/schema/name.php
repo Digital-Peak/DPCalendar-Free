@@ -7,4 +7,4 @@
  */
 defined('_JEXEC') or die();
 ?>
-<meta itemprop="name" content="<?php echo $displayData['event']->title; ?>">
+<meta itemprop="name" content="<?php echo htmlentities($displayData['event']->title); ?>">

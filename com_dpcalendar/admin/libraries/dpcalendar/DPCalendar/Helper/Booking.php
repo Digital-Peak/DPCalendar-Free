@@ -170,7 +170,7 @@ class Booking
 					'module_width'  => 1,
 					'module_height' => 1
 				);
-				$pdf->write2DBarcode(\DPCalendarHelperRoute::getTicketRoute($ticket, true), 'QRCODE,L', 20, 200, 50, 50, $style, 'N');
+				$pdf->write2DBarcode(\DPCalendarHelperRoute::getTicketCheckinRoute($ticket, true), 'QRCODE,L', 20, 200, 50, 50, $style, 'N');
 			}
 
 			$fileName = $ticket->uid . '.pdf';

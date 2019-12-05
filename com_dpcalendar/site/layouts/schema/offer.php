@@ -21,10 +21,10 @@ $currency = $displayData['params']->get('currency', 'USD');
 			<meta itemprop="priceCurrency" content="<?php echo $currency; ?>">
 			<meta itemprop="validFrom" content="<?php echo $displayData['dateHelper']->getDate($event->created)->format('c'); ?>">
 			<?php if ($event->price->label[$key]) { ?>
-				<meta itemprop="name" content="<?php echo $event->price->label[$key]; ?>">
+				<meta itemprop="name" content="<?php echo htmlentities($event->price->label[$key]); ?>">
 			<?php } ?>
 			<?php if ($event->price->description[$key]) { ?>
-				<meta itemprop="description" content="<?php echo strip_tags($event->price->description[$key]); ?>">
+				<meta itemprop="description" content="<?php echo htmlentities(strip_tags($event->price->description[$key])); ?>">
 			<?php } ?>
 			<meta itemprop="availability"
 				  content="<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_LABEL') . ': ' . $event->capacity; ?>">

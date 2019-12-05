@@ -7,4 +7,4 @@
  */
 defined('_JEXEC') or die();
 ?>
-<meta itemprop="performer" content="<?php echo $displayData['userHelper']->getUser($displayData['event']->created_by)->name; ?>">
+<meta itemprop="performer" content="<?php echo htmlentities($displayData['userHelper']->getUser($displayData['event']->created_by)->name); ?>">

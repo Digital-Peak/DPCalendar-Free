@@ -1,3 +1,5 @@
+.fc-prev-button,
+.fc-next-button,
 .fc-add-button,
 .fc-datepicker-button,
 .fc-print-button {
@@ -14,6 +16,21 @@
 			background-size: 14px 20px;
 			background-repeat: no-repeat;
 		}
+	}
+}
+
+.fc-prev-button {
+	span:before {
+		content: '';
+		background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgNTEyIiB3aWR0aD0iMTAiPjxwYXRoIGQ9Ik0zMS43IDIzOWwxMzYtMTM2YzkuNC05LjQgMjQuNi05LjQgMzMuOSAwbDIyLjYgMjIuNmM5LjQgOS40IDkuNCAyNC42IDAgMzMuOUwxMjcuOSAyNTZsOTYuNCA5Ni40YzkuNCA5LjQgOS40IDI0LjYgMCAzMy45TDIwMS43IDQwOWMtOS40IDkuNC0yNC42IDkuNC0zMy45IDBsLTEzNi0xMzZjLTkuNS05LjQtOS41LTI0LjYtLjEtMzR6Ii8+PC9zdmc+");
+	}
+}
+
+.fc-next-button {
+	span:before {
+		margin-left: 2px;
+		content: '';
+		background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgNTEyIiB3aWR0aD0iMTAiPjxwYXRoIGQ9Ik0yMjQuMyAyNzNsLTEzNiAxMzZjLTkuNCA5LjQtMjQuNiA5LjQtMzMuOSAwbC0yMi42LTIyLjZjLTkuNC05LjQtOS40LTI0LjYgMC0zMy45bDk2LjQtOTYuNC05Ni40LTk2LjRjLTkuNC05LjQtOS40LTI0LjYgMC0zMy45TDU0LjMgMTAzYzkuNC05LjQgMjQuNi05LjQgMzMuOSAwbDEzNiAxMzZjOS41IDkuNCA5LjUgMjQuNi4xIDM0eiIvPjwvc3ZnPg==");
 	}
 }
 

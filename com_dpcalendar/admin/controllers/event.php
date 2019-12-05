@@ -164,6 +164,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		$model = $this->getModel('Events');
 		$model->getState();
 		$model->setState('list.limit', 5);
+		$model->setState('list.direction', 'desc');
 		$model->setState('category.id', $formData['catid']);
 		$model->setState('filter.ongoing', false);
 		$model->setState('filter.expand', true);
@@ -184,7 +185,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 			$item          = new stdClass();
 			$item->value   = $e->id;
-			$item->title   = $e->title;
+			$item->title   = $e->title . ' [' . DPCalendarHelper::getDateStringFromEvent($e) . ']';
 			$item->details = strip_tags(JHtml::_('string.truncate', $e->description, 100));
 
 			$data[] = $item;
@@ -293,6 +294,11 @@ class DPCalendarControllerEvent extends JControllerForm
 		$formData = $this->input->post->get('jform', array(), 'array');
 
 		$data->id = !empty($formData['id']) ? $formData['id'] : 0;
+
+		// Reset the color when equal to calendar
+		if ($data->color == \DPCalendar\Helper\DPCalendarHelper::getCalendar($data->catid)->color) {
+			$data->color = '';
+		}
 
 		$this->input->set('jform', (array)$data);
 		$this->input->post->set('jform', (array)$data);

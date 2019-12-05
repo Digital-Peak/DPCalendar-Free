@@ -28,8 +28,8 @@
 		}
 
 		&--dropdown {
-			// Because of leaflet we need to have it on 1000
-			z-index: 1000;
+			// Because of leaflet we need to have it on 1001
+			z-index: 1001;
 
 			.choices__item {
 				padding: 3px;

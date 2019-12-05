@@ -218,14 +218,20 @@ DPCalendar = window.DPCalendar || {};
 					loader.classList.add('dp-loader_hidden');
 				}
 
-				var json = JSON.parse(res);
+				try {
+					var json = JSON.parse(res);
 
-				if (json.messages != null && json.messages.length !== 0 && document.getElementById('system-message-container')) {
-					Joomla.renderMessages(json.messages);
-				}
+					if (json.messages != null && json.messages.length !== 0 && document.getElementById('system-message-container')) {
+						Joomla.renderMessages(json.messages);
+					}
 
-				if (callback) {
-					callback(json);
+					if (callback) {
+						callback(json);
+					}
+				} catch (e) {
+					if (document.getElementById('system-message-container')) {
+						Joomla.renderMessages({error: [url + '<br>' + e.message]});
+					}
 				}
 			},
 			onError: function (response) {
@@ -234,11 +240,16 @@ DPCalendar = window.DPCalendar || {};
 				if (loader) {
 					loader.classList.add('dp-loader_hidden');
 				}
+				try {
+					var json = JSON.parse(response);
 
-				var json = JSON.parse(response);
-
-				if (json.messages != null && json.messages.length !== 0 && document.getElementById('system-message-container')) {
-					Joomla.renderMessages(json.messages);
+					if (json.messages != null && json.messages.length !== 0 && document.getElementById('system-message-container')) {
+						Joomla.renderMessages(json.messages);
+					}
+				} catch (e) {
+					if (document.getElementById('system-message-container')) {
+						Joomla.renderMessages({error: [url + '<br>' + e.message]});
+					}
 				}
 			}
 		});
@@ -292,7 +303,13 @@ DPCalendar = window.DPCalendar || {};
 		var tzSwitcher = document.querySelector('.dp-timezone .dp-select');
 		if (tzSwitcher) {
 			if (typeof Choices != 'undefined') {
-				tzSwitcher._choicejs = new Choices(tzSwitcher, {itemSelectText: '', noChoicesText: '', shouldSortItems: false, shouldSort: false});
+				tzSwitcher._choicejs = new Choices(tzSwitcher, {
+					itemSelectText: '',
+					noChoicesText: '',
+					shouldSortItems: false,
+					shouldSort: false,
+					searchResultLimit: 30
+				});
 			}
 			tzSwitcher.addEventListener('change', function () {
 				this.form.submit();

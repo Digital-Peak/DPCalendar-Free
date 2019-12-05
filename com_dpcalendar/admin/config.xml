@@ -238,7 +238,7 @@
 		<field name="map_long" type="text" default="4" showon="show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-		<field name="first_hour" type="text" default="6" showon="show_map:1"
+		<field name="first_hour" type="text" default="6"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_DESC"
 		/>

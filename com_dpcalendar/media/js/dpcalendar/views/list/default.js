@@ -117,5 +117,19 @@ DPCalendar = window.DPCalendar || {};
 				button.style.display = 'none';
 			}
 		}
+		if (document.body.clientWidth > 768) {
+			var previousEvent = null;
+			[].slice.call(root.querySelectorAll('.com-dpcalendar-timeline .dp-event')).forEach(function (eventElement) {
+				if (previousEvent == null || previousEvent.clientHeight < 300) {
+					previousEvent = eventElement;
+					return;
+				}
+
+				eventElement.querySelector('.dp-event__dot').style.marginTop = '-200px';
+				eventElement.querySelector('.dp-event__information').style.marginTop = '-200px';
+
+				previousEvent = eventElement;
+			});
+		}
 	});
 })(document, DPCalendar);

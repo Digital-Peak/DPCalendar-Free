@@ -1,6 +1,7 @@
 & {
 	display: grid;
 	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: auto auto auto auto auto auto auto 1fr;
 }
 
 &__heading {
@@ -49,7 +50,7 @@
 	grid-column: 1 / 3;
 	grid-row: 5 / 9;
 
-	.com-dpcalendar-event > :not(.com-dpcalendar-event_small) & {
+	.com-dpcalendar-event:not(.has-bookings):not(.has-series):not(.has-locations) .com-dpcalendar-event__description {
 		grid-column: 1 / 4;
 	}
 }
@@ -57,7 +58,7 @@
 &_small {
 	grid-column: 3 / 4;
 
-	.com-dpcalendar-event > :not(.com-dpcalendar-event__description) & {
+	.com-dpcalendar-event:not(.has-description) .com-dpcalendar-event_small {
 		grid-column: 1 / 4;
 	}
 }

@@ -54,7 +54,7 @@ class DPCalendarViewTools extends \DPCalendar\View\BaseView
 			$this->canPatch = JModelLegacy::getInstance('Import', 'DPCalendarModel')->canPatch();
 
 			if (!$this->canPatch) {
-				$this->app->enqueueMessage('Patch executable not available!!', 'error');
+				$this->app->enqueueMessage('Patch executable not available or it is not possible to execute the binary!!', 'error');
 			}
 		}
 	}

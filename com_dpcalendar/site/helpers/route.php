@@ -237,7 +237,7 @@ class DPCalendarHelperRoute
 
 		$uri = self::getUrl($args, false);
 
-		return $full ? $uri->toString() : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
+		return $full ? str_replace('administrator', '', $uri->toString()) : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
 	}
 
 	public static function getTicketsRoute($bookingId = null, $eventId = null, $my = false)

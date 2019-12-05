@@ -38,7 +38,6 @@ class ComposerStaticInit80249a1b60293e970126aef8684d3cd5
         ),
         'R' => 
         array (
-            'Recurr\\Test\\' => 12,
             'Recurr\\' => 7,
         ),
         'P' => 
@@ -114,10 +113,6 @@ class ComposerStaticInit80249a1b60293e970126aef8684d3cd5
         'Sabre\\CalDAV\\' => 
         array (
             0 => __DIR__ . '/..' . '/sabre/dav/lib/CalDAV',
-        ),
-        'Recurr\\Test\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/simshaun/recurr/tests',
         ),
         'Recurr\\' => 
         array (

@@ -1121,17 +1121,17 @@
     },
     {
         "name": "simshaun/recurr",
-        "version": "v4.0",
-        "version_normalized": "4.0.0.0",
+        "version": "v4.1",
+        "version_normalized": "4.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/simshaun/recurr.git",
-            "reference": "e7bccac5704b9710c8512fdd7cf78fb5445523a2"
+            "reference": "053c35aaba20a179aa62ead344bea4a9af2c0092"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/simshaun/recurr/zipball/e7bccac5704b9710c8512fdd7cf78fb5445523a2",
-            "reference": "e7bccac5704b9710c8512fdd7cf78fb5445523a2",
+            "url": "https://api.github.com/repos/simshaun/recurr/zipball/053c35aaba20a179aa62ead344bea4a9af2c0092",
+            "reference": "053c35aaba20a179aa62ead344bea4a9af2c0092",
             "shasum": ""
         },
         "require": {
@@ -1141,7 +1141,7 @@
         "require-dev": {
             "phpunit/phpunit": "~4.5"
         },
-        "time": "2019-02-24T03:15:15+00:00",
+        "time": "2019-08-06T22:18:04+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1151,8 +1151,7 @@
         "installation-source": "dist",
         "autoload": {
             "psr-4": {
-                "Recurr\\": "src/Recurr/",
-                "Recurr\\Test\\": "tests/"
+                "Recurr\\": "src/Recurr/"
             }
         },
         "notification-url": "https://packagist.org/downloads/",
@@ -1162,8 +1161,8 @@
         "authors": [
             {
                 "name": "Shaun Simmons",
-                "email": "shaun@envysphere.com",
-                "homepage": "http://envysphere.com"
+                "email": "shaun@shaun.pub",
+                "homepage": "https://shaun.pub"
             }
         ],
         "description": "PHP library for working with recurrence rules",
@@ -1240,17 +1239,17 @@
     },
     {
         "name": "symfony/http-foundation",
-        "version": "v3.4.27",
-        "version_normalized": "3.4.27.0",
+        "version": "v3.4.31",
+        "version_normalized": "3.4.31.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/http-foundation.git",
-            "reference": "fa02215233be8de1c2b44617088192f9e8db3512"
+            "reference": "b3d57a1c325f39f703b249bed7998ce8c64236b4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/fa02215233be8de1c2b44617088192f9e8db3512",
-            "reference": "fa02215233be8de1c2b44617088192f9e8db3512",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/b3d57a1c325f39f703b249bed7998ce8c64236b4",
+            "reference": "b3d57a1c325f39f703b249bed7998ce8c64236b4",
             "shasum": ""
         },
         "require": {
@@ -1261,7 +1260,7 @@
         "require-dev": {
             "symfony/expression-language": "~2.8|~3.0|~4.0"
         },
-        "time": "2019-05-01T08:04:33+00:00",
+        "time": "2019-08-26T07:50:50+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -1296,17 +1295,17 @@
     },
     {
         "name": "symfony/polyfill-mbstring",
-        "version": "v1.11.0",
-        "version_normalized": "1.11.0.0",
+        "version": "v1.12.0",
+        "version_normalized": "1.12.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-mbstring.git",
-            "reference": "fe5e94c604826c35a32fa832f35bd036b6799609"
+            "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/fe5e94c604826c35a32fa832f35bd036b6799609",
-            "reference": "fe5e94c604826c35a32fa832f35bd036b6799609",
+            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/b42a2f66e8f1b15ccf25652c3424265923eb4f17",
+            "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17",
             "shasum": ""
         },
         "require": {
@@ -1315,11 +1314,11 @@
         "suggest": {
             "ext-mbstring": "For best performance"
         },
-        "time": "2019-02-06T07:57:58+00:00",
+        "time": "2019-08-06T08:03:45+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.11-dev"
+                "dev-master": "1.12-dev"
             }
         },
         "installation-source": "dist",
@@ -1357,28 +1356,28 @@
     },
     {
         "name": "symfony/polyfill-php70",
-        "version": "v1.11.0",
-        "version_normalized": "1.11.0.0",
+        "version": "v1.12.0",
+        "version_normalized": "1.12.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php70.git",
-            "reference": "bc4858fb611bda58719124ca079baff854149c89"
+            "reference": "54b4c428a0054e254223797d2713c31e08610831"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/bc4858fb611bda58719124ca079baff854149c89",
-            "reference": "bc4858fb611bda58719124ca079baff854149c89",
+            "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/54b4c428a0054e254223797d2713c31e08610831",
+            "reference": "54b4c428a0054e254223797d2713c31e08610831",
             "shasum": ""
         },
         "require": {
             "paragonie/random_compat": "~1.0|~2.0|~9.99",
             "php": ">=5.3.3"
         },
-        "time": "2019-02-06T07:57:58+00:00",
+        "time": "2019-08-06T08:03:45+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.11-dev"
+                "dev-master": "1.12-dev"
             }
         },
         "installation-source": "dist",
@@ -1423,20 +1422,20 @@
         "source": {
             "type": "git",
             "url": "https://github.com/Digital-Peak/TCPDF.git",
-            "reference": "62f554b869530af95de393391c5d40f4953c70d5"
+            "reference": "a2f20532abd91ea65ffaead076f66736d17b7341"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/Digital-Peak/TCPDF/zipball/62f554b869530af95de393391c5d40f4953c70d5",
-            "reference": "62f554b869530af95de393391c5d40f4953c70d5",
+            "url": "https://api.github.com/repos/Digital-Peak/TCPDF/zipball/a2f20532abd91ea65ffaead076f66736d17b7341",
+            "reference": "a2f20532abd91ea65ffaead076f66736d17b7341",
             "shasum": ""
         },
         "require": {
             "php": ">=5.3.0"
         },
-        "time": "2018-07-19T12:56:32+00:00",
+        "time": "2019-09-06T14:18:08+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "classmap": [
                 "config",

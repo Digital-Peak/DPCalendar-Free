@@ -132,7 +132,7 @@ class DPCalendarModelImport extends JModelLegacy
 		JLoader::import('joomla.filesystem.file');
 
 		if (!$this->canPatch()) {
-			$this->setError("Patch executable not available");
+			$this->setError("Patch executable not available or it is not possible to execute the binary");
 
 			return false;
 		}
@@ -184,6 +184,10 @@ class DPCalendarModelImport extends JModelLegacy
 
 	public function canPatch()
 	{
+		if (!is_callable('shell_exec') || stripos(ini_get('disable_functions'), 'shell_exec') !== false) {
+			return false;
+		}
+
 		return strpos(shell_exec('patch --version'), 'GNU patch') !== false;
 	}
 }

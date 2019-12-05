@@ -8,7 +8,9 @@
 					itemSelectText: '',
 					noChoicesText: '',
 					shouldSortItems: false,
-					shouldSort: false, removeItemButton: true
+					shouldSort: false,
+					removeItemButton: true,
+					searchResultLimit: 30
 				}
 			);
 

@@ -24,7 +24,8 @@
 					noChoicesText: '',
 					shouldSortItems: false,
 					shouldSort: false,
-					removeItemButton: true
+					removeItemButton: true,
+					searchResultLimit: 30
 				}
 			);
 		})

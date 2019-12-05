@@ -7,6 +7,7 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Language\Language;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
@@ -348,7 +349,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		// Alter the title for save as copy
-		if (JFactory::getApplication()->input->getVar('task') == 'save2copy') {
+		$app = JFactory::getApplication();
+		if ($app->input->getVar('task') == 'save2copy') {
 			list ($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
 			$data['title'] = $title;
 			$data['alias'] = $alias;
@@ -437,9 +439,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		// Automatic handling of alias for empty fields
-		$input = JFactory::getApplication()->input;
 		if (empty($data['alias'])
-			&& in_array($input->get('task'), array('apply', 'save', 'save2new'))
+			&& in_array($app->input->get('task'), array('apply', 'save', 'save2new'))
 			&& (!isset($data['id']) || (int)$data['id'] == 0)) {
 			if (JFactory::getConfig()->get('unicodeslugs') == 1) {
 				$data['alias'] = JFilterOutput::stringURLUnicodeSlug($data['title']);
@@ -462,7 +463,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		$id    = $this->getState($this->getName() . '.id');
 		$event = $this->getItem($id);
-		JFactory::getApplication()->setUserState('dpcalendar.event.id', $id);
+		$app->setUserState('dpcalendar.event.id', $id);
 
 		$db = JFactory::getDbo();
 		$db->setQuery('select id from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
@@ -529,13 +530,25 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		// Notify the ticket holders
 		if (key_exists('notify_changes', $data) && $data['notify_changes']) {
+			$langs   = [$app->getLanguage()->getTag() => $app->getLanguage()];
 			$tickets = $this->getTickets($event->id);
 			foreach ($tickets as $ticket) {
-				$subject = DPCalendarHelper::renderEvents(array($event), JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
+				$language = $app->getLanguage()->getTag();
+				if ($ticket->user_id) {
+					$language = JFactory::getUser($ticket->user_id)->getParam('language') ?: $language;
+
+					if (!array_key_exists($language, $langs)) {
+						$l = Language::getInstance($language, $app->get('debug_lang'));
+						$l->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+						$langs[$l->getTag()] = $l;
+					}
+				}
+
+				$subject = DPCalendarHelper::renderEvents(array($event), $langs[$language]->_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
 
 				$body = DPCalendarHelper::renderEvents(
 					array($event),
-					JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_EDIT_TICKETS_BODY'),
+					$langs[$language]->_('COM_DPCALENDAR_NOTIFICATION_EVENT_EDIT_TICKETS_BODY'),
 					null,
 					array(
 						'ticketLink' => DPCalendarHelperRoute::getTicketRoute($ticket, true),
@@ -755,7 +768,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['featured'] = $params->get('event_form_featured');
 		}
 		if (!$item->get('location_ids')) {
-			$data['location_ids'] = $params->get('event_form_location_ids',[]);
+			$data['location_ids'] = $params->get('event_form_location_ids', []);
 		}
 		if (!$item->get('language')) {
 			$data['language'] = $params->get('event_form_language');

@@ -89,30 +89,6 @@ $options['views']['resday']   = [
 	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('location_timeformat_day', 'g:i a'))
 ];
 
-// Set up the month and day names
-$options['monthNames']      = array();
-$options['monthNamesShort'] = array();
-$options['dayNames']        = array();
-$options['dayNamesShort']   = array();
-$options['dayNamesMin']     = array();
-for ($i = 0; $i < 7; $i++) {
-	$options['dayNames'][]      = DPCalendarHelper::dayToString($i, false);
-	$options['dayNamesShort'][] = DPCalendarHelper::dayToString($i, true);
-
-	if (function_exists('mb_substr')) {
-		$options['dayNamesMin'][] = mb_substr(DPCalendarHelper::dayToString($i, true), 0, 2);
-	} else {
-		$options['dayNamesMin'][] = substr(DPCalendarHelper::dayToString($i, true), 0, 2);
-	}
-}
-for ($i = 1; $i <= 12; $i++) {
-	$options['monthNames'][]      = DPCalendarHelper::monthToString($i, false);
-	$options['monthNamesShort'][] = DPCalendarHelper::monthToString($i, true);
-}
-
-$options['use_hash']          = true;
-$options['event_create_form'] = 2;
-
 // Set the actual date
 $now              = $this->dateHelper->getDate();
 $options['year']  = $now->format('Y', true);

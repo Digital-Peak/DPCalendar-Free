@@ -59,7 +59,7 @@ if ($bd && !(count($bd) == 1 && !$bd[0])) {
 	);
 }
 
-$options['eventColor']            = '#' . $params->get('event_color', '135CAE');
+$options['eventColor']            = '#' . str_replace('#', '', $params->get('event_color', '135CAE'));
 $options['firstDay']              = (int)$params->get('weekstart', 0);
 $options['scrollTime']            = $params->get('first_hour', 6) . ':00:00';
 $options['weekNumbersWithinDays'] = false;
@@ -163,27 +163,6 @@ $options['views']['list']       = array(
 	'duration'           => array('days' => (int)$params->get('list_range', 30)),
 	'noEventsMessage'    => $translator->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
 );
-
-// Set up the month and day names
-$options['monthNames']      = array();
-$options['monthNamesShort'] = array();
-$options['dayNames']        = array();
-$options['dayNamesShort']   = array();
-$options['dayNamesMin']     = array();
-for ($i = 0; $i < 7; $i++) {
-	$options['dayNames'][]      = DPCalendarHelper::dayToString($i, false);
-	$options['dayNamesShort'][] = DPCalendarHelper::dayToString($i, true);
-
-	if (function_exists('mb_substr')) {
-		$options['dayNamesMin'][] = mb_substr(DPCalendarHelper::dayToString($i, true), 0, 2);
-	} else {
-		$options['dayNamesMin'][] = substr(DPCalendarHelper::dayToString($i, true), 0, 2);
-	}
-}
-for ($i = 1; $i <= 12; $i++) {
-	$options['monthNames'][]      = DPCalendarHelper::monthToString($i, false);
-	$options['monthNamesShort'][] = DPCalendarHelper::monthToString($i, true);
-}
 
 // Some DPCalendar specific options
 $options['show_event_as_popup']   = $params->get('show_event_as_popup');

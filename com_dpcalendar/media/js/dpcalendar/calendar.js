@@ -97,7 +97,7 @@ DPCalendar = window.DPCalendar || {};
 				if (date.getUTCFullYear() != d.getUTCFullYear() || date.getUTCMonth() != d.getUTCMonth() || date.getUTCDate() != d.getUTCDate()) {
 					calendar.dpCalendar.gotoDate(date);
 				}
-				if (view.type != tmpView) {
+				if (view.type != viewMapping[tmpView]) {
 					calendar.dpCalendar.changeView(viewMapping[tmpView]);
 				}
 			});
@@ -419,27 +419,27 @@ DPCalendar = window.DPCalendar || {};
 						input.setAttribute('type', 'hidden');
 						input.id = 'datepicker-input';
 						button.appendChild(input);
+
+						input.dpPicker = new Pikaday({
+							field: input,
+							trigger: button,
+							i18n: {
+								months: names['monthNames'],
+								weekdays: names['dayNames'],
+								weekdaysShort: names['dayNamesShort']
+							},
+							onSelect: function (date) {
+								var newHash = 'year=' + date.getFullYear() + '&month=' + (date.getMonth() + 1) + '&day=' + date.getDate() + '&view=' + viewMappingReverse[calendar.dpCalendar.view.type];
+								if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
+									window.location.hash = newHash;
+								} else {
+									calendar.dpCalendar.gotoDate(date);
+								}
+							}
+						});
 					}
 
-					var picker = new Pikaday({
-						field: input,
-						trigger: button,
-						i18n: {
-							months: names['monthNames'],
-							weekdays: names['dayNames'],
-							weekdaysShort: names['dayNamesShort']
-						},
-						onSelect: function (date) {
-							var newHash = 'year=' + date.getFullYear() + '&month=' + (date.getMonth() + 1) + '&day=' + date.getDate() + '&view=' + viewMappingReverse[calendar.dpCalendar.view.type];
-							if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
-								window.location.hash = newHash;
-							} else {
-								calendar.dpCalendar.gotoDate(date);
-							}
-							this.destroy();
-						}
-					});
-					picker.show();
+					input.dpPicker.show();
 				}
 			};
 		}

@@ -284,7 +284,7 @@
 }
 
 .com-dpcalendar-eventform .dp-timezone .choices__list--dropdown {
-	z-index: 1000;
+	z-index: 1001;
 }
 
 .com-dpcalendar-eventform .dp-timezone .choices__list--dropdown .choices__item {
@@ -357,7 +357,7 @@
 }
 
 .com-dpcalendar-eventform .choices__list--dropdown {
-	z-index: 1000;
+	z-index: 1001;
 }
 
 .com-dpcalendar-eventform .choices__list--dropdown .choices__item {

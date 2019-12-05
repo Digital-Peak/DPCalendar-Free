@@ -115,7 +115,8 @@ DPCalendar = window.DPCalendar || {};
 					noChoicesText: '',
 					shouldSortItems: false,
 					shouldSort: false,
-					removeItemButton: select.id != 'jform_catid'
+					removeItemButton: select.id != 'jform_catid',
+					searchResultLimit: 30
 				}
 			);
 		});

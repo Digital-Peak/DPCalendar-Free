@@ -33,7 +33,7 @@ class DPCalendarControllerImport extends JControllerLegacy
 		$model = $this->getModel('Import', '', []);
 
 		if (!$model->canPatch()) {
-			$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=tools&layout=patch', false), 'Patch executable not available!!',
+			$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=tools&layout=patch', false), 'Patch executable not available or it is not possible to execute the binary!!',
 				'error');
 
 			return;

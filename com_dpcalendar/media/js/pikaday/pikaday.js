@@ -1081,7 +1081,7 @@
                 bottomAligned = false;
             }
 
-            this.el.style.left = left + 'px';
+            left = Math.max(0, left); top = Math.max(0, top); this.el.style.left = left + 'px';
             this.el.style.top = top + 'px';
 
             addClass(this.el, leftAligned ? 'left-aligned' : 'right-aligned');

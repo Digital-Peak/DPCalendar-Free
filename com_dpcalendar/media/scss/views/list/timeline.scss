@@ -10,7 +10,6 @@
 	@import "../../layouts/block/autocomplete";
 
 	$lineColor: #e1e1e1;
-	$eventSpacing: -200px;
 
 	position: relative;
 	margin: 10px;
@@ -52,10 +51,10 @@
 			overflow: hidden;
 			margin-top: 0;
 			margin-left: -24px;
+			transition: all 0.3s ease;
 
 			@media screen and (min-width: 768px) {
 				left: 50%;
-				margin-top: $eventSpacing;
 			}
 		}
 
@@ -77,18 +76,7 @@
 
 			@media screen and (min-width: 768px) {
 				width: calc(50% - 68px);
-				margin-top: ($eventSpacing + 5px);
 				margin-left: 0;
-			}
-		}
-
-		&:first-of-type {
-			.dp-event__dot {
-				margin-top: 0;
-			}
-
-			.dp-event__information {
-				margin-top: 5px;
 			}
 		}
 

@@ -255,7 +255,7 @@
 }
 
 .com-dpcalendar-timeline .dp-timezone .choices__list--dropdown {
-	z-index: 1000;
+	z-index: 1001;
 }
 
 .com-dpcalendar-timeline .dp-timezone .choices__list--dropdown .choices__item {
@@ -341,12 +341,12 @@
 	overflow: hidden;
 	margin-top: 0;
 	margin-left: -24px;
+	transition: all 0.3s ease;
 }
 
 @media screen and (min-width: 768px) {
 	.com-dpcalendar-timeline .dp-event__dot {
 		left: 50%;
-		margin-top: -200px;
 	}
 }
 
@@ -370,17 +370,8 @@
 @media screen and (min-width: 768px) {
 	.com-dpcalendar-timeline .dp-event__information {
 		width: calc(50% - 68px);
-		margin-top: -195px;
 		margin-left: 0;
 	}
-}
-
-.com-dpcalendar-timeline .dp-event:first-of-type .dp-event__dot {
-	margin-top: 0;
-}
-
-.com-dpcalendar-timeline .dp-event:first-of-type .dp-event__information {
-	margin-top: 5px;
 }
 
 .com-dpcalendar-timeline .dp-event__title {

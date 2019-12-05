@@ -235,7 +235,7 @@
 }
 
 .com-dpcalendar-calendar .dp-timezone .choices__list--dropdown {
-	z-index: 1000;
+	z-index: 1001;
 }
 
 .com-dpcalendar-calendar .dp-timezone .choices__list--dropdown .choices__item {
@@ -308,6 +308,8 @@
 	vertical-align: -2px;
 }
 
+.com-dpcalendar-calendar .fc-prev-button span,
+.com-dpcalendar-calendar .fc-next-button span,
 .com-dpcalendar-calendar .fc-add-button span,
 .com-dpcalendar-calendar .fc-datepicker-button span,
 .com-dpcalendar-calendar .fc-print-button span {
@@ -316,6 +318,8 @@
 	padding-left: 4px;
 }
 
+.com-dpcalendar-calendar .fc-prev-button span:before,
+.com-dpcalendar-calendar .fc-next-button span:before,
 .com-dpcalendar-calendar .fc-add-button span:before,
 .com-dpcalendar-calendar .fc-datepicker-button span:before,
 .com-dpcalendar-calendar .fc-print-button span:before {
@@ -325,6 +329,17 @@
 	height: 20px;
 	background-size: 14px 20px;
 	background-repeat: no-repeat;
+}
+
+.com-dpcalendar-calendar .fc-prev-button span:before {
+	content: '';
+	background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgNTEyIiB3aWR0aD0iMTAiPjxwYXRoIGQ9Ik0zMS43IDIzOWwxMzYtMTM2YzkuNC05LjQgMjQuNi05LjQgMzMuOSAwbDIyLjYgMjIuNmM5LjQgOS40IDkuNCAyNC42IDAgMzMuOUwxMjcuOSAyNTZsOTYuNCA5Ni40YzkuNCA5LjQgOS40IDI0LjYgMCAzMy45TDIwMS43IDQwOWMtOS40IDkuNC0yNC42IDkuNC0zMy45IDBsLTEzNi0xMzZjLTkuNS05LjQtOS41LTI0LjYtLjEtMzR6Ii8+PC9zdmc+");
+}
+
+.com-dpcalendar-calendar .fc-next-button span:before {
+	margin-left: 2px;
+	content: '';
+	background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTYgNTEyIiB3aWR0aD0iMTAiPjxwYXRoIGQ9Ik0yMjQuMyAyNzNsLTEzNiAxMzZjLTkuNCA5LjQtMjQuNiA5LjQtMzMuOSAwbC0yMi42LTIyLjZjLTkuNC05LjQtOS40LTI0LjYgMC0zMy45bDk2LjQtOTYuNC05Ni40LTk2LjRjLTkuNC05LjQtOS40LTI0LjYgMC0zMy45TDU0LjMgMTAzYzkuNC05LjQgMjQuNi05LjQgMzMuOSAwbDEzNiAxMzZjOS41IDkuNCA5LjUgMjQuNi4xIDM0eiIvPjwvc3ZnPg==");
 }
 
 .com-dpcalendar-calendar .fc-add-button span:before {

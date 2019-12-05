@@ -7,7 +7,7 @@
 	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.2.2</version>
+	<version>7.2.3</version>
 	<description>MOD_DPCALENDAR_COUNTER_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_counter">mod_dpcalendar_counter.php</filename>

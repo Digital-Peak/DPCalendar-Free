@@ -69,7 +69,16 @@ DPCalendar = window.DPCalendar || {};
 		});
 
 		setTimeout(checkOverlapping, 2000);
-		setTimeout(updateLocationFrame, 2000);
+
+		var map = document.querySelector('.com-dpcalendar-eventform__location .dp-map');
+		if (map != null) {
+			map.addEventListener('dp-map-loaded', function () {
+				updateLocationFrame()
+			});
+			if (map.dpmap) {
+				updateLocationFrame();
+			}
+		}
 
 		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS')) {
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls')).forEach(function (el) {
@@ -100,7 +109,7 @@ DPCalendar = window.DPCalendar || {};
 		};
 
 
-		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_tags):not(#jform_tags)')).forEach(function (select) {
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color):not(#jform_tags)')).forEach(function (select) {
 			select._choicejs = new Choices(select, {
 					itemSelectText: '',
 					noChoicesText: '',

@@ -46,7 +46,7 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 	<div class="com-dpcalendar-event__header">
 		<?php echo $this->loadTemplate('title'); ?>
 		<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
-		<div class="com-dpcalendar-event__custom-text">
+		<div class="com-dpcalendar-event__custom-text com-dpcalendar-event__custom-text-before">
 			<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('event_textbefore'))); ?>
 		</div>
 	</div>
@@ -59,7 +59,7 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 	<?php echo $seriesContent; ?>
 	<?php echo $locationsContent; ?>
 	<?php echo $ticketsContent; ?>
-	<div class="com-dpcalendar-event__custom-text">
+	<div class="com-dpcalendar-event__custom-text com-dpcalendar-event__custom-text-after">
 		<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('event_textafter'))); ?>
 	</div>
 	<?php echo $this->layoutHelper->renderLayout('schema.event', $this->displayData); ?>

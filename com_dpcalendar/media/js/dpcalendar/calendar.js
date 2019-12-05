@@ -75,9 +75,9 @@ DPCalendar = window.DPCalendar || {};
 			// Listening for hash/url changes
 			window.addEventListener('hashchange', function () {
 				var today = new Date();
-				var tmpYear = today.getFullYear();
-				var tmpMonth = today.getMonth() + 1;
-				var tmpDay = today.getDate();
+				var tmpYear = today.getUTCFullYear();
+				var tmpMonth = today.getUTCMonth() + 1;
+				var tmpDay = today.getUTCDate();
 				var tmpView = viewMappingReverse[options['defaultView']];
 				var vars = window.location.hash.replace(/&amp;/gi, '&').split('&');
 				for (var i = 0; i < vars.length; i++) {
@@ -94,7 +94,7 @@ DPCalendar = window.DPCalendar || {};
 				var date = new Date(Date.UTC(tmpYear, tmpMonth, tmpDay, 0, 0, 0));
 				var d = calendar.dpCalendar.getDate();
 				var view = calendar.dpCalendar.view;
-				if (date.getYear() != d.getYear() || date.getMonth() != d.getMonth() || date.getDate() != d.getDate()) {
+				if (date.getUTCFullYear() != d.getUTCFullYear() || date.getUTCMonth() != d.getUTCMonth() || date.getUTCDate() != d.getUTCDate()) {
 					calendar.dpCalendar.gotoDate(date);
 				}
 				if (view.type != tmpView) {
@@ -148,8 +148,8 @@ DPCalendar = window.DPCalendar || {};
 		options['datesRender'] = function (info) {
 			// Setting the hash based on the actual view
 			var d = info.view.calendar.getDate();
-			var newHash = 'year=' + d.getFullYear() + '&month=' + (d.getMonth() + 1) + '&day=' + d.getDate() + '&view=' + viewMappingReverse[info.view.type];
-			if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&") != newHash) {
+			var newHash = 'year=' + d.getUTCFullYear() + '&month=' + (d.getUTCMonth() + 1) + '&day=' + d.getUTCDate() + '&view=' + viewMappingReverse[info.view.type];
+			if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
 				window.location.hash = newHash;
 			}
 
@@ -197,8 +197,8 @@ DPCalendar = window.DPCalendar || {};
 				}
 			}
 
-			if (info.event.fgcolor && info.view.type != 'list') {
-				info.el.style.color = info.event.fgcolor;
+			if (info.event.extendedProps.fgcolor && info.view.type != viewMapping['list']) {
+				info.el.style.color = info.event.extendedProps.fgcolor;
 			}
 
 			var map = calendar.parentElement.querySelector('.dp-map');
@@ -391,10 +391,10 @@ DPCalendar = window.DPCalendar || {};
 					form.querySelector('input[name=task]').value = '';
 					form.submit();
 				}
-			} else if (options['header'].right.indexOf('agendaDay') > 0) {
+			} else if (options['header'].right.indexOf(viewMapping['day']) > 0) {
 				// The edit form is not loaded, navigate to the day
-				calendar.dpCalendar.gotoDate(date);
-				calendar.dpCalendar.changeView('agendaDay');
+				calendar.dpCalendar.gotoDate(info.date);
+				calendar.dpCalendar.changeView(viewMapping['day']);
 			}
 		};
 
@@ -424,12 +424,11 @@ DPCalendar = window.DPCalendar || {};
 							weekdaysShort: names['dayNamesShort']
 						},
 						onSelect: function (date) {
-							var d = picker.getMoment();
-							var newHash = 'year=' + d.year() + '&month=' + (d.month() + 1) + '&day=' + d.date() + '&view=' + calendar.dpCalendar.view.type;
-							if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&") != newHash) {
+							var newHash = 'year=' + date.getFullYear() + '&month=' + (date.getMonth() + 1) + '&day=' + date.getDate() + '&view=' + viewMappingReverse[calendar.dpCalendar.view.type];
+							if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
 								window.location.hash = newHash;
 							} else {
-								calendar.gotoDate(d);
+								calendar.dpCalendar.gotoDate(date);
 							}
 							this.destroy();
 						}
@@ -507,7 +506,8 @@ DPCalendar = window.DPCalendar || {};
 		options['header']['right'] = headers;
 
 		if (headers.indexOf('resource') != -1) {
-			options['plugins'] = ['resourceTimeline', 'moment'];
+			options['plugins'].push('resourceTimeline');
+			options['plugins'].push('resourceTimeGrid');
 		} else if (options['resources']) {
 			options['plugins'].push('resourceTimeGrid');
 		}

@@ -78,7 +78,11 @@
 	grid-row: 8 / 9;
 }
 
-&__tickets,
-&__custom-text {
+&__tickets {
 	grid-column: 1 / 4;
+}
+
+&__custom-text-after {
+	grid-column: 1 / 4;
+	grid-row: 9 / 10;
 }

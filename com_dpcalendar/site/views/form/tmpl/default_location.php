@@ -11,7 +11,6 @@ defined('_JEXEC') or die();
 <div class="com-dpcalendar-eventform__location">
 	<?php if ($this->params->get('event_form_show_map', 1)) { ?>
 		<div class="dp-map"
-			 data-lazy="false"
 			 data-zoom="<?php echo $this->params->get('map_zoom', 6); ?>"
 			 data-latitude="<?php echo $this->params->get('map_lat', 47); ?>"
 			 data-longitude="<?php echo $this->params->get('map_long', 4); ?>">

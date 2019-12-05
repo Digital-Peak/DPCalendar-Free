@@ -4766,7 +4766,7 @@ Docs & License: https://fullcalendar.io/
                 this.weekDow = 1;
                 this.weekDoy = 4;
             }
-            else if (typeof settings.firstDay === 'number') {
+            if (typeof settings.firstDay === 'number') {
                 this.weekDow = settings.firstDay;
             }
             if (typeof settings.weekNumberCalculation === 'function') {

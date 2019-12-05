@@ -369,8 +369,13 @@
 	grid-row: 8 / 9;
 }
 
-.com-dpcalendar-event__tickets, .com-dpcalendar-event__custom-text {
+.com-dpcalendar-event__tickets {
 	grid-column: 1 / 4;
+}
+
+.com-dpcalendar-event__custom-text-after {
+	grid-column: 1 / 4;
+	grid-row: 9 / 10;
 }
 
 .com-dpcalendar-event__image, .com-dpcalendar-event__information {

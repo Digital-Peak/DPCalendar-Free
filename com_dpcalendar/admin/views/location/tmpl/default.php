@@ -32,7 +32,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 					<?php } ?>
 				</div>
 				<?php if ($name == 'general') { ?>
-					<div class="com-dpcalendar-locationform__map dp-map" data-lazy="false"></div>
+					<div class="com-dpcalendar-locationform__map dp-map"></div>
 				<?php } ?>
 			</div>
 			<?php echo JHtml::_('bootstrap.endTab'); ?>

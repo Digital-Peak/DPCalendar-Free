@@ -146,7 +146,8 @@ $resourceViews = $params->get('calendar_resource_views');
 if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $this->resources) {
 	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SCHEDULER);
 
-	$options['resources'] = $this->resources;
+	$options['resources']           = $this->resources;
+	$options['datesAboveResources'] = true;
 }
 
 // Set up the views

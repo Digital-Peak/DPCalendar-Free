@@ -51,7 +51,19 @@ DPCalendar = window.DPCalendar || {};
 			input.dispatchEvent(e);
 		}));
 
-		input.setAttribute('data-autocomplete', true);
+		input.addEventListener('blur', function (e) {
+			if (e.relatedTarget && e.relatedTarget.classList.contains('dp-autocomplete__result')) {
+				return true;
+			}
+
+			var dropdown = e.target.parentElement.querySelector('.dp-autocomplete');
+			if (!dropdown) {
+				return true;
+			}
+
+			DPCalendar.slideToggle(dropdown);
+			dropdown.parentElement.removeChild(dropdown);
+		});
 	};
 
 	DPCalendar.autocomplete.setItems = function (input, items) {
@@ -122,27 +134,4 @@ DPCalendar = window.DPCalendar || {};
 			}
 		});
 	};
-
-	// Close when clicked outside
-	var closeListener = function (event) {
-		if (!event.target || event.target.getAttribute('data-autocomplete') || event.target.closest('.dp-autocomplete')) {
-			return true;
-		}
-
-		var root = document.querySelector('.dp-autocomplete');
-
-		if (!root) {
-			return true;
-		}
-
-		DPCalendar.slideToggle(root);
-
-		if (root.parentElement) {
-			root.parentElement.removeChild(root);
-		}
-
-		return true;
-	};
-	document.addEventListener('touchstart', closeListener);
-	document.addEventListener('mousedown', closeListener);
 })(document, DPCalendar);

@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .com-dpcalendar-calendar .dp-quickadd {
 	display: none;
 	position: absolute;
@@ -376,8 +377,36 @@
 	display: none;
 }
 
+.com-dpcalendar-calendar__list .dp-description__label {
+	display: flex;
+}
+
 .com-dpcalendar-calendar__list .dp-input {
-	margin: 0;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	position: relative;
+	width: 1.4em;
+	height: 1.4em;
+	margin: 0 5px 0 0;
+	border-width: 2px;
+	border-style: solid;
+}
+
+.com-dpcalendar-calendar__list .dp-input::before {
+	content: "✔";
+	position: absolute;
+	font-size: 1.2em;
+	right: 0;
+	top: -0.1em;
+	visibility: hidden;
+}
+
+.com-dpcalendar-calendar__list .dp-input:checked::before {
+	visibility: visible;
+}
+
+.com-dpcalendar-calendar__list .dp-input:not(:checked) {
+	background-color: inherit !important;
 }
 
 .com-dpcalendar-calendar_printable {

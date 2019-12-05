@@ -29,6 +29,7 @@ $this->loadTemplate('options');
 		<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 	</div>
 	<?php echo $this->loadTemplate('list'); ?>
+	<?php echo $this->loadTemplate('toggle'); ?>
 	<?php echo $this->loadTemplate('calendar'); ?>
 	<?php echo $this->loadTemplate('map'); ?>
 	<div class="com-dpcalendar-calendar__custom-text">

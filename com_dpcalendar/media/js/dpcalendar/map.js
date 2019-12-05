@@ -144,10 +144,12 @@ DPCalendar = window.DPCalendar || {};
 			return;
 		}
 
-		for (var i = 0; i < map.dpmap.dpMarkers.length; i++) {
-			map.dpmap.removeLayer(map.dpmap.dpMarkers[i]);
-		}
+		map.dpmap.dpMarkers.forEach(function (marker) {
+			map.dpmap.dpMarkersCluster.removeLayer(marker);
+		});
+
 		map.dpmap.dpMarkers = [];
+		map.dpmap.dpCachedMarkers = [];
 		map.dpmap.dpBounds = new L.latLngBounds();
 
 		var options = map.dpmap.dpElement.dataset;
@@ -187,4 +189,63 @@ DPCalendar = window.DPCalendar || {};
 		}).addTo(map.dpmap));
 		map.dpmap.panTo([location.latitude, location.longitude]);
 	};
+
+	document.addEventListener('DOMContentLoaded', function () {
+		// Set up the maps
+		var createMap = function (mapElement) {
+			var options = mapElement.dataset;
+
+			if (options.width) {
+				mapElement.style.width = options.width;
+			}
+
+			if (options.height) {
+				mapElement.style.height = options.height;
+			}
+
+			DPCalendar.Map.create(mapElement);
+
+			var locationsContainer = mapElement.closest('.dp-location');
+
+			if (locationsContainer == null) {
+				locationsContainer = mapElement.closest('.dp-locations');
+			}
+			if (locationsContainer == null) {
+				return;
+			}
+
+			[].slice.call(locationsContainer.querySelectorAll('.dp-location__details')).forEach(function (location) {
+				var data = location.dataset;
+
+				var desc = location.parentElement.querySelector('.dp-location__description');
+				if (!data.description && desc) {
+					data.description = desc.innerHTML;
+				}
+				DPCalendar.Map.createMarker(mapElement, data);
+			});
+		};
+
+		[].slice.call(document.querySelectorAll('.dp-map')).forEach(function (mapElement) {
+			if (DPCalendar.Map == null) {
+				return;
+			}
+			if ('IntersectionObserver' in window) {
+				var observer = new IntersectionObserver(
+					function (entries, observer) {
+						entries.forEach(function (entry) {
+							if (!entry.isIntersecting) {
+								return;
+							}
+							observer.unobserve(mapElement);
+
+							createMap(mapElement);
+						});
+					}
+				);
+				observer.observe(mapElement)
+			} else {
+				createMap(mapElement);
+			}
+		});
+	});
 })(document, Joomla, DPCalendar);

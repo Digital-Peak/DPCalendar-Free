@@ -105,7 +105,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 							continue;
 						}
 
-						$this->roomTitles[$room] = $lroom->title;
+						$this->roomTitles[$locationId][$room] = $lroom->title;
 					}
 				}
 			}

@@ -17,9 +17,33 @@ if ($plugin) {
 }
 $hasPrice                = $booking->price && $booking->price != '0.00';
 $booking->amount_tickets = 0;
+$eventOptions            = [];
+$orderedOptions          = $booking->options ? explode(',', $booking->options) : [];
 foreach ($tickets as $ticket) {
 	if ($ticket->booking_id == $booking->id) {
 		$booking->amount_tickets++;
+	}
+
+	if (!$ticket->event_options) {
+		continue;
+	}
+
+	// Prepare the options
+	foreach (json_decode($ticket->event_options) as $key => $option) {
+		$key = preg_replace('/\D/', '', $key);
+
+		foreach ($orderedOptions as $o) {
+			list($eventId, $type, $amount) = explode('-', $o);
+
+			if ($eventId != $ticket->event_id || $type != $key || !empty($eventOptions[$eventId][$type])) {
+				continue;
+			}
+
+			if (!array_key_exists($eventId, $eventOptions)) {
+				$eventOptions[$eventId] = [];
+			}
+			$eventOptions[$eventId][$type] = ['price' => $option->price, 'label' => $option->label, 'amount' => $amount];
+		}
 	}
 }
 
@@ -181,5 +205,26 @@ foreach ($fields as $key => $field) {
 				<td></td>
 			</tr>
 		</table>
+		<?php if (!empty($eventOptions)) { ?>
+			<h3 style="border-bottom: 1px solid #eee"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_OPTIONS'); ?></h3>
+			<table style="width:100%; border-collapse:collapse">
+				<?php foreach ($eventOptions as $eventId => $options) { ?>
+					<?php foreach ($options as $option) { ?>
+						<tr>
+							<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_OPTION'); ?></td>
+							<td style="width:70%"><?php echo $option['label']; ?></td>
+						</tr>
+						<tr>
+							<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></td>
+							<td style="width:70%"><?php echo DPCalendarHelper::renderPrice($option['price']); ?></td>
+						</tr>
+						<tr>
+							<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL'); ?></td>
+							<td style="width:70%"><?php echo $option['amount']; ?></td>
+						</tr>
+					<?php } ?>
+				<?php } ?>
+			</table>
+		<?php } ?>
 	<?php } ?>
 </div>

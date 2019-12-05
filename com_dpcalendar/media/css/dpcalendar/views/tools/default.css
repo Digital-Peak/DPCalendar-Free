@@ -24,6 +24,22 @@
 	min-height: 4rem;
 }
 
+.com-dpcalendar-tools-default .dp-quick-icon .dp-icon-overlay {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: tomato;
+	border-radius: 20px;
+	padding: 0 5px;
+}
+
+.com-dpcalendar-tools-default .dp-quick-icon .dp-icon-overlay svg {
+	fill: #ffffff;
+	width: 10px;
+	height: 10px;
+	min-height: unset;
+}
+
 .com-dpcalendar-tools-default .dp-quick-icon__link {
 	display: block;
 	height: 100%;
@@ -41,6 +57,7 @@
 	font-size: .75rem;
 	font-weight: bold;
 	transition: all 0.3s ease;
+	position: relative;
 }
 
 .com-dpcalendar-tools-default .dp-quick-icon__link:hover, .com-dpcalendar-tools-default .dp-quick-icon__link:focus, .com-dpcalendar-tools-default .dp-quick-icon__link:active {

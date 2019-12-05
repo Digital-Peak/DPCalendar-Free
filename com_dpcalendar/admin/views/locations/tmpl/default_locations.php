@@ -17,7 +17,7 @@ if ($saveOrder) {
 }
 ?>
 <div class="com-dpcalendar-locations__locations">
-	<table class="dp-table" id="locationList">
+	<table class="dp-table dp-locations-table" id="locationList">
 		<thead>
 		<th class="dp-table__col-order">
 			<?php echo JHtml::_('searchtools.sort', '', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING',
@@ -30,6 +30,9 @@ if ($saveOrder) {
 		<th class="dp-table__col-state"><?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?></th>
 		<th><?php echo JHtml::_('searchtools.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?></th>
 		<th><?php echo JHtml::_('searchtools.sort', 'COM_DPCALENDAR_VIEW_LOCATION_DETAILS', 'a.access', $listDirn, $listOrder); ?></th>
+		<th class="dp-table__col-color">
+			<?php echo JHtml::_('searchtools.sort', 'COM_DPCALENDAR_FIELD_COLOR_LABEL', 'a.color', $listDirn, $listOrder); ?>
+		</th>
 		<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'a.language', $listDirn, $listOrder); ?></th>
 		<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
 		</tr>
@@ -42,7 +45,7 @@ if ($saveOrder) {
 			<?php $canCheckin = $this->user->authorise('core.manage', 'com_checkin')
 				|| $item->checked_out == $this->user->get('id') || $item->checked_out == 0; ?>
 			<?php $canChange = $this->user->authorise('core.edit.state', 'com_dpcalendar') && $canCheckin; ?>
-			<tr sortable-group-id="">
+			<tr sortable-group-id="" class="dp-location">
 				<td class="order" data-column="<?php echo $this->translate('JGRID_HEADING_ORDERING'); ?>">
 					<?php if ($canChange) { ?>
 						<span class="sortable-handler <?php echo $saveOrder ? '' : 'inactive tip-top'; ?>"><i class="icon-menu"></i></span>
@@ -73,6 +76,12 @@ if ($saveOrder) {
 				</td>
 				<td class="dp-table__col-expand" data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_DETAILS'); ?>">
 					<?php echo \DPCalendar\Helper\Location::format([$item]); ?>
+				</td>
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_COLOR_LABEL'); ?>">
+					<?php $color = $item->color ?: DPCalendarHelper::getCalendar($item->catid)->color; ?>
+					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($color); ?>" class="dp-location__color">
+						<?php echo $this->escape($color); ?>
+					</div>
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_LANGUAGE'); ?>">
 					<?php if ($item->language == '*') { ?>

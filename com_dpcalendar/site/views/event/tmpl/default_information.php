@@ -49,17 +49,24 @@ if ($calendarLink && $params->get('event_show_calendar', '1') == '2') {
 	<?php } ?>
 	<?php if ($this->event->locations && $params->get('event_show_location', '2')) { ?>
 		<dl class="dp-description">
-			<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?></dt>
-			<dd class="dp-description__description">
-				<?php foreach ($this->event->locations as $location) { ?>
-					<?php $url = $params->get('event_show_location', '2') == '1' ?
-						$this->router->getLocationRoute($location) : '#dp-location-' . $location->id; ?>
-					<a href="<?php echo $url; ?>" class="dp-link">
-						<?php echo $location->title; ?>
-						<?php if ($this->roomTitles) { ?>
-							[<?php echo implode(', ', $this->roomTitles); ?>]
+			<dt class="dp-description__label">
+				<?php echo $this->translate('COM_DPCALENDAR_LOCATION' . (count($this->event->locations) > 1 ? 'S' : '')); ?>
+			</dt>
+			<dd class="dp-description__description dp-locations">
+				<?php foreach ($this->event->locations as $index => $location) { ?>
+					<span class="dp-location">
+						<?php $url = $params->get('event_show_location', '2') == '1' ?
+							$this->router->getLocationRoute($location) : '#dp-location-' . $location->id; ?>
+						<a href="<?php echo $url; ?>" class="dp-link dp-location__url">
+							<?php echo $location->title; ?>
+							<?php if (!empty($this->roomTitles[$location->id])) { ?>
+								[<?php echo implode(', ', $this->roomTitles[$location->id]); ?>]
+							<?php } ?>
+						</a>
+						<?php if ($index < count($this->event->locations) - 1) { ?>
+							<span class="dp-location__separator">,</span>
 						<?php } ?>
-					</a>
+					</span>
 				<?php } ?>
 			</dd>
 		</dl>

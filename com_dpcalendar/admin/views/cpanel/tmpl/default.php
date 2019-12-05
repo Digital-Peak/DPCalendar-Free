@@ -5,11 +5,11 @@
  * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
+$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
 $this->dpdocument->loadStyleFile('dpcalendar/views/cpanel/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/cpanel/default.js');
+$this->dpdocument->loadScriptFile('dpcalendar/views/adminlist/default.js');
 ?>
 <div class="com-dpcalendar-cpanel row">
 	<div id="j-sidebar-container" class="com-dpcalendar-cpanel__sidebar span2 col-md-2">

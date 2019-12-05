@@ -77,7 +77,7 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 				<td data-column="<?php echo $this->translate('JDATE'); ?>"><?php echo $this->dateHelper->getDateStringFromEvent($item); ?></td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_COLOR_LABEL'); ?>">
 					<?php $color = $item->color ?: DPCalendarHelper::getCalendar($item->catid)->color; ?>
-					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>" class="dp-event__color">
+					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($color); ?>" class="dp-event__color">
 						<?php echo $this->escape($color); ?>
 					</div>
 				</td>

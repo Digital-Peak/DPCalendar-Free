@@ -175,17 +175,23 @@
 
 .com-dpcalendar-adminlist .dp-events-table__col-color {
 	width: 1%;
+	min-height: 60px;
 }
 
 .com-dpcalendar-adminlist .dp-events-table__col-date {
 	width: 20%;
 }
 
-.com-dpcalendar-adminlist .dp-events-table__col-color {
+.com-dpcalendar-adminlist .dp-events-table .dp-event__color {
+	padding: 5px;
+}
+
+.com-dpcalendar-adminlist .dp-locations-table__col-color {
+	width: 1%;
 	min-height: 60px;
 }
 
-.com-dpcalendar-adminlist .dp-events-table .dp-event__color {
+.com-dpcalendar-adminlist .dp-locations-table .dp-location__color {
 	padding: 5px;
 }
 

@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-if (!$this->event->locations) {
+if (!$this->event->locations || !$this->params->get('event_show_location', '2')) {
 	return;
 }
 

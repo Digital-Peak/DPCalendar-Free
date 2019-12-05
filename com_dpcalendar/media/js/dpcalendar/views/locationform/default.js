@@ -15,17 +15,13 @@ DPCalendar = window.DPCalendar || {};
             longitude: document.getElementById('jform_longitude').value,
             color: document.getElementById('jform_color').value
           }, function (latitude, longitude) {
-            var task = 'location';
-
-            if (window.location.href.indexOf('administrator') == -1) {
-              task = 'locationform';
+            if (latitude) {
+              document.getElementById('jform_latitude').value = latitude;
             }
 
-            DPCalendar.request('task=' + task + '.loc&loc=' + latitude + ',' + longitude, function (json) {
-              if (json.data) {
-                setGeoResult(json.data);
-              }
-            });
+            if (longitude) {
+              document.getElementById('jform_longitude').value = longitude;
+            }
           });
         }
 
@@ -64,13 +60,12 @@ DPCalendar = window.DPCalendar || {};
           DPCalendar.Map.clearMarkers(map);
           getMarker();
         });
-      } else {
-        document.getElementById('jform_color').addEventListener('change', function (e) {
-          DPCalendar.Map.clearMarkers(map);
-          getMarker();
-        });
       }
 
+      document.getElementById('jform_color').addEventListener('change', function (e) {
+        DPCalendar.Map.clearMarkers(map);
+        getMarker();
+      });
       getMarker();
       DPCalendar.autocomplete.create(geoComplete);
       geoComplete.addEventListener('dp-autocomplete-select', function (e) {
@@ -121,7 +116,7 @@ DPCalendar = window.DPCalendar || {};
     });
     [].slice.call(document.querySelectorAll('.com-dpcalendar-locationform__actions .dp-button')).forEach(function (button) {
       button.addEventListener('click', function () {
-        Joomla.submitbutton('locationform.' + this.getAttribute('data-task'));
+        Joomla.submitbutton('locationform.' + button.getAttribute('data-task'));
       });
     });
 

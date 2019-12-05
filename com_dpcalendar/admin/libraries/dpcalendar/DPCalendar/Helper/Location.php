@@ -255,8 +255,6 @@ class Location
 
 	public static function getCountryForIp()
 	{
-		self::checkGeoDatabase();
-
 		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
 		if (!file_exists($geoDBFile)) {
 			return '';
@@ -270,68 +268,6 @@ class Location
 
 			return $model->getItem(['short_code' => $reader->country($_SERVER['REMOTE_ADDR'])->country->isoCode]);
 		} catch (\Exception $e) {
-		}
-	}
-
-	private static function checkGeoDatabase()
-	{
-		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
-
-		// Don't update when the file was fetched 10 days ago
-		if (file_exists($geoDBFile) && (time() - filemtime($geoDBFile) < (60 * 60 * 24 * 10))) {
-			return;
-		}
-
-		// Only update when we are in admin
-		if (file_exists($geoDBFile) && !\JFactory::getApplication()->isClient('admin')) {
-			return;
-		}
-
-		$content = DPCalendarHelper::fetchContent('http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz');
-
-		if (empty($content)) {
-			throw new \Exception("Can't download the geolocation database.");
-		}
-
-		// Sometimes you get a rate limit exceeded
-		if (stristr($content, 'Rate limited exceeded') !== false) {
-			throw new \Exception("You hit the rate limit of maxmind.");
-		}
-
-		$ret = file_put_contents($geoDBFile . '.gz', $content);
-
-		if ($ret === false) {
-			throw new \Exception("Could not write the geolocation database.");
-		}
-
-		unset($content);
-
-		// Decompress the file
-		$uncompressed = '';
-
-		$zp = @gzopen($geoDBFile . '.gz', 'rb');
-
-		if ($zp === false) {
-			throw new \Exception("Can't uncompress the geolocation database file.");
-		}
-
-		if ($zp !== false) {
-			while (!gzeof($zp)) {
-				$uncompressed .= @gzread($zp, 102400);
-			}
-
-			@gzclose($zp);
-
-			@unlink($geoDBFile . '.gz');
-		}
-
-		try {
-			file_put_contents($geoDBFile, $uncompressed);
-			new Reader($geoDBFile);
-		} catch (\Exception $e) {
-			unlink($geoDBFile);
-
-			throw $e;
 		}
 	}
 
@@ -506,8 +442,8 @@ class Location
 
 			return;
 		}
-		$tmp = json_decode($content);
 
+		$tmp = json_decode($content);
 		if (!$tmp) {
 			return;
 		}

@@ -57,6 +57,13 @@ class Icon
 	const COG = 'cog';
 
 	/**
+	 * The directions icon.
+	 *
+	 * @var string
+	 */
+	const DATABASE = 'database-solid';
+
+	/**
 	 * The delete icon.
 	 *
 	 * @var string
@@ -90,6 +97,13 @@ class Icon
 	 * @var string
 	 */
 	const EDIT = 'pencil-alt';
+
+	/**
+	 * The exclamation icon.
+	 *
+	 * @var string
+	 */
+	const EXCLAMATION = 'exclamation-solid';
 
 	/**
 	 * The external link icon.

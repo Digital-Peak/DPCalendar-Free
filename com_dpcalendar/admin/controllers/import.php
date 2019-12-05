@@ -9,8 +9,7 @@ defined('_JEXEC') or die();
 
 class DPCalendarControllerImport extends JControllerLegacy
 {
-
-	public function add ($data = array())
+	public function add($data = array())
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
@@ -18,5 +17,18 @@ class DPCalendarControllerImport extends JControllerLegacy
 		$model->import();
 
 		$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=tools&layout=import', false), implode('<br>', $model->get('messages')));
+	}
+
+	public function geodb()
+	{
+		$model = $this->getModel('Import', '', array());
+
+		$message = '';
+		try {
+			$model->importGeoDB();
+		} catch (Exception $e) {
+			$message = JText::sprintf('COM_DPCALENDAR_CONTROLLER_GEO_IMPORT_ERROR', $e->getMessage());
+		}
+		$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=cpanel', false), $message, $message ? 'error' : null);
 	}
 }

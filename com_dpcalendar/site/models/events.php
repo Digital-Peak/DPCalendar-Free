@@ -585,7 +585,11 @@ class DPCalendarModelEvents extends JModelList
 			$this->setState('filter.publish_date', true);
 		}
 
-		$this->setState('filter.language', $app->isClient('site') ? $app->getLanguageFilter() : $app->getLanguage()->getCalendar());
+		// On CalDAV requests, the language doesn't exist in the app
+		$this->setState(
+			'filter.language',
+			$app->isClient('site') ? $app->getLanguageFilter() : $app->getLanguage() ? $app->getLanguage()->getTag() : null
+		);
 		$this->setState('filter.search', $this->getUserStateFromRequest('com_dpcalendar.filter.search', 'filter-search'));
 
 		// Filter for

@@ -1,4 +1,6 @@
-(function (document, Joomla) {
+DPCalendar = window.DPCalendar || {};
+
+(function (document, Joomla, DPCalendar) {
   'use strict';
 
   document.addEventListener('DOMContentLoaded', function () {
@@ -6,11 +8,10 @@
       var table = document.getElementById('sortTable');
       var direction = document.getElementById('directionTable');
       var order = table.options[table.selectedIndex].value;
+      var dirn = 'asc';
 
-      if (order != Joomla.getOptions('DPCalendar.adminlist').listOrder) {
-        var dirn = 'asc';
-      } else {
-        var dirn = direction.options[direction.selectedIndex].value;
+      if (order == Joomla.getOptions('DPCalendar.adminlist').listOrder) {
+        dirn = direction.options[direction.selectedIndex].value;
       }
 
       Joomla.tableOrdering(order, dirn, '');
@@ -29,7 +30,7 @@
 
     if (startInput) {
       startInput.addEventListener('change', function (e) {
-        this.form.submit();
+        startInput.form.submit();
       });
     }
 
@@ -37,7 +38,7 @@
 
     if (endInput) {
       endInput.addEventListener('change', function (e) {
-        this.form.submit();
+        endInput.form.submit();
       });
     }
 
@@ -87,4 +88,4 @@
       });
     });
   });
-})(document, Joomla);
+})(document, Joomla, DPCalendar);

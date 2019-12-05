@@ -108,11 +108,24 @@
 
 .com-dpcalendar-blog .dp-event__actions, .com-dpcalendar-blog .dp-event__date, .com-dpcalendar-blog .dp-event__rrule, .com-dpcalendar-blog .dp-event__calendar, .com-dpcalendar-blog .dp-event__capacity, .com-dpcalendar-blog .dp-event__price, .com-dpcalendar-blog .dp-event__hits, .com-dpcalendar-blog .dp-event__locations {
 	margin-right: 1rem;
-	display: inline-block;
+	display: inline-flex;
+	flex-wrap: wrap;
+}
+
+.com-dpcalendar-blog .dp-event__actions .dp-icon, .com-dpcalendar-blog .dp-event__date .dp-icon, .com-dpcalendar-blog .dp-event__rrule .dp-icon, .com-dpcalendar-blog .dp-event__calendar .dp-icon, .com-dpcalendar-blog .dp-event__capacity .dp-icon, .com-dpcalendar-blog .dp-event__price .dp-icon, .com-dpcalendar-blog .dp-event__hits .dp-icon, .com-dpcalendar-blog .dp-event__locations .dp-icon {
+	margin-right: 5px;
+}
+
+.com-dpcalendar-blog .dp-event .dp-location {
+	display: inline-flex;
 }
 
 .com-dpcalendar-blog .dp-event .dp-location__description {
 	display: none;
+}
+
+.com-dpcalendar-blog .dp-event .dp-location__separator {
+	margin-right: 5px;
 }
 
 @media screen and (max-width: 640px) {

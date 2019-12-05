@@ -14,7 +14,6 @@ class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
 	protected function init()
 	{
 		$this->getModel()->refreshUpdateSite();
-		\DPCalendar\Helper\Location::getCountryForIp();
 
 		$model = $this->getModel();
 
@@ -35,6 +34,11 @@ class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
 				$this->calendarsInternal[] = $calendar;
 			}
 		}
+
+		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
+
+		// Don't update when the file was fetched 10 days ago
+		$this->needsGeoDBUpdate = (!file_exists($geoDBFile) || (time() - filemtime($geoDBFile) > (60 * 60 * 24 * 10))) && !DPCalendarHelper::isFree();
 
 		parent::init();
 	}

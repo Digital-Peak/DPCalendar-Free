@@ -5,7 +5,6 @@
  * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
  * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 ?>
@@ -34,16 +33,14 @@ defined('_JEXEC') or die();
 			<span class="dp-quick-icon__text"><?php echo JText::_('COM_DPCALENDAR_VIEW_CPANEL_LOCATIONS'); ?></span>
 		</a>
 	</div>
-	<?php if (!DPCalendarHelper::isFree()) {
-		?>
+	<?php if (!DPCalendarHelper::isFree()) { ?>
 		<div class="dp-quick-icon">
 			<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&view=bookings">
 				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::USERS]); ?>
 				<span class="dp-quick-icon__text"><?php echo JText::_('COM_DPCALENDAR_VIEW_CPANEL_BOOKINGS'); ?></span>
 			</a>
 		</div>
-		<?php
-	} ?>
+	<?php } ?>
 	<div class="dp-quick-icon">
 		<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&view=tools">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::COG]); ?>
@@ -56,4 +53,15 @@ defined('_JEXEC') or die();
 			<span class="dp-quick-icon__text"><?php echo JText::_('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE'); ?></span>
 		</a>
 	</div>
+	<?php if (!DPCalendarHelper::isFree() && $this->needsGeoDBUpdate) { ?>
+		<div class="dp-quick-icon">
+			<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&task=import.geodb">
+				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DATABASE]); ?>
+				<span class="dp-icon-overlay">
+				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXCLAMATION]); ?>
+				</span>
+				<span class="dp-quick-icon__text"><?php echo JText::_('COM_DPCALENDAR_VIEW_CPANEL_UPDATE_GEO'); ?></span>
+			</a>
+		</div>
+	<?php } ?>
 </div>

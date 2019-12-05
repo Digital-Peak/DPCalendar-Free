@@ -8,6 +8,8 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use GeoIp2\Database\Reader;
 use Joomla\Registry\Registry;
 
 JLoader::import('joomla.application.component.modellist');
@@ -119,6 +121,71 @@ class DPCalendarModelImport extends JModelLegacy
 			$msgs[] = sprintf(JText::_('COM_DPCALENDAR_N_ITEMS_UPDATED'), $counterUpdated, $cal->title);
 		}
 		$this->set('messages', $msgs);
+	}
+
+	public function importGeoDB()
+	{
+		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
+
+		// Don't update when the file was fetched 10 days ago
+		if (file_exists($geoDBFile) && (time() - filemtime($geoDBFile) < (60 * 60 * 24 * 10))) {
+			return;
+		}
+
+		// Only update when we are in free mode
+		if (file_exists($geoDBFile) && DPCalendarHelper::isFree()) {
+			return;
+		}
+
+		$content = DPCalendarHelper::fetchContent('http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz');
+
+		if (empty($content)) {
+			throw new \Exception("Can't download the geolocation database from maxmind. Is the site blocked through a firewall?");
+		}
+
+		if ($content instanceof Exception) {
+			throw $content;
+		}
+
+		// Sometimes you get a rate limit exceeded
+		if (stristr($content, 'Rate limited exceeded') !== false) {
+			throw new \Exception("You hit the rate limit of maxmind to download the geodatabase.");
+		}
+
+		$ret = file_put_contents($geoDBFile . '.gz', $content);
+		if ($ret === false) {
+			throw new \Exception("Could not write the geolocation database to the temp folder. Are the permissions correct?");
+		}
+
+		unset($content);
+
+		// Decompress the file
+		$uncompressed = '';
+
+		$zp = @gzopen($geoDBFile . '.gz', 'rb');
+
+		if ($zp === false) {
+			throw new \Exception("Can't uncompress the geolocation database file, there was a zip error.");
+		}
+
+		if ($zp !== false) {
+			while (!gzeof($zp)) {
+				$uncompressed .= @gzread($zp, 102400);
+			}
+
+			@gzclose($zp);
+
+			@unlink($geoDBFile . '.gz');
+		}
+
+		try {
+			file_put_contents($geoDBFile, $uncompressed);
+			new Reader($geoDBFile);
+		} catch (\Exception $e) {
+			unlink($geoDBFile);
+
+			throw $e;
+		}
 	}
 
 	public function getTable($type = 'Location', $prefix = 'DPCalendarTable', $config = array())

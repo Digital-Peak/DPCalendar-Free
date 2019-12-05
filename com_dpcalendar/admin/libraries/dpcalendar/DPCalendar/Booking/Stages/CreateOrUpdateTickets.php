@@ -67,7 +67,7 @@ class CreateOrUpdateTickets implements StageInterface
 			$event = reset($payload->events);
 
 			if ($event->original_id == '-1' && $event->booking_series) {
-				$events = Booking::getSeriesEvents($event);
+				$events = Booking::getSeriesEvents($event, 1000);
 
 				foreach ($events as $e) {
 					$e->amount_tickets = $event->amount_tickets;

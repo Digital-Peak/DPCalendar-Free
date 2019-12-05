@@ -424,11 +424,11 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['capacity'] = $this->getParams()->get('event_form_capacity');
 		}
 
-		if (!empty($data['booking_options']) && is_array($data['booking_options'])) {
+		if (isset($data['booking_options']) && is_array($data['booking_options'])) {
 			$data['booking_options'] = json_encode($data['booking_options']);
 		}
 
-		if (!empty($data['schedule']) && is_array($data['schedule'])) {
+		if (isset($data['schedule']) && is_array($data['schedule'])) {
 			$data['schedule'] = json_encode($data['schedule']);
 		}
 

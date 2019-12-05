@@ -9,8 +9,6 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
-use DPCalendarHelper;
-
 class DateHelper
 {
 	public function transformRRuleToString($rrule, $startDate)

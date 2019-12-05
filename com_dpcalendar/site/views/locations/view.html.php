@@ -22,9 +22,11 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 
 	public function init()
 	{
-		if ($ids = $this->params->get('ids')) {
+		$ids = $this->params->get('ids');
+		if ($ids && !in_array(-1, $ids)) {
 			$this->getModel()->setState('filter.search', 'ids:' . implode(',', $ids));
 		}
+
 		$this->getModel()->setState('list.limit', 100);
 		$this->locations = $this->get('Items');
 

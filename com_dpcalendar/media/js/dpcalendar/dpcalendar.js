@@ -194,8 +194,8 @@ DPCalendar = window.DPCalendar || {};
 		return true;
 	};
 
-	DPCalendar.request = function (url, callback, data) {
-		var loader = document.querySelector('.dp-loader');
+	DPCalendar.request = function (url, callback, data, updateLoader) {
+		var loader = updateLoader ? document.querySelector('.dp-loader') : null;
 		if (loader) {
 			loader.classList.remove('dp-loader_hidden');
 		}

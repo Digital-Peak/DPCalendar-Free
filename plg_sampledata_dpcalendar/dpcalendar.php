@@ -836,7 +836,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['name']     = strtolower('field-' . $code . '-' . preg_replace('/[^0-9,.]/', '', $data['title']));
 			$data['title']    = $language->_($data['title']);
 			$data['label']    = $language->_($data['label']);
-			$data['language'] = $code;
+			$data['language'] = count($this->languageCache) > 1 ? $code : '*';
 			$data['state']    = 1;
 			$data['access']   = (int)$this->app->get('access', 1);
 
@@ -885,7 +885,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['id']         = 0;
 			$data['title']      = $language->_($data['title']);
 			$data['asset_id']   = 0;
-			$data['language']   = $code;
+			$data['language']   = count($this->languageCache) > 1 ? $code : '*';
 			$data['note']       = '';
 			$data['published']  = 1;
 			$data['assignment'] = 0;
@@ -953,7 +953,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['link']            = 'index.php?option=com_dpcalendar&' . $data['link'];
 			$data['menutype']        = count($this->languageCache) > 1 ? 'dpcalendar-' . $code : 'mainmenu';
 			$data['component_id']    = $componentId;
-			$data['language']        = $code;
+			$data['language']        = count($this->languageCache) > 1 ? $code : '*';
 
 			// Set unicodeslugs if alias is empty
 			if (trim(str_replace('-', '', $data['alias']) == '')) {
@@ -1064,7 +1064,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['description'] = '<p>' . $language->_($data['description']) . '</p>';
 			$data['description'] .= self::$lorem;
 
-			$data['language'] = $code;
+			$data['language'] = count($this->languageCache) > 1 ? $code : '*';
 
 			if (!empty($data['fields'])) {
 				$data['com_fields'] = [];
@@ -1134,7 +1134,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'alias'           => $code . '-' . $alias,
 				'associations'    => [],
 				'description'     => '',
-				'language'        => $code,
+				'language'        => count($this->languageCache) > 1 ? $code : '*',
 				'params'          => '',
 			];
 
@@ -1159,7 +1159,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data = $originalData;
 
 			$data['title']    = $language->_($data['title']) . (count($this->languageCache) > 1 ? ' (' . $code . ')' : '');
-			$data['language'] = $code;
+			$data['language'] = count($this->languageCache) > 1 ? $code : '*';
 			$data['state']    = 1;
 
 			$model = JModelLegacy::getInstance('Extcalendar', 'DPCalendarModel', ['ignore_request' => true]);

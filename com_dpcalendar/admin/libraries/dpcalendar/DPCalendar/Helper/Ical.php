@@ -11,7 +11,6 @@ defined('_JEXEC') or die();
 
 class Ical
 {
-
 	public static function createIcalFromCalendar($calendarId, $asDownload = false)
 	{
 		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
@@ -267,10 +266,12 @@ class Ical
 			}
 		}
 
-		$text[] = 'SUMMARY:' . $event->title;
-		$text[] = 'DTSTAMP:' . \DPCalendarHelper::getDate($event->created)->format('Ymd\THis\Z');
-		$text[] = 'DESCRIPTION:' . \JFilterInput::getInstance()->clean(preg_replace('/\r\n|\r|\n/', "\N", $event->description));
-		$text[] = 'X-ALT-DESC;FMTTYPE=text/html:' . preg_replace('/\r\n|\r|\n/', "", $event->description);
+		$created = \DPCalendarHelper::getDate($event->created);
+		$text[]  = 'SUMMARY:' . $event->title;
+		$text[]  = 'CREATED:' . $created->format('Ymd\THis\Z');
+		$text[]  = 'DTSTAMP:' . $created->format('Ymd\THis\Z');
+		$text[]  = 'DESCRIPTION:' . \JFilterInput::getInstance()->clean(preg_replace('/\r\n|\r|\n/', "\N", $event->description));
+		$text[]  = 'X-ALT-DESC;FMTTYPE=text/html:' . preg_replace('/\r\n|\r|\n/', "", $event->description);
 
 		if (isset($event->locations) && !empty($event->locations)) {
 			$text[] = 'LOCATION:' . self::icalEncode(\DPCalendar\Helper\Location::format($event->locations));
@@ -280,8 +281,11 @@ class Ical
 		}
 
 		if ($event->modified && $event->modified != \JFactory::getDbo()->getNullDate()) {
-			$text[] = 'LAST-MODIFIED:' . \DPCalendarHelper::getDate($event->modified)->format('Ymd\THis\Z');
+			$modified = \DPCalendarHelper::getDate($event->modified);
+			$text[]   = 'LAST-MODIFIED:' . $modified->format('Ymd\THis\Z');
+			$text[]   = 'SEQUENCE:' . ($modified->format('U') - $created->format('U'));
 		}
+
 		$text[] = 'X-ACCESS:' . $event->access;
 		$text[] = 'X-HITS:' . $event->hits;
 		$text[] = 'X-URL:' . $event->url;

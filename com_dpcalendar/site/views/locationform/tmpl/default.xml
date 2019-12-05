@@ -5,8 +5,7 @@
 			<![CDATA[COM_DPCALENDAR_VIEW_LOCATIONFORM_DEFAULT_DESC]]>
 		</message>
 	</layout>
-	<fields name="params"
-	        addfieldpath="/administrator/components/com_dpcalendar/models/fields">
+	<fields name="params" addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 		<fieldset name="basic">
 			<field name="location_form_country" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"

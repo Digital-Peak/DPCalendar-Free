@@ -27,13 +27,5 @@
     "psr-4": {
       "DPCalendar\\": "libraries/dpcalendar/DPCalendar"
     }
-  },
-  "scripts": {
-    "post-install-cmd": [
-      "php ../../suite_build/cleanup-vendors.php"
-    ],
-    "post-update-cmd": [
-      "php ../../suite_build/cleanup-vendors.php"
-    ]
   }
 }

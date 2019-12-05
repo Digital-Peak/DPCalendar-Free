@@ -9,7 +9,6 @@
 defined('_JEXEC') or die();
 
 $this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
 $this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_FORM);
 $this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_AUTOCOMPLETE);
 $this->dpdocument->loadStyleFile('dpcalendar/views/locationform/default.css');
@@ -24,9 +23,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 	<form class="com-dpcalendar-locationform__form dp-form form-validate" method="post" name="adminForm" id="adminForm"
 		  action="<?php echo $action; ?>">
 		<?php echo $this->loadTemplate('fields'); ?>
-		<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
-			<div class="com-dpcalendar-locationform__map dp-map"></div>
-		<?php } ?>
+		<?php echo $this->loadTemplate('map'); ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<input type="hidden" name="return" value="<?php echo $this->returnPage; ?>" class="dp-input dp-input-hidden">
 		<input type="hidden" name="tmpl" value="<?php echo $this->input->get('tmpl'); ?>" class="dp-input dp-input-hidden">

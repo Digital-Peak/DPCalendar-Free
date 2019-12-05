@@ -241,19 +241,19 @@ abstract class DPCalendarPlugin extends \JPlugin
 			\JLoader::import('joomla.application.component.model');
 			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-			$this->extCalendarsCache = \JModelLegacy::getInstance('Extcalendars', 'DPCalendarModel', array('ignore_request' => true));
-		}
+			$model = \JModelLegacy::getInstance('Extcalendars', 'DPCalendarModel', array('ignore_request' => true));
+			$model->getState();
+			$model->setState('filter.plugin', str_replace('dpcalendar_', '', $this->_name));
+			$model->setState('filter.state', 1);
+			$model->setState('list.limit', -1);
+			$model->setState('list.ordering', 'a.ordering');
 
-		$model = $this->extCalendarsCache;
-		$model->getState();
-		$model->setState('filter.plugin', str_replace('dpcalendar_', '', $this->_name));
-		$model->setState('filter.state', 1);
-		$model->setState('list.limit', -1);
-		$model->setState('list.ordering', 'a.ordering');
+			$this->extCalendarsCache = $model->getItems();
+		}
 
 		$user      = \JFactory::getUser();
 		$calendars = array();
-		foreach ($model->getItems() as $calendar) {
+		foreach ($this->extCalendarsCache as $calendar) {
 			if (!empty($calendarIds) && !in_array($calendar->id, $calendarIds)) {
 				continue;
 			}

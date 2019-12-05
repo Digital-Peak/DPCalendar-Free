@@ -167,6 +167,16 @@ class Com_DPCalendarInstallerScript
 		if (version_compare($version, '7.0.6') == -1) {
 			JFile::delete(JPATH_ROOT . '/components/com_dpcalendar/views/ticketform/tmpl/default.xml');
 		}
+
+		if (version_compare($version, '7.2.7') == -1) {
+			// Defaulting some params which have changed
+			$params = JComponentHelper::getParams('com_dpcalendar');
+			$params->set('list_filter_featured', $params->get('list_filter_featured', '2') == '2' ? 0 : 1);
+
+			// Map was never shown, so disable it
+			$this->run('update #__modules set params = replace(params, \'"show_map":"1"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
+			$this->run('update #__modules set params = replace(params, \'"show_map":"2"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
+		}
 	}
 
 	public function uninstall($parent)

@@ -529,7 +529,9 @@ DPCalendar = window.DPCalendar || {};
 						options['requestUrlRoot'] + '&ids=' + calId + '&date-start=' + fetchInfo.startStr + '&date-end=' + fetchInfo.endStr,
 						function (json) {
 							successCallback(json.data);
-						}
+						},
+						null,
+						false
 					);
 				}
 			};
@@ -576,7 +578,9 @@ DPCalendar = window.DPCalendar || {};
 								options['requestUrlRoot'] + '&ids=' + calId + '&date-start=' + fetchInfo.startStr + '&date-end=' + fetchInfo.endStr,
 								function (json) {
 									successCallback(json.data);
-								}
+								},
+								null,
+								false
 							);
 						}
 					});

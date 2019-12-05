@@ -26,4 +26,5 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_mini', '_scripts');
 		 data-popupwidth="<?php echo $params->get('popup_width'); ?>"
 		 data-popupheight="<?php echo $params->get('popup_height', 500); ?>"
 		 data-options="DPCalendar.module.mini.<?php echo $module->id; ?>.options"></div>
+	<?php require JModuleHelper::getLayoutPath('mod_dpcalendar_mini', 'default_map'); ?>
 </div>

@@ -872,15 +872,10 @@ class DPCalendarHelper
 	{
 		ob_clean();
 
-		if (!$error) {
-			if ($message) {
-				\JFactory::getApplication()->enqueueMessage($message);
-			}
-			echo new \JResponseJson($data);
-		} else {
-			\JFactory::getApplication()->enqueueMessage($message, 'error');
-			echo new \JResponseJson($data);
+		if ($message) {
+			\JFactory::getApplication()->enqueueMessage($message, $error ? 'error' : 'message');
 		}
+		echo new \JResponseJson($data);
 
 		\JFactory::getApplication()->close();
 	}

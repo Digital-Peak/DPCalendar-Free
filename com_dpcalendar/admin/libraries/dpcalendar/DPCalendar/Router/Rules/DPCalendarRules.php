@@ -79,11 +79,22 @@ class DPCalendarRules extends \JComponentRouterRulesMenu
 
 			// If the location exists in a location menu item, do nothing
 			if (!empty($items['location']) && array_key_exists($id, $items['location'])) {
+				$query['Itemid'] = $items['location'][$id];
+
 				return;
 			}
 
 			// If the location exists in a locations menu item, do nothing
 			if (!empty($items['locations']) && array_key_exists($id, $items['locations'])) {
+				$query['Itemid'] = $items['locations'][$id];
+
+				return;
+			}
+
+			// Search in the lookup for a passable menu item
+			if (!empty($items['locations']) && array_key_exists(-1, $items['locations'])) {
+				$query['Itemid'] = $items['locations'][-1];
+
 				return;
 			}
 		}

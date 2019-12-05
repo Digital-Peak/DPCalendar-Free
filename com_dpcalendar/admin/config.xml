@@ -461,10 +461,10 @@
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="list_filter_featured" type="radio" class="btn-group"
-		       default="2" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_LABEL"
+		       default="0" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_DESC">
 			<option value="1">JYES</option>
-			<option value="2">JNO</option>
+			<option value="0">JNO</option>
 		</field>
 		<field name="list_autocomplete" type="radio" class="btn-group" default="1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"

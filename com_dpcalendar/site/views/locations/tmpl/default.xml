@@ -9,7 +9,9 @@
 	        addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 		<fieldset name="request">
 			<field name="ids" type="location" multiple="true" size="10"
-			       description="COM_DPCALENDAR_FIELD_LOCATION_LABEL" label="COM_DPCALENDAR_FIELD_LOCATION_LABEL"/>
+			       description="COM_DPCALENDAR_FIELD_LOCATION_LABEL" label="COM_DPCALENDAR_FIELD_LOCATION_LABEL">
+				<option value="-1">JALL</option>
+			</field>
 		</fieldset>
 		<fieldset name="basic" addrulepath="/administrator/components/com_dpcalendar/models/rules">
 			<field name="locations_expand_events" type="list" useglobal="true"

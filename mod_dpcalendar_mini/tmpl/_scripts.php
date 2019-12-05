@@ -33,6 +33,7 @@ $translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 
 $document->addScriptOptions('calendar.names', $dateHelper->getNames());
+$document->addScriptOptions('timezone', $dateHelper->getDate()->getTimezone()->getName());
 
 // The options which will be passed to the js library
 $options                   = array();

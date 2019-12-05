@@ -29,6 +29,7 @@ $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 
 $this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());
+$this->dpdocument->addScriptOptions('timezone', $this->dateHelper->getDate()->getTimezone()->getName());
 
 $options                 = array();
 $options['eventSources'] = array();

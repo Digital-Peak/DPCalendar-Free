@@ -62,4 +62,16 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 
 		$this->return = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;
 	}
+
+	protected function prepareDocument()
+	{
+		parent::prepareDocument();
+
+		$title = $this->location->title;
+		if (!$title) {
+			$title = $this->params->get('page_title', '');
+		}
+
+		$this->document->setTitle($title);
+	}
 }

@@ -38,6 +38,7 @@ $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 
 $this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());
+$this->dpdocument->addScriptOptions('timezone', $this->dateHelper->getDate()->getTimezone()->getName());
 
 // Set up the params
 $params = $this->params;

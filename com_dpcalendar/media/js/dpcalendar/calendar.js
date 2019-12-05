@@ -107,7 +107,7 @@ DPCalendar = window.DPCalendar || {};
 			DPCalendar.pad(parseInt(options['month']), 2) + '-' +
 			DPCalendar.pad(options['date'], 2)
 		);
-		options['timeZone'] = 'UTC';
+		options['timeZone'] = Joomla.getOptions('DPCalendar.timezone');
 		options['defaultView'] = viewMapping[options['defaultView']];
 
 		// Loading the list view when we have a small screen

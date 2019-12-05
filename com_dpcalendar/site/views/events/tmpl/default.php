@@ -61,7 +61,7 @@ foreach ($this->items as $event) {
 	}
 
 	// Format the dates depending on the all day flag
-	$format = $event->all_day ? 'Y-m-d' : 'c';
+	$format = $event->all_day ? 'Y-m-d' : 'Y-m-d\TH:i:s';
 
 	$calendar = DPCalendarHelper::getCalendar($event->catid);
 

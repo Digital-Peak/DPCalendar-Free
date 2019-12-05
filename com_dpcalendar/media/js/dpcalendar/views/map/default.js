@@ -5,38 +5,45 @@ DPCalendar = window.DPCalendar || {};
 
 	document.addEventListener('DOMContentLoaded', function () {
 		var update = function (root) {
-			DPCalendar.request(
-				'view=map&layout=events&format=raw',
-				function (json) {
-					var map = root.querySelector('.dp-map');
-					if (map == null) {
-						return;
-					}
+			var map = root.querySelector('.dp-map');
+			if (map == null) {
+				return;
+			}
 
-					DPCalendar.Map.clearMarkers(map);
+			var mapHandler = function () {
+				DPCalendar.request(
+					'view=map&layout=events&format=raw',
+					function (json) {
+						DPCalendar.Map.clearMarkers(map);
 
-					json.data.events.forEach(function (event) {
-						event.location.forEach(function (location) {
-							var locationData = JSON.parse(JSON.stringify(location));
-							locationData.title = event.title;
-							locationData.color = event.color;
-							locationData.description = event.description;
+						json.data.events.forEach(function (event) {
+							event.location.forEach(function (location) {
+								var locationData = JSON.parse(JSON.stringify(location));
+								locationData.title = event.title;
+								locationData.color = event.color;
+								locationData.description = event.description;
 
-							DPCalendar.Map.createMarker(map, locationData);
+								DPCalendar.Map.createMarker(map, locationData);
+							});
 						});
-					});
 
-					if (json.data.location && root.querySelector('.dp-input[name=radius]').value != -1) {
-						DPCalendar.Map.drawCircle(
-							map,
-							json.data.location,
-							root.querySelector('.dp-input[name=radius]').value,
-							root.querySelector('.dp-input[name="length-type"]').value
-						);
-					}
-				},
-				DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)'))
-			);
+						if (json.data.location && root.querySelector('.dp-input[name=radius]').value != -1) {
+							DPCalendar.Map.drawCircle(
+								map,
+								json.data.location,
+								root.querySelector('.dp-input[name=radius]').value,
+								root.querySelector('.dp-input[name="length-type"]').value
+							);
+						}
+					},
+					DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)'))
+				);
+			};
+
+			map.addEventListener('dp-map-loaded', mapHandler);
+			if (map.dpmap) {
+				mapHandler();
+			}
 		};
 
 		[].slice.call(document.querySelectorAll('.dp-search-map')).forEach(function (map) {

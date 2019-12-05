@@ -44,18 +44,10 @@ $this->dpdocument->addScriptOptions('timezone', $this->dateHelper->getDate()->ge
 $params = $this->params;
 
 // The options which will be passed to the js library
-$options                 = array();
-$options['eventSources'] = array();
-foreach ($this->selectedCalendars as $calendar) {
-	$options['eventSources'][] = html_entity_decode(
-		JRoute::_(
-			'index.php?option=com_dpcalendar&view=events&format=raw&limit=0' .
-			'&ids=' . $calendar .
-			'&my=' . $params->get('show_my_only_calendar', '0') .
-			'&Itemid=' . $this->input->getInt('Itemid', 0)
-		)
-	);
-}
+$options                   = [];
+$options['requestUrlRoot'] = 'view=events&format=raw&limit=0&my=' . $params->get('show_my_only_calendar', '0') .
+	'&Itemid=' . $this->input->getInt('Itemid', 0);
+$options['calendarIds']    = $this->selectedCalendars;
 
 // Set the default view
 $options['defaultView'] = $params->get('default_view', 'month');
@@ -75,7 +67,7 @@ if ($bd && !(count($bd) == 1 && !$bd[0])) {
 }
 
 $options['firstDay']              = $params->get('weekstart', 0);
-$options['firstHour']             = $params->get('first_hour', 6);
+$options['scrollTime']            = $params->get('first_hour', 6) . ':00:00';
 $options['weekNumbersWithinDays'] = false;
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;
@@ -203,4 +195,4 @@ $options['year']  = $now->format('Y', true);
 $options['month'] = $now->format('m', true);
 $options['date']  = $now->format('d', true);
 
-$this->dpdocument->addScriptOptions('view.calendar.options', $options);
+$this->dpdocument->addScriptOptions('view.calendar.' . $this->input->getInt('Itemid', 0) . '.options', $options);

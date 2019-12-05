@@ -1,5 +1,5 @@
 /*!
-FullCalendar Core Package v4.1.0
+FullCalendar Core Package v4.2.0
 Docs & License: https://fullcalendar.io/
 (c) 2019 Adam Shaw
 */
@@ -899,7 +899,7 @@ Lots taken from Flatly (MIT): https://bootswatch.com/4/flatly/bootstrap.css
     display: none;
     /* don't display any button-related controls */ } }
 /*!
-FullCalendar Day Grid Plugin v4.1.0
+FullCalendar Day Grid Plugin v4.2.0
 Docs & License: https://fullcalendar.io/
 (c) 2019 Adam Shaw
 */
@@ -968,7 +968,7 @@ Docs & License: https://fullcalendar.io/
   display: inline-block;
   min-width: 1.25em; }
 /*!
-FullCalendar Time Grid Plugin v4.1.0
+FullCalendar Time Grid Plugin v4.2.0
 Docs & License: https://fullcalendar.io/
 (c) 2019 Adam Shaw
 */
@@ -1234,7 +1234,7 @@ be a descendant of the grid when it is being dragged.
   border-top-color: transparent;
   border-bottom-color: transparent; }
 /*!
-FullCalendar List View Plugin v4.1.0
+FullCalendar List View Plugin v4.2.0
 Docs & License: https://fullcalendar.io/
 (c) 2019 Adam Shaw
 */

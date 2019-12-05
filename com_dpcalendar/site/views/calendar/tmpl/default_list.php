@@ -14,18 +14,10 @@ if ($params->get('show_selection', 1) == 2) {
 ?>
 <div class="com-dpcalendar-calendar__list com-dpcalendar-calendar__list_<?php echo $params->get('show_selection', 1) == 3 ? '' : 'hidden'; ?>">
 	<?php foreach ($this->doNotListCalendars as $calendar) { ?>
-		<?php $value = html_entity_decode(
-			JRoute::_(
-				'index.php?option=com_dpcalendar&view=events&format=raw&limit=0' .
-				'&ids=' . $calendar->id .
-				'&my=' . $params->get('show_my_only_calendar', '0') .
-				'&Itemid=' . $this->input->getInt('Itemid', 0)
-			)
-		); ?>
 		<dl class="com-dpcalendar-calendar__calendar-description dp-description">
 			<dt class="dp-description__label">
 				<label for="cal-<?php echo $calendar->id; ?>">
-					<input type="checkbox" name="<?php echo $calendar->id; ?>" value="<?php echo $value; ?>" id="cal-<?php echo $calendar->id; ?>"
+					<input type="checkbox" name="cal-<?php echo $calendar->id; ?>" value="<?php echo $calendar->id; ?>" id="cal-<?php echo $calendar->id; ?>"
 						   class="dp-input dp-input-checkbox">
 					<span style="color: #<?php echo $calendar->color; ?>">
 						<?php echo str_pad(' ' . $calendar->title, strlen(' ' . $calendar->title) + $calendar->level - 1, '-', STR_PAD_LEFT); ?>

@@ -69,19 +69,7 @@ foreach ($tmp as $date => $events) {
 	);
 }
 
-$messages = JFactory::getApplication()->getMessageQueue();
-
-// Build the sorted messages list
-$lists = array();
-if (is_array($messages) && count($messages)) {
-	foreach ($messages as $message) {
-		if (isset($message['type']) && isset($message['message'])) {
-			$lists[$message['type']][] = $message['message'];
-		}
-	}
-}
-
 ob_clean();
-echo json_encode(array(array('data' => $data, 'messages' => $lists)));
+\DPCalendar\Helper\DPCalendarHelper::sendMessage(null, false, $data);
 
 JFactory::getApplication()->close();

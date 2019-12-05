@@ -39,7 +39,7 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 			$canEdit    = $this->user->authorise('core.edit', 'com_dpcalendar.category.' . $item->catid);
 			$canEditOwn = $this->user->authorise('core.edit.own', 'com_dpcalendar.category.' . $item->catid);
 			$canCheckin = $this->user->authorise('core.manage', 'com_checkin')
-				|| $item->checked_out == $user->get('id') || $item->checked_out == 0;
+				|| $item->checked_out == $this->user->get('id') || $item->checked_out == 0;
 			$canChange  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category.' . $item->catid) && $canCheckin;
 			?>
 			<tr sortable-group-id="<?php echo $item->catid ?>">

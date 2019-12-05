@@ -103,7 +103,7 @@ if (is_array($messages) && count($messages)) {
 
 // Echo the data
 ob_clean();
-echo json_encode(array(array('data' => $data, 'messages' => $lists)));
+\DPCalendar\Helper\DPCalendarHelper::sendMessage(null, false, $data);
 
 // Close the request
 JFactory::getApplication()->close();

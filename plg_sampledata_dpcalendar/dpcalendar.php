@@ -53,7 +53,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				$this->clearTable('caldav_calendars');
 				$this->clearTable('caldav_calendarinstances');
 
-				$this->db->setQuery("delete from #__dpcalendar_extcalendars where plugin = 'ical'");
+				$this->db->setQuery("delete from #__dpcalendar_extcalendars where plugin = 'ical' or plugin = 'google'");
 				$this->db->execute();
 
 				$this->db->setQuery("delete from #__categories where extension = 'com_dpcalendar'");
@@ -255,18 +255,37 @@ class PlgSampledataDPCalendar extends JPlugin
 			$this->createCalendar('PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_3_TITLE');
 
 			if (!DPCalendarHelper::isFree()) {
-				$this->db->setQuery("update #__extensions set enabled = 1 where name = 'plg_dpcalendar_ical'");
+				$this->db->setQuery("update #__extensions set enabled = 1 where name = 'plg_dpcalendar_ical' or name = 'plg_dpcalendar_google'");
 				$this->db->execute();
 
 				$this->createExternalCalendar([
 					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_ICAL_TITLE',
 					'plugin' => 'ical',
+					'color'  => 'c61111',
 					'params' => ['uri' => 'plugins/dpcalendar/ical/examples/calendar.ics']
 				]);
 
+				$configFile = JPATH_ROOT . '/DPCalendarGoogleConfig.json';
+				if (file_exists($configFile) && \Joomla\CMS\Plugin\PluginHelper::getPlugin('dpcalendar', 'google')) {
+					$config = json_decode(file_get_contents($configFile));
+					foreach ($config->calendars as $cal) {
+						$this->createExternalCalendar([
+							'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_GOOGLE_TITLE',
+							'plugin' => 'google',
+							'color'  => '1541ef',
+							'params' => [
+								'calendarId'    => $cal->calendarId,
+								'refreshToken'  => $cal->refreshToken,
+								'client-id'     => $cal->clientId,
+								'client-secret' => $cal->clientSecret
+							]
+						]);
+					}
+				}
+
 				$this->createPrivateCalendar([
 					'displayname'   => 'PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_PRIVATE_TITLE',
-					'calendarcolor' => 'CC2B40'
+					'calendarcolor' => '1dc611'
 				]);
 			}
 
@@ -403,16 +422,17 @@ class PlgSampledataDPCalendar extends JPlugin
 				'location_ids' => $locationIds[0]
 			]);
 			$this->createEvent([
-				'catid'        => 1,
-				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_TITLE',
-				'rrule'        => 'FREQ=WEEKLY;BYDAY=SU',
-				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":""}',
-				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_DESC',
-				'capacity'     => '10',
-				'max_tickets'  => 2,
-				'price'        => '{"value":["55","68","89"],"label":["Kids","Student","Adults"],"description":["Age: 1 - 5 years","Needs an ID","Age: Older than 6 years"]}',
-				'earlybird'    => '{"value":["20"],"type":["percentage"],"date":["-2 days"],"label":["Early Bird Discount"],"description":[" Decide early, pay less"]}',
-				'location_ids' => $locationIds[1]
+				'catid'           => 1,
+				'title'           => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_TITLE',
+				'rrule'           => 'FREQ=WEEKLY;BYDAY=SU',
+				'images'          => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":""}',
+				'description'     => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_DESC',
+				'capacity'        => '10',
+				'max_tickets'     => 2,
+				'price'           => '{"value":["55","68","89"],"label":["Kids","Student","Adults"],"description":["Age: 1 - 5 years","Needs an ID","Age: Older than 6 years"]}',
+				'earlybird'       => '{"value":["20"],"type":["percentage"],"date":["-2 days"],"label":["Early Bird Discount"],"description":[" Decide early, pay less"]}',
+				'booking_options' => '{"booking_options0":{"price":"15","amount":"1","label":"Lunch box small","description":"A small snack"},"booking_options1":{"price":"25","amount":"1","label":"Lunch box big","description":"For the hungry ones"}}',
+				'location_ids'    => $locationIds[1]
 			]);
 
 			$response          = new stdClass();
@@ -438,10 +458,17 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$locationIds = $this->app->getUserState('sampledata.dpcalendar.locations');
 
+			$start = \DPCalendar\Helper\DPCalendarHelper::getDate();
+			$start->setTime(8, 0, 0);
+			$end = clone $start;
+			$end->modify('+2 hours');
+
 			$this->createEvent([
 				'catid'        => 2,
 				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_TITLE',
 				'rrule'        => 'FREQ=DAILY',
+				'start_date'   => $start->toSql(),
+				'end_date'     => $end->toSql(),
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_DESC',
 				'rooms'        => $locationIds[6] . '-1',
 				'location_ids' => $locationIds[6]
@@ -450,6 +477,8 @@ class PlgSampledataDPCalendar extends JPlugin
 				'catid'        => 2,
 				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_11_TITLE',
 				'rrule'        => 'FREQ=DAILY',
+				'start_date'   => $start->toSql(),
+				'end_date'     => $end->toSql(),
 				'color'        => 'FF4557',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_11_DESC',
 				'rooms'        => $locationIds[6] . '-2',
@@ -459,6 +488,8 @@ class PlgSampledataDPCalendar extends JPlugin
 				'catid'        => 2,
 				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_12_TITLE',
 				'rrule'        => 'FREQ=DAILY',
+				'start_date'   => $start->toSql(),
+				'end_date'     => $end->toSql(),
 				'color'        => '056625',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_12_DESC',
 				'rooms'        => $locationIds[6] . '-3',
@@ -702,7 +733,12 @@ class PlgSampledataDPCalendar extends JPlugin
 				$this->createMenuItem([
 					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_12_TITLE',
 					'link'   => 'view=calendar',
-					'params' => ['ids' => [3], 'textbefore' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_12_TEXT']
+					'params' => [
+						'ids'            => [3, 4],
+						'textbefore'     => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_12_TEXT',
+						'show_selection' => 3,
+						'map_zoom'       => 3
+					]
 				]);
 				$this->createMenuItem([
 					'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_13_TITLE',
@@ -1008,7 +1044,8 @@ class PlgSampledataDPCalendar extends JPlugin
 			} else {
 				$start->modify('+' . rand(1, 7) . ' day');
 			}
-			$start->setTime(8, 0, 0);
+			$start->modify('+1 hour');
+			$start->setTime($start->format('H'), 0, 0);
 
 			$end = clone $start;
 			$end->modify('+2 hours');
@@ -1129,7 +1166,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				throw new Exception(JText::_($model->getError()));
 			}
 
-			$newIds[$code] = 'i-' . $model->getItem()->id;
+			$newIds[$code] = ($originalData['plugin'] == 'ical' ? 'i-' : 'g-') . $model->getItem()->id;
 		}
 
 		$ids   = $this->app->getUserState('sampledata.dpcalendar.calendars', []);

@@ -473,7 +473,7 @@
 	background-color: transparent;
 }
 
-.tippy-tooltip[data-interactive], .tippy-tooltip[data-interactive] path {
+.tippy-tooltip[data-interactive], .tippy-tooltip[data-interactive] .tippy-roundarrow path {
 	pointer-events: auto;
 }
 

@@ -36,29 +36,13 @@ $document->addScriptOptions('calendar.names', $dateHelper->getNames());
 $document->addScriptOptions('timezone', $dateHelper->getDate()->getTimezone()->getName());
 
 // The options which will be passed to the js library
-$options                   = array();
-$options['eventSources']   = array();
-$options['eventSources'][] = $url = html_entity_decode(
-	JRoute::_(
-		'index.php?option=com_dpcalendar&view=events&limit=0&format=raw&' .
-		'&compact=' . $params->get('compact_events', 2) . '&ids=' . implode(',', $ids) . '&openview=' . $params->get('open_view', 'agendaDay') .
-		'&module-id=' . $module->id
-	)
-);
+$options                   = [];
+$options['requestUrlRoot'] = 'view=events&limit=0&format=raw&&compact=' . $params->get('compact_events', 2) .
+	'&openview=' . $params->get('open_view', 'agendaDay') . '&module-id=' . $module->id;
+$options['calendarIds']    = [implode(',', $ids)];
 
 // Set the default view
 $options['defaultView'] = $params->get('default_view', 'month');
-
-// Translate to the fullcalendar view names
-$mapping                = array(
-	'day'   => 'agendaDay',
-	'week'  => 'agendaWeek',
-	'month' => 'month'
-);
-$options['defaultView'] = $params->get('default_view', 'month');
-if (key_exists($params->get('default_view', 'month'), $mapping)) {
-	$options['defaultView'] = $mapping[$params->get('default_view', 'month')];
-}
 
 // Some general calendar options
 $options['weekNumbers']    = (boolean)$params->get('week_numbers');
@@ -76,7 +60,7 @@ if ($bd && !(count($bd) == 1 && !$bd[0])) {
 
 $options['eventColor']            = '#' . $params->get('event_color', '135CAE');
 $options['firstDay']              = $params->get('weekstart', 0);
-$options['firstHour']             = $params->get('first_hour', 6);
+$options['scrollTime']            = $params->get('first_hour', 6) . ':00:00';
 $options['weekNumbersWithinDays'] = false;
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;
@@ -175,7 +159,7 @@ $options['views']['list']       = array(
 	'columnHeaderFormat' => $dateHelper->convertPHPDateToMoment($params->get('columnformat_list', 'D')),
 	'listDayFormat'      => $dateHelper->convertPHPDateToMoment($params->get('dayformat_list', 'l')),
 	'listDayAltFormat'   => $dateHelper->convertPHPDateToMoment($params->get('dateformat_list', 'F j, Y')),
-	'duration'           => array('days' => $params->get('list_range', 30)),
+	'duration'           => array('days' => (int)$params->get('list_range', 30)),
 	'noEventsMessage'    => $translator->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
 );
 

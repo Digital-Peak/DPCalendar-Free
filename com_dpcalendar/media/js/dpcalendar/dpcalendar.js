@@ -220,7 +220,7 @@ DPCalendar = window.DPCalendar || {};
 
 				var json = JSON.parse(res);
 
-				if (json.messages != null && json.messages && document.getElementById('system-message-container')) {
+				if (json.messages != null && json.messages.length !== 0 && document.getElementById('system-message-container')) {
 					Joomla.renderMessages(json.messages);
 				}
 
@@ -237,7 +237,7 @@ DPCalendar = window.DPCalendar || {};
 
 				var json = JSON.parse(response);
 
-				if (json.messages != null && document.getElementById('system-message-container')) {
+				if (json.messages != null && json.messages.length !== 0 && document.getElementById('system-message-container')) {
 					Joomla.renderMessages(json.messages);
 				}
 			}

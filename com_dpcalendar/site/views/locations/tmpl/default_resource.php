@@ -31,17 +31,9 @@ $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 $this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());
 $this->dpdocument->addScriptOptions('timezone', $this->dateHelper->getDate()->getTimezone()->getName());
 
-$options                 = array();
-$options['eventSources'] = array();
-foreach ($this->ids as $calendar) {
-	$options['eventSources'][] = html_entity_decode(
-		JRoute::_(
-			'index.php?option=com_dpcalendar&view=events&format=raw&limit=0&l=1' .
-			'&ids=' . $calendar .
-			'&Itemid=' . $this->input->getInt('Itemid', 0)
-		)
-	);
-}
+$options                   = [];
+$options['requestUrlRoot'] = 'view=events&format=raw&limit=0&l=1&Itemid=' . $this->input->getInt('Itemid', 0);
+$options['calendarIds']    = $this->ids;
 
 $options['defaultView'] = $this->params->get('locations_default_view', 'resday');
 // Set up the header
@@ -128,8 +120,8 @@ if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
 	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->return);
 }
 
-$this->dpdocument->addScriptOptions('view.locations.options', $options);
+$this->dpdocument->addScriptOptions('view.locations.' . $this->input->getInt('Itemid', 0) . '.options', $options);
 ?>
 <div class="com-dpcalendar-locations__resource">
-	<div class="dp-calendar" data-options="DPCalendar.view.locations.options"></div>
+	<div class="dp-calendar" data-options="DPCalendar.view.locations.<?php echo $this->input->getInt('Itemid', 0); ?>.options"></div>
 </div>

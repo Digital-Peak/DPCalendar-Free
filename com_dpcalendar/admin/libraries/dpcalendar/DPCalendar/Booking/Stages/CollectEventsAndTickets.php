@@ -21,9 +21,15 @@ class CollectEventsAndTickets implements StageInterface
 	 */
 	private $model;
 
-	public function __construct(\DPCalendarModelBooking $model)
+	/**
+	 * @var \JApplicationCms
+	 */
+	private $application = null;
+
+	public function __construct(\JApplicationCms $application, \DPCalendarModelBooking $model)
 	{
-		$this->model = $model;
+		$this->application = $application;
+		$this->model       = $model;
 	}
 
 	public function __invoke($payload)

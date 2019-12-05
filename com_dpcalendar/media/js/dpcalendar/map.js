@@ -9,6 +9,7 @@ DPCalendar = window.DPCalendar || {};
 		if (typeof L === 'undefined') {
 			return;
 		}
+		element.classList.add('dp-map_loading');
 
 		var options = element.dataset;
 
@@ -45,13 +46,21 @@ DPCalendar = window.DPCalendar || {};
 					type = google.maps.MapTypeId.TERRAIN;
 					break;
 			}
-			L.gridLayer.googleMutant({
-				type: type
-			}).addTo(map);
+			var tiles = L.gridLayer.googleMutant({type: type});
+			tiles.addTo(map);
+			tiles.addEventListener('spawned', function (e) {
+				google.maps.event.addListenerOnce(e.mapObject, 'idle', function () {
+					element.classList.remove('dp-map_loading');
+					element.classList.add('dp-map_loaded');
+				});
+			});
 		} else {
-			L.tileLayer(Joomla.getOptions('DPCalendar.map.tiles.url'), {
-				id: 'mapbox.streets'
-			}).addTo(map);
+			var tiles = L.tileLayer(Joomla.getOptions('DPCalendar.map.tiles.url'), {id: 'mapbox.streets'});
+			tiles.on('load', function () {
+				element.classList.remove('dp-map_loading');
+				element.classList.add('dp-map_loaded');
+			});
+			tiles.addTo(map);
 		}
 
 		// Marker cluster
@@ -63,6 +72,10 @@ DPCalendar = window.DPCalendar || {};
 		map.dpElement = element;
 
 		element.dpmap = map;
+
+		var e = document.createEvent('CustomEvent');
+		e.initCustomEvent('dp-map-loaded');
+		element.dispatchEvent(e);
 
 		if (Array.isArray(element.dpCachedMarkers)) {
 			element.dpCachedMarkers.forEach(function (marker) {

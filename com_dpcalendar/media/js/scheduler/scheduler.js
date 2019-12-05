@@ -1,5 +1,5 @@
 /*!
-FullCalendar Resources Common Plugin v4.1.0
+FullCalendar Resources Common Plugin v4.2.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -115,7 +115,7 @@ Docs & License: https://fullcalendar.io/scheduler
     // for when non-resource view should be given EventUi info (for event coloring/constraints based off of resource data)
     var ResourceEventConfigAdder = /** @class */ (function () {
         function ResourceEventConfigAdder() {
-            this.buildResourceEventUis = core.memoizeOutput(buildResourceEventUis, core.isObjectsSimilar);
+            this.buildResourceEventUis = core.memoizeOutput(buildResourceEventUis, core.isPropsEqual);
             this.injectResourceEventUis = core.memoize(injectResourceEventUis);
         }
         ResourceEventConfigAdder.prototype.transform = function (viewProps, viewSpec, calendarProps) {
@@ -175,7 +175,7 @@ Docs & License: https://fullcalendar.io/scheduler
             var meta = def.parseMeta(input);
             if (meta) {
                 var res = parseResourceSourceProps((typeof input === 'object' && input) ? input : {}, meta, i);
-                res._raw = core.freezeRaw(input);
+                res._raw = input;
                 return res;
             }
         }
@@ -801,7 +801,7 @@ Docs & License: https://fullcalendar.io/scheduler
         });
     };
 
-    var RELEASE_DATE = '2019-04-24'; // for Scheduler
+    var RELEASE_DATE = '2019-06-02'; // for Scheduler
     var UPGRADE_WINDOW = 365 + 7; // days. 1 week leeway, for tz shift reasons too
     var LICENSE_INFO_URL = 'http://fullcalendar.io/scheduler/license/';
     var PRESET_LICENSE_KEYS = [
@@ -856,9 +856,9 @@ Docs & License: https://fullcalendar.io/scheduler
     var optionChangeHandlers = {
         resources: handleResources
     };
-    function handleResources(newSourceInput, calendar) {
+    function handleResources(newSourceInput, calendar, deepEquals) {
         var oldSourceInput = calendar.state.resourceSource._raw;
-        if (!core.isValuesSimilar(oldSourceInput, newSourceInput, 2)) {
+        if (!deepEquals(oldSourceInput, newSourceInput)) {
             calendar.dispatch({
                 type: 'RESET_RESOURCE_SOURCE',
                 resourceSourceInput: newSourceInput
@@ -1569,7 +1569,7 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Resources Common Plugin v4.1.0
+FullCalendar Resources Common Plugin v4.2.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -1685,7 +1685,7 @@ Docs & License: https://fullcalendar.io/scheduler
     // for when non-resource view should be given EventUi info (for event coloring/constraints based off of resource data)
     var ResourceEventConfigAdder = /** @class */ (function () {
         function ResourceEventConfigAdder() {
-            this.buildResourceEventUis = core.memoizeOutput(buildResourceEventUis, core.isObjectsSimilar);
+            this.buildResourceEventUis = core.memoizeOutput(buildResourceEventUis, core.isPropsEqual);
             this.injectResourceEventUis = core.memoize(injectResourceEventUis);
         }
         ResourceEventConfigAdder.prototype.transform = function (viewProps, viewSpec, calendarProps) {
@@ -1745,7 +1745,7 @@ Docs & License: https://fullcalendar.io/scheduler
             var meta = def.parseMeta(input);
             if (meta) {
                 var res = parseResourceSourceProps((typeof input === 'object' && input) ? input : {}, meta, i);
-                res._raw = core.freezeRaw(input);
+                res._raw = input;
                 return res;
             }
         }
@@ -2371,7 +2371,7 @@ Docs & License: https://fullcalendar.io/scheduler
         });
     };
 
-    var RELEASE_DATE = '2019-04-24'; // for Scheduler
+    var RELEASE_DATE = '2019-06-02'; // for Scheduler
     var UPGRADE_WINDOW = 365 + 7; // days. 1 week leeway, for tz shift reasons too
     var LICENSE_INFO_URL = 'http://fullcalendar.io/scheduler/license/';
     var PRESET_LICENSE_KEYS = [
@@ -2426,9 +2426,9 @@ Docs & License: https://fullcalendar.io/scheduler
     var optionChangeHandlers = {
         resources: handleResources
     };
-    function handleResources(newSourceInput, calendar) {
+    function handleResources(newSourceInput, calendar, deepEquals) {
         var oldSourceInput = calendar.state.resourceSource._raw;
-        if (!core.isValuesSimilar(oldSourceInput, newSourceInput, 2)) {
+        if (!deepEquals(oldSourceInput, newSourceInput)) {
             calendar.dispatch({
                 type: 'RESET_RESOURCE_SOURCE',
                 resourceSourceInput: newSourceInput
@@ -3139,7 +3139,7 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Resource Day Grid Plugin v4.1.0
+FullCalendar Resource Day Grid Plugin v4.2.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -3351,7 +3351,7 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Resource Time Grid Plugin v4.1.0
+FullCalendar Resource Time Grid Plugin v4.2.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -3570,7 +3570,7 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Timeline Plugin v4.1.0
+FullCalendar Timeline Plugin v4.2.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -5580,7 +5580,7 @@ Docs & License: https://fullcalendar.io/scheduler
 
 }));
 /*!
-FullCalendar Resource Timeline Plugin v4.1.0
+FullCalendar Resource Timeline Plugin v4.2.0
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */

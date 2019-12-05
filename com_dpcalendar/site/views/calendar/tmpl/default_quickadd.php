@@ -31,10 +31,10 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
 		<?php echo JHtml::_('form.token'); ?>
 		<div class="dp-quickadd__buttons">
 			<button type="button" class="dp-button dp-quickadd__button-submit">
-				<?php echo $this->translate('COM_DPCALENDAR_VIEW_FORM_BUTTON_SUBMIT_EVENT'); ?>
+				<?php echo $this->translate('JACTION_EDIT'); ?>
 			</button>
 			<button type="button" class="dp-button dp-quickadd__button-edit">
-				<?php echo $this->translate('COM_DPCALENDAR_VIEW_FORM_BUTTON_EDIT_EVENT'); ?>
+				<?php echo $this->translate('JSAVE'); ?>
 			</button>
 			<button type="button" class="dp-button dp-quickadd__button-cancel">
 				<?php echo $this->translate('JCANCEL'); ?>

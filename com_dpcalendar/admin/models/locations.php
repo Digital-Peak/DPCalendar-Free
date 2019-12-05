@@ -188,29 +188,25 @@ class DPCalendarModelLocations extends JModelList
 				$data = \DPCalendar\Helper\Location::get($location, false);
 			}
 
-			if (!empty($data->latitude) && !empty($data->longitude)) {
+			if ($radius > -1 && !empty($data->latitude) && !empty($data->longitude)) {
 				$latitude  = (float)$data->latitude;
 				$longitude = (float)$data->longitude;
 
-				if ($radius == -1) {
-					$radius = PHP_INT_MAX;
+				if ($this->getState('filter.length-type') == 'mile') {
+					$radius = $radius * 1.60934;
 				}
 
-				if ($this->getState('filter.length-type') == 'm') {
-					$radius = $radius * 0.62137119;
-				}
-
-				$longitudeMin = $longitude - $radius / abs(cos(deg2rad($longitude)) * 69);
-				$longitudeMax = $longitude + $radius / abs(cos(deg2rad($longitude)) * 69);
-				$latitudeMin  = $latitude - ($radius / 69);
-				$latitudeMax  = $latitude + ($radius / 69);
+				$longitudeMin = $longitude - rad2deg(asin($radius / 6371) / cos(deg2rad($latitude)));
+				$longitudeMax = $longitude + rad2deg(asin($radius / 6371) / cos(deg2rad($latitude)));
+				$latitudeMin  = $latitude - rad2deg($radius / 6371);
+				$latitudeMax  = $latitude + rad2deg($radius / 6371);
 
 				$query->where(
 					'a.longitude > ' . $db->quote($longitudeMin) . " AND
 						a.longitude < " . $db->quote($longitudeMax) . " AND
 						a.latitude > " . $db->quote($latitudeMin) . " AND
 						a.latitude < " . $db->quote($latitudeMax));
-			} else {
+			} else if ($radius > -1) {
 				$query->where('1 = 0');
 			}
 		}

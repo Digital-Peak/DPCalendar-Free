@@ -36,12 +36,19 @@ DPCalendar = window.DPCalendar || {};
 		}
 
 		if (DPCalendar.Map && geoComplete && geoComplete.getAttribute('data-latitude') && geoComplete.getAttribute('data-longitude')) {
-			DPCalendar.Map.drawCircle(
-				root.querySelector('.dp-map'),
-				{latitude: geoComplete.getAttribute('data-latitude'), longitude: geoComplete.getAttribute('data-longitude')},
-				root.querySelector('.dp-input[name=radius]').value,
-				root.querySelector('.dp-input[name="length-type"]').value
-			);
+			var map = root.querySelector('.dp-map');
+			var circleDrawer = function () {
+				DPCalendar.Map.drawCircle(
+					map,
+					{latitude: geoComplete.getAttribute('data-latitude'), longitude: geoComplete.getAttribute('data-longitude')},
+					root.querySelector('.dp-input[name=radius]').value,
+					root.querySelector('.dp-input[name="length-type"]').value
+				);
+			};
+			map.addEventListener('dp-map-loaded', circleDrawer);
+			if (map.dpmap) {
+				circleDrawer();
+			}
 		}
 
 		[].slice.call(root.querySelectorAll('.dp-button-bar__actions .dp-button-search')).forEach(function (button) {

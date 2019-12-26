@@ -11,14 +11,14 @@
       });
     }
 
-    [].slice.call(document.querySelectorAll('.com-dpcalendar-event__actions [data-href]')).forEach(function (el) {
-      el.addEventListener('click', function (event) {
-        if (event.target.getAttribute('data-open') == 'window') {
-          window.open(event.target.getAttribute('data-href'));
-        } else {
-          location.href = event.target.getAttribute('data-href');
+    [].slice.call(document.querySelectorAll('.com-dpcalendar-event__actions [data-href]')).forEach(function (action) {
+      action.addEventListener('click', function (event) {
+        if (action.getAttribute('data-open') != 'window') {
+          location.href = action.getAttribute('data-href');
+          return false;
         }
 
+        window.open(action.getAttribute('data-href'));
         return false;
       });
     });

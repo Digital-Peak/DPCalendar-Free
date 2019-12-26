@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 define('_JEXEC', 1);
 define('DS', DIRECTORY_SEPARATOR);
@@ -11,8 +11,7 @@ define('DS', DIRECTORY_SEPARATOR);
 use Joomla\Registry\Registry;
 
 $path = dirname(dirname(dirname(__FILE__)));
-if (isset($_SERVER["SCRIPT_FILENAME"]))
-{
+if (isset($_SERVER["SCRIPT_FILENAME"])) {
 	$path = dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"])));
 }
 
@@ -23,9 +22,9 @@ require_once JPATH_BASE . '/includes/framework.php';
 JLoader::import('joomla.user.authentication');
 JLoader::import('joomla.application.component.helper');
 
-JLog::addLogger(array(
+JLog::addLogger([
 		'text_file' => 'com_dpcalendar.caldav.errors.php'
-), JLog::ALL, 'com_dpcalendar');
+], JLog::ALL, 'com_dpcalendar');
 
 class DPCalendarCalDavServer extends JApplicationCms
 {
@@ -48,8 +47,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 		}
 		set_error_handler("exception_error_handler");
 
-		try
-		{
+		try {
 			JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 			$config = JFactory::getConfig();
@@ -76,10 +74,10 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$principalBackend->tableName = $config->get('dbprefix') . 'dpcalendar_caldav_principals';
 			$principalBackend->groupMembersTableName = $config->get('dbprefix') . 'dpcalendar_caldav_groupmembers';
 
-			$tree = array(
+			$tree = [
 					new \Sabre\CalDAV\Principal\Collection($principalBackend),
 					new \Sabre\CalDAV\CalendarRoot($principalBackend, $calendarBackend)
-			);
+			];
 
 			\Sabre\DAV\Server::$exposeVersion = false;
 
@@ -87,8 +85,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$server->debugExceptions = JDEBUG;
 
 			$uri = trim(JUri::root(true), '/');
-			if (strpos($uri, 'components/com_dpcalendar') === false)
-			{
+			if (strpos($uri, 'components/com_dpcalendar') === false) {
 				$uri .= '/components/com_dpcalendar/';
 			}
 			$uri = '/' . trim($uri, '/') . '/' . 'caldav.php';
@@ -103,9 +100,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$server->addPlugin(new \Sabre\DAV\Browser\Plugin());
 
 			$server->exec();
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			$message = 'Something crashed during a CalDAV request: ' . PHP_EOL . $e;
 			JLog::add($message, JLog::ERROR, 'com_dpcalendar');
 
@@ -136,28 +131,22 @@ class DPCalendarCalDavServer extends JApplicationCms
 		return $config->get('' . $varname, $default);
 	}
 
-	public static function getRouter($name = '', array $options = array())
+	public static function getRouter($name = '', array $options = [])
 	{
 		JLoader::import('joomla.application.router');
 
-		try
-		{
+		try {
 			return new JRouter($options);
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			return null;
 		}
 	}
 
-	public function getMenu($name = 'site', $options = array())
+	public function getMenu($name = 'site', $options = [])
 	{
-		try
-		{
+		try {
 			return JMenu::getInstance($name, $options);
-		}
-		catch (Exception $e)
-		{
+		} catch (Exception $e) {
 			return null;
 		}
 	}
@@ -192,8 +181,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 		$session = JFactory::getSession();
 		$registry = $session->get('registry');
 
-		if (!is_null($registry))
-		{
+		if (!is_null($registry)) {
 			return $registry->get($key, $default);
 		}
 
@@ -206,12 +194,9 @@ class DPCalendarCalDavServer extends JApplicationCms
 		$new_state = $this->input->get($request, null, $type);
 
 		// Save the new value only if it was set in this request.
-		if ($new_state !== null)
-		{
+		if ($new_state !== null) {
 			$this->setUserState($key, $new_state);
-		}
-		else
-		{
+		} else {
 			$new_state = $cur_state;
 		}
 
@@ -223,8 +208,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 		$session = JFactory::getSession();
 		$registry = $session->get('registry');
 
-		if (!is_null($registry))
-		{
+		if (!is_null($registry)) {
 			return $registry->set($key, $value);
 		}
 

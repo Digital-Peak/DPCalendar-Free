@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -36,14 +36,14 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 
 		$model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
 		$model->getState();
-		$model->setState('filter.parentIds', array('root'));
+		$model->setState('filter.parentIds', ['root']);
 
-		$this->ids = array();
+		$this->ids = [];
 		foreach ($model->getItems() as $calendar) {
 			$this->ids[] = $calendar->id;
 		}
 
-		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('list.limit', 25);
 		$model->setState('list.start-date', DPCalendarHelper::getDate());
 		$model->setState('list.ordering', 'start_date');
@@ -56,14 +56,14 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 
 		$this->resources = [];
 		foreach ($this->locations as $location) {
-			$rooms = array();
+			$rooms = [];
 			if ($location->rooms) {
 				foreach ($location->rooms as $room) {
-					$rooms[] = (object)array('id' => $location->id . '-' . $room->id, 'title' => $room->title);
+					$rooms[] = (object)['id' => $location->id . '-' . $room->id, 'title' => $room->title];
 				}
 			}
 
-			$this->resources[] = (object)array('id' => $location->id, 'title' => $location->title, 'children' => $rooms);
+			$this->resources[] = (object)['id' => $location->id, 'title' => $location->title, 'children' => $rooms];
 		}
 
 		$this->return = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;

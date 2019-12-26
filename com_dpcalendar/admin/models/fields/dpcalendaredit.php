@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -29,14 +29,14 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 			$calendar = \DPCalendar\Helper\DPCalendarHelper::getCalendar($this->value);
 		}
 
-		$options = array();
+		$options = [];
 		if (empty($calendar) || !$calendar->external) {
 			$options = parent::getOptions();
 		}
 
 		if (empty($calendar) || $calendar->external) {
 			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch', array(null, !empty($calendar->system) ? $calendar->system : null));
+			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch', [null, !empty($calendar->system) ? $calendar->system : null]);
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
 					foreach ($calendars as $externalCalendar) {
@@ -49,16 +49,16 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 			}
 		}
 
-		$ids = array();
+		$ids = [];
 		if ($app->isClient('site')) {
 			$activeMenu = $app->getMenu()->getActive();
 			if (isset($activeMenu) && $app->input->get('option') == 'com_dpcalendar') {
 				$params = $activeMenu->params;
-				$ids    = $params->get('ids', array());
+				$ids    = $params->get('ids', []);
 			}
 		}
 
-		$toMove = array();
+		$toMove = [];
 		for ($i = 0; $i < count($options); $i++) {
 			$option = $options[$i];
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -13,7 +13,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 {
 	protected $view_item = 'locationform';
 
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		JModelLegacy::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/models');
 		JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
@@ -22,7 +22,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 		parent::__construct();
 	}
 
-	protected function allowDelete($data = array(), $key = 'id')
+	protected function allowDelete($data = [], $key = 'id')
 	{
 		return JFactory::getUser()->authorise('core.delete', $this->option);
 	}
@@ -58,9 +58,9 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 	{
 		$recordId = $this->input->getInt($key);
 
-		if (!$this->allowDelete(array(
+		if (!$this->allowDelete([
 			$key => $recordId
-		), $key)) {
+		], $key)) {
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
 			$this->setMessage($this->getError(), 'error');
 
@@ -86,7 +86,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 		return true;
 	}
 
-	public function getModel($name = 'Location', $prefix = '', $config = array('ignore_request' => true))
+	public function getModel($name = 'Location', $prefix = '', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -25,5 +25,5 @@ defined('_JEXEC') or die();
 		<?php $this->displayData['date'] = $this->endDate; ?>
 		<?php echo $this->layoutHelper->renderLayout('block.datepicker', $this->displayData); ?>
 	</div>
-	<?php echo $this->layoutHelper->renderLayout('joomla.searchtools.default', array('view' => $this)); ?>
+	<?php echo $this->layoutHelper->renderLayout('joomla.searchtools.default', ['view' => $this]); ?>
 </div>

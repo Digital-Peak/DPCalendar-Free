@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -46,8 +46,16 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 				<td data-column=""><?php echo JHtml::_('grid.id', $i, $item->id); ?></td>
 				<td data-column="<?php echo $this->translate('JSTATUS'); ?>">
 					<div class="btn-group">
-						<?php echo JHtml::_('jgrid.published', $item->state, $i, 'events.', $canChange, 'cb', $item->publish_up,
-							$item->publish_down); ?>
+						<?php echo JHtml::_(
+							'jgrid.published',
+							$item->state,
+							$i,
+							'events.',
+							$canChange,
+							'cb',
+							$item->publish_up,
+							$item->publish_down
+						); ?>
 						<?php if ($canChange) { ?>
 							<?php $state = $this->getState($item); ?>
 							<a href="#" data-cb="<?php echo $i; ?>" data-state="<?php echo $state[1]; ?>"
@@ -68,8 +76,8 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 							<?php echo $this->escape($item->title); ?>
 						</a>
 					<?php } else { ?>
-						<span title="<?php echo JText::sprintf('JFIELD_ALIAS_LABEL',
-							$this->escape($item->alias)); ?>"><?php echo $this->escape($item->title); ?>
+						<span title="<?php echo JText::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->alias)); ?>">
+							<?php echo $this->escape($item->title); ?>
 						</span>
 					<?php } ?>
 					<div><?php echo $this->translate('COM_DPCALENDAR_CALENDAR') . ": " . $this->escape($item->category_title); ?></div>

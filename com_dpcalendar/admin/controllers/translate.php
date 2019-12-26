@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -22,10 +22,10 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 			return false;
 		}
 
-		$data = array(
+		$data = [
 			'resource'  => $resource,
-			'languages' => array()
-		);
+			'languages' => []
+		];
 		foreach (JLanguageHelper::getKnownLanguages() as $language) {
 			$resourceData       = Transifex::getData('resource/' . $resource . '/stats');
 			$transifexLanguages = json_decode($resourceData['data']);
@@ -35,7 +35,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 					continue;
 				}
 
-				$data['languages'][] = array('tag' => $code, 'percent' => (int)$tr->completed);
+				$data['languages'][] = ['tag' => $code, 'percent' => (int)$tr->completed];
 			}
 		}
 
@@ -99,7 +99,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 		DPCalendarHelper::sendMessage(
 			JText::sprintf('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_UPDATE_RESOURCE_SUCCESS', $resource),
 			false,
-			array('resource' => $resource)
+			['resource' => $resource]
 		);
 	}
 }

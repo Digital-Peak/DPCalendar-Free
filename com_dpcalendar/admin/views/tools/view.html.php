@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -15,7 +15,7 @@ class DPCalendarViewTools extends \DPCalendar\View\BaseView
 			$this->resources = $this->get('ResourcesFromTransifex');
 
 			foreach ($this->resources as $resource) {
-				$name           = str_replace(array('-', '_'), ' ', $resource->name);
+				$name           = str_replace(['-', '_'], ' ', $resource->name);
 				$name           = ucwords($name);
 				$name           = str_replace('Plg', 'Plugin', $name);
 				$name           = str_replace('Mod', 'Module', $name);

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -15,13 +15,13 @@ JLoader::import('joomla.application.component.controlleradmin');
 class DPCalendarControllerEvents extends JControllerAdmin
 {
 
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		parent::__construct($config);
 		$this->registerTask('unfeatured', 'featured');
 	}
 
-	public function getModel($name = 'AdminEvent', $prefix = 'DPCalendarModel', $config = array('ignore_request' => true))
+	public function getModel($name = 'AdminEvent', $prefix = 'DPCalendarModel', $config = ['ignore_request' => true])
 	{
 		$model = parent::getModel($name, $prefix, $config);
 
@@ -34,7 +34,7 @@ class DPCalendarControllerEvents extends JControllerAdmin
 
 		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
 
-		$fields                   = array();
+		$fields                   = [];
 		$fields['id']             = JText::_('JGRID_HEADING_ID');
 		$fields['title']          = JText::_('JGLOBAL_TITLE');
 		$fields['calendar']       = JText::_('COM_DPCALENDAR_CALENDAR');
@@ -96,11 +96,11 @@ class DPCalendarControllerEvents extends JControllerAdmin
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
 		$user   = JFactory::getUser();
-		$ids    = $this->input->get('cid', array(), 'array');
-		$values = array(
+		$ids    = $this->input->get('cid', [], 'array');
+		$values = [
 			'featured'   => 1,
 			'unfeatured' => 0
-		);
+		];
 		$task   = $this->getTask();
 		$value  = ArrayHelper::getValue($values, $task, 0, 'int');
 		ArrayHelper::toInteger($ids);

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Plugin;
 
@@ -88,13 +88,13 @@ abstract class PaymentPlugin extends \JPlugin
 
 		// The urls for call back actions
 		$purchaseParameters['returnUrl'] = $rootURL . \JRoute::_(
-				'index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . '&paymentmethod=' . $this->_name . $tmpl,
-				false
-			);
+			'index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . '&paymentmethod=' . $this->_name . $tmpl,
+			false
+		);
 		$purchaseParameters['cancelUrl'] = $rootURL . \JRoute::_(
-				'index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . '&ptype=' . $this->_name . $tmpl,
-				false
-			);
+			'index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . '&ptype=' . $this->_name . $tmpl,
+			false
+		);
 
 		return $purchaseParameters;
 	}
@@ -122,7 +122,7 @@ abstract class PaymentPlugin extends \JPlugin
 		// Render the form of the plugin
 		$layout = \JLayoutHelper::render(
 			'purchase.form',
-			array(
+			[
 				'booking'      => $booking,
 				'params'       => $this->params,
 				'returnUrl'    => $purchaseParameters['returnUrl'],
@@ -130,7 +130,7 @@ abstract class PaymentPlugin extends \JPlugin
 				'translator'   => new Translator(),
 				'layoutHelper' => new LayoutHelper(),
 				'document'     => new HtmlDocument()
-			),
+			],
 			JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/layouts'
 		);
 
@@ -146,7 +146,7 @@ abstract class PaymentPlugin extends \JPlugin
 		if ($response->isRedirect()) {
 			$response->redirect();
 		} else if (!$response->isSuccessful()) {
-			$this->cancelPayment(array('b_id' => $booking->id), $response->getMessage() ?: 'Server error!');
+			$this->cancelPayment(['b_id' => $booking->id], $response->getMessage() ?: 'Server error!');
 
 			return false;
 		}

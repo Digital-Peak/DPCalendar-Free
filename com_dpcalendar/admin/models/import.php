@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -30,12 +30,12 @@ class DPCalendarModelImport extends JModelLegacy
 		$tmp       = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
 		$calendars = call_user_func_array('array_merge', (array)$tmp);
 
-		$calendarsToimport = $input->get('calendar', array());
+		$calendarsToimport = $input->get('calendar', []);
 		$existingCalendars = JModelLegacy::getInstance('Categories', 'CategoriesModel')->getItems();
 		$start             = DPCalendarHelper::getDate($input->getCmd('filter_search_start', null));
 		$end               = DPCalendarHelper::getDate($input->getCmd('filter_search_end', null));
 
-		$msgs = array();
+		$msgs = [];
 		foreach ($calendars as $cal) {
 			if (!in_array($cal->id, $calendarsToimport)) {
 				continue;
@@ -53,7 +53,7 @@ class DPCalendarModelImport extends JModelLegacy
 			}
 
 			if ($category == null) {
-				$data                = array();
+				$data                = [];
 				$data['id']          = 0;
 				$data['title']       = $cal->title;
 				$data['description'] = $cal->description;
@@ -82,7 +82,7 @@ class DPCalendarModelImport extends JModelLegacy
 				$eventData = (array)$event;
 
 				if (!isset($event->locations)) {
-					$event->locations = array();
+					$event->locations = [];
 				}
 
 				$eventData['location_ids'] = array_map(function ($l) {
@@ -100,7 +100,7 @@ class DPCalendarModelImport extends JModelLegacy
 
 				// Find an existing event with the same xreference
 				$table = JTable::getInstance('Event', 'DPCalendarTable');
-				$table->load(array('xreference' => $xreference));
+				$table->load(['xreference' => $xreference]);
 				if ($table->id) {
 					$eventData['id']          = $table->id;
 					$eventData['original_id'] = $table->original_id;
@@ -188,7 +188,7 @@ class DPCalendarModelImport extends JModelLegacy
 		}
 	}
 
-	public function getTable($type = 'Location', $prefix = 'DPCalendarTable', $config = array())
+	public function getTable($type = 'Location', $prefix = 'DPCalendarTable', $config = [])
 	{
 		return parent::getTable($type, $prefix, $config);
 	}

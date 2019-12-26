@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Helper;
 
@@ -40,13 +40,13 @@ class Booking
 				\JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 				$details = \DPCalendarHelper::renderLayout(
 					'booking.invoice',
-					array(
+					[
 						'booking'    => $booking,
 						'tickets'    => $tickets,
 						'translator' => new Translator(),
 						'dateHelper' => new DateHelper(),
 						'params'     => $params
-					)
+					]
 				);
 			}
 
@@ -75,8 +75,8 @@ class Booking
 			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
 			// Font sizes
-			$pdf->setHeaderFont(array($pdf->getFontFamily(), '', 9));
-			$pdf->setFooterFont(array($pdf->getFontFamily(), '', 9));
+			$pdf->setHeaderFont([$pdf->getFontFamily(), '', 9]);
+			$pdf->setFooterFont([$pdf->getFontFamily(), '', 9]);
 
 			// Adding the content
 			$pdf->AddPage();
@@ -117,18 +117,18 @@ class Booking
 			\DPCalendarHelper::increaseMemoryLimit(130 * 1024 * 1024);
 
 			\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-			$model = \JModelLegacy::getInstance('Event', 'DPCalendarModel', array('ignore_request' => true));
+			$model = \JModelLegacy::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
 			$event = $model->getItem($ticket->event_id);
 
 			$details = \DPCalendarHelper::renderLayout(
 				'ticket.details',
-				array(
+				[
 					'ticket'     => $ticket,
 					'event'      => $event,
 					'translator' => new Translator(),
 					'dateHelper' => new DateHelper(),
 					'params'     => $params
-				)
+				]
 			);
 
 			// Disable notices (TCPDF is causing many of these)
@@ -156,24 +156,24 @@ class Booking
 			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 
 			// Font sizes
-			$pdf->setHeaderFont(array($pdf->getFontFamily(), '', 9));
-			$pdf->setFooterFont(array($pdf->getFontFamily(), '', 9));
+			$pdf->setHeaderFont([$pdf->getFontFamily(), '', 9]);
+			$pdf->setFooterFont([$pdf->getFontFamily(), '', 9]);
 
 			// Adding the content
 			$pdf->AddPage();
 			$pdf->writeHTML($details, true, false, true, false, '');
 
 			if ($params->get('ticket_show_barcode', 1)) {
-				$style = array(
+				$style = [
 					'border'        => 2,
 					'position'      => 'C',
 					'vpadding'      => 'auto',
 					'hpadding'      => 'auto',
-					'fgcolor'       => array(0, 0, 0),
+					'fgcolor'       => [0, 0, 0],
 					'bgcolor'       => false,
 					'module_width'  => 1,
 					'module_height' => 1
-				);
+				];
 				$pdf->write2DBarcode(\DPCalendarHelperRoute::getTicketCheckinRoute($ticket, true), 'QRCODE,L', 20, 200, 50, 50, $style, 'N');
 			}
 
@@ -243,7 +243,6 @@ class Booking
 		}
 
 		return $event->price != '0.00' && !empty($event->price) && !empty($event->price->value);
-
 	}
 
 	public static function openForBooking($event)
@@ -309,7 +308,7 @@ class Booking
 	public static function getPaymentStatementFromPlugin($booking, $params = null)
 	{
 		\JPluginHelper::importPlugin('dpcalendarpay');
-		$statement = \JFactory::getApplication()->triggerEvent('onDPPaymentStatement', array($booking));
+		$statement = \JFactory::getApplication()->triggerEvent('onDPPaymentStatement', [$booking]);
 
 		$buffer = '';
 		if ($statement) {
@@ -317,11 +316,17 @@ class Booking
 				$params = \JComponentHelper::getParams('com_dpcalendar');
 			}
 
-			$vars                      = (array)$booking;
-			$vars['currency']          = \DPCalendarHelper::getComponentParameter('currency', 'USD');
-			$vars['currencySymbol']    = \DPCalendarHelper::getComponentParameter('currency_symbol', '$');
-			$vars['currencySeparator'] = \DPCalendarHelper::getComponentParameter('currency_separator', '.');
-			$vars['price_formatted']   = \DPCalendarHelper::renderPrice($vars['price'], $vars['currencySymbol'], $vars['currencySeparator']);
+			$vars                               = (array)$booking;
+			$vars['currency']                   = \DPCalendarHelper::getComponentParameter('currency', 'USD');
+			$vars['currencySymbol']             = \DPCalendarHelper::getComponentParameter('currency_symbol', '$');
+			$vars['currencySeparator']          = \DPCalendarHelper::getComponentParameter('currency_separator', '.');
+			$vars['currencyThousandsSeparator'] = \DPCalendarHelper::getComponentParameter('currency_thousands_separator', "'");
+			$vars['price_formatted']            = \DPCalendarHelper::renderPrice(
+				$vars['price'],
+				$vars['currencySymbol'],
+				$vars['currencySeparator'],
+				$vars['currencyThousandsSeparator']
+			);
 
 			if (!empty($booking->jcfields)) {
 				foreach ($booking->jcfields as $field) {
@@ -331,7 +336,7 @@ class Booking
 
 			foreach ($statement as $b) {
 				if ($b->status && $booking->type = $b->type) {
-					$buffer .= \DPCalendarHelper::renderEvents(array(), $b->statement, $params, $vars);
+					$buffer .= \DPCalendarHelper::renderEvents([], $b->statement, $params, $vars);
 				}
 			}
 		}

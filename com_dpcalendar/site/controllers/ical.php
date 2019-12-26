@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -44,7 +44,7 @@ class DPCalendarControllerIcal extends JControllerLegacy
 		}
 
 		// Also include children when available
-		$calendars = array($this->input->getCmd('id'));
+		$calendars = [$this->input->getCmd('id')];
 		if (method_exists($calendar, 'getChildren')) {
 			$childrens = $calendar->getChildren();
 			if ($childrens) {
@@ -90,7 +90,7 @@ class DPCalendarControllerIcal extends JControllerLegacy
 
 		// Get a fake login response
 		\JLoader::import('joomla.user.authentication');
-		$options            = array('remember' => false);
+		$options            = ['remember' => false];
 		$response           = new JAuthenticationResponse;
 		$response->status   = JAuthentication::STATUS_SUCCESS;
 		$response->type     = 'icstoken';
@@ -100,7 +100,7 @@ class DPCalendarControllerIcal extends JControllerLegacy
 
 		// Run the login user events
 		JPluginHelper::importPlugin('user');
-		JFactory::getApplication()->triggerEvent('onLoginUser', array((array)$response, $options));
+		JFactory::getApplication()->triggerEvent('onLoginUser', [(array)$response, $options]);
 
 		// Set the user in the session, effectively logging in the user
 		JFactory::getSession()->set('user', JFactory::getUser($user->id));

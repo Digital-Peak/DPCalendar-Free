@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -11,13 +11,13 @@ class JFormFieldDPRadio extends JFormField
 {
 	protected $type = 'DPRadio';
 
-	protected function getInput ()
+	protected function getInput()
 	{
 		// Initialize variables.
-		$html = array();
+		$html = [];
 
 		// Initialize some field attributes.
-		$class = $this->element['class'] ? ' class="radio ' . (string) $this->element['class'] . '"' : ' class="radio"';
+		$class = $this->element['class'] ? ' class="radio ' . (string)$this->element['class'] . '"' : ' class="radio"';
 
 		// Start the radio field output.
 		$html[] = '<fieldset id="' . $this->id . '"' . $class . '>';
@@ -26,53 +26,54 @@ class JFormFieldDPRadio extends JFormField
 		$options = $this->getOptions();
 
 		// Build the radio field output.
-		foreach ($options as $i => $option)
-		{
-
+		foreach ($options as $i => $option) {
 			// Initialize some option attributes.
-			$checked = ((string) $option->value == (string) $this->value) ? ' checked="checked"' : '';
-			$class = ! empty($option->class) ? ' class="' . $option->class . '"' : '';
-			$disabled = ! empty($option->disable) || ! empty($this->element['disabled']) ? ' disabled="disabled"' : '';
+			$checked  = ((string)$option->value == (string)$this->value) ? ' checked="checked"' : '';
+			$class    = !empty($option->class) ? ' class="' . $option->class . '"' : '';
+			$disabled = !empty($option->disable) || !empty($this->element['disabled']) ? ' disabled="disabled"' : '';
 
 			// Initialize some JavaScript option attributes.
-			$onclick = ! empty($option->onclick) ? ' onclick="' . $option->onclick . '"' : '';
+			$onclick = !empty($option->onclick) ? ' onclick="' . $option->onclick . '"' : '';
 
 			$html[] = '<input type="radio" id="' . $this->id . $i . '" name="' . $this->name . '"' . ' value="' .
-					 htmlspecialchars($option->value, ENT_COMPAT, 'UTF-8') . '"' . $checked . $onclick . $disabled . '/>';
+				htmlspecialchars($option->value, ENT_COMPAT, 'UTF-8') . '"' . $checked . $onclick . $disabled . '/>';
 
 			$html[] = '<label for="' . $this->id . $i . '"' . $class . '>' .
-					 JText::alt($option->text, preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)) . '</label>';
+				JText::alt($option->text, preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)) . '</label>';
 		}
 
 		// End the radio field output.
 		$html[] = '</fieldset>';
 
-		return implode($html);
+		return implode(PHP_EOL, $html);
 	}
 
-	protected function getOptions ()
+	protected function getOptions()
 	{
 		// Initialize variables.
-		$options = array();
+		$options = [];
 
-		foreach ($this->element->children() as $option)
-		{
-
+		foreach ($this->element->children() as $option) {
 			// Only add <option /> elements.
-			if ($option->getName() != 'option')
-			{
+			if ($option->getName() != 'option') {
 				continue;
 			}
 
 			// Create a new option object based on the <option /> element.
-			$tmp = JHtml::_('select.option', (string) $option['value'], trim((string) $option), 'value', 'text',
-					((string) $option['disabled'] == 'true'));
+			$tmp = JHtml::_(
+				'select.option',
+				(string)$option['value'],
+				trim((string)$option),
+				'value',
+				'text',
+				((string)$option['disabled'] == 'true')
+			);
 
 			// Set some option attributes.
-			$tmp->class = (string) $option['class'];
+			$tmp->class = (string)$option['class'];
 
 			// Set some JavaScript option attributes.
-			$tmp->onclick = (string) $option['onclick'];
+			$tmp->onclick = (string)$option['onclick'];
 
 			// Add the option object to the result set.
 			$options[] = $tmp;

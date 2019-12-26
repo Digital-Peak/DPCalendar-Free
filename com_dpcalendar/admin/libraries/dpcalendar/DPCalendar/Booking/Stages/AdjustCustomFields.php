@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 namespace DPCalendar\Booking\Stages;
@@ -27,7 +27,7 @@ class AdjustCustomFields implements StageInterface
 
 		$event                   = reset($payload->eventsWithTickets);
 		$payload->item->catid    = $event->catid;
-		$payload->item->jcfields = \FieldsHelper::getFields('com_dpcalendar.booking', $payload->item);
+		$payload->item->jcfields = \FieldsHelper::getFields('com_dpcalendar.booking', $payload->item, true);
 		unset($payload->item->catid);
 
 		return $payload;

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -23,14 +23,14 @@ class JFormFieldDpcrooms extends JFormFieldGroupedList
 
 		$groups = parent::getGroups();
 		foreach ($this->form->getValue('location_ids') as $locationId) {
-			$model    = JModelLegacy::getInstance('Location', 'DPCalendarModel', array('ignore_request' => true));
+			$model    = JModelLegacy::getInstance('Location', 'DPCalendarModel', ['ignore_request' => true]);
 			$location = $model->getItem($locationId);
 
 			if (!$location->id || !$location->rooms) {
 				continue;
 			}
 
-			$groups[$location->title] = array();
+			$groups[$location->title] = [];
 
 			foreach ($location->rooms as $room) {
 				$groups[$location->title][] = JHtml::_('select.option', $location->id . '-' . $room->id, $room->title);

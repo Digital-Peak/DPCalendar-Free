@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 namespace DPCalendar\Booking\Stages;
@@ -35,7 +35,7 @@ class SetupForMail implements StageInterface
 
 		$payload->item->book_date_formatted = DPCalendarHelper::getDate($payload->item->book_date)
 			->format($params->get('event_date_format', 'm.d.Y') . ' ' . $params->get('event_time_format', 'g:i a'), true);
-		$payload->mailVariables             = array(
+		$payload->mailVariables             = [
 			'booking'        => $payload->item,
 			'bookingDetails' => $payload->item->invoice,
 			'bookingLink'    => \DPCalendarHelperRoute::getBookingRoute($payload->item, true),
@@ -44,7 +44,7 @@ class SetupForMail implements StageInterface
 			'user'           => $payload->item->name,
 			'tickets'        => $payload->tickets,
 			'countTickets'   => count($payload->tickets)
-		);
+		];
 
 		foreach ($payload->item->jcfields as $field) {
 			$payload->mailVariables['field-' . $field->name] = $field;

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -17,8 +17,7 @@ class JFormRuleDecimal extends JFormRule
 		// If the field is empty and not required, the field is valid.
 		$required = ((string) $element['required'] == 'true' || (string) $element['required'] == 'required');
 
-		if (!$required && empty($value))
-		{
+		if (!$required && empty($value)) {
 			return true;
 		}
 

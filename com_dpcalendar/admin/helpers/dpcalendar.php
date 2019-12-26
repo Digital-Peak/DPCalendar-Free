@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -106,12 +106,12 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 	{
 		JFactory::getLanguage()->load('com_content', JPATH_ADMINISTRATOR);
 
-		$contexts = array(
+		$contexts = [
 			'com_dpcalendar.event'    => JText::_('COM_DPCALENDAR_FIELDS_SECTION_EVENT'),
 			'com_dpcalendar.location' => JText::_('COM_DPCALENDAR_FIELDS_SECTION_LOCATION'),
 			'com_dpcalendar.ticket'   => JText::_('COM_DPCALENDAR_FIELDS_SECTION_TICKET'),
 			'com_dpcalendar.booking'  => JText::_('COM_DPCALENDAR_FIELDS_SECTION_BOOKING')
-		);
+		];
 
 		return $contexts;
 	}

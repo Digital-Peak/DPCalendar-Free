@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -30,10 +30,14 @@ class DPCalendarControllerEvent extends JControllerForm
 		}
 	}
 
-	protected function allowAdd($data = array())
+	protected function allowAdd($data = [])
 	{
-		$calendar = DPCalendarHelper::getCalendar(ArrayHelper::getValue($data, 'catid', $this->input->getVar('id'),
-			'string'));
+		$calendar = DPCalendarHelper::getCalendar(ArrayHelper::getValue(
+			$data,
+			'catid',
+			$this->input->getVar('id'),
+			'string'
+		));
 		$allow    = null;
 		if ($calendar) {
 			$allow = $calendar->canCreate;
@@ -46,7 +50,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		}
 	}
 
-	protected function allowEdit($data = array(), $key = 'id')
+	protected function allowEdit($data = [], $key = 'id')
 	{
 		$recordId = isset($data[$key]) ? $data[$key] : 0;
 		$event    = null;
@@ -64,7 +68,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		}
 	}
 
-	protected function allowDelete($data = array(), $key = 'id')
+	protected function allowDelete($data = [], $key = 'id')
 	{
 		$calendar = null;
 		$event    = null;
@@ -100,7 +104,7 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		$recordId = $this->input->getVar($key);
 
-		if (!$this->allowDelete(array($key => $recordId), $key)) {
+		if (!$this->allowDelete([$key => $recordId], $key)) {
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
 			$this->setMessage($this->getError(), 'error');
 
@@ -114,9 +118,9 @@ class DPCalendarControllerEvent extends JControllerForm
 		$event = $this->getModel()->getItem($recordId);
 
 		if (!is_numeric($event->catid)) {
-			JFactory::getApplication()->triggerEvent('onEventDelete', array(
+			JFactory::getApplication()->triggerEvent('onEventDelete', [
 				is_numeric($event->id) ? $event->xreference : $event->id
-			));
+			]);
 		}
 		if (is_numeric($event->id)) {
 			$this->getModel()->publish($recordId, -2);
@@ -143,10 +147,10 @@ class DPCalendarControllerEvent extends JControllerForm
 	public function edit($key = 'id', $urlVar = 'e_id')
 	{
 		$context  = "$this->option.edit.$this->context";
-		$cid      = $this->input->getVar('cid', array(), 'post', 'array');
+		$cid      = $this->input->getVar('cid', [], 'post', 'array');
 		$recordId = (count($cid) ? $cid[0] : $this->input->getVar($urlVar));
 
-		if (!$this->allowEdit(array($key => $recordId), $key)) {
+		if (!$this->allowEdit([$key => $recordId], $key)) {
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
 			$this->setMessage($this->getError(), 'error');
 
@@ -170,8 +174,10 @@ class DPCalendarControllerEvent extends JControllerForm
 
 			$this->setRedirect(
 				JRoute::_(
-					'index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend($recordId,
-						$urlVar),
+					'index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend(
+						$recordId,
+						$urlVar
+					),
 					false
 				)
 			);
@@ -182,7 +188,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		return parent::edit($key, $urlVar);
 	}
 
-	public function getModel($name = 'form', $prefix = '', $config = array('ignore_request' => true))
+	public function getModel($name = 'form', $prefix = '', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}
@@ -226,10 +232,10 @@ class DPCalendarControllerEvent extends JControllerForm
 
 	public function move()
 	{
-		$data       = array();
+		$data       = [];
 		$data['id'] = $this->input->getVar('id');
 		$success    = false;
-		$model      = $this->getModel('form', 'DPCalendarModel', array('ignore_request' => false));
+		$model      = $this->getModel('form', 'DPCalendarModel', ['ignore_request' => false]);
 		if (!$this->allowSave($data)) {
 			$model->setError(JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
 		} else {
@@ -263,7 +269,7 @@ class DPCalendarControllerEvent extends JControllerForm
 				if (is_numeric($data['id'])) {
 					$data['id'] = $data['xreference'];
 				}
-				$tmp = JFactory::getApplication()->triggerEvent('onEventSave', array($data));
+				$tmp = JFactory::getApplication()->triggerEvent('onEventSave', [$data]);
 				foreach ($tmp as $newEventId) {
 					if ($newEventId === false) {
 						continue;
@@ -320,7 +326,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			$this->context = 'form';
 		}
 
-		$data = $this->input->post->get('jform', array(), 'array');
+		$data = $this->input->post->get('jform', [], 'array');
 
 		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
 			$data['all_day'] = '1';
@@ -346,15 +352,25 @@ class DPCalendarControllerEvent extends JControllerForm
 		}
 
 		// Get the start date from the date
-		$start = DPCalendarHelper::getDateFromString($data['start_date'], $data['start_date_time'],
-			$data['all_day'] == '1', $dateFormat, $timeFormat);
+		$start = DPCalendarHelper::getDateFromString(
+			$data['start_date'],
+			$data['start_date_time'],
+			$data['all_day'] == '1',
+			$dateFormat,
+			$timeFormat
+		);
 
 		// Format the start date to SQL format
 		$data['start_date'] = $start->toSql(false);
 
 		// Get the start date from the date
-		$end = DPCalendarHelper::getDateFromString($data['end_date'], $data['end_date_time'], $data['all_day'] == '1',
-			$dateFormat, $timeFormat);
+		$end = DPCalendarHelper::getDateFromString(
+			$data['end_date'],
+			$data['end_date_time'],
+			$data['all_day'] == '1',
+			$dateFormat,
+			$timeFormat
+		);
 		if ($end->format('U') < $start->format('U')) {
 			$end = clone $start;
 			$end->modify('+30 min');
@@ -388,7 +404,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			}
 
 			try {
-				$tmp = JFactory::getApplication()->triggerEvent('onEventSave', array($validData));
+				$tmp = JFactory::getApplication()->triggerEvent('onEventSave', [$validData]);
 			} catch (InvalidArgumentException $e) {
 				$this->setMessage($e->getMessage(), 'error');
 
@@ -424,22 +440,28 @@ class DPCalendarControllerEvent extends JControllerForm
 		}
 		// If ok, redirect to the return page.
 		if ($result) {
-			$canChangeState = $calendar->external || JFactory::getUser()->authorise('core.edit.state',
-					'com_dpcalendar.category.' . $data['catid']);
+			$canChangeState = $calendar->external || JFactory::getUser()->authorise(
+				'core.edit.state',
+				'com_dpcalendar.category.' . $data['catid']
+			);
 			if ($this->getTask() == 'save') {
 				$app->setUserState('com_dpcalendar.edit.event.data', null);
 				$return = $this->getReturnPage();
 				if ($return == JURI::base() && $canChangeState) {
-					$return = DPCalendarHelperRoute::getEventRoute($app->getUserState('dpcalendar.event.id'),
-						$data['catid']);
+					$return = DPCalendarHelperRoute::getEventRoute(
+						$app->getUserState('dpcalendar.event.id'),
+						$data['catid']
+					);
 				}
 				$this->setRedirect($return);
 			}
 			if ($this->getTask() == 'apply' || $this->getTask() == 'save2copy') {
 				$return = $this->getReturnPage();
 				if ($canChangeState) {
-					$return = DPCalendarHelperRoute::getFormRoute($app->getUserState('dpcalendar.event.id'),
-						$this->getReturnPage());
+					$return = DPCalendarHelperRoute::getFormRoute(
+						$app->getUserState('dpcalendar.event.id'),
+						$this->getReturnPage()
+					);
 				}
 				$this->setRedirect($return);
 			}
@@ -461,11 +483,11 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		$data = $this->input->post->get('jform', array(), 'array');
+		$data = $this->input->post->get('jform', [], 'array');
 		$this->getModel()->invite(
 			$data['event_id'],
-			isset($data['users']) ? $data['users'] : array(),
-			isset($data['groups']) ? $data['groups'] : array()
+			isset($data['users']) ? $data['users'] : [],
+			isset($data['groups']) ? $data['groups'] : []
 		);
 
 		$this->setRedirect(
@@ -478,7 +500,7 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		$data = $this->input->get('jform', array(), 'array');
+		$data = $this->input->get('jform', [], 'array');
 
 		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
 			$data['all_day'] = '1';
@@ -541,17 +563,18 @@ class DPCalendarControllerEvent extends JControllerForm
 		$date                 = strip_tags(DPCalendarHelper::getDateStringFromEvent($event));
 		$message              = DPCalendarHelper::renderEvents(
 			$events,
-			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'), null,
-			array(
+			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
+			null,
+			[
 				'checkDate'    => $date,
 				'calendarName' => DPCalendarHelper::getCalendar($data['catid'])->title
-			)
+			]
 		);
 
 		DPCalendarHelper::sendMessage(
 			null,
 			false,
-			array('message' => $message, 'count' => count($events))
+			['message' => $message, 'count' => count($events)]
 		);
 	}
 
@@ -559,7 +582,7 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		$formData = $this->input->get('jform', array(), 'array');
+		$formData = $this->input->get('jform', [], 'array');
 
 		if (empty($formData['title'])) {
 			DPCalendarHelper::sendMessage(null);
@@ -590,8 +613,11 @@ class DPCalendarControllerEvent extends JControllerForm
 			$item          = new stdClass();
 			$item->value   = $e->id;
 			$item->title   = $e->title;
-			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' . strip_tags(JHtml::_('string.truncate', $e->description,
-					100));
+			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' . strip_tags(JHtml::_(
+				'string.truncate',
+				$e->description,
+				100
+			));
 
 			$data[] = $item;
 		}
@@ -632,7 +658,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			return parent::reload($key, $urlVar);
 		}
 
-		$formData = $this->input->post->get('jform', array(), 'array');
+		$formData = $this->input->post->get('jform', [], 'array');
 
 		$data->id = !empty($formData['id']) ? $formData['id'] : 0;
 
@@ -649,7 +675,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 	public function reload($key = null, $urlVar = 'e_id')
 	{
-		$data = $this->input->post->get('jform', array(), 'array');
+		$data = $this->input->post->get('jform', [], 'array');
 
 		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
 			$data['all_day'] = '1';

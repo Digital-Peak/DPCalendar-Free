@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -61,8 +61,10 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 				$uid  = null;
 				$item = $vobj->getBaseComponent();
 				if (!isset($item->UID)) {
-					JFactory::getApplication()->enqueueMessage("Warning! Item with id $event->id does NOT have a UID property and this is required!",
-						'error');
+					JFactory::getApplication()->enqueueMessage(
+						"Warning! Item with id $event->id does NOT have a UID property and this is required!",
+						'error'
+					);
 					continue;
 				}
 				$uid = (string)$item->UID;
@@ -121,9 +123,10 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 
 		if (version_compare($version, '6.2.0') == -1) {
 			$db->setQuery(
-				"select id,rooms from `#__dpcalendar_locations` where rooms is not null and rooms != ''");
+				"select id,rooms from `#__dpcalendar_locations` where rooms is not null and rooms != ''"
+			);
 			foreach ($db->loadObjectList() as $index => $loc) {
-				$rooms = json_encode(array('rooms0' => array('id' => $index + 1, 'title' => $loc->rooms)));
+				$rooms = json_encode(['rooms0' => ['id' => $index + 1, 'title' => $loc->rooms]]);
 				$this->run('UPDATE `#__dpcalendar_locations` SET rooms = ' . $db->quote($rooms) . ' where id = ' . $loc->id);
 			}
 
@@ -149,8 +152,10 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 					continue;
 				}
 				JFolder::move($path, $path . '-v6');
-				JFactory::getApplication()->enqueueMessage('We have disabled the template overrides in ' . $path . '. They do not work with version 7 anymore!',
-					'warning');
+				JFactory::getApplication()->enqueueMessage(
+					'We have disabled the template overrides in ' . $path . '. They do not work with version 7 anymore!',
+					'warning'
+				);
 			}
 
 			// Cleanup files
@@ -197,7 +202,8 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 		if (!empty($version) && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '6.0.0') < 0) {
 			JFactory::getApplication()->enqueueMessage(
 				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 6.0.0 running. Please install the latest release from version 6 first.',
-				'error');
+				'error'
+			);
 			JFactory::getApplication()->redirect('index.php?option=com_installer&view=install');
 
 			return false;
@@ -208,10 +214,14 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 	{
 		JLoader::import('joomla.filesystem.folder');
 		if (JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_falang/contentelements')) {
-			JFile::copy(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/falang/dpcalendar_events.xml',
-				JPATH_ADMINISTRATOR . '/components/com_falang/contentelements/dpcalendar_events.xml');
-			JFile::copy(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/falang/dpcalendar_locations.xml',
-				JPATH_ADMINISTRATOR . '/components/com_falang/contentelements/dpcalendar_locations.xml');
+			JFile::copy(
+				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/falang/dpcalendar_events.xml',
+				JPATH_ADMINISTRATOR . '/components/com_falang/contentelements/dpcalendar_events.xml'
+			);
+			JFile::copy(
+				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/falang/dpcalendar_locations.xml',
+				JPATH_ADMINISTRATOR . '/components/com_falang/contentelements/dpcalendar_locations.xml'
+			);
 		}
 
 		if ($type == 'install' || $type == 'discover_install') {
@@ -219,7 +229,8 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 			$this->run("update `#__extensions` set enabled=1 where type = 'plugin' and element = 'manual'");
 
 			$this->run(
-				"insert into `#__modules_menu` (menuid, moduleid) select 0 as menuid, id as moduleid from `#__modules` where module like 'mod_dpcalendar%'");
+				"insert into `#__modules_menu` (menuid, moduleid) select 0 as menuid, id as moduleid from `#__modules` where module like 'mod_dpcalendar%'"
+			);
 
 			// Create default calendar
 			JTable::addIncludePath(JPATH_LIBRARIES . '/joomla/database/table');

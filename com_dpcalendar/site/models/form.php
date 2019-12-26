@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -34,8 +34,8 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
 
 		foreach (array_unique($userIds) as $uid) {
-			$bookingModel = JModelLegacy::getInstance('Booking', 'DPCalendarModel', array('ignore_request' => true));
-			$ticketsModel = JModelLegacy::getInstance('Tickets', 'DPCalendarModel', array('ignore_request' => true));
+			$bookingModel = JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
+			$ticketsModel = JModelLegacy::getInstance('Tickets', 'DPCalendarModel', ['ignore_request' => true]);
 
 			$u = JUser::getInstance($uid);
 			if ($u->guest) {
@@ -54,7 +54,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 				JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 			}
 
-			$amount = array();
+			$amount = [];
 			if ($event->price) {
 				foreach ($event->price->value as $index => $value) {
 					$amount[$index] = 1;
@@ -64,12 +64,12 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			}
 
 			$booking = $bookingModel->save(
-				array(
+				[
 					'event_id' => [$event->id => ['tickets' => $amount]],
 					'name'     => $u->name,
 					'email'    => $u->email,
 					'user_id'  => $u->id
-				),
+				],
 				true
 			);
 			if (!$booking) {
@@ -82,16 +82,16 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 
 			$details = DPCalendarHelper::renderLayout(
 				'booking.invoice',
-				array(
+				[
 					'booking'    => $booking,
 					'tickets'    => $bookingModel->getTickets($booking->id),
 					'translator' => new \DPCalendar\Translator\Translator(),
 					'dateHelper' => new \DPCalendar\Helper\DateHelper(),
 					'params'     => $params
-				)
+				]
 			);
 
-			$additionalVars = array(
+			$additionalVars = [
 				'acceptUrl'      => DPCalendarHelperRoute::getInviteChangeRoute($booking, true, true),
 				'declineUrl'     => DPCalendarHelperRoute::getInviteChangeRoute($booking, false, true),
 				'bookingDetails' => $details,
@@ -99,11 +99,11 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 				'bookingUid'     => $booking->uid,
 				'sitename'       => JFactory::getConfig()->get('sitename'),
 				'user'           => $u->name
-			);
+			];
 
-			$subject = DPCalendarHelper::renderEvents(array($event), JText::_('COM_DPCALENDAR_INVITE_NOTIFICATION_EVENT_SUBJECT'));
+			$subject = DPCalendarHelper::renderEvents([$event], JText::_('COM_DPCALENDAR_INVITE_NOTIFICATION_EVENT_SUBJECT'));
 
-			$body = DPCalendarHelper::renderEvents(array($event), JText::_('COM_DPCALENDAR_INVITE_NOTIFICATION_EVENT_BODY'), null, $additionalVars);
+			$body = DPCalendarHelper::renderEvents([$event], JText::_('COM_DPCALENDAR_INVITE_NOTIFICATION_EVENT_BODY'), null, $additionalVars);
 
 			$mailer = JFactory::getMailer();
 			$mailer->setSubject($subject);
@@ -156,7 +156,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		$this->setState('layout', JFactory::getApplication()->input->getCmd('layout'));
 	}
 
-	public function getForm($data = array(), $loadData = true)
+	public function getForm($data = [], $loadData = true)
 	{
 		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 
@@ -181,8 +181,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		$form->setFieldAttribute('xreference', 'readonly', true);
 
 		// User field doesn't work on front
-		if (JFactory::getApplication()->isClient('site'))
-		{
+		if (JFactory::getApplication()->isClient('site')) {
 			$form->setFieldAttribute('created_by', 'type', 'sql');
 			$form->setFieldAttribute('created_by', 'key_field', 'value');
 			$form->setFieldAttribute('created_by', 'value_field', 'text');

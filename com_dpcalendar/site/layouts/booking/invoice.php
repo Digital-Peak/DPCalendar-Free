@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -28,8 +28,13 @@ foreach ($tickets as $ticket) {
 		continue;
 	}
 
+	$ticketEventOptions = $ticket->event_options;
+	if (is_string($ticketEventOptions)) {
+		$ticketEventOptions = json_decode($ticketEventOptions);
+	}
+
 	// Prepare the options
-	foreach (json_decode($ticket->event_options) as $key => $option) {
+	foreach ($ticketEventOptions as $key => $option) {
 		$key = preg_replace('/\D/', '', $key);
 
 		foreach ($orderedOptions as $o) {
@@ -52,22 +57,22 @@ if ($imageUrl && !filter_var($imageUrl, FILTER_VALIDATE_URL)) {
 	$imageUrl = trim(JUri::root(), '/') . '/' . trim($imageUrl, '/');
 }
 
-$fields   = array();
-$fields[] = (object)array('id' => 'name', 'name' => 'name');
-$fields[] = (object)array('id' => 'email', 'name' => 'email');
-$fields[] = (object)array('id' => 'telephone', 'name' => 'telephone');
-$fields[] = (object)array('id' => 'country', 'name' => 'country', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL');
-$fields[] = (object)array('id' => 'province', 'name' => 'province', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL');
-$fields[] = (object)array('id' => 'city', 'name' => 'city', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL');
-$fields[] = (object)array('id' => 'zip', 'name' => 'zip', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL');
-$fields[] = (object)array('id' => 'street', 'name' => 'street', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL');
-$fields[] = (object)array('id' => 'number', 'name' => 'number', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL');
+$fields   = [];
+$fields[] = (object)['id' => 'name', 'name' => 'name'];
+$fields[] = (object)['id' => 'email', 'name' => 'email'];
+$fields[] = (object)['id' => 'telephone', 'name' => 'telephone'];
+$fields[] = (object)['id' => 'country', 'name' => 'country', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'];
+$fields[] = (object)['id' => 'province', 'name' => 'province', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL'];
+$fields[] = (object)['id' => 'city', 'name' => 'city', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL'];
+$fields[] = (object)['id' => 'zip', 'name' => 'zip', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL'];
+$fields[] = (object)['id' => 'street', 'name' => 'street', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL'];
+$fields[] = (object)['id' => 'number', 'name' => 'number', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL'];
 
 // The fields are not fetched, load them
 if (!isset($booking->jcfields)) {
 	JPluginHelper::importPlugin('content');
 	$booking->text = '';
-	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.booking', &$booking, &$params, 0));
+	JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.booking', &$booking, &$params, 0]);
 }
 
 $fields = array_merge($fields, $booking->jcfields);
@@ -94,6 +99,10 @@ foreach ($fields as $key => $field) {
 	if (!$content) {
 		unset($fields[$key]);
 		continue;
+	}
+
+	if (is_array($content)) {
+		$content = implode(', ', $content);
 	}
 
 	$field->dpDisplayLabel   = $label;
@@ -170,9 +179,11 @@ foreach ($fields as $key => $field) {
 			<tr>
 				<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_EVENT'); ?></td>
 				<td style="width:70%">
-					<?php echo $ticket->event_title . ' [' . $displayData['dateHelper']->getDateStringFromEvent($ticket,
+					<?php echo $ticket->event_title . ' [' . $displayData['dateHelper']->getDateStringFromEvent(
+							$ticket,
 							$params->get('event_date_format'),
-							$params->get('event_time_format')) . ']'; ?>
+							$params->get('event_time_format')
+						) . ']'; ?>
 				</td>
 			</tr>
 			<?php if (!empty($ticket->event_prices)) { ?>

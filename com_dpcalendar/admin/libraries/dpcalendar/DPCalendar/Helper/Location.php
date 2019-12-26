@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Helper;
 
@@ -128,7 +128,7 @@ class Location
 		if (self::$locationCache == null) {
 			\JLoader::import('joomla.application.component.model');
 			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			self::$locationCache = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
+			self::$locationCache = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 		}
 
 		if ($fill) {
@@ -193,7 +193,7 @@ class Location
 				\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 			}
 
-			self::$locationCache = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
+			self::$locationCache = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 		}
 
 		return $locObject;
@@ -215,7 +215,7 @@ class Location
 	public static function getLocations($locationIds)
 	{
 		if (empty($locationIds)) {
-			return array();
+			return [];
 		}
 		\JLoader::import('joomla.application.component.model');
 		\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');

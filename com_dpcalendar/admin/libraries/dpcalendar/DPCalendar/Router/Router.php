@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Router;
 
@@ -31,7 +31,7 @@ class Router
 
 	public function getEventFormRoute($id, $return = null, $append = null, $xhtml = true)
 	{
-		return \JRoute::_(\DPCalendarHelperRoute::getFormRoute($id, $return, $append),$xhtml);
+		return \JRoute::_(\DPCalendarHelperRoute::getFormRoute($id, $return, $append), $xhtml);
 	}
 
 	public function getEventDeleteRoute($id, $return = null)

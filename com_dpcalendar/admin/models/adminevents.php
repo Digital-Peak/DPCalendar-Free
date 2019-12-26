@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -14,10 +14,10 @@ JLoader::import('joomla.application.component.modellist');
 
 class DPCalendarModelAdminEvents extends JModelList
 {
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = array(
+			$config['filter_fields'] = [
 				'id',
 				'a.id',
 				'title',
@@ -61,7 +61,7 @@ class DPCalendarModelAdminEvents extends JModelList
 				'event_type',
 				'level',
 				'tag'
-			);
+			];
 		}
 
 		parent::__construct($config);
@@ -105,8 +105,13 @@ class DPCalendarModelAdminEvents extends JModelList
 		parent::populateState('a.start_date', 'asc');
 
 		// Joomla resets the start and end date
-		$search = $this->getUserStateFromRequest($this->context . '.filter.search_start', 'filter_search_start',
-			DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'), true), 'none', false);
+		$search = $this->getUserStateFromRequest(
+			$this->context . '.filter.search_start',
+			'filter_search_start',
+			DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'), true),
+			'none',
+			false
+		);
 		try {
 			DPCalendarHelper::getDateFromString(
 				$search,
@@ -205,7 +210,8 @@ class DPCalendarModelAdminEvents extends JModelList
 			$query->where('a.access IN (' . $groups . ')');
 
 			$query->select(
-				'CASE WHEN a.access_content IN (' . $groups . ") THEN a.title ELSE '" . JText::_('COM_DPCALENDAR_EVENT_BUSY') . "' END as title");
+				'CASE WHEN a.access_content IN (' . $groups . ") THEN a.title ELSE '" . JText::_('COM_DPCALENDAR_EVENT_BUSY') . "' END as title"
+			);
 		} else {
 			$query->select('a.title');
 		}
@@ -214,7 +220,7 @@ class DPCalendarModelAdminEvents extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} elseif ($published === '') {
+		} else if ($published === '') {
 			$query->where('a.state IN (0, 1)');
 		}
 
@@ -232,7 +238,7 @@ class DPCalendarModelAdminEvents extends JModelList
 			$baselevel = (int)$cat_tbl->level;
 			$query->where('c.lft >= ' . (int)$lft);
 			$query->where('c.rgt <= ' . (int)$rgt);
-		} elseif (is_array($categoryId)) {
+		} else if (is_array($categoryId)) {
 			ArrayHelper::toInteger($categoryId);
 			$categoryId = implode(',', $categoryId);
 			$query->where('a.catid IN (' . $categoryId . ')');
@@ -255,7 +261,7 @@ class DPCalendarModelAdminEvents extends JModelList
 		if (!empty($search)) {
 			if (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
-			} elseif (stripos($search, 'author:') === 0) {
+			} else if (stripos($search, 'author:') === 0) {
 				$search = $db->quote('%' . $db->escape(substr($search, 7), true) . '%');
 				$query->where('(ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			} else {
@@ -301,7 +307,8 @@ class DPCalendarModelAdminEvents extends JModelList
 
 		if (is_numeric($tagId)) {
 			$query->where($db->quoteName('tagmap.tag_id') . ' = ' . (int)$tagId)
-				->join('LEFT',
+				->join(
+					'LEFT',
 					$db->quoteName('#__contentitem_tag_map', 'tagmap') . ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' .
 					$db->quoteName('a.id') . ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_dpcalendar.event')
 				);

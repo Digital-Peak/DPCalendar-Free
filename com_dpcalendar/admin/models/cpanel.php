@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -15,7 +15,7 @@ class DPCalendarModelCpanel extends JModelLegacy
 
 	public function getEvents($start, $ordering = 'a.start_date', $direction = 'asc')
 	{
-		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('list.limit', 3);
 		$model->setState('category.recursive', true);
@@ -42,7 +42,7 @@ class DPCalendarModelCpanel extends JModelLegacy
 
 	public function getCalendars()
 	{
-		$model     = JModelLegacy::getInstance('Calendar', 'DPCalendarModel', array('ignore_request' => true));
+		$model     = JModelLegacy::getInstance('Calendar', 'DPCalendarModel', ['ignore_request' => true]);
 		$calendars = $model->getAllItems();
 
 		JPluginHelper::importPlugin('dpcalendar');
@@ -114,11 +114,11 @@ class DPCalendarModelCpanel extends JModelLegacy
 		}
 
 		// Create the update site definition we want to store to the database
-		$update_site = array(
+		$update_site = [
 			'enabled'              => 1,
 			'last_check_timestamp' => 0,
 			'extra_query'          => $extra_query
-		);
+		];
 
 		if (version_compare(JVERSION, '3.0.0', 'lt')) {
 			unset($update_site['extra_query']);

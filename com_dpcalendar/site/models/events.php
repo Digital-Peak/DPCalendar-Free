@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -16,17 +16,17 @@ JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 
 class DPCalendarModelEvents extends JModelList
 {
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = array(
+			$config['filter_fields'] = [
 				'id',
 				'a.id',
 				'title',
 				'a.title',
 				'hits',
 				'a.hits'
-			);
+			];
 		}
 
 		parent::__construct($config);
@@ -34,10 +34,10 @@ class DPCalendarModelEvents extends JModelList
 
 	public function getItems()
 	{
-		$items       = array();
+		$items       = [];
 		$categoryIds = $this->getState('category.id');
 		if (!is_array($categoryIds)) {
-			$categoryIds = array($categoryIds);
+			$categoryIds = [$categoryIds];
 		}
 		$options = new Registry();
 		$search  = $this->getState('filter.search');
@@ -84,7 +84,7 @@ class DPCalendarModelEvents extends JModelList
 			}
 
 			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent('onEventsFetch', array($catId, $startDate, $endDate, $options));
+			$tmp = JFactory::getApplication()->triggerEvent('onEventsFetch', [$catId, $startDate, $endDate, $options]);
 			if (!empty($tmp)) {
 				$containsExternalEvents = true;
 				foreach ($tmp as $events) {
@@ -95,28 +95,28 @@ class DPCalendarModelEvents extends JModelList
 			}
 		}
 		if ($containsExternalEvents) {
-			$dbItems = array();
+			$dbItems = [];
 			if ($categoryIds) {
 				$dbItems = parent::getItems();
 			}
 			$items = array_merge($dbItems, $items);
-			usort($items, array($this, "compareEvent"));
+			usort($items, [$this, "compareEvent"]);
 			if ($this->getState('list.limit') > 0) {
 				$items = array_slice($items, 0, $this->getState('list.limit'));
 			}
 		} else {
 			$items = parent::getItems();
 			if ($items && $this->getState('list.ordering', 'a.start_date') == 'a.start_date') {
-				usort($items, array($this, "compareEvent"));
+				usort($items, [$this, "compareEvent"]);
 			}
 		}
 
 		if (empty($items)) {
-			return array();
+			return [];
 		}
 
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
+		$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('list.ordering', 'ordering');
 		$model->setState('list.direction', 'asc');
@@ -176,7 +176,7 @@ class DPCalendarModelEvents extends JModelList
 				$item->location    = '';
 				$item->url         = '';
 				$item->description = '';
-				$item->price       = array();
+				$item->price       = [];
 			}
 		}
 
@@ -216,8 +216,10 @@ class DPCalendarModelEvents extends JModelList
 
 		// Join on series max/min
 		$query->select('ser.min_date AS series_min_start_date, ser.max_date AS series_max_end_date');
-		$query->join('LEFT',
-			'(select original_id, max(end_date) as max_date, min(start_date) as min_date from #__dpcalendar_events group by original_id) ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id');
+		$query->join(
+			'LEFT',
+			'(select original_id, max(end_date) as max_date, min(start_date) as min_date from #__dpcalendar_events group by original_id) ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id'
+		);
 
 		// Join locations
 		$query->select("GROUP_CONCAT(v.id SEPARATOR ', ') location_ids");
@@ -228,7 +230,7 @@ class DPCalendarModelEvents extends JModelList
 		// Filter by category.
 		if ($categoryIds = $this->getState('category.id', 0)) {
 			if (!is_array($categoryIds)) {
-				$categoryIds = array($categoryIds);
+				$categoryIds = [$categoryIds];
 			}
 			if (in_array('root', $categoryIds)) {
 				JPluginHelper::importPlugin('dpcalendar');
@@ -241,7 +243,7 @@ class DPCalendarModelEvents extends JModelList
 					}
 				}
 			}
-			$cats = array();
+			$cats = [];
 			foreach ($categoryIds as $categoryId) {
 				if (!$categoryId) {
 					continue;
@@ -338,7 +340,7 @@ class DPCalendarModelEvents extends JModelList
 				$query->where('a.id in (' . implode(',', $ids) . ')');
 			} else {
 				// Immitating simple boolean search
-				$searchColumns = $this->getState('filter.search.columns', array(
+				$searchColumns = $this->getState('filter.search.columns', [
 					'v.title',
 					'CONCAT_WS(v.`country`,",",v.`province`,",",v.`city`,",",v.`zip`,",",v.`street`)',
 					'a.title',
@@ -346,15 +348,17 @@ class DPCalendarModelEvents extends JModelList
 					'a.description',
 					'a.metakey',
 					'a.metadesc'
-				));
+				]);
 
 				// Only add custom fields when there is default search
 				if (!$this->getState('filter.search.columns')) {
 					// Search in custom fields
 					// Join over Fields.
 					$query->join('LEFT', '#__fields_values AS jf ON jf.item_id = ' . $query->castAsChar('a.id'))
-						->join('LEFT',
-							'#__fields AS f ON f.id = jf.field_id and f.context = ' . $db->q('com_dpcalendar.event') . ' and f.state = 1 and f.access IN (' . $groups . ')');
+						->join(
+							'LEFT',
+							'#__fields AS f ON f.id = jf.field_id and f.context = ' . $db->q('com_dpcalendar.event') . ' and f.state = 1 and f.access IN (' . $groups . ')'
+						);
 					$searchColumns[] = 'jf.value';
 				}
 
@@ -363,9 +367,9 @@ class DPCalendarModelEvents extends JModelList
 				natsort($searchTerms);
 
 				// Filtering the terms based on + - or none operators
-				$must    = array();
-				$mustNot = array();
-				$can     = array();
+				$must    = [];
+				$mustNot = [];
+				$can     = [];
 				foreach ($searchTerms as $search) {
 					if (!$search) {
 						continue;
@@ -397,13 +401,13 @@ class DPCalendarModelEvents extends JModelList
 		}
 
 		// The locations to filter for
-		$locationsFilter = $this->getState('filter.locations', array());
+		$locationsFilter = $this->getState('filter.locations', []);
 
 		// Search for a location
 		$location = $this->getState('filter.location');
 		if ($location) {
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
+			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->getState();
 			$model->setState('filter.location', $location);
 			$model->setState('filter.radius', $this->getState('filter.radius', 20));
@@ -436,9 +440,11 @@ class DPCalendarModelEvents extends JModelList
 		// Filter by tags
 		$tagIds = (array)$this->getState('filter.tags');
 		if ($tagIds) {
-			$query->join('LEFT',
+			$query->join(
+				'LEFT',
 				$db->quoteName('#__contentitem_tag_map', 'tagmap') . ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' .
-				$db->quoteName('a.id') . ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_dpcalendar.event'));
+				$db->quoteName('a.id') . ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_dpcalendar.event')
+			);
 
 			ArrayHelper::toInteger($tagIds);
 			$query->where($db->quoteName('tagmap.tag_id') . ' in (' . implode(',', $tagIds) . ')');
@@ -561,7 +567,7 @@ class DPCalendarModelEvents extends JModelList
 		$this->setState('list.ordering', $orderCol);
 
 		$listOrder = $app->input->getCmd('filter_order_dir', 'ASC');
-		if (!in_array(strtoupper($listOrder), array('ASC', 'DESC', ''))) {
+		if (!in_array(strtoupper($listOrder), ['ASC', 'DESC', ''])) {
 			$listOrder = 'ASC';
 		}
 		$this->setState('list.direction', $listOrder);
@@ -588,7 +594,7 @@ class DPCalendarModelEvents extends JModelList
 		// On CalDAV requests, the language doesn't exist in the app
 		$this->setState(
 			'filter.language',
-			$app->isClient('site') ? $app->getLanguageFilter() : $app->getLanguage() ? $app->getLanguage()->getTag() : null
+			$app->isClient('site') ? $app->getLanguageFilter() : ($app->getLanguage() ? $app->getLanguage()->getTag() : null)
 		);
 		$this->setState('filter.search', $this->getUserStateFromRequest('com_dpcalendar.filter.search', 'filter-search'));
 

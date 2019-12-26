@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -19,7 +19,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 		ini_set('display_errors', false);
 
 		// Registering shutdown function to catch fatal errors
-		register_shutdown_function(array($this, 'handleError'));
+		register_shutdown_function([$this, 'handleError']);
 
 		// Set some defaults
 		$this->input->set('list.limit', 1000);
@@ -51,16 +51,17 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 		if ($error && ($error['type'] == E_ERROR || $error['type'] == E_USER_ERROR)) {
 			ob_clean();
 			echo json_encode(
-				array(
-					array(
-						'data'     => array(),
-						'messages' => array(
-							'error' => array(
+				[
+					[
+						'data'     => [],
+						'messages' => [
+							'error' => [
 								$error['message'] . ': <br/>' . $error['file'] . ' ' . $error['line']
-							)
-						)
-					)
-				));
+							]
+						]
+					]
+				]
+			);
 
 			// We always send ok as we want to be able to handle the error by
 			// our own

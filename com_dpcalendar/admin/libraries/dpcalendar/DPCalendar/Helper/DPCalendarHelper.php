@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Helper;
 
@@ -29,7 +29,7 @@ if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 class DPCalendarHelper
 {
 
-	public static $calendars = array();
+	public static $calendars = [];
 
 	public static function getCalendar($id)
 	{
@@ -65,7 +65,7 @@ class DPCalendarHelper
 			}
 		} else {
 			\JPluginHelper::importPlugin('dpcalendar');
-			$tmp = \JFactory::getApplication()->triggerEvent('onCalendarsFetch', array($id));
+			$tmp = \JFactory::getApplication()->triggerEvent('onCalendarsFetch', [$id]);
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
 					foreach ($calendars as $fetchedCalendar) {
@@ -216,7 +216,7 @@ class DPCalendarHelper
 			$string = $date . ($allDay ? '' : ' ' . $time);
 		}
 
-		$replaces = array(
+		$replaces = [
 			'JANUARY',
 			'FEBRUARY',
 			'MARCH',
@@ -255,7 +255,7 @@ class DPCalendarHelper
 			'WED',
 			'THU',
 			'FRI'
-		);
+		];
 		$lang     = \JLanguage::getInstance('en-GB');
 		foreach ($replaces as $key) {
 			$string = str_replace(\JText::_($key), $lang->_($key), $string);
@@ -283,7 +283,9 @@ class DPCalendarHelper
 	{
 		$text = \JLayoutHelper::render(
 			'event.datestring',
-			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat], null, ['component' => 'com_dpcalendar', 'client' => 0]
+			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat],
+			null,
+			['component' => 'com_dpcalendar', 'client' => 0]
 		);
 
 		if (!$noTags) {
@@ -298,7 +300,7 @@ class DPCalendarHelper
 
 	public static function dateStringToDatepickerFormat($dateString)
 	{
-		$pattern = array(
+		$pattern = [
 			'd',
 			'j',
 			'l',
@@ -309,8 +311,8 @@ class DPCalendarHelper
 			'm',
 			'Y',
 			'y'
-		);
-		$replace = array(
+		];
+		$replace = [
 			'dd',
 			'd',
 			'DD',
@@ -321,7 +323,7 @@ class DPCalendarHelper
 			'mm',
 			'yy',
 			'y'
-		);
+		];
 		foreach ($pattern as &$p) {
 			$p = '/' . $p . '/';
 		}
@@ -329,10 +331,10 @@ class DPCalendarHelper
 		return preg_replace($pattern, $replace, $dateString);
 	}
 
-	public static function renderEvents(array $events = null, $output, $params = null, $eventParams = array())
+	public static function renderEvents(array $events = null, $output, $params = null, $eventParams = [])
 	{
 		if ($events === null) {
-			$events = array();
+			$events = [];
 		}
 		if ($params == null) {
 			$params = \JComponentHelper::getParams('com_dpcalendar');
@@ -350,10 +352,10 @@ class DPCalendarHelper
 		$lastHeading = '';
 
 		$configuration           = $eventParams;
-		$configuration['events'] = array();
-		$locationCache           = array();
+		$configuration['events'] = [];
+		$locationCache           = [];
 		foreach ($events as $event) {
-			$variables = array();
+			$variables = [];
 
 			$calendar = self::getCalendar($event->catid);
 
@@ -532,15 +534,18 @@ class DPCalendarHelper
 		}
 	}
 
-	public static function renderPrice($price, $currencySymbol = null, $separator = null)
+	public static function renderPrice($price, $currencySymbol = null, $separator = null, $thousandSeparator = null)
 	{
-		return self::renderLayout('format.price', ['price' => $price, 'currency' => $currencySymbol, 'separator' => $separator]);
+		return self::renderLayout(
+			'format.price',
+			['price' => $price, 'currency' => $currencySymbol, 'separator' => $separator, 'thousands_separator' => $thousandSeparator]
+		);
 	}
 
-	public static function renderLayout($layout, $data = array())
+	public static function renderLayout($layout, $data = [])
 	{
 		// Framework specific content is not loaded
-		return \JLayoutHelper::render($layout, $data, null, array('component' => 'com_dpcalendar', 'client' => 0));
+		return \JLayoutHelper::render($layout, $data, null, ['component' => 'com_dpcalendar', 'client' => 0]);
 	}
 
 	public static function getStringFromParams($key, $default, $params)
@@ -616,7 +621,7 @@ class DPCalendarHelper
 
 	public static function getGoogleLanguage()
 	{
-		$languages = array(
+		$languages = [
 			'ar',
 			'bg',
 			'bn',
@@ -673,7 +678,7 @@ class DPCalendarHelper
 			'vi',
 			'zh-CN',
 			'zh-TW'
-		);
+		];
 		$lang      = self::getFrLanguage();
 		if (!in_array($lang, $languages)) {
 			$lang = substr($lang, 0, strpos($lang, '-'));
@@ -710,16 +715,16 @@ class DPCalendarHelper
 			} else {
 				$options = new Registry();
 				$options->set('userAgent', 'DPCalendar');
-				foreach (array('curl', 'socket', 'stream') as $adapter) {
+				foreach (['curl', 'socket', 'stream'] as $adapter) {
 					$class = 'JHttpTransport' . ucfirst($adapter);
 					$http  = new \JHttp($options, new $class($options));
 
 					$u   = \JUri::getInstance($uri);
-					$uri = $u->toString(array('scheme', 'user', 'pass', 'host', 'port', 'path'));
-					$uri .= $u->toString(array('query', 'fragment'));
+					$uri = $u->toString(['scheme', 'user', 'pass', 'host', 'port', 'path']);
+					$uri .= $u->toString(['query', 'fragment']);
 
 					$language = \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag());
-					$headers  = array('Accept-Language' => $language);
+					$headers  = ['Accept-Language' => $language];
 					$response = $http->get($uri, $headers);
 					$content  = $response->body;
 
@@ -743,15 +748,15 @@ class DPCalendarHelper
 	public static function exportCsv($name, $fieldsToLabels, $valueParser)
 	{
 		$name  = strtolower($name);
-		$model = \JModelLegacy::getInstance(ucfirst($name) . 's', 'DPCalendarModel', array('ignore_request' => false));
+		$model = \JModelLegacy::getInstance(ucfirst($name) . 's', 'DPCalendarModel', ['ignore_request' => false]);
 		$model->setState('list.limit', 1000);
 		$items = $model->getItems();
 
 		$f         = fopen('php://memory', 'w');
 		$delimiter = ',';
-		$fields    = array();
+		$fields    = [];
 		if ($items) {
-			$line = array();
+			$line = [];
 			foreach ($fieldsToLabels as $fieldLabel) {
 				$line[] = $fieldLabel;
 			}
@@ -764,8 +769,8 @@ class DPCalendarHelper
 		}
 
 		foreach ($items as $item) {
-			\JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.' . $name, &$item, &$item->params, 0));
-			$line = array();
+			\JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $name, &$item, &$item->params, 0]);
+			$line = [];
 			foreach ($fieldsToLabels as $fieldName => $fieldLabel) {
 				$line[] = $valueParser($fieldName, $item);
 			}
@@ -773,7 +778,7 @@ class DPCalendarHelper
 			if ($fields) {
 				foreach ($fields as $field) {
 					if (isset($item->jcfields) && key_exists($field->id, $item->jcfields)) {
-						$line[] = strip_tags($item->jcfields[$field->id]->value);
+						$line[] = html_entity_decode(strip_tags($item->jcfields[$field->id]->value));
 					}
 				}
 			}
@@ -811,7 +816,7 @@ class DPCalendarHelper
 			new $className($dispatcher, $p);
 		}
 
-		$result = \JFactory::getApplication()->triggerEvent('onDPCalendarDoAction', array($action, $plugin));
+		$result = \JFactory::getApplication()->triggerEvent('onDPCalendarDoAction', [$action, $plugin]);
 
 		return $result;
 	}
@@ -864,12 +869,12 @@ class DPCalendarHelper
 		\JPluginHelper::importPlugin('captcha');
 
 		$userGroups    = \JAccess::getGroupsByUser(\JFactory::getUser()->id, false);
-		$accessCaptcha = array_intersect(self::getComponentParameter('captcha_groups', array(1)), $userGroups);
+		$accessCaptcha = array_intersect(self::getComponentParameter('captcha_groups', [1]), $userGroups);
 
 		return \JPluginHelper::isEnabled('captcha') && $accessCaptcha;
 	}
 
-	public static function sendMessage($message, $error = false, array $data = array())
+	public static function sendMessage($message, $error = false, array $data = [])
 	{
 		ob_clean();
 
@@ -898,10 +903,10 @@ class DPCalendarHelper
 			return [];
 		}
 		if (!is_array($groups)) {
-			$groups = array($groups);
+			$groups = [$groups];
 		}
 
-		$users = array();
+		$users = [];
 		foreach ($groups as $groupId) {
 			$users = array_merge($users, \JAccess::getUsersByGroup($groupId));
 		}
@@ -962,7 +967,7 @@ class DPCalendarHelper
 
 		// str_getcsv creates from '-"foo bar"' > ['-"foo', 'bar"'] it needs to
 		// be combined back
-		$criteria  = array();
+		$criteria  = [];
 		$appending = null;
 		foreach ($tmp as $key => $value) {
 			if (self::startsWith($value, '-"')) {
@@ -1086,10 +1091,10 @@ class DPCalendarHelper
 		</a\s*>                      # </A> closing tag.
 		)                              # End $2:
 		%ix';
-		$text                 = preg_replace_callback($section_html_pattern, array(
+		$text                 = preg_replace_callback($section_html_pattern, [
 			'DPCalendarHelper',
 			'linkifyHtmlCallback'
-		), $text);
+		], $text);
 		$text                 = nl2br($text);
 
 		return $text;
@@ -1158,7 +1163,7 @@ class DPCalendarHelper
 		// Copied from SEF plugin
 		// Check for all unknown protocals (a protocol must contain at least one alpahnumeric character followed by a ":").
 		$protocols  = '[a-zA-Z0-9\-]+:';
-		$attributes = array('href=', 'src=', 'poster=');
+		$attributes = ['href=', 'src=', 'poster='];
 
 		foreach ($attributes as $attribute) {
 			if (strpos($buffer, $attribute) !== false) {
@@ -1174,14 +1179,17 @@ class DPCalendarHelper
 	{
 		$memMax = trim(@ini_get('memory_limit'));
 		if ($memMax) {
-			$last = strtolower($memMax{strlen($memMax) - 1});
+			$last = strtolower($memMax[strlen($memMax) - 1]);
 			switch ($last) {
 				case 'g':
 					$memMax = (int)$memMax * 1024;
+				// Gigabyte
 				case 'm':
 					$memMax = (int)$memMax * 1024;
+				// Megabyte
 				case 'k':
 					$memMax = (int)$memMax * 1024;
+				// Kilobyte
 			}
 
 			if ($memMax > $limit) {

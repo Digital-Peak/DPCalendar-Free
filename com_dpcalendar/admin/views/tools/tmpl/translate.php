@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -19,6 +19,9 @@ $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE
 <div class="com-dpcalendar-tools-translate">
 	<div id="j-sidebar-container" class="com-dpcalendar-tools-translate__sidebar span2"><?php echo $this->sidebar; ?></div>
 	<div id="j-main-container" class="com-dpcalendar-tools-translate__content span10">
+		<div class="com-dpcalendar-tools-translate__loader">
+			<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
+		</div>
 		<table class="dp-resource-table dp-table">
 			<thead>
 			<tr>

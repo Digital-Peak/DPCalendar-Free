@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -14,7 +14,7 @@ JLoader::import('joomla.application.component.controllerform');
 class DPCalendarControllerEvent extends JControllerForm
 {
 
-	protected function allowAdd($data = array())
+	protected function allowAdd($data = [])
 	{
 		// Initialise variables.
 		$user       = JFactory::getUser();
@@ -35,7 +35,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		}
 	}
 
-	protected function allowEdit($data = array(), $key = 'id')
+	protected function allowEdit($data = [], $key = 'id')
 	{
 		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
 		$event    = null;
@@ -59,7 +59,7 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		$this->transformDatesToSql();
 
-		$data = $this->input->post->get('jform', array(), 'array');
+		$data = $this->input->post->get('jform', [], 'array');
 
 		if (!key_exists('color', $data)) {
 			$data['color'] = '';
@@ -81,7 +81,7 @@ class DPCalendarControllerEvent extends JControllerForm
 				$validData['end_date']   = DPCalendarHelper::getDate($validData['end_date'])->toSql(true);
 			}
 
-			$tmp = JFactory::getApplication()->triggerEvent('onEventSave', array($validData));
+			$tmp = JFactory::getApplication()->triggerEvent('onEventSave', [$validData]);
 			foreach ($tmp as $newEventId) {
 				if ($newEventId === false) {
 					continue;
@@ -107,7 +107,8 @@ class DPCalendarControllerEvent extends JControllerForm
 						break;
 					default:
 						$this->setRedirect(
-							JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->getRedirectToListAppend(), false));
+							JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->getRedirectToListAppend(), false)
+						);
 						break;
 				}
 			}
@@ -145,7 +146,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		return parent::reload($key, $urlVar);
 	}
 
-	public function getModel($name = 'AdminEvent', $prefix = 'DPCalendarModel', $config = array('ignore_request' => true))
+	public function getModel($name = 'AdminEvent', $prefix = 'DPCalendarModel', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}
@@ -154,7 +155,7 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		$formData = $this->input->get('jform', array(), 'array');
+		$formData = $this->input->get('jform', [], 'array');
 
 		if (empty($formData['title'])) {
 			DPCalendarHelper::sendMessage(null);
@@ -186,8 +187,11 @@ class DPCalendarControllerEvent extends JControllerForm
 			$item          = new stdClass();
 			$item->value   = $e->id;
 			$item->title   = $e->title;
-			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' . strip_tags(JHtml::_('string.truncate', $e->description,
-					100));
+			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' . strip_tags(JHtml::_(
+				'string.truncate',
+				$e->description,
+				100
+			));
 			$data[] = $item;
 		}
 
@@ -198,7 +202,7 @@ class DPCalendarControllerEvent extends JControllerForm
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		$data = $this->input->get('jform', array(), 'array');
+		$data = $this->input->get('jform', [], 'array');
 
 		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
 			$data['all_day'] = '1';
@@ -264,17 +268,18 @@ class DPCalendarControllerEvent extends JControllerForm
 		$date                 = strip_tags(DPCalendarHelper::getDateStringFromEvent($event));
 		$message              = DPCalendarHelper::renderEvents(
 			$events,
-			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'), null,
-			array(
+			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
+			null,
+			[
 				'checkDate'    => $date,
 				'calendarName' => DPCalendarHelper::getCalendar($data['catid'])->title
-			)
+			]
 		);
 
 		DPCalendarHelper::sendMessage(
 			null,
 			false,
-			array('message' => $message, 'count' => count($events))
+			['message' => $message, 'count' => count($events)]
 		);
 	}
 
@@ -291,7 +296,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			return parent::reload($key, $urlVar);
 		}
 
-		$formData = $this->input->post->get('jform', array(), 'array');
+		$formData = $this->input->post->get('jform', [], 'array');
 
 		$data->id = !empty($formData['id']) ? $formData['id'] : 0;
 
@@ -308,7 +313,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 	private function transformDatesToSql()
 	{
-		$data = $this->input->post->get('jform', array(), 'array');
+		$data = $this->input->post->get('jform', [], 'array');
 
 		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
 			$data['all_day'] = '1';

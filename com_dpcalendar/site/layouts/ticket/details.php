@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -17,27 +17,27 @@ if ($imageUrl && !filter_var($imageUrl, FILTER_VALIDATE_URL)) {
 	$imageUrl = trim(JUri::root(), '/') . '/' . trim($imageUrl, '/');
 }
 
-$fields   = array();
-$fields[] = (object)array('id' => 'name', 'name' => 'name', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL');
-$fields[] = (object)array('id' => 'email', 'name' => 'email');
+$fields   = [];
+$fields[] = (object)['id' => 'name', 'name' => 'name', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'];
+$fields[] = (object)['id' => 'email', 'name' => 'email'];
 
 if ($params->get('ticket_show_seat', 1)) {
-	$fields[] = (object)array('id' => 'seat', 'name' => 'seat', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL');
+	$fields[] = (object)['id' => 'seat', 'name' => 'seat', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'];
 }
 
-$fields[] = (object)array('id' => 'country', 'name' => 'country', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL');
-$fields[] = (object)array('id' => 'province', 'name' => 'province', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL');
-$fields[] = (object)array('id' => 'city', 'name' => 'city', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL');
-$fields[] = (object)array('id' => 'zip', 'name' => 'zip', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL');
-$fields[] = (object)array('id' => 'street', 'name' => 'street', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL');
-$fields[] = (object)array('id' => 'number', 'name' => 'number', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL');
-$fields[] = (object)array('id' => 'telephone', 'name' => 'telephone');
+$fields[] = (object)['id' => 'country', 'name' => 'country', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'];
+$fields[] = (object)['id' => 'province', 'name' => 'province', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL'];
+$fields[] = (object)['id' => 'city', 'name' => 'city', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL'];
+$fields[] = (object)['id' => 'zip', 'name' => 'zip', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL'];
+$fields[] = (object)['id' => 'street', 'name' => 'street', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL'];
+$fields[] = (object)['id' => 'number', 'name' => 'number', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL'];
+$fields[] = (object)['id' => 'telephone', 'name' => 'telephone'];
 
 // The fields are not fetched, load them
 if (!isset($ticket->jcfields)) {
 	JPluginHelper::importPlugin('content');
 	$ticket->text = '';
-	JFactory::getApplication()->triggerEvent('onContentPrepare', array('com_dpcalendar.ticket', &$ticket, &$params, 0));
+	JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.ticket', &$ticket, &$params, 0]);
 }
 
 $fields = array_merge($fields, $ticket->jcfields);

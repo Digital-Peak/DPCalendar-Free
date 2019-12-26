@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -19,7 +19,7 @@ class DPCalendarControllerLocation extends JControllerForm
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
 		// Set the model
-		$model = $this->getModel('Location', '', array());
+		$model = $this->getModel('Location', '', []);
 
 		// Preset the redirect
 		$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=locations' . $this->getRedirectToListAppend(), false));
@@ -55,20 +55,20 @@ class DPCalendarControllerLocation extends JControllerForm
 				DPCalendarHelper::sendMessage(
 					$this->message,
 					false,
-					array(
+					[
 						'id'      => $this->id,
 						'display' => $table->title . ' [' . $table->latitude . ':' . $table->longitude . ']'
-					)
+					]
 				);
 			} else {
-				DPCalendarHelper::sendMessage($this->message, true, array('id' => 0));
+				DPCalendarHelper::sendMessage($this->message, true, ['id' => 0]);
 			}
 		}
 
 		return $return;
 	}
 
-	protected function postSaveHook(JModelLegacy $model, $validData = array())
+	protected function postSaveHook(JModelLegacy $model, $validData = [])
 	{
 		$this->id    = $model->getState('location.id');
 		$this->error = $model->getError();

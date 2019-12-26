@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Router\Rules;
 
@@ -30,11 +30,11 @@ class DPCalendarRules extends \JComponentRouterRulesMenu
 		// Getting the required variables to match the parent lookup
 		$component = \JComponentHelper::getComponent('com_' . $this->router->getName());
 
-		$attributes = array('component_id');
-		$values     = array((int)$component->id);
+		$attributes = ['component_id'];
+		$values     = [(int)$component->id];
 
 		$attributes[] = 'language';
-		$values[]     = array($language, '*');
+		$values[]     = [$language, '*'];
 
 		$menuItems = $this->router->menu->getItems($attributes, $values);
 

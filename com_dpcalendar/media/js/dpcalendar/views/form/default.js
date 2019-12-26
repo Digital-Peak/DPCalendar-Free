@@ -287,8 +287,13 @@ DPCalendar = window.DPCalendar || {};
                 week = 'last';
               }
 
-              document.getElementById('jform_scheduling_monthly_week').querySelector('option[value="' + week + '"]').selected = true;
-              document.getElementById('jform_scheduling_monthly_week_days').querySelector('option[value="' + day + '"]').selected = true;
+              if (week) {
+                document.getElementById('jform_scheduling_monthly_week').querySelector('option[value="' + week + '"]').selected = true;
+              }
+
+              if (day) {
+                document.getElementById('jform_scheduling_monthly_week_days').querySelector('option[value="' + day + '"]').selected = true;
+              }
             } else {
               document.getElementById('jform_scheduling_weekly_days').querySelector('option[value="' + value + '"]').selected = true;
             }

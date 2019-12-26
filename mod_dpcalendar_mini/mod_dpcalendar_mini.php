@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -37,8 +37,8 @@ JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', '
 
 $model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
 $model->getState();
-$model->setState('filter.parentIds', $params->get('ids', array('root')));
-$ids = array();
+$model->setState('filter.parentIds', $params->get('ids', ['root']));
+$ids = [];
 foreach ($model->getItems() as $calendar) {
 	$ids[] = $calendar->id;
 }
@@ -47,21 +47,21 @@ $resources = [];
 if ($params->get('calendar_filter_locations') && $params->get('calendar_resource_views') && !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
 	// Load the model
 	JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-	$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
+	$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 	$model->getState();
 	$model->setState('list.limit', 10000);
-	$model->setState('filter.search', 'ids:' . implode($params->get('calendar_filter_locations'), ','));
+	$model->setState('filter.search', 'ids:' . implode(',', $params->get('calendar_filter_locations')));
 
 	// Add the locations
 	foreach ($model->getItems() as $location) {
-		$rooms = array();
+		$rooms = [];
 		if ($location->rooms) {
 			foreach ($location->rooms as $room) {
-				$rooms[] = (object)array('id' => $location->id . '-' . $room->id, 'title' => $room->title);
+				$rooms[] = (object)['id' => $location->id . '-' . $room->id, 'title' => $room->title];
 			}
 		}
 
-		$resource = (object)array('id' => $location->id, 'title' => $location->title);
+		$resource = (object)['id' => $location->id, 'title' => $location->title];
 
 		if ($rooms) {
 			$resource->children = $rooms;

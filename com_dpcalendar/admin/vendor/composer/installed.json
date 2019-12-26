@@ -104,17 +104,17 @@
     },
     {
         "name": "composer/ca-bundle",
-        "version": "1.2.4",
-        "version_normalized": "1.2.4.0",
+        "version": "1.2.5",
+        "version_normalized": "1.2.5.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/ca-bundle.git",
-            "reference": "10bb96592168a0f8e8f6dcde3532d9fa50b0b527"
+            "reference": "62e8fc2dc550e5d6d8c9360c7721662670f58149"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/ca-bundle/zipball/10bb96592168a0f8e8f6dcde3532d9fa50b0b527",
-            "reference": "10bb96592168a0f8e8f6dcde3532d9fa50b0b527",
+            "url": "https://api.github.com/repos/composer/ca-bundle/zipball/62e8fc2dc550e5d6d8c9360c7721662670f58149",
+            "reference": "62e8fc2dc550e5d6d8c9360c7721662670f58149",
             "shasum": ""
         },
         "require": {
@@ -125,9 +125,9 @@
         "require-dev": {
             "phpunit/phpunit": "^4.8.35 || ^5.7 || 6.5 - 8",
             "psr/log": "^1.0",
-            "symfony/process": "^2.5 || ^3.0 || ^4.0"
+            "symfony/process": "^2.5 || ^3.0 || ^4.0 || ^5.0"
         },
-        "time": "2019-08-30T08:44:50+00:00",
+        "time": "2019-12-11T14:44:42+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -231,30 +231,31 @@
     },
     {
         "name": "geoip2/geoip2",
-        "version": "v2.9.0",
-        "version_normalized": "2.9.0.0",
+        "version": "v2.10.0",
+        "version_normalized": "2.10.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/maxmind/GeoIP2-php.git",
-            "reference": "a807fbf65212eef5d8d2db1a1b31082b53633d77"
+            "reference": "419557cd21d9fe039721a83490701a58c8ce784a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/maxmind/GeoIP2-php/zipball/a807fbf65212eef5d8d2db1a1b31082b53633d77",
-            "reference": "a807fbf65212eef5d8d2db1a1b31082b53633d77",
+            "url": "https://api.github.com/repos/maxmind/GeoIP2-php/zipball/419557cd21d9fe039721a83490701a58c8ce784a",
+            "reference": "419557cd21d9fe039721a83490701a58c8ce784a",
             "shasum": ""
         },
         "require": {
-            "maxmind-db/reader": "~1.0",
-            "maxmind/web-service-common": "~0.5",
-            "php": ">=5.4"
+            "ext-json": "*",
+            "maxmind-db/reader": "~1.5",
+            "maxmind/web-service-common": "~0.6",
+            "php": ">=5.6"
         },
         "require-dev": {
             "friendsofphp/php-cs-fixer": "2.*",
-            "phpunit/phpunit": "4.*",
+            "phpunit/phpunit": "5.*",
             "squizlabs/php_codesniffer": "3.*"
         },
-        "time": "2018-04-10T15:32:59+00:00",
+        "time": "2019-12-12T18:48:39+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -270,7 +271,7 @@
             {
                 "name": "Gregory J. Oschwald",
                 "email": "goschwald@maxmind.com",
-                "homepage": "http://www.maxmind.com/"
+                "homepage": "https://www.maxmind.com/"
             }
         ],
         "description": "MaxMind GeoIP2 PHP API",
@@ -285,17 +286,17 @@
     },
     {
         "name": "guzzlehttp/guzzle",
-        "version": "6.4.1",
-        "version_normalized": "6.4.1.0",
+        "version": "6.5.0",
+        "version_normalized": "6.5.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/guzzle/guzzle.git",
-            "reference": "0895c932405407fd3a7368b6910c09a24d26db11"
+            "reference": "dbc2bc3a293ed6b1ae08a3651e2bfd213d19b6a5"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/guzzle/guzzle/zipball/0895c932405407fd3a7368b6910c09a24d26db11",
-            "reference": "0895c932405407fd3a7368b6910c09a24d26db11",
+            "url": "https://api.github.com/repos/guzzle/guzzle/zipball/dbc2bc3a293ed6b1ae08a3651e2bfd213d19b6a5",
+            "reference": "dbc2bc3a293ed6b1ae08a3651e2bfd213d19b6a5",
             "shasum": ""
         },
         "require": {
@@ -310,13 +311,14 @@
             "psr/log": "^1.1"
         },
         "suggest": {
+            "ext-intl": "Required for Internationalized Domain Name (IDN) support",
             "psr/log": "Required for using the Log middleware"
         },
-        "time": "2019-10-23T15:58:00+00:00",
+        "time": "2019-12-07T18:20:45+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "6.3-dev"
+                "dev-master": "6.5-dev"
             }
         },
         "installation-source": "dist",
@@ -581,17 +583,17 @@
     },
     {
         "name": "maxmind-db/reader",
-        "version": "v1.5.0",
-        "version_normalized": "1.5.0.0",
+        "version": "v1.5.1",
+        "version_normalized": "1.5.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/maxmind/MaxMind-DB-Reader-php.git",
-            "reference": "bd436094fc0a9b0558a899fb80b0ae34fe1808a0"
+            "reference": "f096bbe4d37e3d93e62626297bfc2179472a972d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/maxmind/MaxMind-DB-Reader-php/zipball/bd436094fc0a9b0558a899fb80b0ae34fe1808a0",
-            "reference": "bd436094fc0a9b0558a899fb80b0ae34fe1808a0",
+            "url": "https://api.github.com/repos/maxmind/MaxMind-DB-Reader-php/zipball/f096bbe4d37e3d93e62626297bfc2179472a972d",
+            "reference": "f096bbe4d37e3d93e62626297bfc2179472a972d",
             "shasum": ""
         },
         "require": {
@@ -609,7 +611,7 @@
             "ext-gmp": "bcmath or gmp is required for decoding larger integers with the pure PHP decoder",
             "ext-maxminddb": "A C-based database decoder that provides significantly faster lookups"
         },
-        "time": "2019-09-30T22:56:38+00:00",
+        "time": "2019-12-12T18:32:55+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -640,31 +642,31 @@
     },
     {
         "name": "maxmind/web-service-common",
-        "version": "v0.5.0",
-        "version_normalized": "0.5.0.0",
+        "version": "v0.6.0",
+        "version_normalized": "0.6.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/maxmind/web-service-common-php.git",
-            "reference": "61a9836fa3bb1743ab89752bae5005d71e78c73b"
+            "reference": "40c928bb0194c45088b369a17f9baef9c3fc7460"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/maxmind/web-service-common-php/zipball/61a9836fa3bb1743ab89752bae5005d71e78c73b",
-            "reference": "61a9836fa3bb1743ab89752bae5005d71e78c73b",
+            "url": "https://api.github.com/repos/maxmind/web-service-common-php/zipball/40c928bb0194c45088b369a17f9baef9c3fc7460",
+            "reference": "40c928bb0194c45088b369a17f9baef9c3fc7460",
             "shasum": ""
         },
         "require": {
             "composer/ca-bundle": "^1.0.3",
             "ext-curl": "*",
             "ext-json": "*",
-            "php": ">=5.4"
+            "php": ">=5.6"
         },
         "require-dev": {
             "friendsofphp/php-cs-fixer": "2.*",
-            "phpunit/phpunit": "4.*",
+            "phpunit/phpunit": "^4.8.36 || ^5.7 || ^6.5 || ^7.0",
             "squizlabs/php_codesniffer": "3.*"
         },
-        "time": "2018-02-12T22:31:54+00:00",
+        "time": "2019-12-12T15:56:05+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -772,17 +774,17 @@
     },
     {
         "name": "mustache/mustache",
-        "version": "v2.11.1",
-        "version_normalized": "2.11.1.0",
+        "version": "v2.13.0",
+        "version_normalized": "2.13.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/bobthecow/mustache.php.git",
-            "reference": "a3f6d55996dd28b58f3a909d474189a3c1aa693f"
+            "reference": "e95c5a008c23d3151d59ea72484d4f72049ab7f4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/a3f6d55996dd28b58f3a909d474189a3c1aa693f",
-            "reference": "a3f6d55996dd28b58f3a909d474189a3c1aa693f",
+            "url": "https://api.github.com/repos/bobthecow/mustache.php/zipball/e95c5a008c23d3151d59ea72484d4f72049ab7f4",
+            "reference": "e95c5a008c23d3151d59ea72484d4f72049ab7f4",
             "shasum": ""
         },
         "require": {
@@ -792,7 +794,7 @@
             "friendsofphp/php-cs-fixer": "~1.11",
             "phpunit/phpunit": "~3.7|~4.0|~5.0"
         },
-        "time": "2016-07-31T06:18:27+00:00",
+        "time": "2019-11-23T21:40:31+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -1841,17 +1843,17 @@
     },
     {
         "name": "sabre/dav",
-        "version": "3.2.3",
-        "version_normalized": "3.2.3.0",
+        "version": "dev-php74",
+        "version_normalized": "dev-php74",
         "source": {
             "type": "git",
-            "url": "https://github.com/sabre-io/dav.git",
-            "reference": "a9780ce4f35560ecbd0af524ad32d9d2c8954b80"
+            "url": "https://github.com/Digital-Peak/sabre-dav.git",
+            "reference": "e90a0ab89bb5235a5dfe2e6ea9dbfb9e8ba830d7"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sabre-io/dav/zipball/a9780ce4f35560ecbd0af524ad32d9d2c8954b80",
-            "reference": "a9780ce4f35560ecbd0af524ad32d9d2c8954b80",
+            "url": "https://api.github.com/repos/Digital-Peak/sabre-dav/zipball/e90a0ab89bb5235a5dfe2e6ea9dbfb9e8ba830d7",
+            "reference": "e90a0ab89bb5235a5dfe2e6ea9dbfb9e8ba830d7",
             "shasum": ""
         },
         "require": {
@@ -1869,7 +1871,7 @@
             "sabre/event": ">=2.0.0, <4.0.0",
             "sabre/http": "^4.2.1",
             "sabre/uri": "^1.0.1",
-            "sabre/vobject": "^4.1.0",
+            "sabre/vobject": "dev-php74",
             "sabre/xml": "^1.4.0"
         },
         "require-dev": {
@@ -1882,7 +1884,7 @@
             "ext-curl": "*",
             "ext-pdo": "*"
         },
-        "time": "2018-10-19T09:58:27+00:00",
+        "time": "2019-12-13T14:24:00+00:00",
         "bin": [
             "bin/sabredav",
             "bin/naturalselection"
@@ -1902,7 +1904,6 @@
                 "Sabre\\CardDAV\\": "lib/CardDAV/"
             }
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "BSD-3-Clause"
         ],
@@ -1919,10 +1920,14 @@
         "keywords": [
             "CalDAV",
             "CardDAV",
+            "Framework",
             "WebDAV",
-            "framework",
             "iCalendar"
-        ]
+        ],
+        "support": {
+            "forum": "https://groups.google.com/group/sabredav-discuss",
+            "source": "https://github.com/fruux/sabre-dav"
+        }
     },
     {
         "name": "sabre/event",
@@ -2096,17 +2101,17 @@
     },
     {
         "name": "sabre/vobject",
-        "version": "4.2.0",
-        "version_normalized": "4.2.0.0",
+        "version": "dev-php74",
+        "version_normalized": "dev-php74",
         "source": {
             "type": "git",
-            "url": "https://github.com/sabre-io/vobject.git",
-            "reference": "bd500019764e434ff65872d426f523e7882a0739"
+            "url": "https://github.com/Digital-Peak/sabre-vobject.git",
+            "reference": "2de7a4c76a20c8cc8debd9046f434e7a95614fa2"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/sabre-io/vobject/zipball/bd500019764e434ff65872d426f523e7882a0739",
-            "reference": "bd500019764e434ff65872d426f523e7882a0739",
+            "url": "https://api.github.com/repos/Digital-Peak/sabre-vobject/zipball/2de7a4c76a20c8cc8debd9046f434e7a95614fa2",
+            "reference": "2de7a4c76a20c8cc8debd9046f434e7a95614fa2",
             "shasum": ""
         },
         "require": {
@@ -2120,7 +2125,7 @@
         "suggest": {
             "hoa/bench": "If you would like to run the benchmark scripts"
         },
-        "time": "2019-02-19T13:05:37+00:00",
+        "time": "2019-11-13T21:36:52+00:00",
         "bin": [
             "bin/vobject",
             "bin/generate_vcards"
@@ -2137,7 +2142,6 @@
                 "Sabre\\VObject\\": "lib/"
             }
         },
-        "notification-url": "https://packagist.org/downloads/",
         "license": [
             "BSD-3-Clause"
         ],
@@ -2166,8 +2170,8 @@
         "keywords": [
             "availability",
             "freebusy",
+            "iCal",
             "iCalendar",
-            "ical",
             "ics",
             "jCal",
             "jCard",
@@ -2190,7 +2194,11 @@
             "vcf",
             "xCal",
             "xCard"
-        ]
+        ],
+        "support": {
+            "forum": "https://groups.google.com/group/sabredav-discuss",
+            "source": "https://github.com/fruux/sabre-vobject"
+        }
     },
     {
         "name": "sabre/xml",
@@ -2315,17 +2323,17 @@
     },
     {
         "name": "symfony/http-foundation",
-        "version": "v3.4.35",
-        "version_normalized": "3.4.35.0",
+        "version": "v3.4.36",
+        "version_normalized": "3.4.36.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/http-foundation.git",
-            "reference": "9e4b3ac8fa3348b4811674d23de32d201de225ce"
+            "reference": "d2d0cfe8e319d9df44c4cca570710fcf221d4593"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/9e4b3ac8fa3348b4811674d23de32d201de225ce",
-            "reference": "9e4b3ac8fa3348b4811674d23de32d201de225ce",
+            "url": "https://api.github.com/repos/symfony/http-foundation/zipball/d2d0cfe8e319d9df44c4cca570710fcf221d4593",
+            "reference": "d2d0cfe8e319d9df44c4cca570710fcf221d4593",
             "shasum": ""
         },
         "require": {
@@ -2336,7 +2344,7 @@
         "require-dev": {
             "symfony/expression-language": "~2.8|~3.0|~4.0"
         },
-        "time": "2019-11-11T12:53:10+00:00",
+        "time": "2019-11-28T12:52:59+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
@@ -2371,17 +2379,17 @@
     },
     {
         "name": "symfony/polyfill-mbstring",
-        "version": "v1.12.0",
-        "version_normalized": "1.12.0.0",
+        "version": "v1.13.1",
+        "version_normalized": "1.13.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-mbstring.git",
-            "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17"
+            "reference": "7b4aab9743c30be783b73de055d24a39cf4b954f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/b42a2f66e8f1b15ccf25652c3424265923eb4f17",
-            "reference": "b42a2f66e8f1b15ccf25652c3424265923eb4f17",
+            "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/7b4aab9743c30be783b73de055d24a39cf4b954f",
+            "reference": "7b4aab9743c30be783b73de055d24a39cf4b954f",
             "shasum": ""
         },
         "require": {
@@ -2390,11 +2398,11 @@
         "suggest": {
             "ext-mbstring": "For best performance"
         },
-        "time": "2019-08-06T08:03:45+00:00",
+        "time": "2019-11-27T14:18:11+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.12-dev"
+                "dev-master": "1.13-dev"
             }
         },
         "installation-source": "dist",
@@ -2432,28 +2440,28 @@
     },
     {
         "name": "symfony/polyfill-php70",
-        "version": "v1.12.0",
-        "version_normalized": "1.12.0.0",
+        "version": "v1.13.1",
+        "version_normalized": "1.13.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/symfony/polyfill-php70.git",
-            "reference": "54b4c428a0054e254223797d2713c31e08610831"
+            "reference": "af23c7bb26a73b850840823662dda371484926c4"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/54b4c428a0054e254223797d2713c31e08610831",
-            "reference": "54b4c428a0054e254223797d2713c31e08610831",
+            "url": "https://api.github.com/repos/symfony/polyfill-php70/zipball/af23c7bb26a73b850840823662dda371484926c4",
+            "reference": "af23c7bb26a73b850840823662dda371484926c4",
             "shasum": ""
         },
         "require": {
             "paragonie/random_compat": "~1.0|~2.0|~9.99",
             "php": ">=5.3.3"
         },
-        "time": "2019-08-06T08:03:45+00:00",
+        "time": "2019-11-27T13:56:44+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
-                "dev-master": "1.12-dev"
+                "dev-master": "1.13-dev"
             }
         },
         "installation-source": "dist",

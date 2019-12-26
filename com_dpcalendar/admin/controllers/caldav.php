@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -20,18 +20,21 @@ class DPCalendarControllerCaldav extends JControllerLegacy
 		$db->setQuery(
 			'insert into #__dpcalendar_caldav_principals
 				(uri, email, displayname, external_id) select concat("principals/", username) as uri, email, name as displayname, id
-				from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name');
+				from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name'
+		);
 		$db->execute();
 
 		$db->setQuery(
 			'insert into #__dpcalendar_caldav_principals
 				(uri, email, displayname, external_id) select concat("principals/", username, "/calendar-proxy-read") as uri, email, name as displayname, id
-				from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name');
+				from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name'
+		);
 		$db->execute();
 		$db->setQuery(
 			'insert into #__dpcalendar_caldav_principals
 				(uri, email, displayname, external_id) select concat("principals/", username, "/calendar-proxy-write") as uri, email, name as displayname, id
-				from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name');
+				from #__users u ON DUPLICATE KEY UPDATE email=u.email, displayname=u.name'
+		);
 		$db->execute();
 
 		// Sync calendars
@@ -40,7 +43,8 @@ class DPCalendarControllerCaldav extends JControllerLegacy
 				inner join #__dpcalendar_caldav_calendarinstances c on c.principaluri = p.uri
 				inner join #__dpcalendar_caldav_calendars cal on cal.id = c.calendarid
 				inner join #__dpcalendar_caldav_calendarobjects e on e.calendarid = c.id
-				where p.external_id not in (select id from #__users)');
+				where p.external_id not in (select id from #__users)'
+		);
 		$db->execute();
 
 		$db->setQuery('select count(id) from #__users');

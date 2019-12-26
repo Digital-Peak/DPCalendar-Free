@@ -152,7 +152,9 @@ DPCalendar = window.DPCalendar || {};
 
       if (field.type == 'select-multiple') {
         for (var j = elements[i].options.length - 1; j >= 0; j--) {
-          if (field.options[j].selected) s[s.length] = encodeURIComponent(field.name) + '=' + encodeURIComponent(field.options[j].value);
+          if (field.options[j].selected) {
+            s[s.length] = encodeURIComponent(field.name) + '=' + encodeURIComponent(field.options[j].value);
+          }
         }
       } else if (field.type != 'checkbox' && field.type != 'radio' || field.checked) {
         s[s.length] = encodeURIComponent(field.name) + '=' + encodeURIComponent(field.value);
@@ -282,13 +284,19 @@ DPCalendar = window.DPCalendar || {};
 
       var later = function later() {
         timeout = null;
-        if (!immediate) func.apply(context, args);
+
+        if (!immediate) {
+          func.apply(context, args);
+        }
       };
 
       var callNow = immediate && !timeout;
       clearTimeout(timeout);
       timeout = setTimeout(later, wait);
-      if (callNow) func.apply(context, args);
+
+      if (callNow) {
+        func.apply(context, args);
+      }
     };
   };
 

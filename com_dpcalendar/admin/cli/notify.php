@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 define('_JEXEC', 1);
 define('DS', DIRECTORY_SEPARATOR);
@@ -18,13 +18,13 @@ require_once JPATH_BASE . '/includes/defines.php';
 require_once JPATH_BASE . '/includes/framework.php';
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-JLog::addLogger(array(
+JLog::addLogger([
 	'text_file' => 'com_dpcalendars.cli.notify.errors.php'
-), JLog::ERROR, 'com_dpcalendar');
+], JLog::ERROR, 'com_dpcalendar');
 
-JLog::addLogger(array(
+JLog::addLogger([
 	'text_file' => 'com_dpcalendars.cli.notify.php'
-), JLog::NOTICE, 'com_dpcalendar');
+], JLog::NOTICE, 'com_dpcalendar');
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -33,8 +33,11 @@ set_error_handler("DPErrorHandler");
 
 function DPErrorHandler($error_level, $error_message, $error_file, $error_line, $error_context)
 {
-	JLog::add('Fatal Error during fetch! Exception is in file ' . $error_file . ' on line ' . $error_line . ': ' . PHP_EOL . $error_message,
-		JLog::ERROR, 'com_dpcalendar');
+	JLog::add(
+		'Fatal Error during fetch! Exception is in file ' . $error_file . ' on line ' . $error_line . ': ' . PHP_EOL . $error_message,
+		JLog::ERROR,
+		'com_dpcalendar'
+	);
 }
 
 JLog::add('Starting with the DPCalendar notification', JLog::DEBUG, 'com_dpcalendar');
@@ -83,7 +86,8 @@ class DPCalendarEventNotifier extends JApplicationCli
             when a.remind_type = 5
             then " . $now . " + interval a.remind_time month <= e.start_date and
                  " . $now . " + interval 1 minute + interval a.remind_time month > e.start_date
-       		end) > 0");
+       		end) > 0"
+			);
 			$db->setQuery($query);
 
 			JLog::add('Loading the events to notify which should be notified for ' . $now, JLog::DEBUG, 'com_dpcalendar');
@@ -115,9 +119,9 @@ class DPCalendarEventNotifier extends JApplicationCli
 			if (empty($event)) {
 				return;
 			}
-			$events = array(
+			$events = [
 				$event
-			);
+			];
 
 			JLog::add('Settig up the texts', JLog::DEBUG, 'com_dpcalendar');
 
@@ -128,13 +132,17 @@ class DPCalendarEventNotifier extends JApplicationCli
 
 			$subject = DPCalendarHelper::renderEvents($events, JText::_('COM_DPCALENDAR_BOOK_NOTIFICATION_EVENT_SUBJECT'), null);
 
-			$variables                = array(
+			$variables                = [
 				'sitename' => JFactory::getConfig()->get('sitename'),
 				'user'     => JFactory::getUser()->name
-			);
+			];
 			$variables['hasLocation'] = !empty($events[0]->locations);
-			$body                     = DPCalendarHelper::renderEvents($events, JText::_('COM_DPCALENDAR_BOOK_NOTIFICATION_EVENT_BODY'), null,
-				$variables);
+			$body                     = DPCalendarHelper::renderEvents(
+				$events,
+				JText::_('COM_DPCALENDAR_BOOK_NOTIFICATION_EVENT_BODY'),
+				null,
+				$variables
+			);
 
 			JLog::add('Sending the mail to ' . $ticket->email, JLog::DEBUG, 'com_dpcalendar');
 			$mailer = JFactory::getMailer();
@@ -165,7 +173,7 @@ class DPCalendarEventNotifier extends JApplicationCli
 		return $config->get('' . $varname, $default);
 	}
 
-	public static function getRouter($name = '', array $options = array())
+	public static function getRouter($name = '', array $options = [])
 	{
 		JLoader::import('joomla.application.router');
 
@@ -176,7 +184,7 @@ class DPCalendarEventNotifier extends JApplicationCli
 		}
 	}
 
-	public function getMenu($name = 'DPCalendar', $options = array())
+	public function getMenu($name = 'DPCalendar', $options = [])
 	{
 		try {
 			return JMenu::getInstance($name, $options);

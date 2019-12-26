@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -58,13 +58,13 @@ $options['weekNumbers']    = (boolean)$params->get('week_numbers');
 $options['weekends']       = (boolean)$params->get('weekend', 1);
 $options['fixedWeekCount'] = (boolean)$params->get('fixed_week_count', 1);
 
-$bd = $params->get('business_hours_days', array());
+$bd = $params->get('business_hours_days', []);
 if ($bd && !(count($bd) == 1 && !$bd[0])) {
-	$options['businessHours'] = array(
+	$options['businessHours'] = [
 		'startTime'  => $params->get('business_hours_start', ''),
 		'endTime'    => $params->get('business_hours_end', ''),
-		'daysOfWeek' => $params->get('business_hours_days', array())
-	);
+		'daysOfWeek' => $params->get('business_hours_days', [])
+	];
 }
 
 $options['firstDay']              = (int)$params->get('weekstart', 0);
@@ -106,7 +106,7 @@ $options['slotLabelInterval'] = '00:' . $params->get('agenda_slot_minutes', 30) 
 $options['slotLabelFormat']   = $this->dateHelper->convertPHPDateToMoment($params->get('axisformat', 'g:i a'));
 
 // Set up the header
-$options['header'] = array('left' => array(), 'center' => array(), 'right' => array());
+$options['header'] = ['left' => [], 'center' => [], 'right' => []];
 if ($params->get('header_show_navigation', 1)) {
 	$options['header']['left'][] = 'prev';
 	$options['header']['left'][] = 'next';
@@ -152,34 +152,34 @@ if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $this->r
 }
 
 // Set up the views
-$options['views']          = array();
-$options['views']['month'] = array(
+$options['views']          = [];
+$options['views']['month'] = [
 	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_month', 'F Y')),
 	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_month', 'g:i a')),
 	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_month', 'D')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
-);
-$options['views']['week']  = array(
+];
+$options['views']['week']  = [
 	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_week', 'M j Y')),
 	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_week', 'g:i a')),
 	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_week', 'D n/j')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
-);
-$options['views']['day']   = array(
+];
+$options['views']['day']   = [
 	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_day', 'F j Y')),
 	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_day', 'g:i a')),
 	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_day', 'l')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
-);
-$options['views']['list']  = array(
+];
+$options['views']['list']  = [
 	'titleFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_list', 'M j Y')),
 	'eventTimeFormat'    => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_list', 'g:i a')),
 	'columnHeaderFormat' => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_list', 'D')),
 	'listDayFormat'      => $this->dateHelper->convertPHPDateToMoment($params->get('dayformat_list', 'l')),
 	'listDayAltFormat'   => $this->dateHelper->convertPHPDateToMoment($params->get('dateformat_list', 'F j, Y')),
-	'duration'           => array('days' => (int)$params->get('list_range', 30)),
+	'duration'           => ['days' => (int)$params->get('list_range', 30)],
 	'noEventsMessage'    => $this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
-);
+];
 
 // Some DPCalendar specific options
 $options['show_event_as_popup']   = $params->get('show_event_as_popup');

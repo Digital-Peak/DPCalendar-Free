@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -28,7 +28,7 @@ JLoader::import('joomla.application.component.controller');
 
 // Load the model
 JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_installer/models', 'InstallerModel');
-$model = JModelLegacy::getInstance('Updatesites', 'InstallerModel', array('ignore_request' => true));
+$model = JModelLegacy::getInstance('Updatesites', 'InstallerModel', ['ignore_request' => true]);
 
 // Determine the type
 $type = '';
@@ -38,10 +38,10 @@ if ($model) {
 		if (strpos($updateSite->update_site_name, 'DPCalendar') === false) {
 			continue;
 		}
-		$type .= str_replace(array(
+		$type .= str_replace([
 			'DPCalendar',
 			'Update Site'
-		), '', $updateSite->update_site_name);
+		], '', $updateSite->update_site_name);
 	}
 }
 

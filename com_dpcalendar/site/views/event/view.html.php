@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -54,12 +54,12 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event->text = $event->description;
 		JFactory::getApplication()->triggerEvent(
 			'onContentPrepare',
-			array(
+			[
 				'com_dpcalendar.event',
 				&$event,
 				&$event->params,
 				0
-			)
+			]
 		);
 		$event->description = $event->text;
 
@@ -207,8 +207,10 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			return JText::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_END',
 				$regstrationEndDate->format($this->params->get('event_date_format', 'm.d.Y'), true),
-				$regstrationEndDate->format('H:i') != '00:00' ? $regstrationEndDate->format($this->params->get('event_time_format', 'h:i a'),
-					true) : ''
+				$regstrationEndDate->format('H:i') != '00:00' ? $regstrationEndDate->format(
+					$this->params->get('event_time_format', 'h:i a'),
+					true
+				) : ''
 			);
 		}
 
@@ -246,11 +248,11 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 				$this->document->setTitle($this->event->title);
 			}
 
-			$path     = array(array('title' => $this->event->title, 'link' => ''));
+			$path     = [['title' => $this->event->title, 'link' => '']];
 			$category = DPCalendarHelper::getCalendar($this->event->catid);
 			while ($category != null && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] == 'event' || $id != $category->id) &&
 				$category->id > 1) {
-				$path[]   = array('title' => $category->title, 'link' => DPCalendarHelperRoute::getCalendarRoute($category->id));
+				$path[]   = ['title' => $category->title, 'link' => DPCalendarHelperRoute::getCalendarRoute($category->id)];
 				$category = $category->getParent();
 			}
 			$path = array_reverse($path);
@@ -265,8 +267,12 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		}
 		if ($metadesc) {
 			$this->document->setDescription($this->event->title . ' '
-				. DPCalendarHelper::getDateStringFromEvent($this->event, $this->params->get('event_date_format', 'm.d.Y'),
-					$this->params->get('event_time_format', 'g:i a'), true) . ' ' . $metadesc);
+				. DPCalendarHelper::getDateStringFromEvent(
+					$this->event,
+					$this->params->get('event_date_format', 'm.d.Y'),
+					$this->params->get('event_time_format', 'g:i a'),
+					true
+				) . ' ' . $metadesc);
 		}
 
 		if ($this->event->metakey) {

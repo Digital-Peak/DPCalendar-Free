@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Helper;
 
@@ -76,9 +76,9 @@ class DateHelper
 	{
 		return \JLayoutHelper::render(
 			'event.datestring',
-			array('event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat),
+			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat],
 			null,
-			array('component' => 'com_dpcalendar', 'client' => 0)
+			['component' => 'com_dpcalendar', 'client' => 0]
 		);
 	}
 
@@ -111,7 +111,7 @@ class DateHelper
 	public function convertPHPDateToMoment($format)
 	{
 		// Php date to fullcalendar date conversion
-		$dateFormat = array(
+		$dateFormat = [
 			'd' => 'DD',
 			'D' => 'ddd',
 			'j' => 'D',
@@ -151,7 +151,7 @@ class DateHelper
 			'U' => 'X',
 			'{' => '(',
 			'}' => ')'
-		);
+		];
 
 		$formatArray = str_split($format);
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 namespace DPCalendar\Plugin;
@@ -64,7 +64,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 					continue;
 				}
 
-				return $this->createEventFromIcal($event, $calendarId, array((string)$event->UID => $event));
+				return $this->createEventFromIcal($event, $calendarId, [(string)$event->UID => $event]);
 			}
 		}
 		$start = null;
@@ -125,7 +125,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		$content = $this->getContent($calendarId, $s, $e, $options);
 		if (empty($content)) {
-			return array();
+			return [];
 		}
 		if (is_array($content)) {
 			$content = implode(PHP_EOL, $content);
@@ -144,7 +144,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$this->log($e->getMessage());
 			$this->log('Content is:' . nl2br(substr($content, 0, 200)));
 
-			return array();
+			return [];
 		}
 
 		if ($startDate == null) {
@@ -156,10 +156,10 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 		$data = $cal->VEVENT;
 		if (empty($data)) {
-			return array();
+			return [];
 		}
 
-		$originals = array();
+		$originals = [];
 		foreach ($cal->VEVENT as $tmp) {
 			$originals[] = clone $tmp;
 		}
@@ -171,21 +171,21 @@ abstract class DPCalendarPlugin extends \JPlugin
 		} catch (\Exception $e) {
 			$this->log($e->getMessage());
 
-			return array();
+			return [];
 		}
 
 		$data = $cal->VEVENT;
 		if (empty($data)) {
-			return array();
+			return [];
 		}
 
-		$tmp = array();
+		$tmp = [];
 		foreach ($data as $event) {
 			$tmp[] = $event;
 		}
 		$data = $tmp;
 
-		$events = array();
+		$events = [];
 		$filter = strtolower($options->get('filter', null));
 		$limit  = $options->get('limit', null);
 		$order  = strtolower($options->get('order', 'asc'));
@@ -215,7 +215,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$events[] = $tmpEvent;
 		}
 
-		usort($events,
+		usort(
+			$events,
 			function ($event1, $event2) use ($order) {
 				$first  = $event1;
 				$second = $event2;
@@ -241,7 +242,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			\JLoader::import('joomla.application.component.model');
 			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-			$model = \JModelLegacy::getInstance('Extcalendars', 'DPCalendarModel', array('ignore_request' => true));
+			$model = \JModelLegacy::getInstance('Extcalendars', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->getState();
 			$model->setState('filter.plugin', str_replace('dpcalendar_', '', $this->_name));
 			$model->setState('filter.state', 1);
@@ -252,7 +253,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		$user      = \JFactory::getUser();
-		$calendars = array();
+		$calendars = [];
 		foreach ($this->extCalendarsCache as $calendar) {
 			if (!empty($calendarIds) && !in_array($calendar->id, $calendarIds)) {
 				continue;
@@ -319,7 +320,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 *
 	 * @return string false
 	 */
-	public function saveEvent($eventId = null, $calendarId, array $data)
+	public function saveEvent($eventId, $calendarId, array $data)
 	{
 		return false;
 	}
@@ -332,7 +333,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 *
 	 * @return boolean
 	 */
-	public function deleteEvent($eventId = null, $calendarId)
+	public function deleteEvent($eventId, $calendarId)
 	{
 		return false;
 	}
@@ -369,7 +370,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$cache->options['locking'] = false;
 
 		try {
-			$event = $cache->get(array($this, 'fetchEvent'), array($id[1], $id[0]));
+			$event = $cache->get([$this, 'fetchEvent'], [$id[1], $id[0]]);
 			$cache->gc();
 
 			return $event;
@@ -405,7 +406,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		try {
-			$events = $cache->get(array($this, 'fetchEvents'), array($id, $startDate, $endDate, $options));
+			$events = $cache->get([$this, 'fetchEvents'], [$id, $startDate, $endDate, $options]);
 			$cache->gc();
 		} catch (\Exception $e) {
 			$this->log($e->getMessage());
@@ -422,10 +423,10 @@ abstract class DPCalendarPlugin extends \JPlugin
 			return;
 		}
 
-		$ids = array();
+		$ids = [];
 		if (!empty($calendarIds)) {
 			if (!is_array($calendarIds)) {
-				$calendarIds = array($calendarIds);
+				$calendarIds = [$calendarIds];
 			}
 			foreach ($calendarIds as $calendarId) {
 				if (strpos($calendarId, $this->identifier) === 0) {
@@ -646,8 +647,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->all_day          = false;
 		$event->color            = '';
 		$event->url              = '';
-		$event->price            = array();
-		$event->locations        = array();
+		$event->price            = [];
+		$event->locations        = [];
 		$event->rooms            = null;
 		$event->hits             = 0;
 		$event->capacity         = 0;
@@ -786,7 +787,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		if (isset($event->ATTENDEE)) {
-			$tmpEvent->bookings = array();
+			$tmpEvent->bookings = [];
 			foreach ($event->ATTENDEE as $child) {
 				$booking        = new \stdClass();
 				$booking->name  = '';
@@ -837,14 +838,14 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		$location  = (string)$event->LOCATION;
-		$locations = array();
+		$locations = [];
 		if (!empty($location)) {
 			$geo = (string)$event->GEO;
 			if (!empty($geo) && strpos($geo, ';') !== false) {
 				static $locationModel = null;
 				if ($locationModel == null) {
 					\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-					$locationModel = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', array('ignore_request' => true));
+					$locationModel = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 					$locationModel->getState();
 					$locationModel->setState('list.limit', 1);
 				}
@@ -856,7 +857,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 				if (!empty($tmp)) {
 					$locations = $tmp;
 
-					$tmpEvent->location_ids = array();
+					$tmpEvent->location_ids = [];
 					foreach ($tmp as $dpLocation) {
 						$tmpEvent->location_ids[] = $dpLocation->id;
 					}
@@ -887,7 +888,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 	protected function getDbCal($calendarId)
 	{
-		$calendars = $this->fetchCalendars(array($calendarId));
+		$calendars = $this->fetchCalendars([$calendarId]);
 		if (empty($calendars)) {
 			return null;
 		}
@@ -902,7 +903,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 	protected function replaceNl($text, $replace = '')
 	{
-		return str_replace(array("\r\n", "\r", "\n"), $replace, $text);
+		return str_replace(["\r\n", "\r", "\n"], $replace, $text);
 	}
 
 	protected function log($message)
@@ -916,7 +917,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			return true;
 		}
 		$location    = $options->get('location');
-		$locationIds = $options->get('location_ids', array());
+		$locationIds = $options->get('location_ids', []);
 		if (empty($location) && empty($locationIds)) {
 			return true;
 		}

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -239,7 +239,6 @@ class PlgSampledataDPCalendar extends JPlugin
 		}
 
 		return $response;
-
 	}
 
 	public function onAjaxSampledataApplyStep2()
@@ -300,7 +299,6 @@ class PlgSampledataDPCalendar extends JPlugin
 		}
 
 		return $response;
-
 	}
 
 	public function onAjaxSampledataApplyStep3()
@@ -784,7 +782,7 @@ class PlgSampledataDPCalendar extends JPlugin
 		}
 
 		if (!JComponentHelper::isEnabled('com_modules')) {
-			$response            = array();
+			$response            = [];
 			$response['success'] = true;
 			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_SKIPPED', 9, 'com_modules');
 
@@ -946,16 +944,18 @@ class PlgSampledataDPCalendar extends JPlugin
 						$data['params']['timeformat_day']   = 'H:i';
 						$data['params']['timeformat_list']  = 'H:i';
 						$data['params']['weekstart']        = 1;
+						// Params for calendar
 					case 'view=list':
 					case 'view=list&layout=blog':
 					case 'view=list&layout=timeline':
 						$data['params']['list_title_format'] = 'd.m.Y';
+						// Params for list
 					case 'view=map':
 						$data['params']['map_date_format'] = 'H:i';
+						// Params for map
 					case 'view=event&id=':
 						$data['params']['event_date_format'] = 'd.m.Y';
 						$data['params']['event_time_format'] = 'H:i';
-						break;
 				}
 			}
 

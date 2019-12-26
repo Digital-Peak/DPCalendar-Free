@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -37,17 +37,18 @@ JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/componen
 
 // Some styling
 JFactory::getDocument()->addStyleDeclaration(
-	'#member-registration legend, #member-registration fieldset .control-group:nth-of-type(1) {display:none} #member-registration {padding: 5}');
+	'#member-registration legend, #member-registration fieldset .control-group:nth-of-type(1) {display:none} #member-registration {padding: 5}'
+);
 
 // Prefill the data
 $data = JFactory::getApplication()->setUserState(
 	'com_users.registration.data',
-	array(
+	[
 		'name'     => $booking->name,
 		'username' => preg_replace('/([^@]*).*/', '$1', $booking->email),
 		'email1'   => $booking->email,
 		'email2'   => $booking->email
-	)
+	]
 );
 
 // Path to the users component

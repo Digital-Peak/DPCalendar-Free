@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -26,7 +26,7 @@ class DPCalendarTableExtcalendar extends JTable
 		if ($success) {
 			// Load the DPCalendar plugins to delete cached events
 			JPluginHelper::importPlugin('dpcalendar');
-			JFactory::getApplication()->triggerEvent('onCalendarAfterDelete', array($this));
+			JFactory::getApplication()->triggerEvent('onCalendarAfterDelete', [$this]);
 		}
 
 		return $success;
@@ -94,12 +94,12 @@ class DPCalendarTableExtcalendar extends JTable
 
 		// Verify that the alias is unique
 		$table = JTable::getInstance('Extcalendar', 'DPCalendarTable');
-		if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0)) {
+		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id == 0)) {
 			$this->alias = \Joomla\String\StringHelper::increment($this->alias);
 		}
 
 		if (empty($this->_rules)) {
-			$this->_rules = new JRules(array('core.edit' => array(), 'core.create' => array(), 'core.delete' => array()));
+			$this->_rules = new JRules(['core.edit' => [], 'core.create' => [], 'core.delete' => []]);
 		}
 
 		// Obfuscate the password
@@ -184,11 +184,11 @@ class DPCalendarTableExtcalendar extends JTable
 		// Clean up keywords -- eliminate extra spaces between phrases
 		// and cr (\r) and lf (\n) characters from string
 		if (!empty($this->metakey)) {
-			$bad_characters = array("\n", "\r", "\"", "<", ">");
+			$bad_characters = ["\n", "\r", "\"", "<", ">"];
 
 			$after_clean = \Joomla\String\StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys        = explode(',', $after_clean);
-			$clean_keys  = array();
+			$clean_keys  = [];
 			foreach ($keys as $key) {
 				if (trim($key)) {
 					$clean_keys[] = trim($key);
@@ -216,9 +216,9 @@ class DPCalendarTableExtcalendar extends JTable
 		// set.
 		if (empty($pks)) {
 			if ($this->$k) {
-				$pks = array($this->$k);
-			} // Nothing to set publishing state on, return false.
-			else {
+				$pks = [$this->$k];
+			} else {
+				// Nothing to set publishing state on, return false.
 				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 
 				return false;

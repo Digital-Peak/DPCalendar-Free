@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -14,14 +14,14 @@ class DPCalendarControllerExtcalendars extends JControllerAdmin
 
 	protected $text_prefix = 'COM_DPCALENDAR_EXTCALENDAR';
 
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		parent::__construct($config);
 
 		$this->input = JFactory::getApplication()->input;
 	}
 
-	public function getModel($name = 'Extcalendar', $prefix = 'DPCalendarModel', $config = array('ignore_request' => true))
+	public function getModel($name = 'Extcalendar', $prefix = 'DPCalendarModel', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}
@@ -30,7 +30,8 @@ class DPCalendarControllerExtcalendars extends JControllerAdmin
 	{
 		$this->setRedirect(
 			'index.php?option=com_dpcalendar&view=extcalendars&layout=import&dpplugin=' . $this->input->getCmd('dpplugin') . '&tmpl=' .
-			$this->input->getCmd('tmpl'));
+			$this->input->getCmd('tmpl')
+		);
 
 		return true;
 	}

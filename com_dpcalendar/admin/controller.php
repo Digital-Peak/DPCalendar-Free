@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -45,7 +45,7 @@ class DPCalendarController extends JControllerLegacy
 		return $this;
 	}
 
-	public function getModel($name = '', $prefix = 'DPCalendarModel', $config = array())
+	public function getModel($name = '', $prefix = 'DPCalendarModel', $config = [])
 	{
 		if ($name == 'event') {
 			$name = 'AdminEvent';

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -78,7 +78,7 @@ class DPCalendarTableLocation extends JTable
 
 		// Verify that the alias is unique
 		$table = JTable::getInstance('Location', 'DPCalendarTable');
-		if ($table->load(array('alias' => $this->alias)) && ($table->id != $this->id || $this->id == 0)) {
+		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id == 0)) {
 			$this->setError(JText::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_LOCATION') . ': ' . $table->alias);
 
 			return false;
@@ -126,11 +126,11 @@ class DPCalendarTableLocation extends JTable
 		// Clean up keywords -- eliminate extra spaces between phrases
 		// and cr (\r) and lf (\n) characters from string
 		if (!empty($this->metakey)) {
-			$bad_characters = array("\n", "\r", "\"", "<", ">");
+			$bad_characters = ["\n", "\r", "\"", "<", ">"];
 
 			$after_clean = \Joomla\String\StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys        = explode(',', $after_clean);
-			$clean_keys  = array();
+			$clean_keys  = [];
 			foreach ($keys as $key) {
 				if (trim($key)) {
 					$clean_keys[] = trim($key);
@@ -164,7 +164,7 @@ class DPCalendarTableLocation extends JTable
 		// set.
 		if (empty($pks)) {
 			if ($this->$k) {
-				$pks = array($this->$k);
+				$pks = [$this->$k];
 			} else {
 				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 
@@ -185,7 +185,8 @@ class DPCalendarTableLocation extends JTable
 		// Update the publishing state for rows with the given primary keys.
 		$this->_db->setQuery(
 			'UPDATE ' . $this->_db->quoteName($this->_tbl) . ' SET ' . $this->_db->quoteName('state') . ' = ' . (int)$state . ' WHERE (' . $where .
-			')' . $checkin);
+			')' . $checkin
+		);
 
 		try {
 			$this->_db->execute();

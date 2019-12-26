@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -48,15 +48,15 @@ class DPCalendarModelLocation extends JModelAdmin
 		return $item;
 	}
 
-	public function getTable($type = 'Location', $prefix = 'DPCalendarTable', $config = array())
+	public function getTable($type = 'Location', $prefix = 'DPCalendarTable', $config = [])
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm($data = array(), $loadData = true, $controlName = 'jform')
+	public function getForm($data = [], $loadData = true, $controlName = 'jform')
 	{
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.location', 'location', array('control' => $controlName, 'load_data' => $loadData));
+		$form = $this->loadForm('com_dpcalendar.location', 'location', ['control' => $controlName, 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
@@ -159,7 +159,7 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.location.data', array());
+		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.location.data', []);
 
 		if (empty($data)) {
 			$data = $this->getItem();

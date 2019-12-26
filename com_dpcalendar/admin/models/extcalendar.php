@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -29,15 +29,15 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 		return parent::save($data);
 	}
 
-	public function getTable($type = 'Extcalendar', $prefix = 'DPCalendarTable', $config = array())
+	public function getTable($type = 'Extcalendar', $prefix = 'DPCalendarTable', $config = [])
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm($data = array(), $loadData = true)
+	public function getForm($data = [], $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.extcalendar', 'extcalendar', array('control'   => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_dpcalendar.extcalendar', 'extcalendar', ['control'   => 'jform', 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
@@ -76,7 +76,7 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.extcalendar.data', array());
+		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.extcalendar.data', []);
 
 		if (empty($data)) {
 			$data = $this->getItem();
@@ -135,7 +135,7 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 		JPluginHelper::importPlugin('dpcalendar');
 		$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
 		if (!empty($tmp)) {
-			$ids = array();
+			$ids = [];
 			foreach ($tmp as $calendars) {
 				foreach ($calendars as $externalCalendar) {
 					if ($externalCalendar->plugin_name != $plugin) {

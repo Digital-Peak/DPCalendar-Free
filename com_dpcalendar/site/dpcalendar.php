@@ -1,16 +1,18 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 if (version_compare(PHP_VERSION, '5.5.9') < 0) {
 	JFactory::getApplication()->enqueueMessage(
 		'You have PHP version ' . PHP_VERSION . ' installed. This version is end of life and contains some security wholes!!
-					 		Please upgrade your PHP version to at least 5.3.x. DPCalendar can not run on this version.', 'warning');
+					 		Please upgrade your PHP version to at least 5.3.x. DPCalendar can not run on this version.',
+		'warning'
+	);
 
 	return;
 }

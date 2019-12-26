@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Helper;
 
@@ -14,7 +14,7 @@ class Ical
 	public static function createIcalFromCalendar($calendarId, $asDownload = false)
 	{
 		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-		$eventsModel = \JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$eventsModel = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$eventsModel->setState('category.id', $calendarId);
 		$eventsModel->setState('category.recursive', false);
 		$eventsModel->setState('list.limit', 100000);
@@ -48,7 +48,7 @@ class Ical
 	 * in the events data. If this is not the case the force flag will generate ical content of the available event
 	 * data, even when they are instances of a series.
 	 *
-	 * @param      $events
+	 * @param $events
 	 * @param bool $asDownload
 	 * @param bool $forceEvents
 	 *
@@ -345,20 +345,20 @@ class Ical
 		foreach ($transitions as $i => $trans) {
 			$cmp = null;
 
-			// skip the first entry...
+			// Skip the first entry...
 			if ($i == 0) {
 				// ... but remember the offset for the next TZOFFSETFROM value
 				$tzfrom = $trans['offset'] / 3600;
 				continue;
 			}
 
-			// daylight saving time definition
+			// Daylight saving time definition
 			if ($trans['isdst']) {
 				$t_dst = $trans['ts'];
 				$dst   = $vcalendar->createComponent('DAYLIGHT');
 				$cmp   = $dst;
-			} // standard time definition
-			else {
+			} else {
+				// Standard time definition
 				$t_std = $trans['ts'];
 				$std   = $vcalendar->createComponent('STANDARD');
 				$cmp   = $std;

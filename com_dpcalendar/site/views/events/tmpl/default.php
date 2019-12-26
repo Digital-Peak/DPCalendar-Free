@@ -1,16 +1,16 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 // Set the mime encoding
 JFactory::getDocument()->setMimeEncoding('application/json');
 
-$data = array();
+$data = [];
 foreach ($this->items as $event) {
 	$displayData          = $this->displayData;
 	$displayData['event'] = $event;
@@ -18,15 +18,15 @@ foreach ($this->items as $event) {
 	$description          = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
 
 	// Set up the locations
-	$locations   = array();
-	$resourceIds = array();
+	$locations   = [];
+	$resourceIds = [];
 	if (!empty($event->locations)) {
 		foreach ($event->locations as $location) {
-			$locations[] = array(
+			$locations[] = [
 				'location'  => \DPCalendar\Helper\Location::format($location),
 				'latitude'  => $location->latitude,
 				'longitude' => $location->longitude
-			);
+			];
 
 			if (!$event->rooms) {
 				$resourceIds[] = $location->id;
@@ -66,7 +66,7 @@ foreach ($this->items as $event) {
 	$calendar = DPCalendarHelper::getCalendar($event->catid);
 
 	// Add the data
-	$eventData = array(
+	$eventData = [
 		'id'          => $event->id,
 		'title'       => $this->compactMode == 0 ? htmlspecialchars_decode($event->title) : utf8_encode(chr(160)),
 		'start'       => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format($format, true),
@@ -78,7 +78,7 @@ foreach ($this->items as $event) {
 		'description' => $description,
 		'location'    => $locations,
 		'classNames'  => ['dp-event-' . $event->id, 'dp-event-calendar-' . $event->catid],
-	);
+	];
 
 	if ($event->show_end_time || $event->all_day) {
 		$eventData['end'] = DPCalendarHelper::getDate($event->end_date, $event->all_day)->format($format, true);
@@ -93,7 +93,7 @@ foreach ($this->items as $event) {
 $messages = JFactory::getApplication()->getMessageQueue();
 
 // Build the sorted messages list
-$lists = array();
+$lists = [];
 if (is_array($messages) && count($messages)) {
 	foreach ($messages as $message) {
 		if (isset($message['type']) && isset($message['message'])) {

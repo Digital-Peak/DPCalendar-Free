@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -40,8 +40,8 @@ JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', '
 
 $model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
 $model->getState();
-$model->setState('filter.parentIds', $params->get('ids', array('root')));
-$ids = array();
+$model->setState('filter.parentIds', $params->get('ids', ['root']));
+$ids = [];
 foreach ($model->getItems() as $calendar) {
 	$ids[] = $calendar->id;
 }
@@ -71,7 +71,7 @@ if ($endDate == 'same day') {
 	$endDate = null;
 }
 
-$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 $model->getState();
 $model->setState('list.limit', $params->get('max_events', 5));
 $model->setState('list.direction', $params->get('order', 'asc'));
@@ -88,8 +88,8 @@ $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
 $model->setState('filter.my', $params->get('show_my_only', 0));
 $model->setState('filter.featured', $params->get('filter_featured', 0));
-$model->setState('filter.tags', $params->get('filter_tags', array()));
-$model->setState('filter.locations', $params->get('filter_locations', array()));
+$model->setState('filter.tags', $params->get('filter_tags', []));
+$model->setState('filter.locations', $params->get('filter_locations', []));
 
 $events = $model->getItems();
 
@@ -98,10 +98,16 @@ if (!$events && !$params->get('empty_text', 1)) {
 }
 
 if ($params->get('sort', 'start_date') == 'start_date') {
-// Sort the array by user date
-	usort($events, function ($e1, $e2) use ($dateHelper) {
+	// Sort the array by user date
+	usort($events, function ($e1, $e2) use ($dateHelper, $params) {
 		$d1 = $dateHelper->getDate($e1->start_date, $e1->all_day);
 		$d2 = $dateHelper->getDate($e2->start_date, $e2->all_day);
+
+		if ($params->get('order', 'asc') !== 'asc') {
+			$tmp = $d1;
+			$d1  = $d2;
+			$d2  = $tmp;
+		}
 
 		return strcmp($d1->format('c', true), $d2->format('c', true));
 	});
@@ -134,11 +140,11 @@ foreach ($events as $event) {
 	$groupedEvents[$lastHeading][] = $event;
 
 	$event->text = $event->description;
-	$app->triggerEvent('onContentPrepare', array('com_dpcalendar.event', &$event, &$event->params, 0));
+	$app->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$event->params, 0]);
 	$event->description = $event->text;
 
 	$event->realUrl = str_replace(
-		array('?tmpl=component', 'tmpl=component'),
+		['?tmpl=component', 'tmpl=component'],
 		'',
 		$router->getEventRoute($event->id, $event->catid, false, true, $params->get('default_menu_item'))
 	);

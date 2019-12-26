@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -51,7 +51,7 @@ if (!empty($this->event->tickets)) {
 	<?php } ?>
 	<form class="com-dpcalendar-eventform__form dp-form form-validate" method="post" name="adminForm"
 		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id); ?>">
-		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', array('active' => 'general')); ?>
+		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
 			<?php echo JHtml::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<?php foreach ($this->form->getFieldset($name) as $field) { ?>

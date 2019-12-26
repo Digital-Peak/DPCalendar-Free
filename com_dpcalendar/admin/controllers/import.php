@@ -1,19 +1,19 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 class DPCalendarControllerImport extends JControllerLegacy
 {
-	public function add($data = array())
+	public function add($data = [])
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
-		$model = $this->getModel('Import', '', array());
+		$model = $this->getModel('Import', '', []);
 		$model->import();
 
 		$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=tools&layout=import', false), implode('<br>', $model->get('messages')));
@@ -21,7 +21,7 @@ class DPCalendarControllerImport extends JControllerLegacy
 
 	public function geodb()
 	{
-		$model = $this->getModel('Import', '', array());
+		$model = $this->getModel('Import', '', []);
 
 		$message = '';
 		try {

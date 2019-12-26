@@ -34,7 +34,8 @@ class DPCalendar extends \TCPDF
 	public function Footer()
 	{
 		$date = \DPCalendarHelper::getDate()->format(
-			$this->params->get('event_date_format', 'm.d.Y') . ' ' . $this->params->get('event_time_format', 'g:i a'));
+			$this->params->get('event_date_format', 'm.d.Y') . ' ' . $this->params->get('event_time_format', 'g:i a')
+		);
 		$this->Cell(30, 0, $date, 'T', false, 'L', 0, '', 0, false, 'T', 'M');
 		$this->Cell(120, 0, $this->params->get('invoice_footer'), 'T', false, 'C', 0, '', 0, false, 'T', 'C');
 		$this->Cell(0, 0, $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 'T', false, 'R', 0, '', 0, false, 'T', 'M');

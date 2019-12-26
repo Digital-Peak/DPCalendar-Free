@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -20,8 +20,17 @@ if ($saveOrder) {
 		<thead>
 		<tr>
 			<th class="dp-table__col-order">
-				<?php echo JHtml::_('searchtools.sort', '', 'a.ordering', $listDirn, $listOrder, null, 'asc', 'JGRID_HEADING_ORDERING',
-					'icon-menu-2'); ?>
+				<?php echo JHtml::_(
+					'searchtools.sort',
+					'',
+					'a.ordering',
+					$listDirn,
+					$listOrder,
+					null,
+					'asc',
+					'JGRID_HEADING_ORDERING',
+					'icon-menu-2'
+				); ?>
 			</th>
 			<th class="dp-table__col-check">
 				<input type="checkbox" name="checkall-toggle" value="" title="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"
@@ -52,8 +61,16 @@ if ($saveOrder) {
 				</td>
 				<td data-column="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"><?php echo JHtml::_('grid.id', $i, $item->id); ?></td>
 				<td data-column="<?php echo $this->translate('JSTATUS'); ?>">
-					<?php echo JHtml::_('jgrid.published', $item->state, $i, 'extcalendars.', $canChange, 'cb', $item->publish_up,
-						$item->publish_down); ?>
+					<?php echo JHtml::_(
+						'jgrid.published',
+						$item->state,
+						$i,
+						'extcalendars.',
+						$canChange,
+						'cb',
+						$item->publish_up,
+						$item->publish_down
+					); ?>
 				</td>
 				<td data-column="<?php echo $this->translate('JGLOBAL_TITLE'); ?>">
 					<?php if ($canEdit) { ?>

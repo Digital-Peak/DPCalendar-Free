@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -167,7 +167,7 @@ class DPCalendarRouter extends JComponentRouterView
 
 		list($void, $segment) = explode(':', $id, 2);
 
-		return array($void => $segment);
+		return [$void => $segment];
 	}
 
 	public function getFormSegment($id, $query)
@@ -195,7 +195,7 @@ class DPCalendarRouter extends JComponentRouterView
 
 		list($void, $segment) = explode(':', $id, 2);
 
-		return array($void => $segment);
+		return [$void => $segment];
 	}
 
 	public function getLocationsSegment($id, $query)
@@ -213,7 +213,7 @@ class DPCalendarRouter extends JComponentRouterView
 
 		list($void, $segment) = explode(':', $id, 2);
 
-		return array($void => $segment);
+		return [$void => $segment];
 	}
 
 	public function getLocationformSegment($id, $query)
@@ -224,7 +224,7 @@ class DPCalendarRouter extends JComponentRouterView
 	public function getCalendarId($segment, $query)
 	{
 		if (isset($query['id'])) {
-			$category = JCategories::getInstance($this->getName(), array('access' => false))->get($query['id']);
+			$category = JCategories::getInstance($this->getName(), ['access' => false])->get($query['id']);
 
 			if ($category) {
 				foreach ($category->getChildren() as $child) {

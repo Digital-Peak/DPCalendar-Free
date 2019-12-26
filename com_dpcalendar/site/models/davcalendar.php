@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -12,14 +12,14 @@ JTable::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/tables');
 
 class DPCalendarModelDavcalendar extends JModelAdmin
 {
-	public function getTable($type = 'Davcalendar', $prefix = 'DPCalendarTable', $config = array())
+	public function getTable($type = 'Davcalendar', $prefix = 'DPCalendarTable', $config = [])
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm($data = array(), $loadData = true)
+	public function getForm($data = [], $loadData = true)
 	{
-		$form = $this->loadForm('com_dpcalendar.davcalendar', 'davcalendar', array('control'   => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_dpcalendar.davcalendar', 'davcalendar', ['control'   => 'jform', 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
@@ -29,7 +29,7 @@ class DPCalendarModelDavcalendar extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.davcalendar.data', array());
+		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.davcalendar.data', []);
 
 		if (empty($data)) {
 			$data = $this->getItem();

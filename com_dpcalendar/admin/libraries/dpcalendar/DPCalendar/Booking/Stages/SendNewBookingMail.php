@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 namespace DPCalendar\Booking\Stages;
@@ -70,7 +70,7 @@ class SendNewBookingMail implements StageInterface
 			$this->mailer->IsHTML(true);
 			$this->mailer->addRecipient($payload->item->email);
 
-			$files = array();
+			$files = [];
 			if ($payload->mailParams->get('booking_include_ics', 1)) {
 				$icsFile = JPATH_ROOT . '/tmp/' . $payload->item->uid . '.ics';
 				$content = Ical::createIcalFromEvents($payload->eventsWithTickets, false, true);

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -30,11 +30,11 @@ class DPCalendarHelperRoute
 		if (\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
 			$link .= '&calid=' . $calId;
 		} else {
-			$needles = array('event' => array((int)$id));
+			$needles = ['event' => [(int)$id]];
 			if ($calId > 0 || (!is_numeric($calId) && $calId != 'root')) {
-				$needles['calendar'] = array($calId);
-				$needles['list']     = array($calId);
-				$needles['map']      = array($calId);
+				$needles['calendar'] = [$calId];
+				$needles['list']     = [$calId];
+				$needles['map']      = [$calId];
 			}
 
 			if ($defaultItemId) {
@@ -93,7 +93,7 @@ class DPCalendarHelperRoute
 		}
 
 		if (!\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
-			$needles = array('location' => array((int)$location->id), 'locations' => array((int)$location->id));
+			$needles = ['location' => [(int)$location->id], 'locations' => [(int)$location->id]];
 			if ($item = self::findItem($needles)) {
 				$link .= '&Itemid=' . $item;
 			} else if ($item = self::findItem()) {
@@ -131,19 +131,19 @@ class DPCalendarHelperRoute
 
 	public static function getBookingRoute($booking, $full = false)
 	{
-		$args         = array();
+		$args         = [];
 		$args['view'] = 'booking';
 		$args['uid']  = $booking->uid;
 
 		$uri = self::getUrl($args, false);
 
-		$uri = $full ? $uri->toString() : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
+		$url = JRoute::_($uri->toString(['path', 'query', 'fragment']),false);
+		if ($full) {
+			$url = ($full ? JUri::getInstance()->toString(['host','port','scheme']) : '') . JRoute::_('index.php' . $uri->toString(['query', 'fragment']),false);
+		}
 
-		// When a booking is created on the back end it contains the
-		// administrator part
-		$uri = str_replace('/administrator/', '/', $uri);
-
-		return $uri;
+		// When a booking is created on the back end it contains the administrator part
+		return str_replace('/administrator/', '/', $url);
 	}
 
 	public static function getBookingsRoute($eventId)
@@ -162,7 +162,7 @@ class DPCalendarHelperRoute
 
 	public static function getInviteRoute($event, $return = null)
 	{
-		$args         = array();
+		$args         = [];
 		$args['view'] = 'invite';
 		$args['id']   = $event->id;
 		if (empty($return)) {
@@ -175,19 +175,19 @@ class DPCalendarHelperRoute
 
 	public static function getInviteChangeRoute($booking, $accept, $full)
 	{
-		$args           = array();
+		$args           = [];
 		$args['task']   = 'booking.invite';
 		$args['uid']    = $booking->uid;
 		$args['accept'] = $accept ? '1' : '0';
 
 		$uri = self::getUrl($args, false);
 
-		return $full ? $uri->toString() : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
+		return $full ? $uri->toString() : JRoute::_($uri->toString(['path', 'query', 'fragment']));
 	}
 
 	public static function getBookingFormRoute($bookingId, $return = null)
 	{
-		$args         = array();
+		$args         = [];
 		$args['task'] = 'bookingform.edit';
 		$args['b_id'] = $bookingId;
 		if (empty($return)) {
@@ -200,7 +200,7 @@ class DPCalendarHelperRoute
 
 	public static function getBookingFormRouteFromEvent($event, $return = null)
 	{
-		$args         = array();
+		$args         = [];
 		$args['task'] = 'bookingform.add';
 		$args['e_id'] = $event->id;
 		if (empty($return)) {
@@ -218,12 +218,12 @@ class DPCalendarHelperRoute
 
 	public static function getTicketRoute($ticket, $full = false)
 	{
-		$args         = array();
+		$args         = [];
 		$args['view'] = 'ticket';
 		$args['uid']  = $ticket->uid;
 
 		$uri = self::getUrl($args, false);
-		$uri = $full ? $uri->toString() : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
+		$uri = $full ? $uri->toString() : JRoute::_($uri->toString(['path', 'query', 'fragment']));
 		$uri = str_replace('/administrator/', '/', $uri);
 
 		return $uri;
@@ -231,18 +231,25 @@ class DPCalendarHelperRoute
 
 	public static function getTicketCheckinRoute($ticket, $full = false)
 	{
-		$args         = array();
+		$args         = [];
 		$args['uid']  = $ticket->uid;
 		$args['task'] = 'ticket.checkin';
 
 		$uri = self::getUrl($args, false);
 
-		return $full ? str_replace('administrator', '', $uri->toString()) : JRoute::_($uri->toString(array('path', 'query', 'fragment')));
+		$url = JRoute::_($uri->toString(['path', 'query', 'fragment']), false);
+		if ($full) {
+			$url = ($full ? JUri::getInstance()->toString(['host', 'port', 'scheme']) : '')
+				. JRoute::_('index.php' . $uri->toString(['query', 'fragment']), false);
+		}
+
+		// When a Ticket urls is created on the back end it contains the administrator part
+		return str_replace('/administrator/', '/', $url);
 	}
 
 	public static function getTicketsRoute($bookingId = null, $eventId = null, $my = false)
 	{
-		$args         = array();
+		$args         = [];
 		$args['view'] = 'tickets';
 
 		if ($bookingId) {
@@ -260,7 +267,7 @@ class DPCalendarHelperRoute
 
 	public static function getTicketFormRoute($ticketId, $return = null)
 	{
-		$args         = array();
+		$args         = [];
 		$args['task'] = 'ticketform.edit';
 		$args['t_id'] = $ticketId;
 
@@ -297,17 +304,17 @@ class DPCalendarHelperRoute
 		if ($id == '0') {
 			$link = '';
 		} else {
-			$needles = array(
-				'calendar' => array(
+			$needles = [
+				'calendar' => [
 					$id
-				),
-				'list'     => array(
+				],
+				'list'     => [
 					$id
-				),
-				'map'      => array(
+				],
+				'map'      => [
 					$id
-				)
-			);
+				]
+			];
 
 			if ($item = self::findItem($needles)) {
 				$link = 'index.php?Itemid=' . $item;
@@ -316,18 +323,18 @@ class DPCalendarHelperRoute
 				$link = 'index.php?option=com_dpcalendar&view=calendar&id=' . $id;
 
 				if ($calendar) {
-					$calIds = array();
+					$calIds = [];
 					if ($calId instanceof JCategoryNode) {
 						$calIds = array_reverse($calendar->getPath());
 					} else {
 						$calIds[] = $calendar->id;
 					}
 
-					$needles = array(
+					$needles = [
 						'calendar' => $calIds,
 						'map'      => $calIds,
 						'list'     => $calIds
-					);
+					];
 
 					if ($item = self::findItem($needles)) {
 						$link .= '&Itemid=' . $item;
@@ -348,7 +355,7 @@ class DPCalendarHelperRoute
 
 		// Prepare the reverse lookup array.
 		if (self::$lookup === null) {
-			self::$lookup = array();
+			self::$lookup = [];
 
 			$component = JComponentHelper::getComponent('com_dpcalendar');
 			$items     = $menus->getItems('component_id', $component->id);
@@ -366,23 +373,23 @@ class DPCalendarHelperRoute
 						$view = $item->query['view'];
 
 						if (!isset(self::$lookup[$view])) {
-							self::$lookup[$view] = array();
+							self::$lookup[$view] = [];
 						}
 
 						$ids = $item->params->get('ids');
 						if (!is_array($ids) && $ids) {
-							$ids = array(
+							$ids = [
 								$ids
-							);
+							];
 						}
 						if (!$ids && isset($item->query['id'])) {
-							$ids = array(
+							$ids = [
 								$item->query['id']
-							);
+							];
 						}
 
 						if ($ids === null) {
-							$ids = array();
+							$ids = [];
 						}
 
 						foreach ($ids as $id) {
@@ -409,7 +416,7 @@ class DPCalendarHelperRoute
 				&& isset($active->query['view'])
 				&& isset($needles[$active->query['view']])) {
 				// Move the actual item to the first position
-				$tmp = array($active->query['view'] => $needles[$active->query['view']]);
+				$tmp = [$active->query['view'] => $needles[$active->query['view']]];
 				unset($needles[$active->query['view']]);
 				$needles = array_merge($tmp, $needles);
 			}
@@ -433,7 +440,7 @@ class DPCalendarHelperRoute
 		return null;
 	}
 
-	private static function getUrl($arguments = array(), $route = true, $needles = [])
+	private static function getUrl($arguments = [], $route = true, $needles = [])
 	{
 		$uri = clone JUri::getInstance();
 		if (JFactory::getDocument()->getType() != 'html' || JFactory::getApplication()->isClient('site')) {
@@ -460,11 +467,11 @@ class DPCalendarHelperRoute
 		}
 
 		if ($route) {
-			return JRoute::_($uri->toString(array(
+			return JRoute::_($uri->toString([
 				'path',
 				'query',
 				'fragment'
-			)));
+			]));
 		}
 
 		return $uri;

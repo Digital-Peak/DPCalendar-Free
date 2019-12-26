@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 use Joomla\Registry\Registry;
@@ -16,10 +16,10 @@ JLoader::import('joomla.application.component.modellist');
 class DPCalendarModelExtcalendars extends JModelList
 {
 
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = array(
+			$config['filter_fields'] = [
 				'id',
 				'a.id',
 				'title',
@@ -40,7 +40,7 @@ class DPCalendarModelExtcalendars extends JModelList
 				'a.publish_up',
 				'publish_down',
 				'a.publish_down'
-			);
+			];
 		}
 
 		parent::__construct($config);
@@ -122,7 +122,7 @@ class DPCalendarModelExtcalendars extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} elseif ($published === '') {
+		} else if ($published === '') {
 			$query->where('(a.state IN (0, 1))');
 		}
 

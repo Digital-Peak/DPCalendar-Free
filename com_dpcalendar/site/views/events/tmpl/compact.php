@@ -1,15 +1,15 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 JFactory::getDocument()->setMimeEncoding('application/json');
 
-$tmp = array();
+$tmp = [];
 foreach ($this->items as $event) {
 	$start = DPCalendarHelper::getDate($event->start_date, $event->all_day == 1);
 	$end   = DPCalendarHelper::getDate($event->end_date, $event->all_day == 1);
@@ -17,25 +17,25 @@ foreach ($this->items as $event) {
 	do {
 		$date = $start->format('Y-m-d', true);
 		if (!key_exists($date, $tmp)) {
-			$tmp[$date] = array();
+			$tmp[$date] = [];
 		}
 		$tmp[$date][] = $event;
 		$start->modify("+1 day");
 	} while ($start <= $end);
 }
 
-$data = array();
+$data = [];
 foreach ($tmp as $date => $events) {
-	$linkIDs = array();
+	$linkIDs = [];
 	$itemId  = '';
 	foreach ($events as $event) {
 		$linkIDs[$event->catid] = $event->catid;
 		if ($itemId != null) {
 			continue;
 		}
-		$needles             = array('event' => array((int)$event->id));
-		$needles['calendar'] = array((int)$event->catid);
-		$needles['list']     = array((int)$event->catid);
+		$needles             = ['event' => [(int)$event->id]];
+		$needles['calendar'] = [(int)$event->catid];
+		$needles['list']     = [(int)$event->catid];
 
 		if ($item = DPCalendarHelperRoute::findItem($needles)) {
 			$itemId = '&Itemid=' . $item;
@@ -57,7 +57,7 @@ foreach ($tmp as $date => $events) {
 	}
 	$description .= '</ul>';
 
-	$data[] = array(
+	$data[] = [
 		'id'          => $date,
 		'title'       => utf8_encode(chr(160)), // Space only works in IE, empty only in Chrome
 		'start'       => DPCalendarHelper::getDate($date)->format('Y-m-d'),
@@ -67,7 +67,7 @@ foreach ($tmp as $date => $events) {
 		'description' => $description,
 		'view_class'  => 'dp-event-compact',
 		'rendering'   => 'background'
-	);
+	];
 }
 
 ob_clean();

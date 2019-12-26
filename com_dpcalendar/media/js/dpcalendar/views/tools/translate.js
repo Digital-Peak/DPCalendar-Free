@@ -13,7 +13,15 @@
 
         el.innerHTML = language.percent + '%';
         var label = 'success';
-        if (language.percent < 30) label = 'important';else if (language.percent < 50) label = 'warning';else if (language.percent < 100) label = 'info';
+
+        if (language.percent < 30) {
+          label = 'important';
+        } else if (language.percent < 50) {
+          label = 'warning';
+        } else if (language.percent < 100) {
+          label = 'info';
+        }
+
         el.parentElement.classList.add('dp-resource_' + label);
 
         if (next >= queue.length) {

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -53,18 +53,18 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 	}
 
-	public function getTable($type = 'Event', $prefix = 'DPCalendarTable', $config = array())
+	public function getTable($type = 'Event', $prefix = 'DPCalendarTable', $config = [])
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm($data = array(), $loadData = true)
+	public function getForm($data = [], $loadData = true)
 	{
 		// Load plugins for form manipulation
 		JPluginHelper::importPlugin('dpcalendar');
 
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.event', 'event', array('control' => 'jform', 'load_data' => $loadData));
+		$form = $this->loadForm('com_dpcalendar.event', 'event', ['control' => 'jform', 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
@@ -158,7 +158,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$app = JFactory::getApplication();
 
 		// Check the session for previously entered form data.
-		$data = $app->getUserState('com_dpcalendar.edit.event.data', array());
+		$data = $app->getUserState('com_dpcalendar.edit.event.data', []);
 
 		if (empty($data)) {
 			$data    = $this->getItem();
@@ -168,7 +168,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			if ($eventId == '0') {
 				$data->set('catid', $app->input->getCmd('catid', $app->getUserState('com_dpcalendar.events.filter.category_id')));
 
-				$requestParams = $app->input->get('jform', array(), 'array');
+				$requestParams = $app->input->get('jform', [], 'array');
 				if (!$data->get('catid') && key_exists('catid', $requestParams)) {
 					$data->set('catid', $requestParams['catid']);
 				}
@@ -188,10 +188,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if ($data->get(('start_date_time'))) {
 			try {
 				// We got the data from a session, normalizing it
-				$data->set('start_date',
-					DPCalendarHelper::getDateFromString($data->get('start_date'), $data->get('start_date_time'), $data->get('all_day'))->toSql());
-				$data->set('end_date',
-					DPCalendarHelper::getDateFromString($data->get('end_date'), $data->get('end_date_time'), $data->get('all_day'))->toSql());
+				$data->set(
+					'start_date',
+					DPCalendarHelper::getDateFromString($data->get('start_date'), $data->get('start_date_time'), $data->get('all_day'))->toSql()
+				);
+				$data->set(
+					'end_date',
+					DPCalendarHelper::getDateFromString($data->get('end_date'), $data->get('end_date_time'), $data->get('all_day'))->toSql()
+				);
 			} catch (Exception $e) {
 				// Silently ignore the error
 			}
@@ -205,7 +209,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		if ((!isset($data->location_ids) || !$data->location_ids) && isset($data->locations) && $data->locations) {
-			$data->location_ids = array();
+			$data->location_ids = [];
 			foreach ($data->locations as $location) {
 				$data->location_ids[] = $location->id;
 			}
@@ -221,42 +225,42 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		// Migrate subform data to old repeatable format
 		if (isset($data->price) && is_string($data->price) && $data->price) {
 			$obj     = json_decode($data->price);
-			$newData = array();
+			$newData = [];
 			foreach ($obj->value as $index => $value) {
-				$newData['price' . ($index + 1)] = array(
+				$newData['price' . ($index + 1)] = [
 					'value'       => $value,
 					'label'       => $obj->label[$index],
 					'description' => $obj->description[$index]
-				);
+				];
 			}
 			$data->price = json_encode($newData);
 		}
 		if (isset($data->earlybird) && is_string($data->earlybird) && $data->earlybird) {
 			$obj     = json_decode($data->earlybird);
-			$newData = array();
+			$newData = [];
 			foreach ($obj->value as $index => $value) {
-				$newData['price' . ($index + 1)] = array(
+				$newData['price' . ($index + 1)] = [
 					'value'       => $value,
 					'type'        => $obj->type[$index],
 					'date'        => $obj->date[$index],
 					'label'       => $obj->label[$index],
 					'description' => $obj->description[$index]
-				);
+				];
 			}
 			$data->earlybird = json_encode($newData);
 		}
 		if (isset($data->user_discount) && is_string($data->user_discount) && $data->user_discount) {
 			$obj     = json_decode($data->user_discount);
-			$newData = array();
+			$newData = [];
 			foreach ($obj->value as $index => $value) {
-				$newData['price' . ($index + 1)] = array(
+				$newData['price' . ($index + 1)] = [
 					'value'           => $value,
 					'type'            => $obj->type[$index],
 					'date'            => $obj->date[$index],
 					'label'           => $obj->label[$index],
 					'description'     => $obj->description[$index],
 					'discount_groups' => $obj->discount_groups[$index]
-				);
+				];
 			}
 			$data->user_discount = json_encode($newData);
 		}
@@ -274,7 +278,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$item = null;
 		if (!empty($pk) && !is_numeric($pk)) {
 			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', array($pk));
+			$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', [$pk]);
 			if (!empty($tmp)) {
 				$item = $tmp[0];
 			}
@@ -299,7 +303,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 					$this->_db->setQuery('select location_id from #__dpcalendar_events_location where event_id = ' . (int)$item->id);
 					$locations = $this->_db->loadObjectList();
 					if (!empty($locations)) {
-						$item->location_ids = array();
+						$item->location_ids = [];
 						foreach ($locations as $location) {
 							$item->location_ids[] = $location->location_id;
 						}
@@ -321,13 +325,13 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 	public function save($data)
 	{
-		$locationIds = array();
+		$locationIds = [];
 		if (isset($data['location_ids'])) {
 			$locationIds = $data['location_ids'];
 			unset($data['location_ids']);
 		}
 
-		$oldEventIds = array();
+		$oldEventIds = [];
 		if (isset($data['id']) && $data['id']) {
 			$this->getDbo()->setQuery('select id from #__dpcalendar_events where original_id = ' . (int)$data['id']);
 			$rows = $this->getDbo()->loadObjectList();
@@ -358,9 +362,9 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		// Migrate subform data to old repeatable format
 		if (isset($data['price']) && is_array($data['price'])) {
 			$obj              = new stdClass();
-			$obj->value       = array();
-			$obj->label       = array();
-			$obj->description = array();
+			$obj->value       = [];
+			$obj->label       = [];
+			$obj->description = [];
 			foreach ($data['price'] as $key => $p) {
 				$obj->value[]       = $p['value'];
 				$obj->label[]       = $p['label'];
@@ -370,11 +374,11 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 		if (isset($data['earlybird']) && is_array($data['earlybird'])) {
 			$obj              = new stdClass();
-			$obj->value       = array();
-			$obj->type        = array();
-			$obj->date        = array();
-			$obj->label       = array();
-			$obj->description = array();
+			$obj->value       = [];
+			$obj->type        = [];
+			$obj->date        = [];
+			$obj->label       = [];
+			$obj->description = [];
 			foreach ($data['earlybird'] as $key => $p) {
 				$obj->value[]       = $p['value'];
 				$obj->type[]        = $p['type'];
@@ -386,12 +390,12 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 		if (isset($data['user_discount']) && is_array($data['user_discount'])) {
 			$obj                  = new stdClass();
-			$obj->value           = array();
-			$obj->type            = array();
-			$obj->date            = array();
-			$obj->label           = array();
-			$obj->description     = array();
-			$obj->discount_groups = array();
+			$obj->value           = [];
+			$obj->type            = [];
+			$obj->date            = [];
+			$obj->label           = [];
+			$obj->description     = [];
+			$obj->discount_groups = [];
 			foreach ($data['user_discount'] as $key => $p) {
 				$obj->value[]           = $p['value'];
 				$obj->type[]            = $p['type'];
@@ -443,7 +447,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		// Automatic handling of alias for empty fields
 		if (empty($data['alias'])
-			&& in_array($app->input->get('task'), array('apply', 'save', 'save2new', 'save2copy'))
+			&& in_array($app->input->get('task'), ['apply', 'save', 'save2new', 'save2copy'])
 			&& (!isset($data['id']) || (int)$data['id'] == 0)) {
 			if (JFactory::getConfig()->get('unicodeslugs') == 1) {
 				$data['alias'] = JFilterOutput::stringURLUnicodeSlug($data['title']);
@@ -452,7 +456,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			}
 
 			$table = $this->getTable();
-			$table->load(array('alias' => $data['alias'], 'catid' => $data['catid']));
+			$table->load(['alias' => $data['alias'], 'catid' => $data['catid']]);
 
 			list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
 			$data['alias'] = $alias;
@@ -476,7 +480,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		// Load the fields helper class
 		JLoader::import('components.com_fields.helpers.fields', JPATH_ADMINISTRATOR);
 
-		$fieldModel = JModelLegacy::getInstance('Field', 'FieldsModel', array('ignore_request' => true));
+		$fieldModel = JModelLegacy::getInstance('Field', 'FieldsModel', ['ignore_request' => true]);
 
 		// Loading the fields
 		$fields = FieldsHelper::getFields('com_dpcalendar.event', $event);
@@ -531,11 +535,11 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if (!empty($event->location_ids)) {
 			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->setState('list.limit', 100);
-			$model->setState('filter.search', 'ids:' . implode($event->location_ids, ','));
+			$model->setState('filter.search', 'ids:' . implode(',', $event->location_ids));
 			$event->locations = $model->getItems();
 		}
 
-		$this->sendMail($this->getState($this->getName() . '.new') ? 'create' : 'edit', array($event));
+		$this->sendMail($this->getState($this->getName() . '.new') ? 'create' : 'edit', [$event]);
 
 		// Notify the ticket holders
 		if (key_exists('notify_changes', $data) && $data['notify_changes']) {
@@ -553,17 +557,17 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 					}
 				}
 
-				$subject = DPCalendarHelper::renderEvents(array($event), $langs[$language]->_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
+				$subject = DPCalendarHelper::renderEvents([$event], $langs[$language]->_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
 
 				$body = DPCalendarHelper::renderEvents(
-					array($event),
+					[$event],
 					$langs[$language]->_('COM_DPCALENDAR_NOTIFICATION_EVENT_EDIT_TICKETS_BODY'),
 					null,
-					array(
+					[
 						'ticketLink' => DPCalendarHelperRoute::getTicketRoute($ticket, true),
 						'sitename'   => JFactory::getConfig()->get('sitename'),
 						'user'       => JFactory::getUser()->name
-					)
+					]
 				);
 
 				$mailer = JFactory::getMailer();
@@ -719,7 +723,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	public function getTickets($eventId)
 	{
 		if (empty($eventId) || DPCalendarHelper::isFree()) {
-			return array();
+			return [];
 		}
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 		$ticketsModel = JModelLegacy::getInstance('Tickets', 'DPCalendarModel');
@@ -734,7 +738,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	private function getDefaultValues(JObject $item)
 	{
 		$params = $this->getParams();
-		$data   = array();
+		$data   = [];
 
 		// Set the default values from the params
 		if (!$item->get('catid')) {
@@ -813,7 +817,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$user = JFactory::getUser();
 
 		// The event authors
-		$authors = array();
+		$authors = [];
 
 		// We don't send notifications when an event is external
 		foreach ($events as $event) {
@@ -837,10 +841,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$events,
 			JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_' . strtoupper($action) . '_BODY'),
 			null,
-			array(
+			[
 				'sitename' => JFactory::getConfig()->get('sitename'),
 				'user'     => $user->name
-			)
+			]
 		);
 
 		// Send the notification to the groups
@@ -852,10 +856,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 		$authors = array_unique($authors);
 
-		$extraVars = array(
+		$extraVars = [
 			'sitename' => JFactory::getConfig()->get('sitename'),
 			'user'     => $user->name
-		);
+		];
 
 		// Create the subject
 		$subject = DPCalendarHelper::renderEvents(

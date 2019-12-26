@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -14,24 +14,22 @@ class JFormFieldDPAuthor extends JFormFieldList
 
 	public $type = 'DPAuthor';
 
-	protected static $options = array();
+	protected static $options = [];
 
-	protected function getOptions ()
+	protected function getOptions()
 	{
 		// Accepted modifiers
 		$hash = md5($this->element);
 
-		if (! isset(static::$options[$hash]))
-		{
+		if (! isset(static::$options[$hash])) {
 			static::$options[$hash] = parent::getOptions();
 
-			$options = array();
+			$options = [];
 
 			$db = JFactory::getDbo();
 
 			$authorField = 'created_by';
-			if ($this->element['author_field'])
-			{
+			if ($this->element['author_field']) {
 				$authorField = $this->element['author_field'];
 			}
 
@@ -47,8 +45,7 @@ class JFormFieldDPAuthor extends JFormFieldList
 			$db->setQuery($query);
 
 			// Return the result
-			if ($options = $db->loadObjectList())
-			{
+			if ($options = $db->loadObjectList()) {
 				static::$options[$hash] = array_merge(static::$options[$hash], $options);
 			}
 		}

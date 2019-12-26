@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -14,17 +14,17 @@ class DPCalendarModelProfile extends JModelList
 
 	private $items = null;
 
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = array(
+			$config['filter_fields'] = [
 				'id',
 				'a.id',
 				'title',
 				'a.title',
 				'hits',
 				'a.hits'
-			);
+			];
 		}
 
 		parent::__construct($config);
@@ -40,8 +40,8 @@ class DPCalendarModelProfile extends JModelList
 
 			$myUri = 'principals/' . JFactory::getUser()->username;
 
-			$myCalendars       = array();
-			$externalCalendars = array();
+			$myCalendars       = [];
+			$externalCalendars = [];
 			foreach ($calendars as $calendar) {
 				if (empty($calendar->calendarcolor)) {
 					$calendar->calendarcolor = '3366CC';
@@ -82,11 +82,13 @@ class DPCalendarModelProfile extends JModelList
 		$query->select('c.*,mainp.uri as member_principal_uri, mainp.displayname as member_principal_name, mp.linkuri member_principal_access');
 		$query->from($db->quoteName('#__dpcalendar_caldav_calendarinstances') . ' c');
 		$query->join('left outer', "#__dpcalendar_caldav_principals mainp on mainp.uri = c.principaluri");
-		$query->join('left outer',
+		$query->join(
+			'left outer',
 			"(select memberp.external_id member_external_id, linkp.uri linkuri from #__dpcalendar_caldav_principals memberp
 				inner join #__dpcalendar_caldav_groupmembers m on memberp.id = m.member_id
 				inner join #__dpcalendar_caldav_principals linkp on m.principal_id = linkp.id) as mp
-				on mp.linkuri LIKE CONCAT(c.principaluri, '/%')");
+				on mp.linkuri LIKE CONCAT(c.principaluri, '/%')"
+		);
 
 		$query->where('(mainp.external_id = ' . (int)$user->id . ' or mp.member_external_id = ' . (int)$user->id . ')');
 
@@ -128,7 +130,7 @@ class DPCalendarModelProfile extends JModelList
 		$this->setState('list.ordering', $orderCol);
 
 		$listOrder = JFactory::getApplication()->input->getCmd('filter_order_Dir', 'ASC');
-		if (!in_array(strtoupper($listOrder), array('ASC', 'DESC', ''))) {
+		if (!in_array(strtoupper($listOrder), ['ASC', 'DESC', ''])) {
 			$listOrder = 'ASC';
 		}
 		$this->setState('list.direction', $listOrder);
@@ -150,7 +152,9 @@ class DPCalendarModelProfile extends JModelList
 		$query->join('right', '#__dpcalendar_caldav_groupmembers m on p.id = m.member_id');
 		$query->where(
 			'm.principal_id = (select id from #__dpcalendar_caldav_principals where uri = ' . $db->quote(
-				'principals/' . $user->username . '/calendar-proxy-read') . ')');
+				'principals/' . $user->username . '/calendar-proxy-read'
+			) . ')'
+		);
 
 		$db->setQuery($query);
 
@@ -169,7 +173,9 @@ class DPCalendarModelProfile extends JModelList
 		$query->join('right', '#__dpcalendar_caldav_groupmembers m on p.id = m.member_id');
 		$query->where(
 			'm.principal_id = (select id from #__dpcalendar_caldav_principals where uri = ' . $db->quote(
-				'principals/' . $user->username . '/calendar-proxy-write') . ')');
+				'principals/' . $user->username . '/calendar-proxy-write'
+			) . ')'
+		);
 
 		$db->setQuery($query);
 

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -28,25 +28,30 @@ $this->app->enqueueMessage(JText::_('COM_DPCALENDAR_VIEW_TOOLS_IMPORT_WARNING'),
 					   for="filter_search_start">
 					<?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_START_DATE_AFTER_LABEL'); ?>:
 				</label>
-				<?php echo JHtml::_('calendar',
+				<?php echo JHtml::_(
+					'calendar',
 					$this->escape(DPCalendarHelper::getDate()->format('Y-m-d')),
 					'filter_search_start',
 					'filter_search_start',
 					'%Y-%m-%d',
-					array('class' => 'inputbox', 'maxlength' => '10', 'size' => '10')); ?>
+					['class' => 'inputbox', 'maxlength' => '10', 'size' => '10']
+				); ?>
 			</div>
 			<div class="dp-filter__end">
 				<label class="element-invisible" for="filter_search_end">
 					<?php echo JText::_('COM_DPCALENDAR_VIEW_EVENTS_END_DATE_BEFORE_LABEL'); ?>:
 				</label>
 				<?php $end = DPCalendarHelper::getDate(); ?>
-				<?php $end->modify('+2 month');; ?>
-				<?php echo JHtml::_('calendar',
+				<?php $end->modify('+2 month');
+				; ?>
+				<?php echo JHtml::_(
+					'calendar',
 					$this->escape($end),
 					'filter_search_end',
 					'filter_search_end',
 					'%Y-%m-%d',
-					array('class' => 'inputbox', 'maxlength' => '10', 'size' => '10')); ?>
+					['class' => 'inputbox', 'maxlength' => '10', 'size' => '10']
+				); ?>
 			</div>
 		</div>
 		<fieldset class="com-dpcalendar-tools-import__plugins">

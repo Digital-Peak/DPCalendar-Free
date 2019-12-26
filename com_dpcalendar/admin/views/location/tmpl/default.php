@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -22,7 +22,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 <div class="com-dpcalendar-locationform">
 	<form class="com-dpcalendar-locationform__form dp-form form-validate" method="post" name="adminForm" id="adminForm"
 		  action="<?php echo $action; ?>">
-		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', array('active' => 'general')); ?>
+		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
 			<?php echo JHtml::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<div class="com-dpcalendar-locationform__content dp-grid">

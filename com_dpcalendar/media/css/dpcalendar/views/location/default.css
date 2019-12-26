@@ -263,6 +263,7 @@
 	animation: 12s 0s normal none 1 running calendarLoader;
 	animation-fill-mode: forwards;
 	animation-timing-function: cubix-bezier(0, 1, 0, 1);
+	animation-iteration-count: infinite;
 }
 
 .com-dpcalendar-location .dp-loader_hidden::before {
@@ -278,7 +279,7 @@
 		animation-timing-function: linear;
 	}
 	100% {
-		right: 5%;
+		right: 1%;
 	}
 }
 

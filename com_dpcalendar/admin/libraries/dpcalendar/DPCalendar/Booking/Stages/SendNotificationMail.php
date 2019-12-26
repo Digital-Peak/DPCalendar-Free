@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 namespace DPCalendar\Booking\Stages;
@@ -36,7 +36,8 @@ class SendNotificationMail implements StageInterface
 		);
 		$body    = DPCalendarHelper::renderEvents(
 			$payload->eventsWithTickets,
-			\JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_BODY'), null,
+			\JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_BODY'),
+			null,
 			$payload->mailVariables
 		);
 
@@ -44,7 +45,7 @@ class SendNotificationMail implements StageInterface
 
 		if ($payload->mailParams->get('booking_send_mail_author', 1)) {
 			// Send to the authors of the events
-			$authors = array();
+			$authors = [];
 			foreach ($payload->eventsWithTickets as $e) {
 				// Ignore already sent out mails
 				if (array_key_exists($e->created_by, $emails)) {

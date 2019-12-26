@@ -3,7 +3,7 @@
 /*
  * This file is part of Mustache.php.
  *
- * (c) 2010-2016 Justin Hileman
+ * (c) 2010-2017 Justin Hileman
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -149,7 +149,7 @@ class Mustache_Parser
                 case Mustache_Tokenizer::T_BLOCK_VAR:
                     if ($this->pragmaBlocks) {
                         // BLOCKS pragma is enabled, let's do this!
-                        if ($parent[Mustache_Tokenizer::TYPE] === Mustache_Tokenizer::T_PARENT) {
+                        if (isset($parent) && $parent[Mustache_Tokenizer::TYPE] === Mustache_Tokenizer::T_PARENT) {
                             $token[Mustache_Tokenizer::TYPE] = Mustache_Tokenizer::T_BLOCK_ARG;
                         }
                         $this->clearStandaloneLines($nodes, $tokens);
@@ -275,7 +275,7 @@ class Mustache_Parser
      */
     private function checkIfTokenIsAllowedInParent($parent, array $token)
     {
-        if ($parent[Mustache_Tokenizer::TYPE] === Mustache_Tokenizer::T_PARENT) {
+        if (isset($parent) && $parent[Mustache_Tokenizer::TYPE] === Mustache_Tokenizer::T_PARENT) {
             throw new Mustache_Exception_SyntaxException('Illegal content in < parent tag', $token);
         }
     }

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -25,12 +25,12 @@ class DPCalendarControllerDavcalendar extends JControllerForm
 		}
 	}
 
-	protected function allowAdd($data = array())
+	protected function allowAdd($data = [])
 	{
 		return true;
 	}
 
-	protected function allowEdit($data = array(), $key = 'id')
+	protected function allowEdit($data = [], $key = 'id')
 	{
 		$recordId = isset($data[$key]) ? $data[$key] : 0;
 		$calendar = $this->getModel()->getItem($recordId);
@@ -41,7 +41,7 @@ class DPCalendarControllerDavcalendar extends JControllerForm
 		return $calendar->principaluri == 'principals/' . JFactory::getUser()->username;
 	}
 
-	protected function allowDelete($data = array(), $key = 'id')
+	protected function allowDelete($data = [], $key = 'id')
 	{
 		$recordId = isset($data[$key]) ? $data[$key] : 0;
 		$calendar = $this->getModel()->getItem($recordId);
@@ -69,7 +69,7 @@ class DPCalendarControllerDavcalendar extends JControllerForm
 	{
 		$recordId = JFactory::getApplication()->input->getVar($key);
 
-		if (!$this->allowDelete(array($key => $recordId), $key)) {
+		if (!$this->allowDelete([$key => $recordId], $key)) {
 			$this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
 			$this->setMessage($this->getError(), 'error');
 
@@ -99,7 +99,7 @@ class DPCalendarControllerDavcalendar extends JControllerForm
 		return $result;
 	}
 
-	public function getModel($name = 'davcalendar', $prefix = '', $config = array('ignore_request' => true))
+	public function getModel($name = 'davcalendar', $prefix = '', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);
 	}

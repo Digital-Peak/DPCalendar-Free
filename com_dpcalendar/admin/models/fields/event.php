@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -21,7 +21,7 @@ class JFormFieldEvent extends JFormField
 		JHtml::_('behavior.modal', 'a.modal');
 
 		// Build the script
-		$script   = array();
+		$script   = [];
 		$script[] = '    function jSelectEvent_' . $this->id . '(id, title, object) {';
 		$script[] = '        document.id("' . $this->id . '_id").value = id;';
 		$script[] = '        document.id("' . $this->id . '_name").value = title;';
@@ -33,7 +33,7 @@ class JFormFieldEvent extends JFormField
 		JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
 
 		// Setup variables for display
-		$html = array();
+		$html = [];
 		$link = 'index.php?option=com_dpcalendar&amp;view=events&amp;layout=modal' . '&amp;tmpl=component&amp;function=jSelectEvent_' . $this->id;
 
 		$db    = JFactory::getDbo();

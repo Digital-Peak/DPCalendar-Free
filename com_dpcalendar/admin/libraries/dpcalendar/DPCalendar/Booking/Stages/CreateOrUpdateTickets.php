@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 namespace DPCalendar\Booking\Stages;
@@ -81,7 +81,7 @@ class CreateOrUpdateTickets implements StageInterface
 
 			if (!$prices) {
 				// Free event
-				$prices = new \JObject(array('value' => array(0 => 0)));
+				$prices = new \JObject(['value' => [0 => 0]]);
 			}
 
 			foreach ($prices->value as $index => $value) {
@@ -103,7 +103,7 @@ class CreateOrUpdateTickets implements StageInterface
 							if (!$relatedTicketFieldName) {
 								continue;
 							}
-							$ticket->com_fields[$relatedTicketFieldName] = $field->value;
+							$ticket->com_fields[$relatedTicketFieldName] = $field->rawvalue;
 						}
 					}
 

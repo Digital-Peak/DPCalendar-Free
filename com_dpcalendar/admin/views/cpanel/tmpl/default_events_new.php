@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -16,7 +16,8 @@ defined('_JEXEC') or die();
 		<?php foreach ($this->newEvents as $event) { ?>
 			<div class="com-dpcalendar-cpanel__event">
 				<?php $date = $this->dateHelper->getDate($event->created)->format(
-					$this->params->get('event_date_format', 'm.d.Y') . ' ' . $this->params->get('event_time_format', 'g:i a'), true
+					$this->params->get('event_date_format', 'm.d.Y') . ' ' . $this->params->get('event_time_format', 'g:i a'),
+					true
 				); ?>
 				<a href="index.php?option=com_dpcalendar&view=event&e_id=<?php echo $event->id; ?>" class="dp-link">
 					<?php echo $event->title; ?>

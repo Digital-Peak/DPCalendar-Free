@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -92,12 +92,16 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 		// the booking to him
 		if ($isNew) {
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-			$model = JModelLegacy::getInstance('Booking', 'DPCalendarModel', array('ignore_request' => true));
+			$model = JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
 			if ($model && $booking = $model->assign($user)) {
 				$loginUrl = JRoute::_(
-					'index.php?option=com_users&view=login&return=' . base64_encode(DPCalendarHelperRoute::getBookingRoute($booking)));
-				JFactory::getApplication()->enqueueMessage(JText::sprintf('PLG_SYSTEM_DPCALENDAR_BOOKING_ASSIGNED',
-					$booking->uid, $loginUrl));
+					'index.php?option=com_users&view=login&return=' . base64_encode(DPCalendarHelperRoute::getBookingRoute($booking))
+				);
+				JFactory::getApplication()->enqueueMessage(JText::sprintf(
+					'PLG_SYSTEM_DPCALENDAR_BOOKING_ASSIGNED',
+					$booking->uid,
+					$loginUrl
+				));
 			}
 		}
 	}
@@ -173,7 +177,7 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
 
 		// Load the model
-		$model = JModelLegacy::getInstance('Form', 'DPCalendarModel', array('ignore_request' => true));
+		$model = JModelLegacy::getInstance('Form', 'DPCalendarModel', ['ignore_request' => true]);
 
 		// Select all events which do belong to the category
 		$db    = JFactory::getDbo();
@@ -211,17 +215,17 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 
 	protected function createCalDAVEvent($uid, $icalData, $calendarId)
 	{
-		return $this->getBackend()->createCalendarObject(array($calendarId), $uid . '.ics', $icalData);
+		return $this->getBackend()->createCalendarObject([$calendarId], $uid . '.ics', $icalData);
 	}
 
 	protected function updateCalDAVEvent($uid, $icalData, $calendarId)
 	{
-		return $this->getBackend()->updateCalendarObject(array($calendarId), $uid . '.ics', $icalData);
+		return $this->getBackend()->updateCalendarObject([$calendarId], $uid . '.ics', $icalData);
 	}
 
 	protected function deleteCalDAVEvent($uid, $calendarId)
 	{
-		return $this->getBackend()->deleteCalendarObject(array($calendarId), $uid . '.ics');
+		return $this->getBackend()->deleteCalendarObject([$calendarId], $uid . '.ics');
 	}
 
 	protected function getOriginalData($uid, $calendarId)
@@ -268,10 +272,10 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 		$db->setQuery($query);
 		$rows = $db->loadObjectList();
 		if (empty($rows)) {
-			return array();
+			return [];
 		}
 
-		$text   = array();
+		$text   = [];
 		$text[] = 'BEGIN:VCALENDAR';
 		foreach ($rows as $item) {
 			if (empty($item->calendardata)) {
@@ -299,7 +303,7 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 		$model = JModelLegacy::getInstance('Profile', 'DPCalendarModel');
 
-		$data  = array();
+		$data  = [];
 		$items = $model->getItems();
 
 		if (empty($items)) {
@@ -334,8 +338,11 @@ class PlgSystemDpcalendar extends \DPCalendar\Plugin\CalDAVPlugin
 
 		JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
-		$pdo = new \PDO('mysql:host=' . $config->get('host') . ';dbname=' . $config->get('db'), $config->get('user'),
-			$config->get('password'));
+		$pdo = new \PDO(
+			'mysql:host=' . $config->get('host') . ';dbname=' . $config->get('db'),
+			$config->get('user'),
+			$config->get('password')
+		);
 		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 		$calendarBackend                                 = new \DPCalendar\Sabre\CalDAV\Backend\DPCalendar($pdo);

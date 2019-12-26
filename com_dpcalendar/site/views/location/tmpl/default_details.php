@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -76,8 +76,10 @@ if (!$this->params->get('locations_expand', 1)) {
 		<?php } ?>
 	</div>
 	<div class="dp-location__description">
-		<?php echo trim(implode("\n",
-			$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$this->location, &$params, 0]))); ?>
+		<?php echo trim(implode(
+			"\n",
+			$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$this->location, &$params, 0])
+		)); ?>
 		<?php echo JHTML::_('content.prepare', $this->location->description); ?>
 	</div>
 </div>

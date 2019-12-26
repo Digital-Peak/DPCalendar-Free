@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -15,7 +15,7 @@ class JFormFieldDPCFields extends JFormFieldList
 
 	protected function getOptions()
 	{
-		$options = array();
+		$options = [];
 
 		JLoader::import('joomla.form.form');
 
@@ -23,7 +23,7 @@ class JFormFieldDPCFields extends JFormFieldList
 		JForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
 
 		$hide = explode(',', $this->element['hide']);
-		$form = JForm::getInstance('com_dpcalendar.' . $this->element['section'], $this->element['section'], array('control' => 'jform'));
+		$form = JForm::getInstance('com_dpcalendar.' . $this->element['section'], $this->element['section'], ['control' => 'jform']);
 		foreach ($form->getFieldset() as $field) {
 			$isHidden = false;
 			foreach ($hide as $toHide) {

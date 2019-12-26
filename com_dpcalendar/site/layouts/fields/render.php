@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -27,7 +27,7 @@ JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/
 
 $parts     = explode('.', $context);
 $component = $parts[0];
-$fields    = array();
+$fields    = [];
 
 if (key_exists('fields', $displayData)) {
 	$fields = $displayData['fields'];

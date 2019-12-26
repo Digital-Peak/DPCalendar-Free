@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -28,14 +28,14 @@ class PlgContentDpcalendar extends JPlugin
 			// Extract the parameters
 			$start  = $starts[0][1] + strlen($starts[0][0]);
 			$end    = $ends[0][1];
-			$params = explode(' ', str_replace(array(
+			$params = explode(' ', str_replace([
 				'{{#events',
 				'}}'
-			), '', $starts[0][0]));
+			], '', $starts[0][0]));
 
 			// Load the module
 			JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+			$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 
 			// Set some default variables
 			$model->getState();

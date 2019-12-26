@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Plugin;
 
@@ -67,7 +67,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 		return true;
 	}
 
-	public function saveEvent($eventId = null, $calendarId, array $data)
+	public function saveEvent($eventId, $calendarId, array $data)
 	{
 		$params = $this->params;
 		try {
@@ -87,7 +87,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 			if (isset($data['location_ids'])) {
 				$event->locations = \DPCalendar\Helper\Location::getLocations((array)$data['location_ids']);
 			}
-			$ical = \DPCalendar\Helper\Ical::createIcalFromEvents(array($event));
+			$ical = \DPCalendar\Helper\Ical::createIcalFromEvents([$event]);
 
 			$start = strpos($ical, 'UID:') + 4;
 			$end   = strpos($ical, PHP_EOL, $start + 1);

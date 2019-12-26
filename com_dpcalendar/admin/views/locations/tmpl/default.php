@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -16,7 +16,7 @@ $this->dpdocument->addScriptOptions('adminlist', ['listOrder' => $this->state->g
 		  method="post" name="adminForm" id="adminForm" class="row">
 		<div id="j-sidebar-container" class="span2 col-md-2"><?php echo $this->sidebar; ?></div>
 		<div id="j-main-container" class="span10 col-md-10 j-toggle-main">
-			<?php echo $this->layoutHelper->renderLayout('joomla.searchtools.default', array('view' => $this)); ?>
+			<?php echo $this->layoutHelper->renderLayout('joomla.searchtools.default', ['view' => $this]); ?>
 			<?php echo $this->loadTemplate('locations'); ?>
 		</div>
 		<?php echo $this->loadTemplate('batch'); ?>

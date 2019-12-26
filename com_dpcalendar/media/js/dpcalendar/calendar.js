@@ -60,10 +60,21 @@ DPCalendar = window.DPCalendar || {};
       var vars = window.location.hash.replace(/&amp;/gi, '&').split('&');
 
       for (var i = 0; i < vars.length; i++) {
-        if (vars[i].match('^#year')) options['year'] = vars[i].substring(6);
-        if (vars[i].match('^month')) options['month'] = vars[i].substring(6);
-        if (vars[i].match('^day')) options['date'] = vars[i].substring(4);
-        if (vars[i].match('^view')) options['defaultView'] = vars[i].substring(5);
+        if (vars[i].match('^#year')) {
+          options['year'] = vars[i].substring(6);
+        }
+
+        if (vars[i].match('^month')) {
+          options['month'] = vars[i].substring(6);
+        }
+
+        if (vars[i].match('^day')) {
+          options['date'] = vars[i].substring(4);
+        }
+
+        if (vars[i].match('^view')) {
+          options['defaultView'] = vars[i].substring(5);
+        }
       } // Listening for hash/url changes
 
 
@@ -76,10 +87,21 @@ DPCalendar = window.DPCalendar || {};
         var vars = window.location.hash.replace(/&amp;/gi, '&').split('&');
 
         for (var i = 0; i < vars.length; i++) {
-          if (vars[i].match('^#year')) tmpYear = vars[i].substring(6);
-          if (vars[i].match('^month')) tmpMonth = vars[i].substring(6) - 1;
-          if (vars[i].match('^day')) tmpDay = vars[i].substring(4);
-          if (vars[i].match('^view')) tmpView = vars[i].substring(5);
+          if (vars[i].match('^#year')) {
+            tmpYear = vars[i].substring(6);
+          }
+
+          if (vars[i].match('^month')) {
+            tmpMonth = vars[i].substring(6) - 1;
+          }
+
+          if (vars[i].match('^day')) {
+            tmpDay = vars[i].substring(4);
+          }
+
+          if (vars[i].match('^view')) {
+            tmpView = vars[i].substring(5);
+          }
         }
 
         var date = new Date(Date.UTC(tmpYear, tmpMonth, tmpDay, 0, 0, 0));
@@ -438,7 +460,11 @@ DPCalendar = window.DPCalendar || {};
         icon: 'icon-print',
         click: function click() {
           var loc = document.location.href.replace(/\?/, "\?layout=print&tmpl=component\&");
-          if (loc == document.location.href) loc = document.location.href.replace(/#/, "\?layout=print&tmpl=component#");
+
+          if (loc == document.location.href) {
+            loc = document.location.href.replace(/#/, "\?layout=print&tmpl=component#");
+          }
+
           var printWindow = window.open(loc);
           printWindow.focus();
         }

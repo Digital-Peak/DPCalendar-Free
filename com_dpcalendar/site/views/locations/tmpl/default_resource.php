@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -38,7 +38,7 @@ $options['calendarIds']    = $this->ids;
 
 $options['defaultView'] = $this->params->get('locations_default_view', 'resday');
 // Set up the header
-$options['header']           = array('left' => array(), 'center' => array(), 'right' => array());
+$options['header']           = ['left' => [], 'center' => [], 'right' => []];
 $options['header']['left'][] = 'prev';
 $options['header']['left'][] = 'next';
 if ($this->params->get('locations_header_show_datepicker', 1)) {

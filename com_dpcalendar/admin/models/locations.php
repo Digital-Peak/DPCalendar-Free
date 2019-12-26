@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -14,10 +14,10 @@ JLoader::import('joomla.application.component.modellist');
 class DPCalendarModelLocations extends JModelList
 {
 
-	public function __construct($config = array())
+	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = array(
+			$config['filter_fields'] = [
 				'id',
 				'a.id',
 				'title',
@@ -44,7 +44,7 @@ class DPCalendarModelLocations extends JModelList
 				'a.publish_down',
 				'url',
 				'a.url'
-			);
+			];
 		}
 
 		parent::__construct($config);
@@ -128,7 +128,7 @@ class DPCalendarModelLocations extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} elseif ($published === '') {
+		} else if ($published === '') {
 			$query->where('(a.state IN (0, 1))');
 		}
 
@@ -172,7 +172,8 @@ class DPCalendarModelLocations extends JModelList
 			$longitude = round(str_replace('+', '', $longitude), 8);
 			$query->where(
 				'((a.latitude = ' . (float)$latitude . ' or a.latitude like ' . $db->quote('+' . $latitude) . ') and (a.longitude = ' .
-				(float)$longitude . ' or a.longitude like ' . $db->quote('+' . $longitude) . '))');
+				(float)$longitude . ' or a.longitude like ' . $db->quote('+' . $longitude) . '))'
+			);
 		}
 
 		$location = $this->getState('filter.location');
@@ -206,7 +207,8 @@ class DPCalendarModelLocations extends JModelList
 					'a.longitude > ' . $db->quote($longitudeMin) . " AND
 						a.longitude < " . $db->quote($longitudeMax) . " AND
 						a.latitude > " . $db->quote($latitudeMin) . " AND
-						a.latitude < " . $db->quote($latitudeMax));
+						a.latitude < " . $db->quote($latitudeMax)
+				);
 			} else if ($radius > -1) {
 				$query->where('1 = 0');
 			}

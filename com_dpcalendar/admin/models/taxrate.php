@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -52,15 +52,15 @@ class DPCalendarModelTaxrate extends JModelAdmin
 		return $item;
 	}
 
-	public function getTable($type = 'Taxrate', $prefix = 'DPCalendarTable', $config = array())
+	public function getTable($type = 'Taxrate', $prefix = 'DPCalendarTable', $config = [])
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm($data = array(), $loadData = true, $controlName = 'jform')
+	public function getForm($data = [], $loadData = true, $controlName = 'jform')
 	{
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.taxrate', 'taxrate', array('control' => $controlName, 'load_data' => $loadData));
+		$form = $this->loadForm('com_dpcalendar.taxrate', 'taxrate', ['control' => $controlName, 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
@@ -85,7 +85,7 @@ class DPCalendarModelTaxrate extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.taxrate.data', array());
+		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.taxrate.data', []);
 
 		if (empty($data)) {
 			$data = $this->getItem();

@@ -256,6 +256,12 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
+			<field name="event_form_change_schedule" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULE_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULE_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
 			<field name="event_form_change_capacity" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CAPACITY_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CAPACITY_DESC">

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -37,8 +37,8 @@ JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', '
 
 $model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
 $model->getState();
-$model->setState('filter.parentIds', $params->get('ids', array('root')));
-$ids = array();
+$model->setState('filter.parentIds', $params->get('ids', ['root']));
+$ids = [];
 foreach ($model->getItems() as $calendar) {
 	$ids[] = $calendar->id;
 }
@@ -58,7 +58,7 @@ $startDate->sub(new DateInterval("PT" . ($startDate->format("i") % 15) . "M"));
 $endDate = clone $startDate;
 $endDate->modify('+1 year');
 
-$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 $model->getState();
 $model->setState('list.limit', 1);
 $model->setState('list.direction', $params->get('order', 'asc'));
@@ -71,8 +71,8 @@ $model->setState('filter.language', JFactory::getLanguage());
 $model->setState('filter.publish_date', true);
 $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
-$model->setState('filter.tags', $params->get('filter_tags', array()));
-$model->setState('filter.locations', $params->get('filter_locations', array()));
+$model->setState('filter.tags', $params->get('filter_tags', []));
+$model->setState('filter.locations', $params->get('filter_locations', []));
 $model->setState('filter.my', $params->get('show_my_only', 0));
 
 $event = $model->getItems();

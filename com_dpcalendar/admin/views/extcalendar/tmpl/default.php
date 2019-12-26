@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -28,7 +28,7 @@ $fieldSets = ['general' => $fieldSets['general']] + $fieldSets;
 ?>
 <div class="com-dpcalendar-extcalendar">
 	<form class="com-dpcalendar-extcalendar__form dp-form form-validate" method="post" name="adminForm"
-	      action="<?php echo $this->router->route('index.php?option=com_dpcalendar&id=' . (int)$this->item->id); ?>">
+		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&id=' . (int)$this->item->id); ?>">
 		<?php foreach ($fieldSets as $name => $fieldSet) { ?>
 			<?php foreach ($this->form->getFieldset($name) as $field) { ?>
 				<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>

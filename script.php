@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -31,7 +31,8 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 		if ($version && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '6.0.0') < 0) {
 			JFactory::getApplication()->enqueueMessage(
 				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 6.0.0 running. Please install the latest release from version 6 first.',
-				'error');
+				'error'
+			);
 			JFactory::getApplication()->redirect('index.php?option=com_installer&view=install');
 
 			return false;
@@ -43,7 +44,8 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 
 		// Delete existing update sites, necessary if upgrading eg. free to pro
 		$this->run(
-			"delete from #__update_sites_extensions where extension_id in (select extension_id from #__extensions where element = 'pkg_dpcalendar')");
+			"delete from #__update_sites_extensions where extension_id in (select extension_id from #__extensions where element = 'pkg_dpcalendar')"
+		);
 		$this->run("delete from #__update_sites where name like 'DPCalendar%'");
 
 		return true;
@@ -60,7 +62,8 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 			$this->run("update `#__extensions` set enabled=1 where type = 'plugin' and element = 'manual'");
 
 			$this->run(
-				"insert into `#__modules_menu` (menuid, moduleid) select 0 as menuid, id as moduleid from `#__modules` where module like 'mod_dpcalendar%'");
+				"insert into `#__modules_menu` (menuid, moduleid) select 0 as menuid, id as moduleid from `#__modules` where module like 'mod_dpcalendar%'"
+			);
 		}
 	}
 

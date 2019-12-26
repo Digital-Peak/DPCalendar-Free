@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -41,10 +41,10 @@ class DPCalendarModelEvent extends JModelForm
 		$this->setState('filter.language', JLanguageMultilang::isEnabled());
 	}
 
-	public function getForm($data = array(), $loadData = true)
+	public function getForm($data = [], $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.event', 'event', array('control' => 'jform', 'load_data' => true));
+		$form = $this->loadForm('com_dpcalendar.event', 'event', ['control' => 'jform', 'load_data' => true]);
 		if (empty($form)) {
 			return false;
 		}
@@ -59,7 +59,7 @@ class DPCalendarModelEvent extends JModelForm
 
 	protected function loadFormData()
 	{
-		$data = (array)JFactory::getApplication()->getUserState('com_dpcalendar.event.data', array());
+		$data = (array)JFactory::getApplication()->getUserState('com_dpcalendar.event.data', []);
 
 		return $data;
 	}
@@ -69,14 +69,14 @@ class DPCalendarModelEvent extends JModelForm
 		$pk = (!empty($pk)) ? $pk : $this->getState('event.id');
 
 		if ($this->_item === null) {
-			$this->_item = array();
+			$this->_item = [];
 		}
 		$user = JFactory::getUser();
 
 		if (!isset($this->_item[$pk])) {
 			if (!empty($pk) && !is_numeric($pk)) {
 				JPluginHelper::importPlugin('dpcalendar');
-				$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', array($pk));
+				$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', [$pk]);
 				if (!empty($tmp)) {
 					$tmp[0]->params   = new Registry();
 					$this->_item[$pk] = $tmp[0];
@@ -94,7 +94,7 @@ class DPCalendarModelEvent extends JModelForm
 					$case_when .= $query->charLength('a.alias');
 					$case_when .= ' THEN ';
 					$b_id      = $query->castAsChar('a.id');
-					$case_when .= $query->concatenate(array($b_id, 'a.alias'), ':');
+					$case_when .= $query->concatenate([$b_id, 'a.alias'], ':');
 					$case_when .= ' ELSE ';
 					$case_when .= $b_id . ' END as slug';
 
@@ -102,7 +102,7 @@ class DPCalendarModelEvent extends JModelForm
 					$case_when1 .= $query->charLength('c.alias');
 					$case_when1 .= ' THEN ';
 					$c_id       = $query->castAsChar('c.id');
-					$case_when1 .= $query->concatenate(array($c_id, 'c.alias'), ':');
+					$case_when1 .= $query->concatenate([$c_id, 'c.alias'], ':');
 					$case_when1 .= ' ELSE ';
 					$case_when1 .= $c_id . ' END as catslug';
 
@@ -115,8 +115,10 @@ class DPCalendarModelEvent extends JModelForm
 
 					// Join on series max/min
 					$query->select('min(ser.start_date) AS series_min_start_date, max(ser.end_date) AS series_max_end_date');
-					$query->join('LEFT',
-						'#__dpcalendar_events AS ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id');
+					$query->join(
+						'LEFT',
+						'#__dpcalendar_events AS ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id'
+					);
 
 					$query->select('u.name AS author');
 					$query->join('LEFT', '#__users AS u on u.id = a.created_by');
@@ -172,7 +174,8 @@ class DPCalendarModelEvent extends JModelForm
 					$locationQuery->select('a.*');
 					$locationQuery->from('#__dpcalendar_locations AS a');
 
-					$locationQuery->join('RIGHT',
+					$locationQuery->join(
+						'RIGHT',
 						'#__dpcalendar_events_location AS rel on rel.event_id = ' . (int)$pk . ' and rel.location_id = a.id'
 					);
 					$locationQuery->where('state = 1');
@@ -242,9 +245,11 @@ class DPCalendarModelEvent extends JModelForm
 			$calendar = DPCalendarHelper::getCalendar($item->catid);
 			$item->params->set('access-edit', $calendar->canEdit || ($calendar->canEditOwn && $item->created_by == $user->id));
 			$item->params->set('access-delete', $calendar->canDelete || ($calendar->canEditOwn && $item->created_by == $user->id));
-			$item->params->set('access-invite',
+			$item->params->set(
+				'access-invite',
 				is_numeric($item->catid) &&
-				($item->created_by == $user->id || $user->authorise('dpcalendar.invite', 'com_dpcalendar.category.' . $item->catid)));
+				($item->created_by == $user->id || $user->authorise('dpcalendar.invite', 'com_dpcalendar.category.' . $item->catid))
+			);
 
 			// Ensure a color is set
 			if (!$item->color) {
@@ -272,7 +277,7 @@ class DPCalendarModelEvent extends JModelForm
 
 	public function getSeriesEventsModel($event)
 	{
-		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
 		$model->setState('list.limit', 5);

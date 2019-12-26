@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -22,15 +22,15 @@ class DPCalendarModelCountry extends JModelAdmin
 		}
 	}
 
-	public function getTable($type = 'Country', $prefix = 'DPCalendarTable', $config = array())
+	public function getTable($type = 'Country', $prefix = 'DPCalendarTable', $config = [])
 	{
 		return JTable::getInstance($type, $prefix, $config);
 	}
 
-	public function getForm($data = array(), $loadData = true, $controlName = 'jform')
+	public function getForm($data = [], $loadData = true, $controlName = 'jform')
 	{
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.country', 'country', array('control' => $controlName, 'load_data' => $loadData));
+		$form = $this->loadForm('com_dpcalendar.country', 'country', ['control' => $controlName, 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
@@ -55,7 +55,7 @@ class DPCalendarModelCountry extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.country.data', array());
+		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.country.data', []);
 
 		if (empty($data)) {
 			$data = $this->getItem();

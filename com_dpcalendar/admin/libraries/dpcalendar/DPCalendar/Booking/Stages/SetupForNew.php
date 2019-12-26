@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 namespace DPCalendar\Booking\Stages;
@@ -167,8 +167,11 @@ class SetupForNew implements StageInterface
 		if ($amountTickets < 1 && $amount[$index] > 0) {
 			$amountTickets = 0;
 			$this->application->enqueueMessage(
-				\JText::sprintf('COM_DPCALENDAR_BOOK_ERROR_CAPACITY_EXHAUSTED_USER', $event->price ? $event->price->label[$index] : '',
-					$event->title),
+				\JText::sprintf(
+					'COM_DPCALENDAR_BOOK_ERROR_CAPACITY_EXHAUSTED_USER',
+					$event->price ? $event->price->label[$index] : '',
+					$event->title
+				),
 				'warning'
 			);
 		}

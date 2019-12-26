@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -23,7 +23,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 
 		if (JFactory::getApplication()->input->getVar('ids', null) == null) {
 			$this->setState('filter.parentIds', $this->state->get('parameters.menu', new Registry())->get('ids'));
-			$this->setState('filter.categories', array());
+			$this->setState('filter.categories', []);
 		} else {
 			$this->setState('filter.categories', explode(',', JFactory::getApplication()->input->getVar('ids', null)));
 			$this->setState('filter.parentIds', $this->setState('filter.categories'));
@@ -56,10 +56,10 @@ class DPCalendarModelCalendar extends JModelLegacy
 			if ($active) {
 				$params->loadString($active->params);
 			}
-			$this->items    = array();
-			$this->allItems = array();
+			$this->items    = [];
+			$this->allItems = [];
 
-			foreach ($this->getState('filter.parentIds', array('root')) as $calendar) {
+			foreach ($this->getState('filter.parentIds', ['root']) as $calendar) {
 				if ($calendar == '-1') {
 					$calendar = 'root';
 				}
@@ -90,7 +90,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 			}
 
 			// Add caldav calendars when available
-			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch', array(null, 'cd'));
+			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch', [null, 'cd']);
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
 					foreach ($tmpCalendars as $calendar) {
@@ -123,7 +123,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 		$format = $params->get('event_form_date_format', 'm.d.Y') . ' ' . $params->get('event_form_time_format', 'g:i a');
 		$date   = \DPCalendar\Helper\DPCalendarHelper::getDate();
 
-		$form = JForm::getInstance('com_dpcalendar.event', 'event', array('control' => 'jform'));
+		$form = JForm::getInstance('com_dpcalendar.event', 'event', ['control' => 'jform']);
 		$form->setValue('start_date', null, $date->format($format, false));
 		$date->modify('+1 hour');
 		$form->setValue('end_date', null, $date->format($format, false));

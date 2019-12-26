@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -16,11 +16,11 @@ class DPCalendarTableEvent extends JTable
 	public function __construct(&$db = null)
 	{
 		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
-			JObserverMapper::addObserverClassToClass('JTableObserverTags', 'DPCalendarTableEvent', array('typeAlias' => 'com_dpcalendar.event'));
+			JObserverMapper::addObserverClassToClass('JTableObserverTags', 'DPCalendarTableEvent', ['typeAlias' => 'com_dpcalendar.event']);
 			JObserverMapper::addObserverClassToClass(
 				'JTableObserverContenthistory',
 				'DPCalendarTableEvent',
-				array('typeAlias' => 'com_dpcalendar.event')
+				['typeAlias' => 'com_dpcalendar.event']
 			);
 		}
 
@@ -80,7 +80,7 @@ class DPCalendarTableEvent extends JTable
 
 		// Verify that the alias is unique
 		$table = JTable::getInstance('Event', 'DPCalendarTable');
-		if ($table->load(array('alias' => $this->alias, 'catid' => $this->catid)) && ($table->id != $this->id || $this->id == 0)) {
+		if ($table->load(['alias' => $this->alias, 'catid' => $this->catid]) && ($table->id != $this->id || $this->id == 0)) {
 			$this->alias = StringHelper::increment($this->alias, 'dash');
 			$this->alias = JApplicationHelper::stringURLSafe($this->alias);
 		}
@@ -182,7 +182,7 @@ class DPCalendarTableEvent extends JTable
 		}
 
 		if ($isNew || $hardReset) {
-			$text   = array();
+			$text   = [];
 			$text[] = 'BEGIN:VCALENDAR';
 			$text[] = 'BEGIN:VEVENT';
 			$text[] = 'UID:' . md5($this->title);
@@ -213,7 +213,7 @@ class DPCalendarTableEvent extends JTable
 				$endDate   = DPCalendarHelper::getDate($vevent->DTEND->getDateTime()->format('U'), $this->all_day);
 
 				$table = JTable::getInstance('Event', 'DPCalendarTable');
-				$table->bind((array)$this, array('id'));
+				$table->bind((array)$this, ['id']);
 
 				$table->alias      = $table->alias . '_' . $startDate->format('U');
 				$table->start_date = $startDate->toSql();
@@ -233,8 +233,11 @@ class DPCalendarTableEvent extends JTable
 				// the proper scheme
 				if ($this->xreference) {
 					// Replacing the _0 with the start date
-					$table->xreference = $this->str_replace_last('_0',
-						'_' . ($this->all_day ? $startDate->format('Ymd') : $startDate->format('YmdHi')), $this->xreference);
+					$table->xreference = $this->replaceLastInString(
+						'_0',
+						'_' . ($this->all_day ? $startDate->format('Ymd') : $startDate->format('YmdHi')),
+						$this->xreference
+					);
 				}
 
 				if (isset($this->newTags)) {
@@ -259,7 +262,7 @@ class DPCalendarTableEvent extends JTable
 				}
 
 				// Fields to update.
-				$files = array(
+				$files = [
 					$this->_db->qn('catid') . ' = ' . $this->_db->q($this->catid),
 					$this->_db->qn('title') . ' = ' . $this->_db->q($this->title),
 					$this->_db->qn('alias') . ' = concat(' . $this->_db->q($this->alias . '_') . ', UNIX_TIMESTAMP(start_date))',
@@ -277,7 +280,6 @@ class DPCalendarTableEvent extends JTable
 					$this->_db->qn('earlybird') . ' = ' . $this->_db->q($this->earlybird),
 					$this->_db->qn('user_discount') . ' = ' . $this->_db->q($this->user_discount),
 					$this->_db->qn('booking_information') . ' = ' . $this->_db->q($this->booking_information),
-					$this->_db->qn('tax') . ' = ' . $this->_db->q($this->tax),
 					$this->_db->qn('ordertext') . ' = ' . $this->_db->q($this->ordertext),
 					$this->_db->qn('orderurl') . ' = ' . $this->_db->q($this->orderurl),
 					$this->_db->qn('canceltext') . ' = ' . $this->_db->q($this->canceltext),
@@ -299,13 +301,13 @@ class DPCalendarTableEvent extends JTable
 					$this->_db->qn('publish_up') . ' = ' . $this->_db->q($this->publish_up),
 					$this->_db->qn('publish_down') . ' = ' . $this->_db->q($this->publish_down),
 					$this->_db->qn('plugintype') . ' = ' . $this->_db->q($this->plugintype)
-				);
+				];
 
 				// If the xreference does exist, then we need to create it with
 				// the proper scheme
 				if ($this->xreference) {
 					// Replacing the _0 with the start date
-					$files[] = $this->_db->qn('xreference') . ' = concat(' . $this->_db->q($this->str_replace_last('_0', '_', $this->xreference)) .
+					$files[] = $this->_db->qn('xreference') . ' = concat(' . $this->_db->q($this->replaceLastInString('_0', '_', $this->xreference)) .
 						", DATE_FORMAT(start_date, CASE WHEN all_day = '1' THEN '%Y%m%d' ELSE '%Y%m%d%H%i' END))";
 				} else {
 					$files[] = $this->_db->qn('xreference') . ' = null';
@@ -324,12 +326,12 @@ class DPCalendarTableEvent extends JTable
 
 	public function check()
 	{
-		if (JFilterInput::checkAttribute(array('start_date', $this->start_date))) {
+		if (JFilterInput::checkAttribute(['start_date', $this->start_date])) {
 			$this->setError(JText::_('COM_DPCALENDAR_ERR_TABLES_PROVIDE_START_DATE'));
 
 			return false;
 		}
-		if (JFilterInput::checkAttribute(array('end_date', $this->end_date))) {
+		if (JFilterInput::checkAttribute(['end_date', $this->end_date])) {
 			$this->setError(JText::_('COM_DPCALENDAR_ERR_TABLES_PROVIDE_END_DATE'));
 
 			return false;
@@ -372,10 +374,10 @@ class DPCalendarTableEvent extends JTable
 		// and cr (\r) and lf (\n) characters from string
 		if (!empty($this->metakey)) {
 			// Only process if not empty
-			$bad_characters = array("\n", "\r", "\"", "<", ">");
+			$bad_characters = ["\n", "\r", "\"", "<", ">"];
 			$after_clean    = StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys           = explode(',', $after_clean);
-			$clean_keys     = array();
+			$clean_keys     = [];
 			foreach ($keys as $key) {
 				if (trim($key)) {
 					$clean_keys[] = trim($key);
@@ -444,7 +446,7 @@ class DPCalendarTableEvent extends JTable
 		// set.
 		if (empty($pks)) {
 			if ($this->$k) {
-				$pks = array($this->$k);
+				$pks = [$this->$k];
 			} else {
 				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 
@@ -528,8 +530,9 @@ class DPCalendarTableEvent extends JTable
 		$childs = $this->_db->loadObjectList(null, 'DPCalendarTableEvent');
 
 		foreach ($childs as $child) {
-			$child->bind((array)$this,
-				array(
+			$child->bind(
+				(array)$this,
+				[
 					'id',
 					'original_id',
 					'start_date',
@@ -541,7 +544,8 @@ class DPCalendarTableEvent extends JTable
 					'checked_out',
 					'checked_out_time',
 					'xreference'
-				));
+				]
+			);
 
 			if ($newTags === null) {
 				$newTags = $this->newTags;
@@ -561,7 +565,7 @@ class DPCalendarTableEvent extends JTable
 		return true;
 	}
 
-	private function str_replace_last($search, $replace, $str)
+	private function replaceLastInString($search, $replace, $str)
 	{
 		if (($pos = strrpos($str, $search)) !== false) {
 			$search_length = strlen($search);

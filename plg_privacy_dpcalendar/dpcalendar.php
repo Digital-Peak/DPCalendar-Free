@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -18,10 +18,10 @@ class PlgPrivacyDPCalendar extends PrivacyPlugin
 	public function onPrivacyExportRequest(PrivacyTableRequest $request, JUser $user = null)
 	{
 		if (!$user) {
-			return array();
+			return [];
 		}
 
-		$domains   = array();
+		$domains   = [];
 
 		// Event data
 		$domain    = $this->createDomain('user_dpcalendar_event', 'joomla_user_dpcalendar_event_data');

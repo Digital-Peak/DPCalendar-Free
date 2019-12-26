@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Plugin;
 
@@ -86,10 +86,10 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		// Update the extcalendar table with the new sync information
 		$extCalendarTable = \JTable::getInstance('Extcalendar', 'DPCalendarTable');
 		$extCalendarTable->load(
-			array(
+			[
 				'plugin' => str_replace('dpcalendar_', '', $this->_name),
 				'id'     => str_replace($this->identifier . '-', '', $calendar->id)
-			)
+			]
 		);
 
 		if ($extCalendarTable->id) {
@@ -150,7 +150,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 				// Find an existing event with the same keys
 				$table = \JTable::getInstance('Event', 'DPCalendarTable');
 
-				$keys = array('catid' => $calendar->id, 'uid' => $event->uid);
+				$keys = ['catid' => $calendar->id, 'uid' => $event->uid];
 				if ($event->recurrence_id) {
 					// Search the parent
 					$table->load($keys);
@@ -176,7 +176,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 				$event->id           = $table->id;
 				$event->publish_down = $db->getNullDate();
 
-				$event->location_ids = array();
+				$event->location_ids = [];
 				foreach ($event->locations as $location) {
 					$event->location_ids[$location->id] = $location->id;
 				}
@@ -216,7 +216,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 	public function onEventsFetch($calendarId, \JDate $startDate = null, \JDate $endDate = null, Registry $options = null)
 	{
 		if ($this->params->get('cache', 1) == 2) {
-			return array();
+			return [];
 		}
 
 		return parent::onEventsFetch($calendarId, $startDate, $endDate, $options);

@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -14,9 +14,9 @@ class JFormFieldBooking extends JFormField
 
 	public $readonly = false;
 
-	protected function getInput ()
+	protected function getInput()
 	{
-		$html = array();
+		$html = [];
 		$groups = $this->getGroups();
 		$excluded = $this->getExcluded();
 		$link = 'index.php?option=com_dpcalendar&amp;view=bookings&amp;layout=modal&amp;tmpl=component&amp;field=' . $this->id .
@@ -32,7 +32,7 @@ class JFormFieldBooking extends JFormField
 		JHtml::_('behavior.modal', 'a.modal_' . $this->id);
 
 		// Build the script.
-		$script = array();
+		$script = [];
 		$script[] = '	function jSelectUser_' . $this->id . '(id, title, event_id) {';
 		$script[] = '		var old_id = document.getElementById("' . $this->id . '_id").value;';
 		$script[] = '		if (old_id != id) {';
@@ -52,12 +52,9 @@ class JFormFieldBooking extends JFormField
 		// Load the current Booking if available.
 		$table = JTable::getInstance('Booking', 'DPCalendarTable');
 
-		if (is_numeric($this->value))
-		{
+		if (is_numeric($this->value)) {
 			$table->load($this->value);
-		}
-		else
-		{
+		} else {
 			$table->username = JText::_('JLIB_FORM_SELECT_USER');
 		}
 
@@ -67,8 +64,7 @@ class JFormFieldBooking extends JFormField
 				 $attr . ' />';
 
 		// Create the user select button.
-		if ($this->readonly === false)
-		{
+		if ($this->readonly === false) {
 			$html[] = '		<a class="btn btn-primary modal_' . $this->id . '" title="' . JText::_('JLIB_FORM_CHANGE_USER') . '" href="' . $link . '"' .
 					 ' rel="{handler: \'iframe\', size: {x: 800, y: 500}}">';
 			$html[] = '<i class="icon-user"></i></a>';
@@ -85,12 +81,12 @@ class JFormFieldBooking extends JFormField
 		return implode("\n", $html);
 	}
 
-	protected function getGroups ()
+	protected function getGroups()
 	{
 		return null;
 	}
 
-	protected function getExcluded ()
+	protected function getExcluded()
 	{
 		return null;
 	}

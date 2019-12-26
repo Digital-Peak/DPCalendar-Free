@@ -198,9 +198,9 @@ if (!Function.prototype.bind) {
           configurable: true,
           enumerable: true,
           writable: true
-        },
-            getter = lookupGetter.call(obj, prop),
-            setter = lookupSetter.call(obj, prop);
+        };
+        var getter = lookupGetter.call(obj, prop);
+        var setter = lookupSetter.call(obj, prop);
 
         if (!hasOwnProp.call(obj, prop)) {
           // property doesn't exist or is inherited

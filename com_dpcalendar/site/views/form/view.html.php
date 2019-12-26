@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -32,7 +32,7 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 
 		$authorised = true;
 		if (empty($this->event->id)) {
-			$tmp        = $this->app->triggerEvent('onCalendarsFetch', array(null, 'cd'));
+			$tmp        = $this->app->triggerEvent('onCalendarsFetch', [null, 'cd']);
 			$authorised = DPCalendarHelper::canCreateEvent() || !empty(array_filter($tmp));
 		}
 
@@ -40,19 +40,25 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
 		}
 
-		$requestParams = $this->input->getVar('jform', array());
+		$requestParams = $this->input->getVar('jform', []);
 		if (key_exists('start_date', $requestParams)) {
 			$this->form->setFieldAttribute('start_date', 'filter', null);
 			$this->form->setFieldAttribute('start_date', 'formated', true);
-			$this->form->setValue('start_date', null,
-				$requestParams['start_date'] . (key_exists('start_date_time', $requestParams) ? ' ' . $requestParams['start_date_time'] : ''));
+			$this->form->setValue(
+				'start_date',
+				null,
+				$requestParams['start_date'] . (key_exists('start_date_time', $requestParams) ? ' ' . $requestParams['start_date_time'] : '')
+			);
 		}
 
 		if (key_exists('end_date', $requestParams)) {
 			$this->form->setFieldAttribute('end_date', 'filter', null);
 			$this->form->setFieldAttribute('end_date', 'formated', true);
-			$this->form->setValue('end_date', null,
-				$requestParams['end_date'] . (key_exists('end_date_time', $requestParams) ? ' ' . $requestParams['end_date_time'] : ''));
+			$this->form->setValue(
+				'end_date',
+				null,
+				$requestParams['end_date'] . (key_exists('end_date_time', $requestParams) ? ' ' . $requestParams['end_date_time'] : '')
+			);
 		}
 
 		if (key_exists('title', $requestParams)) {
@@ -152,6 +158,9 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 		if ($this->params->get('event_form_change_description', '1') != '1') {
 			$this->form->removeField('description');
 		}
+		if ($this->params->get('event_form_change_schedule', '1') != '1') {
+			$this->form->removeField('schedule');
+		}
 		if ($this->params->get('event_form_change_capacity', '1') != '1') {
 			$this->form->removeField('capacity');
 		}
@@ -199,6 +208,7 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 		if ($this->params->get('event_form_change_location', '1') != '1') {
 			$this->form->removeField('location');
 			$this->form->removeField('location_ids');
+			$this->form->removeField('location_lookup');
 		}
 
 		return parent::init();

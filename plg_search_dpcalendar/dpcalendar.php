@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -14,7 +14,7 @@ if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMIN
 class PlgSearchDPCalendar extends JPlugin
 {
 
-	public function __construct(& $subject, $config)
+	public function __construct(&$subject, $config)
 	{
 		parent::__construct($subject, $config);
 		$this->loadLanguage();
@@ -22,7 +22,7 @@ class PlgSearchDPCalendar extends JPlugin
 
 	public function onContentSearchAreas()
 	{
-		static $areas = array('dpcalendar' => 'PLG_SEARCH_DPCALENDAR_EVENTS');
+		static $areas = ['dpcalendar' => 'PLG_SEARCH_DPCALENDAR_EVENTS'];
 
 		return $areas;
 	}
@@ -32,20 +32,20 @@ class PlgSearchDPCalendar extends JPlugin
 		$searchText = $text;
 		if (is_array($areas)) {
 			if (!array_intersect($areas, array_keys($this->onContentSearchAreas()))) {
-				return array();
+				return [];
 			}
 		}
 
 		$text = trim($text);
 		if ($text == '') {
-			return array();
+			return [];
 		}
 
 		JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 		JLoader::import('joomla.application.component.model');
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', array('ignore_request' => true));
+		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('list.limit', $this->params->def('search_limit', 50));
 		$model->setState('category.id', 'root');
@@ -60,7 +60,7 @@ class PlgSearchDPCalendar extends JPlugin
 		}
 		$model->setState('list.end-date', null);
 
-		$state = array();
+		$state = [];
 		if ($this->params->get('search_content', 1)) {
 			$state[] = 1;
 		}
@@ -69,7 +69,7 @@ class PlgSearchDPCalendar extends JPlugin
 		}
 
 		if (empty($state)) {
-			return array();
+			return [];
 		}
 
 		$model->setState('filter.state', $state);

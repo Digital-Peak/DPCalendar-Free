@@ -1,9 +1,9 @@
 <?php
 /**
- * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
- * @license    http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @package   DPCalendar
+ * @author    Digital Peak http://www.digital-peak.com
+ * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -11,7 +11,7 @@ $event      = $this->event;
 $eventRoute = $this->router->getEventRoute($event->id, $event->catid, false, true);
 
 require_once JPATH_SITE . '/components/com_mailto/helpers/mailto.php';
-$uri       = JUri::getInstance()->toString(array('scheme', 'host', 'port'));
+$uri       = JUri::getInstance()->toString(['scheme', 'host', 'port']);
 $mailtoUrl = 'index.php?option=com_mailto&tmpl=component&link=' . MailToHelper::addLink($uri . $eventRoute);
 
 // Compile the Google url
@@ -83,7 +83,8 @@ $deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return
 	<?php if ($event->params->get('access-edit')) { ?>
 		<?php if ($event->checked_out && $this->user->id != $event->checked_out) { ?>
 			<?php $this->app->enqueueMessage(
-				JText::sprintf('COM_DPCALENDAR_VIEW_EVENT_CHECKED_OUT_BY', JFactory::getUser($event->checked_out)->name), 'warning'
+				JText::sprintf('COM_DPCALENDAR_VIEW_EVENT_CHECKED_OUT_BY', JFactory::getUser($event->checked_out)->name),
+				'warning'
 			); ?>
 		<?php } ?>
 		<?php if ($event->checked_out && $this->user->id != $event->checked_out && $this->user->authorise('core.manage', 'com_checkin')) { ?>

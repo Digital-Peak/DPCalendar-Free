@@ -57,23 +57,23 @@ DPCalendar = window.DPCalendar || {};
 
     if (options['use_hash']) {
       // Parsing the hash
-      var vars = window.location.hash.replace(/&amp;/gi, '&').split('&');
+      var consts = window.location.hash.replace(/&amp;/gi, '&').split('&');
 
-      for (var i = 0; i < vars.length; i++) {
-        if (vars[i].match('^#year')) {
-          options['year'] = vars[i].substring(6);
+      for (var i = 0; i < consts.length; i++) {
+        if (consts[i].match('^#year')) {
+          options['year'] = consts[i].substring(6);
         }
 
-        if (vars[i].match('^month')) {
-          options['month'] = vars[i].substring(6);
+        if (consts[i].match('^month')) {
+          options['month'] = consts[i].substring(6);
         }
 
-        if (vars[i].match('^day')) {
-          options['date'] = vars[i].substring(4);
+        if (consts[i].match('^day')) {
+          options['date'] = consts[i].substring(4);
         }
 
-        if (vars[i].match('^view')) {
-          options['defaultView'] = vars[i].substring(5);
+        if (consts[i].match('^view')) {
+          options['defaultView'] = consts[i].substring(5);
         }
       } // Listening for hash/url changes
 
@@ -84,23 +84,23 @@ DPCalendar = window.DPCalendar || {};
         var tmpMonth = today.getUTCMonth() + 1;
         var tmpDay = today.getUTCDate();
         var tmpView = viewMappingReverse[options['defaultView']];
-        var vars = window.location.hash.replace(/&amp;/gi, '&').split('&');
+        var consts = window.location.hash.replace(/&amp;/gi, '&').split('&');
 
-        for (var i = 0; i < vars.length; i++) {
-          if (vars[i].match('^#year')) {
-            tmpYear = vars[i].substring(6);
+        for (var _i = 0; _i < consts.length; _i++) {
+          if (consts[_i].match('^#year')) {
+            tmpYear = consts[_i].substring(6);
           }
 
-          if (vars[i].match('^month')) {
-            tmpMonth = vars[i].substring(6) - 1;
+          if (consts[_i].match('^month')) {
+            tmpMonth = consts[_i].substring(6) - 1;
           }
 
-          if (vars[i].match('^day')) {
-            tmpDay = vars[i].substring(4);
+          if (consts[_i].match('^day')) {
+            tmpDay = consts[_i].substring(4);
           }
 
-          if (vars[i].match('^view')) {
-            tmpView = vars[i].substring(5);
+          if (consts[_i].match('^view')) {
+            tmpView = consts[_i].substring(5);
           }
         }
 
@@ -161,13 +161,18 @@ DPCalendar = window.DPCalendar || {};
       if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
         window.location.hash = newHash;
       }
+    };
 
+    calendar.dpEventMarkerSet = [];
+
+    options['datesDestroy'] = function (info) {
       var map = calendar.parentElement.querySelector('.dp-map');
 
       if (!DPCalendar.Map || map == null || !options['show_map']) {
         return;
       }
 
+      calendar.dpEventMarkerSet = [];
       DPCalendar.Map.clearMarkers(map);
     };
 
@@ -226,6 +231,10 @@ DPCalendar = window.DPCalendar || {};
 
 
       info.event.extendedProps.location.forEach(function (location) {
+        if (calendar.dpEventMarkerSet[info.event.id + ' ' + location.latitude + ' ' + location.longitude]) {
+          return;
+        }
+
         var locationData = JSON.parse(JSON.stringify(location));
         locationData.title = info.event.title;
         locationData.color = info.event.backgroundColor;
@@ -235,6 +244,7 @@ DPCalendar = window.DPCalendar || {};
         }
 
         locationData.description = desc;
+        calendar.dpEventMarkerSet[info.event.id + ' ' + location.latitude + ' ' + location.longitude] = locationData;
         DPCalendar.Map.createMarker(map, locationData);
       });
     }; // Handling the messages in the returned data
@@ -541,7 +551,7 @@ DPCalendar = window.DPCalendar || {};
         id: calId,
         events: function events(fetchInfo, successCallback, failureCallback) {
           DPCalendar.request(options['requestUrlRoot'] + '&ids=' + calId + '&date-start=' + fetchInfo.startStr + '&date-end=' + fetchInfo.endStr, function (json) {
-            successCallback(json.data);
+            return successCallback(json.data);
           }, null, false);
         }
       };
@@ -583,7 +593,7 @@ DPCalendar = window.DPCalendar || {};
             id: calId,
             events: function events(fetchInfo, successCallback, failureCallback) {
               DPCalendar.request(options['requestUrlRoot'] + '&ids=' + calId + '&date-start=' + fetchInfo.startStr + '&date-end=' + fetchInfo.endStr, function (json) {
-                successCallback(json.data);
+                return successCallback(json.data);
               }, null, false);
             }
           });

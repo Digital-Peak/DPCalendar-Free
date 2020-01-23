@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -57,7 +57,7 @@ class SetupForNew implements StageInterface
 		$amountTickets = 0;
 		foreach ($payload->events as $event) {
 			$this->handleOptions($payload, $event);
-			$amountTickets = $this->handleTickets($payload, $event, $amountTickets);
+			$amountTickets += $this->handleTickets($payload, $event, $amountTickets);
 		}
 
 		if ($amountTickets == 0) {
@@ -102,16 +102,14 @@ class SetupForNew implements StageInterface
 
 	private function handleTickets($payload, $event, $amountTickets)
 	{
-		// Flag if a payment is required
-		$paymentRequired = false;
-
 		// The tickets to process
 		$amount = $payload->data['event_id'][$event->id]['tickets'];
 
-		$newTickets = false;
+		$amountTickets = 0;
+		$newTickets    = false;
 		if (!$event->price) {
 			// Free event
-			$event->amount_tickets[0] = $this->getAmountTickets($event, $payload, $amount, 0);
+			$event->amount_tickets[0] = $this->getAmountTickets($event, $payload, $amount, 0, $amountTickets);
 			$amountTickets            += $event->amount_tickets[0];
 
 			if (!$newTickets && $event->amount_tickets[0]) {
@@ -119,7 +117,7 @@ class SetupForNew implements StageInterface
 			}
 		} else {
 			foreach ($event->price->value as $index => $value) {
-				$event->amount_tickets[$index] = $this->getAmountTickets($event, $payload, $amount, $index);
+				$event->amount_tickets[$index] = $this->getAmountTickets($event, $payload, $amount, $index, $amountTickets);
 				$amountTickets                 += $event->amount_tickets[$index];
 
 				// Determine the price
@@ -145,7 +143,7 @@ class SetupForNew implements StageInterface
 		return $amountTickets;
 	}
 
-	private function getAmountTickets($event, $payload, $amount, $index)
+	private function getAmountTickets($event, $payload, $amount, $index, $alreadyCollected)
 	{
 		// Check if the user or email address has already tickets booked
 		$bookedTickets = 0;
@@ -155,15 +153,21 @@ class SetupForNew implements StageInterface
 			}
 			$bookedTickets++;
 		}
+
+		// Make sure booked tickets is correct
 		if ($bookedTickets > $event->max_tickets) {
 			$bookedTickets = $event->max_tickets;
 		}
+
+		// If there are already booked tickets and the limit is hit, reduce the amount
 		$amountTickets = $amount[$index] > ($event->max_tickets - $bookedTickets) ? $event->max_tickets - $bookedTickets : $amount[$index];
 
-		if ($event->capacity !== null && $amountTickets > ($event->capacity - $event->capacity_used)) {
-			$amountTickets = $event->capacity - $event->capacity_used;
+		// If the amount is bigger than the available space, reduce it
+		if ($event->capacity !== null && $amountTickets > ($event->capacity - $event->capacity_used - $alreadyCollected)) {
+			$amountTickets = $event->capacity - $event->capacity_used - $alreadyCollected;
 		}
 
+		// If the amount of tickets is 0 raise a warning
 		if ($amountTickets < 1 && $amount[$index] > 0) {
 			$amountTickets = 0;
 			$this->application->enqueueMessage(

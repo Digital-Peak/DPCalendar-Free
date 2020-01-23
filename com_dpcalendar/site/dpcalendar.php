@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -16,6 +16,10 @@ if (version_compare(PHP_VERSION, '5.5.9') < 0) {
 
 	return;
 }
+
+// BC classes
+JLoader::registerAlias('DPCalendarHelperLocation', '\\DPCalendar\\Helper\\Location', '6.0');
+JLoader::registerAlias('DPCalendarHelperBooking', '\\DPCalendar\\Helper\\Booking', '6.0');
 
 JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 JFactory::getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');

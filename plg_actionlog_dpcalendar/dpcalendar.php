@@ -2,14 +2,10 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
-
-if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
-	return;
-}
 
 JLoader::register('ActionLogPlugin', JPATH_ADMINISTRATOR . '/components/com_actionlogs/libraries/actionlogplugin.php');
 
@@ -51,7 +47,7 @@ class PlgActionlogDPCalendar extends ActionLogPlugin
 
 		if ($context == 'com_dpcalendar.event') {
 			$message['title']    = $item->title;
-			$message['itemlink'] = DPCalendarHelperRoute::getEventRoute($item->id, $item->catid);
+			$message['itemlink'] = 'index.php?option=com_dpcalendar&task=event.edit&e_id=' . $item->id;
 		}
 
 		if ($context == 'com_dpcalendar.booking') {

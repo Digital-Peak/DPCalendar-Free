@@ -2,12 +2,10 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Helper;
-
-use GeoIp2\Database\Reader;
 
 defined('_JEXEC') or die();
 
@@ -255,20 +253,52 @@ class Location
 
 	public static function getCountryForIp()
 	{
-		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
-		if (!file_exists($geoDBFile)) {
+		$geoDBDirectory = \JFactory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
+		$files          = is_dir($geoDBDirectory) ? scandir($geoDBDirectory) : [];
+
+		// Check if the data is available
+		if (count($files) < 3) {
 			return '';
 		}
 
-		\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+		// Determine the IP address of the current user
+		$ip = $_SERVER['REMOTE_ADDR'];
+
+		// Compile the file name
+		$fileName = $geoDBDirectory . '/' . current(explode('.', $ip)) . '.php';
+		if (!file_exists($fileName)) {
+			return '';
+		}
 
 		try {
-			$reader = new Reader($geoDBFile);
-
-			return $model->getItem(['short_code' => $reader->country($_SERVER['REMOTE_ADDR'])->country->isoCode]);
+			// Read the data from the file
+			$data = require $fileName;
+		} catch (\Throwable $e) {
+			return '';
 		} catch (\Exception $e) {
+			return '';
 		}
+
+		// Convert the IP to long
+		$number = ip2long($ip);
+		foreach ($data as $range) {
+			if ($number < $range[0] || $number > $range[1]) {
+				continue;
+			}
+
+			// Check if a special IP address like localhost
+			if ($range[2] == 'ZZ') {
+				return '';
+			}
+
+			// Get the country by short code
+			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+
+			return $model->getItem(['short_code' => $range[2]]);
+		}
+
+		return '';
 	}
 
 	private static function searchInGoogle($address)

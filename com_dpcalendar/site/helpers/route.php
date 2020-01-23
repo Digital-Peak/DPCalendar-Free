@@ -2,14 +2,13 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 class DPCalendarHelperRoute
 {
-
 	private static $lookup;
 
 	public static function getEventRoute($id, $calId, $full = false, $autoRoute = true, $defaultItemId = 0)
@@ -137,9 +136,10 @@ class DPCalendarHelperRoute
 
 		$uri = self::getUrl($args, false);
 
-		$url = JRoute::_($uri->toString(['path', 'query', 'fragment']),false);
+		$url = JRoute::_($uri->toString(['path', 'query', 'fragment']), false);
 		if ($full) {
-			$url = ($full ? JUri::getInstance()->toString(['host','port','scheme']) : '') . JRoute::_('index.php' . $uri->toString(['query', 'fragment']),false);
+			$url = ($full ? JUri::getInstance()->toString(['host', 'port', 'scheme']) : '') .
+				JRoute::_('index.php' . $uri->toString(['query', 'fragment']), false);
 		}
 
 		// When a booking is created on the back end it contains the administrator part

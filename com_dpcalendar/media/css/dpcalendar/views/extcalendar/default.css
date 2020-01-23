@@ -73,19 +73,22 @@
 	/* Opera/IE 8+ */
 }
 
-.com-dpcalendar-extcalendar .dp-control {
-	overflow: auto;
+.com-dpcalendar-extcalendar .dp-control, .com-dpcalendar-extcalendar .control-group {
+	display: flex;
 }
 
 .com-dpcalendar-extcalendar .dp-control__label, .com-dpcalendar-extcalendar .control-group .control-label {
-	float: left;
-	width: 160px;
+	flex: 0 0 20%;
 	padding-top: 5px;
 	text-align: left;
 }
 
 .com-dpcalendar-extcalendar .dp-control__input, .com-dpcalendar-extcalendar .control-group .controls {
-	margin-left: 180px;
+	flex: 1 1 80%;
+}
+
+.com-dpcalendar-extcalendar .dp-control_hidden {
+	display: none;
 }
 
 .com-dpcalendar-extcalendar .control-group .form-text {
@@ -93,9 +96,15 @@
 }
 
 @media screen and (max-width: 640px) {
+	.com-dpcalendar-extcalendar .dp-control, .com-dpcalendar-extcalendar .control-group {
+		display: block;
+	}
 	.com-dpcalendar-extcalendar .dp-control__label, .com-dpcalendar-extcalendar .control-group .control-label, .com-dpcalendar-extcalendar .dp-control__input, .com-dpcalendar-extcalendar .control-group .controls {
 		width: 100%;
 		margin-left: 0;
+	}
+	.com-dpcalendar-extcalendar .control-group {
+		display: block;
 	}
 	.com-dpcalendar-extcalendar .control-group control-label, .com-dpcalendar-extcalendar .control-group controls {
 		width: 100%;

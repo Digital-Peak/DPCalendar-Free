@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -12,7 +12,6 @@ JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', '
 
 class DPCalendarModelCpanel extends JModelLegacy
 {
-
 	public function getEvents($start, $ordering = 'a.start_date', $direction = 'asc')
 	{
 		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
@@ -91,38 +90,22 @@ class DPCalendarModelCpanel extends JModelLegacy
 
 	public function refreshUpdateSite()
 	{
-		if (DPCalendarHelper::isFree()) {
-			return;
-		}
-
 		JLoader::import('joomla.application.component.helper');
 		$params = JComponentHelper::getParams('com_dpcalendar');
 
-		if (version_compare(JVERSION, '3.0', 'ge')) {
-			$dlid = $params->get('downloadid', '');
-		} else {
-			$dlid = $params->getValue('downloadid', '');
+		$dlid = trim($params->get('downloadid', ''));
+		if (!$dlid) {
+			return;
 		}
-		$dlid = trim($dlid);
 
-		$extra_query = null;
-
-		// If I have a valid Download ID I will need to use a non-blank
-		// extra_query in Joomla! 3.2+
+		// If I have a valid Download ID I will need to use a non-blank extra_query in Joomla! 3.2+
+		$extraQuery = null;
 		if (preg_match('/^([0-9]{1,}:)?[0-9a-f]{32}$/i', $dlid)) {
-			$extra_query = 'dlid=' . $dlid;
+			$extraQuery = 'dlid=' . $dlid;
 		}
 
 		// Create the update site definition we want to store to the database
-		$update_site = [
-			'enabled'              => 1,
-			'last_check_timestamp' => 0,
-			'extra_query'          => $extra_query
-		];
-
-		if (version_compare(JVERSION, '3.0.0', 'lt')) {
-			unset($update_site['extra_query']);
-		}
+		$updateSite = ['enabled' => 1, 'last_check_timestamp' => 0, 'extra_query' => $extraQuery];
 
 		$db = $this->getDbo();
 
@@ -134,9 +117,8 @@ class DPCalendarModelCpanel extends JModelLegacy
 			->where($db->qn('element') . ' = ' . $db->q('pkg_dpcalendar'));
 		$db->setQuery($query);
 
-		$extension_id = $db->loadResult();
-
-		if (empty($extension_id)) {
+		$extensionId = $db->loadResult();
+		if (empty($extensionId)) {
 			return;
 		}
 
@@ -144,35 +126,30 @@ class DPCalendarModelCpanel extends JModelLegacy
 		$query = $db->getQuery(true)
 			->select($db->qn('update_site_id'))
 			->from($db->qn('#__update_sites_extensions'))
-			->where($db->qn('extension_id') . ' = ' . $db->q($extension_id));
+			->where($db->qn('extension_id') . ' = ' . $db->q($extensionId));
 		$db->setQuery($query);
 
 		$updateSiteIDs = $db->loadColumn(0);
-		if (count($updateSiteIDs)) {
-			// Loop through all update sites
-			foreach ($updateSiteIDs as $id) {
-				$query = $db->getQuery(true)
-					->select('*')
-					->from($db->qn('#__update_sites'))
-					->where($db->qn('update_site_id') . ' = ' . $db->q($id));
-				$db->setQuery($query);
-				$aSite = $db->loadObject();
+		if (!count($updateSiteIDs)) {
+			return;
+		}
 
-				// Do we have the extra_query property (J 3.2+) and does it
-				// match?
-				if (property_exists($aSite, 'extra_query')) {
-					if ($aSite->extra_query == $update_site['extra_query']) {
-						continue;
-					}
-				} else {
-					// Joomla! 3.1 or earlier. Updates may or may not work.
-					continue;
-				}
+		// Loop through all update sites
+		foreach ($updateSiteIDs as $id) {
+			$query = $db->getQuery(true)
+				->select('*')
+				->from($db->qn('#__update_sites'))
+				->where($db->qn('update_site_id') . ' = ' . $db->q($id));
+			$db->setQuery($query);
 
-				$update_site['update_site_id'] = $id;
-				$newSite                       = (object)$update_site;
-				$db->updateObject('#__update_sites', $newSite, 'update_site_id', true);
+			$site = $db->loadObject();
+			if ($site->extra_query == $updateSite['extra_query']) {
+				continue;
 			}
+
+			$updateSite['update_site_id'] = $id;
+			$newSite                      = (object)$updateSite;
+			$db->updateObject('#__update_sites', $newSite, 'update_site_id', true);
 		}
 	}
 }

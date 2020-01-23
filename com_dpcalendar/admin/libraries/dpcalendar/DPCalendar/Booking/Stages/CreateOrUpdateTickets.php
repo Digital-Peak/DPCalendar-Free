@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -84,6 +84,7 @@ class CreateOrUpdateTickets implements StageInterface
 				$prices = new \JObject(['value' => [0 => 0]]);
 			}
 
+			$seatNumber = $event->capacity_used + 1;
 			foreach ($prices->value as $index => $value) {
 				for ($i = 0; $i < $event->amount_tickets[$index]; $i++) {
 					$ticket             = (object)$payload->data;
@@ -91,7 +92,7 @@ class CreateOrUpdateTickets implements StageInterface
 					$ticket->uid        = 0;
 					$ticket->booking_id = $payload->item->id;
 					$ticket->price      = $event->booking_series ? 0 : Booking::getPriceWithDiscount($value, $event);
-					$ticket->seat       = $event->capacity_used + 1;
+					$ticket->seat       = $seatNumber;
 					$ticket->state      = $payload->item->state;
 					$ticket->created    = DPCalendarHelper::getDate()->toSql();
 					$ticket->type       = $index;
@@ -116,7 +117,7 @@ class CreateOrUpdateTickets implements StageInterface
 						$table->book(true);
 					} else if ($this->model->save((array)$ticket)) {
 						// Increase the seat
-						$ticket->seat++;
+						$seatNumber++;
 
 						$t                = $this->model->getItem();
 						$t->event_calid   = $event->catid;

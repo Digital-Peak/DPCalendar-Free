@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -705,15 +705,16 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 	public function delete(&$pks)
 	{
+		$pks    = (array)$pks;
+		$events = [];
+		foreach ($pks as $pk) {
+			$event    = $this->getItem($pk);
+			$events[] = $event;
+		}
+
 		$success = parent::delete($pks);
 
 		if ($success) {
-			$events = [];
-			foreach ($pks as $pk) {
-				$event    = $this->getItem($pk);
-				$events[] = $event;
-			}
-
 			$this->sendMail('delete', $events);
 		}
 

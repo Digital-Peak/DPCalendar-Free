@@ -134,6 +134,7 @@
 
 		<field name="id" type="hidden" readonly="true" default="0"
 		       label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
+		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
 		<field name="location_ids" type="sql" multiple="true"
@@ -181,7 +182,6 @@
 		       label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
 		<field name="booking_information" type="editor" filter="raw" buttons="true" hide="pagebreak,readmore"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
-		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
 		<field name="alias" type="text" label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_FIELD_ALIAS_DESC"/>

@@ -1,16 +1,19 @@
-.com-dpcalendar-country .dp-control {
-	overflow: auto;
+.com-dpcalendar-country .dp-control, .com-dpcalendar-country .control-group {
+	display: flex;
 }
 
 .com-dpcalendar-country .dp-control__label, .com-dpcalendar-country .control-group .control-label {
-	float: left;
-	width: 160px;
+	flex: 0 0 20%;
 	padding-top: 5px;
 	text-align: left;
 }
 
 .com-dpcalendar-country .dp-control__input, .com-dpcalendar-country .control-group .controls {
-	margin-left: 180px;
+	flex: 1 1 80%;
+}
+
+.com-dpcalendar-country .dp-control_hidden {
+	display: none;
 }
 
 .com-dpcalendar-country .control-group .form-text {
@@ -18,9 +21,15 @@
 }
 
 @media screen and (max-width: 640px) {
+	.com-dpcalendar-country .dp-control, .com-dpcalendar-country .control-group {
+		display: block;
+	}
 	.com-dpcalendar-country .dp-control__label, .com-dpcalendar-country .control-group .control-label, .com-dpcalendar-country .dp-control__input, .com-dpcalendar-country .control-group .controls {
 		width: 100%;
 		margin-left: 0;
+	}
+	.com-dpcalendar-country .control-group {
+		display: block;
 	}
 	.com-dpcalendar-country .control-group control-label, .com-dpcalendar-country .control-group controls {
 		width: 100%;

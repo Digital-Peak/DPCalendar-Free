@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -11,6 +11,7 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 {
 	protected $minimumPhp = '5.6.0';
 	protected $minimumJoomla = '3.9.0';
+	protected $allowDowngrades = true;
 
 	public function preflight($type, $parent)
 	{
@@ -53,9 +54,6 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 
 	public function postflight($type, $parent)
 	{
-		// The system plugin needs to be disabled during upgrade
-		$this->run("update `#__extensions` set enabled = 1 where type = 'plugin' and element = 'dpcalendar' and folder = 'system'");
-
 		// Perform some post install tasks
 		if ($type == 'install') {
 			$this->run("update `#__extensions` set enabled=1 where type = 'plugin' and element = 'dpcalendar'");
@@ -64,6 +62,20 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 			$this->run(
 				"insert into `#__modules_menu` (menuid, moduleid) select 0 as menuid, id as moduleid from `#__modules` where module like 'mod_dpcalendar%'"
 			);
+		}
+
+		if ($type == 'update') {
+			// Update sites are created in a plugin
+			JEventDispatcher::getInstance()->register('onExtensionAfterInstall', function ($installer, $eid) {
+				if ($installer->getManifest()->packagename != 'dpcalendar') {
+					return;
+				}
+
+				// Set the download ID if available
+				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+				$model = JModelLegacy::getInstance('Cpanel', 'DPCalendarModel');
+				$model->refreshUpdateSite();
+			});
 		}
 	}
 

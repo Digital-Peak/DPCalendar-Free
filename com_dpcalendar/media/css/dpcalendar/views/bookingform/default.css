@@ -26,6 +26,7 @@
 .com-dpcalendar-bookingform .dp-button[disabled] {
 	background-color: #cccccc;
 	color: #666666;
+	cursor: not-allowed;
 }
 
 .com-dpcalendar-bookingform .dp-icon svg {
@@ -35,34 +36,28 @@
 	vertical-align: -2px;
 }
 
-.com-dpcalendar-bookingform .dp-control {
-	overflow: auto;
+.com-dpcalendar-bookingform .dp-info-box {
+	padding: 8px 35px 8px 14px;
+	margin-bottom: 18px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	color: #c09853;
+	background-color: #fcf8e3;
+	border: 1px solid #fbeed5;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
 }
 
-.com-dpcalendar-bookingform .dp-control__label, .com-dpcalendar-bookingform .control-group .control-label {
-	float: left;
-	width: 160px;
-	padding-top: 5px;
-	text-align: left;
+.com-dpcalendar-bookingform .dp-info-box_success {
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	color: #3c763d;
 }
 
-.com-dpcalendar-bookingform .dp-control__input, .com-dpcalendar-bookingform .control-group .controls {
-	margin-left: 180px;
-}
-
-.com-dpcalendar-bookingform .control-group .form-text {
-	display: none;
-}
-
-@media screen and (max-width: 640px) {
-	.com-dpcalendar-bookingform .dp-control__label, .com-dpcalendar-bookingform .control-group .control-label, .com-dpcalendar-bookingform .dp-control__input, .com-dpcalendar-bookingform .control-group .controls {
-		width: 100%;
-		margin-left: 0;
-	}
-	.com-dpcalendar-bookingform .control-group control-label, .com-dpcalendar-bookingform .control-group controls {
-		width: 100%;
-		margin-left: 0;
-	}
+.com-dpcalendar-bookingform .dp-info-box_error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
 }
 
 .com-dpcalendar-bookingform .dp-form-input {
@@ -74,6 +69,147 @@
 	/* Firefox, other Gecko */
 	box-sizing: border-box;
 	/* Opera/IE 8+ */
+}
+
+.com-dpcalendar-bookingform .dp-control, .com-dpcalendar-bookingform .control-group {
+	display: flex;
+}
+
+.com-dpcalendar-bookingform .dp-control__label, .com-dpcalendar-bookingform .control-group .control-label {
+	flex: 0 0 20%;
+	padding-top: 5px;
+	text-align: left;
+}
+
+.com-dpcalendar-bookingform .dp-control__input, .com-dpcalendar-bookingform .control-group .controls {
+	flex: 1 1 80%;
+}
+
+.com-dpcalendar-bookingform .dp-control_hidden {
+	display: none;
+}
+
+.com-dpcalendar-bookingform .control-group .form-text {
+	display: none;
+}
+
+@media screen and (max-width: 640px) {
+	.com-dpcalendar-bookingform .dp-control, .com-dpcalendar-bookingform .control-group {
+		display: block;
+	}
+	.com-dpcalendar-bookingform .dp-control__label, .com-dpcalendar-bookingform .control-group .control-label, .com-dpcalendar-bookingform .dp-control__input, .com-dpcalendar-bookingform .control-group .controls {
+		width: 100%;
+		margin-left: 0;
+	}
+	.com-dpcalendar-bookingform .control-group {
+		display: block;
+	}
+	.com-dpcalendar-bookingform .control-group control-label, .com-dpcalendar-bookingform .control-group controls {
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
+.com-dpcalendar-bookingform .dp-loader {
+	position: relative;
+	width: 100%;
+	height: 0;
+}
+
+.com-dpcalendar-bookingform .dp-loader::before {
+	content: '';
+	position: absolute;
+	right: 100%;
+	left: 0;
+	bottom: 2px;
+	z-index: 10;
+	height: 4px;
+	background-color: #2d9ede;
+	animation: 12s 0s normal none 1 running calendarLoader;
+	animation-fill-mode: forwards;
+	animation-timing-function: cubix-bezier(0, 1, 0, 1);
+	animation-iteration-count: infinite;
+}
+
+.com-dpcalendar-bookingform .dp-loader_hidden::before {
+	display: none;
+}
+
+@keyframes calendarLoader {
+	0% {
+		right: 100%;
+	}
+	50% {
+		right: 6%;
+		animation-timing-function: linear;
+	}
+	100% {
+		right: 1%;
+	}
+}
+
+.com-dpcalendar-bookingform .dp-form-radio.radio {
+	padding-left: 0px;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio label {
+	padding-right: 10px;
+	border-radius: 3px;
+	border: 1px solid #D1D3D4;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty {
+	display: none;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty + label {
+	position: relative;
+	float: left;
+	line-height: 2em;
+	text-indent: 3em;
+	cursor: pointer;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	margin-right: 5px;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty + label:before {
+	position: absolute;
+	display: block;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	content: '';
+	width: 2.5em;
+	background: #D1D3D4;
+	border-radius: 3px 0 0 3px;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:hover:not(:checked) + label:before {
+	content: '\2714';
+	text-indent: .9em;
+	color: #C2C2C2;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:hover:not(:checked) + label {
+	color: #888;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:checked + label:before {
+	content: '\2714';
+	text-indent: .9em;
+	color: #cdeacd;
+	background-color: #46a546;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:checked + label {
+	color: #777;
+}
+
+.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:focus ~ label:before {
+	box-shadow: 0 0 0 3px #999;
 }
 
 .com-dpcalendar-bookingform .dp-table {
@@ -156,132 +292,6 @@
 	}
 }
 
-.com-dpcalendar-bookingform .dp-loader {
-	position: relative;
-	width: 100%;
-	height: 0;
-}
-
-.com-dpcalendar-bookingform .dp-loader::before {
-	content: '';
-	position: absolute;
-	right: 100%;
-	left: 0;
-	bottom: 2px;
-	z-index: 10;
-	height: 4px;
-	background-color: #2d9ede;
-	animation: 12s 0s normal none 1 running calendarLoader;
-	animation-fill-mode: forwards;
-	animation-timing-function: cubix-bezier(0, 1, 0, 1);
-	animation-iteration-count: infinite;
-}
-
-.com-dpcalendar-bookingform .dp-loader_hidden::before {
-	display: none;
-}
-
-@keyframes calendarLoader {
-	0% {
-		right: 100%;
-	}
-	50% {
-		right: 6%;
-		animation-timing-function: linear;
-	}
-	100% {
-		right: 1%;
-	}
-}
-
-.com-dpcalendar-bookingform .dp-info-box {
-	padding: 8px 35px 8px 14px;
-	margin-bottom: 18px;
-	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	color: #c09853;
-	background-color: #fcf8e3;
-	border: 1px solid #fbeed5;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
-	border-radius: 4px;
-}
-
-.com-dpcalendar-bookingform .dp-info-box_success {
-	background-color: #dff0d8;
-	border-color: #d6e9c6;
-	color: #3c763d;
-}
-
-.com-dpcalendar-bookingform .dp-info-box_error {
-	color: #721c24;
-	background-color: #f8d7da;
-	border-color: #f5c6cb;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio.radio {
-	padding-left: 0px;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio label {
-	padding-right: 10px;
-	border-radius: 3px;
-	border: 1px solid #D1D3D4;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty {
-	display: none;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty + label {
-	position: relative;
-	float: left;
-	line-height: 2em;
-	text-indent: 3em;
-	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	margin-right: 5px;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:empty + label:before {
-	position: absolute;
-	display: block;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	content: '';
-	width: 2.5em;
-	background: #D1D3D4;
-	border-radius: 3px 0 0 3px;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:hover:not(:checked) + label:before {
-	content: '\2714';
-	text-indent: .9em;
-	color: #C2C2C2;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:hover:not(:checked) + label {
-	color: #888;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:checked + label:before {
-	content: '\2714';
-	text-indent: .9em;
-	color: #cdeacd;
-	background-color: #46a546;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:checked + label {
-	color: #777;
-}
-
-.com-dpcalendar-bookingform .dp-form-radio input[type=radio]:focus ~ label:before {
-	box-shadow: 0 0 0 3px #999;
-}
-
 .com-dpcalendar-bookingform .dp-timezone {
 	display: flex;
 	align-items: center;
@@ -332,6 +342,10 @@
 .com-dpcalendar-bookingform .dp-timezone .choices {
 	min-width: 300px;
 	margin: 0;
+}
+
+.com-dpcalendar-bookingform .dp-select_error {
+	border: 3px solid #f5515c;
 }
 
 .com-dpcalendar-bookingform .choices {
@@ -437,6 +451,10 @@
 
 .com-dpcalendar-bookingform .dp-event_instance {
 	display: none;
+}
+
+.com-dpcalendar-bookingform .dp-event__ticket-count {
+	font-style: italic;
 }
 
 .com-dpcalendar-bookingform .dp-ticket td,

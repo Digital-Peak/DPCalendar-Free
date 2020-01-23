@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -123,7 +123,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			]);
 		}
 		if (is_numeric($event->id)) {
-			$this->getModel()->publish($recordId, -2);
+			$this->getModel()->getTable('Event', 'DPCalendarTable')->publish([$recordId], -2);
 			if (!$this->getModel()->delete($recordId)) {
 				$this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
 				$this->setMessage($this->getModel()->getError(), 'error');
@@ -440,10 +440,8 @@ class DPCalendarControllerEvent extends JControllerForm
 		}
 		// If ok, redirect to the return page.
 		if ($result) {
-			$canChangeState = $calendar->external || JFactory::getUser()->authorise(
-				'core.edit.state',
-				'com_dpcalendar.category.' . $data['catid']
-			);
+			$canChangeState = $calendar->external
+				|| JFactory::getUser()->authorise('core.edit.state', 'com_dpcalendar.category.' . $data['catid']);
 			if ($this->getTask() == 'save') {
 				$app->setUserState('com_dpcalendar.edit.event.data', null);
 				$return = $this->getReturnPage();
@@ -613,11 +611,8 @@ class DPCalendarControllerEvent extends JControllerForm
 			$item          = new stdClass();
 			$item->value   = $e->id;
 			$item->title   = $e->title;
-			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' . strip_tags(JHtml::_(
-				'string.truncate',
-				$e->description,
-				100
-			));
+			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' .
+				strip_tags(JHtml::_('string.truncate', $e->description, 100));
 
 			$data[] = $item;
 		}

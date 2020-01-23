@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -29,6 +29,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 
 		$this->getModel()->setState('filter.my', $this->params->get('locations_show_my_only'));
 		$this->getModel()->setState('list.limit', 100);
+		$this->getModel()->setState('filter.state', 1);
 		$this->locations = $this->get('Items');
 
 		JLoader::import('joomla.application.component.model');

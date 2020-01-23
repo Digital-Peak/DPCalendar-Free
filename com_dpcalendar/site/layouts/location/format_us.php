@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -34,7 +34,10 @@ foreach ($locations as $index => $location) {
 	if (!empty($location->zip)) {
 		$buffer .= $location->zip . ', ';
 	}
-	if (!empty($location->country)) {
+	if (!empty($location->country_code_value)) {
+		$buffer .= $location->country_code_value . ', ';
+	}
+	if (!empty($location->country) && empty($location->country_code_value)) {
 		$buffer .= $location->country . ', ';
 	}
 	$buffer = trim($buffer, ', ');

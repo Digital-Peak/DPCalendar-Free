@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -12,15 +12,6 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 	public function init()
 	{
 		$user = $this->user;
-		if ($user->guest && count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) < 1) {
-			$active = $this->app->getMenu()->getActive();
-			$link   = new JUri(JRoute::_('index.php?option=com_users&view=login&Itemid=' . $active->id, false));
-			$link->setVar('return', base64_encode('index.php?Itemid=' . $active->id));
-
-			$this->app->redirect(JRoute::_($link), JText::_('COM_DPCALENDAR_NOT_LOGGED_IN'), 'warning');
-
-			return false;
-		}
 
 		JPluginHelper::importPlugin('dpcalendar');
 
@@ -36,8 +27,8 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			$authorised = DPCalendarHelper::canCreateEvent() || !empty(array_filter($tmp));
 		}
 
-		if ($authorised !== true) {
-			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 403);
+		if (!$authorised && count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) < 1) {
+			return $this->handleNoAccess();
 		}
 
 		$requestParams = $this->input->getVar('jform', []);
@@ -106,7 +97,7 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			$hideFieldsets[] = 'publishing';
 		}
 		if (!$this->params->get('event_form_change_metadata', 1)) {
-			$hideFieldsets[] = 'jmetadata';
+			$hideFieldsets[]           = 'jmetadata';
 			$hideFieldsets['metadata'] = 'jmetadata';
 		}
 

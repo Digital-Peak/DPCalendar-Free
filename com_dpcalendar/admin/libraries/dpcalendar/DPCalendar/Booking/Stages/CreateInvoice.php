@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Booking\Stages;
@@ -51,7 +51,9 @@ class CreateInvoice implements StageInterface
 		$translator = new Translator();
 
 		$booking = clone $payload->item;
-		if (!empty($booking->country)) {
+		if (!empty($booking->country_code)) {
+			$booking->country = $translator->translate('COM_DPCALENDAR_COUNTRY_' . $booking->country_code);
+		} else if (!empty($booking->country)) {
 			$booking->country = $translator->translate('COM_DPCALENDAR_COUNTRY_' . $this->model->getItem($booking->country)->short_code);
 		}
 

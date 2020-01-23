@@ -56,6 +56,7 @@
 .com-dpcalendar-eventform .dp-button[disabled] {
 	background-color: #cccccc;
 	color: #666666;
+	cursor: not-allowed;
 }
 
 .com-dpcalendar-eventform .dp-datepicker {
@@ -72,19 +73,22 @@
 	margin: 0;
 }
 
-.com-dpcalendar-eventform .dp-control {
-	overflow: auto;
+.com-dpcalendar-eventform .dp-control, .com-dpcalendar-eventform .control-group {
+	display: flex;
 }
 
 .com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label {
-	float: left;
-	width: 160px;
+	flex: 0 0 20%;
 	padding-top: 5px;
 	text-align: left;
 }
 
 .com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls {
-	margin-left: 180px;
+	flex: 1 1 80%;
+}
+
+.com-dpcalendar-eventform .dp-control_hidden {
+	display: none;
 }
 
 .com-dpcalendar-eventform .control-group .form-text {
@@ -92,9 +96,15 @@
 }
 
 @media screen and (max-width: 640px) {
+	.com-dpcalendar-eventform .dp-control, .com-dpcalendar-eventform .control-group {
+		display: block;
+	}
 	.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label, .com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls {
 		width: 100%;
 		margin-left: 0;
+	}
+	.com-dpcalendar-eventform .control-group {
+		display: block;
 	}
 	.com-dpcalendar-eventform .control-group control-label, .com-dpcalendar-eventform .control-group controls {
 		width: 100%;

@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 
@@ -453,7 +453,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 */
 	public function onEventSave(array $data)
 	{
-		if (strpos($data['catid'], $this->identifier) !== 0) {
+		if (strpos($data['catid'], $this->identifier . '-') !== 0) {
 			return false;
 		}
 
@@ -508,7 +508,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 */
 	public function onEventDelete($eventId)
 	{
-		if (strpos($eventId, $this->identifier) !== 0) {
+		if (strpos($eventId, $this->identifier . '-') !== 0) {
 			return false;
 		}
 

@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -32,10 +32,4 @@ $calendar = DPCalendarHelper::getCalendar($this->form->getValue('catid'));
 		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::CANCEL]); ?>
 		<?php echo $this->translate('JCANCEL'); ?>
 	</button>
-	<?php if ($calendar && $calendar->canDelete) { ?>
-		<button type="button" class="dp-button dp-button-delete" data-task="delete">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DELETE]); ?>
-			<?php echo $this->translate('JACTION_DELETE'); ?>
-		</button>
-	<?php } ?>
 </div>

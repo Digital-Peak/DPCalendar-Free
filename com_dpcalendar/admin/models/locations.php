@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -89,6 +89,10 @@ class DPCalendarModelLocations extends JModelList
 	public function getItems()
 	{
 		$locations = parent::getItems();
+
+		if (!$locations) {
+			return [];
+		}
 
 		foreach ($locations as $location) {
 			if (empty($location->color)) {

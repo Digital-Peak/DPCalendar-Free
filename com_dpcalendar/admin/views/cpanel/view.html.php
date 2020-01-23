@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -35,10 +35,11 @@ class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
 			}
 		}
 
-		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
+		$geoDBDirectory = \JFactory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
 
 		// Don't update when the file was fetched 10 days ago
-		$this->needsGeoDBUpdate = (!file_exists($geoDBFile) || (time() - filemtime($geoDBFile) > (60 * 60 * 24 * 10))) && !DPCalendarHelper::isFree();
+		$files                  = is_dir($geoDBDirectory) ? scandir($geoDBDirectory) : [];
+		$this->needsGeoDBUpdate = (count($files) <= 2 || (time() - filemtime($geoDBDirectory . '/' . $files[2]) > (60 * 60 * 24 * 10))) && !DPCalendarHelper::isFree();
 
 		parent::init();
 	}

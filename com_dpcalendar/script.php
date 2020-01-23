@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -13,6 +13,7 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 {
 	protected $minimumPhp = '5.6.0';
 	protected $minimumJoomla = '3.9.0';
+	protected $allowDowngrades = true;
 
 	public function update($parent)
 	{
@@ -184,6 +185,10 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 			// Map was never shown, so disable it
 			$this->run('update #__modules set params = replace(params, \'"show_map":"1"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
 			$this->run('update #__modules set params = replace(params, \'"show_map":"2"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
+		}
+
+		if (version_compare($version, '7.3.3') == -1) {
+			JFolder::delete(JPATH_PLUGINS . '/system/dpcalendar');
 		}
 	}
 

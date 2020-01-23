@@ -287,6 +287,11 @@ class DPCalendar extends CalDAV\Backend\PDO
 				throw new Forbidden();
 			}
 
+			if ($event->checked_out != 0 && $event->checked_out == \JFactory::getUser()->id) {
+				$this->log('Event ' . $objectUri . ' on calendar ' . $calendarId . ' is checked out');
+				throw new Forbidden();
+			}
+
 			$event->state = -2;
 			$event->store();
 			$model = \JModelLegacy::getInstance(

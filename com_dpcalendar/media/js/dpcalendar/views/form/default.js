@@ -142,6 +142,13 @@ DPCalendar = window.DPCalendar || {};
           DPCalendar.autocomplete.setItems(titleInput, json.data);
         }, DPCalendar.formToQueryString(document.querySelector('.com-dpcalendar-eventform__form'), 'input:not([name=task]), select') + '&id=' + url.query.e_id);
       });
+    } // Captcha
+
+
+    var captcha = document.querySelector('.dp-field-captcha');
+
+    if (captcha) {
+      document.querySelector('.com-dpcalendar-eventform__form').appendChild(captcha);
     }
 
     document.getElementById('jform_location_ids').addEventListener('change', function (e) {
@@ -457,68 +464,52 @@ DPCalendar = window.DPCalendar || {};
   }
 
   function changeVisiblity() {
+    // Disable all fields initially
+    document.querySelector('.dp-field-scheduling-end-date').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-interval').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-repeat-count').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-rrule').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-daily-weekdays').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-weekly-days').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-monthly-options').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-monthly-week').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-monthly-week-days').classList.add('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-monthly-days').classList.add('dp-control_hidden'); // Scheduling field is not rendered
+
     if (!document.getElementById('jform_scheduling')) {
-      document.querySelector('.dp-field-scheduling-end-date').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-interval').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-repeat-count').style.display = 'none';
-      document.querySelector('.dp-field-rrule').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-daily-weekdays').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-weekly-days').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-monthly-options').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-monthly-week').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-monthly-week-days').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-monthly-days').style.display = 'none';
       return;
-    } // no scheduling
+    } // Scheduling is not activated
 
 
     if (document.getElementById('jform_scheduling0').checked) {
-      document.querySelector('.dp-field-scheduling-end-date').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-interval').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-repeat-count').style.display = 'none';
-      document.querySelector('.dp-field-rrule').style.display = 'none';
-    } else {
-      document.querySelector('.dp-field-scheduling-end-date').style.display = 'block';
-      document.querySelector('.dp-field-scheduling-interval').style.display = 'block';
-      document.querySelector('.dp-field-scheduling-repeat-count').style.display = 'block';
-      document.querySelector('.dp-field-rrule').style.display = 'block';
-    } // daily
+      return;
+    } // Display default fields
 
+
+    document.querySelector('.dp-field-scheduling-end-date').classList.remove('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-interval').classList.remove('dp-control_hidden');
+    document.querySelector('.dp-field-scheduling-repeat-count').classList.remove('dp-control_hidden');
+    document.querySelector('.dp-field-rrule').classList.remove('dp-control_hidden'); // Daily
 
     if (document.getElementById('jform_scheduling1').checked) {
-      document.querySelector('.dp-field-scheduling-daily-weekdays').style.display = 'block';
-    } else {
-      document.querySelector('.dp-field-scheduling-daily-weekdays').style.display = 'none';
-    } // weekly
+      document.querySelector('.dp-field-scheduling-daily-weekdays').classList.remove('dp-control_hidden');
+    } // Weekly
 
 
     if (document.getElementById('jform_scheduling2').checked) {
-      document.querySelector('.dp-field-scheduling-weekly-days').style.display = 'block';
-    } else {
-      document.querySelector('.dp-field-scheduling-weekly-days').style.display = 'none';
-    } // monthly
+      document.querySelector('.dp-field-scheduling-weekly-days').classList.remove('dp-control_hidden');
+    } // Monthly
 
 
     if (document.getElementById('jform_scheduling3').checked) {
-      document.querySelector('.dp-field-scheduling-monthly-options').style.display = 'block';
-      document.querySelector('.dp-field-scheduling-monthly-week').style.display = 'block';
-      document.querySelector('.dp-field-scheduling-monthly-week-days').style.display = 'block';
-      document.querySelector('.dp-field-scheduling-monthly-days').style.display = 'block';
+      document.querySelector('.dp-field-scheduling-monthly-options').classList.remove('dp-control_hidden');
 
       if (document.getElementById('jform_scheduling_monthly_options0').checked) {
-        document.querySelector('.dp-field-scheduling-monthly-week').style.display = 'none';
-        document.querySelector('.dp-field-scheduling-monthly-week-days').style.display = 'none';
-        document.querySelector('.dp-field-scheduling-monthly-days').style.display = 'block';
+        document.querySelector('.dp-field-scheduling-monthly-days').classList.remove('dp-control_hidden');
       } else {
-        document.querySelector('.dp-field-scheduling-monthly-week').style.display = 'block';
-        document.querySelector('.dp-field-scheduling-monthly-week-days').style.display = 'block';
-        document.querySelector('.dp-field-scheduling-monthly-days').style.display = 'none';
+        document.querySelector('.dp-field-scheduling-monthly-week').classList.remove('dp-control_hidden');
+        document.querySelector('.dp-field-scheduling-monthly-week-days').classList.remove('dp-control_hidden');
       }
-    } else {
-      document.querySelector('.dp-field-scheduling-monthly-options').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-monthly-week').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-monthly-week-days').style.display = 'none';
-      document.querySelector('.dp-field-scheduling-monthly-days').style.display = 'none';
     }
   }
 })(document, Joomla, DPCalendar);

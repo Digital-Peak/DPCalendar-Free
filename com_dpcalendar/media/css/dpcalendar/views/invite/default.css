@@ -26,6 +26,7 @@
 .com-dpcalendar-invite .dp-button[disabled] {
 	background-color: #cccccc;
 	color: #666666;
+	cursor: not-allowed;
 }
 
 .com-dpcalendar-invite .dp-icon svg {
@@ -35,19 +36,22 @@
 	vertical-align: -2px;
 }
 
-.com-dpcalendar-invite .dp-control {
-	overflow: auto;
+.com-dpcalendar-invite .dp-control, .com-dpcalendar-invite .control-group {
+	display: flex;
 }
 
 .com-dpcalendar-invite .dp-control__label, .com-dpcalendar-invite .control-group .control-label {
-	float: left;
-	width: 160px;
+	flex: 0 0 20%;
 	padding-top: 5px;
 	text-align: left;
 }
 
 .com-dpcalendar-invite .dp-control__input, .com-dpcalendar-invite .control-group .controls {
-	margin-left: 180px;
+	flex: 1 1 80%;
+}
+
+.com-dpcalendar-invite .dp-control_hidden {
+	display: none;
 }
 
 .com-dpcalendar-invite .control-group .form-text {
@@ -55,9 +59,15 @@
 }
 
 @media screen and (max-width: 640px) {
+	.com-dpcalendar-invite .dp-control, .com-dpcalendar-invite .control-group {
+		display: block;
+	}
 	.com-dpcalendar-invite .dp-control__label, .com-dpcalendar-invite .control-group .control-label, .com-dpcalendar-invite .dp-control__input, .com-dpcalendar-invite .control-group .controls {
 		width: 100%;
 		margin-left: 0;
+	}
+	.com-dpcalendar-invite .control-group {
+		display: block;
 	}
 	.com-dpcalendar-invite .control-group control-label, .com-dpcalendar-invite .control-group controls {
 		width: 100%;

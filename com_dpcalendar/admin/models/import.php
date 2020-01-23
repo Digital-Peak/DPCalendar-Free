@@ -2,14 +2,12 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
-use GeoIp2\Database\Reader;
 use Joomla\Registry\Registry;
 
 JLoader::import('joomla.application.component.modellist');
@@ -125,22 +123,18 @@ class DPCalendarModelImport extends JModelLegacy
 
 	public function importGeoDB()
 	{
-		$geoDBFile = \JFactory::getApplication()->get('tmp_path') . '/GeoLite2-Country.mmdb';
+		// The folder with the data
+		$geoDBDirectory = \JFactory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
 
-		// Don't update when the file was fetched 10 days ago
-		if (file_exists($geoDBFile) && (time() - filemtime($geoDBFile) < (60 * 60 * 24 * 10))) {
+		// Only update when we are not in free mode
+		if (DPCalendarHelper::isFree()) {
 			return;
 		}
 
-		// Only update when we are in free mode
-		if (file_exists($geoDBFile) && DPCalendarHelper::isFree()) {
-			return;
-		}
-
-		$content = DPCalendarHelper::fetchContent('http://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.mmdb.gz');
-
+		// Fetch the content
+		$content = DPCalendarHelper::fetchContent('https://software77.net/geo-ip/?DL=1');
 		if (empty($content)) {
-			throw new \Exception("Can't download the geolocation database from maxmind. Is the site blocked through a firewall?");
+			throw new \Exception("Can't download the geolocation database from software77.net. Is the site blocked through a firewall?");
 		}
 
 		if ($content instanceof Exception) {
@@ -149,42 +143,85 @@ class DPCalendarModelImport extends JModelLegacy
 
 		// Sometimes you get a rate limit exceeded
 		if (stristr($content, 'Rate limited exceeded') !== false) {
-			throw new \Exception("You hit the rate limit of maxmind to download the geodatabase.");
+			throw new \Exception("You hit the rate limit of software77 to download the geo database, try again in 24 hours.");
 		}
 
-		$ret = file_put_contents($geoDBFile . '.gz', $content);
+		// Ensure the directory exists
+		if (!is_dir($geoDBDirectory)) {
+			mkdir($geoDBDirectory);
+		}
+
+		// Store the downloaded file
+		$ret = file_put_contents($geoDBDirectory . '/tmp.gz', $content);
 		if ($ret === false) {
 			throw new \Exception("Could not write the geolocation database to the temp folder. Are the permissions correct?");
 		}
 
+		// Free up some memory
 		unset($content);
 
 		// Decompress the file
 		$uncompressed = '';
 
-		$zp = @gzopen($geoDBFile . '.gz', 'rb');
-
+		// Create the zip reader
+		$zp = @gzopen($geoDBDirectory . '/tmp.gz', 'rb');
 		if ($zp === false) {
+			@unlink($geoDBDirectory . '/tmp.gz');
 			throw new \Exception("Can't uncompress the geolocation database file, there was a zip error.");
 		}
 
 		if ($zp !== false) {
+			// Unzip the content
 			while (!gzeof($zp)) {
 				$uncompressed .= @gzread($zp, 102400);
 			}
 
+			// Close the zip reader
 			@gzclose($zp);
 
-			@unlink($geoDBFile . '.gz');
+			// Delete the zip file
+			@unlink($geoDBDirectory . '/tmp.gz');
 		}
 
-		try {
-			file_put_contents($geoDBFile, $uncompressed);
-			new Reader($geoDBFile);
-		} catch (\Exception $e) {
-			unlink($geoDBFile);
+		// Read the uncompressed content line by line
+		$files = [];
+		foreach (preg_split("/\r\n|\n|\r/", $uncompressed) as $line) {
+			if (strpos($line, '#') === 0) {
+				continue;
+			}
 
-			throw $e;
+			// Parse the line
+			$data = explode(',', str_replace('"', '', $line));
+			if (count($data) < 4) {
+				continue;
+			}
+
+			// Filename contains the first part of the IP
+			$fileName = current(explode('.', long2ip($data[0]))) . '.php';
+
+			// Teh files array with the IP data file names
+			$files[$fileName] = $geoDBDirectory . '/' . $fileName;
+
+			// The buffer which contains the PHP code for the data array
+			$buffer = '';
+
+			// The files are PHP arrays for fast lookup
+			if (!file_exists($geoDBDirectory . '/' . $fileName)) {
+				// Create the main array
+				$buffer .= '<?php' . PHP_EOL;
+				$buffer .= 'return [' . PHP_EOL;
+			}
+
+			// The data array
+			$buffer .= '[\'' . $data[0] . '\', \'' . $data[1] . '\', \'' . $data[4] . '\'],' . PHP_EOL;
+
+			// Write the buffer
+			file_put_contents($geoDBDirectory . '/' . $fileName, $buffer, FILE_APPEND | LOCK_EX);
+		}
+
+		// Close the main array
+		foreach ($files as $file) {
+			file_put_contents($file, '];', FILE_APPEND | LOCK_EX);
 		}
 	}
 

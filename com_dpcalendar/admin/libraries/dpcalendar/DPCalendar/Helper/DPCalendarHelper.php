@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 namespace DPCalendar\Helper;
@@ -271,7 +271,10 @@ class DPCalendarHelper
 		$date = self::getDate(null, $allDay);
 		$date = \DateTime::createFromFormat($dateFormat . ($allDay ? '' : ' ' . $timeFormat), $string, $date->getTimezone());
 		if ($date == null) {
-			throw new \Exception('Could not interprete format: ' . ($dateFormat . ($allDay ? '' : ' ' . $timeFormat)) . ' for date string : ' . $string);
+			$errors = \DateTime::getLastErrors();
+			throw new \Exception('Could not interprete format: ' . ($dateFormat . ($allDay ? '' : ' ' . $timeFormat)) .
+				' for date string : ' . $string . PHP_EOL .
+				'Error was: ' . implode(',', $errors['warnings']) . ' ' . implode(',', $errors['errors']));
 		}
 
 		$date = self::getDate($date->format('U'), $allDay);
@@ -557,7 +560,7 @@ class DPCalendarHelper
 			return \JText::_($text);
 		}
 
-		return $text;
+		return $params->get($key, $default);
 	}
 
 	public static function getAvatar($userId, $email, $params)

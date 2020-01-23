@@ -42,18 +42,18 @@ DPCalendar = window.DPCalendar || {};
         event.preventDefault();
         var options = document.querySelectorAll('.dp-payment-option'); // If there is one option check it
 
-        if (this.getAttribute('data-task') == 'save' && options.length == 1) {
+        if (button.getAttribute('data-task') == 'save' && options.length == 1) {
           options[0].querySelector('.dp-payment-option__input').checked = true;
         } // If there is no price check the first option
 
 
         var total = document.querySelector('.dp-price-total__content');
 
-        if (this.getAttribute('data-task') == 'save' && options.length > 0 && total && total.getAttribute('data-raw') == 0) {
+        if (button.getAttribute('data-task') == 'save' && options.length > 0 && total && total.getAttribute('data-raw') == 0) {
           options[0].querySelector('.dp-payment-option__input').checked = true;
         }
 
-        if (this.getAttribute('data-task') == 'save' && options.length > 1 && !document.querySelectorAll('.dp-payment-option__input:checked').length) {
+        if (button.getAttribute('data-task') == 'save' && options.length > 1 && !document.querySelectorAll('.dp-payment-option__input:checked').length) {
           var form = document.getElementsByName('adminForm')[0];
 
           if (form && !document.formvalidator.isValid(form)) {
@@ -63,14 +63,14 @@ DPCalendar = window.DPCalendar || {};
           DPCalendar.slideToggle(document.querySelector('.com-dpcalendar-bookingform__payment-options'));
           [].slice.call(document.querySelectorAll('.dp-payment-option')).forEach(function (option) {
             option.addEventListener('click', function () {
-              this.querySelector('.dp-payment-option__input').checked = true;
+              option.querySelector('.dp-payment-option__input').checked = true;
               Joomla.submitbutton('bookingform.save');
             });
           });
           return false;
         }
 
-        Joomla.submitbutton('bookingform.' + this.getAttribute('data-task'));
+        Joomla.submitbutton('bookingform.' + button.getAttribute('data-task'));
         return false;
       });
     });
@@ -95,7 +95,43 @@ DPCalendar = window.DPCalendar || {};
   });
 
   function calculatePrice() {
+    var saveButton = document.querySelector('.com-dpcalendar-bookingform .dp-button-save');
+
+    if (saveButton) {
+      saveButton.disabled = false;
+    }
+
     if (!Joomla.getOptions('DPCalendar.price.url') || !document.querySelector('.dp-price-total__content')) {
+      return;
+    }
+
+    [].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform .dp-event')).forEach(function (event) {
+      var selected = 0;
+      var events = [].slice.call(event.querySelectorAll('.dp-ticket__amount .dp-select'));
+      events.forEach(function (select) {
+        selected += parseInt(select.options[select.selectedIndex].value);
+      });
+      events.forEach(function (select) {
+        if (selected > event.getAttribute('data-ticket-count') && parseInt(select.options[select.selectedIndex].value) > 0) {
+          select.classList.add('dp-select_error');
+        } else {
+          select.classList.remove('dp-select_error');
+        }
+      });
+    });
+    var taxElement = document.querySelector('.com-dpcalendar-bookingform .dp-tax');
+
+    if (document.querySelectorAll('.com-dpcalendar-bookingform .dp-ticket__amount .dp-select_error').length > 0) {
+      document.querySelector('.com-dpcalendar-bookingform .dp-price-total__content').innerHTML = '';
+      Joomla.renderMessages({
+        error: [Joomla.JText._('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOKED_MESSAGE')]
+      });
+      saveButton.disabled = true;
+
+      if (taxElement) {
+        taxElement.style.display = 'none';
+      }
+
       return;
     }
 

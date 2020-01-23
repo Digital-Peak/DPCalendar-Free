@@ -49,6 +49,7 @@
 .com-dpcalendar-tickets .dp-button[disabled] {
 	background-color: #cccccc;
 	color: #666666;
+	cursor: not-allowed;
 }
 
 .com-dpcalendar-tickets .dp-table {

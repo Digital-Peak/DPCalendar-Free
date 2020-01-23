@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -171,7 +171,7 @@ $options['screen_size_list_view'] = 0;
 $options['use_hash']              = false;
 
 // Set the actual date
-$now              = DPCalendarHelper::getDate();
+$now              = DPCalendarHelper::getDate($params->get('start_date'));
 $options['year']  = $now->format('Y', true);
 $options['month'] = $now->format('m', true);
 $options['date']  = $now->format('d', true);

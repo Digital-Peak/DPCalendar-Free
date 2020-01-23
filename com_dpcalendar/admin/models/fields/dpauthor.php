@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -11,9 +11,7 @@ JFormHelper::loadFieldClass('list');
 
 class JFormFieldDPAuthor extends JFormFieldList
 {
-
 	public $type = 'DPAuthor';
-
 	protected static $options = [];
 
 	protected function getOptions()

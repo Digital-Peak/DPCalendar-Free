@@ -2,13 +2,12 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.categories');
-JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 class DPCalendarRouter extends JComponentRouterView
 {
@@ -62,6 +61,8 @@ class DPCalendarRouter extends JComponentRouterView
 		parent::__construct($app, $menu);
 
 		if ($params->get('sef_advanced', 1)) {
+			JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+
 			$this->attachRule(new \DPCalendar\Router\Rules\DPCalendarRules($this));
 			$this->attachRule(new JComponentRouterRulesStandard($this));
 			$this->attachRule(new JComponentRouterRulesNomenu($this));

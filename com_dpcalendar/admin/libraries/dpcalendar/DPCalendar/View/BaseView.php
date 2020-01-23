@@ -2,10 +2,9 @@
 /**
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2019 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
  */
-
 namespace DPCalendar\View;
 
 defined('_JEXEC') or die();
@@ -109,6 +108,9 @@ class BaseView extends \JViewLegacy
 		parent::display($tpl);
 	}
 
+	/**
+	 * Prepares the document by adding some meta information and defining some view specific values.
+	 */
 	protected function prepareDocument()
 	{
 		$menus = $this->app->getMenu();
@@ -153,7 +155,11 @@ class BaseView extends \JViewLegacy
 		$this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx'));
 	}
 
-
+	/**
+	 * Adds some default actions to the toolbar in the back end.
+	 *
+	 * @throws \Exception
+	 */
 	protected function addToolbar()
 	{
 		$canDo = \DPCalendarHelper::getActions();
@@ -185,8 +191,35 @@ class BaseView extends \JViewLegacy
 	{
 	}
 
+	/**
+	 * Translate the given key.
+	 *
+	 * @param $key
+	 *
+	 * @return string
+	 */
 	protected function translate($key)
 	{
 		return $this->translator->translate($key);
+	}
+
+	/**
+	 * Performs some checks when no access is detected by the view.
+	 *
+	 * @return bool
+	 */
+	protected function handleNoAccess()
+	{
+		if (!$this->user->guest) {
+			throw new \Exception($this->translate('JERROR_ALERTNOAUTHOR'), 403);
+		}
+
+		$active = $this->app->getMenu()->getActive();
+		$link   = new \JUri(\JRoute::_('index.php?option=com_users&view=login&Itemid=' . $active->id, false));
+		$link->setVar('return', base64_encode('index.php?Itemid=' . $active->id));
+
+		$this->app->redirect(\JRoute::_($link), $this->translate('COM_DPCALENDAR_NOT_LOGGED_IN'), 'warning');
+
+		return false;
 	}
 }

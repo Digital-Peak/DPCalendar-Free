@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -405,8 +405,8 @@ class PlgSampledataDPCalendar extends JPlugin
 				'rrule'        => 'FREQ=WEEKLY;BYDAY=TH',
 				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_full_alt":"","image_full_caption":""}',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_7_DESC',
-				'capacity'     => '20',
-				'max_tickets'  => 4,
+				'capacity'     => null,
+				'max_tickets'  => 100,
 				'price'        => '{"value":["20.00"],"label":[""],"description":[""]}',
 				'location_ids' => $locationIds[5]
 			]);
@@ -427,7 +427,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'rrule'           => 'FREQ=WEEKLY;BYDAY=SU',
 				'images'          => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":""}',
 				'description'     => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_DESC',
-				'capacity'        => '10',
+				'capacity'        => '20',
 				'max_tickets'     => 2,
 				'price'           => '{"value":["55","68","89"],"label":["Kids","Student","Adults"],"description":["Age: 1 - 5 years","Needs an ID","Age: Older than 6 years"]}',
 				'earlybird'       => '{"value":["20"],"type":["percentage"],"date":["-2 days"],"label":["Early Bird Discount"],"description":[" Decide early, pay less"]}',
@@ -944,15 +944,15 @@ class PlgSampledataDPCalendar extends JPlugin
 						$data['params']['timeformat_day']   = 'H:i';
 						$data['params']['timeformat_list']  = 'H:i';
 						$data['params']['weekstart']        = 1;
-						// Params for calendar
+					// Params for calendar
 					case 'view=list':
 					case 'view=list&layout=blog':
 					case 'view=list&layout=timeline':
 						$data['params']['list_title_format'] = 'd.m.Y';
-						// Params for list
+					// Params for list
 					case 'view=map':
 						$data['params']['map_date_format'] = 'H:i';
-						// Params for map
+					// Params for map
 					case 'view=event&id=':
 						$data['params']['event_date_format'] = 'd.m.Y';
 						$data['params']['event_time_format'] = 'H:i';

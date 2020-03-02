@@ -3,19 +3,18 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
-
 class DPCalendarViewInvite extends \DPCalendar\View\BaseView
 {
-
 	public function init()
 	{
 		JFactory::getLanguage()->load('', JPATH_ADMINISTRATOR);
 
-		if ($this->user->authorise('dpcalendar.invite', 'com_dpcalendar') !== true) {
+		$event = JModelLegacy::getInstance('Event', 'DPCalendarModel')->getItem($this->input->getInt('id'));
+		if (!$event || !$event->id || $this->user->authorise('dpcalendar.invite', 'com_dpcalendar.category.' . $event->catid) !== true) {
 			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
 		}
 
@@ -24,6 +23,6 @@ class DPCalendarViewInvite extends \DPCalendar\View\BaseView
 
 		$this->form = JForm::getInstance('com_dpcalendar.invite', 'invite', ['control' => 'jform']);
 
-		$this->form->setValue('event_id', null, $this->input->getInt('id'));
+		$this->form->setValue('event_id', null, $event->id);
 	}
 }

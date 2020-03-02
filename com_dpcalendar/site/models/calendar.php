@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -89,8 +89,12 @@ class DPCalendarModelCalendar extends JModelLegacy
 				}
 			}
 
-			// Add caldav calendars when available
-			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch', [null, 'cd']);
+			// Add external calendars or only the private ones when not all is set
+			JPluginHelper::importPlugin('dpcalendar');
+			$tmp = JFactory::getApplication()->triggerEvent(
+				'onCalendarsFetch',
+				[null, in_array('-1', $this->getState('filter.parentIds', ['root'])) ? null : 'cd']
+			);
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
 					foreach ($tmpCalendars as $calendar) {

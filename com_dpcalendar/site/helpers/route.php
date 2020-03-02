@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -25,6 +25,8 @@ class DPCalendarHelperRoute
 		if ($tmpl = JFactory::getApplication()->input->getWord('tmpl')) {
 			$link .= '&tmpl=' . $tmpl;
 		}
+
+		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 		if (\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
 			$link .= '&calid=' . $calId;
@@ -182,7 +184,14 @@ class DPCalendarHelperRoute
 
 		$uri = self::getUrl($args, false);
 
-		return $full ? $uri->toString() : JRoute::_($uri->toString(['path', 'query', 'fragment']));
+		$url = JRoute::_($uri->toString(['path', 'query', 'fragment']), false);
+		if ($full) {
+			$url = ($full ? JUri::getInstance()->toString(['host', 'port', 'scheme']) : '') .
+				JRoute::_('index.php' . $uri->toString(['query', 'fragment']), false);
+		}
+
+		// When a booking is created on the back end it contains the administrator part
+		return str_replace('/administrator/', '/', $url);
 	}
 
 	public static function getBookingFormRoute($bookingId, $return = null)

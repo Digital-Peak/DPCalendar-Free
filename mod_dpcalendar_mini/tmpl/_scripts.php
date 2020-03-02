@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -39,7 +39,7 @@ $document->addScriptOptions('itemid', $app->input->getInt('Itemid', 0));
 // The options which will be passed to the js library
 $options                   = [];
 $options['requestUrlRoot'] = 'view=events&limit=0&format=raw&&compact=' . $params->get('compact_events', 2) .
-	'&openview=' . $params->get('open_view', 'agendaDay') . '&module-id=' . $module->id;
+	'&openview=' . $params->get('open_view', 'agendaDay') . '&module-id=' . $module->id . '&Itemid=' . $app->input->getInt('Itemid', 0);
 $options['calendarIds']    = [implode(',', $ids)];
 
 // Set the default view

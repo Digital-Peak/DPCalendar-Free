@@ -63,9 +63,14 @@
 	margin-bottom: 0;
 }
 
-.com-dpcalendar-calendar .dp-quickadd .dp-timepicker,
 .com-dpcalendar-calendar .dp-quickadd .dp-datepicker {
-	width: 48%;
+	width: 58%;
+	box-sizing: border-box;
+	height: auto;
+}
+
+.com-dpcalendar-calendar .dp-quickadd .dp-timepicker {
+	width: 38%;
 	box-sizing: border-box;
 	height: auto;
 }

@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -86,6 +86,16 @@ class DPCalendarModelCpanel extends JModelLegacy
 		$data['week'] = $this->_db->loadAssoc();
 
 		return $data;
+	}
+
+	public function getTotalTaxRates()
+	{
+		$query = $this->_db->getQuery(true);
+		$query->select('count(id) as total');
+		$query->from('#__dpcalendar_taxrates');
+		$this->_db->setQuery($query);
+
+		return $this->_db->loadResult();
 	}
 
 	public function refreshUpdateSite()

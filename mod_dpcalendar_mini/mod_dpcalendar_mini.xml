@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>23 Jan 2020</creationDate>
-	<copyright>(C) 2007 - 2020 Digital Peak. All rights reserved.</copyright>
-	<license>http://www.gnu.org/copyleft/gpl.htmlGNU/GPL</license>
+	<creationDate>2 Mar 2020</creationDate>
+	<copyright>Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.3.3</version>
+	<version>7.3.4</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -214,7 +214,7 @@
 				<field name="popup_height" type="text" default="500" size="5"
 				       label="MOD_DPCALENDAR_MINI_FIELD_POPUP_HEIGHT_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_POPUP_HEIGHT_DESC"/>
-				<field name="description_length" type="text" size="10"
+				<field name="description_length" type="text" size="10" default="100"
 				       label="MOD_DPCALENDAR_MINI_FIELD_DESC_COUNT_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_DESC_COUNT_DESC"/>
 				<field name="adjust_fg_color" type="list" default="0"

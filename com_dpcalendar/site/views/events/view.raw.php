@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -26,7 +26,10 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 		$this->get('State')->set('filter.state', 1);
 
 		if ($id = $this->input->getString('module-id')) {
-			$this->getModel()->setStateFromParams(new Registry(JModuleHelper::getModuleById($id)->params));
+			$moduleParams = new Registry(JModuleHelper::getModuleById($id)->params);
+			$this->getModel()->setStateFromParams($moduleParams);
+			$this->params                = $moduleParams;
+			$this->displayData['params'] = $moduleParams;
 		}
 
 		$this->items = $this->get('Items');

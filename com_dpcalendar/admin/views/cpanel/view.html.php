@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -40,6 +40,11 @@ class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
 		// Don't update when the file was fetched 10 days ago
 		$files                  = is_dir($geoDBDirectory) ? scandir($geoDBDirectory) : [];
 		$this->needsGeoDBUpdate = (count($files) <= 2 || (time() - filemtime($geoDBDirectory . '/' . $files[2]) > (60 * 60 * 24 * 10))) && !DPCalendarHelper::isFree();
+
+		// If no taxes are available no geo DB update is needed
+		if (!$model->getTotalTaxRates()) {
+			$this->needsGeoDBUpdate = false;
+		}
 
 		parent::init();
 	}

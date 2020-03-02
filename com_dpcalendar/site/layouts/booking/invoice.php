@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -63,7 +63,7 @@ $fields[] = (object)['id' => 'email', 'name' => 'email'];
 $fields[] = (object)['id' => 'telephone', 'name' => 'telephone'];
 $fields[] = (object)[
 	'id'    => 'country',
-	'name'  => 'country' . ($booking->country_code_value ? '_code_value' : ''),
+	'name'  => 'country' . (!empty($booking->country_code_value) ? '_code_value' : ''),
 	'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'
 ];
 $fields[] = (object)['id' => 'province', 'name' => 'province', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL'];

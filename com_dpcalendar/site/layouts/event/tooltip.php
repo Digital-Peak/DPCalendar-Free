@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -42,9 +42,9 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 	<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
 		<?php echo $event->title; ?>
 	</a>
-	<?php if ($params->get('tooltip_show_description', 1)) { ?>
+	<?php if ($params->get('tooltip_show_description', 1) && $params->get('description_length', 100)) { ?>
 		<div class="dp-event-tooltip__description">
-			<?php echo JHtml::_('string.truncate', $event->description, 100); ?>
+			<?php echo JHtml::_('string.truncate', $event->description, $params->get('description_length', 100)); ?>
 		</div>
 	<?php } ?>
 	<div class="dp-event-tooltip__actions dp-button-bar">

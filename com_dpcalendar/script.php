@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -182,6 +182,8 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 			$params = JComponentHelper::getParams('com_dpcalendar');
 			$params->set('list_filter_featured', $params->get('list_filter_featured', '2') == '2' ? 0 : 1);
 
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+
 			// Map was never shown, so disable it
 			$this->run('update #__modules set params = replace(params, \'"show_map":"1"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
 			$this->run('update #__modules set params = replace(params, \'"show_map":"2"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
@@ -189,6 +191,16 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 
 		if (version_compare($version, '7.3.3') == -1) {
 			JFolder::delete(JPATH_PLUGINS . '/system/dpcalendar');
+		}
+
+		if (version_compare($version, '7.3.4') == -1) {
+			// Defaulting some params which have changed
+			$params = JComponentHelper::getParams('com_dpcalendar');
+			$params->set('description_length', $params->get('description_length', 100));
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+
+			$this->run('update #__modules set params = replace(params, \'"description_length":""\', \'"description_length":"100"\') where `module` like "mod_dpcalendar_mini"');
 		}
 	}
 
@@ -230,13 +242,6 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 		}
 
 		if ($type == 'install' || $type == 'discover_install') {
-			$this->run("update `#__extensions` set enabled=1 where type = 'plugin' and element = 'dpcalendar'");
-			$this->run("update `#__extensions` set enabled=1 where type = 'plugin' and element = 'manual'");
-
-			$this->run(
-				"insert into `#__modules_menu` (menuid, moduleid) select 0 as menuid, id as moduleid from `#__modules` where module like 'mod_dpcalendar%'"
-			);
-
 			// Create default calendar
 			JTable::addIncludePath(JPATH_LIBRARIES . '/joomla/database/table');
 			$category              = JTable::getInstance('Category');

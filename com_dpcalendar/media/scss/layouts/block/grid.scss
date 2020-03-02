@@ -1,7 +1,0 @@
-$minColumnSize: 320px !default;
-
-.dp-grid {
-	display: grid;
-	grid-gap: 1rem;
-	grid-template-columns: repeat(auto-fit, minmax($minColumnSize, 1fr));
-}

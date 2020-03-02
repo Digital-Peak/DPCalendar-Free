@@ -1,19 +1,28 @@
-(function (document, Joomla, DPCalendar) {
-  'use strict';
+(function () {
+	'use strict';
 
-  document.addEventListener('DOMContentLoaded', function () {
-    Joomla.submitbutton = function (task) {
-      if (task == 'plugin.action') {
-        document.getElementById('extcalendar-action').val = 'import';
-      }
+	/**
+	 * @package   DPCalendar
+	 * @author    Digital Peak http://www.digital-peak.com
+	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+	 */
 
-      Joomla.submitform(task, document.getElementById('adminForm'));
-    };
+	document.addEventListener('DOMContentLoaded', function () {
+		Joomla.submitbutton = function (task) {
+			if (task == 'plugin.action') {
+				document.getElementById('extcalendar-action').val = 'import';
+			}
+			Joomla.submitform(task, document.getElementById('adminForm'));
+		};
 
-    var root = document.querySelector('.com-dpcalendar-extcalendars');
+		var root = document.querySelector('.com-dpcalendar-extcalendars');
+		if (root && root.getAttribute('data-sync') == 2) {
+			DPCalendar.request(
+				'task=extcalendars.sync&dpplugin=' + root.getAttribute('data-sync-plugin')
+			);
+		}
+	});
 
-    if (root && root.getAttribute('data-sync') == 2) {
-      DPCalendar.request('task=extcalendars.sync&dpplugin=' + root.getAttribute('data-sync-plugin'));
-    }
-  });
-})(document, Joomla, DPCalendar);
+}());
+//# sourceMappingURL=default.js.map

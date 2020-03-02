@@ -3,7 +3,7 @@
  * @package   DPCalendar
  * @author    Digital Peak http://www.digital-peak.com
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
- * @license   http://www.gnu.org/licenses/gpl.html GNU/GPL
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -68,6 +68,8 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 				} else if (isset($query['id'])) {
 					$calid = $query['id'];
 				}
+
+				JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 				$menuCatid = $mId;
 				$category = DPCalendarHelper::getCalendar($calid);

@@ -1,4 +1,4 @@
-function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
+function _typeof2(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof2 = function _typeof2(obj) { return typeof obj; }; } else { _typeof2 = function _typeof2(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof2(obj); }
 
 /*! choices.js v7.1.5 | © 2019 Josh Johnson | https://github.com/jshjohnson/Choices#readme */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -1115,9 +1115,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
               /*! ./bitap_pattern_alphabet */
               "./src/bitap/bitap_pattern_alphabet.js");
 
-              var Bitap =
-              /*#__PURE__*/
-              function () {
+              var Bitap = /*#__PURE__*/function () {
                 function Bitap(pattern, _ref) {
                   var _ref$location = _ref.location,
                       location = _ref$location === void 0 ? 0 : _ref$location,
@@ -1337,9 +1335,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
               /*! ./helpers/is_array */
               "./src/helpers/is_array.js");
 
-              var Fuse =
-              /*#__PURE__*/
-              function () {
+              var Fuse = /*#__PURE__*/function () {
                 function Fuse(list, _ref) {
                   var _ref$location = _ref.location,
                       location = _ref$location === void 0 ? 0 : _ref$location,
@@ -1990,16 +1986,12 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
 
       var dist_fuse = __webpack_require__(3);
 
-      var fuse_default =
-      /*#__PURE__*/
-      __webpack_require__.n(dist_fuse); // EXTERNAL MODULE: ./node_modules/deepmerge/dist/cjs.js
+      var fuse_default = /*#__PURE__*/__webpack_require__.n(dist_fuse); // EXTERNAL MODULE: ./node_modules/deepmerge/dist/cjs.js
 
 
       var cjs = __webpack_require__(1);
 
-      var cjs_default =
-      /*#__PURE__*/
-      __webpack_require__.n(cjs); // EXTERNAL MODULE: ./src/scripts/lib/delegate-events.js
+      var cjs_default = /*#__PURE__*/__webpack_require__.n(cjs); // EXTERNAL MODULE: ./src/scripts/lib/delegate-events.js
 
 
       var delegate_events = __webpack_require__(6); // EXTERNAL MODULE: ./node_modules/symbol-observable/es/index.js
@@ -3201,9 +3193,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
         return Constructor;
       }
 
-      var store_Store =
-      /*#__PURE__*/
-      function () {
+      var store_Store = /*#__PURE__*/function () {
         function Store() {
           this._store = createStore(reducers, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
         }
@@ -3404,9 +3394,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
       }(); // CONCATENATED MODULE: ./src/scripts/components/dropdown.js
 
 
-      var Dropdown =
-      /*#__PURE__*/
-      function () {
+      var Dropdown = /*#__PURE__*/function () {
         function Dropdown(_ref) {
           var element = _ref.element,
               type = _ref.type,
@@ -3472,9 +3460,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
       }(); // CONCATENATED MODULE: ./src/scripts/components/container.js
 
 
-      var container_Container =
-      /*#__PURE__*/
-      function () {
+      var container_Container = /*#__PURE__*/function () {
         function Container(_ref) {
           var element = _ref.element,
               type = _ref.type,
@@ -3697,9 +3683,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
         return Constructor;
       }
 
-      var input_Input =
-      /*#__PURE__*/
-      function () {
+      var input_Input = /*#__PURE__*/function () {
         function Input(_ref) {
           var element = _ref.element,
               type = _ref.type,
@@ -3983,9 +3967,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
       };
       var SCROLLING_SPEED = 4; // CONCATENATED MODULE: ./src/scripts/components/list.js
 
-      var list_List =
-      /*#__PURE__*/
-      function () {
+      var list_List = /*#__PURE__*/function () {
         function List(_ref) {
           var element = _ref.element;
           Object.assign(this, {
@@ -4094,9 +4076,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
         return Constructor;
       }
 
-      var wrapped_element_WrappedElement =
-      /*#__PURE__*/
-      function () {
+      var wrapped_element_WrappedElement = /*#__PURE__*/function () {
         function WrappedElement(_ref) {
           var element = _ref.element,
               classNames = _ref.classNames;
@@ -4204,9 +4184,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
         subClass.__proto__ = superClass;
       }
 
-      var WrappedInput =
-      /*#__PURE__*/
-      function (_WrappedElement) {
+      var WrappedInput = /*#__PURE__*/function (_WrappedElement) {
         _inheritsLoose(WrappedInput, _WrappedElement);
 
         function WrappedInput(_ref) {
@@ -4264,9 +4242,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
         subClass.__proto__ = superClass;
       }
 
-      var WrappedSelect =
-      /*#__PURE__*/
-      function (_WrappedElement) {
+      var WrappedSelect = /*#__PURE__*/function (_WrappedElement) {
         wrapped_select_inheritsLoose(WrappedSelect, _WrappedElement);
 
         function WrappedSelect(_ref) {
@@ -4333,9 +4309,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
 
       var classnames = __webpack_require__(0);
 
-      var classnames_default =
-      /*#__PURE__*/
-      __webpack_require__.n(classnames); // CONCATENATED MODULE: ./src/scripts/templates.js
+      var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames); // CONCATENATED MODULE: ./src/scripts/templates.js
 
 
       var TEMPLATES = {
@@ -4553,9 +4527,7 @@ function _typeof2(obj) { if (typeof Symbol === "function" && typeof Symbol.itera
        */
 
 
-      var choices_Choices =
-      /*#__PURE__*/
-      function () {
+      var choices_Choices = /*#__PURE__*/function () {
         function Choices(element, userConfig) {
           var _this = this;
 

@@ -5,8 +5,6 @@
 		          addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 			<field name="color" type="color" required="true" default="3366CC" size="6"
 			       label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"/>
-			<field name="token" type="dptoken"
-			       label="COM_DPCALENDAR_FIELD_CALENDAR_TOKEN_LABEL" description="COM_DPCALENDAR_FIELD_CALENDAR_TOKEN_DESC"/>
 			<field name="default_menu_item" type="dpmenuitems" filter="integer"
 			       label="COM_DPCALENDAR_FIELD_CALENDAR_DEFAULT_MENU_ITEM_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CALENDAR_DEFAULT_MENU_ITEM_DESC">

@@ -848,14 +848,15 @@ class PlgSampledataDPCalendar extends JPlugin
 	{
 		$newIds = [];
 		foreach ($this->languageCache as $code => $language) {
-			$data             = $originalData;
-			$data['id']       = 0;
-			$data['name']     = strtolower('field-' . $code . '-' . preg_replace('/[^0-9,.]/', '', $data['title']));
-			$data['title']    = $language->_($data['title']);
-			$data['label']    = $language->_($data['label']);
-			$data['language'] = count($this->languageCache) > 1 ? $code : '*';
-			$data['state']    = 1;
-			$data['access']   = (int)$this->app->get('access', 1);
+			$data                  = $originalData;
+			$data['id']            = 0;
+			$data['name']          = strtolower('field-' . $code . '-' . preg_replace('/[^0-9,.]/', '', $data['title']));
+			$data['title']         = $language->_($data['title']);
+			$data['label']         = $language->_($data['label']);
+			$data['language']      = count($this->languageCache) > 1 ? $code : '*';
+			$data['state']         = 1;
+			$data['default_value'] = null;
+			$data['access']        = (int)$this->app->get('access', 1);
 
 			$model = JModelLegacy::getInstance('Field', 'FieldsModel');
 			if (!$model->save($data)) {

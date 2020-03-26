@@ -21,6 +21,11 @@ class PlgFieldsDPCalendar extends FieldsPlugin
 
 		$fieldNode->setAttribute('extension', 'com_dpcalendar');
 
+		// If the field is not required add an empty option
+		if (!$field->required) {
+			$fieldNode->appendChild(new DOMElement('option', ''));
+		}
+
 		return $fieldNode;
 	}
 }

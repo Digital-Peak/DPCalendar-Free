@@ -1,4 +1,4 @@
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /*!
  * Pikaday
@@ -1001,6 +1001,8 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
         bottomAligned = false;
       }
 
+      left = Math.max(0, left);
+      top = Math.max(0, top);
       this.el.style.left = left + 'px';
       this.el.style.top = top + 'px';
       addClass(this.el, leftAligned ? 'left-aligned' : 'right-aligned');

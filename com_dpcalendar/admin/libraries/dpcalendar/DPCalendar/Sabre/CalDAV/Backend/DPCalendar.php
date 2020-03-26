@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 2007 - 2013 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 namespace DPCalendar\Sabre\CalDAV\Backend;
 
 use Sabre\VObject;
@@ -168,6 +167,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 			$model->setState('category.id', str_replace('dp-', '', $calendarId));
 			$model->setState('category.recursive', true);
 			$model->setState('filter.ongoing', 1);
+			$model->setState('filter.state', 1);
 
 			if (is_array($timeRange) && key_exists('start', $timeRange) && !empty($timeRange['start'])) {
 				$model->setState('list.start-date', $timeRange['start']->getTimeStamp());

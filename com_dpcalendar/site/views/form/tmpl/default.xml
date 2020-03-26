@@ -26,9 +26,9 @@
 			<field name="event_form_check_overlaping" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_DESC">
-				<option value="1">JYES</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_WARNING</option>
 				<option value="0">JNO</option>
-				<option value="2">JDISABLED</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_FORM_CHECK_OVERLAPPING_DISABLE_SAVE</option>
 			</field>
 			<field name="event_form_show_map" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"

@@ -28,7 +28,6 @@ if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 
 class DPCalendarHelper
 {
-
 	public static $calendars = [];
 
 	public static function getCalendar($id)
@@ -451,8 +450,9 @@ class DPCalendarHelper
 
 			$event->images = self::parseImages($event);
 
-			$author              = \JFactory::getUser($event->created_by);
-			$variables['author'] = $author->name;
+			$author                  = \JFactory::getUser($event->created_by);
+			$variables['author']     = $author->name;
+			$variables['authorMail'] = $author->email;
 			if (!empty($event->created_by_alias)) {
 				$variables['author'] = $event->created_by_alias;
 			}

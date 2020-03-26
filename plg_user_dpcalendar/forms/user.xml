@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
 	<fields name="params">
-		<fieldset name="dpcalendar" label="COM_DPCALENDAR"
+		<fieldset name="dpcalendar" label="PLG_USER_DPCALENDAR_PARAMS_FIELD_USER_SET_LABEL"
 		          addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 			<field name="token" type="dptoken" readonly="true"
-			       label="COM_DPCALENDAR_FIELD_CALENDAR_TOKEN_LABEL" description="COM_DPCALENDAR_FIELD_CALENDAR_TOKEN_DESC"/>
+			       label="PLG_USER_DPCALENDAR_PARAMS_FIELD_USER_TOKEN_LABEL" description="PLG_USER_DPCALENDAR_PARAMS_FIELD_USER_TOKEN_DESC"/>
 		</fieldset>
 	</fields>
 </form>

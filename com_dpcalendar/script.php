@@ -20,15 +20,12 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 		$path    = JPATH_ADMINISTRATOR . '/components/com_dpcalendar/dpcalendar.xml';
 		$version = null;
 
-		if ($version == 'DP_DEPLOY_VERSION') {
-			return;
-		}
-
 		if (file_exists($path)) {
 			$manifest = simplexml_load_file($path);
 			$version  = (string)$manifest->version;
 		}
-		if (empty($version)) {
+
+		if (empty($version) || $version == 'DP_DEPLOY_VERSION') {
 			return;
 		}
 

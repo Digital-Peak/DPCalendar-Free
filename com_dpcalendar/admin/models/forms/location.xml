@@ -98,12 +98,10 @@
 	</fieldset>
 	<fields name="metadata">
 		<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
-			<field name="metakey" type="textarea" rows="3"
-			       cols="30"
-			       label="JFIELD_META_KEYWORDS_LABEL" description="JFIELD_META_KEYWORDS_DESC"/>
-
 			<field name="metadesc" type="textarea" rows="3" cols="30"
 			       label="JFIELD_META_DESCRIPTION_LABEL" description="JFIELD_META_DESCRIPTION_DESC"/>
+			<field name="metakey" type="textarea" rows="3" cols="30"
+			       label="JFIELD_META_KEYWORDS_LABEL" description="JFIELD_META_KEYWORDS_DESC"/>
 			<field name="robots" type="list"
 			       label="JFIELD_METADATA_ROBOTS_LABEL" description="JFIELD_METADATA_ROBOTS_DESC">
 				<option value="">JGLOBAL_USE_GLOBAL</option>

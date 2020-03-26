@@ -55,7 +55,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 						<div class="mod-dpcalendar-upcoming-horizontal__date">
 							<?php echo $layoutHelper->renderLayout(
 								'block.icon',
-								['icon' => \DPCalendar\HTML\Block\Icon::CLOCK, 'title' => $translator->translate('COM_DPCALENDAR_DATE')]
+								['icon' => \DPCalendar\HTML\Block\Icon::CLOCK, 'title' => $translator->translate('MOD_DPCALENDAR_UPCOMING_DATE')]
 							); ?>
 							<?php echo $dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>
 						</div>
@@ -79,11 +79,11 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 										'block.icon',
 										[
 											'icon'  => \DPCalendar\HTML\Block\Icon::MONEY,
-											'title' => $translator->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL')
+											'title' => $translator->translate('MOD_DPCALENDAR_UPCOMING_PRICES')
 										]
 									); ?>
 									<span class="dp-event-price__label">
-									<?php echo $event->price->label[$key] ?: $translator->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL'); ?>
+									<?php echo $event->price->label[$key] ?: $translator->translate('MOD_DPCALENDAR_UPCOMING_PRICES'); ?>
 								</span>
 									<span class="dp-event-price__regular<?php echo $discounted != $value ? ' dp-event-price__regular_has-discount' : ''; ?>">
 									<?php echo $value === '' ? '' : DPCalendarHelper::renderPrice($value); ?>

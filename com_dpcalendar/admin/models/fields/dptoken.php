@@ -33,6 +33,9 @@ class JFormFieldDptoken extends JFormFieldText
 		});
 		");
 
+		// Load the language
+		JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+
 		$buffer = parent::getInput();
 
 		$buffer .= '<button id="' . $this->id . '-gen" class="btn">' . htmlspecialchars(JText::_('COM_DPCALENDAR_GENERATE')) . '</button>';

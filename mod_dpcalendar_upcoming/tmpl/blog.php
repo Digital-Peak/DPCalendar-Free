@@ -53,7 +53,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 								</a>
 							<?php } ?>
 							<div class="mod-dpcalendar-upcoming-blog__date">
-								<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BLOG_DATE'); ?>:
+								<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_DATE'); ?>:
 								<?php echo $dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>
 							</div>
 							<?php if ($event->rrule) { ?>

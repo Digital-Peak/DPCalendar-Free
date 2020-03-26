@@ -9,6 +9,8 @@ defined('_JEXEC') or die();
 
 class PlgUserDPCalendar extends JPlugin
 {
+	protected $autoloadLanguage = true;
+
 	public function onUserAfterSave($user, $isNew, $success, $msg)
 	{
 		if (!$success) {
@@ -151,13 +153,17 @@ class PlgUserDPCalendar extends JPlugin
 
 	public function onContentPrepareForm($form, $data)
 	{
-		if ($this->params->get('add_dpcalendar_user_fields', 1)
-			&& ($form->getName() == 'com_users.profile' || (JFactory::getApplication()->isClient('administrator') && $form->getName() == 'com_users.user'))) {
-			// Load the language
-			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-
-			$form->loadFile(JPATH_PLUGINS . '/user/dpcalendar/forms/user.xml');
+		// Do nothing when disabled
+		if (!$this->params->get('add_dpcalendar_user_fields', 1)) {
+			return true;
 		}
+
+		if ($form->getName() != 'com_users.profile'
+			&& !(JFactory::getApplication()->isClient('administrator') && $form->getName() == 'com_users.user')) {
+			return true;
+		}
+
+		$form->loadFile(JPATH_PLUGINS . '/user/dpcalendar/forms/user.xml');
 
 		return true;
 	}

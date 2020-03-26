@@ -184,7 +184,7 @@
 
 		options['eventRender'] = (info) => {
 			// Support HTML in title
-			const title = info.el.querySelector('.fc-title');
+			const title = info.el.querySelector('.fc-title, .fc-list-item-title');
 			if (title) {
 				title.innerHTML = title.textContent;
 			}

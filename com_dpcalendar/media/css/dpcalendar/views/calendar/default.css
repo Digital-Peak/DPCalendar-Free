@@ -418,6 +418,16 @@
 	margin: 0;
 }
 
+.com-dpcalendar-calendar .dp-map_consent {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2em;
+	border: 1px solid #b2b2b2;
+	background-color: #f2f2f2;
+	cursor: pointer;
+}
+
 .com-dpcalendar-calendar .fc-header-toolbar h2 {
 	padding: 4px 15px 0;
 }
@@ -471,6 +481,10 @@
 	text-align: center;
 	clear: both;
 	width: 100%;
+}
+
+.com-dpcalendar-calendar__icons {
+	display: none;
 }
 
 .dp-event-tooltip {

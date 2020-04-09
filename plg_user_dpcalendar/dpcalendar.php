@@ -9,6 +9,7 @@ defined('_JEXEC') or die();
 
 class PlgUserDPCalendar extends JPlugin
 {
+	protected $app;
 	protected $autoloadLanguage = true;
 
 	public function onUserAfterSave($user, $isNew, $success, $msg)
@@ -88,11 +89,7 @@ class PlgUserDPCalendar extends JPlugin
 				$loginUrl = JRoute::_(
 					'index.php?option=com_users&view=login&return=' . base64_encode(DPCalendarHelperRoute::getBookingRoute($booking))
 				);
-				JFactory::getApplication()->enqueueMessage(JText::sprintf(
-					'PLG_USER_DPCALENDAR_BOOKING_ASSIGNED',
-					$booking->uid,
-					$loginUrl
-				));
+				$this->app->enqueueMessage(JText::sprintf('PLG_USER_DPCALENDAR_BOOKING_ASSIGNED', $booking->uid, $loginUrl));
 			}
 		}
 	}

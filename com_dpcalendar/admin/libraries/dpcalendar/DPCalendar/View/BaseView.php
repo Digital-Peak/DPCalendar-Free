@@ -90,6 +90,19 @@ class BaseView extends \JViewLegacy
 			throw new \Exception(implode("\n", $errors), 500);
 		}
 
+		if ($this->getModel() instanceof \JModelForm) {
+			\JHtml::_('behavior.keepalive');
+			\JHtml::_('behavior.formvalidator');
+
+			if ($this->params->get('save_history')) {
+				\JHtml::_('behavior.modal', 'a.modal_jform_contenthistory');
+			}
+
+			if ($this->app->isClient('administrator')) {
+				\JHtml::_('behavior.tabstate');
+			}
+		}
+
 		if ($this->app->isClient('site')) {
 			$this->prepareDocument();
 		} else {

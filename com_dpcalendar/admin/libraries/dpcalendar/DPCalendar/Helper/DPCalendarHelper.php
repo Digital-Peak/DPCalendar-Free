@@ -616,7 +616,7 @@ class DPCalendarHelper
 				$h = '';
 			}
 
-			return '<img src="' . $image . '" ' . $w . ' ' . $h . '/>';
+			return '<img src="' . $image . '" ' . $w . ' ' . $h . ' loading="lazy"/>';
 		}
 
 		return '';
@@ -895,18 +895,21 @@ class DPCalendarHelper
 	 *
 	 * @param $subject
 	 * @param $message
-	 * @param $group
+	 * @param $parameter
 	 *
 	 * @return array
 	 */
-	public static function sendMail($subject, $message, $group)
+	public static function sendMail($subject, $message, $parameter, $additionalGroups = [])
 	{
-		$groups = self::getComponentParameter($group);
-		if (empty($groups)) {
-			return [];
-		}
+		$groups = self::getComponentParameter($parameter);
+
 		if (!is_array($groups)) {
 			$groups = [$groups];
+		}
+
+		$groups = array_unique(array_filter(array_merge($groups, $additionalGroups)));
+		if (empty($groups)) {
+			return [];
 		}
 
 		$users = [];
@@ -1207,10 +1210,11 @@ class DPCalendarHelper
 
 	public static function getOppositeBWColor($color)
 	{
-		$r   = hexdec(substr($color, 0, 2));
-		$g   = hexdec(substr($color, 2, 2));
-		$b   = hexdec(substr($color, 4, 2));
-		$yiq = (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
+		$color = trim($color, '#');
+		$r     = hexdec(substr($color, 0, 2));
+		$g     = hexdec(substr($color, 2, 2));
+		$b     = hexdec(substr($color, 4, 2));
+		$yiq   = (($r * 299) + ($g * 587) + ($b * 114)) / 1000;
 
 		return ($yiq >= 128) ? '000000' : 'ffffff';
 	}

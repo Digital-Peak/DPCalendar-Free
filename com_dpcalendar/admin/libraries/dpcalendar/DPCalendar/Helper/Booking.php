@@ -247,7 +247,7 @@ class Booking
 
 	public static function openForBooking($event)
 	{
-		if (!$event || \DPCalendarHelper::isFree()) {
+		if (!$event || $event->state == 3 || \DPCalendarHelper::isFree()) {
 			return false;
 		}
 
@@ -451,6 +451,9 @@ class Booking
 				break;
 			case 5:
 				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED';
+				break;
+			case 6:
+				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED';
 				break;
 			case -2:
 				$status = 'JTRASHED';

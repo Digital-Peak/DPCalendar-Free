@@ -8,7 +8,6 @@
 defined('_JEXEC') or die();
 
 $value = $field->value;
-
 if ($value == '') {
 	return;
 }
@@ -30,7 +29,7 @@ foreach ($value as $calendarId) {
 	if (!$calendar) {
 		continue;
 	}
+
 	$texts[] = '<a href="' . DPCalendarHelperRoute::getCalendarRoute($calendarId) . '">' . htmlentities($calendar->title) . '</a>';
 }
-
 echo implode(', ', $texts);

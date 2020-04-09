@@ -23,7 +23,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 
 		// Set some defaults
 		$this->input->set('list.limit', 1000);
-		$this->get('State')->set('filter.state', 1);
+		$this->get('State')->set('filter.state', [1, 3]);
 
 		if ($id = $this->input->getString('module-id')) {
 			$moduleParams = new Registry(JModuleHelper::getModuleById($id)->params);

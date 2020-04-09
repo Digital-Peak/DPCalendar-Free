@@ -224,7 +224,7 @@ class DPCalendarModelProfile extends JModelList
 		$model->setState('list.ordering', 'start_date');
 		$model->setState('filter.my', 1);
 		$model->setState('filter.expand', 1);
-		$model->setState('filter.state', [0, 1]);
+		$model->setState('filter.state', [0, 1, 3]);
 
 		return $model->getItems();
 	}

@@ -8,6 +8,6 @@
 defined('_JEXEC') or die();
 
 ?>
-<h2 class="com-dpcalendar-location__title dp-heading">
+<h<?php echo $this->heading + 1; ?> class="com-dpcalendar-location__title dp-heading">
 	<?php echo $this->location->title; ?>
-</h2>
+</h<?php echo $this->heading + 1; ?>>

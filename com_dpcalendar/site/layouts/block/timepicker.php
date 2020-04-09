@@ -7,8 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-$displayData['document']->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_AUTOCOMPLETE);
-$displayData['document']->loadScriptFile('dpcalendar/layouts/block/timepicker.js');
 ?>
 <input type="text"
 	   id="<?php echo $displayData['id']; ?>"

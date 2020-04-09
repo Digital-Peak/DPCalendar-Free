@@ -26,15 +26,8 @@ $translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_HOUR');
 $translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_MINUTE');
 $translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_SECOND');
 
-$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_URL);
-$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MOMENT);
-$document->loadScriptFile('default.js', 'mod_dpcalendar_counter');
 $document->loadStyleFile('default.css', 'mod_dpcalendar_counter');
-
-if ($params->get('show_as_popup')) {
-	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MODAL);
-}
+$document->loadScriptFile('default.js', 'mod_dpcalendar_counter');
 ?>
 <div class="mod-dpcalendar-counter mod-dpcalendar-counter-<?php echo $module->id; ?>"
 	 data-date="<?php echo $dateHelper->getDate($event->start_date, $event->all_day)->format('c', true); ?>"
@@ -93,7 +86,8 @@ if ($params->get('show_as_popup')) {
 		<?php if ($event->images->image_intro) { ?>
 			<div class="mod-dpcalendar-upcoming-counter__image">
 				<figure class="dp-figure">
-					<img class="dp-image" src="<?php echo $event->images->image_intro; ?>" alt="<?php echo $event->images->image_intro_alt; ?>">
+					<img class="dp-image" src="<?php echo $event->images->image_intro; ?>" alt="<?php echo $event->images->image_intro_alt; ?>"
+						 loading="lazy">
 					<?php if ($event->images->image_intro_caption) { ?>
 						<figcaption class="dp-figure__caption"><?php echo $event->images->image_intro_caption; ?></figcaption>
 					<?php } ?>

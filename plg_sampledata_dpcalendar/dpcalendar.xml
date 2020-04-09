@@ -2,12 +2,12 @@
 <extension version="3.9" type="plugin" group="sampledata" method="upgrade">
 	<name>plg_sampledata_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>26 Mar 2020</creationDate>
+	<creationDate>9 Apr 2020</creationDate>
 	<copyright>Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.3.5</version>
+	<version>7.4.0</version>
 	<description>PLG_SAMPLEDATA_DPCALENDAR_XML_DESCRIPTION</description>
 	<files>
 		<filename plugin="dpcalendar">dpcalendar.php</filename>

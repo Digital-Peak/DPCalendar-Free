@@ -105,6 +105,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$form->setFieldAttribute('max_tickets', 'disabled', 'true');
 			$form->setFieldAttribute('price', 'disabled', 'true');
 			$form->setFieldAttribute('plugintype', 'disabled', 'true');
+			$form->setFieldAttribute('booking_assign_user_groups', 'disabled', 'true');
 
 			// Disable fields while saving.
 			$form->setFieldAttribute('rrule', 'filter', 'unset');
@@ -113,6 +114,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$form->setFieldAttribute('max_tickets', 'filter', 'unset');
 			$form->setFieldAttribute('price', 'filter', 'unset');
 			$form->setFieldAttribute('plugintype', 'filter', 'unset');
+			$form->setFieldAttribute('booking_assign_user_groups', 'filter', 'unset');
 		}
 
 		if (!DPCalendarHelper::isCaptchaNeeded()) {
@@ -269,6 +271,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data->plugintype = explode(',', $data->plugintype);
 		}
 
+		if (!empty($data->booking_assign_user_groups) && is_string($data->booking_assign_user_groups)) {
+			$data->booking_assign_user_groups = explode(',', $data->booking_assign_user_groups);
+		}
+
 		return $data;
 	}
 
@@ -327,7 +333,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	{
 		$locationIds = [];
 		if (isset($data['location_ids'])) {
-			$locationIds = $data['location_ids'];
+			$locationIds = array_unique($data['location_ids']);
 			unset($data['location_ids']);
 		}
 
@@ -438,6 +444,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		if (!empty($data['plugintype']) && is_array($data['plugintype'])) {
 			$data['plugintype'] = implode(',', $data['plugintype']);
+		}
+
+		if (!empty($data['booking_assign_user_groups']) && is_array($data['booking_assign_user_groups'])) {
+			$data['booking_assign_user_groups'] = implode(',', $data['booking_assign_user_groups']);
 		}
 
 		// Only apply the default values on create
@@ -600,22 +610,26 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	{
 		$result = parent::batch($commands, $pks, $contexts);
 
-		if (!empty($commands['color_id'])) {
-			$user  = JFactory::getUser();
+		if (!empty($commands['color_id']) || !empty($commands['access_content_id']) || !empty($commands['capacity_id'])) {
 			$table = $this->getTable();
 			foreach ($pks as $pk) {
-				if ($user->authorise('core.edit', $contexts[$pk])) {
-					$table->reset();
-					$table->load($pk);
+				$table->reset();
+				$table->load($pk);
+
+				if (!empty($commands['color_id'])) {
 					$table->color = $commands['color_id'];
+				}
 
-					if (!$table->store()) {
-						$this->setError($table->getError());
+				if (!empty($commands['access_content_id'])) {
+					$table->access_content = $commands['access_content_id'];
+				}
 
-						return false;
-					}
-				} else {
-					$this->setError(JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
+				if (!empty($commands['capacity_id'])) {
+					$table->capacity = $commands['capacity_id'];
+				}
+
+				if (!$table->store()) {
+					$this->setError($table->getError());
 
 					return false;
 				}
@@ -820,10 +834,17 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		// The event authors
 		$authors = [];
 
+		// The event calendars
+		$calendarGroups = [];
+
 		// We don't send notifications when an event is external
 		foreach ($events as $event) {
 			if (!is_numeric($event->catid)) {
 				return;
+			}
+
+			if ($calendar = \DPCalendarHelper::getCalendar($event->catid)) {
+				$calendarGroups = array_merge($calendarGroups, $calendar->params->get('notification_groups_' . $action, []));
 			}
 
 			if ($user->id != $event->created_by) {
@@ -849,12 +870,13 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		);
 
 		// Send the notification to the groups
-		DPCalendarHelper::sendMail($subject, $body, 'notification_groups_' . $action, $authors);
+		DPCalendarHelper::sendMail($subject, $body, 'notification_groups_' . $action, $calendarGroups);
 
 		// Check if authors should get a mail
 		if (!$authors || !DPCalendarHelper::getComponentParameter('notification_author')) {
 			return;
 		}
+
 		$authors = array_unique($authors);
 
 		$extraVars = [

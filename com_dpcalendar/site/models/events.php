@@ -48,6 +48,7 @@ class DPCalendarModelEvents extends JModelList
 			$options->set('limit', $this->getState('list.limit'));
 		}
 		$options->set('order', $this->getState('list.direction', 'ASC'));
+		$options->set('publish_date', $this->getState('filter.publish_date'));
 
 		// Add location filter
 		$options->set('location', $this->getState('filter.location', null));
@@ -100,14 +101,14 @@ class DPCalendarModelEvents extends JModelList
 				$dbItems = parent::getItems();
 			}
 			$items = array_merge($dbItems, $items);
-			usort($items, [$this, "compareEvent"]);
+			usort($items, [$this, 'compareEvent']);
 			if ($this->getState('list.limit') > 0) {
 				$items = array_slice($items, 0, $this->getState('list.limit'));
 			}
 		} else {
 			$items = parent::getItems();
 			if ($items && $this->getState('list.ordering', 'a.start_date') == 'a.start_date') {
-				usort($items, [$this, "compareEvent"]);
+				usort($items, [$this, 'compareEvent']);
 			}
 		}
 
@@ -540,7 +541,7 @@ class DPCalendarModelEvents extends JModelList
 
 	protected function populateState($ordering = null, $direction = null)
 	{
-		// Initialise variables.
+		// Initialise variables
 		$app    = JFactory::getApplication();
 		$params = $app->isClient('site') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
 
@@ -585,7 +586,7 @@ class DPCalendarModelEvents extends JModelList
 		$user = JFactory::getUser();
 		if ((!$user->authorise('core.edit.state', 'com_dpcalendar')) && (!$user->authorise('core.edit', 'com_dpcalendar'))) {
 			// Limit to published for people who can't edit or edit.state.
-			$this->setState('filter.state', 1);
+			$this->setState('filter.state', [1, 3]);
 
 			// Filter by start and end dates.
 			$this->setState('filter.publish_date', true);

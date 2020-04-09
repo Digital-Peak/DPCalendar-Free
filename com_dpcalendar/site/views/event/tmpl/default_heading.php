@@ -12,5 +12,7 @@ if (!$this->params->get('show_page_heading')) {
 }
 ?>
 <div class="com-dpcalendar-event__heading">
-	<h1 class="dp-page-heading page-header"><?php echo $this->escape($this->params->get('page_heading')); ?></h1>
+	<h<?php echo $this->heading; ?> class="dp-page-heading page-header">
+		<?php echo $this->escape($this->params->get('page_heading')); ?>
+	</h<?php echo $this->heading; ?>>
 </div>

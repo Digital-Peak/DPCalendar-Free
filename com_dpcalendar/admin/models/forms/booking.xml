@@ -21,14 +21,14 @@
 		       label="COM_DPCALENDAR_BOOKING_FIELD_PROCESSOR_LABEL">
 			<option value=""></option>
 		</field>
-		<field name="state" type="list" default="1"
-		       label="JSTATUS">
+		<field name="state" type="list" default="1" label="JSTATUS">
 			<option value="1">COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED</option>
 			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
 			<option value="2">JARCHIVED</option>
 			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_NEED_PAYMENT</option>
 			<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
 			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
+			<option value="6">COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED</option>
 			<option value="-2">JTRASHED</option>
 		</field>
 		<field name="amount" type="integer" first="0" last="1" step="1" default="0"

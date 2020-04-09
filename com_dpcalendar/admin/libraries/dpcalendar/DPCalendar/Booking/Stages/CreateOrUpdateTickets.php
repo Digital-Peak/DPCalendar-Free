@@ -135,7 +135,7 @@ class CreateOrUpdateTickets implements StageInterface
 						$table->bind($event);
 						$table->book(true);
 					} else {
-						$this->setError($this->getError() . PHP_EOL . $this->model->getError());
+						throw new \Exception($this->model->getError());
 					}
 				}
 			}

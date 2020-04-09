@@ -7,8 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_IFRAME_CHILD);
 $this->dpdocument->loadScriptFile('dpcalendar/views/extcalendars/default.js');
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminlist/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/adminlist/default.js');

@@ -15,7 +15,8 @@ if (!$events) {
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 ?>
-<div class="mod-dpcalendar-upcoming mod-dpcalendar-upcoming-timeline mod-dpcalendar-upcoming-<?php echo $module->id; ?> dp-locations">
+<div class="mod-dpcalendar-upcoming mod-dpcalendar-upcoming-timeline mod-dpcalendar-upcoming-<?php echo $module->id; ?> dp-locations"
+	 data-popup="<?php echo $params->get('show_as_popup', 0); ?>">
 	<div class="mod-dpcalendar-upcoming-timeline__events">
 		<?php foreach ($groupedEvents as $groupHeading => $events) { ?>
 			<?php if ($groupHeading) { ?>
@@ -28,6 +29,9 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 					<div class="mod-dpcalendar-upcoming-timeline__dot"></div>
 					<div class="mod-dpcalendar-upcoming-timeline__information">
 						<h3 class="mod-dpcalendar-upcoming-timeline__title" style="background-color: #<?php echo $event->color; ?>">
+							<?php if ($event->state == 3) { ?>
+								<span class="dp-event_canceled>">[<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_CANCELED'); ?>]</span>
+							<?php } ?>
 							<a href="<?php echo $event->realUrl; ?>" class="dp-event-url dp-link"
 							   style="color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($event->color); ?>">
 								<?php echo $event->title; ?>
@@ -105,7 +109,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 							<div class="mod-dpcalendar-upcoming-timeline__image">
 								<figure class="dp-figure">
 									<img class="dp-image" src="<?php echo $event->images->image_intro; ?>"
-										 alt="<?php echo $event->images->image_intro_alt; ?>">
+										 alt="<?php echo $event->images->image_intro_alt; ?>" loading="lazy">
 									<?php if ($event->images->image_intro_caption) { ?>
 										<figcaption class="dp-figure__caption"><?php echo $event->images->image_intro_caption; ?></figcaption>
 									<?php } ?>
@@ -140,7 +144,8 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 			 data-height="<?php echo $params->get('map_height', '350px'); ?>"
 			 data-zoom="<?php echo $params->get('map_zoom', 4); ?>"
 			 data-latitude="<?php echo $params->get('map_lat', 47); ?>"
-			 data-longitude="<?php echo $params->get('map_long', 4); ?>">
+			 data-longitude="<?php echo $params->get('map_long', 4); ?>"
+			 data-ask-consent="<?php echo $params->get('map_ask_consent'); ?>">
 		</div>
 	<?php } ?>
 </div>

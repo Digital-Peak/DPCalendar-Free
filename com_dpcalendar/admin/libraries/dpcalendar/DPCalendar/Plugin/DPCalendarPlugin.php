@@ -10,6 +10,7 @@ namespace DPCalendar\Plugin;
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Sabre\VObject\Parser\Parser;
@@ -185,10 +186,11 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 		$data = $tmp;
 
-		$events = [];
-		$filter = strtolower($options->get('filter', null));
-		$limit  = $options->get('limit', null);
-		$order  = strtolower($options->get('order', 'asc'));
+		$events      = [];
+		$filter      = strtolower($options->get('filter', null));
+		$limit       = $options->get('limit', null);
+		$publishDate = $options->get('publish_date') ? DPCalendarHelper::getDate()->toSql() : null;
+		$order       = strtolower($options->get('order', 'asc'));
 
 		$dbCal = $this->getDbCal($calendarId);
 		foreach ($data as $event) {
@@ -203,6 +205,16 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$tmpEvent->access_content = $dbCal->access_content;
 
 			if (!$this->matchLocationFilterEvent($tmpEvent, $options)) {
+				continue;
+			}
+
+			// Check if now is before publish up date
+			if ($publishDate && $tmpEvent->publish_up && $tmpEvent->publish_up > $publishDate) {
+				continue;
+			}
+
+			// Check if now is after publish down date
+			if ($publishDate && $tmpEvent->publish_down && $tmpEvent->publish_down < $publishDate) {
 				continue;
 			}
 
@@ -674,6 +686,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->xreference       = $event->id;
 		$event->images           = new \stdClass();
 		$event->checked_out      = null;
+		$event->publish_up       = null;
+		$event->publish_down     = null;
 
 		return $event;
 	}
@@ -811,6 +825,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		if (!empty($color) && !\DPCalendarHelper::getCalendar($tmpEvent->catid)->color_force) {
 			$tmpEvent->color = $color;
 		}
+
 		$url = (string)$event->{'x-url'};
 		if (!empty($url)) {
 			$tmpEvent->url = $url;
@@ -819,14 +834,27 @@ abstract class DPCalendarPlugin extends \JPlugin
 				$tmpEvent->url = $url;
 			}
 		}
+
 		$alias = (string)$event->{'x-alias'};
 		if (!empty($alias)) {
 			$tmpEvent->alias = $alias;
 		}
+
 		$language = (string)$event->{'x-language'};
 		if (!empty($language)) {
 			$tmpEvent->language = $language;
 		}
+
+		$publishUp = (string)$event->{'x-publish-up'};
+		if (!empty($publishUp)) {
+			$tmpEvent->publish_up = $publishUp;
+		}
+
+		$publishDown = (string)$event->{'x-publish-down'};
+		if (!empty($publishDown)) {
+			$tmpEvent->publish_down = $publishDown;
+		}
+
 		$image = (string)$event->{'x-image'};
 		if (!empty($image)) {
 			$tmpEvent->images->image_full = $image;

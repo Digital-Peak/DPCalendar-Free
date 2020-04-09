@@ -7,7 +7,12 @@
  */
 defined('_JEXEC') or die();
 
+if ($this->params->get('locations_show_map', 1) && $this->params->get('map_provider', 'openstreetmap') != 'none') {
+	$this->layoutHelper->renderLayout('block.map', $this->displayData);
+}
+
 $this->dpdocument->loadStyleFile('dpcalendar/views/locations/default.css');
+$this->dpdocument->loadScriptFile('dpcalendar/views/locations/default.js');
 ?>
 <div class="com-dpcalendar-locations dp-location<?php echo $this->pageclass_sfx ? ' com-dpcalendar-locations-' . $this->pageclass_sfx : ''; ?>s">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>

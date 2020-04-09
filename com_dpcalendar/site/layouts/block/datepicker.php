@@ -7,8 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-$displayData['document']->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DATEPICKER);
-$displayData['document']->loadScriptFile('dpcalendar/layouts/block/datepicker.js');
 $displayData['document']->addScriptOptions('calendar.names', $displayData['dateHelper']->getNames());
 
 $displayData['localFormat'] = !empty($displayData['localFormat']) ? $displayData['localFormat'] : false;

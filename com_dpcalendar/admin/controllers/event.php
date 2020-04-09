@@ -311,6 +311,24 @@ class DPCalendarControllerEvent extends JControllerForm
 		return parent::reload($key, $urlVar);
 	}
 
+	public function newlocation()
+	{
+		// Check for request forgeries
+		\JSession::checkToken() or jexit(\JText::_('JINVALID_TOKEN'));
+
+		$location = \DPCalendar\Helper\Location::get($this->input->getString('lookup'), false, $this->input->getString('lookup_title'));
+
+		$data = [];
+		if ($location->title) {
+			$data =
+				[
+					'id'      => $location->id,
+					'display' => $location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
+				];
+		}
+		DPCalendarHelper::sendMessage(null, empty($data), $data);
+	}
+
 	private function transformDatesToSql()
 	{
 		$data = $this->input->post->get('jform', [], 'array');

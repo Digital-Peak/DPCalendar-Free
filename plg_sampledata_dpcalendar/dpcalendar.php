@@ -60,9 +60,9 @@ class PlgSampledataDPCalendar extends JPlugin
 				$this->db->setQuery("delete from #__categories where extension = 'com_dpcalendar'");
 				$this->db->execute();
 
-				$this->db->setQuery("delete from #__fields_values where field_id in (select id from #__fields where context like 'com_dpcalendar.event')");
+				$this->db->setQuery("delete from #__fields_values where field_id in (select id from #__fields where context like 'com_dpcalendar.event' or context like 'com_dpcalendar.categories')");
 				$this->db->execute();
-				$this->db->setQuery("delete from #__fields where context like 'com_dpcalendar.event'");
+				$this->db->setQuery("delete from #__fields where context like 'com_dpcalendar.event' or context like 'com_dpcalendar.categories'");
 				$this->db->execute();
 
 				$this->db->setQuery("delete from #__menu where link like '%com_dpcalendar%' and client_id = 0");
@@ -250,9 +250,25 @@ class PlgSampledataDPCalendar extends JPlugin
 		try {
 			$this->setUp();
 
-			$this->createCalendar('PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_1_TITLE');
-			$this->createCalendar('PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_2_TITLE');
-			$this->createCalendar('PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_3_TITLE');
+			$fields    = [];
+			$fieldData = $this->createCustomField([
+				'title'   => 'PLG_SAMPLEDATA_DPCALENDAR_FIELD_4_TITLE',
+				'label'   => 'PLG_SAMPLEDATA_DPCALENDAR_FIELD_4_TITLE',
+				'type'    => 'text',
+				'context' => 'com_dpcalendar.categories'
+			]);
+
+			foreach ($fieldData as $code => $name) {
+				$fields[$code][] = ['name' => $name, 'value' => 'PLG_SAMPLEDATA_DPCALENDAR_FIELD_4_VALUE'];
+			}
+
+			$this->createCalendar([
+				'title'       => 'PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_1_TITLE',
+				'description' => self::$lorem,
+				'fields'      => $fields
+			]);
+			$this->createCalendar(['title' => 'PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_2_TITLE']);
+			$this->createCalendar(['title' => 'PLG_SAMPLEDATA_DPCALENDAR_CALENDAR_3_TITLE']);
 
 			if (!DPCalendarHelper::isFree()) {
 				$this->db->setQuery("update #__extensions set enabled = 1 where name = 'plg_dpcalendar_ical' or name = 'plg_dpcalendar_google'");
@@ -1089,19 +1105,7 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$data['language'] = count($this->languageCache) > 1 ? $code : '*';
 
-			if (!empty($data['fields'])) {
-				$data['com_fields'] = [];
-				foreach ($data['fields'] as $fieldCode => $fields) {
-					foreach ($fields as $field) {
-						if ($fieldCode != $code) {
-							continue;
-						}
-
-						$data['com_fields'][$field['name']] = $language->_($field['value']);
-					}
-				}
-				unset($data['fields']);
-			}
+			$data = $this->convertCustomFields($data, $code, $language);
 
 			$model = JModelLegacy::getInstance('AdminEvent', 'DPCalendarModel', ['ignore_request' => true]);
 			if (!$model->save($data)) {
@@ -1131,39 +1135,44 @@ class PlgSampledataDPCalendar extends JPlugin
 		return $model->getItem()->id;
 	}
 
-	private function createCalendar($calendarTitle)
+	private function createCalendar($originalData)
 	{
+		if (empty($originalData['description'])) {
+			$originalData['description'] = '';
+		}
+		if (empty($originalData['params'])) {
+			$originalData['params'] = '';
+		}
+
 		$newIds = [];
 		foreach ($this->languageCache as $code => $language) {
-			$title = $language->_($calendarTitle);
-			$alias = JApplicationHelper::stringURLSafe($title);
+			$data = $originalData;
+
+			$data['title'] = $language->_($data['title']) . (count($this->languageCache) > 1 ? ' (' . $code . ')' : '');
+			$alias         = JApplicationHelper::stringURLSafe($data['title']);
 
 			// Set unicodeslugs if alias is empty
 			if (trim(str_replace('-', '', $alias) == '')) {
 				$unicode = JFactory::getConfig()->set('unicodeslugs', 1);
-				$alias   = JApplicationHelper::stringURLSafe($title);
+				$alias   = JApplicationHelper::stringURLSafe($data['title']);
 				JFactory::getConfig()->set('unicodeslugs', $unicode);
 			}
 
-			$calendar = [
-				'title'           => $title,
-				'parent_id'       => 1,
-				'id'              => 0,
-				'published'       => 1,
-				'access'          => (int)$this->app->get('access', 1),
-				'created_user_id' => JFactory::getUser()->id,
-				'extension'       => 'com_dpcalendar',
-				'level'           => 1,
-				'alias'           => $code . '-' . $alias,
-				'associations'    => [],
-				'description'     => '',
-				'language'        => count($this->languageCache) > 1 ? $code : '*',
-				'params'          => '',
-			];
+			$data['parent_id']       = 1;
+			$data['id']              = 0;
+			$data['published']       = 1;
+			$data['access']          = (int)$this->app->get('access', 1);
+			$data['created_user_id'] = JFactory::getUser()->id;
+			$data['extension']       = 'com_dpcalendar';
+			$data['level']           = 1;
+			$data['alias']           = $code . '-' . $alias;
+			$data['associations']    = [];
+			$data['language']        = count($this->languageCache) > 1 ? $code : '*';
+
+			$data = $this->convertCustomFields($data, $code, $language);
 
 			$model = JModelLegacy::getInstance('Category', 'CategoriesModel');
-
-			if (!$model->save($calendar)) {
+			if (!$model->save($data)) {
 				throw new Exception($model->getError());
 			}
 
@@ -1274,5 +1283,33 @@ class PlgSampledataDPCalendar extends JPlugin
 	{
 		$this->db->setQuery('truncate #__dpcalendar_' . $name);
 		$this->db->execute();
+	}
+
+	/**
+	 * @param $data
+	 * @param $code
+	 * @param $language
+	 *
+	 * @return mixed
+	 */
+	private function convertCustomFields($data, $code, $language)
+	{
+		if (empty($data['fields'])) {
+			return $data;
+		}
+
+		$data['com_fields'] = [];
+		foreach ($data['fields'] as $fieldCode => $fields) {
+			foreach ($fields as $field) {
+				if ($fieldCode != $code) {
+					continue;
+				}
+
+				$data['com_fields'][$field['name']] = $language->_($field['value']);
+			}
+		}
+		unset($data['fields']);
+
+		return $data;
 	}
 }

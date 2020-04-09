@@ -33,153 +33,13 @@ class HtmlDocument
 	const LIBRARY_IFRAME_CHILD = 'iframe-child';
 	const LIBRARY_IFRAME_PARENT = 'iframe-parent';
 
+	/**
+	 * @param $name
+	 *
+	 * @deprecated Scripts are loaded in layout files and dependencyies in JS
+	 */
 	public function loadLibrary($name)
 	{
-		if ($name == self::LIBRARY_CORE) {
-			\JHtml::_('behavior.core');
-		}
-		if ($name == self::LIBRARY_FORM) {
-			\JHtml::_('behavior.keepalive');
-			\JHtml::_('behavior.formvalidator');
-
-			if (\JFactory::getApplication()->isClient('administrator')) {
-				\JHtml::_('behavior.tabstate');
-			}
-		}
-		if ($name == self::LIBRARY_SELECT) {
-			$this->loadScriptFile('choices/choices.js');
-			$this->loadStyleFile('choices/choices.css');
-		}
-		if ($name == self::LIBRARY_TOOLTIP) {
-			$this->loadScriptFile('popper/popper.js');
-			$this->loadScriptFile('tippy/tippy.js');
-			$this->loadStyleFile('tippy/tippy.css');
-		}
-		if ($name == self::LIBRARY_DPCORE) {
-			\JHtml::_('behavior.core');
-			$this->loadScriptFile('dpcalendar/polyfill.js');
-			$this->loadScriptFile('dpcalendar/dpcalendar.js');
-		}
-		if ($name == self::LIBRARY_URL) {
-			$this->loadScriptFile('domurl/url.js');
-		}
-		if ($name == self::LIBRARY_MOMENT) {
-			$this->loadScriptFile('moment/moment.js');
-		}
-		if ($name == self::LIBRARY_MODAL) {
-			$this->loadScriptFile('tingle/tingle.js');
-			$this->loadStyleFile('tingle/tingle.css');
-		}
-		if ($name == self::LIBRARY_AUTOCOMPLETE) {
-			$this->loadScriptFile('popper/popper.js');
-			$this->loadScriptFile('dpcalendar/polyfill.js');
-			$this->loadScriptFile('dpcalendar/layouts/block/autocomplete.js');
-		}
-		if ($name == self::LIBRARY_MD5) {
-			$this->loadScriptFile('md5/md5.js');
-		}
-		if ($name == self::LIBRARY_FULLCALENDAR) {
-			\JHtml::_('behavior.core');
-			$this->loadScriptFile('dpcalendar/polyfill.js');
-			$this->loadScriptFile('dpcalendar/dpcalendar.js');
-			$this->loadScriptFile('popper/popper.js');
-			$this->loadScriptFile('tippy/tippy.js');
-			$this->loadStyleFile('tippy/tippy.css');
-
-			$this->loadScriptFile('md5/md5.js');
-			$this->loadScriptFile('domurl/url.js');
-			$this->loadScriptFile('moment/moment.js');
-			$this->loadScriptFile('fullcalendar/fullcalendar.js');
-			$this->loadStyleFile('fullcalendar/fullcalendar.css');
-
-			$this->loadScriptFile('dpcalendar/calendar.js');
-		}
-		if ($name == self::LIBRARY_SCHEDULER) {
-			\JHtml::_('behavior.core');
-			$this->loadScriptFile('dpcalendar/polyfill.js');
-			$this->loadScriptFile('dpcalendar/dpcalendar.js');
-			$this->loadScriptFile('scheduler/scheduler.js');
-			$this->loadStyleFile('scheduler/scheduler.css');
-		}
-		if ($name == self::LIBRARY_DATEPICKER) {
-			$this->loadScriptFile('moment/moment.js');
-			$this->loadScriptFile('pikaday/pikaday.js');
-			$this->loadStyleFile('pikaday/pikaday.css');
-		}
-		$provider = DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap');
-		if ($name == self::LIBRARY_MAP && $provider != 'none') {
-			\JHtml::_('behavior.core');
-			$this->loadScriptFile('dpcalendar/polyfill.js');
-			$this->loadScriptFile('dpcalendar/dpcalendar.js');
-
-			if ($provider == 'google') {
-				$key = DPCalendarHelper::getComponentParameter('map_api_google_jskey', '');
-				if (!$key) {
-					\JFactory::getApplication()->enqueueMessage(
-						"Can't load Google maps without an API key. More information can be found in our documentation at <a href='https://joomla.digital-peak.com' target='_blank'>joomla.digital-peak.com</a>.",
-						'warning'
-					);
-
-					return;
-				} else {
-					$key = '&key=' . $key;
-					\JHtml::_(
-						'script',
-						'https://maps.googleapis.com/maps/api/js?libraries=places&language=' . self::getGoogleLanguage() . $key,
-						[],
-						['defer' => true]
-					);
-				}
-
-				$this->addScriptOptions('map.tiles.url', 'google');
-			} else if ($provider == 'mapbox') {
-				$this->addScriptOptions(
-					'map.tiles.attribution',
-					'<a href="https://www.mapbox.com/">&copy; '
-					. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX')
-					. '</a> | <a href="https://www.openstreetmap.org/">&copy; '
-					. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
-				);
-
-				$this->addScriptOptions(
-					'map.tiles.url',
-					'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token='
-					. DPCalendarHelper::getComponentParameter(
-						'map_api_mapbox_token',
-						'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
-					)
-				);
-			} else {
-				$this->addScriptOptions(
-					'map.tiles.attribution',
-					'<a href="https://www.openstreetmap.org/">&copy; ' . \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
-				);
-
-				$this->addScriptOptions(
-					'map.tiles.url',
-					DPCalendarHelper::getComponentParameter('map_api_openstreetmap_tiles_url', 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-				);
-			}
-
-			\JText::script('COM_DPCALENDAR_LEAFLET_TEXT_TOUCH');
-			\JText::script('COM_DPCALENDAR_LEAFLET_TEXT_SCROLL');
-			\JText::script('COM_DPCALENDAR_LEAFLET_TEXT_SCROLLMAC');
-			\JText::script('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP');
-
-			$this->loadScriptFile('leaflet/leaflet.js');
-			$this->loadStyleFile('leaflet/leaflet.css');
-			$this->loadScriptFile('dpcalendar/map.js');
-
-			if ($provider == 'google') {
-				$this->loadScriptFile('leaflet/leaflet-google.js');
-			}
-		}
-		if ($name == self::LIBRARY_IFRAME_PARENT) {
-			$this->loadScriptFile('iframe-resizer/iframeresizer.js');
-		}
-		if ($name == self::LIBRARY_IFRAME_CHILD) {
-			$this->loadScriptFile('iframe-resizer/iframeresizer-contentwindow.js');
-		}
 	}
 
 	public function loadScriptFile($path, $extension = 'com_dpcalendar')
@@ -188,6 +48,23 @@ class HtmlDocument
 			\JFactory::getDocument()->addScript($path);
 
 			return;
+		}
+
+		static $coreLoaded = false;
+		if (!$coreLoaded) {
+			$coreLoaded = true;
+			// Load core
+			\JHtml::_('behavior.core');
+
+			// Load polyfill for IE
+			$ua = htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES, 'UTF-8');
+			if (preg_match('~MSIE|Internet Explorer~i', $ua) || (strpos($ua, 'Trident/7.0') !== false && strpos($ua, 'rv:11.0') !== false)) {
+				$this->loadScriptFile('dpcalendar/polyfill.js');
+				$this->loadScriptFile('/polyfill/promise.js');
+			}
+
+			// Load systemjs
+			$this->loadScriptFile('systemjs/systemjs.js');
 		}
 
 		$path = str_replace('.js', '.min.js', $path);

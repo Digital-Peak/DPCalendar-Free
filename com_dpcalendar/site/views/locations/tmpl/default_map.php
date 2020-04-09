@@ -7,10 +7,9 @@
  */
 defined('_JEXEC') or die();
 
-if (!$this->params->get('locations_show_map', 1)) {
+if (!$this->params->get('locations_show_map', 1) || $this->params->get('map_provider', 'openstreetmap') == 'none') {
 	return;
 }
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
 ?>
 <div class="com-dpcalendar-locations__map">
 	<div class="dp-map"
@@ -18,6 +17,7 @@ $this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_M
 		 data-height="<?php echo $this->params->get('locations_map_height', '250px'); ?>"
 		 data-latitude="<?php echo $this->params->get('locations_map_latitude', 47); ?>"
 		 data-longitude="<?php echo $this->params->get('locations_map_longitude', 4); ?>"
-		 data-zoom="<?php echo $this->params->get('locations_map_zoom', 4); ?>">
+		 data-zoom="<?php echo $this->params->get('locations_map_zoom', 4); ?>"
+		 data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>">
 	</div>
 </div>

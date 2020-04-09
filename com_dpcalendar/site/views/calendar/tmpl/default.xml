@@ -186,10 +186,10 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
 			       rows="5" cols="50" filter="safehtml"/>
 			<field name="show_event_as_popup" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_POPUP_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_POPUP_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_DESC">
+				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_FULL</option>
+				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL</option>
 				<option value="2">JDISABLED</option>
 			</field>
 			<field name="popup_width" type="text" useglobal="true" size="5"
@@ -415,6 +415,12 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_show_page_heading" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
+				<option value="2">JGLOBAL_INHERIT</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 		</fieldset>
 		<fieldset name="form" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_LABEL">
 			<field name="event_form_date_format" type="text" useglobal="true"
@@ -506,7 +512,7 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
-			<field name="event_form_change_scheduling"  type="list" useglobal="true"
+			<field name="event_form_change_scheduling" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULING_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULING_DESC">
 				<option value="1">JYES</option>

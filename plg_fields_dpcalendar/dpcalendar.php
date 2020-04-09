@@ -19,7 +19,10 @@ class PlgFieldsDPCalendar extends FieldsPlugin
 			return $fieldNode;
 		}
 
-		$fieldNode->setAttribute('extension', 'com_dpcalendar');
+		if ($field->type == 'dpcalendar') {
+			$fieldNode->setAttribute('extension', 'com_dpcalendar');
+			$fieldNode->setAttribute('addfieldpath', '/administrator/components/com_dpcalendar/models/fields');
+		}
 
 		// If the field is not required add an empty option
 		if (!$field->required) {

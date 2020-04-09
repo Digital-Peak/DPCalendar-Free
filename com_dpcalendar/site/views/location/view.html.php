@@ -46,7 +46,7 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		$model->setState('list.ordering', 'start_date');
 		$model->setState('filter.expand', $this->params->get('location_expand_events', 1));
 		$model->setState('filter.ongoing', true);
-		$model->setState('filter.state', 1);
+		$model->setState('filter.state', [1, 3]);
 		$model->setState('filter.language', JFactory::getLanguage());
 		$model->setState('filter.locations', [$this->location->id]);
 		$this->events = $model->getItems();
@@ -88,5 +88,11 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 				$this->document->setMetadata($k, $v);
 			}
 		}
+
+		if ($this->params->get('location_show_page_heading', 0) != 2) {
+			$this->params->set('show_page_heading', $this->params->get('location_show_page_heading', 0));
+		}
+
+		$this->heading = $this->params->get('show_page_heading') ? 1 : 0;
 	}
 }

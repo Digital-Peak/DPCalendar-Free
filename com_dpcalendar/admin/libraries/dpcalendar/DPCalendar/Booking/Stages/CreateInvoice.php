@@ -9,7 +9,6 @@ namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\Booking;
 use DPCalendar\Helper\DateHelper;
 use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Translator\Translator;
@@ -70,7 +69,8 @@ class CreateInvoice implements StageInterface
 			]
 		);
 
-		$this->bookingTable->bind(['id' => $booking->id, 'invoice' => $details]);
+		$this->bookingTable->load($booking->id);
+		$this->bookingTable->bind(['invoice' => $details]);
 		$this->bookingTable->store();
 		$payload->item->invoice = $details;
 

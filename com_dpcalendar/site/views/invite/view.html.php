@@ -11,6 +11,9 @@ class DPCalendarViewInvite extends \DPCalendar\View\BaseView
 {
 	public function init()
 	{
+		// Set the default model
+		$this->setModel(JModelLegacy::getInstance('Event', 'DPCalendarModel'), true);
+
 		JFactory::getLanguage()->load('', JPATH_ADMINISTRATOR);
 
 		$event = JModelLegacy::getInstance('Event', 'DPCalendarModel')->getItem($this->input->getInt('id'));
@@ -24,5 +27,7 @@ class DPCalendarViewInvite extends \DPCalendar\View\BaseView
 		$this->form = JForm::getInstance('com_dpcalendar.invite', 'invite', ['control' => 'jform']);
 
 		$this->form->setValue('event_id', null, $event->id);
+
+		JHtml::_('behavior.formvalidator');
 	}
 }

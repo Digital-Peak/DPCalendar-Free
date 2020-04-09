@@ -16,12 +16,15 @@ class JFormFieldGeocomplete extends JFormFieldText
 
 	public function getInput()
 	{
-		(new \DPCalendar\HTML\Document\HtmlDocument())->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
+		(new \DPCalendar\Helper\LayoutHelper())->renderLayout(
+			'block.map',
+			['document' => new DPCalendar\HTML\Document\HtmlDocument(), 'translator' => new \DPCalendar\Translator\Translator()]
+		);
 
 		$input = parent::getInput();
 
 		$input .= '<button id="' . $this->id . '_find" class="dp-button" type="button" title="' . JText::_('JSEARCH_FILTER_SUBMIT') .
-				 '"><i class="icon-search"></i></button>';
+			'"><i class="icon-search"></i></button>';
 
 		return $input;
 	}

@@ -5,14 +5,7 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
-
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SELECT);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_IFRAME_CHILD);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_FORM);
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/extcalendar/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/extcalendar/default.js');

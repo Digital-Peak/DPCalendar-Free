@@ -15,7 +15,8 @@ if (!$events) {
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 ?>
-<div class="mod-dpcalendar-upcoming mod-dpcalendar-upcoming-blog mod-dpcalendar-upcoming-<?php echo $module->id; ?> dp-locations">
+<div class="mod-dpcalendar-upcoming mod-dpcalendar-upcoming-blog mod-dpcalendar-upcoming-<?php echo $module->id; ?> dp-locations"
+	 data-popup="<?php echo $params->get('show_as_popup', 0); ?>">
 	<div class="mod-dpcalendar-upcoming-blog__events">
 		<?php foreach ($groupedEvents as $groupHeading => $events) { ?>
 			<?php $calendar = DPCalendarHelper::getCalendar($event->catid); ?>
@@ -27,6 +28,9 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 				<?php $displayData['event'] = $event; ?>
 				<div class="mod-dpcalendar-upcoming-blog__event dp-event dp-event_<?php echo $event->ongoing_start_date ? 'started' : 'future'; ?>">
 					<h3 class="mod-dpcalendar-upcoming-blog__heading">
+						<?php if ($event->state == 3) { ?>
+							<span class="dp-event_canceled>">[<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_CANCELED'); ?>]</span>
+						<?php } ?>
 						<a href="<?php echo $event->realUrl; ?>" target="_parent" class="dp-event-url dp-link">
 							<?php echo $event->title; ?>
 						</a>
@@ -113,7 +117,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 							<div class="mod-dpcalendar-upcoming-blog__image">
 								<figure class="dp-figure">
 									<img class="dp-image" src="<?php echo $event->images->image_intro; ?>"
-										 alt="<?php echo $event->images->image_intro_alt; ?>">
+										 alt="<?php echo $event->images->image_intro_alt; ?>" loading="lazy">
 									<?php if ($event->images->image_intro_caption) { ?>
 										<figcaption class="dp-figure__caption"><?php echo $event->images->image_intro_caption; ?></figcaption>
 									<?php } ?>
@@ -144,7 +148,8 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 			 data-height="<?php echo $params->get('map_height', '350px'); ?>"
 			 data-zoom="<?php echo $params->get('map_zoom', 4); ?>"
 			 data-latitude="<?php echo $params->get('map_lat', 47); ?>"
-			 data-longitude="<?php echo $params->get('map_long', 4); ?>">
+			 data-longitude="<?php echo $params->get('map_long', 4); ?>"
+			 data-ask-consent="<?php echo $params->get('map_ask_consent'); ?>">
 		</div>
 	<?php } ?>
 </div>

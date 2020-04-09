@@ -60,7 +60,8 @@ class DPCalendarModelAdminEvents extends JModelList
 				'a.url',
 				'event_type',
 				'level',
-				'tag'
+				'tag',
+				'original_title'
 			];
 		}
 
@@ -191,6 +192,10 @@ class DPCalendarModelAdminEvents extends JModelList
 		$query->select('ua.name AS author_name');
 		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 
+		// Join over the original
+		$query->select('o.title as original_title, o.rrule as original_rrule');
+		$query->join('LEFT', '#__dpcalendar_events AS o ON o.id = a.original_id');
+
 		// Don't show original events
 		$eventType = $this->getState('filter.event_type');
 		if ($eventType == 0) {
@@ -221,7 +226,7 @@ class DPCalendarModelAdminEvents extends JModelList
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
 		} else if ($published === '') {
-			$query->where('a.state IN (0, 1)');
+			$query->where('a.state IN (0, 1, 3)');
 		}
 
 		// Filter only published categories
@@ -319,6 +324,9 @@ class DPCalendarModelAdminEvents extends JModelList
 		$orderDirn = $this->state->get('list.direction', 'asc');
 		if ($orderCol == 'category_title') {
 			$orderCol = 'c.title ' . $orderDirn . ', a.start_date';
+		}
+		if ($orderCol == 'original_title') {
+			$orderCol = 'o.title ' . $orderDirn . ', a.start_date';
 		}
 		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 

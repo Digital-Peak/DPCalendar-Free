@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>26 Mar 2020</creationDate>
+	<creationDate>9 Apr 2020</creationDate>
 	<copyright>Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.3.5</version>
+	<version>7.4.0</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -201,19 +201,19 @@
 					<option value="0">JNO</option>
 					<option value="1">JYES</option>
 				</field>
-				<field name="show_event_as_popup" type="list" class="btn-group"
-				       default="0" label="MOD_DPCALENDAR_MINI_FIELD_SHOW_POPUP_LABEL"
-				       description="MOD_DPCALENDAR_MINI_FIELD_SHOW_POPUP_DESC">
-					<option value="0">JNO</option>
-					<option value="1">JYES</option>
+				<field name="show_event_as_popup" type="list" class="btn-group" default="0"
+				       label="MOD_DPCALENDAR_MINI_FIELD_OPEN_EVENT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_OPEN_EVENT_DESC">
+					<option value="0">MOD_DPCALENDAR_MINI_FIELD_OPEN_EVENT_FULL</option>
+					<option value="1">MOD_DPCALENDAR_MINI_FIELD_OPEN_EVENT_MODAL</option>
 					<option value="2">JDISABLED</option>
 				</field>
-				<field name="popup_width" type="text" default="" size="5"
-				       label="MOD_DPCALENDAR_MINI_FIELD_POPUP_WIDTH_LABEL"
-				       description="MOD_DPCALENDAR_MINI_FIELD_POPUP_WIDTH_DESC"/>
-				<field name="popup_height" type="text" default="500" size="5"
-				       label="MOD_DPCALENDAR_MINI_FIELD_POPUP_HEIGHT_LABEL"
-				       description="MOD_DPCALENDAR_MINI_FIELD_POPUP_HEIGHT_DESC"/>
+				<field name="popup_width" type="text" showon="show_event_as_popup:1"
+				       label="MOD_DPCALENDAR_MINI_FIELD_OPEN_EVENT_MODAL_WIDTH_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_OPEN_EVENT_MODAL_WIDTH_DESC"/>
+				<field name="popup_height" type="text" default="500" showon="show_event_as_popup:1"
+				       label="MOD_DPCALENDAR_MINI_FIELD_OPEN_EVENT_MODAL_HEIGHT_LABEL"
+				       description="MOD_DPCALENDAR_MINI_FIELD_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
 				<field name="description_length" type="text" size="10" default="100"
 				       label="MOD_DPCALENDAR_MINI_FIELD_DESC_COUNT_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_DESC_COUNT_DESC"/>

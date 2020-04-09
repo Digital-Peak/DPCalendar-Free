@@ -5,30 +5,18 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
-
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_CORE);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_URL);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MOMENT);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SELECT);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_FORM);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_AUTOCOMPLETE);
-$this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/form/default.js');
-
-if ($this->params->get('save_history')) {
-	JHtml::_('behavior.modal', 'a.modal_jform_contenthistory');
-}
-
-if (DPCalendarHelper::isFree()) {
-	$this->translator->translateJS('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');
-}
 
 // Load the maps scripts when required
 if ($this->params->get('event_form_change_location', 1)) {
-	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
+	$this->layoutHelper->renderLayout('block.map', $this->displayData);
+}
+
+$this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
+$this->dpdocument->loadScriptFile('dpcalendar/views/form/default.js');
+
+if (DPCalendarHelper::isFree()) {
+	$this->translator->translateJS('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');
 }
 
 if (!empty($this->event->tickets)) {

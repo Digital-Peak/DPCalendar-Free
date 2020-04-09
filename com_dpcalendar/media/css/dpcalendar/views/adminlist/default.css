@@ -43,6 +43,19 @@
 	margin: 0;
 }
 
+.com-dpcalendar-adminlist .dp-grid {
+	display: grid;
+	grid-gap: 1rem;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.com-dpcalendar-adminlist .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
+}
+
 .com-dpcalendar-adminlist .dp-table {
 	border-collapse: collapse;
 	empty-cells: show;
@@ -165,13 +178,35 @@
 	cursor: pointer;
 }
 
-.com-dpcalendar-adminlist .modal-body {
-	padding: 20px;
-}
-
 .com-dpcalendar-adminlist__footer {
 	padding: 20px;
 	text-align: center;
+}
+
+.com-dpcalendar-adminlist__batch .dp-batch-calendar {
+	box-sizing: border-box;
+	margin-top: 10px;
+	padding-top: 5px;
+	border-top: 1px solid #eee;
+}
+
+.com-dpcalendar-adminlist__batch .controls {
+	display: flex;
+}
+
+.com-dpcalendar-adminlist__batch .controls label {
+	flex: 0 0 20%;
+	padding-top: 5px;
+	text-align: left;
+}
+
+.com-dpcalendar-adminlist__batch .controls .inputbox {
+	flex: 0 1 70%;
+}
+
+.com-dpcalendar-adminlist__batch .modal-body {
+	box-sizing: border-box;
+	padding: 20px;
 }
 
 .com-dpcalendar-adminlist .dp-events-table__col-color {
@@ -185,6 +220,7 @@
 
 .com-dpcalendar-adminlist .dp-events-table .dp-event__color {
 	padding: 5px;
+	text-align: center;
 }
 
 .com-dpcalendar-adminlist .dp-locations-table__col-color {
@@ -194,6 +230,7 @@
 
 .com-dpcalendar-adminlist .dp-locations-table .dp-location__color {
 	padding: 5px;
+	text-align: center;
 }
 
 .pika-single th,

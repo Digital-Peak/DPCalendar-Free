@@ -52,8 +52,8 @@
 			<option value="a.state DESC">JSTATUS_DESC</option>
 			<option value="a.title ASC">JGLOBAL_TITLE_ASC</option>
 			<option value="a.title DESC">JGLOBAL_TITLE_DESC</option>
-			<option value="category_title ASC">JCATEGORY_ASC</option>
-			<option value="category_title DESC">JCATEGORY_DESC</option>
+			<option value="original_title ASC">COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE_ASC</option>
+			<option value="original_title DESC">COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE_DESC</option>
 			<option value="a.access ASC">JGRID_HEADING_ACCESS_ASC</option>
 			<option value="a.access DESC">JGRID_HEADING_ACCESS_DESC</option>
 			<option value="a.created_by ASC">JAUTHOR_ASC</option>

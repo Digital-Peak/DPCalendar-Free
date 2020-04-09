@@ -180,6 +180,8 @@
 		<field name="terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
 		       addfieldpath="/administrator/components/com_content/models/fields"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
+		<field name="booking_assign_user_groups" type="usergroup" multiple="true"
+		       label="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_DESC"/>
 		<field name="booking_information" type="editor" filter="raw" buttons="true" hide="pagebreak,readmore"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
 	</fieldset>
@@ -196,6 +198,7 @@
 			<option value="1">JPUBLISHED</option>
 			<option value="0">JUNPUBLISHED</option>
 			<option value="2">JARCHIVED</option>
+			<option value="3">COM_DPCALENDAR_FIELD_VALUE_CANCELED</option>
 			<option value="-3">COM_DPCALENDAR_FIELD_VALUE_REPORTED</option>
 			<option value="-2">JTRASHED</option>
 		</field>
@@ -246,11 +249,6 @@
 
 	<fields name="params">
 		<fieldset name="jbasic" label="COM_DPCALENDAR_FIELDSET_OPTIONS">
-			<field name="event_count_clicks" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-			</field>
 			<field name="event_date_format" type="text" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_DESC"/>
@@ -356,6 +354,17 @@
 			<field name="event_textafter" type="textarea"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
 			       rows="5" cols="50" filter="safehtml"/>
+			<field name="event_count_clicks" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_page_heading" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
+				<option value="2">JGLOBAL_INHERIT</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 		</fieldset>
 	</fields>
 	<fields name="metadata">

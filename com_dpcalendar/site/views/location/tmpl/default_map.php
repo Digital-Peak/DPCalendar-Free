@@ -10,7 +10,6 @@ defined('_JEXEC') or die();
 if (!$this->params->get('location_show_map', 1) || $this->params->get('map_provider', 'openstreetmap') == 'none') {
 	return;
 }
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
 
 $description = '<a href="' . $this->router->getLocationRoute($this->location) . '">' . $this->location->title . '</a>';
 ?>
@@ -23,6 +22,7 @@ $description = '<a href="' . $this->router->getLocationRoute($this->location) . 
 		 data-longitude="<?php echo $this->location->longitude; ?>"
 		 data-title="<?php echo $this->location->title; ?>"
 		 data-description="<?php echo $this->escape($description); ?>"
-		 data-color="<?php echo $this->location->color; ?>">
+		 data-color="<?php echo $this->location->color; ?>"
+		 data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>">
 	</div>
 </div>

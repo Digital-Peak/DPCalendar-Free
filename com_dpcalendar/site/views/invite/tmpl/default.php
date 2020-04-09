@@ -7,9 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_FORM);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SELECT);
 $this->dpdocument->loadStyleFile('dpcalendar/views/invite/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/invite/default.js');
 ?>

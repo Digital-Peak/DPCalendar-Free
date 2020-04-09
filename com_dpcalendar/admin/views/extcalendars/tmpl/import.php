@@ -7,8 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_IFRAME_CHILD);
+$this->dpdocument->loadScriptFile('dpcalendar/views/extcalendars/default.js');
 
 $plugin = $this->input->getCmd('dpplugin');
 JFactory::getLanguage()->load('plg_dpcalendar_' . $plugin, JPATH_PLUGINS . '/dpcalendar/' . $plugin);

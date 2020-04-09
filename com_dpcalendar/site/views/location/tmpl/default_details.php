@@ -12,7 +12,9 @@ if (!$this->params->get('locations_expand', 1)) {
 }
 ?>
 <div class="com-dpcalendar-location__details dp-location">
-	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_LOCATION_INFORMATION'); ?></h3>
+	<h<?php echo $this->heading + 2; ?> class="dp-heading">
+		<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_LOCATION_INFORMATION'); ?>
+	</h<?php echo $this->heading + 2; ?>>
 	<div class="dp-location__details">
 		<?php if ($this->location->street) { ?>
 			<dl class="dp-description">

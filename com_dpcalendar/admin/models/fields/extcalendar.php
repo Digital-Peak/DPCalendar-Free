@@ -21,11 +21,8 @@ class JFormFieldExtcalendar extends JFormField
 	{
 		JFactory::getSession()->set('extcalendarOrigin', JUri::getInstance()->toString(), 'DPCalendar');
 
-		JHtml::_('script', 'com_dpcalendar/iframe-resizer/iframeresizer.min.js', ['relative' => true], ['defer' => true]);
+		(new \DPCalendar\HTML\Document\HtmlDocument())->loadScriptFile('dpcalendar/fields/extcalendar.js');
 		JFactory::getDocument()->addStyleDeclaration('#general .controls {margin-left: 0}');
-		JFactory::getDocument()->addScriptDeclaration("document.addEventListener('DOMContentLoaded', function () {
-				iFrameResize({log: false});
-	});");
 
 		$url    = 'index.php?option=com_dpcalendar&view=extcalendars';
 		$url    .= '&dpplugin=' . $this->element['plugin'];

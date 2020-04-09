@@ -50,7 +50,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 		$model->setState('list.ordering', 'start_date');
 		$model->setState('filter.expand', $this->params->get('locations_expand_events', 1));
 		$model->setState('filter.ongoing', true);
-		$model->setState('filter.state', 1);
+		$model->setState('filter.state', [1, 3]);
 		$model->setState('filter.language', JFactory::getLanguage());
 		$model->setState('filter.locations', $this->params->get('ids'));
 		$this->events = $model->getItems();

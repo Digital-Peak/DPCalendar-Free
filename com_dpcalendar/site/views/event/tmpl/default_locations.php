@@ -10,16 +10,13 @@ defined('_JEXEC') or die();
 if (!$this->event->locations || !$this->params->get('event_show_location', '2')) {
 	return;
 }
-
-if ($this->params->get('event_show_map', '1')) {
-	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
-}
 ?>
 <div class="com-dpcalendar-event__locations com-dpcalendar-event_small">
 	<?php if ($this->params->get('event_show_map', '1') == '1'
 		&& $this->params->get('event_show_location', '2') == '1' && $this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 		<div class="dp-location">
-			<div class="dp-map" data-zoom="<?php echo $this->params->get('event_map_zoom', 4); ?>"></div>
+			<div class="dp-map" data-zoom="<?php echo $this->params->get('event_map_zoom', 4); ?>"
+				 data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
 			<?php foreach ($this->event->locations as $location) { ?>
 				<div class="dp-location__details"
 					 data-latitude="<?php echo $location->latitude; ?>"
@@ -32,10 +29,12 @@ if ($this->params->get('event_show_map', '1')) {
 		</div>
 	<?php } ?>
 	<?php if ($this->params->get('event_show_location', '2') == '2') { ?>
-		<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_LOCATION_INFORMATION'); ?></h3>
+		<h<?php echo $this->heading + 2; ?> class="dp-heading">
+			<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_LOCATION_INFORMATION'); ?>
+		</h<?php echo $this->heading + 2; ?>>
 		<?php foreach ($this->event->locations as $location) { ?>
 			<div class="dp-location">
-				<h4 class="dp-heading dp-heading_small">
+				<h<?php echo $this->heading + 3; ?> class="dp-heading dp-heading_small">
 					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
 					<?php if ($this->user->authorise('core.edit', 'com_dpcalendar')) { ?>
 						<a href="<?php echo $this->router->getLocationFormRoute($location->id, JUri::getInstance()); ?>"
@@ -47,7 +46,7 @@ if ($this->params->get('event_show_map', '1')) {
 					   class="dp-link dp-location__detail-link" name="<?php echo 'dp-location-' . $location->id; ?>">
 						<?php echo $location->title; ?>
 					</a>
-				</h4>
+				</h<?php echo $this->heading + 3; ?>>
 				<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 					<div class="dp-button-bar">
 						<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
@@ -65,7 +64,8 @@ if ($this->params->get('event_show_map', '1')) {
 					</div>
 				<?php } ?>
 				<?php if ($this->params->get('event_show_map', '1') == '1' && $this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
-					<div class="dp-map" data-zoom="<?php echo $this->params->get('event_map_zoom', 4); ?>"></div>
+					<div class="dp-map" data-zoom="<?php echo $this->params->get('event_map_zoom', 4); ?>"
+						 data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
 				<?php } ?>
 				<div class="dp-location__details"
 					 data-latitude="<?php echo $location->latitude; ?>"

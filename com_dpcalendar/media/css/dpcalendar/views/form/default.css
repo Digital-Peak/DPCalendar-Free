@@ -385,6 +385,16 @@
 	margin: 0;
 }
 
+.com-dpcalendar-eventform .dp-map_consent {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2em;
+	border: 1px solid #b2b2b2;
+	background-color: #f2f2f2;
+	cursor: pointer;
+}
+
 .com-dpcalendar-eventform .choices {
 	font-size: inherit;
 }

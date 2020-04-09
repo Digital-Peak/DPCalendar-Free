@@ -25,6 +25,7 @@ $params  = $cParams->merge($params);
 
 // The display data
 $displayData = [
+	'document'     => $document,
 	'layoutHelper' => $layoutHelper,
 	'userHelper'   => $userHelper,
 	'dateHelper'   => $dateHelper,
@@ -81,7 +82,7 @@ $model->setState('category.recursive', true);
 $model->setState('filter.search', $params->get('filter', ''));
 $model->setState('filter.ongoing', $params->get('ongoing', 0));
 $model->setState('filter.expand', $params->get('expand', 1));
-$model->setState('filter.state', 1);
+$model->setState('filter.state', [1, 3]);
 $model->setState('filter.language', JFactory::getLanguage());
 $model->setState('filter.publish_date', true);
 $model->setState('list.start-date', $startDate);

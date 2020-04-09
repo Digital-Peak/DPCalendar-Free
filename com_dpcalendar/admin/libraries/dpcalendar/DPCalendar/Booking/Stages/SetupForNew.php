@@ -64,8 +64,8 @@ class SetupForNew implements StageInterface
 			throw new \Exception(\JText::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
 		}
 
-		// Publish if the price is 0
-		if (!$payload->data['price'] && !$payload->invite) {
+		// Publish if the price is 0 on the front
+		if (!$payload->data['price'] && !$payload->invite && $this->application->isClient('site')) {
 			$payload->data['state'] = 1;
 		}
 

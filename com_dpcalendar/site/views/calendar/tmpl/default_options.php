@@ -7,10 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-if ($this->params->get('header_show_datepicker', 1)) {
-	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DATEPICKER);
-}
-
 // Loading the strings for javascript
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
@@ -36,6 +32,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
+$this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 
 $this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());
 $this->dpdocument->addScriptOptions('timezone', $this->dateHelper->getDate()->getTimezone()->getName());
@@ -145,8 +142,6 @@ $options['header']['right']  = implode(',', $options['header']['right']);
 $resourceViews = $params->get('calendar_resource_views');
 
 if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $this->resources) {
-	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SCHEDULER);
-
 	$options['resources']           = $this->resources;
 	$options['datesAboveResources'] = true;
 }

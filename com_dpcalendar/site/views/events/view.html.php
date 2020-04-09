@@ -12,7 +12,6 @@ use Joomla\Registry\Registry;
 
 class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 {
-
 	public function init()
 	{
 		// Don't display errors as we want to send them nicely in the ajax response
@@ -23,7 +22,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 
 		// Set some defaults
 		$this->input->set('list.limit', 1000);
-		$this->get('State')->set('filter.state', 1);
+		$this->get('State')->set('filter.state', [1, 3]);
 
 		if ($id = $this->input->getInt('module-id')) {
 			foreach (JModuleHelper::getModuleList() as $module) {

@@ -129,6 +129,12 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_show_page_heading" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
+				<option value="2">JGLOBAL_INHERIT</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 		</fieldset>
 		<fieldset name="form" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_LABEL">
 			<field name="event_form_date_format" type="text" useglobal="true"

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="fieldparams">
+		<fieldset name="fieldparams" addfieldpath="/administrator/components/com_dpcalendar/models/fields">
+			<field name="calendar_ids" type="dpcalendar" multiple="true" extension="com_dpcalendar" default="root"
+			       label="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_CALENDARS_LABEL"
+			       description="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_CALENDARS_DESC">
+				<option value="root">JALL</option>
+			</field>
+			<field name="start_date" type="text" default="-1 month"
+			       label="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_DATE_START_LABEL" description="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_DATE_START_DESC"/>
+			<field name="end_date" type="text"
+			       label="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_DATE_END_LABEL" description="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_DATE_END_DESC"/>
+			<field name="expand" type="radio" default="0" class="btn-group"
+			       label="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_EXPAND_LABEL" description="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_EXPAND_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="multiple" type="list"
+			       label="PLG_FIELDS_DPCALENDAR_PARAMS_MULTIPLE_LABEL" description="PLG_FIELDS_DPCALENDAR_PARAMS_MULTIPLE_DESC">
+				<option value="">COM_FIELDS_FIELD_USE_GLOBAL</option>
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

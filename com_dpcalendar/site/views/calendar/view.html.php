@@ -7,11 +7,8 @@
  */
 defined('_JEXEC') or die();
 
-JLoader::import('libraries.dpcalendar.fullcalendar', JPATH_COMPONENT);
-
 class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 {
-
 	public function init()
 	{
 		$items = $this->get('AllItems');
@@ -25,6 +22,37 @@ class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 		$selectedCalendars = [];
 		foreach ($items as $calendar) {
 			$selectedCalendars[] = $calendar->id;
+
+			$calendar->event = new \stdClass;
+
+			// For some plugins
+			!empty($calendar->description) ? $calendar->text = $calendar->description : $calendar->text = null;
+
+			$dispatcher = \JEventDispatcher::getInstance();
+
+			$dispatcher->trigger('onContentPrepare', ['com_dpcalendar.categories', &$calendar, &$calendar->params, 0]);
+
+			$results                            = $dispatcher->trigger(
+				'onContentAfterTitle',
+				['com_dpcalendar.categories', &$calendar, &$this->params, 0]
+			);
+			$calendar->event->afterDisplayTitle = trim(implode("\n", $results));
+
+			$results                               = $dispatcher->trigger(
+				'onContentBeforeDisplay',
+				['com_dpcalendar.categories', &$calendar, &$this->params, 0]
+			);
+			$calendar->event->beforeDisplayContent = trim(implode("\n", $results));
+
+			$results                              = $dispatcher->trigger(
+				'onContentAfterDisplay',
+				['com_dpcalendar.categories', &$calendar, &$this->params, 0]
+			);
+			$calendar->event->afterDisplayContent = trim(implode("\n", $results));
+
+			if ($calendar->text) {
+				$calendar->description = $calendar->text;
+			}
 		}
 		$this->selectedCalendars = $selectedCalendars;
 
@@ -45,7 +73,8 @@ class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 				}
 			}
 		}
-		// if none are selected, use selected calendars
+
+		// If none are selected, use selected calendars
 		$this->doNotListCalendars = empty($doNotListCalendars) ? $this->items : $doNotListCalendars;
 
 		$this->quickaddForm = $this->getModel()->getQuickAddForm($this->params);

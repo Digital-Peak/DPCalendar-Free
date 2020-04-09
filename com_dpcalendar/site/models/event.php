@@ -5,15 +5,14 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
+use Joomla\Utilities\ArrayHelper;
 
-JLoader::import('joomla.application.component.modelform');
 JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 
-class DPCalendarModelEvent extends JModelForm
+class DPCalendarModelEvent extends JModelItem
 {
 	protected $view_item = 'contact';
 	protected $_item = null;
@@ -33,35 +32,11 @@ class DPCalendarModelEvent extends JModelForm
 		$this->setState('filter.public', $params->get('event_show_tickets'));
 
 		$user = JFactory::getUser();
-		if ((!$user->authorise('core.edit.state', 'com_dpcalendar')) && (!$user->authorise('core.edit', 'com_dpcalendar'))) {
-			$this->setState('filter.published', 1);
-			$this->setState('filter.archived', 2);
+		if (!$user->authorise('core.edit.state', 'com_dpcalendar') && !$user->authorise('core.edit', 'com_dpcalendar')) {
+			$this->setState('filter.published', [1, 3]);
 		}
 
 		$this->setState('filter.language', JLanguageMultilang::isEnabled());
-	}
-
-	public function getForm($data = [], $loadData = true)
-	{
-		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.event', 'event', ['control' => 'jform', 'load_data' => true]);
-		if (empty($form)) {
-			return false;
-		}
-
-		$id     = $this->getState('event.id');
-		$params = $this->getState('params');
-		$event  = $this->_item[$id];
-		$params->merge($event->params);
-
-		return $form;
-	}
-
-	protected function loadFormData()
-	{
-		$data = (array)JFactory::getApplication()->getUserState('com_dpcalendar.event.data', []);
-
-		return $data;
 	}
 
 	public function &getItem($pk = null)
@@ -135,10 +110,14 @@ class DPCalendarModelEvent extends JModelForm
 					$nowDate  = $db->quote(JFactory::getDate()->toSql());
 
 					// Filter by published state.
-					$published = $this->getState('filter.published');
-					$archived  = $this->getState('filter.archived');
-					if (is_numeric($published)) {
-						$query->where('(a.state = ' . (int)$published . ' OR a.state =' . (int)$archived . ')');
+					$state = $this->getState('filter.published',[]);
+					if (is_numeric($state)) {
+						$state = [$state];
+					}
+
+					if ($state) {
+						ArrayHelper::toInteger($state);
+						$query->where('a.state in (' . implode(',', $state) . ')');
 						$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
 						$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
 					}
@@ -152,11 +131,6 @@ class DPCalendarModelEvent extends JModelForm
 					$data = $db->loadObject();
 
 					if (empty($data)) {
-						throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
-					}
-
-					// Check for published state if filter set.
-					if (((is_numeric($published)) || (is_numeric($archived))) && (($data->state != $published) && ($data->state != $archived))) {
 						throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 					}
 

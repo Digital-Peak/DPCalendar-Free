@@ -80,6 +80,10 @@ foreach ($this->items as $event) {
 		'classNames'  => ['dp-event-' . $event->id, 'dp-event-calendar-' . $event->catid],
 	];
 
+	if ($event->state == 3 && $this->compactMode == 0) {
+		$eventData['title'] = '[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ' . $eventData['title'];
+	}
+
 	if ($event->show_end_time || $event->all_day) {
 		$eventData['end'] = DPCalendarHelper::getDate($event->end_date, $event->all_day)->format($format, true);
 	}

@@ -48,9 +48,9 @@ class Ical
 	 * in the events data. If this is not the case the force flag will generate ical content of the available event
 	 * data, even when they are instances of a series.
 	 *
-	 * @param $events
-	 * @param bool $asDownload
-	 * @param bool $forceEvents
+	 * @param array $events
+	 * @param bool  $asDownload
+	 * @param bool  $forceEvents
 	 *
 	 * @return string
 	 * @throws \Exception
@@ -218,11 +218,6 @@ class Ical
 					$found = false;
 					$date  = \DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
 
-					// Ignore starting event
-					if ($date->toSql() == $event->start_date) {
-						continue;
-					}
-
 					$dateFormatted = $event->all_day ? $date->format('Ymd') : $date->format('Ymd\THis\Z');
 
 					// Trying to find the instance for the actual recurrence id date
@@ -280,7 +275,8 @@ class Ical
 			}
 		}
 
-		if ($event->modified && $event->modified != \JFactory::getDbo()->getNullDate()) {
+		$nullDate = \JFactory::getDbo()->getNullDate();
+		if ($event->modified && $event->modified != $nullDate) {
 			$modified = \DPCalendarHelper::getDate($event->modified);
 			$text[]   = 'LAST-MODIFIED:' . $modified->format('Ymd\THis\Z');
 			$text[]   = 'SEQUENCE:' . ($modified->format('U') - $created->format('U'));
@@ -292,6 +288,14 @@ class Ical
 				\DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
 		$text[] = 'X-COLOR:' . $event->color;
 		$text[] = 'X-SHOW-END-TIME:' . $event->show_end_time;
+
+		if ($event->publish_up != $nullDate) {
+			$text[] = 'X-PUBLISH-UP:' . $event->publish_up;
+		}
+
+		if ($event->publish_down != $nullDate) {
+			$text[] = 'X-PUBLISH-DOWN:' . $event->publish_down;
+		}
 
 		$text[] = 'END:VEVENT';
 

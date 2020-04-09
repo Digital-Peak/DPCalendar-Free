@@ -7,8 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.helpers.schema', JPATH_ADMINISTRATOR);
-
 class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 {
 	protected $event;
@@ -185,7 +183,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		}
 
 		// When booking is disabled or not available
-		if ($event->capacity == '0' || \DPCalendarHelper::isFree()) {
+		if ($event->capacity == '0' || $event->state == 3 || \DPCalendarHelper::isFree()) {
 			return '';
 		}
 
@@ -242,23 +240,12 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 
 		// If the menu item does not concern this newsfeed
 		if ($menu && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] != 'event' || $id != $this->event->id)) {
-			// If this is not a single event menu item, set the page title to
-			// the event title
+			// If this is not a single event menu item, set the page title to the event title
 			if ($this->event->title) {
 				$this->document->setTitle($this->event->title);
 			}
 
-			$path     = [['title' => $this->event->title, 'link' => '']];
-			$category = DPCalendarHelper::getCalendar($this->event->catid);
-			while ($category != null && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] == 'event' || $id != $category->id) &&
-				$category->id > 1) {
-				$path[]   = ['title' => $category->title, 'link' => DPCalendarHelperRoute::getCalendarRoute($category->id)];
-				$category = $category->getParent();
-			}
-			$path = array_reverse($path);
-			foreach ($path as $item) {
-				$pathway->addItem($item['title'], $item['link']);
-			}
+			$pathway->addItem($this->event->title, '');
 		}
 
 		$metadesc = trim($this->event->metadata->get('metadesc'));
@@ -289,5 +276,11 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 				$this->document->setMetadata($k, $v);
 			}
 		}
+
+		if ($this->params->get('event_show_page_heading', 0) != 2) {
+			$this->params->set('show_page_heading', $this->params->get('event_show_page_heading', 0));
+		}
+
+		$this->heading = $this->params->get('show_page_heading') ? 1 : 0;
 	}
 }

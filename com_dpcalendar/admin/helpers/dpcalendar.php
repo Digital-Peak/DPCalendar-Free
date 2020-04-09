@@ -35,8 +35,16 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 				'index.php?option=com_dpcalendar&view=bookings',
 				$vName == 'bookings'
 			);
-			JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_TAXRATES'), 'index.php?option=com_dpcalendar&view=taxrates', $vName == 'taxrates');
-			JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_COUNTRIES'), 'index.php?option=com_dpcalendar&view=countries', $vName == 'countries');
+			JHtmlSidebar::addEntry(
+				JText::_('COM_DPCALENDAR_SUBMENU_TAXRATES'),
+				'index.php?option=com_dpcalendar&view=taxrates',
+				$vName == 'taxrates'
+			);
+			JHtmlSidebar::addEntry(
+				JText::_('COM_DPCALENDAR_SUBMENU_COUNTRIES'),
+				'index.php?option=com_dpcalendar&view=countries',
+				$vName == 'countries'
+			);
 		}
 		JHtmlSidebar::addEntry(
 			JText::_('JGLOBAL_FIELDS'),
@@ -107,10 +115,11 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 		JFactory::getLanguage()->load('com_content', JPATH_ADMINISTRATOR);
 
 		$contexts = [
-			'com_dpcalendar.event'    => JText::_('COM_DPCALENDAR_FIELDS_SECTION_EVENT'),
-			'com_dpcalendar.location' => JText::_('COM_DPCALENDAR_FIELDS_SECTION_LOCATION'),
-			'com_dpcalendar.ticket'   => JText::_('COM_DPCALENDAR_FIELDS_SECTION_TICKET'),
-			'com_dpcalendar.booking'  => JText::_('COM_DPCALENDAR_FIELDS_SECTION_BOOKING')
+			'com_dpcalendar.event'      => JText::_('COM_DPCALENDAR_FIELDS_SECTION_EVENT'),
+			'com_dpcalendar.location'   => JText::_('COM_DPCALENDAR_FIELDS_SECTION_LOCATION'),
+			'com_dpcalendar.ticket'     => JText::_('COM_DPCALENDAR_FIELDS_SECTION_TICKET'),
+			'com_dpcalendar.booking'    => JText::_('COM_DPCALENDAR_FIELDS_SECTION_BOOKING'),
+			'com_dpcalendar.categories' => JText::_('COM_DPCALENDAR_FIELDS_SECTION_CALENDAR')
 		];
 
 		return $contexts;

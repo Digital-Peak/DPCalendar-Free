@@ -34,13 +34,11 @@ $checkinUrl = 'index.php?option=com_dpcalendar&task=event.checkin';
 $checkinUrl .= '&e_id=' . $event->id;
 $checkinUrl .= '&' . JSession::getFormToken() . '=1';
 
-$return = JUri::getInstance(!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : null);
-if ($this->input->getCmd('view', null) == 'event') {
-	$return->setVar('layout', 'empty');
-}
+$return = JUri::getInstance(!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'index.php?ItemId=' . $this->input->getInt('Itemid', 0));
 
 $deleteUrl = 'index.php?option=com_dpcalendar&task=event.delete&tmpl=';
 $deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return) . '&e_id=';
+$this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 ?>
 <div class="com-dpcalendar-event__actions dp-button-bar dp-print-hide">
 	<button type="button" class="dp-button dp-button-print" data-selector=".com-dpcalendar-event">
@@ -52,30 +50,32 @@ $deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return
 		<?php echo $this->translate('JGLOBAL_EMAIL'); ?>
 	</button>
 	<?php if ($this->params->get('event_show_copy', '1')) { ?>
-		<button type="button" class="dp-button dp-button-copy-google" data-href="<?php echo $googleUrl; ?>" data-open="window">
+		<button type="button" class="dp-button dp-button-action dp-button-copy-google" data-href="<?php echo $googleUrl; ?>" data-target="new">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DOWNLOAD]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_GOOGLE'); ?>
 		</button>
-		<button type="button" class="dp-button dp-button-copy-ical" data-href="<?php echo $icalUrl; ?>" data-open="window">
+		<button type="button" class="dp-button dp-button-action dp-button-copy-ical" data-href="<?php echo $icalUrl; ?>" data-target="new">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DOWNLOAD]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_OUTLOOK'); ?>
 		</button>
 	<?php } ?>
 	<?php if (\DPCalendar\Helper\Booking::openForBooking($event) && $event->params->get('access-invite') && !DPCalendarHelper::isFree()) { ?>
-		<button type="button" class="dp-button dp-button-invite" data-href="<?php echo DPCalendarHelperRoute::getInviteRoute($event); ?>">
+		<button type="button" class="dp-button dp-button-action dp-button-invite"
+				data-href="<?php echo DPCalendarHelperRoute::getInviteRoute($event); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::SIGNUP]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_INVITE'); ?>
 		</button>
 	<?php } ?>
 	<?php if ($event->capacity != '0' && $event->params->get('access-tickets') && !DPCalendarHelper::isFree()) { ?>
-		<button type="button" class="dp-button dp-button-tickets"
+		<button type="button" class="dp-button dp-button-action dp-button-tickets"
 				data-href="<?php echo DPCalendarHelperRoute::getTicketsRoute(null, $event->id); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::SIGNUP]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_TICKETS_LABEL'); ?>
 		</button>
 	<?php } ?>
 	<?php if ($event->capacity != '0' && $event->params->get('access-bookings') && !DPCalendarHelper::isFree()) { ?>
-		<button type="button" class="dp-button dp-button-bookings" data-href="<?php echo DPCalendarHelperRoute::getBookingsRoute($event->id); ?>">
+		<button type="button" class="dp-button dp-button-action dp-button-bookings"
+				data-href="<?php echo DPCalendarHelperRoute::getBookingsRoute($event->id); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::SIGNUP]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_BOOKINGS'); ?>
 		</button>
@@ -88,13 +88,13 @@ $deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return
 			); ?>
 		<?php } ?>
 		<?php if ($event->checked_out && $this->user->id != $event->checked_out && $this->user->authorise('core.manage', 'com_checkin')) { ?>
-			<button type="button" class="dp-button dp-button-checkin" data-href="<?php echo $checkinUrl; ?>">
+			<button type="button" class="dp-button dp-button-action dp-button-checkin" data-href="<?php echo $checkinUrl; ?>">
 				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCK]); ?>
 				<?php echo $this->translate('JLIB_HTML_CHECKIN'); ?>
 			</button>
 		<?php } ?>
 		<?php if (!$event->checked_out || $this->user->id == $event->checked_out) { ?>
-			<button type="button" class="dp-button dp-button-edit"
+			<button type="button" class="dp-button dp-button-action dp-button-edit"
 					data-href="<?php echo $this->router->getEventFormRoute($event->id, JUri::getInstance()); ?>">
 				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EDIT]); ?>
 				<?php echo $this->translate('COM_DPCALENDAR_VIEW_FORM_BUTTON_EDIT_EVENT'); ?>
@@ -102,13 +102,14 @@ $deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return
 		<?php } ?>
 	<?php } ?>
 	<?php if ($event->params->get('access-delete')) { ?>
-		<button type="button" class="dp-button dp-button-delete" data-href="<?php echo $this->router->route($deleteUrl . $event->id); ?>">
+		<button type="button" class="dp-button dp-button-action dp-button-delete dp-action-delete"
+				data-href="<?php echo $this->router->route($deleteUrl . $event->id); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DELETE]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_DELETE'); ?>
 		</button>
 	<?php } ?>
 	<?php if ($event->original_id > 0 && $event->params->get('access-delete')) { ?>
-		<button type="button" class="dp-button dp-button-delete-series"
+		<button type="button" class="dp-button dp-button-action dp-button-delete-series dp-action-delete"
 				data-href="<?php echo $this->router->route($deleteUrl . $event->original_id); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DELETE]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_DELETE_SERIES'); ?>

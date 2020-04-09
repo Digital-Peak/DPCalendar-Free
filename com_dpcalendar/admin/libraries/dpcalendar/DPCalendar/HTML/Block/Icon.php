@@ -33,7 +33,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const CALENDAR = 'calendar-alt';
+	const CALENDAR = 'calendar';
 
 	/**
 	 * The cancel icon.
@@ -61,21 +61,21 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const DATABASE = 'database-solid';
+	const DATABASE = 'database';
 
 	/**
 	 * The delete icon.
 	 *
 	 * @var string
 	 */
-	const DELETE = 'trash-alt';
+	const DELETE = 'trash';
 
 	/**
 	 * The directions icon.
 	 *
 	 * @var string
 	 */
-	const DIRECTIONS = 'directions-solid';
+	const DIRECTIONS = 'directions';
 
 	/**
 	 * The down icon.
@@ -96,21 +96,21 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const EDIT = 'pencil-alt';
+	const EDIT = 'pencil';
 
 	/**
 	 * The exclamation icon.
 	 *
 	 * @var string
 	 */
-	const EXCLAMATION = 'exclamation-solid';
+	const EXCLAMATION = 'exclamation';
 
 	/**
 	 * The external link icon.
 	 *
 	 * @var string
 	 */
-	const EXTERNAL = 'external-link-square-alt-solid';
+	const EXTERNAL = 'external-link-square';
 
 	/**
 	 * The file icon.
@@ -124,7 +124,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const INFO = 'info-circle-solid';
+	const INFO = 'info-circle';
 
 	/**
 	 * The users icon.
@@ -145,7 +145,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const LOCATION = 'map-marker-alt';
+	const LOCATION = 'map-marker';
 
 	/**
 	 * The lock icon.
@@ -166,14 +166,21 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const MAP = 'map-marked-solid';
+	const MAP = 'map-marked';
 
 	/**
 	 * The money icon.
 	 *
 	 * @var string
 	 */
-	const MONEY = 'money-bill-alt';
+	const MONEY = 'money-bill';
+
+	/**
+	 * The multiple item icon.
+	 *
+	 * @var string
+	 */
+	const MULTIPLE = 'clone';
 
 	/**
 	 * The next icon.
@@ -222,14 +229,21 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const SIGNUP = 'sign-in-alt';
+	const SIGNUP = 'sign-in';
+
+	/**
+	 * The single item icon.
+	 *
+	 * @var string
+	 */
+	const SINGLE = 'square';
 
 	/**
 	 * The users icon.
 	 *
 	 * @var string
 	 */
-	const SYNC = 'sync-alt';
+	const SYNC = 'sync';
 
 	/**
 	 * The up icon.
@@ -244,4 +258,11 @@ class Icon
 	 * @var string
 	 */
 	const USERS = 'users';
+
+	/**
+	 * The icon cache, used by the layout.
+	 *
+	 * @var array
+	 */
+	public static $pathCache = [];
 }

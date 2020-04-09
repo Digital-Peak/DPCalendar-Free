@@ -20,7 +20,7 @@ class DPCalendarModelCpanel extends JModelLegacy
 		$model->setState('category.recursive', true);
 		$model->setState('filter.ongoing', 1);
 		$model->setState('filter.expand', true);
-		$model->setState('filter.state', 1);
+		$model->setState('filter.state', [1, 3]);
 		$model->setState('filter.publish_date', true);
 		$model->setState('list.start-date', $start);
 		$model->setState('list.ordering', $ordering);

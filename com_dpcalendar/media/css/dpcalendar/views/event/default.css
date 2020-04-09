@@ -246,6 +246,16 @@
 	border: 1px solid #0f2bff;
 }
 
+.com-dpcalendar-event .dp-map_consent {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 2em;
+	border: 1px solid #b2b2b2;
+	background-color: #f2f2f2;
+	cursor: pointer;
+}
+
 @media print {
 	.com-dpcalendar-event .dp-print-hide {
 		display: none !important;
@@ -363,6 +373,10 @@
 .com-dpcalendar-event__custom-text-after {
 	grid-column: 1 / 4;
 	grid-row: 11 / 12;
+}
+
+.com-dpcalendar-event__title_canceled {
+	margin-right: 5px;
 }
 
 .com-dpcalendar-event__taxes.dp-info-box {

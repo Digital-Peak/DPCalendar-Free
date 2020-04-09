@@ -187,19 +187,19 @@
 		<field name="textafter" type="textarea"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
 		       rows="5" cols="50" filter="safehtml"/>
-		<field name="show_event_as_popup" type="list" class="btn-group"
-		       default="0" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_POPUP_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_POPUP_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
+		<field name="show_event_as_popup" type="list" class="btn-group" default="0"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_DESC">
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_FULL</option>
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL</option>
 			<option value="2">JDISABLED</option>
 		</field>
 		<field name="popup_width" type="text" showon="show_event_as_popup:1"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_WIDTH_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_WIDTH_DESC"/>
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_DESC"/>
 		<field name="popup_height" type="text" default="500" showon="show_event_as_popup:1"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_HEIGHT_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_HEIGHT_DESC"/>
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
 		<field name="event_create_form" type="list" default="1" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_DESC">
 			<option value="0">JDISABLED</option>
@@ -604,6 +604,12 @@
 		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 		<field name="event_count_clicks" type="radio" default="1" class="btn-group"
 		       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="event_show_page_heading" type="list" default="0"
+		       label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
+			<option value="2">JGLOBAL_INHERIT</option>
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
@@ -1345,8 +1351,7 @@
 		</field>
 		<field name="titleformat_month" type="text" default="F Y"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_DESC"/>
 		<field name="location_default_view" type="list" default="resday" showon="location_show_resource_view:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
@@ -1398,6 +1403,12 @@
 		<field name="location_axisformat" type="text" default="g:i a" showon="location_show_resource_view:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DESC"/>
+		<field name="location_show_page_heading" type="list" default="0"
+		       label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
+			<option value="2">JGLOBAL_INHERIT</option>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 	</fieldset>
 
 	<fieldset name="location_form" label="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONFORM_LABEL"
@@ -1508,6 +1519,12 @@
 			<option value="1">JGLOBAL_SEF_ADVANCED_MODERN</option>
 		</field>
 
+		<field name="map_ask_consent" type="radio" default="0" class="btn-group"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_CONSENT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_CONSENT_DESC">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="map_provider" type="list" default="openstreetmap"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_DESC">
@@ -1574,11 +1591,12 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="booking_show_registration" type="radio" class="btn-group"
-		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SHOW_REGISTRATION_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SHOW_REGISTRATION_DESC">
+		<field name="booking_registration" type="list" default="1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_REGISTRATION_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_REGISTRATION_DESC">
 			<option value="0">JNO</option>
-			<option value="1">JYES</option>
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_REGISTRATION_SHOW_FORM</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_REGISTRATION_CREATE_USER</option>
 		</field>
 		<field name="currency" type="text" default="USD"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CURRENCY_LABEL"
@@ -1615,6 +1633,9 @@
 		<field name="canceltext" type="editor" filter="raw"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELTEXT_DESC"/>
+		<field name="cancelpaidtext" type="editor" filter="raw" default="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELPAIDTEXT_TEXT"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELPAIDTEXT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCELPAIDTEXT_DESC"/>
 	</fieldset>
 	<fieldset name="component" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_LABEL">
 		<field name="downloadid" type="text"

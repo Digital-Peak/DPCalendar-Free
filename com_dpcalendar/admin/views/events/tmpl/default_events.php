@@ -7,6 +7,8 @@
  */
 defined('_JEXEC') or die();
 
+use DPCalendar\HTML\Block\Icon;
+
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $archived  = $this->state->get('filter.state') == 2;
@@ -31,6 +33,8 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 			<th><?php echo JHtml::_('searchtools.sort', 'JAUTHOR', 'a.created_by', $listDirn, $listOrder); ?></th>
 			<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'a.language', $listDirn, $listOrder); ?></th>
 			<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
+			<th><?php echo JHtml::_('searchtools.sort', 'COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE', 'original_title', $listDirn,
+					$listOrder); ?></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -70,6 +74,8 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 					<?php if ($item->checked_out) { ?>
 						<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'events.', $canCheckin); ?>
 					<?php } ?>
+					<?php $icon = $item->original_id == -1 ? Icon::RECURRING : ($item->original_id > 0 ? Icon::MULTIPLE : Icon::SINGLE); ?>
+					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => $icon]); ?>
 					<?php if ($canEdit || $canEditOwn) { ?>
 						<a href="<?php echo $this->router->route('index.php?option=com_dpcalendar&task=event.edit&e_id=' . $item->id); ?>"
 						   title="<?php echo $this->translate('JACTION_EDIT'); ?>">
@@ -82,10 +88,14 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 					<?php } ?>
 					<div><?php echo $this->translate('COM_DPCALENDAR_CALENDAR') . ": " . $this->escape($item->category_title); ?></div>
 				</td>
-				<td data-column="<?php echo $this->translate('JDATE'); ?>"><?php echo $this->dateHelper->getDateStringFromEvent($item); ?></td>
+				<td data-column="<?php echo $this->translate('JDATE'); ?>">
+					<div><?php echo $this->dateHelper->getDateStringFromEvent($item); ?></div>
+					<div><?php echo $this->dateHelper->transformRRuleToString($item->rrule ?: $item->original_rrule, $item->start_date); ?></div>
+				</td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_COLOR_LABEL'); ?>">
 					<?php $color = $item->color ?: DPCalendarHelper::getCalendar($item->catid)->color; ?>
-					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($color); ?>" class="dp-event__color">
+					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($color); ?>"
+						 class="dp-event__color">
 						<?php echo $this->escape($color); ?>
 					</div>
 				</td>
@@ -99,12 +109,24 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 					<?php } ?>
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ID'); ?>"><?php echo (int)$item->id; ?></td>
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE'); ?>">
+					<?php if (($canEdit || $canEditOwn) && $item->original_title) { ?>
+						<a href="<?php echo $this->router->route('index.php?option=com_dpcalendar&task=event.edit&e_id=' . $item->original_id); ?>"
+						   title="<?php echo $this->translate('JACTION_EDIT'); ?>">
+							<?php echo $this->escape($item->original_title); ?>
+						</a>
+					<?php } else if ($item->original_title) { ?>
+						<span title="<?php echo JText::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->alias)); ?>">
+							<?php echo $this->escape($item->title); ?>
+						</span>
+					<?php } ?>
+				</td>
 			</tr>
 		<?php } ?>
 		</tbody>
 		<tfoot>
 		<tr>
-			<td colspan="11"><?php echo $this->pagination->getListFooter(); ?></td>
+			<td colspan="12"><?php echo $this->pagination->getListFooter(); ?></td>
 		</tr>
 		</tfoot>
 	</table>

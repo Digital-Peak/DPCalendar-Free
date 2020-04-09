@@ -12,7 +12,9 @@ if (!$this->event->schedule || !$this->params->get('event_show_schedule', 1)) {
 }
 ?>
 <div class="com-dpcalendar-event__schedule com-dpcalendar-event_small">
-	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_FIELD_SCHEDULE_LABEL'); ?></h3>
+	<h<?php echo $this->heading + 2; ?> class="dp-heading">
+		<?php echo $this->translate('COM_DPCALENDAR_FIELD_SCHEDULE_LABEL'); ?>
+	</h<?php echo $this->heading + 2; ?>>
 	<div class="dp-schedule-list">
 		<?php foreach ($this->event->schedule as $index => $schedule) { ?>
 			<div class="dp-schedule-list__item dp-schedule dp-schedule-<?php echo $index; ?>">

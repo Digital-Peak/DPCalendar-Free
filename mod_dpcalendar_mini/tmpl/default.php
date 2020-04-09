@@ -5,14 +5,14 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
-$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_FULLCALENDAR);
-
-if ($params->get('show_event_as_popup')) {
-	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MODAL);
+if ($params->get('show_map', 1)) {
+	$layoutHelper->renderLayout('block.map', $displayData);
 }
+
+$document->loadScriptFile('dpcalendar/views/calendar/default.js');
+$document->loadScriptFile('dpcalendar/views/calendar/default.js');
 
 $document->loadStyleFile('default.css', 'mod_dpcalendar_mini');
 $document->addStyle('.mod-dpcalendar-mini-' . $module->id . ' .fc-bgevent { background-color: ' . $params->get('event_color', '#135CAE') . '}');

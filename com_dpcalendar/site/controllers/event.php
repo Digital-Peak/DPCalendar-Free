@@ -17,7 +17,6 @@ JLoader::import('joomla.application.component.controllerform');
 
 class DPCalendarControllerEvent extends JControllerForm
 {
-
 	protected $view_item = 'form';
 	protected $view_list = 'calendar';
 	protected $option = 'com_dpcalendar';
@@ -378,6 +377,23 @@ class DPCalendarControllerEvent extends JControllerForm
 		// Format the end date to SQL format
 		$data['end_date'] = $end->toSql(false);
 
+		if ($data['location_ids']) {
+			foreach ($data['location_ids'] as $index => $locationId) {
+				if (is_numeric($locationId)) {
+					continue;
+				}
+
+				list($title, $coordinates) = explode(' [', $locationId);
+
+				$location = \DPCalendar\Helper\Location::get(trim($coordinates, ']'), true, $title);
+				if (!$location->id) {
+					unset($data['location_ids'][$index]);
+					continue;
+				}
+				$data['location_ids'][$index] = $location->id;
+			}
+		}
+
 		$this->input->post->set('jform', $data);
 
 		$result   = false;
@@ -695,5 +711,23 @@ class DPCalendarControllerEvent extends JControllerForm
 		$this->input->post->set('jform', $data);
 
 		return parent::reload($key, $urlVar);
+	}
+
+	public function newlocation()
+	{
+		// Check for request forgeries
+		\JSession::checkToken() or jexit(\JText::_('JINVALID_TOKEN'));
+
+		$location = \DPCalendar\Helper\Location::get($this->input->getString('lookup'), false, $this->input->getString('lookup_title'));
+
+		$data = [];
+		if ($location->title) {
+			$data =
+				[
+					'id'      => $location->id,
+					'display' => $location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
+				];
+		}
+		DPCalendarHelper::sendMessage(null, empty($data), $data);
 	}
 }

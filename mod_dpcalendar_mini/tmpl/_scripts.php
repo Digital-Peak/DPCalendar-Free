@@ -128,8 +128,6 @@ $options['header']['right']  = implode(',', $options['header']['right']);
 $resourceViews = $params->get('calendar_resource_views');
 
 if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $resources) {
-	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SCHEDULER);
-
 	$options['resources'] = $resources;
 }
 

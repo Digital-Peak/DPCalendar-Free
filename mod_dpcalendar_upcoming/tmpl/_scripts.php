@@ -8,15 +8,12 @@
 defined('_JEXEC') or die();
 
 // Load the required modal JS libraries
-if ($params->get('show_as_popup')) {
-	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MODAL);
-	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_URL);
+if ($params->get('show_as_popup') || $params->get('show_map')) {
 	$document->loadScriptFile('default.js', 'mod_dpcalendar_upcoming');
 }
 
 if ($params->get('show_map')) {
-	$document->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_MAP);
+	$layoutHelper->renderLayout('block.map', $displayData);
 }
 
 // Load the stylesheet

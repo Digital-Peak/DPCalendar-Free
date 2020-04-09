@@ -5,15 +5,12 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 if (DPCalendarHelper::getComponentParameter('enable_tz_switcher', '0') == '0') {
 	return;
 }
-
-$displayData['document']->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
-$displayData['document']->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SELECT);
+$displayData['document']->loadScriptFile('dpcalendar/layouts/block/timezone.js');
 
 $regions = [
 	'Africa'     => DateTimeZone::AFRICA,

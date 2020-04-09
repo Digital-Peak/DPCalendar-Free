@@ -29,43 +29,7 @@ class DPCalendarControllerLocation extends JControllerForm
 
 	public function save($key = null, $urlVar = 'l_id')
 	{
-		if ($lookup = $this->input->getString('lookup')) {
-			$location = \DPCalendar\Helper\Location::get($lookup, true, $this->input->getString('lookup_title'));
-
-			$data = [];
-			if ($location->id) {
-				$data =
-					[
-						'id'      => $location->id,
-						'display' => $location->title . ' [' . $location->latitude . ':' . $location->longitude . ']'
-					];
-			}
-			DPCalendarHelper::sendMessage(
-				null,
-				empty($data),
-				$data
-			);
-		}
-		$return = parent::save($key, $urlVar);
-
-		if ($this->input->get('ajax') != 0) {
-			if (isset($this->id) && $this->id) {
-				$table = $this->getModel()->getTable();
-				$table->load($this->id);
-				DPCalendarHelper::sendMessage(
-					$this->message,
-					false,
-					[
-						'id'      => $this->id,
-						'display' => $table->title . ' [' . $table->latitude . ':' . $table->longitude . ']'
-					]
-				);
-			} else {
-				DPCalendarHelper::sendMessage($this->message, true, ['id' => 0]);
-			}
-		}
-
-		return $return;
+		return parent::save($key, $urlVar);
 	}
 
 	protected function postSaveHook(JModelLegacy $model, $validData = [])

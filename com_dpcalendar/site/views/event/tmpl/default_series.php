@@ -12,7 +12,9 @@ if (!$this->seriesEvents || !$this->params->get('event_show_series', 1)) {
 }
 ?>
 <div class="com-dpcalendar-event__series com-dpcalendar-event_small">
-	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_SERIES_LIST'); ?></h3>
+	<h<?php echo $this->heading + 2; ?> class="dp-heading">
+		<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_SERIES_LIST'); ?>
+	</h<?php echo $this->heading + 2; ?>>
 	<ul class="dp-event-list">
 		<?php foreach ($this->seriesEvents as $event) { ?>
 			<li class="dp-events-list__event dp-event-<?php echo $event->id; ?>">

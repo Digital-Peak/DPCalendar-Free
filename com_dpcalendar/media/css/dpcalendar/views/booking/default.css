@@ -2,38 +2,6 @@
 	margin-bottom: 1rem;
 }
 
-.com-dpcalendar-booking-default .dp-heading {
-	clear: both;
-	margin-bottom: 1rem;
-}
-
-.com-dpcalendar-booking-default .dp-heading_small {
-	border-bottom: none;
-}
-
-@media print {
-	.com-dpcalendar-booking-default .dp-print-hide {
-		display: none !important;
-	}
-	.com-dpcalendar-booking-default a:link:after, .com-dpcalendar-booking-default a:visited:after {
-		display: none;
-		content: "";
-	}
-	.com-dpcalendar-booking-default dt {
-		float: left !important;
-		margin: 0 !important;
-		padding: 0 !important;
-		max-width: 150px;
-		min-width: 150px;
-	}
-	.com-dpcalendar-booking-default dd {
-		float: left !important;
-		margin: 0 0 0 5px !important;
-		padding: 0 !important;
-		max-width: 350px;
-	}
-}
-
 .com-dpcalendar-booking-default .dp-button-bar {
 	margin-bottom: 10px;
 }
@@ -63,6 +31,43 @@
 	background-color: #cccccc;
 	color: #666666;
 	cursor: not-allowed;
+}
+
+.com-dpcalendar-booking-default .dp-description {
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-booking-default .dp-description__label {
+	float: left;
+	width: 160px;
+	clear: left;
+	text-align: left;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.com-dpcalendar-booking-default .dp-description__description {
+	margin-left: 180px;
+}
+
+@media screen and (max-width: 540px) {
+	.com-dpcalendar-booking-default .dp-description__label {
+		float: none;
+		width: 100%;
+	}
+	.com-dpcalendar-booking-default .dp-description__description {
+		margin-left: 0;
+	}
+}
+
+.com-dpcalendar-booking-default .dp-heading {
+	clear: both;
+	margin-bottom: 1rem;
+}
+
+.com-dpcalendar-booking-default .dp-heading_small {
+	border-bottom: none;
 }
 
 .com-dpcalendar-booking-default .dp-icon svg {
@@ -152,34 +157,6 @@
 	}
 }
 
-.com-dpcalendar-booking-default .dp-description {
-	margin-bottom: 10px;
-}
-
-.com-dpcalendar-booking-default .dp-description__label {
-	float: left;
-	width: 160px;
-	clear: left;
-	text-align: left;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
-}
-
-.com-dpcalendar-booking-default .dp-description__description {
-	margin-left: 180px;
-}
-
-@media screen and (max-width: 540px) {
-	.com-dpcalendar-booking-default .dp-description__label {
-		float: none;
-		width: 100%;
-	}
-	.com-dpcalendar-booking-default .dp-description__description {
-		margin-left: 0;
-	}
-}
-
 .com-dpcalendar-booking-default .dp-timezone {
 	display: flex;
 	align-items: center;
@@ -230,6 +207,37 @@
 .com-dpcalendar-booking-default .dp-timezone .choices {
 	min-width: 300px;
 	margin: 0;
+}
+
+@media print {
+	.com-dpcalendar-booking-default .dp-print-hide {
+		display: none !important;
+	}
+	.com-dpcalendar-booking-default a:link:after, .com-dpcalendar-booking-default a:visited:after {
+		display: none;
+		content: "";
+	}
+	.com-dpcalendar-booking-default dt {
+		float: left !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		max-width: 150px;
+		min-width: 150px;
+	}
+	.com-dpcalendar-booking-default dd {
+		float: left !important;
+		margin: 0 0 0 5px !important;
+		padding: 0 !important;
+		max-width: 350px;
+	}
+}
+
+.com-dpcalendar-booking-default #member-registration {
+	padding: 5px;
+}
+
+.com-dpcalendar-booking-default #member-registration legend, .com-dpcalendar-booking-default #member-registration fieldset .control-group:nth-of-type(1), .com-dpcalendar-booking-default #member-registration a.btn {
+	display: none;
 }
 
 .com-dpcalendar-booking-default .dp-option {

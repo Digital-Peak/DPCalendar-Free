@@ -11,12 +11,6 @@ if (!$this->params->get('location_show_resource_view', 1) || \DPCalendar\Helper\
 	return;
 }
 
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_FULLCALENDAR);
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_SCHEDULER);
-if ($this->params->get('location_header_show_datepicker', 1)) {
-	$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DATEPICKER);
-}
-
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_MONTH');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_WEEK');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_DAY');
@@ -69,7 +63,7 @@ $options['slotWidth']       = $this->params->get('location_column_width');
 $options['smallTimeFormat'] = $this->dateHelper->convertPHPDateToMoment($this->params->get('timeformat_day', 'g:i a'));
 
 $options['resources']         = $this->resources;
-$options['resourceLabelText'] = $this->translate('COM_DPCALENDAR_LAYOUT_CALENDAR_LOCATIONS_AND_ROOMS');
+$options['resourceLabelText'] = $this->translate('COM_DPCALENDAR_VIEW_LOCATION_LOCATIONS_AND_ROOMS');
 
 $options['views']             = [];
 $options['views']['resyear']  = [

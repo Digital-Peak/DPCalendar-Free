@@ -5,10 +5,14 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
+if ($this->params->get('event_show_map', '1')
+	&& $this->event->locations
+	&& $this->params->get('event_show_location', '2') && $this->params->get('map_provider', 'openstreetmap') != 'none') {
+	$this->layoutHelper->renderLayout('block.map', $this->displayData);
+}
+
 $this->dpdocument->loadStyleFile('dpcalendar/views/event/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/event/default.js');
 

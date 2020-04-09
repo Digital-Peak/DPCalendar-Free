@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `user_discount` text,
   `booking_information` text,
   `booking_options` text,
+  `booking_assign_user_groups` varchar(250) DEFAULT NULL,
   `ordertext` text,
   `orderurl` VARCHAR(255) DEFAULT NULL,
   `canceltext` text,

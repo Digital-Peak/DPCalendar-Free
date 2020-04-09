@@ -120,7 +120,7 @@ class DPCalendarTableEvent extends JTable
 		if ($this->id > 0) {
 			$table->load($this->id);
 
-			// If there is a new rrule or date configuratino do a hard reset
+			// If there is a new rrule or date configuration do a hard reset
 			$hardReset = $this->all_day != $table->all_day || $this->start_date != $table->start_date || $this->end_date != $table->end_date || $this->rrule != $table->rrule;
 			$oldTags   = new JHelperTags();
 			$oldTags   = $oldTags->getItemTags('com_dpcalendar.event', $this->id);
@@ -130,7 +130,7 @@ class DPCalendarTableEvent extends JTable
 
 			$tagsChanged = !isset($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
-			if ($hardReset || $this->price != $table->price || $this->booking_options != $table->booking_options) {
+			if ($this->price != $table->price || $this->booking_options != $table->booking_options) {
 				// Check for tickets
 				$db    = JFactory::getDbo();
 				$query = $db->getQuery(true);
@@ -148,7 +148,7 @@ class DPCalendarTableEvent extends JTable
 					$hardReset        = false;
 
 					JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-					JFactory::getApplication()->enqueueMessage(JText::_('COM_DPCALENDAR_ERR_TABLE_NO_DATE_CHANGE'), 'notice');
+					JFactory::getApplication()->enqueueMessage(JText::_('COM_DPCALENDAR_ERR_TABLE_NO_PRICE_CHANGE'), 'notice');
 				}
 			}
 		}
@@ -294,6 +294,7 @@ class DPCalendarTableEvent extends JTable
 					$this->_db->qn('language') . ' = ' . $this->_db->q($this->language),
 					$this->_db->qn('modified') . ' = ' . $this->_db->q($this->modified),
 					$this->_db->qn('modified_by') . ' = ' . $this->_db->q($user->id),
+					$this->_db->qn('created_by') . ' = ' . $this->_db->q($this->created_by),
 					$this->_db->qn('metakey') . ' = ' . $this->_db->q($this->metakey),
 					$this->_db->qn('metadesc') . ' = ' . $this->_db->q($this->metadesc),
 					$this->_db->qn('metadata') . ' = ' . $this->_db->q($this->metadata),

@@ -5,12 +5,10 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Transifex;
 
-$this->dpdocument->loadLibrary(\DPCalendar\HTML\Document\HtmlDocument::LIBRARY_DPCORE);
 $this->dpdocument->loadStyleFile('dpcalendar/views/tools/translate.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/tools/translate.js');
 

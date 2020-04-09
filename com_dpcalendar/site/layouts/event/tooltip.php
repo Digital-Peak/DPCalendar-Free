@@ -39,6 +39,9 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 			]
 		); ?>
 	</div>
+	<?php if ($event->state == 3) { ?>
+		<span class="dp-event_canceled>">[<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?>]</span>
+	<?php } ?>
 	<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
 		<?php echo $event->title; ?>
 	</a>
@@ -75,7 +78,8 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 			<?php } ?>
 		<?php } ?>
 		<?php if ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
-			<a href="<?php echo $displayData['router']->getEventDeleteRoute($event->id, $return); ?>" class="dp-event-tooltip__action dp-link">
+			<a href="<?php echo $displayData['router']->getEventDeleteRoute($event->id, $return); ?>"
+			   class="dp-event-tooltip__action dp-event-tooltip__action-delete dp-link">
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
 					['icon' => \DPCalendar\HTML\Block\Icon::DELETE, 'title' => $displayData['translator']->translate('JACTION_DELETE')]

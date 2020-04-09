@@ -199,6 +199,14 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 
 			$this->run('update #__modules set params = replace(params, \'"description_length":""\', \'"description_length":"100"\') where `module` like "mod_dpcalendar_mini"');
 		}
+
+		if (version_compare($version, '7.4.0') == -1) {
+			// Defaulting some params which have changed
+			$params = JComponentHelper::getParams('com_dpcalendar');
+			$params->set('booking_registration', $params->get('booking_show_registration', 100));
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
 	}
 
 	public function preflight($type, $parent)

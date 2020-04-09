@@ -41,7 +41,11 @@ class SendNotificationMail implements StageInterface
 			$payload->mailVariables
 		);
 
-		$emails = DPCalendarHelper::sendMail($subject, $body, 'notification_groups_book');
+		$calendarGroups = [];
+		foreach ($payload->eventsWithTickets as $e) {
+			$calendarGroups = array_merge($calendarGroups, \DPCalendarHelper::getCalendar($e->catid)->params->get('notification_groups_book', []));
+		}
+		$emails = DPCalendarHelper::sendMail($subject, $body, 'notification_groups_book', $calendarGroups);
 
 		if ($payload->mailParams->get('booking_send_mail_author', 1)) {
 			// Send to the authors of the events

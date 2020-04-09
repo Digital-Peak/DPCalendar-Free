@@ -11,13 +11,12 @@ JLoader::import('joomla.application.component.controller');
 
 class DPCalendarControllerProfile extends JControllerLegacy
 {
-
 	public function change()
 	{
 		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
 
 		$this->getModel()->setUsers(explode(',', $this->input->getString('users')), $this->input->getString('action'));
-		JFactory::getApplication()->close();
+		\DPCalendar\Helper\DPCalendarHelper::sendMessage('');
 	}
 
 	public function tz()

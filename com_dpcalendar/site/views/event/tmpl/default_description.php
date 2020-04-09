@@ -12,7 +12,9 @@ if (!$this->event->description && !$this->event->displayEvent->afterDisplayConte
 }
 ?>
 <div class="com-dpcalendar-event__description">
-	<h3 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_DESCRIPTION'); ?></h3>
+	<h<?php echo $this->heading + 2; ?> class="dp-heading">
+		<?php echo $this->translate('COM_DPCALENDAR_DESCRIPTION'); ?>
+	</h<?php echo $this->heading + 2; ?>>
 	<div class="com-dpcalendar-event__description-content">
 		<?php echo JHTML::_('content.prepare', $this->event->description); ?>
 	</div>

@@ -39,10 +39,6 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 			return false;
 		}
 
-		// The system plugin needs to be disabled during upgrade
-		$this->run("update `#__extensions` set enabled = 0 where type = 'plugin' and element = 'dpcalendar' and folder = 'system'");
-
-
 		// Delete existing update sites, necessary if upgrading eg. free to pro
 		$this->run(
 			"delete from #__update_sites_extensions where extension_id in (select extension_id from #__extensions where element = 'pkg_dpcalendar')"
@@ -65,8 +61,7 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 		}
 
 		if ($type == 'update') {
-			// Update sites are created in a plugin
-			JEventDispatcher::getInstance()->register('onExtensionAfterInstall', function ($installer, $eid) {
+			$updater = function ($installer, $eid) {
 				if ($installer->getManifest()->packagename != 'dpcalendar') {
 					return;
 				}
@@ -75,7 +70,11 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 				$model = JModelLegacy::getInstance('Cpanel', 'DPCalendarModel');
 				$model->refreshUpdateSite();
-			});
+			};
+
+			// Update sites are created in a plugin
+			JEventDispatcher::getInstance()->register('onExtensionAfterInstall', $updater);
+			JEventDispatcher::getInstance()->register('onExtensionAfterUpdate', $updater);
 		}
 	}
 

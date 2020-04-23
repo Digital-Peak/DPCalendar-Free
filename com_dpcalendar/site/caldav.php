@@ -23,7 +23,7 @@ JLoader::import('joomla.user.authentication');
 JLoader::import('joomla.application.component.helper');
 
 JLog::addLogger([
-		'text_file' => 'com_dpcalendar.caldav.errors.php'
+	'text_file' => 'com_dpcalendar.caldav.errors.php'
 ], JLog::ALL, 'com_dpcalendar');
 
 class DPCalendarCalDavServer extends JApplicationCms
@@ -43,6 +43,14 @@ class DPCalendarCalDavServer extends JApplicationCms
 		function exception_error_handler($errno, $errstr, $errfile, $errline)
 		{
 			JLog::add('Something crashed during a CalDAV request on ' . $errfile . ' ' . $errline . PHP_EOL . $errstr, JLog::ERROR, 'com_dpcalendar');
+			if (JDEBUG) {
+				$text = '';
+				foreach (debug_backtrace() as $item) {
+					$text .= PHP_EOL . $item['line'] . ' ' . $item['file'];
+				}
+
+				JLog::add('Here is the stack trace:' . $text, JLog::DEBUG, 'com_dpcalendar');
+			}
 			throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
 		}
 		set_error_handler("exception_error_handler");
@@ -56,32 +64,35 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$siteLanguage = \JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
 			$config->set('language', $siteLanguage);
 
-			$pdo = new \PDO('mysql:host=' . $config->get('host') . ';dbname=' . $config->get('db') . ';charset=utf8', $config->get('user'), $config->get('password'));
+			$pdo = new \PDO(
+				'mysql:host=' . $config->get('host') . ';dbname=' . $config->get('db') . ';charset=utf8', $config->get('user'),
+				$config->get('password')
+			);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
 			JFactory::getApplication()->input->set('format', 'raw');
 
 			$authBackend = new \DPCalendar\Sabre\DAV\Auth\Backend\Joomla(JFactory::getDbo());
 			$authBackend->setRealm('');
-			$calendarBackend = new \DPCalendar\Sabre\CalDAV\Backend\DPCalendar($pdo);
-			$calendarBackend->calendarTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendars';
-			$calendarBackend->calendarObjectTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendarobjects';
-			$calendarBackend->calendarChangesTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendarchanges';
-			$calendarBackend->calendarInstancesTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendarinstances';
+			$calendarBackend                                 = new \DPCalendar\Sabre\CalDAV\Backend\DPCalendar($pdo);
+			$calendarBackend->calendarTableName              = $config->get('dbprefix') . 'dpcalendar_caldav_calendars';
+			$calendarBackend->calendarObjectTableName        = $config->get('dbprefix') . 'dpcalendar_caldav_calendarobjects';
+			$calendarBackend->calendarChangesTableName       = $config->get('dbprefix') . 'dpcalendar_caldav_calendarchanges';
+			$calendarBackend->calendarInstancesTableName     = $config->get('dbprefix') . 'dpcalendar_caldav_calendarinstances';
 			$calendarBackend->calendarSubscriptionsTableName = $config->get('dbprefix') . 'dpcalendar_caldav_calendarsubscriptions';
-			$calendarBackend->schedulingObjectTableName = $config->get('dbprefix') . 'dpcalendar_caldav_schedulingobjects';
-			$principalBackend = new \Sabre\DAVACL\PrincipalBackend\PDO($pdo);
-			$principalBackend->tableName = $config->get('dbprefix') . 'dpcalendar_caldav_principals';
-			$principalBackend->groupMembersTableName = $config->get('dbprefix') . 'dpcalendar_caldav_groupmembers';
+			$calendarBackend->schedulingObjectTableName      = $config->get('dbprefix') . 'dpcalendar_caldav_schedulingobjects';
+			$principalBackend                                = new \Sabre\DAVACL\PrincipalBackend\PDO($pdo);
+			$principalBackend->tableName                     = $config->get('dbprefix') . 'dpcalendar_caldav_principals';
+			$principalBackend->groupMembersTableName         = $config->get('dbprefix') . 'dpcalendar_caldav_groupmembers';
 
 			$tree = [
-					new \Sabre\CalDAV\Principal\Collection($principalBackend),
-					new \Sabre\CalDAV\CalendarRoot($principalBackend, $calendarBackend)
+				new \Sabre\CalDAV\Principal\Collection($principalBackend),
+				new \Sabre\CalDAV\CalendarRoot($principalBackend, $calendarBackend)
 			];
 
 			\Sabre\DAV\Server::$exposeVersion = false;
 
-			$server = new \Sabre\DAV\Server($tree);
+			$server                  = new \Sabre\DAV\Server($tree);
 			$server->debugExceptions = JDEBUG;
 
 			$uri = trim(JUri::root(true), '/');
@@ -104,7 +115,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$message = 'Something crashed during a CalDAV request: ' . PHP_EOL . $e;
 			JLog::add($message, JLog::ERROR, 'com_dpcalendar');
 
-			$DOM = new \DOMDocument('1.0', 'utf-8');
+			$DOM               = new \DOMDocument('1.0', 'utf-8');
 			$DOM->formatOutput = true;
 
 			$error = $DOM->createElementNS('DAV:', 'd:error');
@@ -128,6 +139,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 	public function getCfg($varname, $default = null)
 	{
 		$config = JFactory::getConfig();
+
 		return $config->get('' . $varname, $default);
 	}
 
@@ -178,7 +190,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 
 	public function getUserState($key, $default = null)
 	{
-		$session = JFactory::getSession();
+		$session  = JFactory::getSession();
 		$registry = $session->get('registry');
 
 		if (!is_null($registry)) {
@@ -205,7 +217,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 
 	public function setUserState($key, $value)
 	{
-		$session = JFactory::getSession();
+		$session  = JFactory::getSession();
 		$registry = $session->get('registry');
 
 		if (!is_null($registry)) {
@@ -216,6 +228,6 @@ class DPCalendarCalDavServer extends JApplicationCms
 	}
 }
 
-$app = JApplicationWeb::getInstance('DPCalendarCalDavServer');
+$app                   = JApplicationWeb::getInstance('DPCalendarCalDavServer');
 JFactory::$application = $app;
 $app->execute();

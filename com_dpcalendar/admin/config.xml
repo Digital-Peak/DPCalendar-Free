@@ -353,18 +353,19 @@
 			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_METER</option>
 			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_MILE</option>
 		</field>
-		<field name="map_show_event_as_popup" type="radio" class="btn-group" default="0"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_POPUP_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_POPUP_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
+		<field name="map_show_event_as_popup" type="list" default="0"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_DESC">
+			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_FULL</option>
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL</option>
+			<option value="2">JDISABLED</option>
 		</field>
 		<field name="map_popup_width" type="text" showon="map_show_event_as_popup:1"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_WIDTH_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_WIDTH_DESC"/>
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_DESC"/>
 		<field name="map_popup_height" type="text" default="500" showon="map_show_event_as_popup:1"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_HEIGHT_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_POPUP_HEIGHT_DESC"/>
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
 		<field name="map_view_show_my_only" type="radio" class="btn-group" default="0"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MY_ONLY_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MY_ONLY_DESC">

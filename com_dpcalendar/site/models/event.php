@@ -53,7 +53,7 @@ class DPCalendarModelEvent extends JModelItem
 				JPluginHelper::importPlugin('dpcalendar');
 				$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', [$pk]);
 				if (!empty($tmp)) {
-					$tmp[0]->params   = new Registry();
+					$tmp[0]->params   = new Registry($tmp[0]->params);
 					$this->_item[$pk] = $tmp[0];
 				} else {
 					$this->_item[$pk] = false;
@@ -88,6 +88,11 @@ class DPCalendarModelEvent extends JModelItem
 					$query->select('c.access AS category_access');
 					$query->join('LEFT', '#__categories AS c on c.id = a.catid');
 
+					// Join locations
+					$query->select("GROUP_CONCAT(v.id SEPARATOR ', ') location_ids");
+					$query->join('LEFT', '#__dpcalendar_events_location AS rel ON a.id = rel.event_id');
+					$query->join('LEFT', '#__dpcalendar_locations AS v ON rel.location_id = v.id');
+
 					// Join on series max/min
 					$query->select('min(ser.start_date) AS series_min_start_date, max(ser.end_date) AS series_max_end_date');
 					$query->join(
@@ -110,7 +115,7 @@ class DPCalendarModelEvent extends JModelItem
 					$nowDate  = $db->quote(JFactory::getDate()->toSql());
 
 					// Filter by published state.
-					$state = $this->getState('filter.published',[]);
+					$state = $this->getState('filter.published', []);
 					if (is_numeric($state)) {
 						$state = [$state];
 					}
@@ -134,9 +139,9 @@ class DPCalendarModelEvent extends JModelItem
 						throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 					}
 
+					JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 					if (!DPCalendarHelper::isFree()) {
-						JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-						$ticketsModel = JModelLegacy::getInstance('Tickets', 'DPCalendarModel');
+						$ticketsModel = JModelLegacy::getInstance('Tickets', 'DPCalendarModel', ['ignore_request' => true]);
 						$ticketsModel->getState();
 						$ticketsModel->setState('filter.event_id', $data->id);
 						$ticketsModel->setState('filter.public', $this->getState('filter.public'));
@@ -144,24 +149,14 @@ class DPCalendarModelEvent extends JModelItem
 						$data->tickets = $ticketsModel->getItems();
 					}
 
-					$locationQuery = $db->getQuery(true);
-					$locationQuery->select('a.*');
-					$locationQuery->from('#__dpcalendar_locations AS a');
-
-					$locationQuery->join(
-						'RIGHT',
-						'#__dpcalendar_events_location AS rel on rel.event_id = ' . (int)$pk . ' and rel.location_id = a.id'
-					);
-					$locationQuery->where('state = 1');
-					$locationQuery->order('ordering asc');
-					$db->setQuery($locationQuery);
-					$data->locations = $db->loadObjectList();
-					foreach ($data->locations as $location) {
-						$location->rooms = json_decode($location->rooms);
-
-						if (empty($location->color)) {
-							$location->color = \DPCalendar\Helper\Location::getColor($location);
-						}
+					$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+					$model->getState();
+					$model->setState('list.ordering', 'ordering');
+					$model->setState('list.direction', 'asc');
+					$data->locations = [];
+					if (!empty($data->location_ids)) {
+						$model->setState('filter.search', 'ids:' . $data->location_ids);
+						$data->locations = $model->getItems();
 					}
 
 					// Convert parameter fields to objects.
@@ -256,6 +251,11 @@ class DPCalendarModelEvent extends JModelItem
 		$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
 		$model->setState('list.limit', 5);
 		$model->setState('filter.expand', true);
+
+		$startDate = DPCalendarHelper::getDate($event->start_date);
+		// We do not want to have the current event in the series
+		$startDate->modify('+1 second');
+		$model->setState('list.start-date', $startDate);
 
 		return $model;
 	}

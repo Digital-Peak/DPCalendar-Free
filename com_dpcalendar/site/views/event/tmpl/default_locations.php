@@ -36,7 +36,7 @@ if (!$this->event->locations || !$this->params->get('event_show_location', '2'))
 			<div class="dp-location">
 				<h<?php echo $this->heading + 3; ?> class="dp-heading dp-heading_small">
 					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
-					<?php if ($this->user->authorise('core.edit', 'com_dpcalendar')) { ?>
+					<?php if ($location->params->get('access-edit')) { ?>
 						<a href="<?php echo $this->router->getLocationFormRoute($location->id, JUri::getInstance()); ?>"
 						   class="dp-link dp-location__edit-link">
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EDIT]); ?>

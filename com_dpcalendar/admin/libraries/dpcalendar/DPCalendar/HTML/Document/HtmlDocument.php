@@ -45,7 +45,7 @@ class HtmlDocument
 	public function loadScriptFile($path, $extension = 'com_dpcalendar')
 	{
 		if (strpos($path, '//') === 0 || strpos($path, 'https://') === 0) {
-			\JFactory::getDocument()->addScript($path);
+			\JFactory::getDocument()->addScript($path, [], ['defer' => true]);
 
 			return;
 		}
@@ -63,8 +63,8 @@ class HtmlDocument
 				$this->loadScriptFile('/polyfill/promise.js');
 			}
 
-			// Load systemjs
-			$this->loadScriptFile('systemjs/systemjs.js');
+			// Load DPCalendar loader
+			$this->loadScriptFile('dpcalendar/loader.js');
 		}
 
 		$path = str_replace('.js', '.min.js', $path);

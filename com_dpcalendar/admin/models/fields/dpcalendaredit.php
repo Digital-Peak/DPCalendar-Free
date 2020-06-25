@@ -36,14 +36,14 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 
 		if (empty($calendar) || $calendar->external) {
 			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch', [null, !empty($calendar->system) ? $calendar->system : null]);
+			$tmp = $app->triggerEvent('onCalendarsFetch', [null, !empty($calendar->system) ? $calendar->system : null]);
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
 					foreach ($calendars as $externalCalendar) {
 						if (!$externalCalendar->canCreate && !$externalCalendar->canEdit) {
 							continue;
 						}
-						$options[] = JHtml::_('select.option', $externalCalendar->id, '- ' . $externalCalendar->title);
+						$options[] = JHtml::_('select.option', $externalCalendar->id, $externalCalendar->title);
 					}
 				}
 			}
@@ -52,11 +52,13 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
 		$ids = [];
 		if ($app->isClient('site')) {
 			$activeMenu = $app->getMenu()->getActive();
-			if (isset($activeMenu) && $app->input->get('option') == 'com_dpcalendar') {
-				$params = $activeMenu->params;
-				$ids    = $params->get('ids', []);
+			if ($activeMenu && $app->input->get('option') == 'com_dpcalendar') {
+				$ids = $activeMenu->params->get('ids', []);
 			}
 		}
+
+		// Reset keys, so we can reorder properly
+		$options = array_values($options);
 
 		$toMove = [];
 		for ($i = 0; $i < count($options); $i++) {

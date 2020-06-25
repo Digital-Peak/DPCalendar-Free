@@ -20,8 +20,15 @@ defined('_JEXEC') or die();
 					<?php echo $location->title; ?>
 				</a>
 			</h2>
-			<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
-				<div class="dp-location__buttons dp-button-bar">
+			<div class="dp-location__buttons dp-button-bar">
+				<?php if ($location->params->get('access-edit')) { ?>
+					<button type="button" class="dp-button dp-button-action dp-button-edit"
+							data-href="<?php echo $this->router->getLocationFormRoute($location->id, JUri::getInstance()); ?>">
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EDIT]); ?>
+						<?php echo $this->translate('JACTION_EDIT'); ?>
+					</button>
+				<?php } ?>
+				<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 					<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
 							data-href="<?php echo \DPCalendar\Helper\Location::getMapLink($location); ?>">
 						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAP]); ?>
@@ -34,8 +41,8 @@ defined('_JEXEC') or die();
 						<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
 						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
 					</button>
-				</div>
-			<?php } ?>
+				<?php } ?>
+			</div>
 			<div class="dp-location__details"
 				 data-latitude="<?php echo $location->latitude; ?>"
 				 data-longitude="<?php echo $location->longitude; ?>"

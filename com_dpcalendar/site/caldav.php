@@ -8,8 +8,6 @@
 define('_JEXEC', 1);
 define('DS', DIRECTORY_SEPARATOR);
 
-use Joomla\Registry\Registry;
-
 $path = dirname(dirname(dirname(__FILE__)));
 if (isset($_SERVER["SCRIPT_FILENAME"])) {
 	$path = dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"])));
@@ -22,13 +20,10 @@ require_once JPATH_BASE . '/includes/framework.php';
 JLoader::import('joomla.user.authentication');
 JLoader::import('joomla.application.component.helper');
 
-JLog::addLogger([
-	'text_file' => 'com_dpcalendar.caldav.errors.php'
-], JLog::ALL, 'com_dpcalendar');
+JLog::addLogger(['text_file' => 'com_dpcalendar.caldav.errors.php'], JLog::ALL, 'com_dpcalendar');
 
 class DPCalendarCalDavServer extends JApplicationCms
 {
-
 	public function __construct(JInput $input = null, JRegistry $config = null, JApplicationWebClient $client = null)
 	{
 		JFactory::getConfig()->set('caching', 0);
@@ -39,7 +34,6 @@ class DPCalendarCalDavServer extends JApplicationCms
 
 	public function doExecute()
 	{
-
 		function exception_error_handler($errno, $errstr, $errfile, $errline)
 		{
 			JLog::add('Something crashed during a CalDAV request on ' . $errfile . ' ' . $errline . PHP_EOL . $errstr, JLog::ERROR, 'com_dpcalendar');
@@ -53,6 +47,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 			}
 			throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
 		}
+
 		set_error_handler("exception_error_handler");
 
 		try {

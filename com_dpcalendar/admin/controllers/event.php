@@ -13,7 +13,6 @@ JLoader::import('joomla.application.component.controllerform');
 
 class DPCalendarControllerEvent extends JControllerForm
 {
-
 	protected function allowAdd($data = [])
 	{
 		// Initialise variables.
@@ -37,22 +36,21 @@ class DPCalendarControllerEvent extends JControllerForm
 
 	protected function allowEdit($data = [], $key = 'id')
 	{
-		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
-		$event    = null;
+		$event = null;
 
+		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
 		if ($recordId) {
 			$event = $this->getModel()->getItem($recordId);
 		}
 
-		if ($event != null) {
+		if ($event != null && $event->id) {
 			$calendar = DPCalendarHelper::getCalendar($event->catid);
 
 			return $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == JFactory::getUser()->id);
-		} else {
-			// Since there is no asset tracking, revert to the component
-			// permissions.
-			return parent::allowEdit($data, $key);
 		}
+
+		// Since there is no asset tracking, revert to the component permissions
+		return parent::allowEdit($data, $key);
 	}
 
 	public function save($key = null, $urlVar = 'e_id')
@@ -63,6 +61,23 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		if (!key_exists('color', $data)) {
 			$data['color'] = '';
+		}
+
+		if (!empty($data['location_ids'])) {
+			foreach ($data['location_ids'] as $index => $locationId) {
+				if (is_numeric($locationId)) {
+					continue;
+				}
+
+				list($title, $coordinates) = explode(' [', $locationId);
+
+				$location = \DPCalendar\Helper\Location::get(trim($coordinates, ']'), true, $title);
+				if (!$location->id) {
+					unset($data['location_ids'][$index]);
+					continue;
+				}
+				$data['location_ids'][$index] = $location->id;
+			}
 		}
 
 		$this->input->post->set('jform', $data);
@@ -188,11 +203,11 @@ class DPCalendarControllerEvent extends JControllerForm
 			$item->value   = $e->id;
 			$item->title   = $e->title;
 			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' . strip_tags(JHtml::_(
-				'string.truncate',
-				$e->description,
-				100
-			));
-			$data[] = $item;
+					'string.truncate',
+					$e->description,
+					100
+				));
+			$data[]        = $item;
 		}
 
 		DPCalendarHelper::sendMessage(null, false, $data);
@@ -232,6 +247,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		$model->setState('filter.language', $data['language']);
 		$model->setState('list.start-date', $startDate);
 		$model->setState('list.end-date', $endDate);
+		$model->setState('list.local-date', true);
 
 		if (DPCalendarHelper::getComponentParameter('event_form_check_overlaping_locations')) {
 			if (!empty($data['location_ids'])) {
@@ -268,7 +284,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		$date                 = strip_tags(DPCalendarHelper::getDateStringFromEvent($event));
 		$message              = DPCalendarHelper::renderEvents(
 			$events,
-			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
+			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
 			null,
 			[
 				'checkDate'    => $date,

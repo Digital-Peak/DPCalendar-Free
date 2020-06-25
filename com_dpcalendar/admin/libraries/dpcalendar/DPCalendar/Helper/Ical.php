@@ -214,23 +214,25 @@ class Ical
 
 				// Find deleted events
 				$exdates = [];
-				foreach ($cal->VEVENT as $vevent) {
-					$found = false;
-					$date  = \DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
+				if ($cal->VEVENT) {
+					foreach ($cal->VEVENT as $vevent) {
+						$found = false;
+						$date  = \DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
 
-					$dateFormatted = $event->all_day ? $date->format('Ymd') : $date->format('Ymd\THis\Z');
+						$dateFormatted = $event->all_day ? $date->format('Ymd') : $date->format('Ymd\THis\Z');
 
-					// Trying to find the instance for the actual recurrence id date
-					foreach ($instances as $e) {
-						if ($dateFormatted == $e->recurrence_id) {
-							$found = true;
-							break;
+						// Trying to find the instance for the actual recurrence id date
+						foreach ($instances as $e) {
+							if ($dateFormatted == $e->recurrence_id) {
+								$found = true;
+								break;
+							}
 						}
-					}
 
-					if (!$found) {
-						// No instance was found, adding it to the exdates
-						$exdates[] = $dateFormatted;
+						if (!$found) {
+							// No instance was found, adding it to the exdates
+							$exdates[] = $dateFormatted;
+						}
 					}
 				}
 				if ($exdates) {

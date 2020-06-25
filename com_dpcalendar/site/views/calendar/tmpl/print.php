@@ -7,7 +7,7 @@
  */
 defined('_JEXEC') or die();
 
-if ($this->params->get('show_map', 1) && $this->getLayout() != 'print') {
+if ($this->params->get('show_map', 1) == 1) {
 	$this->layoutHelper->renderLayout('block.map', $this->displayData);
 }
 
@@ -32,4 +32,5 @@ $this->loadTemplate('options');
 	<div class="com-dpcalendar-calendar__custom-text">
 		<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('textafter'))); ?>
 	</div>
+	<?php echo $this->loadTemplate('icons'); ?>
 </div>

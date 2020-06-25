@@ -34,7 +34,8 @@ $checkinUrl = 'index.php?option=com_dpcalendar&task=event.checkin';
 $checkinUrl .= '&e_id=' . $event->id;
 $checkinUrl .= '&' . JSession::getFormToken() . '=1';
 
-$return = JUri::getInstance(!empty($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : 'index.php?ItemId=' . $this->input->getInt('Itemid', 0));
+$return = JUri::getInstance(!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'layout=edit') === false ?
+	$_SERVER['HTTP_REFERER'] : 'index.php?ItemId=' . $this->input->getInt('Itemid', 0));
 
 $deleteUrl = 'index.php?option=com_dpcalendar&task=event.delete&tmpl=';
 $deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return) . '&e_id=';

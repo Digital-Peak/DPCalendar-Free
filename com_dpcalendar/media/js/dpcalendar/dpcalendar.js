@@ -40,13 +40,17 @@
 				document.querySelector('.tingle-modal-box').style.width = width;
 			}
 
+			if (!height) {
+				height = '80vh';
+			}
+
 			if (!isNaN(height)) {
 				height = height + 'px';
 			}
 
 			const urlObject = new Url(url);
 			urlObject.query.tmpl = 'component';
-			modal.setContent('<iframe width="100%" height="' + height + '" src="' + urlObject.toString() + '" frameborder="0" allowfullscreen></iframe>');
+			modal.setContent('<iframe style="width:100%; height:' + height + '" src="' + urlObject.toString() + '" frameborder="0" allowfullscreen></iframe>');
 			modal.open();
 		});
 	};
@@ -234,6 +238,10 @@
 				} catch (e) {
 					if (document.getElementById('system-message-container')) {
 						Joomla.renderMessages({error: [url + '<br>' + e.message]});
+					}
+
+					if (window.console) {
+						console.log(e);
 					}
 				}
 			},

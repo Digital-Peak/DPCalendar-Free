@@ -16,7 +16,7 @@ defined('_JEXEC') or die();
 	   data-format="<?php echo $displayData['dateHelper']->convertPHPDateToMoment($displayData['format']); ?>"
 	   data-time="<?php echo $displayData['date']->format('H:i:s', true); ?>"
 	   data-pair="<?php echo $displayData['pair']; ?>"
-	   data-min="<?php echo $displayData['min']; ?>"
-	   data-max="<?php echo $displayData['max']; ?>"
+	   data-min-time="<?php echo $displayData['min']; ?>"
+	   data-max-time="<?php echo $displayData['max']; ?>"
 	   data-step="<?php echo $displayData['step']; ?>"
 >

@@ -21,17 +21,17 @@
 }
 
 @media screen and (max-width: 640px) {
-	.com-dpcalendar-country .dp-control, .com-dpcalendar-country .control-group {
+	.com-dpcalendar-country .dp-control:not(.dp-control_hidden), .com-dpcalendar-country .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-country .dp-control__label, .com-dpcalendar-country .control-group .control-label, .com-dpcalendar-country .dp-control__input, .com-dpcalendar-country .control-group .controls {
+	.com-dpcalendar-country .dp-control:not(.dp-control_hidden)__label, .com-dpcalendar-country .control-group:not(.dp-control_hidden)__label, .com-dpcalendar-country .dp-control:not(.dp-control_hidden)__input, .com-dpcalendar-country .control-group:not(.dp-control_hidden)__input {
 		width: 100%;
 		margin-left: 0;
 	}
-	.com-dpcalendar-country .control-group {
+	.com-dpcalendar-country .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-country .control-group control-label, .com-dpcalendar-country .control-group controls {
+	.com-dpcalendar-country .control-group:not(.dp-control_hidden) control-label, .com-dpcalendar-country .control-group:not(.dp-control_hidden) controls {
 		width: 100%;
 		margin-left: 0;
 	}

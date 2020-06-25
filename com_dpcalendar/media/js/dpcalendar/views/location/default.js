@@ -9,6 +9,7 @@
 	 */
 
 	document.addEventListener('DOMContentLoaded', () => {
+		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js']);
 		if (document.querySelector('.com-dpcalendar-location__map')) {
 			loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => {
 				if (document.querySelector('.com-dpcalendar-location__resource')) {

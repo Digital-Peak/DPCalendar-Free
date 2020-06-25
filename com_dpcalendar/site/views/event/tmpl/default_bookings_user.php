@@ -21,7 +21,7 @@ if (!$this->event->user_discount) {
 				<?php echo $this->event->user_discount->label[$index] ?: $this->translate('COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL'); ?>
 			</span>
 			<span class="dp-userdiscount__content">
-				<?php echo $this->event->user_discount->type[$index] == 'value' ? DPCalendarHelper::renderPrice($value) : $value . ' %'; ?>
+				<?php echo $this->event->user_discount->type[$index] == 'value' ? DPCalendarHelper::renderPrice($value) : $value . '%'; ?>
 			</span>
 			<span class="dp-userdiscount__description">
 				<?php echo $this->event->user_discount->description[$index]; ?>

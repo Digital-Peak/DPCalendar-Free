@@ -7,7 +7,6 @@
  */
 defined('_JEXEC') or die();
 
-
 class DPCalendarViewLocationForm extends \DPCalendar\View\BaseView
 {
 	public function display($tpl = null)

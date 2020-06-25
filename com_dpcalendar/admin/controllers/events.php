@@ -87,7 +87,7 @@ class DPCalendarControllerEvents extends JControllerAdmin
 					return $event->$name;
 			}
 		};
-		DPCalendarHelper::exportCsv('event', $fields, $parser);
+		DPCalendarHelper::exportCsv('adminevent', $fields, $parser);
 	}
 
 	public function featured()

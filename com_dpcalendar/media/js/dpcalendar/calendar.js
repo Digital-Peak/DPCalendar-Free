@@ -47,7 +47,7 @@
 		[].slice.call(calendar.parentElement.querySelectorAll('.com-dpcalendar-calendar__list .dp-input-checkbox')).forEach((input) => {
 			calendarIds.forEach((calId) => {
 				if (calId == input.value) {
-					input.setAttribute('checked', true);
+					input.checked = true;
 				}
 			});
 
@@ -85,6 +85,17 @@
 				localStorage.setItem(options['storageId'], JSON.stringify(calendarIds));
 			});
 		});
+
+		// The toggle all checkbox
+		const toggleBoxes = document.querySelector('.com-dpcalendar-calendar__list-toggle .dp-input-checkbox');
+		if (toggleBoxes) {
+			toggleBoxes.addEventListener('click', () => {
+				[].slice.call(document.querySelectorAll('.com-dpcalendar-calendar__calendar-description .dp-input-checkbox')).forEach((input) => {
+					input.checked = !toggleBoxes.checked;
+					input.click();
+				});
+			});
+		}
 	}
 
 	/**
@@ -152,6 +163,7 @@
 	function setup(calendar, options)
 	{
 		const viewMapping = getMappings(options);
+		const viewMappingReverse = getReversMappings(options);
 
 		if (options['use_hash']) {
 			// Parsing the hash
@@ -181,7 +193,7 @@
 		options['defaultView'] = viewMapping[options['defaultView']];
 
 		// Loading the list view when we have a small screen
-		if (document.body.clientWidth < options['screen_size_list_view']) {
+		if (document.body.clientWidth < options['screen_size_list_view'] && viewMappingReverse[options['defaultView']] != 'day') {
 			options['defaultView'] = viewMapping['list'];
 		}
 
@@ -501,6 +513,23 @@
 		}
 	}
 
+	function adaptIcons(calendar)
+	{
+		const iconHandler = (iconName, buttonName) => {
+			const icon = calendar.parentElement.querySelector('.dp-icon_' + iconName);
+			const button = calendar.parentElement.querySelector('.fc-' + buttonName + '-button .fc-icon');
+			if (icon === null || button === null) {
+				return;
+			}
+			button.appendChild(icon.cloneNode(true));
+		};
+		iconHandler('angle-left', 'prev');
+		iconHandler('angle-right', 'next');
+		iconHandler('calendar', 'datepicker');
+		iconHandler('print', 'print');
+		iconHandler('plus', 'add');
+	}
+
 	/**
 	 * @package   DPCalendar
 	 * @author    Digital Peak http://www.digital-peak.com
@@ -510,21 +539,12 @@
 
 	function setup$4(calendar, options)
 	{
-		const viewMapping = getMappings(options);
-		const viewMappingReverse = getReversMappings(options);
-
-		options['datesRender'] = (info) => {
-			// Setting the hash based on the actual view
-			const d = calendar.dpCalendar.getDate();
-			const newHash = 'year=' + d.getUTCFullYear() + '&month=' + (d.getUTCMonth() + 1) + '&day=' + d.getUTCDate() + '&view=' + viewMappingReverse[info.view.type];
-			if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
-				window.location.hash = newHash;
-			}
-		};
-
 		if (!options['use_hash']) {
 			return;
 		}
+
+		const viewMapping = getMappings(options);
+		const viewMappingReverse = getReversMappings(options);
 
 		// Listening for hash/url changes
 		window.addEventListener('hashchange', () => {
@@ -533,21 +553,20 @@
 			let tmpMonth = today.getUTCMonth() + 1;
 			let tmpDay = today.getUTCDate();
 			let tmpView = viewMappingReverse[options['defaultView']];
-			let consts = window.location.hash.replace(/&amp;/gi, '&').split('&');
-			for (let i = 0; i < consts.length; i++) {
-				if (consts[i].match('^#year')) {
-					tmpYear = consts[i].substring(6);
+			window.location.hash.replace(/&amp;/gi, '&').split('&').forEach((value) => {
+				if (value.match('^#year')) {
+					tmpYear = value.substring(6);
 				}
-				if (consts[i].match('^month')) {
-					tmpMonth = consts[i].substring(6) - 1;
+				if (value.match('^month')) {
+					tmpMonth = value.substring(6) - 1;
 				}
-				if (consts[i].match('^day')) {
-					tmpDay = consts[i].substring(4);
+				if (value.match('^day')) {
+					tmpDay = value.substring(4);
 				}
-				if (consts[i].match('^view')) {
-					tmpView = consts[i].substring(5);
+				if (value.match('^view')) {
+					tmpView = value.substring(5);
 				}
-			}
+			});
 
 			const date = new Date(Date.UTC(tmpYear, tmpMonth, tmpDay, 0, 0, 0));
 			const d = calendar.dpCalendar.getDate();
@@ -559,6 +578,17 @@
 				calendar.dpCalendar.changeView(viewMapping[tmpView]);
 			}
 		});
+	}
+
+	function adaptHash(info,calendar, options)
+	{
+		// Setting the hash based on the actual view
+		const viewMappingReverse = getReversMappings(options);
+		const d = calendar.dpCalendar.getDate();
+		const newHash = 'year=' + d.getUTCFullYear() + '&month=' + (d.getUTCMonth() + 1) + '&day=' + d.getUTCDate() + '&view=' + viewMappingReverse[info.view.type];
+		if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
+			window.location.hash = newHash;
+		}
 	}
 
 	/**
@@ -949,11 +979,9 @@
 	function createCalendar(calendar, options)
 	{
 		// Fullcalendar needs to be loaded first
-		loadDPAssets(['/com_dpcalendar/js/moment/moment.js', '/com_dpcalendar/js/fullcalendar/fullcalendar.js', '/com_dpcalendar/css/fullcalendar/fullcalendar.css'], () => {
+		loadDPAssets(['/com_dpcalendar/js/fullcalendar/fullcalendar.js', '/com_dpcalendar/css/fullcalendar/fullcalendar.css'], () => {
 			const assets = [
 				'/com_dpcalendar/js/popper/popper.js',
-				'/com_dpcalendar/js/fullcalendar/fullcalendar.js',
-				'/com_dpcalendar/css/fullcalendar/fullcalendar.css',
 				'/com_dpcalendar/js/dpcalendar/dpcalendar.js'
 			];
 
@@ -1011,6 +1039,11 @@
 					options['plugins'].push('resourceTimeGrid');
 				}
 
+				options['datesRender'] = (info) => {
+					adaptHash(info, calendar, options);
+					adaptIcons(calendar);
+				};
+
 				const cal = new FullCalendar.Calendar(calendar, options);
 				calendar.dpCalendar = cal;
 				cal.render();
@@ -1025,7 +1058,7 @@
 	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 	 */
 
-	loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
+	loadDPAssets(['/com_dpcalendar/js/moment/moment.js'], () => {
 		[].slice.call(document.querySelectorAll('.dp-calendar')).forEach((el) => {
 			if (!el.getAttribute('data-options')) {
 				return;

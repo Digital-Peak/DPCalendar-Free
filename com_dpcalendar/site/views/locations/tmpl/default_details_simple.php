@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 <div class="com-dpcalendar-locations__details">
 	<?php foreach ($this->locations as $location) { ?>
 		<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
-		<div class=dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
+		<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 			<div class="dp-location__details"
 				 data-latitude="<?php echo $location->latitude; ?>"
 				 data-longitude="<?php echo $location->longitude; ?>"

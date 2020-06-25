@@ -7,13 +7,13 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 JLoader::import('joomla.application.component.modellist');
 
 class DPCalendarModelLocations extends JModelList
 {
-
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
@@ -94,10 +94,19 @@ class DPCalendarModelLocations extends JModelList
 			return [];
 		}
 
+		$user = JFactory::getUser();
 		foreach ($locations as $location) {
 			if (empty($location->color)) {
 				$location->color = \DPCalendar\Helper\Location::getColor($location);
 			}
+
+			$location->params = new Registry($location->params);
+			$location->params->set('access-edit',
+				$user->authorise('core.edit', 'com_dpcalendar')
+				|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $location->created_by == $user->id));
+			$location->params->set('access-delete',
+				$user->authorise('core.delete', 'com_dpcalendar')
+				|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $location->created_by == $user->id));
 
 			if (!is_string($location->rooms) || $location->rooms == '{}') {
 				$location->rooms = [];

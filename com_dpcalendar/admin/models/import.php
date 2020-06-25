@@ -68,12 +68,20 @@ class DPCalendarModelImport extends JModelLegacy
 			$events = JFactory::getApplication()->triggerEvent('onEventsFetch', [$cal->id, $start, $end, new Registry(['expand' => false])]);
 			$events = call_user_func_array('array_merge', (array)$events);
 
+			$startDateAsSQL = $start->toSql();
+			$endDateAsSQL   = $end->toSql();
 			$counter        = 0;
 			$counterUpdated = 0;
 			$filter         = strtolower($input->get('filter_search', ''));
 			foreach ($events as $event) {
 				$text = strtolower($event->title . ' ' . $event->description . ' ' . $event->url);
 				if (!empty($filter) && strpos($text, $filter) === false) {
+					continue;
+				}
+
+				// Check if the event is within the date range
+				if (($event->start_date < $startDateAsSQL && $event->end_date < $startDateAsSQL)
+					|| ($event->start_date > $startDateAsSQL && $event->end_date > $endDateAsSQL)) {
 					continue;
 				}
 

@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 $this->layoutHelper->renderLayout('block.map', $this->displayData);
 $this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/form/default.js');
+$this->dpdocument->loadStyleFile('dpcalendar/views/adminevent/default.css');
 
 if (DPCalendarHelper::isFree()) {
 	$this->translator->translateJS('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');
@@ -39,10 +40,17 @@ if (!empty($this->event->tickets)) {
 	<?php } ?>
 	<form class="com-dpcalendar-eventform__form dp-form form-validate" method="post" name="adminForm"
 		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id); ?>">
+		<div class="dp-form__title">
+			<?php echo $this->form->getField('title')->renderField(['class' => 'dp-field-title']); ?>
+			<?php echo $this->form->getField('alias')->renderField(['class' => 'dp-field-alias']); ?>
+		</div>
 		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
 			<?php echo JHtml::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<?php foreach ($this->form->getFieldset($name) as $field) { ?>
+				<?php if ($field->fieldname == 'title' || $field->fieldname == 'alias') { ?>
+					<?php continue; ?>
+				<?php } ?>
 				<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
 			<?php } ?>
 			<?php if ($name == 'location') { ?>

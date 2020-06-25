@@ -5,14 +5,12 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
 
 class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 {
-
 	public function init()
 	{
 		// Don't display errors as we want to send them nicely in the ajax response
@@ -28,11 +26,15 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 		if ($id = $this->input->getString('module-id')) {
 			$moduleParams = new Registry(JModuleHelper::getModuleById($id)->params);
 			$this->getModel()->setStateFromParams($moduleParams);
-			$this->params                = $moduleParams;
-			$this->displayData['params'] = $moduleParams;
+			$this->params->merge($moduleParams);
 		}
 
 		$this->items = $this->get('Items');
+
+		if ($this->getModel()->getError()) {
+			\DPCalendar\Helper\DPCalendarHelper::sendMessage($this->getModel()->getError(), true);
+			$this->app->close();
+		}
 
 		$this->compactMode = $this->input->getInt('compact', 0);
 		if ($this->compactMode == 1) {
@@ -50,17 +52,12 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 				[
 					[
 						'data'     => [],
-						'messages' => [
-							'error' => [
-								$error['message'] . ': <br/>' . $error['file'] . ' ' . $error['line']
-							]
-						]
+						'messages' => ['error' => [$error['message'] . ': <br/>' . $error['file'] . ' ' . $error['line']]]
 					]
 				]
 			);
 
-			// We always send ok as we want to be able to handle the error by
-			// our own
+			// We always send ok as we want to be able to handle the error by our own
 			header('Status: 200 Ok');
 			header('HTTP/1.0 200 Ok');
 			die();

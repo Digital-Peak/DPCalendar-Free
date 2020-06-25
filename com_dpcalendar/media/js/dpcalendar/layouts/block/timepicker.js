@@ -25,7 +25,7 @@
 			if (element.getAttribute('data-min-time')) {
 				const minTime = element.getAttribute('data-min-time').split(':');
 				minDate.set('hour', minTime[0]);
-				minDate.set('minute', minTime[0]);
+				minDate.set('minute', minTime[1]);
 			}
 
 			const maxDate = moment(date);
@@ -33,13 +33,13 @@
 			maxDate.set('minute', 59);
 			maxDate.set('second', 0);
 			if (element.getAttribute('data-max-time')) {
-				const minTime = element.getAttribute('data-max-time').split(':');
-				maxDate.set('hour', minTime[0]);
-				maxDate.set('minute', minTime[0]);
+				const maxTime = element.getAttribute('data-max-time').split(':');
+				maxDate.set('hour', maxTime[0]);
+				maxDate.set('minute', maxTime[1]);
 			}
 
 			const options = [];
-			while (minDate < maxDate) {
+			while (minDate <= maxDate) {
 				options.push({title: minDate.format(format), details: ''});
 				minDate.add(element.getAttribute('data-step'), 'minute');
 			}

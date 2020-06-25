@@ -248,6 +248,10 @@
 	margin-left: 10px;
 }
 
+.tingle-modal {
+	z-index: 1001 !important;
+}
+
 .tingle-modal-box__content {
 	padding: 1rem;
 }

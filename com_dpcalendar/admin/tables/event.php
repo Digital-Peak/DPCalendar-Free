@@ -7,15 +7,20 @@
  */
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarTableEvent extends JTable
 {
-
 	public function __construct(&$db = null)
 	{
-		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
+		if (!class_exists('DPCalendar\\Helper\\DPCalendarHelper')) {
+			// Needed for versions
+			JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+		}
+
+		if (DPCalendarHelper::isJoomlaVersion('4', '<')) {
 			JObserverMapper::addObserverClassToClass('JTableObserverTags', 'DPCalendarTableEvent', ['typeAlias' => 'com_dpcalendar.event']);
 			JObserverMapper::addObserverClassToClass(
 				'JTableObserverContenthistory',
@@ -31,8 +36,8 @@ class DPCalendarTableEvent extends JTable
 
 		$this->setColumnAlias('published', 'state');
 
-		$this->access         = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('event_form_access', $this->access);
-		$this->access_content = \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('event_form_access_content');
+		$this->access         = DPCalendarHelper::getComponentParameter('event_form_access', $this->access);
+		$this->access_content = DPCalendarHelper::getComponentParameter('event_form_access_content');
 	}
 
 	public function bind($array, $ignore = '')
@@ -284,6 +289,7 @@ class DPCalendarTableEvent extends JTable
 					$this->_db->qn('orderurl') . ' = ' . $this->_db->q($this->orderurl),
 					$this->_db->qn('canceltext') . ' = ' . $this->_db->q($this->canceltext),
 					$this->_db->qn('cancelurl') . ' = ' . $this->_db->q($this->cancelurl),
+					$this->_db->qn('terms') . ' = ' . $this->_db->q($this->terms),
 					$this->_db->qn('state') . ' = ' . $this->_db->q($this->state),
 					$this->_db->qn('checked_out') . ' = ' . $this->_db->q(0),
 					$this->_db->qn('checked_out_time') . ' = ' . $this->_db->q($this->_db->getNullDate()),
@@ -346,12 +352,9 @@ class DPCalendarTableEvent extends JTable
 		}
 
 		// Check for existing name
-		$query = 'SELECT id, original_id, alias FROM #__dpcalendar_events WHERE alias = ' . $this->_db->Quote($this->alias) . ' AND catid = ' .
-			(int)$this->catid;
-		$this->_db->setQuery($query);
-
+		$this->_db->setQuery('SELECT id, original_id, alias FROM #__dpcalendar_events WHERE alias = ' . $this->_db->quote($this->alias));
 		$xid = $this->_db->loadObject();
-		if ($xid && $xid->id != intval($this->id) && $xid->original_id == $this->original_id) {
+		if ($xid && $xid->id != (int)$this->id && (int)$xid->original_id == (int)$this->original_id) {
 			$this->alias = StringHelper::increment($this->alias, 'dash');
 		}
 
@@ -371,8 +374,7 @@ class DPCalendarTableEvent extends JTable
 			$this->publish_down = $temp;
 		}
 
-		// Clean up keywords -- eliminate extra spaces between phrases
-		// and cr (\r) and lf (\n) characters from string
+		// Clean up keywords -- eliminate extra spaces between phrases and cr (\r) and lf (\n) characters from string
 		if (!empty($this->metakey)) {
 			// Only process if not empty
 			$bad_characters = ["\n", "\r", "\"", "<", ">"];

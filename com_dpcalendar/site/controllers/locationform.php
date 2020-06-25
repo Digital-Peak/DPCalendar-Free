@@ -22,9 +22,38 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 		parent::__construct();
 	}
 
-	protected function allowDelete($data = [], $key = 'id')
+	protected function allowDelete($data = [], $key = 'l_id')
 	{
+		$location = null;
+
+		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
+		if ($recordId) {
+			$location = $this->getModel()->getItem($recordId);
+		}
+
+		if ($location != null && $location->id) {
+			return $location->params->get('access-delete');
+		}
+
+		// Since there is no asset tracking, revert to the component permissions
 		return JFactory::getUser()->authorise('core.delete', $this->option);
+	}
+
+	protected function allowEdit($data = [], $key = 'l_id')
+	{
+		$location = null;
+
+		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
+		if ($recordId) {
+			$location = $this->getModel()->getItem($recordId);
+		}
+
+		if ($location != null && $location->id) {
+			return $location->params->get('access-edit');
+		}
+
+		// Since there is no asset tracking, revert to the component permissions
+		return parent::allowEdit($data, $key);
 	}
 
 	public function save($key = null, $urlVar = 'l_id')

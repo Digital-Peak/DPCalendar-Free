@@ -7,11 +7,12 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\Utilities\ArrayHelper;
+
 JLoader::import('joomla.application.component.modellist');
 
 class DPCalendarModelProfile extends JModelList
 {
-
 	private $items = null;
 
 	public function __construct($config = [])
@@ -189,9 +190,17 @@ class DPCalendarModelProfile extends JModelList
 		$db    = JFactory::getDbo();
 		$query = $db->getQuery(true);
 
+		$query = $query->select('id')->from('#__users')->where('block = 0')->where('id != ' . (int)$user->id);
+		$db->setQuery($query);
+		$userIds = array_map(function ($data) {
+			return $data['id'];
+		}, $db->loadAssocList());
+		$userIds = ArrayHelper::toInteger($userIds);
+
+		$query = $db->getQuery(true);
 		$query->select('p.id AS value, p.displayname AS text');
 		$query->from($db->quoteName('#__dpcalendar_caldav_principals') . ' AS p');
-		$query->where('p.external_id != ' . (int)$user->id);
+		$query->where('p.external_id in (' . implode(',', $userIds) . ')');
 		$query->where('p.uri not like ' . $db->quote('%calendar-proxy-read%'));
 		$query->where('p.uri not like ' . $db->quote('%calendar-proxy-write%'));
 

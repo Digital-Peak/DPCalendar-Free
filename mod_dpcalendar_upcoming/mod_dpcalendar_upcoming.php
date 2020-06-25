@@ -19,9 +19,8 @@ $userHelper   = new \DPCalendar\Helper\UserHelper();
 $router       = new \DPCalendar\Router\Router();
 $translator   = new \DPCalendar\Translator\Translator();
 
-$cParams = clone JComponentHelper::getParams('com_dpcalendar');
-$params  = $cParams->merge($params);
-
+$cParams      = clone JComponentHelper::getParams('com_dpcalendar');
+$moduleParams = $cParams->merge($params);
 
 // The display data
 $displayData = [
@@ -32,7 +31,7 @@ $displayData = [
 	'translator'   => $translator,
 	'router'       => $router,
 	'input'        => $app->input,
-	'params'       => $params
+	'params'       => $moduleParams
 ];
 
 JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
@@ -41,13 +40,13 @@ JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', '
 
 $model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
 $model->getState();
-$model->setState('filter.parentIds', $params->get('ids', ['root']));
+$model->setState('filter.parentIds', $moduleParams->get('ids', ['root']));
 $ids = [];
 foreach ($model->getItems() as $calendar) {
 	$ids[] = $calendar->id;
 }
 
-$startDate = trim($params->get('start_date', ''));
+$startDate = trim($moduleParams->get('start_date', ''));
 if ($startDate == 'start of day') {
 	$startDate = $dateHelper->getDate(null, true, 'UTC');
 	$startDate->setTime(0, 0, 0);
@@ -59,7 +58,7 @@ if ($startDate == 'start of day') {
 $startDate->sub(new DateInterval("PT" . $startDate->format("s") . "S"));
 $startDate->sub(new DateInterval("PT" . ($startDate->format("i") % 15) . "M"));
 
-$endDate = trim($params->get('end_date', ''));
+$endDate = trim($moduleParams->get('end_date', ''));
 if ($endDate == 'same day') {
 	$endDate = clone $startDate;
 	$endDate->setTime(23, 59, 59);
@@ -74,37 +73,37 @@ if ($endDate == 'same day') {
 
 $model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 $model->getState();
-$model->setState('list.limit', $params->get('max_events', 5));
-$model->setState('list.direction', $params->get('order', 'asc'));
-$model->setState('list.ordering', 'a.' . $params->get('sort', 'start_date'));
+$model->setState('list.limit', $moduleParams->get('max_events', 5));
+$model->setState('list.direction', $moduleParams->get('order', 'asc'));
+$model->setState('list.ordering', 'a.' . $moduleParams->get('sort', 'start_date'));
 $model->setState('category.id', $ids);
 $model->setState('category.recursive', true);
-$model->setState('filter.search', $params->get('filter', ''));
-$model->setState('filter.ongoing', $params->get('ongoing', 0));
-$model->setState('filter.expand', $params->get('expand', 1));
+$model->setState('filter.search', $moduleParams->get('filter', ''));
+$model->setState('filter.ongoing', $moduleParams->get('ongoing', 0));
+$model->setState('filter.expand', $moduleParams->get('expand', 1));
 $model->setState('filter.state', [1, 3]);
 $model->setState('filter.language', JFactory::getLanguage());
 $model->setState('filter.publish_date', true);
 $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
-$model->setState('filter.my', $params->get('show_my_only', 0));
-$model->setState('filter.featured', $params->get('filter_featured', 0));
-$model->setState('filter.tags', $params->get('filter_tags', []));
-$model->setState('filter.locations', $params->get('filter_locations', []));
+$model->setState('filter.my', $moduleParams->get('show_my_only', 0));
+$model->setState('filter.featured', $moduleParams->get('filter_featured', 0));
+$model->setState('filter.tags', $moduleParams->get('filter_tags', []));
+$model->setState('filter.locations', $moduleParams->get('filter_locations', []));
 
 $events = $model->getItems();
 
-if (!$events && !$params->get('empty_text', 1)) {
+if (!$events && !$moduleParams->get('empty_text', 1)) {
 	return;
 }
 
-if ($params->get('sort', 'start_date') == 'start_date') {
+if ($moduleParams->get('sort', 'start_date') == 'start_date') {
 	// Sort the array by user date
-	usort($events, function ($e1, $e2) use ($dateHelper, $params) {
+	usort($events, function ($e1, $e2) use ($dateHelper, $moduleParams) {
 		$d1 = $dateHelper->getDate($e1->start_date, $e1->all_day);
 		$d2 = $dateHelper->getDate($e2->start_date, $e2->all_day);
 
-		if ($params->get('order', 'asc') !== 'asc') {
+		if ($moduleParams->get('order', 'asc') !== 'asc') {
 			$tmp = $d1;
 			$d1  = $d2;
 			$d2  = $tmp;
@@ -119,7 +118,7 @@ JPluginHelper::importPlugin('dpcalendar');
 $now = $dateHelper->getDate();
 
 // The grouping option
-$grouping = $params->get('output_grouping', '');
+$grouping = $moduleParams->get('output_grouping', '');
 
 // The last computed heading
 $lastHeading = '';
@@ -147,11 +146,10 @@ foreach ($events as $event) {
 	$event->realUrl = str_replace(
 		['?tmpl=component', 'tmpl=component'],
 		'',
-		$router->getEventRoute($event->id, $event->catid, false, true, $params->get('default_menu_item'))
+		$router->getEventRoute($event->id, $event->catid, false, true, $moduleParams->get('default_menu_item'))
 	);
 
 	$desc = $params->get('description_length') === '0' ? '' : JHTML::_('content.prepare', $event->description);
-
 	if ($desc && $params->get('description_length') > 0) {
 		$descTruncated = JHtmlString::truncateComplex($desc, $params->get('description_length', null));
 
@@ -179,12 +177,12 @@ foreach ($events as $event) {
 
 	// Determine if the event is running
 	$date = $dateHelper->getDate($event->start_date);
-	if (!empty($event->series_min_start_date) && !$params->get('expand', 1)) {
+	if (!empty($event->series_min_start_date) && !$moduleParams->get('expand', 1)) {
 		$date = $dateHelper->getDate($event->series_min_start_date);
 	}
 	$event->ongoing_start_date = $date < $now ? $date : null;
 
-	if ($params->get('show_display_events')) {
+	if ($moduleParams->get('show_display_events')) {
 		$event->displayEvent                    = new stdClass();
 		$results                                = $app->triggerEvent(
 			'onContentAfterTitle',
@@ -211,4 +209,4 @@ if (!empty($return)) {
 	$return = $router->route('index.php?Itemid=' . $return);
 }
 
-require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', $params->get('layout', 'default'));
+require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', $moduleParams->get('layout', 'default'));

@@ -62,7 +62,7 @@ $options['slotWidth']       = $this->params->get('locations_column_width');
 $options['smallTimeFormat'] = $this->dateHelper->convertPHPDateToMoment($this->params->get('timeformat_day', 'g:i a'));
 
 $options['resources']         = $this->resources;
-$options['resourceLabelText'] = $this->translate('COM_DPCALENDAR_VIEW_LOCATION_LOCATIONS_AND_ROOMS');
+$options['resourceLabelText'] = $this->translate('COM_DPCALENDAR_VIEW_LOCATIONS_LOCATIONS_AND_ROOMS');
 
 $options['views']             = [];
 $options['views']['resyear']  = [
@@ -82,6 +82,18 @@ $options['views']['resday']   = [
 	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_day', 'g:i a'))
 ];
 
+$max = $this->params->get('locations_max_time', 24);
+if (is_numeric($max)) {
+	$max = $max . ':00:00';
+}
+$options['maxTime'] = $max;
+
+$min = $this->params->get('locations_min_time', 0);
+if (is_numeric($min)) {
+	$min = $min . ':00:00';
+}
+$options['minTime'] = $min;
+
 $options['use_hash']          = true;
 $options['event_create_form'] = 2;
 
@@ -96,6 +108,5 @@ if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
 
 $this->dpdocument->addScriptOptions('view.locations.' . $this->input->getInt('Itemid', 0) . '.options', $options);
 ?>
-<div class="com-dpcalendar-locations__resource">
-	<div class="dp-calendar" data-options="DPCalendar.view.locations.<?php echo $this->input->getInt('Itemid', 0); ?>.options"></div>
-</div>
+<div class="com-dpcalendar-locations__resource dp-calendar"
+	 data-options="DPCalendar.view.locations.<?php echo $this->input->getInt('Itemid', 0); ?>.options"></div>

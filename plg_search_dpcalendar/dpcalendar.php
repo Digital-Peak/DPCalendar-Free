@@ -47,13 +47,14 @@ class PlgSearchDPCalendar extends JPlugin
 
 		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
-		$model->setState('list.limit', $this->params->def('search_limit', 50));
+		$model->setState('list.limit', $this->params->get('search_limit', 50));
 		$model->setState('category.id', 'root');
 		$model->setState('category.recursive', true);
 		$model->setState('filter.ongoing', 1);
 		$model->setState('filter.expand', true);
+		$model->setState('filter.my', $this->params->get('show_my_only', 0));
 
-		if ($this->params->def('pastevents', 1)) {
+		if ($this->params->get('pastevents', 1)) {
 			$model->setState('list.start-date', 0);
 		} else {
 			$model->setState('list.start-date', DPCalendarHelper::getDate()->format('U'));

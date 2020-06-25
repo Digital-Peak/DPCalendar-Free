@@ -186,8 +186,8 @@
 			return;
 		}
 
+		let selected = 0;
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform .dp-event')).forEach((event) => {
-			let selected = 0;
 			const events = [].slice.call(event.querySelectorAll('.dp-ticket__amount .dp-select'));
 			events.forEach((select) => {
 				selected += parseInt(select.options[select.selectedIndex].value);
@@ -196,14 +196,14 @@
 			events.forEach((select) => {
 				if (selected > event.getAttribute('data-ticket-count') && parseInt(select.options[select.selectedIndex].value) > 0) {
 					select.classList.add('dp-select_error');
-				} else {
-					select.classList.remove('dp-select_error');
+					return;
 				}
+
+				select.classList.remove('dp-select_error');
 			});
 		});
 
 		const taxElement = document.querySelector('.com-dpcalendar-bookingform .dp-tax');
-
 		if (document.querySelectorAll('.com-dpcalendar-bookingform .dp-ticket__amount .dp-select_error').length > 0) {
 			document.querySelector('.com-dpcalendar-bookingform .dp-price-total__content').innerHTML = '';
 			Joomla.renderMessages({error: [Joomla.JText._('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOKED_MESSAGE')]});
@@ -214,6 +214,10 @@
 			}
 
 			return;
+		}
+
+		if (selected === 0 && saveButton) {
+			saveButton.disabled = true;
 		}
 
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {

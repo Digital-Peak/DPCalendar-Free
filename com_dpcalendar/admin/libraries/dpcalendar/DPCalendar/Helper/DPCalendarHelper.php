@@ -790,7 +790,7 @@ class DPCalendarHelper
 		fseek($f, 0);
 		// echo stream_get_contents($f);die;
 		header('Content-Type: application/csv');
-		header('Content-Disposition: attachement; filename="' . $name . 's-' . date('YmdHi') . '.csv";');
+		header('Content-Disposition: attachement; filename="' . str_replace('admin', '', $name) . 's-' . date('YmdHi') . '.csv";');
 		fpassthru($f);
 
 		\JFactory::getApplication()->close();

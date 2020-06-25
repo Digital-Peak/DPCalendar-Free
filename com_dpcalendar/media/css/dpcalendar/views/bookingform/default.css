@@ -94,17 +94,17 @@
 }
 
 @media screen and (max-width: 640px) {
-	.com-dpcalendar-bookingform .dp-control, .com-dpcalendar-bookingform .control-group {
+	.com-dpcalendar-bookingform .dp-control:not(.dp-control_hidden), .com-dpcalendar-bookingform .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-bookingform .dp-control__label, .com-dpcalendar-bookingform .control-group .control-label, .com-dpcalendar-bookingform .dp-control__input, .com-dpcalendar-bookingform .control-group .controls {
+	.com-dpcalendar-bookingform .dp-control:not(.dp-control_hidden)__label, .com-dpcalendar-bookingform .control-group:not(.dp-control_hidden)__label, .com-dpcalendar-bookingform .dp-control:not(.dp-control_hidden)__input, .com-dpcalendar-bookingform .control-group:not(.dp-control_hidden)__input {
 		width: 100%;
 		margin-left: 0;
 	}
-	.com-dpcalendar-bookingform .control-group {
+	.com-dpcalendar-bookingform .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-bookingform .control-group control-label, .com-dpcalendar-bookingform .control-group controls {
+	.com-dpcalendar-bookingform .control-group:not(.dp-control_hidden) control-label, .com-dpcalendar-bookingform .control-group:not(.dp-control_hidden) controls {
 		width: 100%;
 		margin-left: 0;
 	}

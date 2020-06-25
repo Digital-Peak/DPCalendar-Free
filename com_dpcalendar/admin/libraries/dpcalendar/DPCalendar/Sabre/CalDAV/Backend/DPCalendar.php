@@ -369,7 +369,6 @@ class DPCalendar extends CalDAV\Backend\PDO
 		 *     $dpEvent->description = $vEvent->{'X-ALT-DESC'}->getValue();
 		 * }
 		 */
-
 		if (isset($vEvent->{'X-COLOR'}) && $vEvent->{'X-COLOR'}->getValue()) {
 			$dpEvent->color = $vEvent->{'X-COLOR'}->getValue();
 		}
@@ -430,7 +429,12 @@ class DPCalendar extends CalDAV\Backend\PDO
 			'DPCalendarModel',
 			['event_before_save' => 'nooperationtocatch', 'event_after_save' => 'nooperationtocatch']
 		);
-		$model->save($dpEvent->getProperties());
+
+		// Unset capacity, otherwise it will default to null which is unlimited, but we want the default value
+		$data = $dpEvent->getProperties();
+		unset($data['capacity']);
+
+		$model->save($data);
 
 		if ($model->getError()) {
 			throw new \Sabre\DAV\Exception\BadRequest('Error happened storing the event: ' . $model->getError());

@@ -291,18 +291,18 @@
 			document.getElementById('jform_end_date_time').style.display = 'none';
 		}
 
+		const check = DPCalendar.debounce(checkOverlapping, 2000);
 		[].slice.call(document.querySelectorAll('#jform_start_date, #jform_start_date_time, #jform_end_date, #jform_end_date_time, #jform_rooms')).forEach((input) => {
-			input.addEventListener('change', ((e) => {
-				setTimeout(checkOverlapping, 2000);
-			}));
+			// When the start date changes we need to wait till the end date get adjusted as well
+			input.addEventListener('change', check);
 		});
 
 		document.getElementById('jform_catid').addEventListener('change', (e) => {
 			// Because of com_fields, we need to call it with a delay
-			setTimeout(checkOverlapping, 2000);
+			check();
 		});
 
-		setTimeout(checkOverlapping, 2000);
+		check();
 	}
 
 	function checkOverlapping()
@@ -314,7 +314,7 @@
 
 		box.style.display = 'none';
 
-		loadDPAssets(['/com_dpcalendar/js/domurl/url.js', '/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
+		loadDPAssets(['/com_dpcalendar/js/domurl/url.js'], () => {
 			// Chosen doesn't update the selected value
 			const url = new Url();
 			DPCalendar.request(
@@ -378,52 +378,46 @@
 		});
 
 		geoComplete.addEventListener('dp-autocomplete-select', (e) => {
-			loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
-				DPCalendar.request(
-					'task=event.newlocation',
-					(json) => {
-						if (json.data.id == null || json.data.display == null) {
-							return;
-						}
+			DPCalendar.request(
+				'task=event.newlocation',
+				(json) => {
+					if (json.data.id == null || json.data.display == null) {
+						return;
+					}
 
-						// Reset the input field
-						geoComplete.value = '';
+					// Reset the input field
+					geoComplete.value = '';
 
-						const select = document.getElementById('jform_location_ids');
-						if (select._choicejs.getValue(true).indexOf(json.data.id) != -1) {
-							return;
-						}
+					const select = document.getElementById('jform_location_ids');
+					if (select._choicejs.getValue(true).indexOf(json.data.id) != -1) {
+						return;
+					}
 
-						select._choicejs.setChoices(
-							[{
-								value: json.data.id ? json.data.id : json.data.display,
-								label: json.data.display,
-								selected: true
-							}],
-							'value',
-							'label'
-						);
+					select._choicejs.setChoices(
+						[{
+							value: json.data.id ? json.data.id : json.data.display,
+							label: json.data.display,
+							selected: true
+						}],
+						'value',
+						'label'
+					);
 
-						updateLocationFrame();
-					},
-					'lookup=' + e.detail.value + '&lookup_title=' + e.detail.title
-				);
-			});
+					updateLocationFrame();
+				},
+				'lookup=' + e.detail.value + '&lookup_title=' + e.detail.title
+			);
 		});
 
 		geoComplete.addEventListener('dp-autocomplete-change', (e) => {
-			loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
-				let task = 'location.searchloc';
-				if (window.location.href.indexOf('administrator') == -1) {
-					task = 'locationform.searchloc';
-				}
-				DPCalendar.request(
-					'task=' + task + '&loc=' + encodeURIComponent(e.target.value.trim()),
-					(json) => {
-						DPCalendar.autocomplete.setItems(geoComplete, json.data);
-					}
-				);
-			});
+			let task = 'location.searchloc';
+			if (window.location.href.indexOf('administrator') == -1) {
+				task = 'locationform.searchloc';
+			}
+			DPCalendar.request(
+				'task=' + task + '&loc=' + encodeURIComponent(e.target.value.trim()),
+				(json) => DPCalendar.autocomplete.setItems(geoComplete, json.data)
+			);
 		});
 	}
 
@@ -582,12 +576,14 @@
 	 */
 
 	document.addEventListener('DOMContentLoaded', () => {
-		setup();
-		setup$1();
-		setup$2();
-		setup$3();
-		setup$4();
-		setup$5();
+		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
+			setup();
+			setup$1();
+			setup$2();
+			setup$3();
+			setup$4();
+			setup$5();
+		});
 
 		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS')) {
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls')).forEach((el) => {

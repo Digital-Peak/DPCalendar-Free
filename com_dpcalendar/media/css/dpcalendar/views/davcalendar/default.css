@@ -63,17 +63,17 @@
 }
 
 @media screen and (max-width: 640px) {
-	.com-dpcalendar-davcalendar .dp-control, .com-dpcalendar-davcalendar .control-group {
+	.com-dpcalendar-davcalendar .dp-control:not(.dp-control_hidden), .com-dpcalendar-davcalendar .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-davcalendar .dp-control__label, .com-dpcalendar-davcalendar .control-group .control-label, .com-dpcalendar-davcalendar .dp-control__input, .com-dpcalendar-davcalendar .control-group .controls {
+	.com-dpcalendar-davcalendar .dp-control:not(.dp-control_hidden)__label, .com-dpcalendar-davcalendar .control-group:not(.dp-control_hidden)__label, .com-dpcalendar-davcalendar .dp-control:not(.dp-control_hidden)__input, .com-dpcalendar-davcalendar .control-group:not(.dp-control_hidden)__input {
 		width: 100%;
 		margin-left: 0;
 	}
-	.com-dpcalendar-davcalendar .control-group {
+	.com-dpcalendar-davcalendar .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-davcalendar .control-group control-label, .com-dpcalendar-davcalendar .control-group controls {
+	.com-dpcalendar-davcalendar .control-group:not(.dp-control_hidden) control-label, .com-dpcalendar-davcalendar .control-group:not(.dp-control_hidden) controls {
 		width: 100%;
 		margin-left: 0;
 	}

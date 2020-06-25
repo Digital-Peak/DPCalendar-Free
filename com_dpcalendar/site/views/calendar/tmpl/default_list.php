@@ -12,6 +12,16 @@ if ($this->params->get('show_selection', 1) == 2) {
 }
 ?>
 <div class="com-dpcalendar-calendar__list com-dpcalendar-calendar__list_<?php echo $this->params->get('show_selection', 1) == 3 ? '' : 'hidden'; ?>">
+	<?php if (count($this->doNotListCalendars) >= 10) { ?>
+		<dl class="com-dpcalendar-calendar__list-toggle dp-description">
+			<dt class="dp-description__label">
+				<input type="checkbox" id="calendars-toggle" class="dp-input dp-input-checkbox" checked>
+				<label for="calendars-toggle" class="dp-input-label">
+					<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOGGLE'); ?>
+				</label>
+			</dt>
+		</dl>
+	<?php } ?>
 	<?php foreach ($this->doNotListCalendars as $calendar) { ?>
 		<?php $style = 'background-color: #' . $calendar->color . ';'; ?>
 		<?php $style .= 'border-color: #' . $calendar->color . ';'; ?>

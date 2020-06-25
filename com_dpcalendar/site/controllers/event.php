@@ -543,6 +543,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		$model->setState('filter.language', $data['language']);
 		$model->setState('list.start-date', $startDate);
 		$model->setState('list.end-date', $endDate);
+		$model->setState('list.local-date', true);
 
 		if (DPCalendarHelper::getComponentParameter('event_form_check_overlaping_locations')) {
 			if (!empty($data['location_ids'])) {
@@ -577,7 +578,7 @@ class DPCalendarControllerEvent extends JControllerForm
 		$date                 = strip_tags(DPCalendarHelper::getDateStringFromEvent($event));
 		$message              = DPCalendarHelper::renderEvents(
 			$events,
-			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
+			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
 			null,
 			[
 				'checkDate'    => $date,

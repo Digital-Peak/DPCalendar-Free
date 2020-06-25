@@ -11,7 +11,6 @@ defined('_JEXEC') or die();
 
 abstract class CalDAVPlugin extends SyncPlugin
 {
-
 	abstract protected function createCalDAVEvent($uid, $icalData, $calendarId);
 
 	abstract protected function updateCalDAVEvent($uid, $icalData, $calendarId);
@@ -27,41 +26,42 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 		if (empty($oldEvent->original_id) || $oldEvent->original_id == '-1') {
 			$this->deleteCalDAVEvent($eventId, $calendarId);
-		} else {
-			$calendar = \DPCalendarHelper::getCalendar($oldEvent->catid);
 
-			\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
+			return true;
+		}
 
-			$c = \Sabre\VObject\Reader::read($this->getOriginalData($eventId, $calendarId));
+		\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
-			$original = null;
-			foreach ($c->children as $index => $tmp) {
-				if ($tmp->name != 'VEVENT') {
-					continue;
-				}
-				if ((string)$tmp->{'RECURRENCE-ID'} == $oldEvent->recurrence_id) {
-					unset($c->children[$index]);
-				}
-				if ($tmp->RRULE !== null) {
-					$original = $tmp;
-				}
+		$calendar = \DPCalendarHelper::getCalendar($oldEvent->catid);
+		$c = \Sabre\VObject\Reader::read($this->getOriginalData($eventId, $calendarId));
+
+		$original = null;
+		foreach ($c->children() as $index => $tmp) {
+			if ($tmp->name != 'VEVENT') {
+				continue;
 			}
-
-			$exdate = $original->EXDATE;
-			if ($exdate === null) {
-				$original->add('EXDATE', '');
-				$original->EXDATE->add('VALUE', 'DATE' . ($oldEvent->all_day ? '' : '-TIME'));
+			if ((string)$tmp->{'RECURRENCE-ID'} == $oldEvent->recurrence_id) {
+				unset($c->children()[$index]);
 			}
-			$rec = \DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd' . ($oldEvent->all_day ? '' : '\THis\Z'));
-
-			try {
-				$original->EXDATE = trim($exdate . ',' . $rec, ',');
-
-				// Echo '<pre>' . $c->serialize() . '</pre>'; die();
-				$this->updateCalDAVEvent($eventId, $c->serialize(), $calendarId);
-			} catch (\Sabre\VObject\Recur\NoInstancesException $e) {
-				$this->deleteCalDAVEvent($eventId, $calendarId);
+			if ($tmp->RRULE !== null) {
+				$original = $tmp;
 			}
+		}
+
+		$exdate = $original->EXDATE;
+		if ($exdate === null) {
+			$original->add('EXDATE', '');
+			$original->EXDATE->add('VALUE', 'DATE' . ($oldEvent->all_day ? '' : '-TIME'));
+		}
+		$rec = \DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd' . ($oldEvent->all_day ? '' : '\THis\Z'));
+
+		try {
+			$original->EXDATE = trim($exdate . ',' . $rec, ',');
+
+			// Echo '<pre>' . $c->serialize() . '</pre>'; die();
+			$this->updateCalDAVEvent($eventId, $c->serialize(), $calendarId);
+		} catch (\Sabre\VObject\Recur\NoInstancesException $e) {
+			$this->deleteCalDAVEvent($eventId, $calendarId);
 		}
 
 		return true;
@@ -69,7 +69,6 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 	public function saveEvent($eventId, $calendarId, array $data)
 	{
-		$params = $this->params;
 		try {
 			$calendar = \DPCalendarHelper::getCalendar($data['catid']);
 			$event    = null;

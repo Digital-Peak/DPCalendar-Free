@@ -28,7 +28,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 		}
 
 		$this->getModel()->setState('filter.my', $this->params->get('locations_show_my_only'));
-		$this->getModel()->setState('list.limit', 100);
+		$this->getModel()->setState('list.limit', 1000);
 		$this->getModel()->setState('filter.state', 1);
 		$this->locations = $this->get('Items');
 

@@ -38,7 +38,7 @@ $document->addScriptOptions('itemid', $app->input->getInt('Itemid', 0));
 
 // The options which will be passed to the js library
 $options                   = [];
-$options['requestUrlRoot'] = 'view=events&limit=0&format=raw&&compact=' . $params->get('compact_events', 2) .
+$options['requestUrlRoot'] = 'view=events&limit=0&format=raw&compact=' . $params->get('compact_events', 2) .
 	'&openview=' . $params->get('open_view', 'agendaDay') . '&module-id=' . $module->id . '&Itemid=' . $app->input->getInt('Itemid', 0);
 $options['calendarIds']    = [implode(',', $ids)];
 

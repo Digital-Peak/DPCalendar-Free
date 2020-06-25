@@ -7,6 +7,7 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarModelLocation extends JModelAdmin
@@ -15,13 +16,11 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	protected function canDelete($record)
 	{
-		if (!empty($record->id)) {
-			if ($record->state != -2) {
-				return;
-			}
-
-			return parent::canDelete($record);
+		if (!empty($record->id) && $record->state != -2) {
+			return false;
 		}
+
+		return parent::canDelete($record);
 	}
 
 	public function getItem($pk = null)
@@ -39,11 +38,20 @@ class DPCalendarModelLocation extends JModelAdmin
 		}
 
 		// Convert the params field to an array.
-		$registry = new JRegistry();
+		$registry = new Registry();
 		if (!empty($item->metadata)) {
 			$registry->loadString($item->metadata);
 		}
 		$item->metadata = $registry;
+
+		$user = JFactory::getUser();
+		$item->params = new Registry($item->params);
+		$item->params->set('access-edit',
+			$user->authorise('core.edit', 'com_dpcalendar')
+			|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $item->created_by == $user->id));
+		$item->params->set('access-delete',
+			$user->authorise('core.delete', 'com_dpcalendar')
+			|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $item->created_by == $user->id));
 
 		return $item;
 	}

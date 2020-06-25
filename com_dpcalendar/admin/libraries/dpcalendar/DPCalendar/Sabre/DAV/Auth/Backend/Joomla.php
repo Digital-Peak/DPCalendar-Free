@@ -16,10 +16,7 @@ class Joomla extends Backend\AbstractBasic
 	protected function validateUserPass($username, $password)
 	{
 		$authenticate = \JAuthentication::getInstance();
-		$response = $authenticate->authenticate([
-				'username' => $username,
-				'password' => $password
-		]);
+		$response     = $authenticate->authenticate(['username' => $username, 'password' => $password]);
 
 		if ($response->status === \JAuthentication::STATUS_SUCCESS) {
 			$user = \JUser::getInstance((\JUserHelper::getUserId($username)));

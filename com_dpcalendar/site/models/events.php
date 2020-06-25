@@ -209,8 +209,7 @@ class DPCalendarModelEvents extends JModelList
 		$query->join('LEFT', '#__categories AS c ON c.id = a.catid');
 
 		if ($user->id > 0 && !DPCalendarHelper::isFree()) {
-			// Join to tickets to add a field if the logged in user has a ticket
-			// for the event
+			// Join to tickets to add a field if the logged in user has a ticket for the event
 			$query->select('t.id as booking');
 			$query->join('LEFT', '#__dpcalendar_tickets AS t ON t.event_id = a.id and t.user_id = ' . (int)$user->id);
 		}
@@ -219,7 +218,7 @@ class DPCalendarModelEvents extends JModelList
 		$query->select('ser.min_date AS series_min_start_date, ser.max_date AS series_max_end_date');
 		$query->join(
 			'LEFT',
-			'(select original_id, max(end_date) as max_date, min(start_date) as min_date from #__dpcalendar_events group by original_id) ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id'
+			'(select original_id, max(end_date) as max_date, min(start_date) as min_date from #__dpcalendar_events group by original_id) ser on ' . ($this->getState('filter.expand') ? 'ser.original_id = a.original_id and a.original_id > 0' : 'ser.original_id = a.id')
 		);
 
 		// Join locations
@@ -309,6 +308,28 @@ class DPCalendarModelEvents extends JModelList
 			$endDate       = $db->quote(DPCalendarHelper::getDate($this->getState('list.end-date'))->toSql());
 			$dateCondition = '(a.end_date between ' . $startDate . ' and ' . $endDate . ' or a.start_date between ' . $startDate . ' and ' . $endDate .
 				' or (a.start_date < ' . $startDate . ' and a.end_date > ' . $endDate . '))';
+		}
+
+		if ($this->getState('list.local-date')) {
+			$startDate     = DPCalendarHelper::getDate($this->getState('list.start-date'));
+			$endDate       = DPCalendarHelper::getDate($this->getState('list.end-date'));
+			$dateCondition = '(';
+
+			// Timed events must be searched in UTC timezone
+			$startDateString = $db->quote($startDate->toSql());
+			$endDateString   = $db->quote($endDate->toSql());
+			$dateCondition   .= '(a.all_day = 0 and a.start_date between ' . $startDateString . ' and ' . $endDateString . ') ';
+			$dateCondition   .= 'or (a.all_day = 0 and a.end_date between ' . $startDateString . ' and ' . $endDateString . ') ';
+			$dateCondition   .= 'or (a.all_day = 0 and a.start_date < ' . $startDateString . ' and a.end_date > ' . $endDateString . ') ';
+
+			// We need to use it in the user timezone to match the correct day when the day shifts because of the timezone
+			$startDateString = $db->quote($startDate->format('Y-m-d', true));
+			$endDateString   = $db->quote($endDate->format('Y-m-d', true));
+			$dateCondition   .= 'or (a.all_day = 1 and a.start_date between ' . $startDateString . ' and ' . $endDateString . ') ';
+			$dateCondition   .= 'or (a.all_day = 1 and a.end_date between ' . $startDateString . ' and ' . $endDateString . ') ';
+			$dateCondition   .= 'or (a.all_day = 1 and a.start_date < ' . $startDateString . ' and a.end_date > ' . $endDateString . ')';
+
+			$dateCondition .= ')';
 		}
 
 		if ($this->getState('filter.ongoing', 0) == 1) {

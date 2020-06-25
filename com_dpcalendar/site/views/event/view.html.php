@@ -47,6 +47,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event->tags = new JHelperTags();
 		$event->tags->getItemTags('com_dpcalendar.event', $event->id);
 
+		JPluginHelper::importPlugin('dpcalendar');
 		JPluginHelper::importPlugin('content');
 
 		$event->text = $event->description;
@@ -272,7 +273,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 
 		$mdata = $this->event->metadata->toArray();
 		foreach ($mdata as $k => $v) {
-			if ($v) {
+			if ($v && $k != 'metadesc' && $k != 'metakey') {
 				$this->document->setMetadata($k, $v);
 			}
 		}

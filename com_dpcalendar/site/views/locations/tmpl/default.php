@@ -32,4 +32,5 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/locations/default.js');
 		<?php echo $this->loadTemplate('details_full'); ?>
 	<?php } ?>
 	<?php echo $this->loadTemplate('events'); ?>
+	<?php echo $this->loadTemplate('icons'); ?>
 </div>

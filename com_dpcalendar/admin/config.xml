@@ -71,68 +71,52 @@
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_LIMIT_DESC"/>
 		<field name="titleformat_month" type="text" default="F Y"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_DESC"/>
 		<field name="titleformat_week" type="text" default="M j Y"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_DESC"/>
 		<field name="titleformat_day" type="text" default="F j Y"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_DESC"/>
 		<field name="titleformat_list" type="text" default="M j Y"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_LIST_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_LIST_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_LIST_DESC"/>
 		<field name="timeformat_month" type="text" default="g:i a"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_DESC"/>
 		<field name="timeformat_week" type="text" default="g:i a"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_DESC"/>
 		<field name="timeformat_day" type="text" default="g:i a"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_DESC"/>
 		<field name="timeformat_list" type="text" default="g:i a"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_LIST_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_LIST_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_LIST_DESC"/>
 		<field name="columnformat_month" type="text" default="D"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_MONTH_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_MONTH_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_MONTH_DESC"/>
 		<field name="columnformat_week" type="text" default="D n/j"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_WEEK_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_WEEK_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_WEEK_DESC"/>
 		<field name="columnformat_day" type="text" default="l"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_DAY_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_DAY_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_DAY_DESC"/>
 		<field name="columnformat_list" type="text" default="D"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_LIST_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_LIST_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_COLUMN_FORMAT_LIST_DESC"/>
 		<field name="dayformat_list" type="text" default="l"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DAY_FORMAT_LIST_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DAY_FORMAT_LIST_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DAY_FORMAT_LIST_DESC"/>
 		<field name="dateformat_list" type="text" default="F j, Y"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DATE_FORMAT_LIST_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DATE_FORMAT_LIST_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DATE_FORMAT_LIST_DESC"/>
 		<field name="axisformat" type="text" default="g:i a"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DESC"/>
 		<field name="list_range" type="text" default="30"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_LIST_RANGE_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_LIST_RANGE_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_LIST_RANGE_DESC"/>
 		<field name="header_show_navigation" type="radio" class="btn-group"
 		       default="1" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_NAVIGATION_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_NAVIGATION_DESC">
@@ -197,7 +181,7 @@
 		<field name="popup_width" type="text" showon="show_event_as_popup:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_DESC"/>
-		<field name="popup_height" type="text" default="500" showon="show_event_as_popup:1"
+		<field name="popup_height" type="text" showon="show_event_as_popup:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
 		<field name="event_create_form" type="list" default="1" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_LABEL"
@@ -240,12 +224,10 @@
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="first_hour" type="text" default="6"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_DESC"/>
 		<field name="min_time" type="text" default="0"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
 		<field name="max_time" type="text" default="24"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
@@ -268,12 +250,10 @@
 		</field>
 		<field name="business_hours_start" type="text"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_START_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_START_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_START_DESC"/>
 		<field name="business_hours_end" type="text"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_END_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_END_DESC"
-		/>
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_END_DESC"/>
 		<field name="business_hours_days" type="list" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_DAYS_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_DAYS_DESC">
@@ -363,7 +343,7 @@
 		<field name="map_popup_width" type="text" showon="map_show_event_as_popup:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_DESC"/>
-		<field name="map_popup_height" type="text" default="500" showon="map_show_event_as_popup:1"
+		<field name="map_popup_height" type="text" showon="map_show_event_as_popup:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
 		<field name="map_view_show_my_only" type="radio" class="btn-group" default="0"
@@ -395,8 +375,8 @@
 		       description="COM_DPCALENDAR_FIELD_CONFIG_LIST_HEADER_DATE_DESC"/>
 		<field name="list_increment" type="text" default="1 month"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCREMENT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCREMENT_DESC"/>
-		<field name="show_my_only_list" type="radio" class="btn-group"
-		       default="0" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MY_ONLY_LABEL"
+		<field name="show_my_only_list" type="radio" class="btn-group" default="0"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MY_ONLY_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_MY_ONLY_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
@@ -452,19 +432,19 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-		<field name="list_map_zoom" type="text" default="4"
+		<field name="list_map_zoom" type="text" default="4" showon="list_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
-		<field name="list_map_width" type="text" default="100%"
+		<field name="list_map_width" type="text" default="100%" showon="list_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
-		<field name="list_map_height" type="text" default="350px"
+		<field name="list_map_height" type="text" default="350px" showon="list_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
-		<field name="list_map_lat" type="text" default="47" validate="decimal"
+		<field name="list_map_lat" type="text" default="47" validate="decimal" showon="list_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
-		<field name="list_map_long" type="text" default="4" validate="decimal"
+		<field name="list_map_long" type="text" default="4" validate="decimal" showon="list_show_map:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="list_filter_featured" type="radio" class="btn-group"
@@ -1297,6 +1277,12 @@
 		<field name="locations_axisformat" type="text" default="g:i a" showon="locations_show_resource_view:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DESC"/>
+		<field name="locations_min_time" type="text" default="0" showon="locations_show_resource_view:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
+		<field name="locations_max_time" type="text" default="24" showon="locations_show_resource_view:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 	</fieldset>
 
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
@@ -1404,6 +1390,12 @@
 		<field name="location_axisformat" type="text" default="g:i a" showon="location_show_resource_view:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_LABEL"
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DESC"/>
+		<field name="location_min_time" type="text" default="0" showon="location_show_resource_view:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
+		<field name="location_max_time" type="text" default="24" showon="location_show_resource_view:1"
+		       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
+		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 		<field name="location_show_page_heading" type="list" default="0"
 		       label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
 			<option value="2">JGLOBAL_INHERIT</option>

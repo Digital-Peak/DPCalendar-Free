@@ -543,6 +543,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		if (!empty($event->location_ids)) {
+			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
 			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->setState('list.limit', 100);
 			$model->setState('filter.search', 'ids:' . implode(',', $event->location_ids));

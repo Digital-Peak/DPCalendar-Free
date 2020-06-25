@@ -186,7 +186,8 @@
 		       label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
-		<field name="alias" type="text" label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_FIELD_ALIAS_DESC"/>
+		<field name="alias" type="text" class="dp-form-input"
+		       label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_FIELD_ALIAS_DESC"/>
 		<field name="tags" type="tag" multiple="true" label="JTAG" description="JTAG_DESC"/>
 		<field name="featured" type="list" default="0" label="JFEATURED" description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
 			<option value="0">JNO</option>

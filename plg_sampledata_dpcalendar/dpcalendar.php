@@ -409,6 +409,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'rrule'               => 'FREQ=WEEKLY;BYDAY=SA',
 				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_full_alt":"","image_full_caption":""}',
 				'description'         => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_DESC',
+				'color'               => '3c3d3c',
 				'capacity'            => '80',
 				'max_tickets'         => 2,
 				'price'               => '{"value":["45.00"],"label":[""],"description":[""]}',
@@ -421,6 +422,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'rrule'        => 'FREQ=WEEKLY;BYDAY=TH',
 				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_full_alt":"","image_full_caption":""}',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_7_DESC',
+				'color'        => '127a0f',
 				'capacity'     => null,
 				'max_tickets'  => 100,
 				'price'        => '{"value":["20.00"],"label":[""],"description":[""]}',
@@ -443,12 +445,28 @@ class PlgSampledataDPCalendar extends JPlugin
 				'rrule'           => 'FREQ=WEEKLY;BYDAY=SU',
 				'images'          => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":""}',
 				'description'     => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_DESC',
+				'color'           => 'c42323',
 				'capacity'        => '20',
 				'max_tickets'     => 2,
 				'price'           => '{"value":["55","68","89"],"label":["Kids","Student","Adults"],"description":["Age: 1 - 5 years","Needs an ID","Age: Older than 6 years"]}',
 				'earlybird'       => '{"value":["20"],"type":["percentage"],"date":["-2 days"],"label":["Early Bird Discount"],"description":[" Decide early, pay less"]}',
 				'booking_options' => '{"booking_options0":{"price":"15","amount":"1","label":"Lunch box small","description":"A small snack"},"booking_options1":{"price":"25","amount":"1","label":"Lunch box big","description":"For the hungry ones"}}',
 				'location_ids'    => $locationIds[1]
+			]);
+
+			$this->createEvent([
+				'catid'               => 1,
+				'title'               => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_TITLE',
+				'rrule'               => 'FREQ=WEEKLY;BYDAY=SA',
+				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_full_alt":"","image_full_caption":""}',
+				'description'         => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_DESC',
+				'color'               => '3c3d3c',
+				'capacity'            => '80',
+				'max_tickets'         => 1,
+				'state'               => 3,
+				'price'               => '{"value":["15.00"],"label":[""],"description":[""]}',
+				'booking_information' => '',
+				'location_ids'        => $locationIds[1]
 			]);
 
 			$response          = new stdClass();
@@ -481,23 +499,12 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$this->createEvent([
 				'catid'        => 2,
-				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_TITLE',
-				'rrule'        => 'FREQ=DAILY',
-				'start_date'   => $start->toSql(),
-				'end_date'     => $end->toSql(),
-				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_DESC',
-				'rooms'        => $locationIds[6] . '-1',
-				'location_ids' => $locationIds[6]
-			]);
-			$this->createEvent([
-				'catid'        => 2,
 				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_11_TITLE',
 				'rrule'        => 'FREQ=DAILY',
 				'start_date'   => $start->toSql(),
 				'end_date'     => $end->toSql(),
-				'color'        => 'FF4557',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_11_DESC',
-				'rooms'        => $locationIds[6] . '-2',
+				'rooms'        => $locationIds[6] . '-1',
 				'location_ids' => $locationIds[6]
 			]);
 			$this->createEvent([
@@ -506,8 +513,19 @@ class PlgSampledataDPCalendar extends JPlugin
 				'rrule'        => 'FREQ=DAILY',
 				'start_date'   => $start->toSql(),
 				'end_date'     => $end->toSql(),
-				'color'        => '056625',
+				'color'        => 'FF4557',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_12_DESC',
+				'rooms'        => $locationIds[6] . '-2',
+				'location_ids' => $locationIds[6]
+			]);
+			$this->createEvent([
+				'catid'        => 2,
+				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_13_TITLE',
+				'rrule'        => 'FREQ=DAILY',
+				'start_date'   => $start->toSql(),
+				'end_date'     => $end->toSql(),
+				'color'        => '056625',
+				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_13_DESC',
 				'rooms'        => $locationIds[6] . '-3',
 				'location_ids' => $locationIds[6]
 			]);
@@ -751,6 +769,11 @@ class PlgSampledataDPCalendar extends JPlugin
 						'header_show_week'          => 0,
 						'header_show_day'           => 0,
 						'header_show_list'          => 0,
+						'min_time'                  => '6:00',
+						'max_time'                  => '20:00',
+						'business_hours_start'      => '7:00',
+						'business_hours_end'        => '17:00',
+						'business_hours_days'       => '["1","2","3","4","5","6","0"]',
 						'calendar_filter_locations' => [$locationIds[6]],
 						'calendar_resource_views'   => ['day']
 					]
@@ -1056,7 +1079,9 @@ class PlgSampledataDPCalendar extends JPlugin
 		if (!empty($originalData['location_ids']) && !is_array($originalData['location_ids'])) {
 			$originalData['location_ids'] = [$originalData['location_ids']];
 		}
-		$originalData['state']  = 1;
+		if (!isset($originalData['state'])) {
+			$originalData['state'] = 1;
+		}
 		$originalData['access'] = (int)$this->app->get('access', 1);
 
 		if (!isset($originalData['all_day'])) {

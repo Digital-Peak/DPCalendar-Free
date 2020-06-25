@@ -111,6 +111,12 @@
 			<field name="location_axisformat" type="text" useglobal="true" showon="location_show_resource_view:1"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DESC"/>
+			<field name="location_min_time" type="text" useglobal="true" showon="location_show_resource_view:1"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
+			<field name="location_max_time" type="text" useglobal="true" showon="location_show_resource_view:1"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 			<field name="location_show_page_heading" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
 				<option value="2">JGLOBAL_INHERIT</option>

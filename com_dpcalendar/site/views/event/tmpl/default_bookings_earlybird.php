@@ -22,7 +22,7 @@ if (!$this->event->earlybird) {
 			</span>
 			<span class="dp-earlybird__content">
 				<?php
-				$value = ($this->event->earlybird->type[$index] == 'value' ? DPCalendarHelper::renderPrice($value) : $value . ' %');
+				$value = ($this->event->earlybird->type[$index] == 'value' ? DPCalendarHelper::renderPrice($value) : $value . '%');
 				$limit = $this->event->earlybird->date[$index];
 				$date  = DPCalendarHelper::getDate($this->event->start_date);
 				if (strpos($limit, '-') === 0 || strpos($limit, '+') === 0) {

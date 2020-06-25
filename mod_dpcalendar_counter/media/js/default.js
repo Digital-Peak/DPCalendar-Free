@@ -20,7 +20,7 @@
 						event.preventDefault();
 
 						loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
-							DPCalendar.modal(event.target.getAttribute('href'), 0, 700);
+							DPCalendar.modal(event.target.getAttribute('href'));
 						});
 					});
 				}

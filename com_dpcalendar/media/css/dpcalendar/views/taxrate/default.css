@@ -21,17 +21,17 @@
 }
 
 @media screen and (max-width: 640px) {
-	.com-dpcalendar-taxrate .dp-control, .com-dpcalendar-taxrate .control-group {
+	.com-dpcalendar-taxrate .dp-control:not(.dp-control_hidden), .com-dpcalendar-taxrate .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-taxrate .dp-control__label, .com-dpcalendar-taxrate .control-group .control-label, .com-dpcalendar-taxrate .dp-control__input, .com-dpcalendar-taxrate .control-group .controls {
+	.com-dpcalendar-taxrate .dp-control:not(.dp-control_hidden)__label, .com-dpcalendar-taxrate .control-group:not(.dp-control_hidden)__label, .com-dpcalendar-taxrate .dp-control:not(.dp-control_hidden)__input, .com-dpcalendar-taxrate .control-group:not(.dp-control_hidden)__input {
 		width: 100%;
 		margin-left: 0;
 	}
-	.com-dpcalendar-taxrate .control-group {
+	.com-dpcalendar-taxrate .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-taxrate .control-group control-label, .com-dpcalendar-taxrate .control-group controls {
+	.com-dpcalendar-taxrate .control-group:not(.dp-control_hidden) control-label, .com-dpcalendar-taxrate .control-group:not(.dp-control_hidden) controls {
 		width: 100%;
 		margin-left: 0;
 	}

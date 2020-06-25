@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 
 ?>
 <div class="com-dpcalendar-location__actions dp-button-bar dp-print-hide">
-	<?php if ($this->user->authorise('core.edit', 'com_dpcalendar')) { ?>
+	<?php if ($this->location->params->get('access-edit')) { ?>
 		<button type="button" class="dp-button dp-button-action dp-button-edit"
 				data-href="<?php echo $this->router->getLocationFormRoute($this->location->id, JUri::getInstance()); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EDIT]); ?>

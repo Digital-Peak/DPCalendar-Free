@@ -64,7 +64,7 @@ class JFormFieldDpevent extends JFormFieldList
 		$model->setState('list.start-date', $startDate);
 		$model->setState('list.end-date', $endDate);
 
-		$options = [];
+		$options = parent::getOptions();
 		foreach ($model->getItems() as $event) {
 			$options[] = JHtml::_(
 				'select.option',

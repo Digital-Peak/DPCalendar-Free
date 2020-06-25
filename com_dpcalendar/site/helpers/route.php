@@ -357,6 +357,13 @@ class DPCalendarHelperRoute
 		return $link;
 	}
 
+	public static function getCategoryRoute($catid, $language)
+	{
+		// Is needed for smart search categories indexing
+		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+		return self::getCalendarRoute($catid);
+	}
+
 	public static function findItem($needles = null)
 	{
 		$app   = JFactory::getApplication();

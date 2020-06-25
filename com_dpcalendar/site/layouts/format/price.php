@@ -29,7 +29,7 @@ if (key_exists('currency', $displayData) && $displayData['currency']) {
 	$currency = $displayData['currency'];
 }
 
-if ($currency == '$') {
+if ($currency == '$' || $currency == '£') {
 	echo htmlentities($currency . ' ' . $price);
 
 	return;

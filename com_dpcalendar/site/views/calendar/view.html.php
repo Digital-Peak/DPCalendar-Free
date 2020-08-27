@@ -28,23 +28,22 @@ class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 			// For some plugins
 			!empty($calendar->description) ? $calendar->text = $calendar->description : $calendar->text = null;
 
-			$dispatcher = \JEventDispatcher::getInstance();
 
-			$dispatcher->trigger('onContentPrepare', ['com_dpcalendar.categories', &$calendar, &$calendar->params, 0]);
+			$this->app->triggerEvent('onContentPrepare', ['com_dpcalendar.categories', &$calendar, &$calendar->params, 0]);
 
-			$results                            = $dispatcher->trigger(
+			$results                            = $this->app->triggerEvent(
 				'onContentAfterTitle',
 				['com_dpcalendar.categories', &$calendar, &$this->params, 0]
 			);
 			$calendar->event->afterDisplayTitle = trim(implode("\n", $results));
 
-			$results                               = $dispatcher->trigger(
+			$results                               = $this->app->triggerEvent(
 				'onContentBeforeDisplay',
 				['com_dpcalendar.categories', &$calendar, &$this->params, 0]
 			);
 			$calendar->event->beforeDisplayContent = trim(implode("\n", $results));
 
-			$results                              = $dispatcher->trigger(
+			$results                              = $this->app->triggerEvent(
 				'onContentAfterDisplay',
 				['com_dpcalendar.categories', &$calendar, &$this->params, 0]
 			);

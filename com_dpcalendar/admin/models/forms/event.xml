@@ -156,9 +156,10 @@
 		       label="COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_MAX_TICKETS_DESC"/>
 		<field name="booking_closing_date" type="text"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_DESC"/>
-		<field name="booking_series" type="dpradio" default="0" class="dp-form-radio"
+		<field name="booking_series" type="list" default="2"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_SERIES_DESC">
 			<option value="0">JNO</option>
+			<option value="2">COM_DPCALENDAR_FIELD_BOOKING_SERIES_OPTION</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="price" type="subform" multiple="true"
@@ -180,7 +181,7 @@
 		<field name="terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
 		       addfieldpath="/administrator/components/com_content/models/fields"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
-		<field name="booking_assign_user_groups" type="usergroup" multiple="true"
+		<field name="booking_assign_user_groups" type="usergrouplist" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_DESC"/>
 		<field name="booking_information" type="editor" filter="raw" buttons="true" hide="pagebreak,readmore"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>

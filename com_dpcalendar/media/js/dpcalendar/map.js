@@ -109,11 +109,12 @@
 	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 	 */
 
-	function create(element)
+	function createMap(element)
 	{
 		if (typeof L === 'undefined') {
 			return;
 		}
+
 		element.classList.add('dp-map_loading');
 
 		const options = element.dataset;
@@ -190,32 +191,8 @@
 		return map;
 	}
 
-	function loadFromElements(elements)
-	{
-		[].slice.call(elements).forEach((mapElement) => {
-			if ('IntersectionObserver' in window === false) {
-				createMap(mapElement);
-				return;
-			}
-
-			const observer = new IntersectionObserver(
-				(entries, observer) => {
-					entries.forEach((entry) => {
-						if (!entry.isIntersecting) {
-							return;
-						}
-						observer.unobserve(mapElement);
-
-						createMap(mapElement);
-					});
-				}
-			);
-			observer.observe(mapElement);
-		});
-	}
-
 	// Set up the maps
-	function createMap(mapElement)
+	function create(mapElement)
 	{
 		const options = mapElement.dataset;
 
@@ -243,7 +220,7 @@
 				assets.push('/com_dpcalendar/js/leaflet/leaflet-google.js');
 			}
 			loadDPAssets(assets, () => {
-				create(mapElement);
+				createMap(mapElement);
 
 				let locationsContainer = mapElement.closest('.dp-location');
 				if (locationsContainer == null) {
@@ -320,8 +297,6 @@
 	DPCalendar.Map.clearMarkers = clearMarkers;
 	DPCalendar.Map.moveMarker = moveMarker;
 	DPCalendar.Map.drawCircle = drawCircle;
-
-	loadFromElements(document.querySelectorAll('.dp-map'));
 
 }());
 //# sourceMappingURL=map.js.map

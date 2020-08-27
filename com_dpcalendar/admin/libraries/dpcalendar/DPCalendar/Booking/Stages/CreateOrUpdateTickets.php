@@ -66,7 +66,7 @@ class CreateOrUpdateTickets implements StageInterface
 		if (count($payload->events) == 1) {
 			$event = reset($payload->events);
 
-			if ($event->original_id == '-1' && $event->booking_series) {
+			if ($event->original_id == '-1' && $event->booking_series == 1) {
 				$events = Booking::getSeriesEvents($event, 1000);
 
 				foreach ($events as $e) {
@@ -91,7 +91,7 @@ class CreateOrUpdateTickets implements StageInterface
 					$ticket->id         = 0;
 					$ticket->uid        = 0;
 					$ticket->booking_id = $payload->item->id;
-					$ticket->price      = $event->booking_series ? 0 : Booking::getPriceWithDiscount($value, $event);
+					$ticket->price      = $event->booking_series == 1 ? 0 : Booking::getPriceWithDiscount($value, $event);
 					$ticket->seat       = $seatNumber;
 					$ticket->state      = $payload->item->state;
 					$ticket->created    = DPCalendarHelper::getDate()->toSql();

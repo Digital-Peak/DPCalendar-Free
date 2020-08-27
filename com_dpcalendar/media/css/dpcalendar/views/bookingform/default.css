@@ -73,6 +73,7 @@
 
 .com-dpcalendar-bookingform .dp-control, .com-dpcalendar-bookingform .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-bookingform .dp-control__label, .com-dpcalendar-bookingform .control-group .control-label {

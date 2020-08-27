@@ -29,7 +29,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 				<div class="mod-dpcalendar-upcoming-blog__event dp-event dp-event_<?php echo $event->ongoing_start_date ? 'started' : 'future'; ?>">
 					<h3 class="mod-dpcalendar-upcoming-blog__heading">
 						<?php if ($event->state == 3) { ?>
-							<span class="dp-event_canceled>">[<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_CANCELED'); ?>]</span>
+							<span class="dp-event_canceled">[<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_CANCELED'); ?>]</span>
 						<?php } ?>
 						<a href="<?php echo $event->realUrl; ?>" target="_parent" class="dp-event-url dp-link">
 							<?php echo $event->title; ?>

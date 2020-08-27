@@ -38,6 +38,7 @@
 
 .com-dpcalendar-invite .dp-control, .com-dpcalendar-invite .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-invite .dp-control__label, .com-dpcalendar-invite .control-group .control-label {

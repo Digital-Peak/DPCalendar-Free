@@ -73,4 +73,9 @@ class Router
 	{
 		return \DPCalendarHelperRoute::getTicketFormRoute($ticketId, $return);
 	}
+
+	public static function getTicketDeleteRoute($ticketId, $return = null)
+	{
+		return \DPCalendarHelperRoute::getTicketDeleteRoute($ticketId, $return);
+	}
 }

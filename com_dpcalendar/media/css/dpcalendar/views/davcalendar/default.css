@@ -42,6 +42,7 @@
 
 .com-dpcalendar-davcalendar .dp-control, .com-dpcalendar-davcalendar .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-davcalendar .dp-control__label, .com-dpcalendar-davcalendar .control-group .control-label {

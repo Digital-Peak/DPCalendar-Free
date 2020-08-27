@@ -8,7 +8,7 @@
 			<option value="value">COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_VALUE</option>
 			<option value="percentage">COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_PERCENTAGE</option>
 		</field>
-		<field name="discount_groups" type="usergroup" multiple="true"
+		<field name="discount_groups" type="usergrouplist" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_GROUP_LABEL"/>
 		<field name="label" type="text" label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL_LABEL"/>
 		<field name="description" type="textarea" filter="raw"

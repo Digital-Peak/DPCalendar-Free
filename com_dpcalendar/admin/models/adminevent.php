@@ -12,6 +12,7 @@ use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 JLoader::import('joomla.application.component.modeladmin');
+JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
 
 class DPCalendarModelAdminEvent extends JModelAdmin
 {
@@ -145,7 +146,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		if ($eventId && $item && $item->original_id > 0) {
 			$form->removeField('booking_series');
-			if ($item->booking_series) {
+			if ($item->booking_series == 1) {
 				foreach ($form->getFieldset('booking') as $field) {
 					$form->removeField($field->fieldname);
 				}
@@ -357,13 +358,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['images'] = (string)$registry;
 		}
 
-		// Alter the title for save as copy
 		$app = JFactory::getApplication();
-		if ($app->input->getVar('task') == 'save2copy') {
-			list ($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
-			$data['title'] = $title;
-			$data['alias'] = $alias;
-		}
 
 		// Migrate subform data to old repeatable format
 		if (isset($data['price']) && is_array($data['price'])) {
@@ -455,23 +450,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data = array_merge($data, $this->getDefaultValues(new JObject($data)));
 		}
 
-		// Automatic handling of alias for empty fields
-		if (empty($data['alias'])
-			&& in_array($app->input->get('task'), ['apply', 'save', 'save2new', 'save2copy'])
-			&& (!isset($data['id']) || (int)$data['id'] == 0)) {
-			if (JFactory::getConfig()->get('unicodeslugs') == 1) {
-				$data['alias'] = JFilterOutput::stringURLUnicodeSlug($data['title']);
-			} else {
-				$data['alias'] = JFilterOutput::stringURLSafe($data['title']);
-			}
-
-			$table = $this->getTable();
-			$table->load(['alias' => $data['alias'], 'catid' => $data['catid']]);
-
-			list($title, $alias) = $this->generateNewTitle($data['catid'], $data['alias'], $data['title']);
-			$data['alias'] = $alias;
-		}
-
 		$success = parent::save($data);
 
 		if (!$success) {
@@ -486,9 +464,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$db->setQuery('select id from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
 		$rows   = $db->loadObjectList();
 		$values = '';
-
-		// Load the fields helper class
-		JLoader::import('components.com_fields.helpers.fields', JPATH_ADMINISTRATOR);
 
 		$fieldModel = JModelLegacy::getInstance('Field', 'FieldsModel', ['ignore_request' => true]);
 
@@ -595,13 +570,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 	protected function prepareTable($table)
 	{
-		$table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
-		$table->alias = JApplicationHelper::stringURLSafe($table->alias);
-
-		if (empty($table->alias)) {
-			$table->alias = JApplicationHelper::stringURLSafe($table->title);
-		}
-
 		if (!isset($table->state) && $this->canEditState($table)) {
 			$table->state = 1;
 		}

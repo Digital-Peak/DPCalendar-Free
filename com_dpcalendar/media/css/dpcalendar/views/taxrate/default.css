@@ -1,5 +1,6 @@
 .com-dpcalendar-taxrate .dp-control, .com-dpcalendar-taxrate .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-taxrate .dp-control__label, .com-dpcalendar-taxrate .control-group .control-label {

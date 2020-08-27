@@ -65,6 +65,10 @@ class PlgActionlogDPCalendar extends ActionLogPlugin
 			$message['itemlink'] = 'index.php?option=com_dpcalendar&task=location.edit&l_id=' . (int)$item->id;
 		}
 
+		if ($context == 'com_dpcalendar.extcalendar') {
+			$message['title'] = $item->title;
+		}
+
 		return $message;
 	}
 }

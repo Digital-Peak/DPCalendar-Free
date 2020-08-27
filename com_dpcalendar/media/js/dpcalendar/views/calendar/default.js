@@ -8,21 +8,45 @@
 	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 	 */
 
+	function watchElements(elements)
+	{
+		elements.forEach((mapElement) => {
+			if ('IntersectionObserver' in window === false) {
+				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
+				return;
+			}
+
+			const observer = new IntersectionObserver(
+				(entries, observer) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) {
+							return;
+						}
+						observer.unobserve(mapElement);
+
+						loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
+					});
+				}
+			);
+			observer.observe(mapElement);
+		});
+	}
+
+	/**
+	 * @package   DPCalendar
+	 * @author    Digital Peak http://www.digital-peak.com
+	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+	 */
+
 	document.addEventListener('DOMContentLoaded', () => {
-		if (document.querySelector('.com-dpcalendar-calendar__map')) {
-			loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => {
-				loadDPAssets(['/com_dpcalendar/js/dpcalendar/calendar.js']);
-			});
-		} else {
-			loadDPAssets(['/com_dpcalendar/js/dpcalendar/calendar.js']);
-		}
+		loadDPAssets(['/com_dpcalendar/js/dpcalendar/calendar.js']);
+		watchElements(document.querySelectorAll('.com-dpcalendar-calendar__map'));
 
 		const noLink = document.querySelector('.com-dpcalendar-calendar_printable');
 		if (noLink) {
 			setInterval(() => {
-				[].slice.call(noLink.querySelectorAll('a')).forEach((link) => {
-					link.removeAttribute('href');
-				});
+				[].slice.call(noLink.querySelectorAll('a')).forEach((link) => link.removeAttribute('href'));
 			}, 2000);
 		}
 

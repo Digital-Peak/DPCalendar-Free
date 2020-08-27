@@ -211,7 +211,7 @@ abstract class PaymentPlugin extends \JPlugin
 		$data['processor'] = $this->_name;
 
 		// Merge the old data with the new one
-		$data = array_merge($booking ? (array)$booking : [], $data);
+		$data = array_merge($booking ? $booking->getProperties() : [], $data);
 
 		// Remove some invalid variables
 		$data = json_decode(str_replace('\u0000*\u0000_', '', json_encode($data)), true);

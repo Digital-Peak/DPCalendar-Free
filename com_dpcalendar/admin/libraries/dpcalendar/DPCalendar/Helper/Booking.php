@@ -66,17 +66,10 @@ class Booking
 			$pdf->setPrintHeader(true);
 			$pdf->setPrintFooter(true);
 
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
 			// set margins
 			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-			// Font sizes
-			$pdf->setHeaderFont([$pdf->getFontFamily(), '', 9]);
-			$pdf->setFooterFont([$pdf->getFontFamily(), '', 9]);
 
 			// Adding the content
 			$pdf->AddPage();
@@ -147,17 +140,10 @@ class Booking
 			$pdf->setPrintHeader(true);
 			$pdf->setPrintFooter(true);
 
-			// set default monospaced font
-			$pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
-
 			// set margins
 			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
 			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-			// Font sizes
-			$pdf->setHeaderFont([$pdf->getFontFamily(), '', 9]);
-			$pdf->setFooterFont([$pdf->getFontFamily(), '', 9]);
 
 			// Adding the content
 			$pdf->AddPage();

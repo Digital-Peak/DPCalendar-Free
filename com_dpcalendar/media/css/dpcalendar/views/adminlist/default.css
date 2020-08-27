@@ -31,7 +31,6 @@
 
 .com-dpcalendar-adminlist .dp-datepicker {
 	display: inline-flex;
-	align-items: center;
 }
 
 .com-dpcalendar-adminlist .dp-datepicker__input {
@@ -136,6 +135,10 @@
 	}
 }
 
+.com-dpcalendar-adminlist .js-stools-container-bar {
+	width: unset;
+}
+
 .com-dpcalendar-adminlist__filterbar {
 	display: flex;
 	float: left;
@@ -147,13 +150,17 @@
 	margin-right: 5px;
 }
 
-.com-dpcalendar-adminlist__filterbar .dp-datepicker__button {
-	margin-top: 1px;
-	margin-bottom: 9px;
+.com-dpcalendar-adminlist__filterbar input {
+	margin-bottom: 0 !important;
+}
+
+.com-dpcalendar-adminlist .js-stools-container-bar .btn-toolbar > * {
+	margin: 0 5px 0 5px;
 }
 
 .com-dpcalendar-adminlist .dp-table {
 	border: 0;
+	background-color: #ffffff;
 }
 
 .com-dpcalendar-adminlist .dp-table__col-expand {
@@ -231,6 +238,14 @@
 .com-dpcalendar-adminlist .dp-locations-table .dp-location__color {
 	padding: 5px;
 	text-align: center;
+}
+
+#toolbar joomla-toolbar-button {
+	margin: 0 10px 10px 0;
+}
+
+.subhead-collapse {
+	margin-bottom: 1px !important;
 }
 
 .pika-single th,

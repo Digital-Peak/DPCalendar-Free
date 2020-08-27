@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 <input type="text"
 	   id="<?php echo $displayData['id']; ?>"
 	   name="<?php echo $displayData['name']; ?>"
-	   class="dp-timepicker dp-input dp-input-text"
+	   class="dp-timepicker dp-input dp-input-text form-control"
 	   autocomplete="off"
 	   data-format="<?php echo $displayData['dateHelper']->convertPHPDateToMoment($displayData['format']); ?>"
 	   data-time="<?php echo $displayData['date']->format('H:i:s', true); ?>"

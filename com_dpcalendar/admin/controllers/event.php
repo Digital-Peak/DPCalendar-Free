@@ -65,7 +65,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		if (!empty($data['location_ids'])) {
 			foreach ($data['location_ids'] as $index => $locationId) {
-				if (is_numeric($locationId)) {
+				if (is_numeric($locationId) || !$locationId) {
 					continue;
 				}
 

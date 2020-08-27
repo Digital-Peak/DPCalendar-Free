@@ -207,7 +207,6 @@
 
 .com-dpcalendar-timeline .dp-datepicker {
 	display: inline-flex;
-	align-items: center;
 }
 
 .com-dpcalendar-timeline .dp-datepicker__input {
@@ -416,8 +415,7 @@
 	position: relative;
 	background: #fff;
 	padding: 15px;
-	margin-top: 5px;
-	margin-left: 64px;
+	margin: 5px 0 10px 64px;
 	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
 	transition: all 0.3s ease;
 	width: 100%;

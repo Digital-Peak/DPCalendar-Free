@@ -288,6 +288,20 @@ class DPCalendarHelperRoute
 		return self::getUrl($args, true);
 	}
 
+	public static function getTicketDeleteRoute($ticketId, $return = null)
+	{
+		$args         = [];
+		$args['task'] = 'ticketform.delete';
+		$args['t_id'] = $ticketId;
+
+		if (empty($return)) {
+			$return = JUri::getInstance()->toString();
+		}
+		$args['return'] = base64_encode($return);
+
+		return self::getUrl($args, true);
+	}
+
 	public static function getCalendarIcalRoute($calId, $token = '')
 	{
 		$url = JUri::base();
@@ -392,7 +406,7 @@ class DPCalendarHelperRoute
 							self::$lookup[$view] = [];
 						}
 
-						$ids = $item->params->get('ids');
+						$ids = $item->getParams()->get('ids');
 						if (!is_array($ids) && $ids) {
 							$ids = [
 								$ids

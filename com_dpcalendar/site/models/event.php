@@ -246,6 +246,7 @@ class DPCalendarModelEvent extends JModelItem
 
 	public function getSeriesEventsModel($event)
 	{
+		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);

@@ -375,10 +375,6 @@
 	grid-row: 11 / 12;
 }
 
-.com-dpcalendar-event__title_canceled {
-	margin-right: 5px;
-}
-
 .com-dpcalendar-event__taxes.dp-info-box {
 	margin: 0;
 }

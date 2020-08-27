@@ -61,7 +61,6 @@
 
 .com-dpcalendar-eventform .dp-datepicker {
 	display: inline-flex;
-	align-items: center;
 }
 
 .com-dpcalendar-eventform .dp-datepicker__input {
@@ -75,6 +74,7 @@
 
 .com-dpcalendar-eventform .dp-control, .com-dpcalendar-eventform .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label {

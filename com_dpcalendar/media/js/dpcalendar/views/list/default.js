@@ -8,15 +8,40 @@
 	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 	 */
 
+	function watchElements(elements)
+	{
+		elements.forEach((mapElement) => {
+			if ('IntersectionObserver' in window === false) {
+				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
+				return;
+			}
+
+			const observer = new IntersectionObserver(
+				(entries, observer) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) {
+							return;
+						}
+						observer.unobserve(mapElement);
+
+						loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
+					});
+				}
+			);
+			observer.observe(mapElement);
+		});
+	}
+
+	/**
+	 * @package   DPCalendar
+	 * @author    Digital Peak http://www.digital-peak.com
+	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+	 */
+
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
-			let root = document.querySelector('.com-dpcalendar-list');
-			if (root == null) {
-				root = document.querySelector('.com-dpcalendar-blog');
-			}
-			if (root == null) {
-				root = document.querySelector('.com-dpcalendar-timeline');
-			}
+			const root = document.querySelector('.com-dpcalendar-list, .com-dpcalendar-blog, .com-dpcalendar-timeline');
 
 			const geoComplete = root.querySelector('.dp-input_location');
 			if (geoComplete && geoComplete.dataset.dpAutocomplete == 1) {
@@ -44,24 +69,18 @@
 
 			const map = root.querySelector('.dp-map');
 			if (map) {
-				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => {
-					if (!geoComplete || !geoComplete.getAttribute('data-latitude') || !geoComplete.getAttribute('data-longitude')) {
-						return;
-					}
+				watchElements([map]);
 
-					const circleDrawer = () => {
+				if (geoComplete && geoComplete.getAttribute('data-latitude') && geoComplete.getAttribute('data-longitude')) {
+					map.addEventListener('dp-map-loaded', () => {
 						DPCalendar.Map.drawCircle(
 							map,
 							{latitude: geoComplete.getAttribute('data-latitude'), longitude: geoComplete.getAttribute('data-longitude')},
 							root.querySelector('.dp-input[name=radius]').value,
 							root.querySelector('.dp-input[name="length-type"]').value
 						);
-					};
-					map.addEventListener('dp-map-loaded', circleDrawer);
-					if (map.dpmap) {
-						circleDrawer();
-					}
-				});
+					});
+				}
 			}
 
 			[].slice.call(root.querySelectorAll('.dp-button-bar__actions .dp-button-search')).forEach((button) => {

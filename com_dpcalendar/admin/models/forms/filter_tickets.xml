@@ -9,6 +9,7 @@
 			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_NEED_PAYMENT</option>
 			<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
 			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
+			<option value="6">COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED</option>
 		</field>
 		<field name="ticket_holder" type="dpauthor" label="COM_CONTENT_FILTER_AUTHOR"
 			table_name="dpcalendar_bookings" author_field="user_id" description="COM_CONTENT_FILTER_AUTHOR_DESC"
@@ -16,8 +17,7 @@
 			<option value="">JOPTION_SELECT_AUTHOR</option>
 		</field>
 		<field name="event_id" type="event" onchange="this.form.submit();"
-			label="COM_DPCALENDAR_TICKET_FIELD_EVENT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_EVENT_DESC"
-			required="true" />
+			label="COM_DPCALENDAR_TICKET_FIELD_EVENT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_EVENT_DESC"/>
 	</fields>
 	<fields name="list">
 		<field name="fullordering" type="list" label="COM_CONTENT_LIST_FULL_ORDERING"

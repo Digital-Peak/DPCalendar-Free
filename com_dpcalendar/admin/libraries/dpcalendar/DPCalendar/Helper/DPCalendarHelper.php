@@ -24,7 +24,9 @@ if (!defined('DS')) {
 
 if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 	\JLoader::registerAlias('JFormFieldCategoryEdit', '\\Joomla\\Component\\Categories\\Administrator\\Field\\CategoryeditField');
+	\JLoader::registerAlias('UsersModelRegistration', '\\Joomla\\Component\\Users\\Site\\Model\\RegistrationModel');
 }
+\JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
 
 class DPCalendarHelper
 {
@@ -710,10 +712,10 @@ class DPCalendarHelper
 			if ($internal) {
 				if (\JFolder::exists($uri)) {
 					foreach (\JFolder::files($uri, '\.ics', true, true) as $file) {
-						$content .= \JFile::read($file);
+						$content .= file_get_contents($file);
 					}
 				} else {
-					$content = \JFile::read($uri);
+					$content = file_get_contents($uri);
 				}
 			} else {
 				$options = new Registry();
@@ -750,8 +752,9 @@ class DPCalendarHelper
 
 	public static function exportCsv($name, $fieldsToLabels, $valueParser)
 	{
-		$name  = strtolower($name);
-		$model = \JModelLegacy::getInstance(ucfirst($name) . 's', 'DPCalendarModel', ['ignore_request' => false]);
+		$name     = strtolower($name);
+		$realName = str_replace('admin', '', $name);
+		$model    = \JModelLegacy::getInstance(ucfirst($name) . 's', 'DPCalendarModel', ['ignore_request' => false]);
 		$model->setState('list.limit', 1000);
 		$items = $model->getItems();
 
@@ -763,7 +766,7 @@ class DPCalendarHelper
 			foreach ($fieldsToLabels as $fieldLabel) {
 				$line[] = $fieldLabel;
 			}
-			$fields = array_merge($fields, \FieldsHelper::getFields('com_dpcalendar.' . $name));
+			$fields = array_merge($fields, \FieldsHelper::getFields('com_dpcalendar.' . $realName));
 			foreach ($fields as $field) {
 				$line[] = $field->label;
 			}
@@ -772,7 +775,7 @@ class DPCalendarHelper
 		}
 
 		foreach ($items as $item) {
-			\JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $name, &$item, &$item->params, 0]);
+			\JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $realName, &$item, &$item->params, 0]);
 			$line = [];
 			foreach ($fieldsToLabels as $fieldName => $fieldLabel) {
 				$line[] = $valueParser($fieldName, $item);
@@ -790,7 +793,7 @@ class DPCalendarHelper
 		fseek($f, 0);
 		// echo stream_get_contents($f);die;
 		header('Content-Type: application/csv');
-		header('Content-Disposition: attachement; filename="' . str_replace('admin', '', $name) . 's-' . date('YmdHi') . '.csv";');
+		header('Content-Disposition: attachement; filename="' . $realName . 's-' . date('YmdHi') . '.csv";');
 		fpassthru($f);
 
 		\JFactory::getApplication()->close();

@@ -1,5 +1,6 @@
 .com-dpcalendar-country .dp-control, .com-dpcalendar-country .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-country .dp-control__label, .com-dpcalendar-country .control-group .control-label {

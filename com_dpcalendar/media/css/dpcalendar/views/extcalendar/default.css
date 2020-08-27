@@ -75,6 +75,7 @@
 
 .com-dpcalendar-extcalendar .dp-control, .com-dpcalendar-extcalendar .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-extcalendar .dp-control__label, .com-dpcalendar-extcalendar .control-group .control-label {
@@ -147,6 +148,10 @@
 
 .com-dpcalendar-extcalendar .choices__button {
 	background-image: url("../../../../images/icons/times-solid.svg") !important;
+}
+
+#toolbar joomla-toolbar-button {
+	margin: 0 10px 10px 0;
 }
 
 /*# sourceMappingURL=default.css.map */

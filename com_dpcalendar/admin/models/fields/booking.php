@@ -14,23 +14,27 @@ class JFormFieldBooking extends JFormField
 
 	protected function getInput()
 	{
-		$html = [];
-		$groups = $this->getGroups();
+		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
+			return false;
+		}
+
+		$html     = [];
+		$groups   = $this->getGroups();
 		$excluded = $this->getExcluded();
-		$link = 'index.php?option=com_dpcalendar&amp;view=bookings&amp;layout=modal&amp;tmpl=component&amp;field=' . $this->id .
-				 (isset($groups) ? ('&amp;groups=' . base64_encode(json_encode($groups))) : '') .
-				 (isset($excluded) ? ('&amp;excluded=' . base64_encode(json_encode($excluded))) : '');
+		$link     = 'index.php?option=com_dpcalendar&amp;view=bookings&amp;layout=modal&amp;tmpl=component&amp;field=' . $this->id .
+			(isset($groups) ? ('&amp;groups=' . base64_encode(json_encode($groups))) : '') .
+			(isset($excluded) ? ('&amp;excluded=' . base64_encode(json_encode($excluded))) : '');
 
 		// Initialize some field attributes.
-		$attr = ! empty($this->class) ? ' class="' . $this->class . '"' : '';
-		$attr .= ! empty($this->size) ? ' size="' . $this->size . '"' : '';
+		$attr = !empty($this->class) ? ' class="' . $this->class . '"' : '';
+		$attr .= !empty($this->size) ? ' size="' . $this->size . '"' : '';
 		$attr .= $this->required ? ' required' : '';
 
 		// Load the modal behavior script.
 		JHtml::_('behavior.modal', 'a.modal_' . $this->id);
 
 		// Build the script.
-		$script = [];
+		$script   = [];
 		$script[] = '	function jSelectUser_' . $this->id . '(id, title, event_id) {';
 		$script[] = '		var old_id = document.getElementById("' . $this->id . '_id").value;';
 		$script[] = '		if (old_id != id) {';
@@ -38,7 +42,7 @@ class JFormFieldBooking extends JFormField
 		$script[] = '			document.getElementById("form_event_id_id").value = event_id;';
 		$script[] = '			document.getElementById("' . $this->id . '").value = title;';
 		$script[] = '			document.getElementById("' . $this->id . '").className = document.getElementById("' . $this->id .
-				 '").className.replace(" invalid" , "");';
+			'").className.replace(" invalid" , "");';
 		$script[] = '			' . $this->onchange;
 		$script[] = '		}';
 		$script[] = '		SqueezeBox.close();';
@@ -59,22 +63,22 @@ class JFormFieldBooking extends JFormField
 		// Create a dummy text field with the booking name.
 		$html[] = '<div class="input-append">';
 		$html[] = '	<input type="text" id="' . $this->id . '" value="' . htmlspecialchars($table->name, ENT_COMPAT, 'UTF-8') . '"' . ' readonly' .
-				 $attr . ' />';
+			$attr . ' />';
 
 		// Create the user select button.
 		if ($this->readonly === false) {
 			$html[] = '		<a class="btn btn-primary modal_' . $this->id . '" title="' . JText::_('JLIB_FORM_CHANGE_USER') . '" href="' . $link . '"' .
-					 ' rel="{handler: \'iframe\', size: {x: 800, y: 500}}">';
+				' rel="{handler: \'iframe\', size: {x: 800, y: 500}}">';
 			$html[] = '<i class="icon-user"></i></a>';
 		}
 
 		$html[] = '</div>';
 
 		// Create the real field, hidden, that stored the booking id.
-		$html[] = '<input type="hidden" id="' . $this->id . '_id" name="' . $this->name . '" value="' . (int) $this->value . '" />';
+		$html[] = '<input type="hidden" id="' . $this->id . '_id" name="' . $this->name . '" value="' . (int)$this->value . '" />';
 
 		// Create the real field, hidden, that stored the event id.
-		$html[] = '<input type="hidden" id="form_event_id_id" name="jform[event_id]" value="' . (int) $this->value . '" />';
+		$html[] = '<input type="hidden" id="form_event_id_id" name="jform[event_id]" value="' . (int)$this->value . '" />';
 
 		return implode("\n", $html);
 	}

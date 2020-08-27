@@ -893,6 +893,8 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['title']         = $language->_($data['title']);
 			$data['label']         = $language->_($data['label']);
 			$data['language']      = count($this->languageCache) > 1 ? $code : '*';
+			$data['description']   = '';
+			$data['params']        = '{}';
 			$data['state']         = 1;
 			$data['default_value'] = null;
 			$data['access']        = (int)$this->app->get('access', 1);

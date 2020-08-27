@@ -94,11 +94,11 @@ class BaseView extends \JViewLegacy
 			\JHtml::_('behavior.keepalive');
 			\JHtml::_('behavior.formvalidator');
 
-			if ($this->params->get('save_history')) {
+			if ($this->params->get('save_history') && \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
 				\JHtml::_('behavior.modal', 'a.modal_jform_contenthistory');
 			}
 
-			if ($this->app->isClient('administrator')) {
+			if ($this->app->isClient('administrator') && \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
 				\JHtml::_('behavior.tabstate');
 			}
 		}
@@ -108,8 +108,10 @@ class BaseView extends \JViewLegacy
 		} else {
 			$this->addToolbar();
 
-			// Only render the sidebar when we are not editing a form
-			if (!($this->getModel() instanceof \JModelAdmin) && $this->input->get('tmpl') != 'component') {
+			// Only render the sidebar when we are not editing a form, modal or Joomla 4
+			if (!($this->getModel() instanceof \JModelAdmin)
+				&& $this->input->get('tmpl') != 'component'
+				&& \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
 				$this->sidebar = \JHtmlSidebar::render();
 			} else {
 				$this->sidebar = null;
@@ -127,10 +129,8 @@ class BaseView extends \JViewLegacy
 	protected function prepareDocument()
 	{
 		$menus = $this->app->getMenu();
-		$title = null;
 
-		// Because the application sets a default page title,
-		// we need to get it from the menu item itself
+		// Because the application sets a default page title, we need to get it from the menu item itself
 		$menu = $menus->getActive();
 		if ($menu) {
 			$this->params->def('page_heading', $this->params->get('page_title', $menu->title));
@@ -138,18 +138,15 @@ class BaseView extends \JViewLegacy
 			$this->params->def('page_heading', \JText::_('COM_DPCALENDAR_DEFAULT_PAGE_TITLE'));
 		}
 
-		$title = $this->params->get('page_title', '');
-		if (empty($title)) {
-			$title = $this->app->getCfg('sitename');
-		} else {
-			if ($this->app->getCfg('sitename_pagetitles', 0) == 1) {
-				$title = \JText::sprintf('JPAGETITLE', $this->app->getCfg('sitename'), $title);
-			} else {
-				if ($this->app->getCfg('sitename_pagetitles', 0) == 2) {
-					$title = \JText::sprintf('JPAGETITLE', $title, $this->app->getCfg('sitename'));
-				}
-			}
+		// Check for empty title and add site name if param is set
+		$title = $this->getDocumentTitle();
+		if ($this->app->get('sitename_pagetitles', 0) == 1) {
+			$title = \JText::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
 		}
+		if ($this->app->get('sitename_pagetitles', 0) == 2) {
+			$title = \JText::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
+		}
+
 		$this->document->setTitle($title);
 
 		if ($this->params->get('menu-meta_description')) {
@@ -234,5 +231,16 @@ class BaseView extends \JViewLegacy
 		$this->app->redirect(\JRoute::_($link), $this->translate('COM_DPCALENDAR_NOT_LOGGED_IN'), 'warning');
 
 		return false;
+	}
+
+	protected function getDocumentTitle()
+	{
+		$title = $this->params->get('page_title', '');
+
+		if (empty($title)) {
+			$title = $this->app->get('sitename');
+		}
+
+		return $title;
 	}
 }

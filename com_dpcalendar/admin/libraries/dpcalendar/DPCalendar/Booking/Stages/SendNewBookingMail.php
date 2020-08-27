@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
 use DPCalendar\Helper\Booking;
 use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\Ical;
+use Joomla\CMS\Mail\Exception\MailDisabledException;
 use League\Pipeline\StageInterface;
 
 class SendNewBookingMail implements StageInterface
@@ -102,7 +103,9 @@ class SendNewBookingMail implements StageInterface
 					\JFile::delete($file);
 				}
 
-				throw $e;
+				if (!$e instanceof MailDisabledException) {
+					throw $e;
+				}
 			}
 		}
 

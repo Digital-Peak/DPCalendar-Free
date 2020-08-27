@@ -55,7 +55,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 			$active = $menu->getActive();
 			$params = new Registry();
 			if ($active) {
-				$params->loadString($active->params);
+				$params->loadString($active->getParams());
 			}
 			$this->items    = [];
 			$this->allItems = [];

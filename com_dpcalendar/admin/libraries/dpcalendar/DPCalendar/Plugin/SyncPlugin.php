@@ -16,7 +16,6 @@ use Joomla\Registry\Registry;
  */
 abstract class SyncPlugin extends DPCalendarPlugin
 {
-
 	/**
 	 * Getting the sync token to determine if a full sync needs to be done.
 	 *
@@ -122,8 +121,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		$syncEnd = \DPCalendarHelper::getDate();
 		$syncEnd->modify($this->params->get('sync_end', '+3 year'));
 
-		// If there are deleted events in the external calendar system we
-		// will detect them when publish down is set
+		// If there are deleted events in the external calendar system we will detect them when publish down is set
 		$db->setQuery('update #__dpcalendar_events set publish_down = now() where catid = ' . $db->q($calendar->id));
 		$db->execute();
 
@@ -197,7 +195,8 @@ abstract class SyncPlugin extends DPCalendarPlugin
 
 		if ($foundEvents) {
 			$db->setQuery(
-				'update #__dpcalendar_events set publish_down = ' . $db->q($db->getNullDate()) . ' where id in (' . implode(',', $foundEvents) . ')'
+				'update #__dpcalendar_events set publish_down = ' . $db->q($db->getNullDate()) .
+				' where id in (' . implode(',', $foundEvents) . ') or original_id in (' . implode(',', $foundEvents) . ')'
 			);
 			$db->execute();
 		}
@@ -225,7 +224,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 	/**
 	 * Function to force a sync.
 	 */
-	public function onEventsSync($plugin = null)
+	public function onEventsSync($plugin = null, $ids = [])
 	{
 		// Only do a sync when enabled in the plugin
 		if ($this->params->get('cache', 1) != 2) {
@@ -239,6 +238,9 @@ abstract class SyncPlugin extends DPCalendarPlugin
 
 		// Loop through the calendars to sync
 		foreach ($this->fetchCalendars() as $calendar) {
+			if ($ids && !in_array(str_replace($this->identifier . '-', '', $calendar->id), $ids)) {
+				continue;
+			}
 			$this->sync($calendar, true);
 		}
 	}

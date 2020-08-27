@@ -349,18 +349,43 @@
 	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 	 */
 
+	function watchElements(elements)
+	{
+		elements.forEach((mapElement) => {
+			if ('IntersectionObserver' in window === false) {
+				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
+				return;
+			}
+
+			const observer = new IntersectionObserver(
+				(entries, observer) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) {
+							return;
+						}
+						observer.unobserve(mapElement);
+
+						loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
+					});
+				}
+			);
+			observer.observe(mapElement);
+		});
+	}
+
+	/**
+	 * @package   DPCalendar
+	 * @author    Digital Peak http://www.digital-peak.com
+	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+	 */
+
 	function setup$2()
 	{
 		const map = document.querySelector('.com-dpcalendar-eventform .dp-map');
 		if (map != null) {
-			loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => {
-				map.addEventListener('dp-map-loaded', () => {
-					updateLocationFrame();
-				});
-				if (map.dpmap) {
-					updateLocationFrame();
-				}
-			});
+			map.addEventListener('dp-map-loaded', () => updateLocationFrame());
+			watchElements([map]);
 		}
 
 		const rooms = document.querySelector('.com-dpcalendar-eventform .dp-field-rooms');

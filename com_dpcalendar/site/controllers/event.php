@@ -82,9 +82,9 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		if ($calendar != null && $event != null) {
 			return $calendar->canDelete || ($calendar->canEditOwn && $event->created_by == JFactory::getUser()->id);
-		} else {
-			return JFactory::getUser()->authorise('core.delete', $this->option);
 		}
+
+		return JFactory::getUser()->authorise('core.delete', $this->option);
 	}
 
 	public function cancel($key = 'e_id')
@@ -379,7 +379,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		if ($data['location_ids']) {
 			foreach ($data['location_ids'] as $index => $locationId) {
-				if (is_numeric($locationId)) {
+				if (is_numeric($locationId) || !$locationId) {
 					continue;
 				}
 

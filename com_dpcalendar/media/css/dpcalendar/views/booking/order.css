@@ -31,6 +31,7 @@
 
 .com-dpcalendar-booking-order .dp-control, .com-dpcalendar-booking-order .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-booking-order .dp-control__label, .com-dpcalendar-booking-order .control-group .control-label {

@@ -12,6 +12,7 @@ use Joomla\Registry\Registry;
 // TCPDF variables
 define('K_TCPDF_EXTERNAL_CONFIG', true);
 define('K_TCPDF_THROW_EXCEPTION_ERROR', true);
+define('PDF_FONT_NAME_MAIN', 'dejavusans');
 
 class DPCalendar extends \TCPDF
 {

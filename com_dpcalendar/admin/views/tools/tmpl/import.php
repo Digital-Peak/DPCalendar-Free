@@ -13,8 +13,10 @@ $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_IMPORT_WA
 ?>
 <form action="<?php echo JRoute::_('index.php?option=com_dpcalendar&task=import.add'); ?>" method="post" name="adminForm" id="adminForm"
 	  class="com-dpcalendar-tools-import">
-	<div id="j-sidebar-container" class="com-dpcalendar-tools-import__sidebar span2"><?php echo $this->sidebar; ?></div>
-	<div id="j-main-container" class="com-dpcalendar-tools-import__content span10">
+	<?php if ($this->sidebar) { ?>
+		<div id="j-sidebar-container"><?php echo $this->sidebar; ?></div>
+	<?php } ?>
+	<div id="j-main-container">
 		<div id="filter-bar" class="com-dpcalendar-tools-import__filters dp-filter">
 			<div class="dp-filter__search">
 				<label class="element-invisible" for="filter_search"><?php echo $this->translate('JSEARCH_FILTER_LABEL'); ?></label>

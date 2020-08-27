@@ -10,16 +10,16 @@
 			       description="COM_DPCALENDAR_FIELD_CALENDAR_DEFAULT_MENU_ITEM_DESC">
 				<option value=""></option>
 			</field>
-			<field name="notification_groups_create" type="usergroup" multiple="true"
+			<field name="notification_groups_create" type="usergrouplist" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_DESC"/>
-			<field name="notification_groups_edit" type="usergroup" multiple="true"
+			<field name="notification_groups_edit" type="usergrouplist" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_DESC"/>
-			<field name="notification_groups_delete" type="usergroup" multiple="true"
+			<field name="notification_groups_delete" type="usergrouplist" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_DESC"/>
-			<field name="notification_groups_book" type="usergroup" multiple="true"
+			<field name="notification_groups_book" type="usergrouplist" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_DESC"/>
 			<field name="etag" type="hidden" default="1"/>

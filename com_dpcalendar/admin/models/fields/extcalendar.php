@@ -22,7 +22,7 @@ class JFormFieldExtcalendar extends JFormField
 		JFactory::getSession()->set('extcalendarOrigin', JUri::getInstance()->toString(), 'DPCalendar');
 
 		(new \DPCalendar\HTML\Document\HtmlDocument())->loadScriptFile('dpcalendar/fields/extcalendar.js');
-		JFactory::getDocument()->addStyleDeclaration('#general .controls {margin-left: 0}');
+		JFactory::getDocument()->addStyleDeclaration('#general .controls {margin-left: 0} #general .control-label {width: 0}');
 
 		$url    = 'index.php?option=com_dpcalendar&view=extcalendars';
 		$url    .= '&dpplugin=' . $this->element['plugin'];

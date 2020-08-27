@@ -40,7 +40,7 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 		); ?>
 	</div>
 	<?php if ($event->state == 3) { ?>
-		<span class="dp-event_canceled>">[<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?>]</span>
+		<span class="dp-event_canceled">[<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?>]</span>
 	<?php } ?>
 	<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
 		<?php echo $event->title; ?>

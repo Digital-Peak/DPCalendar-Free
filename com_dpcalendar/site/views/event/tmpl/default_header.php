@@ -10,9 +10,12 @@ defined('_JEXEC') or die();
 $event      = $this->event;
 $eventRoute = $this->router->getEventRoute($event->id, $event->catid, false, true);
 
-require_once JPATH_SITE . '/components/com_mailto/helpers/mailto.php';
-$uri       = JUri::getInstance()->toString(['scheme', 'host', 'port']);
-$mailtoUrl = 'index.php?option=com_mailto&tmpl=component&link=' . MailToHelper::addLink($uri . $eventRoute);
+$mailtoUrl = '';
+if (file_exists(JPATH_SITE . '/components/com_mailto/helpers/mailto.php')) {
+	require_once JPATH_SITE . '/components/com_mailto/helpers/mailto.php';
+	$uri       = JUri::getInstance()->toString(['scheme', 'host', 'port']);
+	$mailtoUrl = 'index.php?option=com_mailto&tmpl=component&link=' . MailToHelper::addLink($uri . $eventRoute);
+}
 
 // Compile the Google url
 $startDate  = $this->dateHelper->getDate($event->start_date, $event->all_day);
@@ -42,14 +45,18 @@ $deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return
 $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 ?>
 <div class="com-dpcalendar-event__actions dp-button-bar dp-print-hide">
-	<button type="button" class="dp-button dp-button-print" data-selector=".com-dpcalendar-event">
-		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PRINTING]); ?>
-		<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'); ?>
-	</button>
-	<button type="button" class="dp-button dp-button-mail" data-mailtohref="<?php echo $mailtoUrl; ?>">
-		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAIL]); ?>
-		<?php echo $this->translate('JGLOBAL_EMAIL'); ?>
-	</button>
+	<?php if ($this->params->get('event_show_print', 1)) { ?>
+		<button type="button" class="dp-button dp-button-print" data-selector=".com-dpcalendar-event">
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PRINTING]); ?>
+			<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'); ?>
+		</button>
+	<?php } ?>
+	<?php if ($mailtoUrl) { ?>
+		<button type="button" class="dp-button dp-button-mail" data-mailtohref="<?php echo $mailtoUrl; ?>">
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAIL]); ?>
+			<?php echo $this->translate('JGLOBAL_EMAIL'); ?>
+		</button>
+	<?php } ?>
 	<?php if ($this->params->get('event_show_copy', '1')) { ?>
 		<button type="button" class="dp-button dp-button-action dp-button-copy-google" data-href="<?php echo $googleUrl; ?>" data-target="new">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DOWNLOAD]); ?>

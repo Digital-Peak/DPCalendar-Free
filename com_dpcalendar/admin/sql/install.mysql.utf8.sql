@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `capacity` int(11) DEFAULT NULL,
   `capacity_used` int(11) DEFAULT 0,
   `max_tickets` int(11) DEFAULT 1,
-  `booking_series` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  `booking_series` tinyint(3) unsigned NOT NULL DEFAULT '2',
   `booking_closing_date` VARCHAR(255) DEFAULT NULL,
   `price` text,
   `earlybird` text,

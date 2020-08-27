@@ -186,11 +186,11 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$form->setFieldAttribute('created_by', 'type', 'sql');
 			$form->setFieldAttribute('created_by', 'key_field', 'value');
 			$form->setFieldAttribute('created_by', 'value_field', 'text');
-			$form->setFieldAttribute('created_by', 'query', 'select id as value, name as text from #__users union all select null, null');
+			$form->setFieldAttribute('created_by', 'query', 'select id as value, name as text from #__users union all select null, null order by text');
 			$form->setFieldAttribute('modified_by', 'type', 'sql');
 			$form->setFieldAttribute('modified_by', 'key_field', 'value');
 			$form->setFieldAttribute('modified_by', 'value_field', 'text');
-			$form->setFieldAttribute('modified_by', 'query', 'select id as value, name as text from #__users union all select null, null');
+			$form->setFieldAttribute('modified_by', 'query', 'select id as value, name as text from #__users union all select null, null order by text');
 		}
 
 		return $return;

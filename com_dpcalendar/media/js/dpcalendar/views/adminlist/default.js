@@ -47,10 +47,10 @@
 		const closeButton = document.querySelector('.com-dpcalendar-events .dp-button-close');
 		if (closeButton) {
 			closeButton.addEventListener('click', (e) => {
-				document.id('batch-category-id').value = '';
-				document.id('batch-access').value = '';
-				document.id('batch-language-id').value = '';
-				document.id('batch-tag-id)').value = '';
+				document.getElementById('batch-category-id').value = '';
+				document.getElementById('batch-access').value = '';
+				document.getElementById('batch-language-id').value = '';
+				document.getElementById('batch-tag-id').value = '';
 			});
 		}
 

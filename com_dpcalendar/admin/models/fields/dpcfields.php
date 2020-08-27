@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
 JFormHelper::loadFieldClass('list');
 
 class JFormFieldDPCFields extends JFormFieldList
@@ -42,8 +43,6 @@ class JFormFieldDPCFields extends JFormFieldList
 
 			$options[] = JHtml::_('select.option', $field->fieldname, JText::_($field->getTitle()));
 		}
-
-		\JLoader::import('components.com_fields.helpers.fields', JPATH_ADMINISTRATOR);
 
 		$fields = FieldsHelper::getFields('com_dpcalendar.' . $this->element['section']);
 		foreach ($fields as $field) {

@@ -574,6 +574,9 @@ class Location
 		if (!empty($addr->city)) {
 			$locObject->city = $addr->city;
 		}
+		if (!empty ($addr->town)) {
+			$locObject->city = $addr->town;
+		}
 		if (!empty($addr->postcode)) {
 			$locObject->zip = $addr->postcode;
 		}

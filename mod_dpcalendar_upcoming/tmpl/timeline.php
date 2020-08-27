@@ -30,7 +30,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 					<div class="mod-dpcalendar-upcoming-timeline__information">
 						<h3 class="mod-dpcalendar-upcoming-timeline__title" style="background-color: #<?php echo $event->color; ?>">
 							<?php if ($event->state == 3) { ?>
-								<span class="dp-event_canceled>">[<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_CANCELED'); ?>]</span>
+								<span class="dp-event_canceled">[<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_CANCELED'); ?>]</span>
 							<?php } ?>
 							<a href="<?php echo $event->realUrl; ?>" class="dp-event-url dp-link"
 							   style="color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($event->color); ?>">

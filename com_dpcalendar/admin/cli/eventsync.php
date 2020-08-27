@@ -18,13 +18,9 @@ require_once JPATH_BASE . '/includes/defines.php';
 require_once JPATH_BASE . '/includes/framework.php';
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-JLog::addLogger([
-	'text_file' => 'com_dpcalendars.cli.eventsync.errors.php'
-], JLog::ERROR, 'com_dpcalendar');
+JLog::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.errors.php'], JLog::ERROR, 'com_dpcalendar');
 
-JLog::addLogger([
-	'text_file' => 'com_dpcalendars.cli.eventsync.php'
-], JLog::NOTICE, 'com_dpcalendar');
+JLog::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.php'], JLog::NOTICE, 'com_dpcalendar');
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -44,11 +40,15 @@ JLog::add('Starting with the DPCalendar event sync', JLog::DEBUG, 'com_dpcalenda
 
 class DPCalendarEventSync extends JApplicationCli
 {
-
 	public function doExecute()
 	{
 		// Disabling session handling otherwise it will result in an error
 		JFactory::getConfig()->set('session_handler', 'none');
+
+		// Setting HOST
+		if (empty($_SERVER['HTTP_HOST'])) {
+			$_SERVER['HTTP_HOST'] = JFactory::getConfig()->get('live_site');
+		}
 
 		// Run as super admin
 		$user        = JFactory::getUser();
@@ -59,9 +59,13 @@ class DPCalendarEventSync extends JApplicationCli
 		$property->setValue($user, true);
 		JFactory::getSession()->set('user', $user);
 
+		if ($ids = $this->input->getString('calids', [])) {
+			$ids = explode(',', $ids);
+		}
+
 		try {
 			JPluginHelper::importPlugin('dpcalendar');
-			JFactory::getApplication()->triggerEvent('onEventsSync');
+			JFactory::getApplication()->triggerEvent('onEventsSync', [null, $ids]);
 
 			JLog::add('Finished with the DPCalendar event sync', JLog::DEBUG, 'com_dpcalendar');
 		} catch (Exception $e) {
@@ -76,9 +80,7 @@ class DPCalendarEventSync extends JApplicationCli
 
 	public function getCfg($varname, $default = null)
 	{
-		$config = JFactory::getConfig();
-
-		return $config->get('' . $varname, $default);
+		return JFactory::getConfig()->get('' . $varname, $default);
 	}
 
 	public static function getRouter($name = '', array $options = [])
@@ -114,6 +116,11 @@ class DPCalendarEventSync extends JApplicationCli
 	public function isAdmin()
 	{
 		return false;
+	}
+
+	public function getName()
+	{
+		return 'eventsync';
 	}
 
 	public function getLanguageFilter()

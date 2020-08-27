@@ -10,8 +10,10 @@ defined('_JEXEC') or die();
 $this->dpdocument->loadStyleFile('dpcalendar/views/tools/default.css');
 ?>
 <div class="com-dpcalendar-tools-default">
-	<div id="j-sidebar-container" class="com-dpcalendar-tools-default__sidebar span2"><?php echo $this->sidebar; ?></div>
-	<div id="j-main-container" class="com-dpcalendar-tools-default__content span10">
+	<?php if ($this->sidebar) { ?>
+		<div id="j-sidebar-container"><?php echo $this->sidebar; ?></div>
+	<?php } ?>
+	<div id="j-main-container">
 		<div id="cpanel">
 			<div class="com-dpcalendar-tools-default__icons">
 				<div class="dp-quick-icon">

@@ -84,15 +84,18 @@ class DPCalendarTableEvent extends JTable
 		}
 
 		// Verify that the alias is unique
-		$table = JTable::getInstance('Event', 'DPCalendarTable');
-		if ($table->load(['alias' => $this->alias, 'catid' => $this->catid]) && ($table->id != $this->id || $this->id == 0)) {
-			$this->alias = StringHelper::increment($this->alias, 'dash');
-			$this->alias = JApplicationHelper::stringURLSafe($this->alias);
+		while (true) {
+			$this->getDbo()->setQuery('SELECT id, alias FROM #__dpcalendar_events WHERE alias = ' . $this->getDbo()->quote($this->alias) . ' and id != ' . (int)$this->id);
+			$table = $this->getDbo()->loadObject();
+			if (!$table || !$table->id) {
+				break;
+			}
+
+			$this->alias = JApplicationHelper::stringURLSafe(StringHelper::increment($this->alias, 'dash'));
 		}
 
 		$start = DPCalendarHelper::getDate($this->start_date, $this->all_day);
 		$end   = DPCalendarHelper::getDate($this->end_date, $this->all_day);
-
 		if ($start->format('U') > $end->format('U')) {
 			$end = clone $start;
 			$end->modify('+30 minutes');
@@ -116,7 +119,9 @@ class DPCalendarTableEvent extends JTable
 
 		// Break never ending rules
 		if (!empty($this->rrule) && strpos(strtoupper($this->rrule), 'UNTIL') === false && strpos(strtoupper($this->rrule), 'COUNT') === false) {
-			$this->rrule .= ';UNTIL=20200101T000000Z';
+			$until = new DateTime();
+			$until->modify('+3 years');
+			$this->rrule .= ';UNTIL=' . $until->format('Y') . '0101T000000Z';
 		}
 
 		$table       = JTable::getInstance('Event', 'DPCalendarTable');
@@ -351,13 +356,6 @@ class DPCalendarTableEvent extends JTable
 			return false;
 		}
 
-		// Check for existing name
-		$this->_db->setQuery('SELECT id, original_id, alias FROM #__dpcalendar_events WHERE alias = ' . $this->_db->quote($this->alias));
-		$xid = $this->_db->loadObject();
-		if ($xid && $xid->id != (int)$this->id && (int)$xid->original_id == (int)$this->original_id) {
-			$this->alias = StringHelper::increment($this->alias, 'dash');
-		}
-
 		if (empty($this->alias)) {
 			$this->alias = $this->title;
 		}
@@ -474,14 +472,7 @@ class DPCalendarTableEvent extends JTable
 		$this->_db->setQuery(
 			'UPDATE ' . $this->_db->quoteName($this->_tbl) . ' SET ' . $this->_db->quoteName('state') . ' = ' . (int)$state . ' WHERE (' . $where . ')' . $checkin
 		);
-		$this->_db->query();
-
-		// Check for a database error.
-		if ($this->_db->getErrorNum()) {
-			$this->setError($this->_db->getErrorMsg());
-
-			return false;
-		}
+		$this->_db->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in.
 		if ($checkin && (count($pks) == $this->_db->getAffectedRows())) {

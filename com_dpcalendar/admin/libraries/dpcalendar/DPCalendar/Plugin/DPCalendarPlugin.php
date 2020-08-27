@@ -396,7 +396,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	public function onEventsFetch($calendarId, \JDate $startDate = null, \JDate $endDate = null, Registry $options = null)
 	{
 		if (strpos($calendarId, $this->identifier) !== 0) {
-			return;
+			return [];
 		}
 
 		$params = $this->params;
@@ -432,7 +432,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 	public function onCalendarsFetch($calendarIds = null, $type = null)
 	{
 		if (!empty($type) && $this->identifier != $type) {
-			return;
+			return [];
 		}
 
 		$ids = [];
@@ -446,7 +446,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 				}
 			}
 			if (empty($ids)) {
-				return;
+				return [];
 			}
 		}
 
@@ -581,12 +581,11 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$catId = $formField->getAttribute('default', null);
 
 			// Choose the first category available
-			$xml = new \DOMDocument();
-			$xml->loadHTML($formField->__get('input'));
-			$options = $xml->getElementsByTagName('option');
+			$xml     = simplexml_load_string($formField->__get('input'));
+			$options = $xml->xpath('//option');
 
-			if (!$catId && $firstChoice = $options->item(0)) {
-				$catId = $firstChoice->getAttribute('value');
+			if (!$catId && $options && $firstChoice = reset($options)) {
+				$catId = (string)$firstChoice->attributes()->value;
 			}
 		}
 
@@ -656,7 +655,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->start_date       = '';
 		$event->end_date         = '';
 		$event->show_end_time    = true;
-		$event->all_day          = false;
+		$event->all_day          = 0;
 		$event->color            = '';
 		$event->url              = '';
 		$event->price            = [];
@@ -900,7 +899,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			}
 		}
 		$tmpEvent->locations = $locations;
-		$tmpEvent->all_day   = $allDay;
+		$tmpEvent->all_day   = $allDay ? 1 : 0;
 
 		if ($original !== null) {
 			if ($recId !== null) {

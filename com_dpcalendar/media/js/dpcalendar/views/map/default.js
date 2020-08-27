@@ -8,8 +8,39 @@
 	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 	 */
 
+	function watchElements(elements)
+	{
+		elements.forEach((mapElement) => {
+			if ('IntersectionObserver' in window === false) {
+				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
+				return;
+			}
+
+			const observer = new IntersectionObserver(
+				(entries, observer) => {
+					entries.forEach((entry) => {
+						if (!entry.isIntersecting) {
+							return;
+						}
+						observer.unobserve(mapElement);
+
+						loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
+					});
+				}
+			);
+			observer.observe(mapElement);
+		});
+	}
+
+	/**
+	 * @package   DPCalendar
+	 * @author    Digital Peak http://www.digital-peak.com
+	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+	 */
+
 	document.addEventListener('DOMContentLoaded', () => {
-		const assets = ['/com_dpcalendar/js/dpcalendar/dpcalendar.js', '/com_dpcalendar/js/dpcalendar/map.js'];
+		const assets = ['/com_dpcalendar/js/dpcalendar/dpcalendar.js'];
 
 		if (document.querySelector('.dp-search-map .dp-form')) {
 			assets.push('/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js');
@@ -18,45 +49,38 @@
 
 		loadDPAssets(assets, () => {
 			const update = (root) => {
-				const map = root.querySelector('.dp-map');
-				if (map == null) {
+				const mapObject = root.querySelector('.dp-map');
+				if (mapObject == null || !mapObject.dpmap) {
 					return;
 				}
 
-				const mapHandler = () => {
-					DPCalendar.request(
-						'view=map&layout=events&format=raw',
-						(json) => {
-							DPCalendar.Map.clearMarkers(map);
+				DPCalendar.request(
+					'view=map&layout=events&format=raw',
+					(json) => {
+						DPCalendar.Map.clearMarkers(mapObject);
 
-							json.data.events.forEach((event) => {
-								event.location.forEach((location) => {
-									const locationData = JSON.parse(JSON.stringify(location));
-									locationData.title = event.title;
-									locationData.color = event.color;
-									locationData.description = event.description;
+						json.data.events.forEach((event) => {
+							event.location.forEach((location) => {
+								const locationData = JSON.parse(JSON.stringify(location));
+								locationData.title = event.title;
+								locationData.color = event.color;
+								locationData.description = event.description;
 
-									DPCalendar.Map.createMarker(map, locationData);
-								});
+								DPCalendar.Map.createMarker(mapObject, locationData);
 							});
+						});
 
-							if (json.data.location && root.querySelector('.dp-input[name=radius]').value != -1) {
-								DPCalendar.Map.drawCircle(
-									map,
-									json.data.location,
-									root.querySelector('.dp-input[name=radius]').value,
-									root.querySelector('.dp-input[name="length-type"]').value
-								);
-							}
-						},
-						DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)'))
-					);
-				};
-
-				map.addEventListener('dp-map-loaded', mapHandler);
-				if (map.dpmap) {
-					mapHandler();
-				}
+						if (json.data.location && root.querySelector('.dp-input[name=radius]').value != -1) {
+							DPCalendar.Map.drawCircle(
+								mapObject,
+								json.data.location,
+								root.querySelector('.dp-input[name=radius]').value,
+								root.querySelector('.dp-input[name="length-type"]').value
+							);
+						}
+					},
+					DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)'))
+				);
 			};
 
 			[].slice.call(document.querySelectorAll('.dp-search-map')).forEach((map) => {
@@ -91,7 +115,8 @@
 					return false;
 				});
 
-				update(map);
+				map.querySelector('.dp-map').addEventListener('dp-map-loaded', () => update(map));
+				watchElements(map.querySelectorAll('.dp-map'));
 
 				const geoComplete = map.querySelector('.dp-input_location');
 				if (geoComplete && geoComplete.dataset.dpAutocomplete == 1) {

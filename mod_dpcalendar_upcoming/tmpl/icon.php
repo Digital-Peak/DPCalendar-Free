@@ -36,7 +36,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 							]
 						); ?>
 						<?php if ($event->state == 3) { ?>
-							<span class="dp-event_canceled>">[<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_CANCELED'); ?>]</span>
+							<span class="dp-event_canceled">[<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_CANCELED'); ?>]</span>
 						<?php } ?>
 						<a href="<?php echo $event->realUrl; ?>" class="dp-event-url dp-link"><?php echo $event->title; ?></a>
 						<?php if ($params->get('show_display_events') && $event->displayEvent->afterDisplayTitle) { ?>

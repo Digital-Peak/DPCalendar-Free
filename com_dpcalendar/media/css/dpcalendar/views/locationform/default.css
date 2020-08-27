@@ -57,6 +57,7 @@
 
 .com-dpcalendar-locationform .dp-control, .com-dpcalendar-locationform .control-group {
 	display: flex;
+	margin-bottom: 5px;
 }
 
 .com-dpcalendar-locationform .dp-control__label, .com-dpcalendar-locationform .control-group .control-label {

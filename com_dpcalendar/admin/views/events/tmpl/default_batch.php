@@ -7,6 +7,9 @@
  */
 defined('_JEXEC') or die();
 
+if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
+	return false;
+}
 ?>
 <div class="modal hide fade com-dpcalendar-adminlist__batch" id="collapseModal">
 	<div class="modal-header">

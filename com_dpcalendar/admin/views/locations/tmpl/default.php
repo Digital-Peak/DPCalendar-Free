@@ -13,9 +13,11 @@ $this->dpdocument->addScriptOptions('adminlist', ['listOrder' => $this->state->g
 ?>
 <div class="com-dpcalendar-locations com-dpcalendar-adminlist">
 	<form action="<?php echo $this->router->route('index.php?option=com_dpcalendar&view=locations'); ?>"
-		  method="post" name="adminForm" id="adminForm" class="row">
-		<div id="j-sidebar-container" class="span2 col-md-2"><?php echo $this->sidebar; ?></div>
-		<div id="j-main-container" class="span10 col-md-10 j-toggle-main">
+		  method="post" name="adminForm" id="adminForm">
+		<?php if ($this->sidebar) { ?>
+			<div id="j-sidebar-container"><?php echo $this->sidebar; ?></div>
+		<?php } ?>
+		<div id="j-main-container">
 			<?php echo $this->layoutHelper->renderLayout('joomla.searchtools.default', ['view' => $this]); ?>
 			<?php echo $this->loadTemplate('locations'); ?>
 		</div>

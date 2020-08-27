@@ -77,7 +77,11 @@ foreach ($this->items as $event) {
 		'allDay'      => (bool)$event->all_day,
 		'description' => $description,
 		'location'    => $locations,
-		'classNames'  => ['dp-event-' . $event->id, 'dp-event-calendar-' . $event->catid],
+		'classNames'  => [
+			'dp-event-' . $event->id,
+			'dp-event-calendar-' . $event->catid,
+			'dp-event_' . ($event->capacity == $event->capacity_used ? 'booked-out' : 'not-booked-out')
+		]
 	];
 
 	if ($event->state == 3 && $this->compactMode == 0) {

@@ -12,6 +12,8 @@ defined('_JEXEC') or die();
 
 use League\Pipeline\StageInterface;
 
+\JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
+
 class AdjustCustomFields implements StageInterface
 {
 	public function __invoke($payload)
@@ -21,7 +23,11 @@ class AdjustCustomFields implements StageInterface
 		}
 
 		// Clear the cache, doggy
-		$reflection = new \ReflectionProperty(\FieldsHelper::class, 'fieldsCache');
+		try {
+			$reflection = new \ReflectionProperty(\FieldsHelper::class, 'fieldsCache');
+		} catch (\Exception $e) {
+			$reflection = new \ReflectionProperty(\Joomla\Component\Fields\Administrator\Helper\FieldsHelper::class, 'fieldsCache');
+		}
 		$reflection->setAccessible(true);
 		$reflection->setValue(null, null);
 

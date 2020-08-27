@@ -10,7 +10,7 @@ defined('_JEXEC') or die();
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $saveOrder = $listOrder == 'a.ordering';
-if ($saveOrder) {
+if ($saveOrder && \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
 	$saveOrderingUrl = 'index.php?option=com_dpcalendar&task=extcalendars.saveOrderAjax&tmpl=component';
 	JHtml::_('sortablelist.sortable', 'extcalendarsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }

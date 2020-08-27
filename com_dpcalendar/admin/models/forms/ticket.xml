@@ -21,6 +21,7 @@
 			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_NEED_PAYMENT</option>
 			<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
 			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
+			<option value="6">COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED</option>
 			<option value="-2">JTRASHED</option>
 		</field>
 	</fieldset>

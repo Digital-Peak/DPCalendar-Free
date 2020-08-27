@@ -25,6 +25,7 @@ if ($this->pluginParams->get('cache', 1) == '2') {
 		  method="post" name="adminForm" id="adminForm"
 		  data-sync="<?php echo $this->pluginParams->get('cache', 1); ?>"
 		  data-sync-plugin="<?php echo $this->input->getWord('dpplugin'); ?>">
+		<?php echo $this->layoutHelper->renderLayout('joomla.searchtools.default', ['view' => $this]); ?>
 		<?php echo $this->loadTemplate('calendars'); ?>
 		<input type="hidden" name="action" value="" id="extcalendar-action"/>
 		<input type="hidden" name="task" value=""/>

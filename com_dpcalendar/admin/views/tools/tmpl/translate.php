@@ -15,8 +15,10 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/tools/translate.js');
 $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_TEXT'), 'warning');
 ?>
 <div class="com-dpcalendar-tools-translate">
-	<div id="j-sidebar-container" class="com-dpcalendar-tools-translate__sidebar span2"><?php echo $this->sidebar; ?></div>
-	<div id="j-main-container" class="com-dpcalendar-tools-translate__content span10">
+	<?php if ($this->sidebar) { ?>
+		<div id="j-sidebar-container"><?php echo $this->sidebar; ?></div>
+	<?php } ?>
+	<div id="j-main-container">
 		<div class="com-dpcalendar-tools-translate__loader">
 			<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 		</div>

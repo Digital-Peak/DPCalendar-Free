@@ -142,7 +142,6 @@
 	.com-dpcalendar-timeline .dp-event .dp-link_cta {
 		float: none;
 		text-align: center;
-		width: 100%;
 		display: block;
 		margin: 10px 0;
 	}
@@ -415,7 +414,8 @@
 	position: relative;
 	background: #fff;
 	padding: 15px;
-	margin: 5px 0 10px 64px;
+	margin-top: 5px;
+	margin-left: 64px;
 	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
 	transition: all 0.3s ease;
 	width: 100%;
@@ -443,7 +443,6 @@
 	right: 0;
 	margin-right: -6px;
 	background-color: inherit;
-	box-shadow: -3px 3px 2px rgba(52, 58, 67, 0.05);
 	transform: rotate(45deg);
 }
 

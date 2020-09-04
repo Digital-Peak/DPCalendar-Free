@@ -533,6 +533,20 @@
 	padding: 0 1em;
 }
 
+.com-dpcalendar-bookingform .dp-term {
+	display: flex;
+	align-items: center;
+	margin: 5px;
+}
+
+.com-dpcalendar-bookingform .dp-term__input {
+	margin: 0 5px 0 0;
+}
+
+.com-dpcalendar-bookingform .dp-term__text {
+	margin: 0;
+}
+
 .com-dpcalendar-bookingform .dp-icon svg {
 	width: 1.2em;
 	height: 1.2em;

@@ -980,10 +980,7 @@
 	{
 		// Fullcalendar needs to be loaded first
 		loadDPAssets(['/com_dpcalendar/js/fullcalendar/fullcalendar.js', '/com_dpcalendar/css/fullcalendar/fullcalendar.css'], () => {
-			const assets = [
-				'/com_dpcalendar/js/popper/popper.js',
-				'/com_dpcalendar/js/dpcalendar/dpcalendar.js'
-			];
+			const assets = ['/com_dpcalendar/js/popper/popper.js'];
 
 			if (options['resources']) {
 				assets.push('/com_dpcalendar/css/scheduler/scheduler.css');
@@ -1058,12 +1055,12 @@
 	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 	 */
 
-	loadDPAssets(['/com_dpcalendar/js/moment/moment.js'], () => {
-		[].slice.call(document.querySelectorAll('.dp-calendar')).forEach((el) => {
-			if (!el.getAttribute('data-options')) {
-				return;
-			}
+	[].slice.call(document.querySelectorAll('.dp-calendar')).forEach((el) => {
+		if (!el.getAttribute('data-options')) {
+			return;
+		}
 
+		loadDPAssets(['/com_dpcalendar/js/moment/moment.js', '/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
 			let options = Joomla.getOptions(el.getAttribute('data-options'));
 			options = Object.assign(options, el.dataset);
 

@@ -577,16 +577,28 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$catId = $data->catid;
 		}
 
+		// When there is no calendar, then get it from the form
 		if (empty($catId) && $formField = $form->getField('catid')) {
 			$catId = $formField->getAttribute('default', null);
 
-			// Choose the first category available
-			$xml     = simplexml_load_string($formField->__get('input'));
-			$options = $xml->xpath('//option');
+			// Do not print errors
+			$oldErrorHandling = libxml_use_internal_errors(true);
+			try {
+				// Get the available calendars
+				$xml     = new \SimpleXMLElement($formField->__get('input'));
+				$options = $xml->xpath('//option');
 
-			if (!$catId && $options && $firstChoice = reset($options)) {
-				$catId = (string)$firstChoice->attributes()->value;
+				// Choose the first available calendar
+				if (!$catId && $options && $firstChoice = reset($options)) {
+					$catId = (string)$firstChoice->attributes()->value;
+				}
+			} catch (\Exception $e) {
+				// Ignore
 			}
+
+			// Cleanup
+			libxml_clear_errors();
+			libxml_use_internal_errors($oldErrorHandling);
 		}
 
 		if (!$catId || strpos($catId, $this->identifier) !== 0) {

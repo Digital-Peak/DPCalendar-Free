@@ -24,27 +24,16 @@
 		});
 
 		[].slice.call(document.querySelectorAll('.dp-ticket__amount .dp-select, .dp-option__amount .dp-select, .dp-field-country .dp-select')).forEach((select) => {
-			select.addEventListener('change', () => {
-				calculatePrice();
-			});
+			select.addEventListener('change', calculatePrice);
 		});
 
-		const terms = [].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform__fields .dp-input-terms'));
-		terms.forEach((checkbox) => {
-			checkbox.addEventListener('change', () => {
-				let accepted = true;
-				terms.forEach((term) => {
-					if (!term.checked) {
-						accepted = false;
-					}
-				});
-
-				document.querySelector('.com-dpcalendar-bookingform .dp-button-save').disabled = !accepted;
+		const saveButton = document.querySelector('.com-dpcalendar-bookingform .dp-button-save');
+		if (saveButton) {
+			[].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform__form .dp-input-term')).forEach((checkbox) => {
+				checkbox.addEventListener('change', () => saveButton.disabled = !isSavePossible());
 			});
-		});
 
-		if (terms.length) {
-			document.querySelector('.com-dpcalendar-bookingform .dp-button-save').disabled = true;
+			saveButton.disabled = !isSavePossible();
 		}
 
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform__actions .dp-button')).forEach((button) => {
@@ -52,6 +41,10 @@
 				event.preventDefault();
 
 				const options = document.querySelectorAll('.dp-payment-option');
+
+				if (!isSavePossible()) {
+					return;
+				}
 
 				// If there is one option check it
 				if (button.getAttribute('data-task') == 'save' && options.length == 1) {
@@ -72,7 +65,6 @@
 						return false;
 					}
 
-					const saveButton = document.querySelector('.com-dpcalendar-bookingform .dp-button-save');
 					if (saveButton) {
 						saveButton.disabled = true;
 					}
@@ -179,7 +171,7 @@
 	{
 		const saveButton = document.querySelector('.com-dpcalendar-bookingform .dp-button-save');
 		if (saveButton) {
-			saveButton.disabled = false;
+			saveButton.disabled = !isSavePossible();
 		}
 
 		if (!Joomla.getOptions('DPCalendar.price.url') || !document.querySelector('.dp-price-total__content')) {
@@ -189,9 +181,7 @@
 		let selected = 0;
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform .dp-event')).forEach((event) => {
 			const events = [].slice.call(event.querySelectorAll('.dp-ticket__amount .dp-select'));
-			events.forEach((select) => {
-				selected += parseInt(select.options[select.selectedIndex].value);
-			});
+			events.forEach((select) => selected += parseInt(select.options[select.selectedIndex].value));
 
 			events.forEach((select) => {
 				if (selected > event.getAttribute('data-ticket-count') && parseInt(select.options[select.selectedIndex].value) > 0) {
@@ -325,6 +315,18 @@
 				data
 			);
 		});
+	}
+
+	function isSavePossible()
+	{
+		let accepted = true;
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform__form .dp-input-term')).forEach((term) => {
+			if (!term.checked) {
+				accepted = false;
+			}
+		});
+
+		return accepted;
 	}
 
 }());

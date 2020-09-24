@@ -16,9 +16,7 @@
 		}
 
 		loadDPAssets(['/com_dpcalendar/js/moment/moment.js'], () => {
-			rrule.addEventListener('change', () => {
-				updateFormFromRule();
-			});
+			rrule.addEventListener('change', updateFormFromRule);
 
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling,#jform_scheduling_monthly_options,#jform_scheduling_daily_weekdays')).forEach((el) => {
 				el.addEventListener('click', () => {
@@ -27,9 +25,7 @@
 				});
 			});
 			[].slice.call(document.querySelectorAll('#jform_scheduling_end_date, #jform_scheduling_interval, #jform_scheduling_repeat_count,#jform_scheduling_weekly_days, #jform_scheduling_monthly_days, #jform_scheduling_monthly_week_days, #jform_scheduling_monthly_week')).forEach((el) => {
-				el.addEventListener('change', () => {
-					updateRuleFromForm();
-				});
+				el.addEventListener('change', updateRuleFromForm);
 			});
 
 			updateFormFromRule();
@@ -88,20 +84,20 @@
 							}
 
 							if (week) {
-								document.getElementById('jform_scheduling_monthly_week').querySelector('option[value="' + week + '"]').selected = true;
+								document.getElementById('jform_scheduling_monthly_week')._choicejs.setChoiceByValue([week]);
 							}
 							if (day) {
-								document.getElementById('jform_scheduling_monthly_week_days').querySelector('option[value="' + day + '"]').selected = true;
+								document.getElementById('jform_scheduling_monthly_week_days')._choicejs.setChoiceByValue([day]);
 							}
 						} else {
-							document.getElementById('jform_scheduling_weekly_days').querySelector('option[value="' + value + '"]').selected = true;
+							document.getElementById('jform_scheduling_weekly_days')._choicejs.setChoiceByValue([value]);
 						}
 					});
 					break;
 				case 'BYMONTHDAY':
 					document.getElementById('jform_scheduling_monthly_options').querySelector('input[value="by_day"]').checked = true;
 					parts[1].split(',').forEach((value) => {
-						document.getElementById('jform_scheduling_monthly_days').querySelector('option[value="' + value + '"]').selected = true;
+						document.getElementById('jform_scheduling_monthly_days')._choicejs.setChoiceByValue([value]);
 					});
 					break;
 				case 'COUNT':
@@ -112,7 +108,7 @@
 					break;
 				case 'UNTIL':
 					const untilField = document.getElementById('jform_scheduling_end_date');
-					untilField.value = moment.utc(parts[1]).format(untilField.getAttribute('format'));
+					untilField.value = moment.utc(parts[1]).format(untilField.getAttribute('data-format'));
 					untilField.setAttribute('data-date', parts[1].substr(0, 8));
 					break;
 			}
@@ -139,9 +135,7 @@
 			const boxes = [].slice.call(document.querySelectorAll('#jform_scheduling_weekly_days option:checked'));
 			if (boxes.length > 0) {
 				rule += ';BYDAY=';
-				boxes.forEach((option) => {
-					rule += option.value + ',';
-				});
+				boxes.forEach((option) => rule += option.value + ',');
 				rule = rule.slice(0, -1);
 			}
 		}
@@ -151,9 +145,7 @@
 				const boxes = [].slice.call(document.querySelectorAll('#jform_scheduling_monthly_days option:checked'));
 				if (boxes.length > 0) {
 					rule += ';BYMONTHDAY=';
-					boxes.forEach((option) => {
-						rule += option.value + ',';
-					});
+					boxes.forEach((option) => rule += option.value + ',');
 					rule = rule.slice(0, -1);
 				}
 			} else {
@@ -171,9 +163,7 @@
 							week = -1;
 						}
 
-						days.forEach((d) => {
-							rule += week + d.value + ',';
-						});
+						days.forEach((d) => rule += week + d.value + ',');
 					});
 					if (rule.endsWith(',')) {
 						rule = rule.slice(0, -1);

@@ -9,8 +9,6 @@
 	 */
 
 	document.addEventListener('DOMContentLoaded', () => {
-		calculatePrice();
-
 		[].slice.call(document.querySelectorAll('.dp-booking-series__input input')).forEach((input) => {
 			input.addEventListener('click', () => {
 				const showSeries = document.getElementById('jform_series0').checked;
@@ -35,6 +33,8 @@
 
 			saveButton.disabled = !isSavePossible();
 		}
+
+		calculatePrice();
 
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform__actions .dp-button')).forEach((button) => {
 			button.addEventListener('click', (event) => {
@@ -169,17 +169,16 @@
 
 	function calculatePrice()
 	{
+		// Set button state
 		const saveButton = document.querySelector('.com-dpcalendar-bookingform .dp-button-save');
 		if (saveButton) {
 			saveButton.disabled = !isSavePossible();
 		}
 
-		if (!Joomla.getOptions('DPCalendar.price.url') || !document.querySelector('.dp-price-total__content')) {
-			return;
-		}
-
-		let selected = 0;
+		// Calculate if there are too many tickets selected per event
+		let hasEventsSelected = false;
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-bookingform .dp-event')).forEach((event) => {
+			let selected = 0;
 			const events = [].slice.call(event.querySelectorAll('.dp-ticket__amount .dp-select'));
 			events.forEach((select) => selected += parseInt(select.options[select.selectedIndex].value));
 
@@ -191,9 +190,20 @@
 
 				select.classList.remove('dp-select_error');
 			});
+
+			if (selected) {
+				hasEventsSelected = true;
+			}
 		});
 
+		// Abort when no price calculation is needed
+		if (!Joomla.getOptions('DPCalendar.price.url') || !document.querySelector('.dp-price-total__content')) {
+			return;
+		}
+
 		const taxElement = document.querySelector('.com-dpcalendar-bookingform .dp-tax');
+
+		// Display overbooking error
 		if (document.querySelectorAll('.com-dpcalendar-bookingform .dp-ticket__amount .dp-select_error').length > 0) {
 			document.querySelector('.com-dpcalendar-bookingform .dp-price-total__content').innerHTML = '';
 			Joomla.renderMessages({error: [Joomla.JText._('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOKED_MESSAGE')]});
@@ -206,7 +216,7 @@
 			return;
 		}
 
-		if (selected === 0 && saveButton) {
+		if (!hasEventsSelected && saveButton) {
 			saveButton.disabled = true;
 		}
 

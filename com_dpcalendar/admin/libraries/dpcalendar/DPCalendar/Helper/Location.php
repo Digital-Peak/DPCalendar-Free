@@ -9,6 +9,8 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\Registry\Registry;
+
 \JTable::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
 
 class Location
@@ -155,20 +157,24 @@ class Location
 		}
 
 		if (!isset($locObject)) {
-			$locObject            = new \stdClass();
-			$locObject->id        = 0;
-			$locObject->title     = $title;
-			$locObject->alias     = \JApplicationHelper::stringURLSafe($title);
-			$locObject->state     = 1;
-			$locObject->language  = '*';
-			$locObject->country   = '';
-			$locObject->province  = '';
-			$locObject->city      = '';
-			$locObject->zip       = '';
-			$locObject->street    = '';
-			$locObject->number    = '';
-			$locObject->latitude  = 0;
-			$locObject->longitude = 0;
+			$locObject              = new \stdClass();
+			$locObject->id          = 0;
+			$locObject->title       = $title;
+			$locObject->alias       = \JApplicationHelper::stringURLSafe($title);
+			$locObject->state       = 1;
+			$locObject->language    = '*';
+			$locObject->country     = '';
+			$locObject->province    = '';
+			$locObject->city        = '';
+			$locObject->zip         = '';
+			$locObject->street      = '';
+			$locObject->number      = '';
+			$locObject->url         = '';
+			$locObject->description = '';
+			$locObject->latitude    = 0;
+			$locObject->longitude   = 0;
+			$locObject->color       = self::getColor($locObject);
+			$locObject->params      = new Registry();
 		}
 
 		$provider = DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap');

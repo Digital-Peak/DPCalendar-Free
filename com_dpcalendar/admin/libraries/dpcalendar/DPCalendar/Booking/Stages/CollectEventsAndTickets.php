@@ -72,6 +72,10 @@ class CollectEventsAndTickets implements StageInterface
 			$payload->events[] = $event;
 		}
 
+		if (count($payload->events) == 1 && $event->original_id == '-1' && $event->booking_series == 0) {
+			throw new \Exception('Original event can not be booked when it is disabled. Please contact the administrator!');
+		}
+
 		return $payload;
 	}
 }

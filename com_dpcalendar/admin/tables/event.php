@@ -281,6 +281,7 @@ class DPCalendarTableEvent extends JTable
 					$this->_db->qn('url') . ' = ' . $this->_db->q($this->url),
 					$this->_db->qn('images') . ' = ' . $this->_db->q($this->images),
 					$this->_db->qn('description') . ' = ' . $this->_db->q($this->description),
+					$this->_db->qn('schedule') . ' = ' . $this->_db->q($this->schedule),
 					$this->_db->qn('capacity') . ' = ' . ($this->capacity === null ? 'NULL' : $this->_db->q($this->capacity)),
 					$this->_db->qn('capacity_used') . ' = ' . $this->_db->q($this->capacity_used),
 					$this->_db->qn('max_tickets') . ' = ' . $this->_db->q($this->max_tickets),

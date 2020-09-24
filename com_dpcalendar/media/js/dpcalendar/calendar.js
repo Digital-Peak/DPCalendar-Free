@@ -329,6 +329,65 @@
 
 	function setup$2(calendar, options)
 	{
+		if (!options['use_hash']) {
+			return;
+		}
+
+		const viewMapping = getMappings(options);
+		const viewMappingReverse = getReversMappings(options);
+
+		// Listening for hash/url changes
+		window.addEventListener('hashchange', () => {
+			const today = new Date();
+			let tmpYear = today.getUTCFullYear();
+			let tmpMonth = today.getUTCMonth() + 1;
+			let tmpDay = today.getUTCDate();
+			let tmpView = viewMappingReverse[options['defaultView']];
+			window.location.hash.replace(/&amp;/gi, '&').split('&').forEach((value) => {
+				if (value.match('^#year')) {
+					tmpYear = value.substring(6);
+				}
+				if (value.match('^month')) {
+					tmpMonth = value.substring(6) - 1;
+				}
+				if (value.match('^day')) {
+					tmpDay = value.substring(4);
+				}
+				if (value.match('^view')) {
+					tmpView = value.substring(5);
+				}
+			});
+
+			const date = new Date(Date.UTC(tmpYear, tmpMonth, tmpDay, 0, 0, 0));
+			const d = calendar.dpCalendar.getDate();
+			const view = calendar.dpCalendar.view;
+			if (date.getUTCFullYear() != d.getUTCFullYear() || date.getUTCMonth() != d.getUTCMonth() || date.getUTCDate() != d.getUTCDate()) {
+				calendar.dpCalendar.gotoDate(date);
+			}
+			if (view.type != viewMapping[tmpView]) {
+				calendar.dpCalendar.changeView(viewMapping[tmpView]);
+			}
+		});
+	}
+
+	function updateHash(d, view, options)
+	{
+		// Setting the hash based on the actual view
+		const newHash = 'year=' + d.getUTCFullYear() + '&month=' + (d.getUTCMonth() + 1) + '&day=' + d.getUTCDate() + '&view=' + view;
+		if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
+			window.location.hash = newHash;
+		}
+	}
+
+	/**
+	 * @package   DPCalendar
+	 * @author    Digital Peak http://www.digital-peak.com
+	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+	 */
+
+	function setup$3(calendar, options)
+	{
 		const viewMapping = getMappings(options);
 
 		// Handling clicking on an event
@@ -412,10 +471,11 @@
 					form.querySelector('input[name=task]').value = '';
 					form.submit();
 				}
-			} else if (options['header'].right.indexOf(viewMapping['day']) > 0) {
-				// The edit form is not loaded, navigate to the day
-				calendar.dpCalendar.gotoDate(info.date);
-				calendar.dpCalendar.changeView(viewMapping['day']);
+				return;
+			}
+
+			if (options['header'].right.indexOf(viewMapping['day']) > 0) {
+				updateHash(info.date, 'day', options);
 			}
 		};
 
@@ -440,7 +500,7 @@
 	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
 	 */
 
-	function setup$3(calendar, options)
+	function setup$4(calendar, options)
 	{
 		// Custom buttons
 		options['customButtons'] = {};
@@ -469,13 +529,10 @@
 										weekdays: names['dayNames'],
 										weekdaysShort: names['dayNamesShort']
 									},
-									onSelect: (date) => {
-										const newHash = 'year=' + date.getFullYear() + '&month=' + (date.getMonth() + 1) + '&day=' + date.getDate() + '&view=' + getReversMappings(options)[calendar.dpCalendar.view.type];
-										if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
-											window.location.hash = newHash;
-										} else {
-											calendar.dpCalendar.gotoDate(date);
-										}
+									onSelect: (d) => {
+										// Create a new date so we have no timezone shifts
+										const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0));
+										updateHash(date, getReversMappings(options)[calendar.dpCalendar.view.type], options);
 									}
 								});
 							}
@@ -528,67 +585,6 @@
 		iconHandler('calendar', 'datepicker');
 		iconHandler('print', 'print');
 		iconHandler('plus', 'add');
-	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
-	function setup$4(calendar, options)
-	{
-		if (!options['use_hash']) {
-			return;
-		}
-
-		const viewMapping = getMappings(options);
-		const viewMappingReverse = getReversMappings(options);
-
-		// Listening for hash/url changes
-		window.addEventListener('hashchange', () => {
-			const today = new Date();
-			let tmpYear = today.getUTCFullYear();
-			let tmpMonth = today.getUTCMonth() + 1;
-			let tmpDay = today.getUTCDate();
-			let tmpView = viewMappingReverse[options['defaultView']];
-			window.location.hash.replace(/&amp;/gi, '&').split('&').forEach((value) => {
-				if (value.match('^#year')) {
-					tmpYear = value.substring(6);
-				}
-				if (value.match('^month')) {
-					tmpMonth = value.substring(6) - 1;
-				}
-				if (value.match('^day')) {
-					tmpDay = value.substring(4);
-				}
-				if (value.match('^view')) {
-					tmpView = value.substring(5);
-				}
-			});
-
-			const date = new Date(Date.UTC(tmpYear, tmpMonth, tmpDay, 0, 0, 0));
-			const d = calendar.dpCalendar.getDate();
-			const view = calendar.dpCalendar.view;
-			if (date.getUTCFullYear() != d.getUTCFullYear() || date.getUTCMonth() != d.getUTCMonth() || date.getUTCDate() != d.getUTCDate()) {
-				calendar.dpCalendar.gotoDate(date);
-			}
-			if (view.type != viewMapping[tmpView]) {
-				calendar.dpCalendar.changeView(viewMapping[tmpView]);
-			}
-		});
-	}
-
-	function adaptHash(info,calendar, options)
-	{
-		// Setting the hash based on the actual view
-		const viewMappingReverse = getReversMappings(options);
-		const d = calendar.dpCalendar.getDate();
-		const newHash = 'year=' + d.getUTCFullYear() + '&month=' + (d.getUTCMonth() + 1) + '&day=' + d.getUTCDate() + '&view=' + viewMappingReverse[info.view.type];
-		if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
-			window.location.hash = newHash;
-		}
 	}
 
 	/**
@@ -990,13 +986,14 @@
 				calendar.parentElement.parentElement.querySelector('.dp-loader').classList.add('dp-loader_hidden');
 
 				const viewMapping = getMappings(options);
+				const viewMappingReverse = getReversMappings(options);
 				options['storageId'] = calendar.getAttribute('data-options') + '-calendar-state-' + md5(options['calendarIds'].toString());
 
 				setup(calendar, options);
 				setup$1(calendar, options);
-				setup$2(calendar, options);
 				setup$3(calendar, options);
 				setup$4(calendar, options);
+				setup$2(calendar, options);
 				setup$5(calendar, options);
 				attachStateListeners(calendar, options, DPCalendar);
 
@@ -1037,7 +1034,7 @@
 				}
 
 				options['datesRender'] = (info) => {
-					adaptHash(info, calendar, options);
+					updateHash(calendar.dpCalendar.getDate(), viewMappingReverse[info.view.type], options);
 					adaptIcons(calendar);
 				};
 

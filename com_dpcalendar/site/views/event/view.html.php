@@ -213,6 +213,25 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			);
 		}
 
+		// Set the ticket count
+		$ticketCount = $event->max_tickets ? $event->max_tickets : 1;
+
+		// If ticket count is higher than available space, reduce it
+		if ($event->capacity !== null && $ticketCount > ($event->capacity - $event->capacity_used)) {
+			$ticketCount = $event->capacity - $event->capacity_used;
+		}
+
+		// Remove the already booked tickets from the ticket count
+		foreach ($event->tickets as $ticket) {
+			if ($ticket->email == $this->user->email || ($ticket->user_id && $ticket->user_id == $this->user->id)) {
+				$ticketCount--;
+			}
+		}
+
+		if (!$ticketCount) {
+			return $this->translate('COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_CAPACITY_FULL_USER');
+		}
+
 		// All fine
 		return null;
 	}

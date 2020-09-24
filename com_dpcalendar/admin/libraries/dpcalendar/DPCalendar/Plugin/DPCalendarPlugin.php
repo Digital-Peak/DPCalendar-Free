@@ -584,8 +584,11 @@ abstract class DPCalendarPlugin extends \JPlugin
 			// Do not print errors
 			$oldErrorHandling = libxml_use_internal_errors(true);
 			try {
+				// Decode the input first when calendars have accents in titles
+				$decoded = html_entity_decode($formField->__get('input'), ENT_QUOTES, 'utf-8');
+				$xml     = new \SimpleXMLElement('<?xml version="1.0" encoding="UTF-8" ?>' . $decoded);
+
 				// Get the available calendars
-				$xml     = new \SimpleXMLElement($formField->__get('input'));
 				$options = $xml->xpath('//option');
 
 				// Choose the first available calendar

@@ -160,8 +160,19 @@
 					element.classList.add('dp-map_loaded');
 				});
 			});
+		} else if (Joomla.getOptions('DPCalendar.map.tiles.url') == 'mapbox') {
+			const gl = L.mapboxGL({
+				accessToken: Joomla.getOptions('DPCalendar.map.mapbox.token'),
+				style: 'mapbox://styles/mapbox/streets-v11'
+			});
+			gl.on('load', () => {
+				element.classList.remove('dp-map_loading');
+				element.classList.add('dp-map_loaded');
+			});
+			map._layersMaxZoom = 19;
+			gl.addTo(map);
 		} else {
-			const tiles = L.tileLayer(Joomla.getOptions('DPCalendar.map.tiles.url'), {id: 'mapbox.streets'});
+			const tiles = L.tileLayer(Joomla.getOptions('DPCalendar.map.tiles.url'));
 			tiles.on('load', () => {
 				element.classList.remove('dp-map_loading');
 				element.classList.add('dp-map_loaded');
@@ -214,10 +225,18 @@
 			assets.push('https://maps.googleapis.com/maps/api/js?libraries=places&language=' + Joomla.getOptions('DPCalendar.map.google.lang') + '&key=' + Joomla.getOptions('DPCalendar.map.google.key'));
 		}
 
+		if (Joomla.getOptions('DPCalendar.map.provider') == 'mapbox') {
+			assets.push('https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css');
+			assets.push('https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js');
+		}
+
 		loadDPAssets(assets, () => {
 			let assets = [];
 			if (Joomla.getOptions('DPCalendar.map.provider') == 'google') {
 				assets.push('/com_dpcalendar/js/leaflet/leaflet-google.js');
+			}
+			if (Joomla.getOptions('DPCalendar.map.provider') == 'mapbox') {
+				assets.push('/com_dpcalendar/js/leaflet/leaflet-mapbox.js');
 			}
 			loadDPAssets(assets, () => {
 				createMap(mapElement);

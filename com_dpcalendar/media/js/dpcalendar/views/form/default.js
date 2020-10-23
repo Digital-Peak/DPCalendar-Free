@@ -287,10 +287,8 @@
 			input.addEventListener('change', check);
 		});
 
-		document.getElementById('jform_catid').addEventListener('change', (e) => {
 			// Because of com_fields, we need to call it with a delay
-			check();
-		});
+		document.getElementById('jform_catid').addEventListener('change', check);
 
 		check();
 	}
@@ -322,10 +320,9 @@
 						return;
 					}
 
-					document.querySelector('.dp-button-apply').disabled = json.data.count > 0;
-					document.querySelector('.dp-button-save').disabled = json.data.count > 0;
-					document.querySelector('.dp-button-save2new').disabled = json.data.count > 0;
-					document.querySelector('.dp-button-save2copy').disabled = json.data.count > 0;
+					[].slice.call(document.querySelectorAll('.dp-button-apply, .button-apply, .dp-button-save, .button-save, .dp-button-save2new, .button-save-new, .dp-button-save2copy, .button-save-copy')).forEach((button) => {
+						button.disabled = json.data.count > 0;
+					});
 				},
 				DPCalendar.formToQueryString(document.querySelector('.com-dpcalendar-eventform__form'), 'input:not([name=task]), select') + (url.query.e_id ? '&id=' + url.query.e_id : '')
 			);

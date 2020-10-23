@@ -1,7 +1,7 @@
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /*!
-FullCalendar Resources Common Plugin v4.4.0
+FullCalendar Resources Common Plugin v4.4.2
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -10,16 +10,16 @@ Docs & License: https://fullcalendar.io/scheduler
 })(this, function (exports, core) {
   'use strict';
   /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation. All rights reserved.
-  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-  this file except in compliance with the License. You may obtain a copy of the
-  License at http://www.apache.org/licenses/LICENSE-2.0
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-  MERCHANTABLITY OR NON-INFRINGEMENT.
-    See the Apache Version 2.0 License for specific language governing permissions
-  and limitations under the License.
+  Copyright (c) Microsoft Corporation.
+    Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
 
   /* global Reflect, Promise */
@@ -595,10 +595,12 @@ Docs & License: https://fullcalendar.io/scheduler
     var resourceSource = reduceResourceSource(state.resourceSource, action, state.dateProfile, calendar);
     var resourceStore = reduceResourceStore(state.resourceStore, action, resourceSource, calendar);
     var resourceEntityExpansions = reduceResourceEntityExpansions(state.resourceEntityExpansions, action);
+    var loadingLevel = state.loadingLevel + (resourceSource && resourceSource.isFetching ? 1 : 0);
     return _assign({}, state, {
       resourceSource: resourceSource,
       resourceStore: resourceStore,
-      resourceEntityExpansions: resourceEntityExpansions
+      resourceEntityExpansions: resourceEntityExpansions,
+      loadingLevel: loadingLevel
     });
   }
 
@@ -1033,7 +1035,7 @@ Docs & License: https://fullcalendar.io/scheduler
     });
   };
 
-  var RELEASE_DATE = '2020-02-12'; // for Scheduler
+  var RELEASE_DATE = '2020-05-28'; // for Scheduler
 
   var UPGRADE_WINDOW = 365 + 7; // days. 1 week leeway, for tz shift reasons too
 
@@ -1953,7 +1955,7 @@ Docs & License: https://fullcalendar.io/scheduler
   });
 });
 /*!
-FullCalendar Resource Day Grid Plugin v4.4.0
+FullCalendar Resource Day Grid Plugin v4.4.2
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -1967,16 +1969,16 @@ Docs & License: https://fullcalendar.io/scheduler
   var ResourceCommonPlugin__default = 'default' in ResourceCommonPlugin ? ResourceCommonPlugin['default'] : ResourceCommonPlugin;
   var DayGridPlugin__default = 'default' in DayGridPlugin ? DayGridPlugin['default'] : DayGridPlugin;
   /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation. All rights reserved.
-  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-  this file except in compliance with the License. You may obtain a copy of the
-  License at http://www.apache.org/licenses/LICENSE-2.0
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-  MERCHANTABLITY OR NON-INFRINGEMENT.
-    See the Apache Version 2.0 License for specific language governing permissions
-  and limitations under the License.
+  Copyright (c) Microsoft Corporation.
+    Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
 
   /* global Reflect, Promise */
@@ -2059,6 +2061,8 @@ Docs & License: https://fullcalendar.io/scheduler
       this.slicers = core.mapHash(splitProps, function (split, resourceId) {
         return _this.slicers[resourceId] || new DayGridPlugin.DayGridSlicer();
       });
+      dayGrid.receiveContext(context); // hack because sliceProps expects component to have context
+
       var slicedProps = core.mapHash(this.slicers, function (slicer, resourceId) {
         return slicer.sliceProps(splitProps[resourceId], dateProfile, nextDayThreshold, context.calendar, dayGrid, resourceDayTable.dayTable);
       });
@@ -2241,7 +2245,7 @@ Docs & License: https://fullcalendar.io/scheduler
   });
 });
 /*!
-FullCalendar Resource Time Grid Plugin v4.4.0
+FullCalendar Resource Time Grid Plugin v4.4.2
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -2255,16 +2259,16 @@ Docs & License: https://fullcalendar.io/scheduler
   var ResourceCommonPlugin__default = 'default' in ResourceCommonPlugin ? ResourceCommonPlugin['default'] : ResourceCommonPlugin;
   var TimeGridPlugin__default = 'default' in TimeGridPlugin ? TimeGridPlugin['default'] : TimeGridPlugin;
   /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation. All rights reserved.
-  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-  this file except in compliance with the License. You may obtain a copy of the
-  License at http://www.apache.org/licenses/LICENSE-2.0
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-  MERCHANTABLITY OR NON-INFRINGEMENT.
-    See the Apache Version 2.0 License for specific language governing permissions
-  and limitations under the License.
+  Copyright (c) Microsoft Corporation.
+    Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
 
   /* global Reflect, Promise */
@@ -2347,6 +2351,8 @@ Docs & License: https://fullcalendar.io/scheduler
       this.slicers = core.mapHash(splitProps, function (split, resourceId) {
         return _this.slicers[resourceId] || new TimeGridPlugin.TimeGridSlicer();
       });
+      timeGrid.receiveContext(context); // hack because sliceProps expects component to have context
+
       var slicedProps = core.mapHash(this.slicers, function (slicer, resourceId) {
         return slicer.sliceProps(splitProps[resourceId], dateProfile, null, context.calendar, timeGrid, dayRanges);
       });
@@ -2545,7 +2551,7 @@ Docs & License: https://fullcalendar.io/scheduler
   });
 });
 /*!
-FullCalendar Timeline Plugin v4.4.0
+FullCalendar Timeline Plugin v4.4.2
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -2556,16 +2562,16 @@ Docs & License: https://fullcalendar.io/scheduler
 })(this, function (exports, core) {
   'use strict';
   /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation. All rights reserved.
-  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-  this file except in compliance with the License. You may obtain a copy of the
-  License at http://www.apache.org/licenses/LICENSE-2.0
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-  MERCHANTABLITY OR NON-INFRINGEMENT.
-    See the Apache Version 2.0 License for specific language governing permissions
-  and limitations under the License.
+  Copyright (c) Microsoft Corporation.
+    Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
 
   /* global Reflect, Promise */
@@ -5093,7 +5099,7 @@ Docs & License: https://fullcalendar.io/scheduler
   });
 });
 /*!
-FullCalendar Resource Timeline Plugin v4.4.0
+FullCalendar Resource Timeline Plugin v4.4.2
 Docs & License: https://fullcalendar.io/scheduler
 (c) 2019 Adam Shaw
 */
@@ -5107,16 +5113,16 @@ Docs & License: https://fullcalendar.io/scheduler
   var TimelinePlugin__default = 'default' in TimelinePlugin ? TimelinePlugin['default'] : TimelinePlugin;
   var ResourceCommonPlugin__default = 'default' in ResourceCommonPlugin ? ResourceCommonPlugin['default'] : ResourceCommonPlugin;
   /*! *****************************************************************************
-  Copyright (c) Microsoft Corporation. All rights reserved.
-  Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-  this file except in compliance with the License. You may obtain a copy of the
-  License at http://www.apache.org/licenses/LICENSE-2.0
-    THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-  KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-  WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-  MERCHANTABLITY OR NON-INFRINGEMENT.
-    See the Apache Version 2.0 License for specific language governing permissions
-  and limitations under the License.
+  Copyright (c) Microsoft Corporation.
+    Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+    THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** */
 
   /* global Reflect, Promise */

@@ -108,14 +108,11 @@ switch ($provider) {
 			. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
 		);
 
-		$document->addScriptOptions(
-			'map.tiles.url',
-			'https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token='
-			. DPCalendarHelper::getComponentParameter(
-				'map_api_mapbox_token',
-				'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
-			)
-		);
+		$document->addScriptOptions('map.mapbox.token', DPCalendarHelper::getComponentParameter(
+			'map_api_mapbox_token',
+			'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
+		));
+		$document->addScriptOptions('map.tiles.url', 'mapbox');
 		break;
 	default:
 		$document->addScriptOptions(

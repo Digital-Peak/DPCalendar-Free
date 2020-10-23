@@ -114,7 +114,7 @@ class PlgContentDpcalendar extends JPlugin
 			$events = $model->getItems();
 			foreach ($events as $index => $event) {
 				// Avoid recursion
-				if ($event->id == $item->id) {
+				if (isset($item->id) && $event->id == $item->id) {
 					unset($events[$index]);
 					continue;
 				}

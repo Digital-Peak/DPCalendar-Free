@@ -1,7 +1,7 @@
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 /**!
-* tippy.js v6.1.1
+* tippy.js v6.2.6
 * (c) 2017-2020 atomiks
 * MIT License
 */
@@ -10,16 +10,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 })(this, function (core) {
   'use strict';
 
-  var PASSIVE = {
-    passive: true
-  };
   var ROUND_ARROW = '<svg width="16" height="6" xmlns="http://www.w3.org/2000/svg"><path d="M0 6s1.796-.013 4.67-3.615C5.851.9 6.93.006 8 0c1.07-.006 2.148.887 3.343 2.385C14.233 6.005 16 6 16 6H0z"></svg>';
-  var IOS_CLASS = "tippy-iOS";
   var BOX_CLASS = "tippy-box";
   var CONTENT_CLASS = "tippy-content";
   var BACKDROP_CLASS = "tippy-backdrop";
   var ARROW_CLASS = "tippy-arrow";
   var SVG_ARROW_CLASS = "tippy-svg-arrow";
+  var TOUCH_OPTIONS = {
+    passive: true,
+    capture: true
+  };
 
   function hasOwnProperty(obj, key) {
     return {}.hasOwnProperty.call(obj, key);
@@ -92,6 +92,16 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
   function arrayFrom(value) {
     return [].slice.call(value);
+  }
+
+  function removeUndefinedProps(obj) {
+    return Object.keys(obj).reduce(function (acc, key) {
+      if (obj[key] !== undefined) {
+        acc[key] = obj[key];
+      }
+
+      return acc;
+    }, {});
   }
 
   function div() {
@@ -251,16 +261,13 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   }
 
   function bindGlobalEventListeners() {
-    document.addEventListener('touchstart', onDocumentTouchStart, Object.assign({}, PASSIVE, {
-      capture: true
-    }));
+    document.addEventListener('touchstart', onDocumentTouchStart, TOUCH_OPTIONS);
     window.addEventListener('blur', onWindowBlur);
   }
 
   var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
   var ua = isBrowser ? navigator.userAgent : '';
   var isIE = /MSIE |Trident\//.test(ua);
-  var isIOS = isBrowser && /iPhone|iPad|iPod/.test(navigator.platform);
 
   function createMemoryLeakWarning(method) {
     var txt = method === 'destroy' ? 'n already-' : ' ';
@@ -569,7 +576,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         box.removeAttribute('role');
       }
 
-      if (prevProps.content !== nextProps.content) {
+      if (prevProps.content !== nextProps.content || prevProps.allowHTML !== nextProps.allowHTML) {
         setContent(content, instance.props);
       }
 
@@ -600,7 +607,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
   var mountedInstances = [];
 
   function createTippy(reference, passedProps) {
-    var props = evaluateProps(reference, Object.assign({}, defaultProps, {}, getExtendedPassedProps(passedProps))); // ===========================================================================
+    var props = evaluateProps(reference, Object.assign({}, defaultProps, {}, getExtendedPassedProps(removeUndefinedProps(passedProps)))); // ===========================================================================
     // 🔒 Private members
     // ===========================================================================
 
@@ -609,6 +616,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     var scheduleHideAnimationFrame;
     var isVisibleFromClick = false;
     var didHideDueToDocumentMouseDown = false;
+    var didTouchMove = false;
     var ignoreOnFirstUpdate = false;
     var lastTriggerEvent;
     var currentTransitionEndListener;
@@ -650,6 +658,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       setContent: setContent,
       show: show,
       hide: hide,
+      hideWithInteractivity: hideWithInteractivity,
       enable: enable,
       disable: disable,
       unmount: unmount,
@@ -748,11 +757,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       popper.style.zIndex = "" + instance.props.zIndex;
     }
 
-    function updateIOSClass(isAdd) {
-      var shouldAdd = isAdd && isIOS && currentInput.isTouch;
-      doc.body.classList[shouldAdd ? 'add' : 'remove'](IOS_CLASS);
-    }
-
     function invokeHook(hook, args, shouldInvokePropsHook) {
       if (shouldInvokePropsHook === void 0) {
         shouldInvokePropsHook = true;
@@ -814,15 +818,21 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
 
     function cleanupInteractiveMouseListeners() {
-      doc.body.removeEventListener('mouseleave', scheduleHide);
       doc.removeEventListener('mousemove', debouncedOnMouseMove);
       mouseMoveListeners = mouseMoveListeners.filter(function (listener) {
         return listener !== debouncedOnMouseMove;
       });
     }
 
-    function onDocumentMouseDown(event) {
-      // Clicked on interactive popper
+    function onDocumentPress(event) {
+      // Moved finger to scroll instead of an intentional tap outside
+      if (currentInput.isTouch) {
+        if (didTouchMove || event.type === 'mousedown') {
+          return;
+        }
+      } // Clicked on interactive popper
+
+
       if (instance.props.interactive && popper.contains(event.target)) {
         return;
       } // Clicked on the event listeners target
@@ -837,11 +847,10 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           return;
         }
       } else {
-        instance.props.onClickOutside(instance, event);
+        invokeHook('onClickOutside', [instance, event]);
       }
 
       if (instance.props.hideOnClick === true) {
-        isVisibleFromClick = false;
         instance.clearDelayTimeouts();
         instance.hide(); // `mousedown` event is fired right before `focus` if pressing the
         // currentTarget. This lets a tippy with `focus` trigger know that it
@@ -855,17 +864,31 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         // from being cleaned up
 
         if (!instance.state.isMounted) {
-          removeDocumentMouseDownListener();
+          removeDocumentPress();
         }
       }
     }
 
-    function addDocumentMouseDownListener() {
-      doc.addEventListener('mousedown', onDocumentMouseDown, true);
+    function onTouchMove() {
+      didTouchMove = true;
     }
 
-    function removeDocumentMouseDownListener() {
-      doc.removeEventListener('mousedown', onDocumentMouseDown, true);
+    function onTouchStart() {
+      didTouchMove = false;
+    }
+
+    function addDocumentPress() {
+      doc.addEventListener('mousedown', onDocumentPress, true);
+      doc.addEventListener('touchend', onDocumentPress, TOUCH_OPTIONS);
+      doc.addEventListener('touchstart', onTouchStart, TOUCH_OPTIONS);
+      doc.addEventListener('touchmove', onTouchMove, TOUCH_OPTIONS);
+    }
+
+    function removeDocumentPress() {
+      doc.removeEventListener('mousedown', onDocumentPress, true);
+      doc.removeEventListener('touchend', onDocumentPress, TOUCH_OPTIONS);
+      doc.removeEventListener('touchstart', onTouchStart, TOUCH_OPTIONS);
+      doc.removeEventListener('touchmove', onTouchMove, TOUCH_OPTIONS);
     }
 
     function onTransitionedOut(duration, callback) {
@@ -920,8 +943,12 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
     function addListeners() {
       if (getIsCustomTouchBehavior()) {
-        on('touchstart', onTrigger, PASSIVE);
-        on('touchend', onMouseLeave, PASSIVE);
+        on('touchstart', onTrigger, {
+          passive: true
+        });
+        on('touchend', onMouseLeave, {
+          passive: true
+        });
       }
 
       splitBySpaces(instance.props.trigger).forEach(function (eventType) {
@@ -959,12 +986,15 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     }
 
     function onTrigger(event) {
+      var _lastTriggerEvent;
+
       var shouldScheduleClickHide = false;
 
       if (!instance.state.isEnabled || isEventListenerStopped(event) || didHideDueToDocumentMouseDown) {
         return;
       }
 
+      var wasFocused = ((_lastTriggerEvent = lastTriggerEvent) == null ? void 0 : _lastTriggerEvent.type) === 'focus';
       lastTriggerEvent = event;
       currentTarget = event.currentTarget;
       handleAriaExpandedAttribute();
@@ -990,14 +1020,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         isVisibleFromClick = !shouldScheduleClickHide;
       }
 
-      if (shouldScheduleClickHide) {
+      if (shouldScheduleClickHide && !wasFocused) {
         scheduleHide(event);
       }
     }
 
     function onMouseMove(event) {
       var target = event.target;
-      var isCursorOverReferenceOrPopper = reference.contains(target) || popper.contains(target);
+      var isCursorOverReferenceOrPopper = getCurrentTarget().contains(target) || popper.contains(target);
 
       if (event.type === 'mousemove' && isCursorOverReferenceOrPopper) {
         return;
@@ -1034,10 +1064,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       if (instance.props.interactive) {
-        doc.body.addEventListener('mouseleave', scheduleHide);
-        doc.addEventListener('mousemove', debouncedOnMouseMove);
-        pushIfUnique(mouseMoveListeners, debouncedOnMouseMove);
-        debouncedOnMouseMove(event);
+        instance.hideWithInteractivity(event);
         return;
       }
 
@@ -1072,7 +1099,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       var arrow = getIsDefaultRenderFn() ? getChildren(popper).arrow : null;
       var computedReference = getReferenceClientRect ? {
         getBoundingClientRect: getReferenceClientRect,
-        contextElement: getCurrentTarget()
+        contextElement: getReferenceClientRect.contextElement || getCurrentTarget()
       } : reference;
       var tippyModifier = {
         name: '$$tippy',
@@ -1101,14 +1128,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
           }
         }
       };
-      var arrowModifier = {
-        name: 'arrow',
-        enabled: !!arrow,
-        options: {
-          element: arrow,
-          padding: 3
-        }
-      };
       var modifiers = [{
         name: 'offset',
         options: {
@@ -1134,7 +1153,19 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         options: {
           adaptive: !moveTransition
         }
-      }].concat(getIsDefaultRenderFn() ? [arrowModifier] : [], (popperOptions == null ? void 0 : popperOptions.modifiers) || [], [tippyModifier]);
+      }, tippyModifier];
+
+      if (getIsDefaultRenderFn() && arrow) {
+        modifiers.push({
+          name: 'arrow',
+          options: {
+            element: arrow,
+            padding: 3
+          }
+        });
+      }
+
+      modifiers.push.apply(modifiers, (popperOptions == null ? void 0 : popperOptions.modifiers) || []);
       instance.popperInstance = core.createPopper(computedReference, popper, Object.assign({}, popperOptions, {
         placement: placement,
         onFirstUpdate: onFirstUpdate,
@@ -1191,7 +1222,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         invokeHook('onTrigger', [instance, event]);
       }
 
-      addDocumentMouseDownListener();
+      addDocumentPress();
       var delay = getDelay(true);
 
       var _getNormalizedTouchSe = getNormalizedTouchSettings(),
@@ -1216,7 +1247,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       invokeHook('onUntrigger', [instance, event]);
 
       if (!instance.state.isVisible) {
-        removeDocumentMouseDownListener();
+        removeDocumentPress();
         return;
       } // For interactive tippies, scheduleHide is added to a document.body handler
       // from onMouseLeave so must intercept scheduled hides from mousemove/leave
@@ -1363,7 +1394,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       handleStyles();
-      addDocumentMouseDownListener();
+      addDocumentPress();
 
       if (!instance.state.isMounted) {
         popper.style.transition = 'none';
@@ -1401,7 +1432,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         handleAriaContentAttribute();
         handleAriaExpandedAttribute();
         pushIfUnique(mountedInstances, instance);
-        updateIOSClass(true);
         instance.state.isMounted = true;
         invokeHook('onMount', [instance]);
 
@@ -1440,13 +1470,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       instance.state.isVisible = false;
       instance.state.isShown = false;
       ignoreOnFirstUpdate = false;
+      isVisibleFromClick = false;
 
       if (getIsDefaultRenderFn()) {
         popper.style.visibility = 'hidden';
       }
 
       cleanupInteractiveMouseListeners();
-      removeDocumentMouseDownListener();
+      removeDocumentPress();
       handleStyles();
 
       if (getIsDefaultRenderFn()) {
@@ -1472,7 +1503,22 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
     }
 
+    function hideWithInteractivity(event) {
+      /* istanbul ignore else */
+      {
+        warnWhen(instance.state.isDestroyed, createMemoryLeakWarning('hideWithInteractivity'));
+      }
+      doc.addEventListener('mousemove', debouncedOnMouseMove);
+      pushIfUnique(mouseMoveListeners, debouncedOnMouseMove);
+      debouncedOnMouseMove(event);
+    }
+
     function unmount() {
+      /* istanbul ignore else */
+      {
+        warnWhen(instance.state.isDestroyed, createMemoryLeakWarning('unmount'));
+      }
+
       if (instance.state.isVisible) {
         instance.hide();
       }
@@ -1496,11 +1542,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       mountedInstances = mountedInstances.filter(function (i) {
         return i !== instance;
       });
-
-      if (mountedInstances.length === 0) {
-        updateIOSClass(false);
-      }
-
       instance.state.isMounted = false;
       invokeHook('onHidden', [instance]);
     }
@@ -1602,20 +1643,34 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     {
       errorWhen(!Array.isArray(tippyInstances), ['The first argument passed to createSingleton() must be an array of', 'tippy instances. The passed value was', String(tippyInstances)].join(' '));
     }
-    tippyInstances.forEach(function (instance) {
-      instance.disable();
-    });
+    var mutTippyInstances = tippyInstances;
+    var references = [];
     var currentTarget;
-    var references = tippyInstances.map(function (instance) {
-      return instance.reference;
-    });
+    var overrides = optionalProps.overrides;
+
+    function setReferences() {
+      references = mutTippyInstances.map(function (instance) {
+        return instance.reference;
+      });
+    }
+
+    function enableInstances(isEnabled) {
+      mutTippyInstances.forEach(function (instance) {
+        if (isEnabled) {
+          instance.enable();
+        } else {
+          instance.disable();
+        }
+      });
+    }
+
+    enableInstances(false);
+    setReferences();
     var singleton = {
       fn: function fn() {
         return {
           onDestroy: function onDestroy() {
-            tippyInstances.forEach(function (instance) {
-              instance.enable();
-            });
+            enableInstances(true);
           },
           onTrigger: function onTrigger(instance, event) {
             var target = event.currentTarget;
@@ -1626,8 +1681,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             }
 
             currentTarget = target;
-            var overrideProps = (optionalProps.overrides || []).concat('content').reduce(function (acc, prop) {
-              acc[prop] = tippyInstances[index].props[prop];
+            var overrideProps = (overrides || []).concat('content').reduce(function (acc, prop) {
+              acc[prop] = mutTippyInstances[index].props[prop];
               return acc;
             }, {});
             instance.setProps(Object.assign({}, overrideProps, {
@@ -1639,10 +1694,28 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         };
       }
     };
-    return tippy(div(), Object.assign({}, removeProperties(optionalProps, ['overrides']), {
+    var instance = tippy(div(), Object.assign({}, removeProperties(optionalProps, ['overrides']), {
       plugins: [singleton].concat(optionalProps.plugins || []),
       triggerTarget: references
     }));
+    var originalSetProps = instance.setProps;
+
+    instance.setProps = function (props) {
+      overrides = props.overrides || overrides;
+      originalSetProps(props);
+    };
+
+    instance.setInstances = function (nextInstances) {
+      enableInstances(true);
+      mutTippyInstances = nextInstances;
+      enableInstances(false);
+      setReferences();
+      instance.setProps({
+        triggerTarget: references
+      });
+    };
+
+    return instance;
   };
 
   var BUBBLING_EVENTS_MAP = {
@@ -1699,7 +1772,7 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         return;
       }
 
-      if (event.type !== 'touchstart' && trigger.indexOf(BUBBLING_EVENTS_MAP[event.type])) {
+      if (event.type !== 'touchstart' && trigger.indexOf(BUBBLING_EVENTS_MAP[event.type]) < 0) {
         return;
       }
 
@@ -1833,49 +1906,42 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     return backdrop;
   }
 
+  var mouseCoords = {
+    clientX: 0,
+    clientY: 0
+  };
+  var activeInstances = [];
+
+  function storeMouseCoords(_ref) {
+    var clientX = _ref.clientX,
+        clientY = _ref.clientY;
+    mouseCoords = {
+      clientX: clientX,
+      clientY: clientY
+    };
+  }
+
+  function addMouseCoordsListener(doc) {
+    doc.addEventListener('mousemove', storeMouseCoords);
+  }
+
+  function removeMouseCoordsListener(doc) {
+    doc.removeEventListener('mousemove', storeMouseCoords);
+  }
+
   var followCursor = {
     name: 'followCursor',
     defaultValue: false,
     fn: function fn(instance) {
       var reference = instance.reference;
       var doc = getOwnerDocument(instance.props.triggerTarget || reference);
-      var initialMouseCoords = null;
-
-      function getIsManual() {
-        return instance.props.trigger.trim() === 'manual';
-      }
-
-      function getIsEnabled() {
-        // #597
-        var isValidMouseEvent = getIsManual() ? true : // Check if a keyboard "click"
-        initialMouseCoords !== null && !(initialMouseCoords.clientX === 0 && initialMouseCoords.clientY === 0);
-        return instance.props.followCursor && isValidMouseEvent;
-      }
+      var isInternalUpdate = false;
+      var wasFocusEvent = false;
+      var isUnmounted = true;
+      var prevProps = instance.props;
 
       function getIsInitialBehavior() {
-        return currentInput.isTouch || instance.props.followCursor === 'initial' && instance.state.isVisible;
-      }
-
-      function unsetReferenceClientRect(shouldUnset) {
-        if (shouldUnset) {
-          instance.setProps({
-            getReferenceClientRect: null
-          });
-        }
-      }
-
-      function handleMouseMoveListener() {
-        if (getIsEnabled()) {
-          addListener();
-        } else {
-          unsetReferenceClientRect(instance.props.followCursor);
-        }
-      }
-
-      function triggerLastMouseMove() {
-        if (getIsEnabled()) {
-          onMouseMove(initialMouseCoords);
-        }
+        return instance.props.followCursor === 'initial' && instance.state.isVisible;
       }
 
       function addListener() {
@@ -1886,13 +1952,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
         doc.removeEventListener('mousemove', onMouseMove);
       }
 
-      function onMouseMove(event) {
-        initialMouseCoords = {
-          clientX: event.clientX,
-          clientY: event.clientY
-        }; // If the instance is interactive, avoid updating the position unless it's
-        // over the reference element
+      function unsetGetReferenceClientRect() {
+        isInternalUpdate = true;
+        instance.setProps({
+          getReferenceClientRect: null
+        });
+        isInternalUpdate = false;
+      }
 
+      function onMouseMove(event) {
+        // If the instance is interactive, avoid updating the position unless it's
+        // over the reference element
         var isCursorOverReference = event.target ? reference.contains(event.target) : true;
         var followCursor = instance.props.followCursor;
         var clientX = event.clientX,
@@ -1928,63 +1998,103 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
             }
           });
         }
+      }
 
-        if (getIsInitialBehavior()) {
-          removeListener();
+      function create() {
+        if (instance.props.followCursor) {
+          activeInstances.push({
+            instance: instance,
+            doc: doc
+          });
+          addMouseCoordsListener(doc);
+        }
+      }
+
+      function destroy() {
+        activeInstances = activeInstances.filter(function (data) {
+          return data.instance !== instance;
+        });
+
+        if (activeInstances.filter(function (data) {
+          return data.doc === doc;
+        }).length === 0) {
+          removeMouseCoordsListener(doc);
         }
       }
 
       return {
-        onAfterUpdate: function onAfterUpdate(_, _ref) {
-          var followCursor = _ref.followCursor;
+        onCreate: create,
+        onDestroy: destroy,
+        onBeforeUpdate: function onBeforeUpdate() {
+          prevProps = instance.props;
+        },
+        onAfterUpdate: function onAfterUpdate(_, _ref2) {
+          var followCursor = _ref2.followCursor;
 
-          if (followCursor !== undefined && !followCursor) {
-            unsetReferenceClientRect(true);
-          }
-        },
-        onMount: function onMount() {
-          triggerLastMouseMove();
-        },
-        onShow: function onShow() {
-          if (getIsManual()) {
-            // Since there's no trigger event to use, we have to use these as
-            // baseline coords
-            initialMouseCoords = {
-              clientX: 0,
-              clientY: 0
-            };
-            handleMouseMoveListener();
-          }
-        },
-        onTrigger: function onTrigger(_, event) {
-          // Tapping on touch devices can trigger `mouseenter` then `focus`
-          if (initialMouseCoords) {
+          if (isInternalUpdate) {
             return;
           }
 
+          if (followCursor !== undefined && prevProps.followCursor !== followCursor) {
+            destroy();
+
+            if (followCursor) {
+              create();
+
+              if (instance.state.isMounted && !wasFocusEvent && !getIsInitialBehavior()) {
+                addListener();
+              }
+            } else {
+              removeListener();
+              unsetGetReferenceClientRect();
+            }
+          }
+        },
+        onMount: function onMount() {
+          if (instance.props.followCursor && !wasFocusEvent) {
+            if (isUnmounted) {
+              onMouseMove(mouseCoords);
+              isUnmounted = false;
+            }
+
+            if (!getIsInitialBehavior()) {
+              addListener();
+            }
+          }
+        },
+        onTrigger: function onTrigger(_, event) {
           if (isMouseEvent(event)) {
-            initialMouseCoords = {
+            mouseCoords = {
               clientX: event.clientX,
               clientY: event.clientY
             };
           }
 
-          handleMouseMoveListener();
-        },
-        onUntrigger: function onUntrigger() {
-          // If untriggered before showing (`onHidden` will never be invoked)
-          if (!instance.state.isVisible) {
-            removeListener();
-            initialMouseCoords = null;
-          }
+          wasFocusEvent = event.type === 'focus';
         },
         onHidden: function onHidden() {
-          removeListener();
-          initialMouseCoords = null;
+          if (instance.props.followCursor) {
+            unsetGetReferenceClientRect();
+            removeListener();
+            isUnmounted = true;
+          }
         }
       };
     }
-  }; // position.
+  };
+
+  function getProps(props, modifier) {
+    var _props$popperOptions;
+
+    return {
+      popperOptions: Object.assign({}, props.popperOptions, {
+        modifiers: [].concat((((_props$popperOptions = props.popperOptions) == null ? void 0 : _props$popperOptions.modifiers) || []).filter(function (_ref) {
+          var name = _ref.name;
+          return name !== modifier.name;
+        }), [modifier])
+      })
+    };
+  }
 
   var inlinePositioning = {
     name: 'inlinePositioning',
@@ -1997,12 +2107,14 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       }
 
       var placement;
+      var cursorRectIndex = -1;
+      var isInternalUpdate = false;
       var modifier = {
         name: 'tippyInlinePositioning',
         enabled: true,
         phase: 'afterWrite',
-        fn: function fn(_ref) {
-          var state = _ref.state;
+        fn: function fn(_ref2) {
+          var state = _ref2.state;
 
           if (isEnabled()) {
             if (placement !== state.placement) {
@@ -2019,27 +2131,49 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
       };
 
       function _getReferenceClientRect(placement) {
-        return getInlineBoundingClientRect(getBasePlacement(placement), reference.getBoundingClientRect(), arrayFrom(reference.getClientRects()));
+        return getInlineBoundingClientRect(getBasePlacement(placement), reference.getBoundingClientRect(), arrayFrom(reference.getClientRects()), cursorRectIndex);
+      }
+
+      function setInternalProps(partialProps) {
+        isInternalUpdate = true;
+        instance.setProps(partialProps);
+        isInternalUpdate = false;
+      }
+
+      function addModifier() {
+        if (!isInternalUpdate) {
+          setInternalProps(getProps(instance.props, modifier));
+        }
       }
 
       return {
-        onCreate: function onCreate() {
-          var _instance$props$poppe;
-
-          instance.setProps({
-            popperOptions: Object.assign({}, instance.props.popperOptions, {
-              modifiers: [].concat(((_instance$props$poppe = instance.props.popperOptions) == null ? void 0 : _instance$props$poppe.modifiers) || [], [modifier])
-            })
-          });
+        onCreate: addModifier,
+        onAfterUpdate: addModifier,
+        onTrigger: function onTrigger(_, event) {
+          if (isMouseEvent(event)) {
+            var rects = arrayFrom(instance.reference.getClientRects());
+            var cursorRect = rects.find(function (rect) {
+              return rect.left - 2 <= event.clientX && rect.right + 2 >= event.clientX && rect.top - 2 <= event.clientY && rect.bottom + 2 >= event.clientY;
+            });
+            cursorRectIndex = rects.indexOf(cursorRect);
+          }
+        },
+        onUntrigger: function onUntrigger() {
+          cursorRectIndex = -1;
         }
       };
     }
   };
 
-  function getInlineBoundingClientRect(currentBasePlacement, boundingRect, clientRects) {
+  function getInlineBoundingClientRect(currentBasePlacement, boundingRect, clientRects, cursorRectIndex) {
     // Not an inline element, or placement is not yet known
     if (clientRects.length < 2 || currentBasePlacement === null) {
       return boundingRect;
+    } // There are two rects and they are disjoined
+
+
+    if (clientRects.length === 2 && cursorRectIndex >= 0 && clientRects[0].left > clientRects[1].right) {
+      return clientRects[cursorRectIndex] || boundingRect;
     }
 
     switch (currentBasePlacement) {

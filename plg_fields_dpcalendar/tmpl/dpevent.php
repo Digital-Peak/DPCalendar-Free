@@ -16,6 +16,7 @@ if (!is_array($value)) {
 	$value = [$value];
 }
 
+JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 JLoader::import('joomla.application.component.model');
 JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 

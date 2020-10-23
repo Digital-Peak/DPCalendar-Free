@@ -2,11 +2,6 @@
 	opacity: 0;
 }
 
-.tippy-iOS {
-	cursor: pointer !important;
-	-webkit-tap-highlight-color: transparent;
-}
-
 [data-tippy-root] {
 	max-width: calc(100vw - 10px);
 }

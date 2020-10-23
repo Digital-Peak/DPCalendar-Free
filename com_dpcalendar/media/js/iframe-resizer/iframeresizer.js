@@ -252,11 +252,11 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
     function isMessageFromMetaParent() {
       // Test if this message is from a parent above us. This is an ugly test, however, updating
       // the message format would break backwards compatibity.
-      var retCode = messageData.type in {
+      var retCode = (messageData.type in {
         true: 1,
         false: 1,
         undefined: 1
-      };
+      });
 
       if (retCode) {
         log(iframeId, 'Ignoring init message from meta parent page');

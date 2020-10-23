@@ -110,76 +110,52 @@ class DateHelper
 
 	public function convertPHPDateToMoment($format)
 	{
-		// Php date to fullcalendar date conversion
-		$dateFormat = [
-			'd' => 'DD',
+		$replacements = [
+			'A' => 'A',      // for the sake of escaping below
+			'a' => 'a',      // for the sake of escaping below
+			'B' => '',       // Swatch internet time (.beats), no equivalent
+			'c' => 'YYYY-MM-DD[T]HH:mm:ssZ', // ISO 8601
 			'D' => 'ddd',
-			'j' => 'D',
-			'l' => 'dddd',
-			'N' => 'E',
-			'S' => 'o',
-			'w' => 'e',
-			'z' => 'DDD',
-			'W' => 'W',
+			'd' => 'DD',
+			'e' => 'zz',     // deprecated since version 1.6.0 of moment.js
 			'F' => 'MMMM',
-			'm' => 'MM',
+			'G' => 'H',
+			'g' => 'h',
+			'H' => 'HH',
+			'h' => 'hh',
+			'I' => '',       // Daylight Saving Time? => moment().isDST();
+			'i' => 'mm',
+			'j' => 'D',
+			'L' => '',       // Leap year? => moment().isLeapYear();
+			'l' => 'dddd',
 			'M' => 'MMM',
+			'm' => 'MM',
+			'N' => 'E',
 			'n' => 'M',
-			't' => '', // no equivalent
-			'L' => '', // no equivalent
+			'O' => 'ZZ',
 			'o' => 'YYYY',
+			'P' => 'Z',
+			'r' => 'ddd, DD MMM YYYY HH:mm:ss ZZ', // RFC 2822
+			'S' => 'o',
+			's' => 'ss',
+			'T' => 'z',      // deprecated since version 1.6.0 of moment.js
+			't' => '',       // days in the month => moment().daysInMonth();
+			'U' => 'X',
+			'u' => 'SSSSSS', // microseconds
+			'v' => 'SSS',    // milliseconds (from PHP 7.0.0)
+			'W' => 'W',      // for the sake of escaping below
+			'w' => 'e',
 			'Y' => 'YYYY',
 			'y' => 'YY',
-			'a' => 'a',
-			'A' => 'A',
-			'B' => '', // no equivalent
-			'g' => 'h',
-			'G' => 'H',
-			'h' => 'hh',
-			'H' => 'HH',
-			'i' => 'mm',
-			's' => 'ss',
-			'u' => 'SSS',
-			'e' => 'zz', // deprecated since version 1.6.0 of moment.js
-			'I' => '', // no equivalent
-			'O' => '', // no equivalent
-			'P' => '', // no equivalent
-			'T' => '', // no equivalent
-			'Z' => '', // no equivalent
-			'c' => '', // no equivalent
-			'r' => '', // no equivalent
-			'U' => 'X',
-			'{' => '(',
-			'}' => ')'
+			'Z' => '',       // time zone offset in minutes => moment().zone();
+			'z' => 'DDD',
 		];
 
-		$formatArray = str_split($format);
-
-		$newFormat = "";
-		$isText    = false;
-		$i         = 0;
-		while ($i < count($formatArray)) {
-			$chr = $formatArray[$i];
-			if ($chr == '"' || $chr == "'") {
-				$isText = !$isText;
-			}
-			$replaced = false;
-			if ($isText == false) {
-				foreach ($dateFormat as $zl => $jql) {
-					if (substr($format, $i, strlen($zl)) == $zl) {
-						$chr      = $jql;
-						$i        += strlen($zl);
-						$replaced = true;
-						break;
-					}
-				}
-			}
-			if ($replaced == false) {
-				$i++;
-			}
-			$newFormat .= $chr;
+		// Converts escaped characters
+		foreach ($replacements as $from => $to) {
+			$replacements['\\' . $from] = '[' . $from . ']';
 		}
 
-		return \JText::_($newFormat);
+		return \JText::_(strtr($format, $replacements));
 	}
 }

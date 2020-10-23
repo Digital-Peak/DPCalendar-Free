@@ -450,7 +450,8 @@ class DPCalendarHelper
 			$variables['url']  = $event->url;
 			$variables['hits'] = $event->hits;
 
-			$event->images = self::parseImages($event);
+			self::parseImages($event);
+			$variables['images'] = $event->images;
 
 			$author                  = \JFactory::getUser($event->created_by);
 			$variables['author']     = $author->name;

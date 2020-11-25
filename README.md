@@ -4,7 +4,8 @@ This is the source of DPCalendar, a Joomla calendar and event manager. Here you 
 ### PREREQUISITS
 - Joomla 3.9 and above
 - MySQL >= 5.5.0
-- PHP >= 5.5.9
+- PHP >= 7.4.0
+- Browsers: Firefox, Edge, Chrome, Opera but not Internet Explorer
 
 ### INSTALLATION
 To install DPCalendar extract the component, your desired modules and the plugins zip files and install them with the Joomla installer. You can also install the whole package with all extensions through the Joomla installer. After a successful installation configure the component, modules and the plugins and publish them.

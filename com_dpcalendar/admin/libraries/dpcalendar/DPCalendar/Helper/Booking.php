@@ -204,6 +204,7 @@ class Booking
 			$model->getState();
 			$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
 			$model->setState('list.limit', 10000);
+			$model->setState('filter.state', [1]);
 			$model->setState('filter.expand', true);
 
 			if ($model->getTotal() > $limit) {

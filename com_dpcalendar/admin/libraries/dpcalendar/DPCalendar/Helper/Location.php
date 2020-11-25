@@ -180,9 +180,11 @@ class Location
 		$provider = DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap');
 		if ($provider == 'google') {
 			self::fillObjectFromGoogle($location, $locObject);
-		} else if ($provider == 'mapbox') {
+		}
+		if ($provider == 'mapbox') {
 			self::fillObjectFromMapbox($location, $locObject);
-		} else if ($provider != 'none') {
+		}
+		if ($provider != 'none') {
 			self::fillObjectFromOpenStreetMap($location, $locObject);
 		}
 
@@ -327,7 +329,6 @@ class Location
 		}
 
 		$content = \DPCalendar\Helper\DPCalendarHelper::fetchContent($url . 'input=' . urlencode($address));
-
 		if (empty($content)) {
 			return [];
 		}
@@ -339,7 +340,6 @@ class Location
 		}
 
 		$tmp = json_decode($content);
-
 		if (!$tmp) {
 			return [];
 		}
@@ -468,7 +468,6 @@ class Location
 		}
 
 		$content = \DPCalendarHelper::fetchContent($url . 'address=' . urlencode($location));
-
 		if (empty($content)) {
 			return;
 		}
@@ -506,6 +505,9 @@ class Location
 					$locObject->province = $part->long_name;
 					break;
 				case 'locality':
+					$locObject->city = $part->long_name;
+					break;
+				case 'postal_town':
 					$locObject->city = $part->long_name;
 					break;
 				case 'postal_code':
@@ -558,7 +560,6 @@ class Location
 		}
 
 		$tmp = json_decode($content);
-
 		if (!$tmp || (empty($tmp->address) && empty($tmp[0]->address))) {
 			return;
 		}
@@ -638,13 +639,11 @@ class Location
 		}
 
 		$tmp = json_decode($content);
-
 		if (!$tmp || empty($tmp->features)) {
 			return;
 		}
 
 		$addr = $tmp->features[0];
-
 		if (strpos($addr->id, 'address') === 0) {
 			$locObject->street = $addr->text;
 		}

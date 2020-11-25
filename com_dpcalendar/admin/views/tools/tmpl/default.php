@@ -28,12 +28,6 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/tools/default.css');
 						<span><?php echo JText::_('COM_DPCALENDAR_VIEW_TOOLS_CALDAV'); ?></span>
 					</a>
 				</div>
-				<div class="dp-quick-icon">
-					<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&view=tools&layout=translate">
-						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LANGUAGE]); ?>
-						<span><?php echo JText::_('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE'); ?></span>
-					</a>
-				</div>
 			</div>
 		</div>
 		<div class="com-dpcalendar-tools-default__footer">

@@ -47,12 +47,6 @@ defined('_JEXEC') or die();
 			<span class="dp-quick-icon__text"><?php echo JText::_('COM_DPCALENDAR_SUBMENU_TOOLS'); ?></span>
 		</a>
 	</div>
-	<div class="dp-quick-icon">
-		<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&view=tools&layout=translate">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LANGUAGE]); ?>
-			<span class="dp-quick-icon__text"><?php echo JText::_('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE'); ?></span>
-		</a>
-	</div>
 	<?php if (!DPCalendarHelper::isFree() && $this->needsGeoDBUpdate) { ?>
 		<div class="dp-quick-icon">
 			<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&task=import.geodb">

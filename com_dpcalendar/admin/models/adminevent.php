@@ -424,11 +424,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			}
 		}
 
-		// Disable booking when it can't be changed
-		if (!array_key_exists('capacity', $data) || !$this->getParams()->get('event_form_change_capacity', '1')) {
-			$data['capacity'] = $this->getParams()->get('event_form_capacity');
-		}
-
 		if (isset($data['booking_options']) && is_array($data['booking_options'])) {
 			$data['booking_options'] = json_encode($data['booking_options']);
 		}
@@ -780,7 +775,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		return $data;
 	}
 
-	private function getParams()
+	protected function getParams()
 	{
 		$params = $this->getState('params');
 

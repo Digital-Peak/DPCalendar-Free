@@ -252,6 +252,7 @@ class DPCalendarModelEvent extends JModelItem
 		$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
 		$model->setState('list.limit', 5);
 		$model->setState('filter.expand', true);
+		$model->setState('filter.state', [1]);
 
 		$startDate = DPCalendarHelper::getDate($event->start_date);
 		// We do not want to have the current event in the series

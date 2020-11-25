@@ -5,7 +5,6 @@
  * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
 JLoader::import('components.com_dpcalendar.models.adminevent', JPATH_ADMINISTRATOR);
@@ -13,8 +12,17 @@ JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 
 class DPCalendarModelForm extends DPCalendarModelAdminEvent
 {
-
 	public $typeAlias = 'com_dpcalendar.event';
+
+	public function save($data)
+	{
+		// Reset capacity
+		if (in_array('capacity', $this->getParams()->get('event_form_hidden_fields', []))) {
+			$data['capacity'] = $this->getParams()->get('event_form_capacity');
+		}
+
+		return parent::save($data);
+	}
 
 	/**
 	 * Invites the given users or groups to the event with the given id.
@@ -186,11 +194,13 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$form->setFieldAttribute('created_by', 'type', 'sql');
 			$form->setFieldAttribute('created_by', 'key_field', 'value');
 			$form->setFieldAttribute('created_by', 'value_field', 'text');
-			$form->setFieldAttribute('created_by', 'query', 'select id as value, name as text from #__users union all select null, null order by text');
+			$form->setFieldAttribute('created_by', 'query',
+				'select id as value, name as text from #__users union all select null, null order by text');
 			$form->setFieldAttribute('modified_by', 'type', 'sql');
 			$form->setFieldAttribute('modified_by', 'key_field', 'value');
 			$form->setFieldAttribute('modified_by', 'value_field', 'text');
-			$form->setFieldAttribute('modified_by', 'query', 'select id as value, name as text from #__users union all select null, null order by text');
+			$form->setFieldAttribute('modified_by', 'query',
+				'select id as value, name as text from #__users union all select null, null order by text');
 		}
 
 		return $return;

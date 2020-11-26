@@ -2,8 +2,7 @@
 
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -36,8 +35,8 @@ if ($calendarLink && $params->get('event_show_calendar', '1') == '2') {
 			<dd class="dp-description__description">
 				<?php echo $this->dateHelper->getDateStringFromEvent(
 					$this->event,
-					$params->get('event_date_format', 'm.d.Y'),
-					$params->get('event_time_format', 'g:i a')
+					$params->get('event_date_format', 'd.m.Y'),
+					$params->get('event_time_format', 'H:i')
 				); ?>
 				<?php if ($this->event->rrule) { ?>
 					<div class="com-dpcalendar-event__rrule">

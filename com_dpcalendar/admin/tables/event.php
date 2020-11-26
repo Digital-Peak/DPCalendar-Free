@@ -1,13 +1,13 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Image\Image;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
 
@@ -63,19 +63,20 @@ class DPCalendarTableEvent extends JTable
 
 	public function store($updateNulls = false)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		// Needs reset, so no caching of now
+		JFactory::$dates = [];
+		$date            = DPCalendarHelper::getDate();
+		$user            = JFactory::getUser();
 		if ($this->id) {
 			// Existing item
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->get('id');
-		} else {
-			if (!intval($this->created)) {
-				$this->created = $date->toSql();
-			}
-			if (empty($this->created_by)) {
-				$this->created_by = $user->get('id');
-			}
+		}
+		if (!$this->id && !intval($this->created)) {
+			$this->created = $date->toSql();
+		}
+		if (!$this->id && empty($this->created_by)) {
+			$this->created_by = $user->get('id');
 		}
 
 		// Quick add checks
@@ -140,22 +141,24 @@ class DPCalendarTableEvent extends JTable
 
 			$tagsChanged = !isset($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
-			if ($this->price != $table->price || $this->booking_options != $table->booking_options) {
+			if ($this->price != $table->price || $this->booking_options != $table->booking_options || ($hardReset && $this->rrule)) {
 				// Check for tickets
 				$db    = JFactory::getDbo();
 				$query = $db->getQuery(true);
-				$query->select('id')
-					->from('#__dpcalendar_tickets')
-					->where('(event_id = ' . (int)$this->id . ' or event_id = ' . (int)$this->original_id . ')')
-					->where('state >= 0');
+				$query->select('t.id')
+					->from('#__dpcalendar_tickets as t')
+					->join('LEFT', '#__dpcalendar_events as e on e.original_id=' . (int)$this->id)
+					->where('(t.event_id = ' . (int)$this->id . ' or t.event_id = ' . (int)$this->original_id . ' or t.event_id = e.id)')
+					->where('t.state >= 0');
 				$db->setQuery($query);
 				if ($db->loadResult()) {
-					$this->all_day    = $table->all_day;
-					$this->start_date = $table->start_date;
-					$this->end_date   = $table->end_date;
-					$this->rrule      = $table->rrule;
-					$this->price      = $table->price;
-					$hardReset        = false;
+					$this->all_day         = $table->all_day;
+					$this->start_date      = $table->start_date;
+					$this->end_date        = $table->end_date;
+					$this->rrule           = $table->rrule;
+					$this->price           = $table->price;
+					$this->booking_options = $table->booking_options;
+					$hardReset             = false;
 
 					JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 					JFactory::getApplication()->enqueueMessage(JText::_('COM_DPCALENDAR_ERR_TABLE_NO_PRICE_CHANGE'), 'notice');
@@ -180,6 +183,22 @@ class DPCalendarTableEvent extends JTable
 		JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 		if (!$this->uid) {
 			$this->uid = strtoupper(Sabre\VObject\UUIDUtil::getUUID());
+		}
+
+		if (!empty($this->images) && $this->images != '{}') {
+			$images = json_decode($this->images);
+			if (!empty($images->image_intro) && file_exists(JPATH_ROOT . '/' . $images->image_intro)) {
+				$props                      = Image::getImageFileProperties(JPATH_ROOT . '/' . $images->image_intro);
+				$images->image_intro_width  = $props->width;
+				$images->image_intro_height = $props->height;
+			}
+			if (!empty($images->image_full) && file_exists(JPATH_ROOT . '/' . $images->image_full)) {
+				$props                     = Image::getImageFileProperties(JPATH_ROOT . '/' . $images->image_full);
+				$images->image_full_width  = $props->width;
+				$images->image_full_height = $props->height;
+			}
+
+			$this->images = json_encode($images);
 		}
 
 		// Attempt to store the user data.
@@ -225,22 +244,17 @@ class DPCalendarTableEvent extends JTable
 				$table = JTable::getInstance('Event', 'DPCalendarTable');
 				$table->bind((array)$this, ['id']);
 
-				$table->alias      = $table->alias . '_' . $startDate->format('U');
-				$table->start_date = $startDate->toSql();
-				if ($table->all_day) {
-					$table->recurrence_id = $startDate->format('Ymd');
-				} else {
-					$table->recurrence_id = $startDate->format('Ymd\THis\Z');
-				}
-				$table->end_date    = $endDate->toSql();
-				$table->original_id = $this->id;
-				$table->rrule       = '';
-				$table->checked_out = 0;
-				$table->modified    = $this->getDbo()->getNullDate();
-				$table->modified_by = 0;
+				$table->alias         = JApplicationHelper::stringURLSafe($table->alias . '-' . $startDate->format('U'));
+				$table->start_date    = $startDate->toSql();
+				$table->recurrence_id = $startDate->format('Ymd' . (!$table->all_day ? '\THis\Z' : ''));
+				$table->end_date      = $endDate->toSql();
+				$table->original_id   = $this->id;
+				$table->rrule         = '';
+				$table->checked_out   = 0;
+				$table->modified      = $this->getDbo()->getNullDate();
+				$table->modified_by   = 0;
 
-				// If the xreference does exist, then we need to create it with
-				// the proper scheme
+				// If the xreference does exist, then we need to create it with the proper scheme
 				if ($this->xreference) {
 					// Replacing the _0 with the start date
 					$table->xreference = $this->replaceLastInString(
@@ -256,83 +270,86 @@ class DPCalendarTableEvent extends JTable
 
 				$table->store();
 			}
-		} else {
-			// If tags have changed we need to update each instance
-			if ($tagsChanged) {
-				$this->populateTags();
-			} else {
-				$query = $this->_db->getQuery(true);
-				$query->update('#__dpcalendar_events');
 
-				if (is_array($this->price)) {
-					$this->price = json_encode($this->price);
-				}
-				if (is_array($this->rooms)) {
-					$this->rooms = json_encode($this->rooms);
-				}
-
-				// Fields to update.
-				$files = [
-					$this->_db->qn('catid') . ' = ' . $this->_db->q($this->catid),
-					$this->_db->qn('title') . ' = ' . $this->_db->q($this->title),
-					$this->_db->qn('alias') . ' = concat(' . $this->_db->q($this->alias . '_') . ', UNIX_TIMESTAMP(start_date))',
-					$this->_db->qn('color') . ' = ' . $this->_db->q($this->color),
-					$this->_db->qn('show_end_time') . ' = ' . $this->_db->q($this->show_end_time),
-					$this->_db->qn('url') . ' = ' . $this->_db->q($this->url),
-					$this->_db->qn('images') . ' = ' . $this->_db->q($this->images),
-					$this->_db->qn('description') . ' = ' . $this->_db->q($this->description),
-					$this->_db->qn('schedule') . ' = ' . $this->_db->q($this->schedule),
-					$this->_db->qn('capacity') . ' = ' . ($this->capacity === null ? 'NULL' : $this->_db->q($this->capacity)),
-					$this->_db->qn('capacity_used') . ' = ' . $this->_db->q($this->capacity_used),
-					$this->_db->qn('max_tickets') . ' = ' . $this->_db->q($this->max_tickets),
-					$this->_db->qn('booking_closing_date') . ' = ' . $this->_db->q($this->booking_closing_date),
-					$this->_db->qn('booking_series') . ' = ' . $this->_db->q($this->booking_series),
-					$this->_db->qn('price') . ' = ' . $this->_db->q($this->price),
-					$this->_db->qn('earlybird') . ' = ' . $this->_db->q($this->earlybird),
-					$this->_db->qn('user_discount') . ' = ' . $this->_db->q($this->user_discount),
-					$this->_db->qn('booking_information') . ' = ' . $this->_db->q($this->booking_information),
-					$this->_db->qn('ordertext') . ' = ' . $this->_db->q($this->ordertext),
-					$this->_db->qn('orderurl') . ' = ' . $this->_db->q($this->orderurl),
-					$this->_db->qn('canceltext') . ' = ' . $this->_db->q($this->canceltext),
-					$this->_db->qn('cancelurl') . ' = ' . $this->_db->q($this->cancelurl),
-					$this->_db->qn('terms') . ' = ' . $this->_db->q($this->terms),
-					$this->_db->qn('state') . ' = ' . $this->_db->q($this->state),
-					$this->_db->qn('checked_out') . ' = ' . $this->_db->q(0),
-					$this->_db->qn('checked_out_time') . ' = ' . $this->_db->q($this->_db->getNullDate()),
-					$this->_db->qn('access') . ' = ' . $this->_db->q($this->access),
-					$this->_db->qn('access_content') . ' = ' . $this->_db->q($this->access_content),
-					$this->_db->qn('params') . ' = ' . $this->_db->q($this->params),
-					$this->_db->qn('rooms') . ' = ' . $this->_db->q($this->rooms),
-					$this->_db->qn('language') . ' = ' . $this->_db->q($this->language),
-					$this->_db->qn('modified') . ' = ' . $this->_db->q($this->modified),
-					$this->_db->qn('modified_by') . ' = ' . $this->_db->q($user->id),
-					$this->_db->qn('created_by') . ' = ' . $this->_db->q($this->created_by),
-					$this->_db->qn('metakey') . ' = ' . $this->_db->q($this->metakey),
-					$this->_db->qn('metadesc') . ' = ' . $this->_db->q($this->metadesc),
-					$this->_db->qn('metadata') . ' = ' . $this->_db->q($this->metadata),
-					$this->_db->qn('featured') . ' = ' . $this->_db->q($this->featured),
-					$this->_db->qn('publish_up') . ' = ' . $this->_db->q($this->publish_up),
-					$this->_db->qn('publish_down') . ' = ' . $this->_db->q($this->publish_down),
-					$this->_db->qn('plugintype') . ' = ' . $this->_db->q($this->plugintype)
-				];
-
-				// If the xreference does exist, then we need to create it with
-				// the proper scheme
-				if ($this->xreference) {
-					// Replacing the _0 with the start date
-					$files[] = $this->_db->qn('xreference') . ' = concat(' . $this->_db->q($this->replaceLastInString('_0', '_', $this->xreference)) .
-						", DATE_FORMAT(start_date, CASE WHEN all_day = '1' THEN '%Y%m%d' ELSE '%Y%m%d%H%i' END))";
-				} else {
-					$files[] = $this->_db->qn('xreference') . ' = null';
-				}
-
-				$query->set($files);
-				$query->where($this->_db->qn('original_id') . ' = ' . $this->_db->q($this->id));
-
-				$this->_db->setQuery($query);
-				$this->_db->execute();
-			}
+			return $success;
 		}
+
+		// If tags have changed we need to update each instance
+		if ($tagsChanged) {
+			$this->populateTags();
+
+			return;
+		}
+
+
+		$query = $this->_db->getQuery(true);
+		$query->update('#__dpcalendar_events');
+
+		if (is_array($this->price)) {
+			$this->price = json_encode($this->price);
+		}
+		if (is_array($this->rooms)) {
+			$this->rooms = json_encode($this->rooms);
+		}
+
+		// Fields to update
+		$files = [
+			$this->_db->qn('catid') . ' = ' . $this->_db->q($this->catid),
+			$this->_db->qn('title') . ' = ' . $this->_db->q($this->title),
+			$this->_db->qn('color') . ' = ' . $this->_db->q($this->color),
+			$this->_db->qn('show_end_time') . ' = ' . $this->_db->q($this->show_end_time),
+			$this->_db->qn('url') . ' = ' . $this->_db->q($this->url),
+			$this->_db->qn('images') . ' = ' . $this->_db->q($this->images),
+			$this->_db->qn('description') . ' = ' . $this->_db->q($this->description),
+			$this->_db->qn('schedule') . ' = ' . $this->_db->q($this->schedule),
+			$this->_db->qn('capacity') . ' = ' . ($this->capacity === null ? 'NULL' : $this->_db->q($this->capacity)),
+			$this->_db->qn('capacity_used') . ' = ' . $this->_db->q($this->capacity_used),
+			$this->_db->qn('max_tickets') . ' = ' . $this->_db->q($this->max_tickets),
+			$this->_db->qn('booking_closing_date') . ' = ' . $this->_db->q($this->booking_closing_date),
+			$this->_db->qn('booking_series') . ' = ' . $this->_db->q($this->booking_series),
+			$this->_db->qn('price') . ' = ' . $this->_db->q($this->price),
+			$this->_db->qn('earlybird') . ' = ' . $this->_db->q($this->earlybird),
+			$this->_db->qn('user_discount') . ' = ' . $this->_db->q($this->user_discount),
+			$this->_db->qn('booking_information') . ' = ' . $this->_db->q($this->booking_information),
+			$this->_db->qn('ordertext') . ' = ' . $this->_db->q($this->ordertext),
+			$this->_db->qn('orderurl') . ' = ' . $this->_db->q($this->orderurl),
+			$this->_db->qn('canceltext') . ' = ' . $this->_db->q($this->canceltext),
+			$this->_db->qn('cancelurl') . ' = ' . $this->_db->q($this->cancelurl),
+			$this->_db->qn('terms') . ' = ' . $this->_db->q($this->terms),
+			$this->_db->qn('state') . ' = ' . $this->_db->q($this->state),
+			$this->_db->qn('checked_out') . ' = ' . $this->_db->q(0),
+			$this->_db->qn('checked_out_time') . ' = ' . $this->_db->q($this->_db->getNullDate()),
+			$this->_db->qn('access') . ' = ' . $this->_db->q($this->access),
+			$this->_db->qn('access_content') . ' = ' . $this->_db->q($this->access_content),
+			$this->_db->qn('params') . ' = ' . $this->_db->q($this->params),
+			$this->_db->qn('rooms') . ' = ' . $this->_db->q($this->rooms),
+			$this->_db->qn('language') . ' = ' . $this->_db->q($this->language),
+			$this->_db->qn('modified') . ' = ' . $this->_db->q($this->modified),
+			$this->_db->qn('modified_by') . ' = ' . $this->_db->q($user->id),
+			$this->_db->qn('created_by') . ' = ' . $this->_db->q($this->created_by),
+			$this->_db->qn('metakey') . ' = ' . $this->_db->q($this->metakey),
+			$this->_db->qn('metadesc') . ' = ' . $this->_db->q($this->metadesc),
+			$this->_db->qn('metadata') . ' = ' . $this->_db->q($this->metadata),
+			$this->_db->qn('featured') . ' = ' . $this->_db->q($this->featured),
+			$this->_db->qn('publish_up') . ' = ' . $this->_db->q($this->publish_up),
+			$this->_db->qn('publish_down') . ' = ' . $this->_db->q($this->publish_down),
+			$this->_db->qn('payment_provider') . ' = ' . $this->_db->q($this->payment_provider)
+		];
+
+		// If the xreference does exist, then we need to create it with the proper scheme
+		if ($this->xreference) {
+			// Replacing the _0 with the start date
+			$files[] = $this->_db->qn('xreference') . ' = concat(' . $this->_db->q($this->replaceLastInString('_0', '_', $this->xreference)) .
+				", DATE_FORMAT(start_date, CASE WHEN all_day = '1' THEN '%Y%m%d' ELSE '%Y%m%d%H%i' END))";
+		} else {
+			$files[] = $this->_db->qn('xreference') . ' = null';
+		}
+
+		$query->set($files);
+		$query->where($this->_db->qn('original_id') . ' = ' . $this->_db->q($this->id));
+
+		$this->_db->setQuery($query);
+		$this->_db->execute();
 
 		return $success;
 	}
@@ -362,7 +379,7 @@ class DPCalendarTableEvent extends JTable
 		}
 		$this->alias = JApplicationHelper::stringURLSafe($this->alias);
 		if (trim(str_replace('-', '', $this->alias)) == '') {
-			$this->alias = JFactory::getDate()->format("Y-m-d-H-i-s");
+			$this->alias = JFactory::getDate($this->start_date)->format('Y-m-d-H-i-s');
 		}
 
 		// Check the publish down date is not earlier than publish up.
@@ -388,11 +405,9 @@ class DPCalendarTableEvent extends JTable
 			$this->metakey = implode(", ", $clean_keys);
 		}
 
-		if (!$this->id) {
-			// Images can be an empty json string
-			if (!isset($this->images)) {
-				$this->images = '{}';
-			}
+		// Images can be an empty json string
+		if (!$this->id && !isset($this->images)) {
+			$this->images = '{}';
 		}
 
 		// Strict mode adjustments
@@ -444,16 +459,15 @@ class DPCalendarTableEvent extends JTable
 		$userId = (int)$userId;
 		$state  = (int)$state;
 
-		// If there are no primary keys set check to see if the instance key is
-		// set.
-		if (empty($pks)) {
-			if ($this->$k) {
-				$pks = [$this->$k];
-			} else {
-				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+		// If there are no primary keys set check to see if the instance key is set.
+		if (empty($pks) && !$this->$k) {
+			$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 
-				return false;
-			}
+			return false;
+		}
+
+		if (empty($pks)) {
+			$pks = [$this->$k];
 		}
 
 		// Build the WHERE clause for the primary keys.
@@ -503,7 +517,7 @@ class DPCalendarTableEvent extends JTable
 		$query = $this->_db->getQuery(true);
 		$query->update($this->_tbl);
 		$query->set($this->_db->quoteName('capacity_used') . ' = (' . $this->_db->quoteName('capacity_used') . ' ' . ($increment ? '+' : '-') . ' 1)');
-		$query->where('id = ' . (int)$pk);
+		$query->where('(id = ' . (int)$pk . ' or (original_id = ' . (int)$pk . ' and booking_series = 1))');
 		if (!$increment) {
 			$query->where('capacity_used > 0');
 		}

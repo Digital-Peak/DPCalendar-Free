@@ -57,7 +57,6 @@
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	padding: 4px 10px;
-	margin: 3px 0;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -78,31 +77,19 @@
 }
 
 .com-dpcalendar-ticket .dp-description {
+	display: flex;
+	flex-wrap: wrap;
 	margin-bottom: 10px;
 }
 
 .com-dpcalendar-ticket .dp-description__label {
-	float: left;
-	width: 160px;
-	clear: left;
+	flex: 0 0 160px;
 	text-align: left;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 .com-dpcalendar-ticket .dp-description__description {
-	margin-left: 180px;
-}
-
-@media screen and (max-width: 540px) {
-	.com-dpcalendar-ticket .dp-description__label {
-		float: none;
-		width: 100%;
-	}
-	.com-dpcalendar-ticket .dp-description__description {
-		margin-left: 0;
-	}
+	flex: 1 1 200px;
+	word-break: break-word;
 }
 
 .com-dpcalendar-ticket .dp-timezone {

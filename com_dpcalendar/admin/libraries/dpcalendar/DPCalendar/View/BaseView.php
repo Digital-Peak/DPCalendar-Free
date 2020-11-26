@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\View;
@@ -38,6 +37,7 @@ class BaseView extends \JViewLegacy
 		$this->app   = \JFactory::getApplication();
 		$this->input = $this->app->input;
 		$this->user  = \JFactory::getUser();
+		$this->tmpl = $this->input->getCmd('tmpl') ? '&tmpl=' . $this->input->getCmd('tmpl') : '';
 
 		$state = $this->get('State');
 

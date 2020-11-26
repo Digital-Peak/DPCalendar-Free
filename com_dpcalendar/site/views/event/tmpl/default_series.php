@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2018 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -21,8 +20,8 @@ if (!$this->seriesEvents || !$this->params->get('event_show_series', 1)) {
 				<a href="<?php echo $this->router->getEventRoute($event->id, $event->catid); ?>" class="dp-link">
 					<?php echo $this->dateHelper->getDateStringFromEvent(
 						$event,
-						$this->params->get('event_date_format', 'm.d.Y'),
-						$this->params->get('event_time_format', 'g:i a')
+						$this->params->get('event_date_format', 'd.m.Y'),
+						$this->params->get('event_time_format', 'H:i')
 					); ?>
 				</a>
 			</li>
@@ -31,8 +30,8 @@ if (!$this->seriesEvents || !$this->params->get('event_show_series', 1)) {
 	<p class="com-dpcalendar-event__series-info">
 		<?php echo JText::sprintf(
 			'COM_DPCALENDAR_VIEW_EVENT_SERIES_INFO',
-			$this->dateHelper->getDate($this->event->series_min_start_date)->format($this->params->get('event_date_format', 'm.d.Y'), true),
-			$this->dateHelper->getDate($this->event->series_max_end_date)->format($this->params->get('event_date_format', 'm.d.Y'), true)
+			$this->dateHelper->getDate($this->event->series_min_start_date)->format($this->params->get('event_date_format', 'd.m.Y'), true),
+			$this->dateHelper->getDate($this->event->series_max_end_date)->format($this->params->get('event_date_format', 'd.m.Y'), true)
 		); ?>
 	</p>
 </div>

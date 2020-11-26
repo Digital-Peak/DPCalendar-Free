@@ -1,13 +1,10 @@
+/**
+ * @package   DPCalendar
+ * @copyright Digital Peak GmbH. <https://www.digital-peak.com>
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ */
 (function () {
 	'use strict';
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function watchElements(elements)
 	{
 		elements.forEach((mapElement) => {
@@ -15,7 +12,6 @@
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
 				return;
 			}
-
 			const observer = new IntersectionObserver(
 				(entries, observer) => {
 					entries.forEach((entry) => {
@@ -23,7 +19,6 @@
 							return;
 						}
 						observer.unobserve(mapElement);
-
 						loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
 					});
 				}
@@ -31,22 +26,11 @@
 			observer.observe(mapElement);
 		});
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js']);
 		watchElements(document.querySelectorAll('.com-dpcalendar-locations__map .dp-map'));
-
 		if (document.querySelector('.com-dpcalendar-locations__resource')) {
 			loadDPAssets(['/com_dpcalendar/js/dpcalendar/calendar.js']);
 		}
 	});
-
 }());
-//# sourceMappingURL=default.js.map

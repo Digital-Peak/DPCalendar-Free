@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -13,6 +12,11 @@ use Joomla\Utilities\ArrayHelper;
 class DPCalendarModelLocation extends JModelAdmin
 {
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
+
+	protected $batch_commands = array(
+		'language_id' => 'batchLanguage',
+		'country_id'  => 'batchCountry',
+	);
 
 	protected function canDelete($record)
 	{
@@ -37,6 +41,9 @@ class DPCalendarModelLocation extends JModelAdmin
 			$item->color = \DPCalendar\Helper\Location::getColor($item);
 		}
 
+		$item->tags = new JHelperTags();
+		$item->tags->getTagIds($item->id, 'com_dpcalendar.location');
+
 		// Convert the params field to an array.
 		$registry = new Registry();
 		if (!empty($item->metadata)) {
@@ -44,7 +51,7 @@ class DPCalendarModelLocation extends JModelAdmin
 		}
 		$item->metadata = $registry;
 
-		$user = JFactory::getUser();
+		$user         = JFactory::getUser();
 		$item->params = new Registry($item->params);
 		$item->params->set('access-edit',
 			$user->authorise('core.edit', 'com_dpcalendar')
@@ -52,6 +59,15 @@ class DPCalendarModelLocation extends JModelAdmin
 		$item->params->set('access-delete',
 			$user->authorise('core.delete', 'com_dpcalendar')
 			|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $item->created_by == $user->id));
+
+		if ($item->country) {
+			$country = JModelLegacy::getInstance('Country', 'DPCalendarModel')->getItem($item->country);
+			if ($country) {
+				JFactory::getApplication()->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+				$item->country_code       = $country->short_code;
+				$item->country_code_value = JText::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
+			}
+		}
 
 		return $item;
 	}
@@ -168,9 +184,12 @@ class DPCalendarModelLocation extends JModelAdmin
 	protected function loadFormData()
 	{
 		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.location.data', []);
-
 		if (empty($data)) {
 			$data = $this->getItem();
+		}
+
+		if (is_array($data)) {
+			$data = new \Joomla\CMS\Object\CMSObject($data);
 		}
 
 		// Forms can't handle registry objects on load
@@ -178,7 +197,22 @@ class DPCalendarModelLocation extends JModelAdmin
 			$data->metadata = $data->metadata->toArray();
 		}
 
+		$data->setProperties($this->getDefaultValues($data));
+
 		$this->preprocessData('com_dpcalendar.location', $data);
+
+		return $data;
+	}
+
+	private function getDefaultValues(JObject $item)
+	{
+		$params = $this->getParams();
+		$data   = [];
+
+		// Set the default values from the params
+		if (!$item->get('country')) {
+			$data['country'] = $params->get('location_form_default_country');
+		}
 
 		return $data;
 	}
@@ -264,5 +298,38 @@ class DPCalendarModelLocation extends JModelAdmin
 	public function getReturnPage()
 	{
 		return base64_encode($this->getState('return_page'));
+	}
+
+	protected function batchCountry($value, $pks, $contexts)
+	{
+		if (!$this->user->authorise('core.edit', 'com_dpcalendar')) {
+			$this->setError(\JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
+
+			return false;
+		}
+
+		ArrayHelper::toInteger($pks);
+		$this->getDbo()->setQuery('update #__dpcalendar_locations set country = ' . (int)$value . ' where id in (' . implode(',', $pks) . ')');
+		$this->getDbo()->execute();
+
+		// Clean the cache
+		$this->cleanCache();
+
+		return true;
+	}
+
+	private function getParams()
+	{
+		$params = $this->getState('params');
+
+		if (!$params) {
+			if (JFactory::getApplication()->isClient('site')) {
+				$params = JFactory::getApplication()->getParams();
+			} else {
+				$params = JComponentHelper::getParams('com_dpcalendar');
+			}
+		}
+
+		return $params;
 	}
 }

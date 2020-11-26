@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\Helper;
@@ -11,6 +10,8 @@ defined('_JEXEC') or die();
 
 use DPCalendar\TCPDF\DPCalendar;
 use DPCalendar\Translator\Translator;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
 
 \JLoader::import('joomla.application.component.helper');
@@ -188,7 +189,7 @@ class Booking
 	 * @return array
 	 * @throws \Exception
 	 */
-	public static function getSeriesEvents($event, $limit = 20)
+	public static function getSeriesEvents($event, $limit = 40)
 	{
 		if (!$event) {
 			return [];
@@ -205,6 +206,7 @@ class Booking
 			$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
 			$model->setState('list.limit', 10000);
 			$model->setState('filter.state', [1]);
+			$model->setState('list.start-date', 0);
 			$model->setState('filter.expand', true);
 
 			if ($model->getTotal() > $limit) {
@@ -295,40 +297,54 @@ class Booking
 	public static function getPaymentStatementFromPlugin($booking, $params = null)
 	{
 		\JPluginHelper::importPlugin('dpcalendarpay');
-		$statement = \JFactory::getApplication()->triggerEvent('onDPPaymentStatement', [$booking]);
 
-		$buffer = '';
-		if ($statement) {
-			if (!$params) {
-				$params = \JComponentHelper::getParams('com_dpcalendar');
-			}
+		$plugin    = substr($booking->processor, 0, strpos($booking->processor, '-'));
+		$providers = \JFactory::getApplication()->triggerEvent('onDPPaymentProviders', [$plugin]);
 
-			$vars                               = (array)$booking;
-			$vars['currency']                   = \DPCalendarHelper::getComponentParameter('currency', 'USD');
-			$vars['currencySymbol']             = \DPCalendarHelper::getComponentParameter('currency_symbol', '$');
-			$vars['currencySeparator']          = \DPCalendarHelper::getComponentParameter('currency_separator', '.');
-			$vars['currencyThousandsSeparator'] = \DPCalendarHelper::getComponentParameter('currency_thousands_separator', "'");
-			$vars['price_formatted']            = \DPCalendarHelper::renderPrice(
-				$vars['price'],
-				$vars['currencySymbol'],
-				$vars['currencySeparator'],
-				$vars['currencyThousandsSeparator']
-			);
-
-			if (!empty($booking->jcfields)) {
-				foreach ($booking->jcfields as $field) {
-					$vars['field-' . $field->name] = $field;
-				}
-			}
-
-			foreach ($statement as $b) {
-				if ($b->status && $booking->type = $b->type) {
-					$buffer .= \DPCalendarHelper::renderEvents([], $b->statement, $params, $vars);
+		$provider = null;
+		foreach ($providers as $pluginProviders) {
+			foreach ($pluginProviders as $p) {
+				if ($p->id == $booking->processor && !empty($p->payment_statement)) {
+					$provider = $p;
+					break;
 				}
 			}
 		}
 
-		return $buffer;
+		if ($provider === null) {
+			return '';
+		}
+
+		if (!$params) {
+			$params = \JComponentHelper::getParams('com_dpcalendar');
+		}
+
+		$vars                               = (array)$booking;
+		$vars['currency']                   = \DPCalendarHelper::getComponentParameter('currency', 'USD');
+		$vars['currencySymbol']             = \DPCalendarHelper::getComponentParameter('currency_symbol', '$');
+		$vars['currencySeparator']          = \DPCalendarHelper::getComponentParameter('currency_separator', '.');
+		$vars['currencyThousandsSeparator'] = \DPCalendarHelper::getComponentParameter('currency_thousands_separator', "'");
+		$vars['price_formatted']            = \DPCalendarHelper::renderPrice(
+			$vars['price'],
+			$vars['currencySymbol'],
+			$vars['currencySeparator'],
+			$vars['currencyThousandsSeparator']
+		);
+
+		if (!empty($booking->jcfields)) {
+			foreach ($booking->jcfields as $field) {
+				$vars['field-' . $field->name] = $field;
+			}
+		}
+
+		$text = trim(strip_tags($provider->payment_statement));
+		if (Factory::getLanguage()->hasKey($text)) {
+			$text = Text::_($text);
+		} else {
+			$text = $provider->payment_statement;
+		}
+
+		return \DPCalendarHelper::renderEvents([], $text, $params, $vars);
 	}
 
 	/**
@@ -357,7 +373,7 @@ class Booking
 
 		if (is_object($event->earlybird) && isset($event->earlybird->value) && is_array($event->earlybird->value)) {
 			foreach ($event->earlybird->value as $index => $value) {
-				if ($earlyBirdIndex == -2 || ($earlyBirdIndex >= 0 && $earlyBirdIndex != $index)) {
+				if (!$value || $earlyBirdIndex == -2 || ($earlyBirdIndex >= 0 && $earlyBirdIndex != $index)) {
 					continue;
 				}
 				$limit = $event->earlybird->date[$index];
@@ -392,7 +408,7 @@ class Booking
 		$userGroups = \JAccess::getGroupsByUser(\JFactory::getUser()->id);
 		if (is_object($event->user_discount) && isset($event->user_discount->value) && is_array($event->user_discount->value)) {
 			foreach ($event->user_discount->value as $index => $value) {
-				if ($userGroupIndex == -2 || ($userGroupIndex >= 0 && $userGroupIndex != $index)) {
+				if (!$value || $userGroupIndex == -2 || ($userGroupIndex >= 0 && $userGroupIndex != $index)) {
 					continue;
 				}
 				$groups = $event->user_discount->discount_groups[$index];
@@ -428,10 +444,10 @@ class Booking
 				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED';
 				break;
 			case 2:
-				$status = 'JARCHIVED';
+				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_TICKET_REVIEW';
 				break;
 			case 3:
-				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_NEED_PAYMENT';
+				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_CONFIRMATION';
 				break;
 			case 4:
 				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD';
@@ -441,6 +457,9 @@ class Booking
 				break;
 			case 6:
 				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED';
+				break;
+			case 7:
+				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED';
 				break;
 			case -2:
 				$status = 'JTRASHED';

@@ -1,15 +1,14 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScript
 {
-	protected $minimumPhp = '5.6.0';
+	protected $minimumPhp = '7.4.0';
 	protected $minimumJoomla = '3.9.0';
 	protected $allowDowngrades = true;
 

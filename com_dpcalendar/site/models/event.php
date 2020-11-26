@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -33,7 +32,7 @@ class DPCalendarModelEvent extends JModelItem
 
 		$user = JFactory::getUser();
 		if (!$user->authorise('core.edit.state', 'com_dpcalendar') && !$user->authorise('core.edit', 'com_dpcalendar')) {
-			$this->setState('filter.published', [1, 3]);
+			$this->setState('filter.state', [1, 3]);
 		}
 
 		$this->setState('filter.language', JLanguageMultilang::isEnabled());
@@ -115,14 +114,15 @@ class DPCalendarModelEvent extends JModelItem
 					$nowDate  = $db->quote(JFactory::getDate()->toSql());
 
 					// Filter by published state.
-					$state = $this->getState('filter.published', []);
+					$state      = $this->getState('filter.state', []);
+					$stateOwner = $this->getState('filter.state_owner') ? ' or a.created_by = ' . $user->id : '';
 					if (is_numeric($state)) {
 						$state = [$state];
 					}
 
 					if ($state) {
 						ArrayHelper::toInteger($state);
-						$query->where('a.state in (' . implode(',', $state) . ')');
+						$query->where('(a.state in (' . implode(',', $state) . ')' . $stateOwner . ')');
 						$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
 						$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
 					}
@@ -173,15 +173,13 @@ class DPCalendarModelEvent extends JModelItem
 					$registry->loadString($data->metadata);
 					$data->metadata = $registry;
 
-					$data->price           = json_decode($data->price);
-					$data->earlybird       = json_decode($data->earlybird);
-					$data->user_discount   = json_decode($data->user_discount);
-					$data->booking_options = $data->booking_options ? json_decode($data->booking_options) : [];
-					$data->schedule        = $data->schedule ? json_decode($data->schedule) : [];
-					$data->rooms           = $data->rooms ? explode(',', $data->rooms) : [];
-					$data->plugintype      = $data->plugintype ? explode(',', $data->plugintype) : [];
-
-					\DPCalendar\Helper\DPCalendarHelper::parseImages($data);
+					$data->price            = json_decode($data->price);
+					$data->earlybird        = json_decode($data->earlybird);
+					$data->user_discount    = json_decode($data->user_discount);
+					$data->booking_options  = $data->booking_options ? json_decode($data->booking_options) : [];
+					$data->schedule         = $data->schedule ? json_decode($data->schedule) : [];
+					$data->rooms            = $data->rooms ? explode(',', $data->rooms) : [];
+					$data->payment_provider = $data->payment_provider ? explode(',', $data->payment_provider) : [];
 
 					$this->_item[$pk] = $data;
 				} catch (Exception $e) {
@@ -192,41 +190,56 @@ class DPCalendarModelEvent extends JModelItem
 		}
 
 		$item = $this->_item[$pk];
-		if (is_object($item) && $item->catid) {
-			// Implement View Level Access
-			if (!$user->authorise('core.admin', 'com_dpcalendar') && !in_array($item->access_content, $user->getAuthorisedViewLevels())) {
-				$item->title       = JText::_('COM_DPCALENDAR_EVENT_BUSY');
-				$item->location    = '';
-				$item->locations   = null;
-				$item->url         = '';
-				$item->description = '';
-			}
-
-			$item->params->set(
-				'access-tickets',
-				is_numeric($item->catid) && ((!$user->guest && $item->created_by == $user->id) || $user->authorise('core.admin', 'com_dpcalendar'))
-			);
-			$item->params->set(
-				'access-bookings',
-				is_numeric($item->catid) && ((!$user->guest && $item->created_by == $user->id) || $user->authorise('core.admin', 'com_dpcalendar'))
-			);
-
-			$calendar = DPCalendarHelper::getCalendar($item->catid);
-			$item->params->set('access-edit', $calendar->canEdit || ($calendar->canEditOwn && $item->created_by == $user->id));
-			$item->params->set('access-delete', $calendar->canDelete || ($calendar->canEditOwn && $item->created_by == $user->id));
-			$item->params->set(
-				'access-invite',
-				is_numeric($item->catid) &&
-				($item->created_by == $user->id || $user->authorise('dpcalendar.invite', 'com_dpcalendar.category.' . $item->catid))
-			);
-
-			// Ensure a color is set
-			if (!$item->color) {
-				$item->color = $calendar->color;
-			}
+		if (!is_object($item) || !$item->catid) {
+			return $item;
 		}
 
-		return $this->_item[$pk];
+		// Implement View Level Access
+		if (!$user->authorise('core.admin', 'com_dpcalendar') && !in_array($item->access_content, $user->getAuthorisedViewLevels())) {
+			$item->title               = JText::_('COM_DPCALENDAR_EVENT_BUSY');
+			$item->location            = '';
+			$item->locations           = [];
+			$item->location_ids        = null;
+			$item->rooms               = [];
+			$item->url                 = '';
+			$item->description         = '';
+			$item->images              = null;
+			$item->schedule            = [];
+			$item->price               = null;
+			$item->capacity            = 0;
+			$item->capacity_used       = 0;
+			$item->booking_information = '';
+			$item->booking_options     = null;
+		}
+
+		\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
+
+		$item->params->set(
+			'access-tickets',
+			is_numeric($item->catid) &&
+			((!$user->guest && $item->created_by == $user->id) || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
+		);
+		$item->params->set(
+			'access-bookings',
+			is_numeric($item->catid) &&
+			((!$user->guest && $item->created_by == $user->id) || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
+		);
+
+		$calendar = DPCalendarHelper::getCalendar($item->catid);
+		$item->params->set('access-edit', $calendar->canEdit || ($calendar->canEditOwn && $item->created_by == $user->id));
+		$item->params->set('access-delete', $calendar->canDelete || ($calendar->canEditOwn && $item->created_by == $user->id));
+		$item->params->set(
+			'access-invite',
+			is_numeric($item->catid) &&
+			($item->created_by == $user->id || $user->authorise('dpcalendar.invite', 'com_dpcalendar.category.' . $item->catid))
+		);
+
+		// Ensure a color is set
+		if (!$item->color) {
+			$item->color = $calendar->color;
+		}
+
+		return $item;
 	}
 
 	public function hit($id = null)

@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -12,13 +11,11 @@ if (!key_exists('item', $displayData) || !key_exists('context', $displayData)) {
 }
 
 $item = $displayData['item'];
-
 if (!$item) {
 	return;
 }
 
 $context = $displayData['context'];
-
 if (!$context) {
 	return;
 }
@@ -50,7 +47,9 @@ if (!$fields) {
 			<?php continue; ?>
 		<?php } ?>
 		<dl class="dp-description dp-field-<?php echo $field->name; ?> <?php echo $field->params->get('render_class'); ?>">
-			<dt class="dp-description__label"><?php echo $field->params->get('showlabel', 1) ? JText::_($field->label) : ''; ?></dt>
+			<?php if ($field->params->get('showlabel', 1)) { ?>
+				<dt class="dp-description__label"><?php echo JText::_($field->label); ?></dt>
+			<?php } ?>
 			<dd class="dp-description__description"><?php echo $field->value; ?></dd>
 		</dl>
 	<?php } ?>

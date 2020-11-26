@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -48,7 +47,7 @@ $options['requestUrlRoot'] = 'view=events&format=raw&limit=0&my=' . $params->get
 $options['calendarIds']    = $this->selectedCalendars;
 
 // Set the default view
-$options['defaultView'] = $params->get('default_view', 'month');
+$options['initialView'] = $params->get('default_view', 'month');
 
 // Some general calendar options
 $options['weekNumbers']    = (boolean)$params->get('week_numbers');
@@ -64,30 +63,29 @@ if ($bd && !(count($bd) == 1 && !$bd[0])) {
 	];
 }
 
-$options['firstDay']              = (int)$params->get('weekstart', 0);
-$options['scrollTime']            = $params->get('first_hour', 6) . ':00:00';
-$options['weekNumbersWithinDays'] = false;
+$options['firstDay']   = (int)$params->get('weekstart', 0);
+$options['scrollTime'] = $params->get('first_hour', 6) . ':00:00';
 $options['weekNumberCalculation'] = 'ISO';
-$options['displayEventEnd']       = true;
-$options['navLinks']              = true;
+$options['displayEventEnd'] = true;
+$options['navLinks']        = true;
 
 $max = $params->get('max_time', 24);
 if (is_numeric($max)) {
 	$max = $max . ':00:00';
 }
-$options['maxTime'] = $max;
+$options['slotMaxTime'] = $max;
 
 $min = $params->get('min_time', 0);
 if (is_numeric($min)) {
 	$min = $min . ':00:00';
 }
-$options['minTime'] = $min;
+$options['slotMinTime'] = $min;
 
 $options['nowIndicator']     = (boolean)$params->get('current_time_indicator', 1);
 $options['displayEventTime'] = (boolean)$params->get('show_event_time', 1);
 
 if ($params->get('event_limit', '') != '-1') {
-	$options['eventLimit'] = $params->get('event_limit', '') == '' ? 2 : $params->get('event_limit', '') + 1;
+	$options['dayMaxEventRows'] = $params->get('event_limit', '') == '' ? 2 : $params->get('event_limit', '') + 1;
 }
 
 // Set the height
@@ -100,44 +98,44 @@ if ($params->get('calendar_height', 0) > 0) {
 $options['slotEventOverlap']  = (boolean)$params->get('overlap_events', 1);
 $options['slotDuration']      = '00:' . $params->get('agenda_slot_minutes', 30) . ':00';
 $options['slotLabelInterval'] = '00:' . $params->get('agenda_slot_minutes', 30) . ':00';
-$options['slotLabelFormat']   = $this->dateHelper->convertPHPDateToMoment($params->get('axisformat', 'g:i a'));
+$options['slotLabelFormat']   = $this->dateHelper->convertPHPDateToJS($params->get('axisformat', 'H:i'));
 
 // Set up the header
-$options['header'] = ['left' => [], 'center' => [], 'right' => []];
+$options['headerToolbar'] = ['left' => [], 'center' => [], 'right' => []];
 if ($params->get('header_show_navigation', 1)) {
-	$options['header']['left'][] = 'prev';
-	$options['header']['left'][] = 'next';
+	$options['headerToolbar']['left'][] = 'prev';
+	$options['headerToolbar']['left'][] = 'next';
 }
 if ($params->get('header_show_datepicker', 1)) {
-	$options['header']['left'][] = 'datepicker';
+	$options['headerToolbar']['left'][] = 'datepicker';
 }
 if ($params->get('header_show_print', 1)) {
-	$options['header']['left'][] = 'print';
+	$options['headerToolbar']['left'][] = 'print';
 }
-if ($params->get('header_show_create', 1)) {
-	$options['header']['left'][] = 'add';
+if ($params->get('header_show_create', 1) && \DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+	$options['headerToolbar']['left'][] = 'add';
 }
 if ($params->get('header_show_title', 1)) {
-	$options['header']['center'][] = 'title';
+	$options['headerToolbar']['center'][] = 'title';
 }
 if ($params->get('header_show_month', 1)) {
-	$options['header']['right'][] = 'month';
+	$options['headerToolbar']['right'][] = 'month';
 }
 if ($params->get('header_show_week', 1)) {
-	$options['header']['right'][] = 'week';
+	$options['headerToolbar']['right'][] = 'week';
 }
 if ($params->get('header_show_day', 1)) {
-	$options['header']['right'][] = 'day';
+	$options['headerToolbar']['right'][] = 'day';
 } else {
 	$options['navLinks'] = false;
 }
 if ($params->get('header_show_list', 1)) {
-	$options['header']['right'][] = 'list';
+	$options['headerToolbar']['right'][] = 'list';
 }
 
-$options['header']['left']   = implode(',', $options['header']['left']);
-$options['header']['center'] = implode(',', $options['header']['center']);
-$options['header']['right']  = implode(',', $options['header']['right']);
+$options['headerToolbar']['left']   = implode(',', $options['headerToolbar']['left']);
+$options['headerToolbar']['center'] = implode(',', $options['headerToolbar']['center']);
+$options['headerToolbar']['right']  = implode(',', $options['headerToolbar']['right']);
 
 $resourceViews = $params->get('calendar_resource_views');
 
@@ -149,31 +147,31 @@ if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $this->r
 // Set up the views
 $options['views']          = [];
 $options['views']['month'] = [
-	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_month', 'F Y')),
-	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_month', 'g:i a')),
-	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_month', 'D')),
+	'titleFormat'            => $this->dateHelper->convertPHPDateToJS($params->get('titleformat_month', 'F Y')),
+	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('timeformat_month', 'H:i')),
+	'dayHeaderFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('columnformat_month', 'D')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
 ];
 $options['views']['week']  = [
-	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_week', 'M j Y')),
-	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_week', 'g:i a')),
-	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_week', 'D n/j')),
+	'titleFormat'            => $this->dateHelper->convertPHPDateToJS($params->get('titleformat_week', 'M j Y')),
+	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('timeformat_week', 'H:i')),
+	'dayHeaderFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('columnformat_week', 'D n/j')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 ];
 $options['views']['day']   = [
-	'titleFormat'            => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_day', 'F j Y')),
-	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_day', 'g:i a')),
-	'columnHeaderFormat'     => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_day', 'l')),
+	'titleFormat'            => $this->dateHelper->convertPHPDateToJS($params->get('titleformat_day', 'F j Y')),
+	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('timeformat_day', 'H:i')),
+	'dayHeaderFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('columnformat_day', 'l')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
 ];
 $options['views']['list']  = [
-	'titleFormat'        => $this->dateHelper->convertPHPDateToMoment($params->get('titleformat_list', 'M j Y')),
-	'eventTimeFormat'    => $this->dateHelper->convertPHPDateToMoment($params->get('timeformat_list', 'g:i a')),
-	'columnHeaderFormat' => $this->dateHelper->convertPHPDateToMoment($params->get('columnformat_list', 'D')),
-	'listDayFormat'      => $this->dateHelper->convertPHPDateToMoment($params->get('dayformat_list', 'l')),
-	'listDayAltFormat'   => $this->dateHelper->convertPHPDateToMoment($params->get('dateformat_list', 'F j, Y')),
-	'duration'           => ['days' => (int)$params->get('list_range', 30)],
-	'noEventsMessage'    => $this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
+	'titleFormat'       => $this->dateHelper->convertPHPDateToJS($params->get('titleformat_list', 'M j Y')),
+	'eventTimeFormat'   => $this->dateHelper->convertPHPDateToJS($params->get('timeformat_list', 'H:i')),
+	'dayHeaderFormat'   => $this->dateHelper->convertPHPDateToJS($params->get('columnformat_list', 'D')),
+	'listDayFormat'     => $this->dateHelper->convertPHPDateToJS($params->get('dayformat_list', 'l')),
+	'listDaySideFormat' => $this->dateHelper->convertPHPDateToJS($params->get('dateformat_list', 'F j, Y')),
+	'duration'          => ['days' => (int)$params->get('list_range', 30)],
+	'noEventsContent'   => $this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND', true)
 ];
 
 // Some DPCalendar specific options
@@ -183,7 +181,7 @@ $options['event_create_form']     = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
 $options['use_hash']              = true;
 if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
-	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->return, null, false);
+	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->returnPage, null, false);
 }
 
 // Set the actual date

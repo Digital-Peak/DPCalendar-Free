@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -27,6 +26,11 @@ class SendNotificationMail implements StageInterface
 
 	public function __invoke($payload)
 	{
+		// Abort when we are in the creation process
+		if (in_array($payload->item->state, [0, 2])) {
+			return $payload;
+		}
+
 		// Send the notification to the groups
 		$subject = DPCalendarHelper::renderEvents(
 			$payload->eventsWithTickets,

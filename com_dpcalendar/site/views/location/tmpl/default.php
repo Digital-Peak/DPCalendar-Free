@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -25,6 +24,7 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/location/default.js');
 	<?php echo $this->loadTemplate('resource'); ?>
 	<?php echo $this->loadTemplate('map'); ?>
 	<?php echo $this->loadTemplate('details'); ?>
+	<?php echo $this->loadTemplate('tags'); ?>
 	<?php echo $this->loadTemplate('events'); ?>
 	<?php echo $this->loadTemplate('icons'); ?>
 </div>

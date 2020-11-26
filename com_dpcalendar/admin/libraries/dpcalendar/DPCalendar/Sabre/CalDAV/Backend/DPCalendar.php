@@ -1,15 +1,13 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2013 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\Sabre\CalDAV\Backend;
 
 use Sabre\VObject;
 use Sabre\CalDAV;
-use Sabre\DAV;
 use Sabre\DAV\Exception\Forbidden;
 
 \JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
@@ -61,211 +59,216 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 	public function getMultipleCalendarObjects($calendarId, array $uris)
 	{
-		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
-			$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
-			$model->setState('category.id', str_replace('dp-', '', $calendarId));
-			$model->setState('category.recursive', false);
-			$model->setState('list.limit', 10000);
-			$model->setState('filter.ongoing', true);
-			$model->setState('filter.state', 1);
-			$model->setState('filter.language', \JFactory::getLanguage());
-			$model->setState('filter.publish_date', true);
-			$model->setState('list.start-date', '0');
-			$model->setState('list.end-date', \DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
-			$model->setState('list.ordering', 'start_date');
-			$model->setState('list.direction', 'asc');
-			$model->setState('filter.expand', false);
-
-			$data = [];
-			foreach ($model->getItems() as $event) {
-				if (key_exists($event->uid, $data) || $event->original_id > 0) {
-					continue;
-				}
-				$data[$event->uid] = $this->toSabreArray($event);
-			}
-			$this->log('Getting multiple calendar objects ' . implode(',', $uris) . ' on calendar ' . $calendarId);
-
-			return $data;
+		if (!is_string($calendarId) || strpos($calendarId, 'dp-') === false) {
+			return parent::getMultipleCalendarObjects($calendarId, $uris);
 		}
 
-		return parent::getMultipleCalendarObjects($calendarId, $uris);
+		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model->setState('category.id', str_replace('dp-', '', $calendarId));
+		$model->setState('category.recursive', false);
+		$model->setState('list.limit', 10000);
+		$model->setState('filter.ongoing', true);
+		$model->setState('filter.state', 1);
+		$model->setState('filter.language', \JFactory::getLanguage());
+		$model->setState('filter.publish_date', true);
+		$model->setState('list.start-date', '0');
+		$model->setState('list.end-date', \DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
+		$model->setState('list.ordering', 'start_date');
+		$model->setState('list.direction', 'asc');
+		$model->setState('filter.expand', false);
+
+		$data = [];
+		foreach ($model->getItems() as $event) {
+			if (key_exists($event->uid, $data) || $event->original_id > 0) {
+				continue;
+			}
+			$data[$event->uid] = $this->toSabreArray($event);
+		}
+		$this->log('Getting multiple calendar objects ' . implode(',', $uris) . ' on calendar ' . $calendarId);
+
+		return $data;
 	}
 
 	public function getCalendarObject($calendarId, $objectUri)
 	{
-		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
-			$event = $this->getTable();
-			$event->load(['uid' => $objectUri]);
-
-			// If we hit an instance, load the original event
-			if ($event->original_id > 0) {
-				$event->load(['id' => $event->original_id]);
-			}
-
-			if (!empty($event->id)) {
-				// The event needs to be loaded through the model to get
-				// locations, tags, etc.
-				$model = \JModelLegacy::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
-				$event = $model->getItem($event->id);
-				$this->log('Getting calendar object ' . $objectUri . ' on calendar ' . $calendarId);
-
-				return $this->toSabreArray($event);
-			}
-
-			return null;
+		if (!is_string($calendarId) || strpos($calendarId, 'dp-') === false) {
+			return parent::getCalendarObject($calendarId, $objectUri);
 		}
 
-		return parent::getCalendarObject($calendarId, $objectUri);
+		$event = $this->getTable();
+		$event->load(['uid' => $objectUri]);
+
+		// If we hit an instance, load the original event
+		if ($event->original_id > 0) {
+			$event->load(['id' => $event->original_id]);
+		}
+
+		if (!empty($event->id)) {
+			// The event needs to be loaded through the model to get
+			// locations, tags, etc.
+			$model = \JModelLegacy::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
+			$event = $model->getItem($event->id);
+			$this->log('Getting calendar object ' . $objectUri . ' on calendar ' . $calendarId);
+
+			return $this->toSabreArray($event);
+		}
 	}
 
 	public function getCalendarObjects($calendarId)
 	{
-		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
-			$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
-			$model->setState('category.id', str_replace('dp-', '', $calendarId));
-			$model->setState('category.recursive', false);
-			$model->setState('list.limit', 10000);
-			$model->setState('filter.ongoing', true);
-			$model->setState('filter.state', 1);
-			$model->setState('filter.language', \JFactory::getLanguage());
-			$model->setState('filter.publish_date', true);
-			$model->setState('list.start-date', '0');
-			$model->setState('list.end-date', \DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
-			$model->setState('list.ordering', 'start_date');
-			$model->setState('list.direction', 'asc');
-			$model->setState('filter.expand', false);
-
-			$data = [];
-			foreach ($model->getItems() as $event) {
-				if (key_exists($event->uid, $data) || $event->original_id > 0) {
-					continue;
-				}
-				$data[$event->uid] = $this->toSabreArray($event);
-			}
-
-			return $data;
+		if (!is_string($calendarId) || strpos($calendarId, 'dp-') === false) {
+			return parent::getCalendarObjects($calendarId);
 		}
 
-		return parent::getCalendarObjects($calendarId);
+		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model->setState('category.id', str_replace('dp-', '', $calendarId));
+		$model->setState('category.recursive', false);
+		$model->setState('list.limit', 10000);
+		$model->setState('filter.ongoing', true);
+		$model->setState('filter.state', 1);
+		$model->setState('filter.language', \JFactory::getLanguage());
+		$model->setState('filter.publish_date', true);
+		$model->setState('list.start-date', '0');
+		$model->setState('list.end-date', \DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
+		$model->setState('list.ordering', 'start_date');
+		$model->setState('list.direction', 'asc');
+		$model->setState('filter.expand', false);
+
+		$data = [];
+		foreach ($model->getItems() as $event) {
+			if (key_exists($event->uid, $data) || $event->original_id > 0) {
+				continue;
+			}
+			$data[$event->uid] = $this->toSabreArray($event);
+		}
+
+		return $data;
 	}
 
 	public function calendarQuery($calendarId, array $filters)
 	{
-		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
-			$timeRange = [];
-			if (count($filters['comp-filters']) > 0 && !$filters['comp-filters'][0]['is-not-defined']) {
-				$componentType = $filters['comp-filters'][0]['name'];
-
-				if ($componentType == 'VEVENT' && isset($filters['comp-filters'][0]['time-range'])) {
-					$timeRange = $filters['comp-filters'][0]['time-range'];
-				}
-			}
-
-			$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel');
-			$model->getState();
-			$model->setState('list.limit', 1000);
-			$model->setState('category.id', str_replace('dp-', '', $calendarId));
-			$model->setState('category.recursive', true);
-			$model->setState('filter.ongoing', 1);
-			$model->setState('filter.state', 1);
-
-			if (is_array($timeRange) && key_exists('start', $timeRange) && !empty($timeRange['start'])) {
-				$model->setState('list.start-date', $timeRange['start']->getTimeStamp());
-			}
-			if (is_array($timeRange) && key_exists('end', $timeRange) && !empty($timeRange['end'])) {
-				$model->setState('list.end-date', $timeRange['end']->getTimeStamp());
-			}
-
-			$data = [];
-			foreach ($model->getItems() as $event) {
-				if (!$this->validateFilterForObject(['uri' => $event->uid, 'calendarid' => $calendarId], $filters)) {
-					continue;
-				}
-				$data[$event->uid] = $event->uid;
-			}
-
-			return $data;
+		if (!is_string($calendarId) || strpos($calendarId, 'dp-') === false) {
+			return parent::calendarQuery($calendarId, $filters);
 		}
 
-		return parent::calendarQuery($calendarId, $filters);
+		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model->getState();
+		$model->setState('list.limit', 1000);
+		$model->setState('category.id', str_replace('dp-', '', $calendarId));
+		$model->setState('category.recursive', true);
+		$model->setState('filter.ongoing', 1);
+		$model->setState('filter.state', 1);
+
+		if (count($filters['comp-filters']) > 0 && !$filters['comp-filters'][0]['is-not-defined']) {
+			$componentType = $filters['comp-filters'][0]['name'];
+
+			if ($componentType == 'VEVENT' && !empty($filters['comp-filters'][0]['time-range'])) {
+				$timeRange = $filters['comp-filters'][0]['time-range'];
+				if (is_array($timeRange) && key_exists('start', $timeRange) && !empty($timeRange['start'])) {
+					$model->setState('list.start-date', $timeRange['start']->getTimeStamp());
+				}
+				if (is_array($timeRange) && key_exists('end', $timeRange) && !empty($timeRange['end'])) {
+					$model->setState('list.end-date', $timeRange['end']->getTimeStamp());
+				}
+			}
+			if ($componentType == 'VEVENT'
+				&& !empty($filters['comp-filters'][0]['prop-filters'])
+				&& $filters['comp-filters'][0]['prop-filters'][0]['name'] == 'UID'
+				&& !empty($filters['comp-filters'][0]['prop-filters'][0]['text-match'])
+				&& !empty($filters['comp-filters'][0]['prop-filters'][0]['text-match']['value'])) {
+				$model->setState('filter.search', 'uid:' . $filters['comp-filters'][0]['prop-filters'][0]['text-match']['value']);
+				$model->setState('list.start-date', 0);
+			}
+		}
+
+		$data = [];
+		foreach ($model->getItems() as $event) {
+			if (!$this->validateFilterForObject(['uri' => $event->uid, 'calendarid' => $calendarId], $filters)) {
+				continue;
+			}
+			$data[$event->uid] = $event->uid;
+		}
+
+		return $data;
 	}
 
 	public function createCalendarObject($calendarId, $objectUri, $calendarData)
 	{
-		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
-			$this->log('Creating calendar object ' . $objectUri . ' on calendar ' . $calendarId);
-
-			$calendar = \DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
-			if (!$calendar || !$calendar->canCreate) {
-				$this->log('No permission to create ' . $objectUri . ' on calendar ' . $calendarId);
-				throw new Forbidden();
-			}
-
-			$event        = $this->getTable();
-			$vEvent       = VObject\Reader::read($calendarData)->VEVENT;
-			$event->alias = \JApplicationHelper::stringURLSafe($vEvent->SUMMARY->getValue());
-			$event->catid = str_replace('dp-', '', $calendarId);
-			$event->state = 1;
-			$event->uid   = $objectUri;
-
-			$this->merge($event, $vEvent);
-			\DPCalendarHelper::increaseEtag($event->catid);
-
-			return null;
+		if (!is_string($calendarId) || strpos($calendarId, 'dp-') === false) {
+			return parent::createCalendarObject($calendarId, $objectUri, $calendarData);
 		}
 
-		return parent::createCalendarObject($calendarId, $objectUri, $calendarData);
+		$this->log('Creating calendar object ' . $objectUri . ' on calendar ' . $calendarId);
+
+		$calendar = \DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
+		if (!$calendar || !$calendar->canCreate) {
+			$this->log('No permission to create ' . $objectUri . ' on calendar ' . $calendarId);
+			throw new Forbidden();
+		}
+
+		$event        = $this->getTable();
+		$vEvent       = VObject\Reader::read($calendarData)->VEVENT;
+		$event->alias = \JApplicationHelper::stringURLSafe($vEvent->SUMMARY->getValue());
+		$event->catid = str_replace('dp-', '', $calendarId);
+		$event->state = 1;
+		$event->uid   = $objectUri;
+
+		$this->merge($event, $vEvent);
+		\DPCalendarHelper::increaseEtag($event->catid);
 	}
 
 	public function updateCalendarObject($calendarId, $objectUri, $calendarData)
 	{
-		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
-			$this->log('Updating calendar object ' . $objectUri . ' on calendar ' . $calendarId);
-
-			$calendar = \DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
-			if (!$calendar || !$calendar->canEdit) {
-				$this->log('No permission to update ' . $objectUri . ' on calendar ' . $calendarId);
-				throw new Forbidden();
-			}
-
-			$event = $this->getTable();
-			$event->load(['uid' => $objectUri]);
-			$obj = VObject\Reader::read($calendarData);
-
-			if ($event->original_id == '-1') {
-				foreach ($obj->VEVENT as $vEvent) {
-					if ($vEvent->RRULE && $vEvent->RRULE->getValue()) {
-						$this->merge($event, $vEvent);
-					}
-				}
-
-				$db = \JFactory::getDbo();
-				$db->setQuery('select * from #__dpcalendar_events where original_id = ' . $db->quote($event->id));
-				$children = $db->loadObjectList('', 'DPCalendarTableEvent');
-
-				foreach ($obj->VEVENT as $vEvent) {
-					if (!isset($vEvent->{'RECURRENCE-ID'})) {
-						continue;
-					}
-					$startDate = (string)$vEvent->{'RECURRENCE-ID'}->getValue();
-
-					foreach ($children as $child) {
-						if ($child->recurrence_id == $startDate) {
-							$this->merge($child, $vEvent);
-							break;
-						}
-					}
-				}
-			} else {
-				$this->merge($event, $obj->VEVENT);
-			}
-
-			\DPCalendarHelper::increaseEtag($event->catid);
-
-			return null;
+		if (!is_string($calendarId) || strpos($calendarId, 'dp-') === false) {
+			return parent::updateCalendarObject($calendarId, $objectUri, $calendarData);
 		}
 
-		return parent::updateCalendarObject($calendarId, $objectUri, $calendarData);
+		$this->log('Updating calendar object ' . $objectUri . ' on calendar ' . $calendarId);
+
+		$calendar = \DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
+		if (!$calendar || !$calendar->canEdit) {
+			$this->log('No permission to update ' . $objectUri . ' on calendar ' . $calendarId);
+			throw new Forbidden();
+		}
+
+		$event = $this->getTable();
+		$event->load(['uid' => $objectUri]);
+		$obj = VObject\Reader::read($calendarData);
+
+		if ($event->original_id == '0') {
+			$this->merge($event, $obj->VEVENT);
+			\DPCalendarHelper::increaseEtag($event->catid);
+
+			return;
+		}
+
+		foreach ($obj->VEVENT as $vEvent) {
+			if ($vEvent->RRULE && $vEvent->RRULE->getValue()) {
+				$this->merge($event, $vEvent);
+				// We need to sleep here that modified instances have another modified date, nasty
+				sleep(1);
+			}
+		}
+
+		$db = \JFactory::getDbo();
+		$db->setQuery('select * from #__dpcalendar_events where original_id = ' . $db->quote($event->id));
+		$children = $db->loadObjectList('', 'DPCalendarTableEvent');
+
+		foreach ($obj->VEVENT as $vEvent) {
+			if (empty($vEvent->{'RECURRENCE-ID'})) {
+				continue;
+			}
+
+			$startDate = (string)$vEvent->{'RECURRENCE-ID'}->getValue();
+			foreach ($children as $child) {
+				if ($child->recurrence_id == $startDate) {
+					$this->merge($child, $vEvent);
+					break;
+				}
+			}
+		}
+
+		\DPCalendarHelper::increaseEtag($event->catid);
 	}
 
 	public function deleteCalendarObject($calendarId, $objectUri)
@@ -369,6 +372,9 @@ class DPCalendar extends CalDAV\Backend\PDO
 		 *     $dpEvent->description = $vEvent->{'X-ALT-DESC'}->getValue();
 		 * }
 		 */
+		if (isset($vEvent->{'LAST-MODIFIED'}) && $vEvent->{'LAST-MODIFIED'}->getDateTime()) {
+			$dpEvent->modified = $vEvent->{'LAST-MODIFIED'}->getDateTime()->format('Y-m-d H:i:s');
+		}
 		if (isset($vEvent->{'X-COLOR'}) && $vEvent->{'X-COLOR'}->getValue()) {
 			$dpEvent->color = $vEvent->{'X-COLOR'}->getValue();
 		}

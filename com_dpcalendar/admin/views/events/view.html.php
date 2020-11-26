@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -22,7 +21,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 		$this->pagination = $this->get('Pagination');
 		$this->authors    = $this->get('Authors');
 
-		$this->displayData['format'] = $this->params->get('event_form_date_format', 'm.d.Y');
+		$this->displayData['format'] = $this->params->get('event_form_date_format', 'd.m.Y');
 
 		$this->startDate = null;
 		if ($this->state->get('filter.search_start')) {
@@ -30,7 +29,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 				$this->state->get('filter.search_start'),
 				null,
 				true,
-				$this->params->get('event_form_date_format', 'm.d.Y')
+				$this->params->get('event_form_date_format', 'd.m.Y')
 			);
 		}
 
@@ -40,7 +39,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 				$this->state->get('filter.search_end'),
 				null,
 				true,
-				$this->params->get('event_form_date_format', 'm.d.Y')
+				$this->params->get('event_form_date_format', 'd.m.Y')
 			);
 		}
 	}

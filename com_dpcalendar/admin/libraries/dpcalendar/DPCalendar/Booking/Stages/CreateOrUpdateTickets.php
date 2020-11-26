@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -48,6 +47,24 @@ class CreateOrUpdateTickets implements StageInterface
 				if ($payload->oldItem && $payload->oldItem->state != $payload->item->state) {
 					$ticket->state = $payload->item->state;
 					$saveTicket    = true;
+
+					if ($payload->item->state != 1 && $payload->oldItem->state == 1) {
+						foreach ($payload->events as $event) {
+							if ($event->id != $ticket->event_id) {
+								continue;
+							}
+							$event->book(false);
+						}
+					}
+
+					if ($payload->item->state == 1 && $payload->oldItem->state != 1) {
+						foreach ($payload->events as $event) {
+							if ($event->id != $ticket->event_id) {
+								continue;
+							}
+							$event->book(true);
+						}
+					}
 				}
 
 				if (!$saveTicket) {
@@ -60,23 +77,8 @@ class CreateOrUpdateTickets implements StageInterface
 			return $payload;
 		}
 
-		$events = $payload->events;
-
-		// Check if series
-		if (count($payload->events) == 1) {
-			$event = reset($payload->events);
-
-			if ($event->original_id == '-1') {
-				$events = Booking::getSeriesEvents($event, 1000);
-
-				foreach ($events as $e) {
-					$e->amount_tickets = $event->amount_tickets;
-				}
-			}
-		}
-
 		$payload->tickets = [];
-		foreach ($events as $event) {
+		foreach ($events = $payload->events as $event) {
 			$prices = $event->price;
 
 			if (!$prices) {
@@ -84,15 +86,13 @@ class CreateOrUpdateTickets implements StageInterface
 				$prices = new \JObject(['value' => [0 => 0]]);
 			}
 
-			$seatNumber = $event->capacity_used + 1;
 			foreach ($prices->value as $index => $value) {
 				for ($i = 0; $i < $event->amount_tickets[$index]; $i++) {
 					$ticket             = (object)$payload->data;
 					$ticket->id         = 0;
 					$ticket->uid        = 0;
 					$ticket->booking_id = $payload->item->id;
-					$ticket->price      = $event->booking_series == 1 ? 0 : Booking::getPriceWithDiscount($value, $event);
-					$ticket->seat       = $seatNumber;
+					$ticket->price      = Booking::getPriceWithDiscount($value, $event);
 					$ticket->state      = $payload->item->state;
 					$ticket->created    = DPCalendarHelper::getDate()->toSql();
 					$ticket->type       = $index;
@@ -110,32 +110,24 @@ class CreateOrUpdateTickets implements StageInterface
 
 					$ticket->event_id = $event->id;
 
-					// Do not create a ticket for the original event just increase the counter
-					if ($event->original_id == -1) {
-						$table = $this->model->getTable('Event');
-						$table->bind($event);
-						$table->book(true);
-					} else if ($this->model->save((array)$ticket)) {
-						// Increase the seat
-						$seatNumber++;
-
-						$t                = $this->model->getItem();
-						$t->event_calid   = $event->catid;
-						$t->event_title   = $event->title;
-						$t->start_date    = $event->start_date;
-						$t->end_date      = $event->end_date;
-						$t->all_day       = $event->all_day;
-						$t->show_end_time = $event->show_end_time;
-						$t->event_prices  = $event->price;
-						$t->event_options = $event->booking_options;
-
-						$payload->tickets[] = $t;
-
-						$table = $this->model->getTable('Event');
-						$table->bind($event);
-						$table->book(true);
-					} else {
+					if (!$this->model->save((array)$ticket)) {
 						throw new \Exception($this->model->getError());
+					}
+
+					$t                = $this->model->getItem();
+					$t->event_calid   = $event->catid;
+					$t->event_title   = $event->title;
+					$t->start_date    = $event->start_date;
+					$t->end_date      = $event->end_date;
+					$t->all_day       = $event->all_day;
+					$t->show_end_time = $event->show_end_time;
+					$t->event_prices  = $event->price;
+					$t->event_options = $event->booking_options;
+
+					$payload->tickets[] = $t;
+
+					if ($ticket->state == 1) {
+						$event->book(true);
 					}
 				}
 			}

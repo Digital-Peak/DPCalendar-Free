@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -35,7 +34,7 @@ class CollectEventsAndTickets implements StageInterface
 	public function __invoke($payload)
 	{
 		if ($payload->oldItem) {
-			$payload->tickets = $this->model->getTickets($payload->oldItem->id);
+			$payload->tickets = $payload->oldItem->tickets;
 			foreach ($payload->tickets as $ticket) {
 				$payload->events[] = $this->model->getEvent($ticket->event_id);
 			}
@@ -50,6 +49,16 @@ class CollectEventsAndTickets implements StageInterface
 
 		foreach ((array)$payload->data['event_id'] as $eId => $types) {
 			$event = $this->model->getEvent($eId);
+
+			if ($event->original_id == '-1' && $event->booking_series != 1) {
+				throw new \Exception('Whole series can only be booked when series booking is enabled in original event. Please contact the administrator!');
+			}
+
+			if ($event->original_id > 0 && $event->booking_series == 1) {
+				$event                                 = $this->model->getEvent($event->original_id);
+				$payload->data['event_id'][$event->id] = $types;
+				unset($payload->data['event_id'][$eId]);
+			}
 
 			// If we can't book continue
 			if (!Booking::openForBooking($event)) {
@@ -70,10 +79,6 @@ class CollectEventsAndTickets implements StageInterface
 			$event->amount_tickets = [];
 
 			$payload->events[] = $event;
-		}
-
-		if (count($payload->events) == 1 && $event->original_id == '-1' && $event->booking_series == 0) {
-			throw new \Exception('Original event can not be booked when it is disabled. Please contact the administrator!');
 		}
 
 		return $payload;

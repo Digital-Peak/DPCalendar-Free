@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\Helper;
@@ -163,7 +162,7 @@ class Location
 			$locObject->alias       = \JApplicationHelper::stringURLSafe($title);
 			$locObject->state       = 1;
 			$locObject->language    = '*';
-			$locObject->country     = '';
+			$locObject->country     = 0;
 			$locObject->province    = '';
 			$locObject->city        = '';
 			$locObject->zip         = '';
@@ -184,7 +183,7 @@ class Location
 		if ($provider == 'mapbox') {
 			self::fillObjectFromMapbox($location, $locObject);
 		}
-		if ($provider != 'none') {
+		if ($provider == 'openstreetmap') {
 			self::fillObjectFromOpenStreetMap($location, $locObject);
 		}
 
@@ -311,13 +310,7 @@ class Location
 
 	private static function searchInGoogle($address)
 	{
-		$key = trim(\DPCalendarHelper::getComponentParameter('map_api_google_key'));
-
-		if (!$key || $key == '-1') {
-			return [];
-		}
-
-		$url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=' . $key . '&';
+		$url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=' . trim(\DPCalendarHelper::getComponentParameter('map_api_google_key')) . '&';
 
 		$lang = \DPCalendarHelper::getFrLanguage();
 		if (!in_array($lang, self::$googleLanguages)) {
@@ -328,23 +321,8 @@ class Location
 			$url .= 'language=' . $lang . '&';
 		}
 
-		$content = \DPCalendar\Helper\DPCalendarHelper::fetchContent($url . 'input=' . urlencode($address));
-		if (empty($content)) {
-			return [];
-		}
-
-		if ($content instanceof \Exception) {
-			\JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
-
-			return [];
-		}
-
-		$tmp = json_decode($content);
-		if (!$tmp) {
-			return [];
-		}
-
-		if (isset($tmp->error_message)) {
+		$tmp = (new HTTP())->get($url . 'input=' . urlencode($address));
+		if (!empty($tmp->error_message)) {
 			\JFactory::getApplication()->enqueueMessage($tmp->error_message, 'warning');
 
 			return [];
@@ -369,7 +347,7 @@ class Location
 
 	private static function searchInOpenStreetMap($address)
 	{
-		$url = 'http://photon.komoot.de/api/?limit=5&';
+		$url = 'https://photon.komoot.io/api/?limit=5&';
 
 		$lang = \DPCalendarHelper::getFrLanguage();
 		if (!in_array($lang, self::$nomatimLanguages)) {
@@ -380,18 +358,7 @@ class Location
 			$url .= 'lang=' . $lang . '&';
 		}
 
-		$content = \DPCalendar\Helper\DPCalendarHelper::fetchContent($url . 'q=' . urlencode($address));
-		if (empty($content)) {
-			return [];
-		}
-
-		if ($content instanceof \Exception) {
-			\JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
-
-			return [];
-		}
-
-		$tmp = json_decode($content);
+		$tmp = (new HTTP())->get($url . 'q=' . urlencode($address));
 
 		$data = [];
 		foreach ($tmp->features as $feature) {
@@ -450,13 +417,7 @@ class Location
 
 	private static function fillObjectFromGoogle($location, $locObject)
 	{
-		$key = trim(\DPCalendarHelper::getComponentParameter('map_api_google_key'));
-
-		if (!$key || $key == '-1') {
-			return;
-		}
-
-		$url = 'https://maps.google.com/maps/api/geocode/json?key=' . $key . '&';
+		$url = 'https://maps.google.com/maps/api/geocode/json?key=' . trim(\DPCalendarHelper::getComponentParameter('map_api_google_key')) . '&';
 
 		$lang = \DPCalendarHelper::getFrLanguage();
 		if (!in_array($lang, self::$googleLanguages)) {
@@ -467,23 +428,8 @@ class Location
 			$url .= 'language=' . $lang . '&';
 		}
 
-		$content = \DPCalendarHelper::fetchContent($url . 'address=' . urlencode($location));
-		if (empty($content)) {
-			return;
-		}
-
-		if ($content instanceof \Exception) {
-			\JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
-
-			return;
-		}
-
-		$tmp = json_decode($content);
-		if (!$tmp) {
-			return;
-		}
-
-		if (isset($tmp->error_message)) {
+		$tmp = (new HTTP())->get($url . 'address=' . urlencode($location));
+		if (!empty($tmp->error_message)) {
 			\JFactory::getApplication()->enqueueMessage($tmp->error_message, 'warning');
 
 			return;
@@ -499,7 +445,14 @@ class Location
 			}
 			switch ($part->types[0]) {
 				case 'country':
-					$locObject->country = $part->long_name;
+					// Get the country by short code
+					\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+					$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+
+					$loc = $model->getItem(['short_code' => strtoupper($part->short_name)]);
+					if ($loc && $loc->id) {
+						$locObject->country = $loc->id;
+					}
 					break;
 				case 'administrative_area_level_1':
 					$locObject->province = $part->long_name;
@@ -538,68 +491,61 @@ class Location
 			$url = str_replace('/search/', '/reverse/', $url);
 			$url = str_replace('&q={address}', '', $url);
 			$url .= '&lat=' . urlencode($coordinates[0]) . '&lon=' . urlencode($coordinates[1]);
+
+			$locObject->latitude  = $coordinates[0];
+			$locObject->longitude = $coordinates[1];
 		} else {
 			$url = str_replace('{address}', urlencode($location), $url);
 		}
 
-		$content = \DPCalendarHelper::fetchContent($url);
-		if ($content instanceof \Exception) {
-			\JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
-
+		$tmp = (new HTTP())->get($url);
+		if (!$tmp || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
 			return;
 		}
 
-		if (empty($content)) {
-			return;
+		if (!empty($tmp->data) && is_array($tmp->data)) {
+			$tmp = $tmp->data[0];
 		}
 
-		if ($content instanceof \Exception) {
-			\JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
+		if (!empty($tmp->address->country_code)) {
+			// Get the country by short code
+			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
 
-			return;
+			$loc = $model->getItem(['short_code' => strtoupper($tmp->address->country_code)]);
+			if ($loc && $loc->id) {
+				$locObject->country = $loc->id;
+			}
 		}
-
-		$tmp = json_decode($content);
-		if (!$tmp || (empty($tmp->address) && empty($tmp[0]->address))) {
-			return;
+		if (!empty($tmp->address->county)) {
+			$locObject->province = $tmp->address->county;
 		}
-
-		$addr = !empty($tmp->address) ? $tmp->address : $tmp[0]->address;
-
-		if (!empty($addr->country)) {
-			$locObject->country = $addr->country;
+		if (!empty($tmp->address->state)) {
+			$locObject->province = $tmp->address->state;
 		}
-		if (!empty($addr->county)) {
-			$locObject->province = $addr->county;
+		if (!empty($tmp->address->village)) {
+			$locObject->city = $tmp->address->village;
 		}
-		if (!empty($addr->state)) {
-			$locObject->province = $addr->state;
+		if (!empty($tmp->address->city)) {
+			$locObject->city = $tmp->address->city;
 		}
-		if (!empty($addr->village)) {
-			$locObject->city = $addr->village;
+		if (!empty ($tmp->address->town)) {
+			$locObject->city = $tmp->address->town;
 		}
-		if (!empty($addr->city)) {
-			$locObject->city = $addr->city;
+		if (!empty($tmp->address->postcode)) {
+			$locObject->zip = $tmp->address->postcode;
 		}
-		if (!empty ($addr->town)) {
-			$locObject->city = $addr->town;
+		if (!empty($tmp->address->road)) {
+			$locObject->street = $tmp->address->road;
 		}
-		if (!empty($addr->postcode)) {
-			$locObject->zip = $addr->postcode;
+		if (!empty($tmp->address->house_number)) {
+			$locObject->number = $tmp->address->house_number;
 		}
-		if (!empty($addr->road)) {
-			$locObject->street = $addr->road;
+		if (!empty($tmp->lat)) {
+			$locObject->latitude = $tmp->lat;
 		}
-		if (!empty($addr->house_number)) {
-			$locObject->number = $addr->house_number;
-		}
-
-		if (empty($tmp->address)) {
-			$locObject->latitude  = $tmp[0]->lat;
-			$locObject->longitude = $tmp[0]->lon;
-		} else if ($coordinates) {
-			$locObject->latitude  = $coordinates[0];
-			$locObject->longitude = $coordinates[1];
+		if (!empty($tmp->lon)) {
+			$locObject->longitude = $tmp->lon;
 		}
 	}
 
@@ -621,24 +567,7 @@ class Location
 		$lang = substr($lang, 0, strpos($lang, '-'));
 		$url  .= '&language=' . $lang;
 
-		$content = \DPCalendarHelper::fetchContent($url);
-		if ($content instanceof \Exception) {
-			\JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
-
-			return;
-		}
-
-		if (empty($content)) {
-			return;
-		}
-
-		if ($content instanceof \Exception) {
-			\JFactory::getApplication()->enqueueMessage((string)$content->getMessage(), 'warning');
-
-			return;
-		}
-
-		$tmp = json_decode($content);
+		$tmp = (new HTTP())->get($url);
 		if (!$tmp || empty($tmp->features)) {
 			return;
 		}
@@ -652,8 +581,15 @@ class Location
 		}
 
 		foreach ($addr->context as $c) {
-			if (strpos($c->id, 'country') === 0) {
-				$locObject->country = $c->text;
+			if (strpos($c->id, 'country') === 0 && !empty($c->short_code)) {
+				// Get the country by short code
+				\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+				$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+
+				$loc = $model->getItem(['short_code' => strtoupper($c->short_code)]);
+				if ($loc && $loc->id) {
+					$locObject->country = $loc->id;
+				}
 			}
 			if (strpos($c->id, 'region') === 0) {
 				$locObject->province = $c->text;

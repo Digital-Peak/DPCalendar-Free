@@ -1,13 +1,12 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
-$this->dpdocument->loadStyleFile('dpcalendar/views/extcalendar/default.css');
+$this->dpdocument->loadStyleFile('dpcalendar/views/adminform/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/extcalendar/default.js');
 
 if ($this->input->getCmd('tmpl') == 'component') {
@@ -19,7 +18,7 @@ $fieldSets = $this->form->getFieldsets();
 $fieldSets = ['params' => $fieldSets['params']] + $fieldSets;
 $fieldSets = ['general' => $fieldSets['general']] + $fieldSets;
 ?>
-<div class="com-dpcalendar-extcalendar">
+<div class="com-dpcalendar-extcalendar com-dpcalendar-adminform">
 	<form class="com-dpcalendar-extcalendar__form dp-form form-validate" method="post" name="adminForm"
 		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&id=' . (int)$this->item->id); ?>">
 		<?php foreach ($fieldSets as $name => $fieldSet) { ?>

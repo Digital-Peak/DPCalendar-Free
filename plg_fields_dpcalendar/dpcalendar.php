@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -30,5 +29,32 @@ class PlgFieldsDPCalendar extends FieldsPlugin
 		}
 
 		return $fieldNode;
+	}
+
+	public function onCustomFieldsBeforePrepareField($context, $event, $field)
+	{
+		if ($context != 'com_dpcalendar.event' || !$field->params->get('dpcalendar_cf_only_tickets')) {
+			return;
+		}
+
+		$user = JFactory::getUser();
+
+		// When the user is the author of the event or an admin then all is ok
+		if ($event->created_by == $user->id || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar.' . $event->catid)) {
+			return;
+		}
+
+		$tickets = isset($event->tickets) ? $event->tickets : [];
+
+		// Get the tickets of the actual logged in user
+		$myTickets = array_filter($tickets, function ($ticket) use ($user) {
+			return !$user->guest && $user->id && $ticket->user_id == $user->id && $ticket->state == 1;
+		});
+
+		if ($myTickets) {
+			return;
+		}
+
+		$field->value = null;
 	}
 }

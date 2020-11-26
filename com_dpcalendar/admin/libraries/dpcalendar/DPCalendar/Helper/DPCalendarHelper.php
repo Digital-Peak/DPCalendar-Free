@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\Helper;
@@ -162,12 +161,24 @@ class DPCalendarHelper
 		$images        = $event->images;
 		$event->images = new \stdClass();
 
-		$event->images->image_intro         = isset($images->image_intro) ? $images->image_intro : null;
-		$event->images->image_intro_alt     = isset($images->image_intro_alt) ? $images->image_intro_alt : null;
-		$event->images->image_intro_caption = isset($images->image_intro_caption) ? $images->image_intro_caption : null;
-		$event->images->image_full          = isset($images->image_full) ? $images->image_full : null;
-		$event->images->image_full_alt      = isset($images->image_full_alt) ? $images->image_full_alt : null;
-		$event->images->image_full_caption  = isset($images->image_full_caption) ? $images->image_full_caption : null;
+
+		$event->images->image_intro            = isset($images->image_intro) ? $images->image_intro : null;
+		$event->images->image_intro_width      = isset($images->image_intro_width) ? $images->image_intro_width : null;
+		$event->images->image_intro_height     = isset($images->image_intro_height) ? $images->image_intro_height : null;
+		$event->images->image_intro_alt        = isset($images->image_intro_alt) ? $images->image_intro_alt : null;
+		$event->images->image_intro_caption    = isset($images->image_intro_caption) ? $images->image_intro_caption : null;
+		$dimensions                            = $event->images->image_intro_width ? ' width="' . $event->images->image_intro_width . '"' : '';
+		$dimensions                            .= $event->images->image_intro_height ? ' height="' . $event->images->image_intro_height . '"' : '';
+		$event->images->image_intro_dimensions = trim($dimensions);
+
+		$event->images->image_full            = isset($images->image_full) ? $images->image_full : null;
+		$event->images->image_full_width      = isset($images->image_full_width) ? $images->image_full_width : null;
+		$event->images->image_full_height     = isset($images->image_full_height) ? $images->image_full_height : null;
+		$event->images->image_full_alt        = isset($images->image_full_alt) ? $images->image_full_alt : null;
+		$event->images->image_full_caption    = isset($images->image_full_caption) ? $images->image_full_caption : null;
+		$dimensions                           = $event->images->image_full_width ? ' width="' . $event->images->image_full_width . '"' : '';
+		$dimensions                           .= $event->images->image_full_height ? ' height="' . $event->images->image_full_height . '"' : '';
+		$event->images->image_full_dimensions = trim($dimensions);
 	}
 
 	public static function dayToString($day, $abbr = false)
@@ -263,10 +274,10 @@ class DPCalendarHelper
 		}
 
 		if (empty($dateFormat)) {
-			$dateFormat = self::getComponentParameter('event_form_date_format', 'm.d.Y');
+			$dateFormat = self::getComponentParameter('event_form_date_format', 'd.m.Y');
 		}
 		if (empty($timeFormat)) {
-			$timeFormat = self::getComponentParameter('event_form_time_format', 'g:i a');
+			$timeFormat = self::getComponentParameter('event_form_time_format', 'H:i');
 		}
 
 		$date = self::getDate(null, $allDay);
@@ -379,8 +390,8 @@ class DPCalendarHelper
 			$variables['backLinkFull'] = \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true);
 
 			// The date formats from http://php.net/date
-			$dateformat = $params->get('event_date_format', 'm.d.Y');
-			$timeformat = $params->get('event_time_format', 'g:i a');
+			$dateformat = $params->get('event_date_format', 'd.m.Y');
+			$timeformat = $params->get('event_time_format', 'H:i');
 
 			// These are the dates we'll display
 			$startDate     = self::getDate($event->start_date, $event->all_day)->format($dateformat, true);
@@ -461,8 +472,9 @@ class DPCalendarHelper
 			}
 			$variables['avatar'] = self::getAvatar($author->id, $author->email, $params);
 
-			$variables['capacity']     = $event->capacity == null ? \JText::_('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED') : $event->capacity;
-			$variables['capacityUsed'] = $event->capacity_used;
+			$variables['capacity']          = $event->capacity == null ? \JText::_('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED') : $event->capacity;
+			$variables['capacityUsed']      = $event->capacity_used;
+			$variables['capacityRemaining'] = $event->capacity == null ? null : $event->capacity - $event->capacity_used;
 			if (isset($event->bookings)) {
 				foreach ($event->bookings as $booking) {
 					if ($booking->user_id < 1) {
@@ -694,61 +706,6 @@ class DPCalendarHelper
 		}
 
 		return $lang;
-	}
-
-	public static function fetchContent($uri)
-	{
-		if (empty($uri)) {
-			return '';
-		}
-
-		$content = '';
-		try {
-			$internal = !filter_var($uri, FILTER_VALIDATE_URL);
-
-			if ($internal && strpos($uri, '/') !== 0) {
-				$uri = JPATH_ROOT . '/' . $uri;
-			}
-
-			if ($internal) {
-				if (\JFolder::exists($uri)) {
-					foreach (\JFolder::files($uri, '\.ics', true, true) as $file) {
-						$content .= file_get_contents($file);
-					}
-				} else {
-					$content = file_get_contents($uri);
-				}
-			} else {
-				$options = new Registry();
-				$options->set('userAgent', 'DPCalendar');
-				foreach (['curl', 'socket', 'stream'] as $adapter) {
-					$class = 'JHttpTransport' . ucfirst($adapter);
-					$http  = new \JHttp($options, new $class($options));
-
-					$u   = \JUri::getInstance($uri);
-					$uri = $u->toString(['scheme', 'user', 'pass', 'host', 'port', 'path']);
-					$uri .= $u->toString(['query', 'fragment']);
-
-					$language = \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag());
-					$headers  = ['Accept-Language' => $language];
-					$response = $http->get($uri, $headers);
-					$content  = $response->body;
-
-					if (isset($response->headers['Content-Encoding']) && $response->headers['Content-Encoding'] == 'gzip') {
-						$content = gzinflate(substr($content, 10, -8));
-					}
-
-					break;
-				}
-			}
-		} catch (\Exception $e) {
-			return $e;
-		}
-		if (!empty($content)) {
-			return $content;
-		}
-
-		return '';
 	}
 
 	public static function exportCsv($name, $fieldsToLabels, $valueParser)

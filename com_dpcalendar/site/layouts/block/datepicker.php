@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -19,7 +18,7 @@ $displayData['localFormat'] = !empty($displayData['localFormat']) ? $displayData
 		   title="<?php echo !empty($displayData['title']) ? $displayData['title'] : ''; ?>"
 		   placeholder="<?php echo !empty($displayData['title']) ? $displayData['title'] : ''; ?>"
 		   autocomplete="off"
-		   data-format="<?php echo $displayData['dateHelper']->convertPHPDateToMoment($displayData['format']); ?>"
+		   data-format="<?php echo $displayData['dateHelper']->convertPHPDateToJS($displayData['format']); ?>"
 		   data-date="<?php echo !empty($displayData['date']) ? $displayData['date']->format('Y-m-d', $displayData['localFormat']) : ''; ?>"
 		   data-first-day="<?php echo !empty($displayData['firstDay']) ? $displayData['firstDay'] : ''; ?>"
 		   data-pair="<?php echo !empty($displayData['pair']) ? $displayData['pair'] : ''; ?>"

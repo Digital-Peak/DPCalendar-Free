@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -18,17 +17,23 @@ class JFormFieldDPCalendar extends JFormFieldCategory
 	{
 		$options = parent::getOptions();
 
+		if ((boolean)$this->element->attributes()->internal) {
+			return $options;
+		}
+
 		JPluginHelper::importPlugin('dpcalendar');
 		$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
-		if (! empty($tmp)) {
-			foreach ($tmp as $calendars) {
-				foreach ($calendars as $calendar) {
-					// Don't show caldav calendars
-					if (strpos($calendar->id, 'cd-') === 0) {
-						continue;
-					}
-					$options[] = JHtml::_('select.option', $calendar->id, $calendar->title);
+		if (empty($tmp)) {
+			return $options;
+		}
+
+		foreach ($tmp as $calendars) {
+			foreach ($calendars as $calendar) {
+				// Don't show caldav calendars
+				if (strpos($calendar->id, 'cd-') === 0) {
+					continue;
 				}
+				$options[] = JHtml::_('select.option', $calendar->id, $calendar->title);
 			}
 		}
 

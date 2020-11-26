@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -30,8 +29,11 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 					<?php if ($event->images->image_intro) { ?>
 						<div class="mod-dpcalendar-upcoming-panel__image">
 							<figure class="dp-figure">
-								<img class="dp-image" src="<?php echo $event->images->image_intro; ?>"
-									 alt="<?php echo $event->images->image_intro_alt; ?>" loading="lazy">
+								<a href="<?php echo $event->realUrl; ?>" class="dp-event-url dp-link">
+									<img class="dp-image" src="<?php echo $event->images->image_intro; ?>"
+										 alt="<?php echo $event->images->image_intro_alt; ?>"
+										 loading="lazy" <?php echo $event->images->image_intro_dimensions; ?>>
+								</a>
 								<?php if ($event->images->image_intro_caption) { ?>
 									<figcaption class="dp-figure__caption"><?php echo $event->images->image_intro_caption; ?></figcaption>
 								<?php } ?>
@@ -47,24 +49,26 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 							<div class="dp-event-display-after-title"><?php echo $event->displayEvent->afterDisplayTitle; ?></div>
 						<?php } ?>
 						<?php if (($params->get('show_location') || $params->get('show_map')) && isset($event->locations) && $event->locations) { ?>
-							<?php foreach ($event->locations as $location) { ?>
-								<span class="mod-dpcalendar-upcoming-panel__location dp-location">
-								<span class="dp-location__details"
-									  data-latitude="<?php echo $location->latitude; ?>"
-									  data-longitude="<?php echo $location->longitude; ?>"
-									  data-title="<?php echo $location->title; ?>"
-									  data-color="<?php echo $event->color; ?>"></span>
-								<?php if ($params->get('show_location')) { ?>
-									<a href="<?php echo $router->getLocationRoute($location); ?>"
-									   class="mod-dpcalendar-upcoming-panel__url dp-location__url dp-link">
-										<?php echo $location->title; ?>
-									</a>
+							<div class="mod-dpcalendar-upcoming-panel__location">
+								<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
+								<?php foreach ($event->locations as $location) { ?>
+									<div class="dp-location">
+										<div class="dp-location__details"
+											 data-latitude="<?php echo $location->latitude; ?>"
+											 data-longitude="<?php echo $location->longitude; ?>"
+											 data-title="<?php echo $location->title; ?>"
+											 data-color="<?php echo $event->color; ?>"></div>
+										<?php if ($params->get('show_location')) { ?>
+											<a href="<?php echo $router->getLocationRoute($location); ?>" class="dp-location__url dp-link">
+												<?php echo $location->title; ?>
+											</a>
+										<?php } ?>
+										<div class="dp-location__description">
+											<?php echo $layoutHelper->renderLayout('event.tooltip', $displayData); ?>
+										</div>
+									</div>
 								<?php } ?>
-								<span class="dp-location__description">
-									<?php echo $layoutHelper->renderLayout('event.tooltip', $displayData); ?>
-								</span>
-							</span>
-							<?php } ?>
+							</div>
 						<?php } ?>
 						<div class="mod-dpcalendar-upcoming-panel__date">
 							<?php echo $layoutHelper->renderLayout(
@@ -138,8 +142,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 	</div>
 	<?php if ($params->get('show_map')) { ?>
 		<div class="mod-dpcalendar-upcoming-panel__map dp-map"
-			 data-width="<?php echo $params->get('map_width', '100%'); ?>"
-			 data-height="<?php echo $params->get('map_height', '350px'); ?>"
+			 style="width: <?php echo $params->get('map_width', '100%'); ?>; height: <?php echo $params->get('map_height', '350px'); ?>"
 			 data-zoom="<?php echo $params->get('map_zoom', 4); ?>"
 			 data-latitude="<?php echo $params->get('map_lat', 47); ?>"
 			 data-longitude="<?php echo $params->get('map_long', 4); ?>"

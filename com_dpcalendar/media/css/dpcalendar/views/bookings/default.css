@@ -1,16 +1,3 @@
-.com-dpcalendar-bookings .dp-buttons {
-	float: left;
-}
-
-.com-dpcalendar-bookings .dp-form {
-	float: right;
-}
-
-.com-dpcalendar-bookings .dp-pagination__counter, .com-dpcalendar-bookings .dp-pagination__links {
-	float: left;
-	margin-right: 5px;
-}
-
 @media print {
 	.com-dpcalendar-bookings .dp-print-hide {
 		display: none !important;
@@ -52,7 +39,6 @@
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	padding: 4px 10px;
-	margin: 3px 0;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -202,6 +188,19 @@
 .com-dpcalendar-bookings .dp-timezone .choices {
 	min-width: 300px;
 	margin: 0;
+}
+
+.com-dpcalendar-bookings .dp-buttons {
+	float: left;
+}
+
+.com-dpcalendar-bookings__actions .dp-form {
+	float: right;
+}
+
+.com-dpcalendar-bookings .dp-pagination__counter, .com-dpcalendar-bookings .dp-pagination__links {
+	float: left;
+	margin-right: 5px;
 }
 
 /*# sourceMappingURL=default.css.map */

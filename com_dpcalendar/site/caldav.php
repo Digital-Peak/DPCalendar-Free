@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 define('_JEXEC', 1);
@@ -59,6 +58,8 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$siteLanguage = \JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
 			$config->set('language', $siteLanguage);
 
+			$this->initialiseApp();
+
 			$pdo = new \PDO(
 				'mysql:host=' . $config->get('host') . ';dbname=' . $config->get('db') . ';charset=utf8', $config->get('user'),
 				$config->get('password')
@@ -105,7 +106,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 
 			$server->addPlugin(new \Sabre\DAV\Browser\Plugin());
 
-			$server->exec();
+			$server->start();
 		} catch (Exception $e) {
 			$message = 'Something crashed during a CalDAV request: ' . PHP_EOL . $e;
 			JLog::add($message, JLog::ERROR, 'com_dpcalendar');

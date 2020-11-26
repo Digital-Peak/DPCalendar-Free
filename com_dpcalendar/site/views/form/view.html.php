@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -83,41 +82,9 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			$this->form->removeField('scheduling_monthly_days');
 		}
 
-		$hideFieldsets = [];
-		if (!$this->params->get('event_form_change_location', 1)) {
-			$hideFieldsets[] = 'location';
-		}
-		if (!$this->params->get('event_form_change_options', 1)) {
-			$hideFieldsets['params'] = 'jbasic';
-		}
-		if (!$this->params->get('event_form_change_book', 1)) {
-			$hideFieldsets[] = 'booking';
-		}
-		if (!$this->params->get('event_form_change_publishing', 1)) {
-			$hideFieldsets[] = 'publishing';
-		}
-		if (!$this->params->get('event_form_change_metadata', 1)) {
-			$hideFieldsets[]           = 'jmetadata';
-			$hideFieldsets['metadata'] = 'jmetadata';
-		}
-
-		foreach ($hideFieldsets as $group => $name) {
-			foreach ($this->form->getFieldset($name) as $field) {
-				if (!is_string($group)) {
-					$group = null;
-				}
-				$this->form->removeField($field->fieldname, $group);
-			}
-		}
-
 		if (!$this->params->get('save_history', 0)) {
 			// Save is not activated
 			$this->form->removeField('version_note');
-		}
-
-		if ($this->params->get('event_form_change_tags', '1') != '1') {
-			// Tags can't be changed
-			$this->form->removeField('tags');
 		}
 
 		if ((!$this->event->id && !$user->authorise('core.edit.state', 'com_dpcalendar'))
@@ -127,79 +94,30 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			$this->form->removeField('state');
 		}
 
-		// Remove fields depending on the params
-		if ($this->params->get('event_form_change_calid', '1') != '1') {
-			$this->form->setFieldAttribute('catid', 'readonly', 'readonly');
-		}
-		if ($this->params->get('event_form_change_show_end_time', '1') != '1') {
-			$this->form->removeField('show_end_time');
-		}
-		if ($this->params->get('event_form_change_scheduling', '1') != '1') {
-			$this->form->removeField('scheduling');
-		}
-		if ($this->params->get('event_form_change_color', '1') != '1') {
-			$this->form->removeField('color');
-		}
-		if ($this->params->get('event_form_change_url', '1') != '1') {
-			$this->form->removeField('url');
-		}
-		if ($this->params->get('event_form_change_images', '1') != '1') {
-			$this->form->removeGroup('images');
-		}
-		if ($this->params->get('event_form_change_description', '1') != '1') {
-			$this->form->removeField('description');
-		}
-		if ($this->params->get('event_form_change_schedule', '1') != '1') {
-			$this->form->removeField('schedule');
-		}
-		if ($this->params->get('event_form_change_capacity', '1') != '1') {
-			$this->form->removeField('capacity');
-		}
-		if ($this->params->get('event_form_change_capacity_used', '1') != '1') {
-			$this->form->removeField('capacity_used');
-		}
-		if ($this->params->get('event_form_change_max_tickets', '1') != '1') {
-			$this->form->removeField('max_tickets');
-		}
-		if ($this->params->get('event_form_change_price', '1') != '1') {
-			$this->form->removeField('price');
-		}
-		if ($this->params->get('event_form_change_booking_closing_date', '1') != '1') {
-			$this->form->removeField('booking_closing_date');
-		}
-		if ($this->params->get('event_form_change_earlybird', '1') != '1') {
-			$this->form->removeField('earlybird');
-		}
-		if ($this->params->get('event_form_change_user_discount', '1') != '1') {
-			$this->form->removeField('user_discount');
-		}
-		if ($this->params->get('event_form_change_booking_options', '1') != '1') {
-			$this->form->removeField('booking_options');
-		}
-		if ($this->params->get('event_form_change_payment', '1') != '1') {
-			$this->form->removeField('plugintype');
-		}
-		if ($this->params->get('event_form_change_terms', '1') != '1') {
-			$this->form->removeField('terms');
-		}
-		if ($this->params->get('event_form_change_booking_information', '1') != '1') {
-			$this->form->removeField('booking_information');
-		}
-		if ($this->params->get('event_form_change_access', '1') != '1') {
-			$this->form->removeField('access');
-		}
-		if ($this->params->get('event_form_change_access_content', '1') != '1') {
-			$this->form->removeField('access_content');
-		}
-		if ($this->params->get('event_form_change_featured', '1') != '1') {
-			$this->form->removeField('featured');
+		foreach ($this->params->get('event_form_hidden_tabs', []) as $tabName) {
+			$parts = explode(':', $tabName);
+			$name  = $parts[0];
+			$group = null;
+			if (count($parts) > 1) {
+				$name  = $parts[1];
+				$group = $parts[0];
+			}
+
+			if ($group == 'metadata') {
+				$this->form->removeField('xreference');
+			}
+			foreach ($this->form->getFieldset($name) as $field) {
+				$this->form->removeField($field->fieldname, $group);
+			}
 		}
 
-		// Handle tabs
-		if ($this->params->get('event_form_change_location', '1') != '1') {
-			$this->form->removeField('location');
-			$this->form->removeField('location_ids');
-			$this->form->removeField('location_lookup');
+		foreach ($this->params->get('event_form_hidden_fields', []) as $fieldName) {
+			$parts = explode(':', $fieldName);
+			if (count($parts) > 1) {
+				$this->form->removeField($parts[1], $parts[0]);
+			} else {
+				$this->form->removeField($parts[0]);
+			}
 		}
 
 		return parent::init();

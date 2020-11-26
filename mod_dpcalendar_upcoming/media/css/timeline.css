@@ -93,6 +93,10 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-timeline .dp-location {
+	display: inline-block;
+}
+
 .mod-dpcalendar-upcoming-timeline .dp-location__description {
 	display: none;
 }
@@ -112,7 +116,7 @@
 	box-sizing: border-box;
 }
 
-.mod-dpcalendar-upcoming-timeline .mod-dpcalendar-upcoming-panel__events {
+.mod-dpcalendar-upcoming-timeline__events {
 	position: relative;
 	margin: 10px;
 	padding: 0px;

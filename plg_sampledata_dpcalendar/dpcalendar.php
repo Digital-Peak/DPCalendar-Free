@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -51,6 +50,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				$this->clearTable('bookings');
 				$this->clearTable('tickets');
 				$this->clearTable('taxrates');
+				$this->clearTable('coupons');
 				$this->clearTable('caldav_calendars');
 				$this->clearTable('caldav_calendarinstances');
 
@@ -82,7 +82,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$ids   = [];
 			$ids[] = $this->createLocation([
 				'title'     => 'Los  Angeles',
-				'country'   => 'United States',
+				'country'   => 'US',
 				'province'  => 'California',
 				'city'      => 'Los Angeles',
 				'zip'       => '90012',
@@ -93,7 +93,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'New York',
-				'country'   => 'United States',
+				'country'   => 'US',
 				'province'  => 'New York',
 				'city'      => 'New York',
 				'zip'       => '10007',
@@ -104,7 +104,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Washington',
-				'country'   => 'United States',
+				'country'   => 'US',
 				'province'  => 'District of Columbia',
 				'city'      => 'Washington',
 				'zip'       => '20502',
@@ -114,7 +114,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Chicago',
-				'country'   => 'United States',
+				'country'   => 'US',
 				'province'  => 'Illinois',
 				'city'      => 'Chicago',
 				'zip'       => '60604',
@@ -125,7 +125,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Indianapolis',
-				'country'   => 'United States',
+				'country'   => 'US',
 				'province'  => 'Indiana',
 				'city'      => 'Indianapolis',
 				'zip'       => '46204',
@@ -136,7 +136,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Rocky Mountain',
-				'country'   => 'United States',
+				'country'   => 'US',
 				'province'  => 'Oklahoma',
 				'city'      => 'Rocky Mountain',
 				'latitude'  => '35.80536630',
@@ -144,7 +144,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Event Venue',
-				'country'   => 'United States',
+				'country'   => 'US',
 				'province'  => 'New York',
 				'city'      => 'New York',
 				'zip'       => '10123',
@@ -157,7 +157,7 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$ids[] = $this->createLocation([
 				'title'     => 'London',
-				'country'   => 'United Kingdom',
+				'country'   => 'GB',
 				'city'      => 'London',
 				'street'    => 'South Carriage Drive',
 				'latitude'  => '51.50288180',
@@ -165,7 +165,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Berlin',
-				'country'   => 'Germany',
+				'country'   => 'DE',
 				'province'  => 'Berlin',
 				'city'      => 'Berlin',
 				'zip'       => '10178',
@@ -176,7 +176,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Mailand',
-				'country'   => 'Italy',
+				'country'   => 'IT',
 				'province'  => 'Lombardia',
 				'city'      => 'Milano',
 				'zip'       => '20122',
@@ -187,7 +187,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Zurich, Switzerland',
-				'country'   => 'Switzerland',
+				'country'   => 'CH',
 				'province'  => 'Zürich',
 				'city'      => 'Zürich',
 				'zip'       => '8001',
@@ -198,7 +198,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Bern',
-				'country'   => 'Switzerland',
+				'country'   => 'CH',
 				'province'  => 'Bern',
 				'city'      => 'Bern',
 				'zip'       => '3011',
@@ -209,7 +209,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Genf',
-				'country'   => 'Switzerland',
+				'country'   => 'CH',
 				'province'  => 'Genève',
 				'city'      => 'Genève',
 				'zip'       => '1204',
@@ -220,7 +220,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			]);
 			$ids[] = $this->createLocation([
 				'title'     => 'Lisbon, Portugal',
-				'country'   => 'Portugal',
+				'country'   => 'PT',
 				'province'  => 'Lisbon',
 				'city'      => 'Lisbon',
 				'latitude'  => '38.72225240',
@@ -407,7 +407,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'catid'               => 1,
 				'title'               => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_TITLE',
 				'rrule'               => 'FREQ=WEEKLY;BYDAY=SA',
-				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_full_alt":"","image_full_caption":""}',
+				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":480,"image_full_width":800,"image_full_height":480}',
 				'description'         => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_DESC',
 				'color'               => '3c3d3c',
 				'capacity'            => '80',
@@ -417,22 +417,24 @@ class PlgSampledataDPCalendar extends JPlugin
 				'location_ids'        => $locationIds[4]
 			]);
 			$this->createEvent([
-				'catid'        => 1,
-				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_7_TITLE',
-				'rrule'        => 'FREQ=WEEKLY;BYDAY=TH',
-				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_full_alt":"","image_full_caption":""}',
-				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_7_DESC',
-				'color'        => '127a0f',
-				'capacity'     => null,
-				'max_tickets'  => 100,
-				'price'        => '{"value":["20.00"],"label":[""],"description":[""]}',
-				'location_ids' => $locationIds[5]
+				'catid'                => 1,
+				'title'                => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_7_TITLE',
+				'rrule'                => 'FREQ=WEEKLY;BYDAY=TH',
+				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":457,"image_full_width":800,"image_full_height":457}',
+				'description'          => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_7_DESC',
+				'color'                => '127a0f',
+				'capacity'             => null,
+				'max_tickets'          => 100,
+				'price'                => '{"value":["20.00"],"label":[""],"description":[""]}',
+				'booking_series'       => 1,
+				'booking_closing_date' => DPCalendarHelper::getDate('+' . $this->params->get('until', '6 month'))->format('Y-m-d 235900'),
+				'location_ids'         => $locationIds[5]
 			]);
 			$this->createEvent([
 				'catid'        => 1,
 				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_8_TITLE',
 				'rrule'        => 'FREQ=WEEKLY;BYDAY=SA',
-				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_full_alt":"","image_full_caption":""}',
+				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":535,"image_full_width":800,"image_full_height":535}',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_8_DESC',
 				'schedule'     => '{"schedule0":{"title":"Intro","duration":"10","description":"Welcome the attendees."},"schedule1":{"title":"Warmup","duration":"20","description":"Making yourself ready."},"schedule2":{"title":"Exercise","duration":"60","description":"Training the different styles."},"schedule3":{"title":"Feedback","duration":"10","description":"Discussion round amongst the attendees."}}',
 				'capacity'     => null,
@@ -443,7 +445,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'catid'           => 1,
 				'title'           => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_TITLE',
 				'rrule'           => 'FREQ=WEEKLY;BYDAY=SU',
-				'images'          => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":""}',
+				'images'          => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":351,"image_full_width":800,"image_full_height":351}',
 				'description'     => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_DESC',
 				'color'           => 'c42323',
 				'capacity'        => '20',
@@ -458,7 +460,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'catid'               => 1,
 				'title'               => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_TITLE',
 				'rrule'               => 'FREQ=WEEKLY;BYDAY=SA',
-				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_full_alt":"","image_full_caption":""}',
+				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":533,"image_full_width":800,"image_full_height":533}',
 				'description'         => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_DESC',
 				'color'               => '3c3d3c',
 				'capacity'            => '80',
@@ -495,7 +497,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$start = \DPCalendar\Helper\DPCalendarHelper::getDate();
 			$start->setTime(8, 0, 0);
 			$end = clone $start;
-			$end->modify('+2 hours');
+			$end->modify('+4 hours');
 
 			$this->createEvent([
 				'catid'        => 2,
@@ -624,6 +626,27 @@ class PlgSampledataDPCalendar extends JPlugin
 				'countries' => '{"countries0":{"country":"' . $model->getItem(['short_code' => 'US'])->id . '"}}'
 			]);
 
+			// Create coupon
+			$calendarIds = [];
+			foreach ($this->app->getUserState('sampledata.dpcalendar.calendars', []) as $calendars) {
+				foreach ($calendars as $calendarId) {
+					if (!is_numeric($calendarId)) {
+						continue;
+					}
+					$calendarIds[] = $calendarId;
+				}
+			}
+			$couponModel = \JModelLegacy::getInstance('Coupon', 'DPCalendarModel', ['ignore_request' => true]);
+			$couponModel->save([
+				'title'     => 'Coupon',
+				'code'      => 'DEMO',
+				'value'     => 20,
+				'type'      => 'percentage',
+				'calendars' => implode(',', $calendarIds),
+				'state'     => 1
+			]);
+			$couponId = $couponModel->getItem()->id;
+
 			// Festival
 			$this->createBooking([
 				'name'      => 'Chuck Norris',
@@ -632,7 +655,10 @@ class PlgSampledataDPCalendar extends JPlugin
 				'city'      => 'Texas',
 				'latitude'  => 31.81603810,
 				'longitude' => -99.51209860,
-				'event_id'  => [4 => ['tickets' => [0 => 1]]]
+				'event_id'  => [4 => ['tickets' => [0 => 1]]],
+				'state'     => 3,
+				'coupon_id' => 'DEMO',
+				'processor' => 'manual-1'
 			]);
 
 			// Hike
@@ -643,7 +669,9 @@ class PlgSampledataDPCalendar extends JPlugin
 				'city'      => 'Texas',
 				'latitude'  => 31.81603810,
 				'longitude' => -99.51209860,
-				'event_id'  => [5 => ['tickets' => [0 => 2]]]
+				'event_id'  => [5 => ['tickets' => [0 => 2]]],
+				'state'     => 1,
+				'processor' => 'manual-1'
 			]);
 
 			// Swimming
@@ -654,7 +682,8 @@ class PlgSampledataDPCalendar extends JPlugin
 				'city'      => 'Sint-Agatha-Berchem',
 				'latitude'  => 50.86492310,
 				'longitude' => 4.29467340,
-				'event_id'  => [6 => ['tickets' => [0 => 1]]]
+				'event_id'  => [6 => ['tickets' => [0 => 1]]],
+				'state'     => 1
 			]);
 
 			// Basketball
@@ -665,7 +694,9 @@ class PlgSampledataDPCalendar extends JPlugin
 				'city'      => 'New York',
 				'latitude'  => 40.71272810,
 				'longitude' => -74.00601520,
-				'event_id'  => [7 => ['tickets' => [0 => 2, 1 => 0, 2 => 1]]]
+				'event_id'  => [7 => ['tickets' => [0 => 2, 1 => 0, 2 => 1]]],
+				'state'     => 2,
+				'processor' => 'manual-1'
 			]);
 
 			$response            = [];
@@ -1099,9 +1130,7 @@ class PlgSampledataDPCalendar extends JPlugin
 		}
 
 		if (!empty($originalData['rrule'])) {
-			$until = \DPCalendar\Helper\DPCalendarHelper::getDate();
-			$until->modify('+' . $this->params->get('until', '6 month'));
-			$originalData['rrule'] .= ';UNTIL=' . $until->format('Ymd\T235900');
+			$originalData['rrule'] .= ';UNTIL=' . DPCalendarHelper::getDate('+' . $this->params->get('until', '6 month'))->format('Ymd\T235900');
 		}
 
 		if (empty($originalData['start_date'])) {
@@ -1149,12 +1178,14 @@ class PlgSampledataDPCalendar extends JPlugin
 
 	private function createLocation($data)
 	{
-		$model = JModelLegacy::getInstance('Location', 'DPCalendarModel');
-
 		$data['state']    = 1;
 		$data['access']   = (int)$this->app->get('access', 1);
 		$data['language'] = '*';
 
+		$model           = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+		$data['country'] = $model->getItem(['short_code' => $data['country']])->id;
+
+		$model = JModelLegacy::getInstance('Location', 'DPCalendarModel');
 		if (!$model->save($data)) {
 			throw new Exception(JText::_($model->getError()));
 		}
@@ -1263,7 +1294,7 @@ class PlgSampledataDPCalendar extends JPlugin
 		$start = \DPCalendar\Helper\DPCalendarHelper::getDate('+1 day');
 		$model = JModelLegacy::getInstance('Adminevents', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('filter.children', $id);
-		$model->setState('filter.search_start', $start->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')));
+		$model->setState('filter.search_start', $start->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')));
 		$model->setState('list.limit', 1);
 
 		$events = $model->getItems();

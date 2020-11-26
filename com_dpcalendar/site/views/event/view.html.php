@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -16,6 +15,8 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		if ($this->getLayout() == 'empty') {
 			return;
 		}
+
+		$this->state->set('filter.state_owner', true);
 
 		$event = $this->get('Item');
 
@@ -205,7 +206,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		if ($regstrationEndDate->format('U') < $now->format('U')) {
 			return JText::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_END',
-				$regstrationEndDate->format($this->params->get('event_date_format', 'm.d.Y'), true),
+				$regstrationEndDate->format($this->params->get('event_date_format', 'd.m.Y'), true),
 				$regstrationEndDate->format('H:i') != '00:00' ? $regstrationEndDate->format(
 					$this->params->get('event_time_format', 'h:i a'),
 					true
@@ -265,8 +266,8 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			$this->document->setDescription($this->event->title . ' '
 				. DPCalendarHelper::getDateStringFromEvent(
 					$this->event,
-					$this->params->get('event_date_format', 'm.d.Y'),
-					$this->params->get('event_time_format', 'g:i a'),
+					$this->params->get('event_date_format', 'd.m.Y'),
+					$this->params->get('event_time_format', 'H:i'),
 					true
 				) . ' ' . $metadesc);
 		}

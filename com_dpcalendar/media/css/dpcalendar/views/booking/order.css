@@ -16,7 +16,6 @@
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	padding: 4px 10px;
-	margin: 3px 0;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -27,6 +26,22 @@
 	background-color: #cccccc;
 	color: #666666;
 	cursor: not-allowed;
+}
+
+.com-dpcalendar-booking-order .dp-description {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-booking-order .dp-description__label {
+	flex: 0 0 160px;
+	text-align: left;
+}
+
+.com-dpcalendar-booking-order .dp-description__description {
+	flex: 1 1 200px;
+	word-break: break-word;
 }
 
 .com-dpcalendar-booking-order .dp-control, .com-dpcalendar-booking-order .control-group {
@@ -205,42 +220,6 @@
 
 .com-dpcalendar-booking-order #member-registration legend, .com-dpcalendar-booking-order #member-registration fieldset .control-group:nth-of-type(1), .com-dpcalendar-booking-order #member-registration a.btn {
 	display: none;
-}
-
-.com-dpcalendar-booking-order .com-dpcalendar-booking__tickets-message {
-	margin-bottom: 10px;
-}
-
-.com-dpcalendar-booking-order .com-dpcalendar-booking__event-info .dp-control__input, .com-dpcalendar-booking-order .com-dpcalendar-booking__event-info .control-group .controls, .com-dpcalendar-booking-order .control-group .com-dpcalendar-booking__event-info .controls {
-	min-height: 28px;
-}
-
-.com-dpcalendar-booking-order .com-dpcalendar-booking__fields .controls {
-	position: relative;
-}
-
-.com-dpcalendar-booking-order .com-dpcalendar-booking__fields .dp-icon {
-	position: absolute;
-	right: 10px;
-	top: 8px;
-}
-
-.com-dpcalendar-booking-order_error {
-	color: #721c24;
-}
-
-.com-dpcalendar-booking-order_error input[type="text"],
-.com-dpcalendar-booking-order_error select {
-	border: 1px solid #721c24;
-}
-
-.com-dpcalendar-booking-order_success {
-	color: #3c763d;
-}
-
-.com-dpcalendar-booking-order_success input[type="text"],
-.com-dpcalendar-booking-order_success select {
-	border: 1px solid #3c763d;
 }
 
 /*# sourceMappingURL=order.css.map */

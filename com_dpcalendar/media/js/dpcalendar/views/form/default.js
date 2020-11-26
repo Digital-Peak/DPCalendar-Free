@@ -1,23 +1,18 @@
+/**
+ * @package   DPCalendar
+ * @copyright Digital Peak GmbH. <https://www.digital-peak.com>
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ */
 (function () {
 	'use strict';
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function setup()
 	{
 		const rrule = document.getElementById('jform_rrule');
 		if (!rrule) {
 			return;
 		}
-
-		loadDPAssets(['/com_dpcalendar/js/moment/moment.js'], () => {
+		loadDPAssets(['/com_dpcalendar/js/dayjs/dayjs.js'], () => {
 			rrule.addEventListener('change', updateFormFromRule);
-
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling,#jform_scheduling_monthly_options,#jform_scheduling_daily_weekdays')).forEach((el) => {
 				el.addEventListener('click', () => {
 					changeVisiblity();
@@ -27,31 +22,26 @@
 			[].slice.call(document.querySelectorAll('#jform_scheduling_end_date, #jform_scheduling_interval, #jform_scheduling_repeat_count,#jform_scheduling_weekly_days, #jform_scheduling_monthly_days, #jform_scheduling_monthly_week_days, #jform_scheduling_monthly_week')).forEach((el) => {
 				el.addEventListener('change', updateRuleFromForm);
 			});
-
 			updateFormFromRule();
 		});
 	}
-
 	function updateFormFromRule()
 	{
 		if (!document.getElementById('jform_scheduling')) {
 			changeVisiblity();
 			return;
 		}
-
 		const rrule = document.getElementById('jform_rrule').value;
 		if (!rrule) {
 			changeVisiblity();
 			return;
 		}
-
 		let frequency = null;
 		rrule.split(';').forEach((rule) => {
 			const parts = rule.split('=');
 			if (parts.length === 0) {
 				return;
 			}
-
 			switch (parts[0]) {
 				case 'FREQ':
 					[].slice.call(document.getElementById('jform_scheduling').querySelectorAll('input')).forEach((input) => {
@@ -59,7 +49,6 @@
 						if (input.value == parts[1]) {
 							frequency = input.value;
 						}
-
 						if (parts[1] == 'DAILY') {
 							document.getElementById('jform_scheduling_daily_weekdays0').checked = false;
 							document.getElementById('jform_scheduling_daily_weekdays1').checked = true;
@@ -67,13 +56,11 @@
 					});
 					break;
 				case 'BYDAY':
-					// Daily without weekend
 					if (frequency == 'WEEKLY' && parts[1] == 'MO,TU,WE,TH,FR') {
 						document.getElementById('jform_scheduling_daily_weekdays0').checked = true;
 						document.getElementById('jform_scheduling_daily_weekdays1').checked = false;
 						document.getElementById('jform_scheduling1').checked = true;
 					}
-
 					parts[1].split(',').forEach((value) => {
 						if (frequency == 'MONTHLY') {
 							const pos = value.length;
@@ -82,7 +69,6 @@
 							if (week == -1) {
 								week = 'last';
 							}
-
 							if (week) {
 								document.getElementById('jform_scheduling_monthly_week')._choicejs.setChoiceByValue([week]);
 							}
@@ -108,20 +94,18 @@
 					break;
 				case 'UNTIL':
 					const untilField = document.getElementById('jform_scheduling_end_date');
-					untilField.value = moment.utc(parts[1]).format(untilField.getAttribute('data-format'));
+					untilField.value = dayjs.utc(parts[1]).format(untilField.getAttribute('data-format'));
 					untilField.setAttribute('data-date', parts[1].substr(0, 8));
 					break;
 			}
 		});
 		changeVisiblity();
 	}
-
 	function updateRuleFromForm()
 	{
 		if (!document.getElementById('jform_scheduling')) {
 			return;
 		}
-
 		let rule = '';
 		if (document.getElementById('jform_scheduling1').checked) {
 			rule = 'FREQ=DAILY';
@@ -131,7 +115,6 @@
 		}
 		if (document.getElementById('jform_scheduling2').checked) {
 			rule = 'FREQ=WEEKLY';
-
 			const boxes = [].slice.call(document.querySelectorAll('#jform_scheduling_weekly_days option:checked'));
 			if (boxes.length > 0) {
 				rule += ';BYDAY=';
@@ -157,12 +140,10 @@
 						if (days.length == 0) {
 							return;
 						}
-
 						let week = option.value;
 						if (week == 'last') {
 							week = -1;
 						}
-
 						days.forEach((d) => rule += week + d.value + ',');
 					});
 					if (rule.endsWith(',')) {
@@ -183,19 +164,16 @@
 			if (count > 0) {
 				rule += ';COUNT=' + count;
 			}
-
 			const untilField = document.getElementById('jform_scheduling_end_date');
-			const until = moment(untilField.value, untilField.getAttribute('data-format'));
+			const until = dayjs(untilField.value, untilField.getAttribute('data-format'));
 			if (until.isValid()) {
 				rule += ';UNTIL=' + until.format('YYYYMMDD') + 'T235900Z';
 			}
 		}
 		document.getElementById('jform_rrule').value = rule;
 	}
-
 	function changeVisiblity()
 	{
-		// Disable all fields initially
 		document.querySelector('.dp-field-scheduling-end-date').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-interval').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-repeat-count').classList.add('dp-control_hidden');
@@ -206,37 +184,24 @@
 		document.querySelector('.dp-field-scheduling-monthly-week').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-monthly-week-days').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-monthly-days').classList.add('dp-control_hidden');
-
-		// Scheduling field is not rendered
 		if (!document.getElementById('jform_scheduling')) {
 			return;
 		}
-
-		// Scheduling is not activated
 		if (document.getElementById('jform_scheduling0').checked) {
 			return;
 		}
-
-		// Display default fields
 		document.querySelector('.dp-field-scheduling-end-date').classList.remove('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-interval').classList.remove('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-repeat-count').classList.remove('dp-control_hidden');
 		document.querySelector('.dp-field-rrule').classList.remove('dp-control_hidden');
-
-		// Daily
 		if (document.getElementById('jform_scheduling1').checked) {
 			document.querySelector('.dp-field-scheduling-daily-weekdays').classList.remove('dp-control_hidden');
 		}
-
-		// Weekly
 		if (document.getElementById('jform_scheduling2').checked) {
 			document.querySelector('.dp-field-scheduling-weekly-days').classList.remove('dp-control_hidden');
 		}
-
-		// Monthly
 		if (document.getElementById('jform_scheduling3').checked) {
 			document.querySelector('.dp-field-scheduling-monthly-options').classList.remove('dp-control_hidden');
-
 			if (document.getElementById('jform_scheduling_monthly_options0').checked) {
 				document.querySelector('.dp-field-scheduling-monthly-days').classList.remove('dp-control_hidden');
 			} else {
@@ -245,18 +210,9 @@
 			}
 		}
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function setup$1()
 	{
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
-
 		[].slice.call(document.querySelectorAll('#jform_all_day input')).forEach((input) => {
 			input.addEventListener('click', (e) => {
 				if (input.value == 0) {
@@ -266,11 +222,9 @@
 					document.getElementById('jform_start_date_time').style.display = 'none';
 					document.getElementById('jform_end_date_time').style.display = 'none';
 				}
-
 				checkOverlapping();
 			});
 		});
-
 		if (document.getElementById('jform_all_day0').checked
 			|| (!document.getElementById('jform_all_day0').checked && !document.getElementById('jform_all_day1').checked)
 		) {
@@ -280,30 +234,21 @@
 			document.getElementById('jform_start_date_time').style.display = 'none';
 			document.getElementById('jform_end_date_time').style.display = 'none';
 		}
-
 		const check = DPCalendar.debounce(checkOverlapping, 2000);
 		[].slice.call(document.querySelectorAll('#jform_start_date, #jform_start_date_time, #jform_end_date, #jform_end_date_time, #jform_rooms')).forEach((input) => {
-			// When the start date changes we need to wait till the end date get adjusted as well
 			input.addEventListener('change', check);
 		});
-
-			// Because of com_fields, we need to call it with a delay
 		document.getElementById('jform_catid').addEventListener('change', check);
-
 		check();
 	}
-
 	function checkOverlapping()
 	{
 		const box = document.querySelector('.com-dpcalendar-eventform__overlapping');
 		if (!box) {
 			return;
 		}
-
 		box.style.display = 'none';
-
 		loadDPAssets(['/com_dpcalendar/js/domurl/url.js'], () => {
-			// Chosen doesn't update the selected value
 			const url = new Url();
 			DPCalendar.request(
 				'task=event.overlapping',
@@ -311,15 +256,12 @@
 					if (!json.data.message) {
 						return;
 					}
-
 					box.style.display = 'block';
 					box.className = 'com-dpcalendar-eventform__overlapping dp-info-box' + (json.data.count ? '' : ' dp-info-box_success');
 					box.innerHTML = json.data.message;
-
 					if (!box.getAttribute('data-overlapping')) {
 						return;
 					}
-
 					[].slice.call(document.querySelectorAll('.dp-button-apply, .button-apply, .dp-button-save, .button-save, .dp-button-save2new, .button-save-new, .dp-button-save2copy, .button-save-copy')).forEach((button) => {
 						button.disabled = json.data.count > 0;
 					});
@@ -328,14 +270,6 @@
 			);
 		});
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function watchElements(elements)
 	{
 		elements.forEach((mapElement) => {
@@ -343,7 +277,6 @@
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
 				return;
 			}
-
 			const observer = new IntersectionObserver(
 				(entries, observer) => {
 					entries.forEach((entry) => {
@@ -351,7 +284,6 @@
 							return;
 						}
 						observer.unobserve(mapElement);
-
 						loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
 					});
 				}
@@ -359,14 +291,6 @@
 			observer.observe(mapElement);
 		});
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function setup$2()
 	{
 		const map = document.querySelector('.com-dpcalendar-eventform .dp-map');
@@ -374,21 +298,17 @@
 			map.addEventListener('dp-map-loaded', () => updateLocationFrame());
 			watchElements([map]);
 		}
-
 		const rooms = document.querySelector('.com-dpcalendar-eventform .dp-field-rooms');
 		if (rooms && rooms.querySelectorAll('option').length == 0) {
 			rooms.style.display = 'none';
 		}
-
 		const geoComplete = document.querySelector('.com-dpcalendar-eventform #jform_location_lookup');
 		if (!geoComplete) {
 			return;
 		}
-
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js'], () => {
 			DPCalendar.autocomplete.create(geoComplete);
 		});
-
 		geoComplete.addEventListener('dp-autocomplete-select', (e) => {
 			DPCalendar.request(
 				'task=event.newlocation',
@@ -396,15 +316,11 @@
 					if (json.data.id == null || json.data.display == null) {
 						return;
 					}
-
-					// Reset the input field
 					geoComplete.value = '';
-
 					const select = document.getElementById('jform_location_ids');
 					if (select._choicejs.getValue(true).indexOf(json.data.id) != -1) {
 						return;
 					}
-
 					select._choicejs.setChoices(
 						[{
 							value: json.data.id ? json.data.id : json.data.display,
@@ -414,13 +330,11 @@
 						'value',
 						'label'
 					);
-
 					updateLocationFrame();
 				},
 				'lookup=' + e.detail.value + '&lookup_title=' + e.detail.title
 			);
 		});
-
 		geoComplete.addEventListener('dp-autocomplete-change', (e) => {
 			let task = 'location.searchloc';
 			if (window.location.href.indexOf('administrator') == -1) {
@@ -432,18 +346,15 @@
 			);
 		});
 	}
-
 	function updateLocationFrame()
 	{
 		const map = document.querySelector('.com-dpcalendar-eventform .dp-map');
 		if (map == null || map.dpmap == null) {
 			return;
 		}
-
 		if (map.dpmap.invalidateSize) {
 			map.dpmap.invalidateSize();
 		}
-
 		DPCalendar.Map.clearMarkers(map);
 		[].slice.call(document.querySelectorAll('#jform_location_ids option:checked')).forEach((option) => {
 			const content = option.innerHTML;
@@ -451,33 +362,21 @@
 			if (parts.length < 2 || (parts[0] == 0 && parts[1] == 0)) {
 				return;
 			}
-
 			DPCalendar.Map.createMarker(map, {latitude: parts[0], longitude: parts[1], title: content});
 		});
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function setup$3()
 	{
 		if (parseInt(document.getElementById('jform_id').value) != 0) {
 			return
 		}
-
 		loadDPAssets(['/com_dpcalendar/js/domurl/url.js', '/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js'], () => {
 			const titleInput = document.getElementById('jform_title');
 			DPCalendar.autocomplete.create(titleInput);
-
 			titleInput.addEventListener('dp-autocomplete-select', (e) => {
 				document.querySelector('input[name=template_event_id]').value = e.detail.value;
 				Joomla.submitbutton('event.reloadfromevent');
 			});
-
 			const url = new Url();
 			titleInput.addEventListener('dp-autocomplete-change', (e) => {
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
@@ -492,121 +391,66 @@
 			});
 		});
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function setup$4()
 	{
 		const captcha = document.querySelector('.dp-field-captcha');
 		if (!captcha) {
 			return;
 		}
-
 		document.querySelector('.com-dpcalendar-eventform__form').appendChild(captcha);
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function setup$5()
 	{
 		document.getElementById('jform_catid').addEventListener('change', (e) => {
-			// If there is an external calendar, reload the form
 			for (let i = 0; i < e.target.length; i++) {
 				if (e.target.value && isNaN(parseInt(e.target.options[i].value))) {
 					const loader = document.querySelector('.dp-loader');
 					if (loader) {
 						loader.classList.remove('dp-loader_hidden');
 					}
-
 					Joomla.submitbutton('event.reload');
 					return true;
 				}
 			}
 		});
-
 		const locationIds = document.getElementById('jform_location_ids');
 		if (locationIds) {
 			locationIds.addEventListener('change', (e) => {
 				if (!document.getElementById('jform_rooms')) {
 					return true;
 				}
-
-				// Only reload when it is a existing location as it can have rooms
 				if (isNaN(e.detail.value)) {
 					return;
 				}
-
 				const loader = document.querySelector('.dp-loader');
 				if (loader) {
 					loader.classList.remove('dp-loader_hidden');
 				}
-
 				Joomla.submitbutton('event.reload');
 			});
 		}
-
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform__actions .dp-button')).forEach((button) => {
 			button.addEventListener('click', () => {
 				Joomla.submitbutton('event.' + button.getAttribute('data-task'));
 			});
 		});
-
 		Joomla.submitbutton = (task) => {
 			const form = document.getElementsByName('adminForm')[0];
 			if (form && (task.indexOf('reload') > -1 || task.indexOf('cancel') > -1 || task.indexOf('delete') > -1 || document.formvalidator.isValid(form))) {
-
 				const text = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
-				if (text && (task.indexOf('save') > -1 || task.indexOf('apply') > -1) && confirm(text)) {
+				if (text && ['save', 'save2new', 'apply'].indexOf(task.replace('event.', '')) > -1 && confirm(text)) {
 					document.getElementById('jform_notify_changes').value = 1;
 				}
-
 				const loader = document.querySelector('.dp-loader');
 				if (loader) {
 					loader.classList.remove('dp-loader_hidden');
 				}
-
 				Joomla.submitform(task, form);
 			}
 		};
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	document.addEventListener('DOMContentLoaded', () => {
-		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
-			setup();
-			setup$1();
-			setup$2();
-			setup$3();
-			setup$4();
-			setup$5();
-		});
-
-		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS')) {
-			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls')).forEach((el) => {
-				const option = document.createElement('span');
-				option.className = 'dp-free-information-text';
-				option.innerText = Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');
-				el.appendChild(option);
-			});
-		}
-
-		loadDPAssets(['/com_dpcalendar/js/choices/choices.js', '/com_dpcalendar/css/choices/choices.css'], () => {
+		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js', '/com_dpcalendar/js/choices/choices.js', '/com_dpcalendar/css/choices/choices.css'], () => {
 			[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color):not(#jform_tags):not(.dp-timezone__select)')).forEach((select) => {
 				select._choicejs = new Choices(
 					select,
@@ -620,8 +464,20 @@
 					}
 				);
 			});
+			setup();
+			setup$1();
+			setup$2();
+			setup$3();
+			setup$4();
+			setup$5();
 		});
+		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS')) {
+			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls')).forEach((el) => {
+				const option = document.createElement('span');
+				option.className = 'dp-free-information-text';
+				option.innerText = Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');
+				el.appendChild(option);
+			});
+		}
 	});
-
 }());
-//# sourceMappingURL=default.js.map

@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -93,7 +92,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 				'booking.invoice',
 				[
 					'booking'    => $booking,
-					'tickets'    => $bookingModel->getTickets($booking->id),
+					'tickets'    => $booking->tickets,
 					'translator' => new \DPCalendar\Translator\Translator(),
 					'dateHelper' => new \DPCalendar\Helper\DateHelper(),
 					'params'     => $params
@@ -182,11 +181,11 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$params = JFactory::getApplication()->getParams();
 		}
 
-		$form->setFieldAttribute('start_date', 'format', $params->get('event_form_date_format', 'm.d.Y'));
-		$form->setFieldAttribute('start_date', 'formatTime', $params->get('event_form_time_format', 'g:i a'));
-		$form->setFieldAttribute('end_date', 'format', $params->get('event_form_date_format', 'm.d.Y'));
-		$form->setFieldAttribute('end_date', 'formatTime', $params->get('event_form_time_format', 'g:i a'));
-		$form->setFieldAttribute('scheduling_end_date', 'format', $params->get('event_form_date_format', 'm.d.Y'));
+		$form->setFieldAttribute('start_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
+		$form->setFieldAttribute('start_date', 'formatTime', $params->get('event_form_time_format', 'H:i'));
+		$form->setFieldAttribute('end_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
+		$form->setFieldAttribute('end_date', 'formatTime', $params->get('event_form_time_format', 'H:i'));
+		$form->setFieldAttribute('scheduling_end_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
 		$form->setFieldAttribute('xreference', 'readonly', true);
 
 		// User field doesn't work on front

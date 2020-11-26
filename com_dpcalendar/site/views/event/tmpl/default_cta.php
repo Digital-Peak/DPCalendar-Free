@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -28,7 +27,7 @@ if ($this->noBookingMessage === '') {
 		<?php $endDate = \DPCalendar\Helper\Booking::getRegistrationEndDate($this->event); ?>
 		<?php echo JText::sprintf(
 			'COM_DPCALENDAR_VIEW_EVENT_REGISTRATION_END_TEXT',
-			$endDate->format($this->params->get('event_date_format', 'm.d.Y'), true),
+			$endDate->format($this->params->get('event_date_format', 'd.m.Y'), true),
 			$endDate->format('H:i') != '00:00' ? $endDate->format($this->params->get('event_time_format', 'h:i a'), true) : ''
 		); ?>
 	</div>

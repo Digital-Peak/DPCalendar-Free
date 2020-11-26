@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -34,20 +33,23 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 			'event.datestring',
 			[
 				'event'      => $event,
-				'dateFormat' => $params->get('event_date_format', 'm.d.Y'),
-				'timeFormat' => $params->get('event_time_format', 'g:i a')
+				'dateFormat' => $params->get('event_date_format', 'd.m.Y'),
+				'timeFormat' => $params->get('event_time_format', 'H:i')
 			]
 		); ?>
 	</div>
-	<?php if ($event->state == 3) { ?>
-		<span class="dp-event_canceled">[<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?>]</span>
-	<?php } ?>
 	<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
 		<?php echo $event->title; ?>
 	</a>
+	<?php if ($event->state == 3) { ?>
+		<span class="dp-event-tooltip_canceled"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?></span>
+	<?php } ?>
+	<?php if ($event->state == 0) { ?>
+		<span class="dp-event-tooltip_unpublished"><?php echo $displayData['translator']->translate('JUNPUBLISHED'); ?></span>
+	<?php } ?>
 	<?php if ($params->get('tooltip_show_description', 1) && $params->get('description_length', 100)) { ?>
 		<div class="dp-event-tooltip__description">
-			<?php echo JHtml::_('string.truncate', $event->description, $params->get('description_length', 100)); ?>
+			<?php echo JHtml::_('string.truncateComplex', $event->description, $params->get('description_length', 100)); ?>
 		</div>
 	<?php } ?>
 	<div class="dp-event-tooltip__actions dp-button-bar">

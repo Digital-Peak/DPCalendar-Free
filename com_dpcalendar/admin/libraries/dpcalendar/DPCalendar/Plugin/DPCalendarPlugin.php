@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -11,6 +10,7 @@ namespace DPCalendar\Plugin;
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Helper\HTTP;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Sabre\VObject\Parser\Parser;
@@ -307,20 +307,20 @@ abstract class DPCalendarPlugin extends \JPlugin
 		if (empty($calendar)) {
 			return '';
 		}
-		$content = \DPCalendarHelper::fetchContent(str_replace('webcal://', 'https://', $calendar->params->get('uri')));
 
-		if ($content instanceof \Exception) {
-			$this->log($content->getMessage());
+		try {
+			$content = $this->fetchContent(str_replace('webcal://', 'https://', $calendar->params->get('uri')));
+			$content = str_replace("BEGIN:VCALENDAR\r\n", '', $content);
+			$content = str_replace("BEGIN:VCALENDAR\n", '', $content);
+			$content = str_replace("\r\nEND:VCALENDAR", '', $content);
+			$content = str_replace("\nEND:VCALENDAR", '', $content);
+
+			return "BEGIN:VCALENDAR\n" . $content . "\nEND:VCALENDAR";
+		} catch (\Exception $e) {
+			$this->log($e->getMessage());
 
 			return '';
 		}
-
-		$content = str_replace("BEGIN:VCALENDAR\r\n", '', $content);
-		$content = str_replace("BEGIN:VCALENDAR\n", '', $content);
-		$content = str_replace("\r\nEND:VCALENDAR", '', $content);
-		$content = str_replace("\nEND:VCALENDAR", '', $content);
-
-		return "BEGIN:VCALENDAR\n" . $content . "\nEND:VCALENDAR";
 	}
 
 	/**
@@ -698,7 +698,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$event->metadata         = new Registry();
 		$event->author           = null;
 		$event->xreference       = $event->id;
-		$event->images           = new \stdClass();
+		$event->images           = null;
 		$event->checked_out      = null;
 		$event->publish_up       = null;
 		$event->publish_down     = null;
@@ -1021,6 +1021,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$form->removeField('show_end_time');
 		$form->removeField('alias');
 		$form->removeField('state');
+		$form->removeField('schedule');
 		$form->removeField('publish_up');
 		$form->removeField('publish_down');
 		$form->removeField('access');
@@ -1041,9 +1042,48 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$form->removeField('rooms');
 		$form->setFieldAttribute('location_ids', 'multiple', false);
 
-
 		foreach ($form->getGroup('com_fields') as $item) {
 			$form->removeField($item->fieldname, $item->group);
 		}
+	}
+
+	protected function fetchContent($uri)
+	{
+		if (empty($uri)) {
+			return '';
+		}
+
+		$internal = !filter_var($uri, FILTER_VALIDATE_URL);
+
+		if ($internal && strpos($uri, '/') !== 0) {
+			$uri = JPATH_ROOT . '/' . $uri;
+		}
+
+		if ($internal && \JFolder::exists($uri)) {
+			$content = '';
+			foreach (\JFolder::files($uri, '\.ics', true, true) as $file) {
+				$content .= file_get_contents($file);
+			}
+
+			return $content;
+		}
+
+		if ($internal) {
+			return file_get_contents($uri);
+		}
+
+		$u   = \JUri::getInstance($uri);
+		$uri = $u->toString(['scheme', 'user', 'pass', 'host', 'port', 'path']);
+		$uri .= $u->toString(['query', 'fragment']);
+
+		$headers = [
+			'Accept-Language: ' . \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag())
+		];
+		$data    = (new HTTP())->get($uri, null, null, $headers);
+		if (!empty($data->dp->headers['Content-Encoding']) && $data->dp->headers['Content-Encoding'] == 'gzip') {
+			return gzinflate(substr($data->dp->body, 10, -8));
+		}
+
+		return $data->dp->body;
 	}
 }

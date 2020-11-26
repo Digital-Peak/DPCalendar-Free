@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\Helper;
@@ -178,8 +177,7 @@ class Ical
 
 				// Check for modified events
 				foreach ($instances as $key => $e) {
-					// If for some reasons the event doesn't belong to the
-					// series, ignore it
+					// If for some reasons the event doesn't belong to the series, ignore it
 					if ($event->uid != $e->uid) {
 						unset($instances[$key]);
 					}

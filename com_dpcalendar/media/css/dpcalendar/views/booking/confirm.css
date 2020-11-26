@@ -1,0 +1,231 @@
+.com-dpcalendar-booking .dp-button-bar {
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-booking .dp-button {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid #c0c0c0;
+	border-radius: 0.1rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	padding: 4px 10px;
+	color: #212529;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-booking .dp-button:disabled,
+.com-dpcalendar-booking .dp-button[disabled] {
+	background-color: #cccccc;
+	color: #666666;
+	cursor: not-allowed;
+}
+
+.com-dpcalendar-booking .dp-description {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-booking .dp-description__label {
+	flex: 0 0 160px;
+	text-align: left;
+}
+
+.com-dpcalendar-booking .dp-description__description {
+	flex: 1 1 200px;
+	word-break: break-word;
+}
+
+.com-dpcalendar-booking .dp-heading {
+	clear: both;
+	margin-bottom: 1rem;
+}
+
+.com-dpcalendar-booking .dp-heading_small {
+	border-bottom: none;
+}
+
+.com-dpcalendar-booking .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
+}
+
+.com-dpcalendar-booking .dp-info-box {
+	padding: 8px 35px 8px 14px;
+	margin-bottom: 18px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+	color: #c09853;
+	background-color: #fcf8e3;
+	border: 1px solid #fbeed5;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+}
+
+.com-dpcalendar-booking .dp-info-box_success {
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+	color: #3c763d;
+}
+
+.com-dpcalendar-booking .dp-info-box_error {
+	color: #721c24;
+	background-color: #f8d7da;
+	border-color: #f5c6cb;
+}
+
+.com-dpcalendar-booking .dp-timezone {
+	display: flex;
+	align-items: center;
+}
+
+.com-dpcalendar-booking .dp-timezone .choices {
+	font-size: inherit;
+}
+
+.com-dpcalendar-booking .dp-timezone .choices__inner, .com-dpcalendar-booking .dp-timezone .choices__input {
+	min-height: unset;
+	padding: 0 !important;
+	background-color: inherit;
+	font-size: inherit;
+}
+
+.com-dpcalendar-booking .dp-timezone .choices__input, .com-dpcalendar-booking .dp-timezone .choices__input:focus {
+	border: 0 !important;
+	box-shadow: unset;
+}
+
+.com-dpcalendar-booking .dp-timezone .choices__list--multiple .choices__item {
+	margin: 3px;
+	padding: 2px 10px;
+	border-radius: 2px;
+	background-color: #2D9EDE;
+	border: 1px solid #1d82bb;
+	color: #000;
+}
+
+.com-dpcalendar-booking .dp-timezone .choices__list--dropdown {
+	z-index: 1001;
+}
+
+.com-dpcalendar-booking .dp-timezone .choices__list--dropdown .choices__item {
+	padding: 3px;
+}
+
+.com-dpcalendar-booking .dp-timezone .choices__button {
+	background-image: url("../../../../images/icons/times-solid.svg") !important;
+}
+
+.com-dpcalendar-booking .dp-timezone__label {
+	font-weight: bold;
+	margin-right: 10px;
+}
+
+.com-dpcalendar-booking .dp-timezone .choices {
+	min-width: 300px;
+	margin: 0;
+}
+
+.com-dpcalendar-booking .dp-form {
+	margin: 0;
+}
+
+.com-dpcalendar-booking__payment-info.dp-info-box {
+	margin: 20px 0 10px 0;
+}
+
+.com-dpcalendar-booking .dp-payment-option {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	padding: 10px 20px 10px 20px;
+	margin-bottom: 10px;
+	border: 2px solid #EEE;
+}
+
+.com-dpcalendar-booking .dp-payment-option_selected {
+	background-color: #dff0d8;
+}
+
+.com-dpcalendar-booking .dp-payment-option:hover {
+	background-color: #dff0d8;
+	cursor: pointer;
+}
+
+.com-dpcalendar-booking .dp-payment-option__input {
+	display: none;
+}
+
+.com-dpcalendar-booking .dp-payment-option__input:checked ~ .dp-icon_angle-right {
+	display: none;
+}
+
+.com-dpcalendar-booking .dp-payment-option__input:checked ~ .dp-icon_check {
+	display: inline-block;
+}
+
+.com-dpcalendar-booking .dp-payment-option .dp-icon {
+	flex: 0 0 15px;
+	margin-right: 20px;
+}
+
+.com-dpcalendar-booking .dp-payment-option .dp-icon_check {
+	display: none;
+	color: #3c763d;
+}
+
+.com-dpcalendar-booking .dp-payment-option .dp-icon svg {
+	width: 2em;
+	height: 2em;
+}
+
+.com-dpcalendar-booking .dp-payment-option__image {
+	flex: 0 0 40px;
+	padding: 0 10px 0 0;
+}
+
+.com-dpcalendar-booking .dp-payment-option__image svg {
+	fill: #2D9EDE;
+	color: #2D9EDE;
+}
+
+.com-dpcalendar-booking .dp-payment-option__text {
+	flex: 1 1 200px;
+	margin: 0;
+}
+
+.com-dpcalendar-booking__tickets {
+	display: none;
+}
+
+.com-dpcalendar-booking__tickets .dp-heading__event-rrule {
+	display: block;
+	font-style: italic;
+	font-size: small;
+}
+
+.com-dpcalendar-booking .dp-term {
+	display: flex;
+	align-items: center;
+	margin: 5px 0;
+}
+
+.com-dpcalendar-booking .dp-term__input {
+	margin: 0 5px 0 0;
+}
+
+.com-dpcalendar-booking .dp-term__text {
+	margin: 0;
+}
+
+/*# sourceMappingURL=confirm.css.map */

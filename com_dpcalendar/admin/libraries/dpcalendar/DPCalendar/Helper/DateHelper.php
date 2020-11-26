@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\Helper;
@@ -108,7 +107,7 @@ class DateHelper
 		return $options;
 	}
 
-	public function convertPHPDateToMoment($format)
+	public function convertPHPDateToJS($format)
 	{
 		$replacements = [
 			'A' => 'A',      // for the sake of escaping below
@@ -117,16 +116,16 @@ class DateHelper
 			'c' => 'YYYY-MM-DD[T]HH:mm:ssZ', // ISO 8601
 			'D' => 'ddd',
 			'd' => 'DD',
-			'e' => 'zz',     // deprecated since version 1.6.0 of moment.js
+			'e' => 'zz',     // deprecated since version 1.6.0 of dayjs.js
 			'F' => 'MMMM',
 			'G' => 'H',
 			'g' => 'h',
 			'H' => 'HH',
 			'h' => 'hh',
-			'I' => '',       // Daylight Saving Time? => moment().isDST();
+			'I' => '',       // Daylight Saving Time? => dayjs().isDST();
 			'i' => 'mm',
 			'j' => 'D',
-			'L' => '',       // Leap year? => moment().isLeapYear();
+			'L' => '',       // Leap year? => dayjs().isLeapYear();
 			'l' => 'dddd',
 			'M' => 'MMM',
 			'm' => 'MM',
@@ -138,8 +137,8 @@ class DateHelper
 			'r' => 'ddd, DD MMM YYYY HH:mm:ss ZZ', // RFC 2822
 			'S' => 'o',
 			's' => 'ss',
-			'T' => 'z',      // deprecated since version 1.6.0 of moment.js
-			't' => '',       // days in the month => moment().daysInMonth();
+			'T' => 'z',      // deprecated since version 1.6.0 of dayjs.js
+			't' => '',       // days in the month => dayjs().daysInMonth();
 			'U' => 'X',
 			'u' => 'SSSSSS', // microseconds
 			'v' => 'SSS',    // milliseconds (from PHP 7.0.0)
@@ -147,7 +146,7 @@ class DateHelper
 			'w' => 'e',
 			'Y' => 'YYYY',
 			'y' => 'YY',
-			'Z' => '',       // time zone offset in minutes => moment().zone();
+			'Z' => '',       // time zone offset in minutes => dayjs().zone();
 			'z' => 'DDD',
 		];
 

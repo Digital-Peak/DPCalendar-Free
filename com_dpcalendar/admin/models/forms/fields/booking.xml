@@ -7,7 +7,7 @@
 	        addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 		<fieldset name="dpcalendar" label="COM_DPCALENDAR_TICKET">
 			<field name="ticket_field" type="dpcfields" section="ticket"
-			       hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude,seat,name,email,country,province,city,street,zip,number,telephone,type,public,captcha"
+			       hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude,name,email,country,province,city,street,zip,number,telephone,type,public,captcha"
 			       label="COM_DPCALENDAR_FIELDS_BOOKING_FIELD_TICKET_RELATION_LABEL"
 			       description="COM_DPCALENDAR_FIELDS_BOOKING_FIELD_TICKET_RELATION_DESC">
 				<option value="">JNONE</option>

@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -67,17 +66,19 @@ foreach ($this->items as $event) {
 
 	// Add the data
 	$eventData = [
-		'id'          => $event->id,
-		'title'       => $this->compactMode == 0 ? htmlspecialchars_decode($event->title) : utf8_encode(chr(160)),
-		'start'       => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format($format, true),
-		'url'         => DPCalendarHelperRoute::getEventRoute($event->id, $event->catid),
-		'editable'    => $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $this->user->id),
-		'color'       => '#' . $event->color,
-		'fgcolor'     => $fgcolor,
-		'allDay'      => (bool)$event->all_day,
-		'description' => $description,
-		'location'    => $locations,
-		'classNames'  => [
+		'id'              => $event->id,
+		'title'           => $this->compactMode == 0 ? htmlspecialchars_decode($event->title) : utf8_encode(chr(160)),
+		'start'           => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format($format, true),
+		'url'             => DPCalendarHelperRoute::getEventRoute($event->id, $event->catid),
+		'editable'        => $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $this->user->id),
+		'backgroundColor' => '#' . $event->color,
+		'borderColor'     => '#' . $event->color,
+		'textColor'       => $fgcolor,
+		'allDay'          => (bool)$event->all_day,
+		'description'     => $description,
+		'location'        => $locations,
+		'classNames'      => [
+			'dp-event',
 			'dp-event-' . $event->id,
 			'dp-event-calendar-' . $event->catid,
 			'dp-event_' . ($event->capacity == $event->capacity_used ? 'booked-out' : 'not-booked-out')
@@ -86,6 +87,9 @@ foreach ($this->items as $event) {
 
 	if ($event->state == 3 && $this->compactMode == 0) {
 		$eventData['title'] = '[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ' . $eventData['title'];
+	}
+	if ($event->state == 0 && $this->compactMode == 0) {
+		$eventData['title'] = '[' . $this->translate('JUNPUBLISHED') . '] ' . $eventData['title'];
 	}
 
 	if ($event->show_end_time || $event->all_day) {

@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -19,27 +18,31 @@ defined('_JEXEC') or die();
 		</div>
 		<div class="dp-information dp-grid">
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_YEAR'); ?>: </span>
-			<span class="dp-information__content"><?php echo $this->totalBookings['year']['total']; ?></span>
-		</div>
-		<div class="dp-information dp-grid">
-			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_INCOME'); ?>: </span>
-			<span class="dp-information__content"><?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['year']['price']); ?></span>
+			<span class="dp-information__content">
+				<?php echo $this->totalBookings['year']['total']; ?>
+				[<?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['year']['price']); ?>]
+			</span>
 		</div>
 		<div class="dp-information dp-grid">
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_MONTH'); ?>: </span>
-			<span class="dp-information__content"><?php echo $this->totalBookings['month']['total']; ?></span>
-		</div>
-		<div class="dp-information dp-grid">
-			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_INCOME'); ?>: </span>
-			<span class="dp-information__content"><?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['month']['price']); ?></span>
+			<span class="dp-information__content">
+				<?php echo $this->totalBookings['month']['total']; ?>
+				[<?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['month']['price']); ?>]
+			</span>
 		</div>
 		<div class="dp-information dp-grid">
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_WEEK'); ?>: </span>
-			<span class="dp-information__content"><?php echo $this->totalBookings['week']['total']; ?></span>
+			<span class="dp-information__content">
+				<?php echo $this->totalBookings['week']['total']; ?>
+				[<?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['week']['price']); ?>]
+			</span>
 		</div>
 		<div class="dp-information dp-grid">
-			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_INCOME'); ?>: </span>
-			<span class="dp-information__content"><?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['week']['price']); ?></span>
+			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_NOTACTIVE'); ?>: </span>
+			<span class="dp-information__content">
+				<?php echo $this->totalBookings['notactive']['total']; ?>
+				[<?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['notactive']['price']); ?>]
+			</span>
 		</div>
 	</div>
 </div>

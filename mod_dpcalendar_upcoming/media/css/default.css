@@ -93,6 +93,10 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-default .dp-location {
+	display: inline-block;
+}
+
 .mod-dpcalendar-upcoming-default .dp-location__description {
 	display: none;
 }

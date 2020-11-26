@@ -50,31 +50,19 @@
 }
 
 .com-dpcalendar-event .dp-description {
+	display: flex;
+	flex-wrap: wrap;
 	margin-bottom: 10px;
 }
 
 .com-dpcalendar-event .dp-description__label {
-	float: left;
-	width: 160px;
-	clear: left;
+	flex: 0 0 160px;
 	text-align: left;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	white-space: nowrap;
 }
 
 .com-dpcalendar-event .dp-description__description {
-	margin-left: 180px;
-}
-
-@media screen and (max-width: 540px) {
-	.com-dpcalendar-event .dp-description__label {
-		float: none;
-		width: 100%;
-	}
-	.com-dpcalendar-event .dp-description__description {
-		margin-left: 0;
-	}
+	flex: 1 1 200px;
+	word-break: break-word;
 }
 
 .com-dpcalendar-event .dp-button-bar {
@@ -95,7 +83,6 @@
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	padding: 4px 10px;
-	margin: 3px 0;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -375,6 +362,30 @@
 	grid-row: 11 / 12;
 }
 
+.com-dpcalendar-event .dp-badge, .com-dpcalendar-event .com-dpcalendar-event__title_canceled, .com-dpcalendar-event .com-dpcalendar-event__title_unpublished {
+	display: inline-block;
+	padding: .25em;
+	font-size: 70%;
+	font-weight: 700;
+	line-height: 1;
+	text-align: center;
+	border-radius: .2rem;
+}
+
+.com-dpcalendar-event .dp-badge_warning, .com-dpcalendar-event .com-dpcalendar-event__title_unpublished {
+	color: #212529;
+	background-color: #ffc107;
+}
+
+.com-dpcalendar-event .dp-badge_info, .com-dpcalendar-event .com-dpcalendar-event__title_canceled {
+	color: #fff;
+	background-color: #17a2b8;
+}
+
+.com-dpcalendar-event__title_canceled, .com-dpcalendar-event__title_unpublished {
+	margin-left: 5px;
+}
+
 .com-dpcalendar-event__taxes.dp-info-box {
 	margin: 0;
 }
@@ -467,15 +478,6 @@
 	font-weight: bold;
 	text-align: center;
 	opacity: .7;
-}
-
-.com-dpcalendar-event.has-image .dp-description__label {
-	float: none;
-	width: 100%;
-}
-
-.com-dpcalendar-event.has-image .dp-description__description {
-	margin-left: 0;
 }
 
 .com-dpcalendar-event .dp-button {

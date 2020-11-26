@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -20,10 +19,6 @@ if ($imageUrl && !filter_var($imageUrl, FILTER_VALIDATE_URL)) {
 $fields   = [];
 $fields[] = (object)['id' => 'name', 'name' => 'name', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'];
 $fields[] = (object)['id' => 'email', 'name' => 'email'];
-
-if ($params->get('ticket_show_seat', 1)) {
-	$fields[] = (object)['id' => 'seat', 'name' => 'seat', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'];
-}
 $fields[] = (object)[
 	'id'    => 'country',
 	'name'  => 'country' . (!empty($ticket->country_code_value) ? '_code_value' : ''),
@@ -93,8 +88,8 @@ foreach ($fields as $key => $field) {
 			<td style="width:70%">
 				<?php echo strip_tags($displayData['dateHelper']->getDateStringFromEvent(
 					$event,
-					$params->get('event_date_format', 'm.d.Y'),
-					$params->get('event_time_format', 'g:i a')
+					$params->get('event_date_format', 'd.m.Y'),
+					$params->get('event_time_format', 'H:i')
 				)); ?>
 			</td>
 		</tr>

@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -146,11 +145,7 @@ class DPCalendarModelEvents extends JModelList
 			// If the event has no color, use the one from the calendar
 			$calendar = DPCalendarHelper::getCalendar($item->catid);
 			if (empty($item->color)) {
-				if (!$calendar) {
-					$item->color = '3366CC';
-				} else {
-					$item->color = $calendar->color;
-				}
+				$item->color = $calendar ? $calendar->color : '3366CC';
 			}
 
 			if (is_string($item->price)) {
@@ -167,18 +162,27 @@ class DPCalendarModelEvents extends JModelList
 			}
 			$item->schedule = $item->schedule ?: null;
 
-			\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
-
 			// Implement View Level Access
 			if (!JFactory::getUser()->authorise('core.admin', 'com_dpcalendar')
 				&& !in_array($item->access_content, JFactory::getUser()->getAuthorisedViewLevels())
 			) {
-				$item->title       = JText::_('COM_DPCALENDAR_EVENT_BUSY');
-				$item->location    = '';
-				$item->url         = '';
-				$item->description = '';
-				$item->price       = [];
+				$item->title               = JText::_('COM_DPCALENDAR_EVENT_BUSY');
+				$item->location            = '';
+				$item->locations           = [];
+				$item->location_ids        = null;
+				$item->rooms               = [];
+				$item->url                 = '';
+				$item->description         = '';
+				$item->images              = null;
+				$item->schedule            = [];
+				$item->price               = null;
+				$item->capacity            = 0;
+				$item->capacity_used       = 0;
+				$item->booking_information = '';
+				$item->booking_options     = null;
 			}
+
+			\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
 		}
 
 		return $items;
@@ -282,14 +286,15 @@ class DPCalendarModelEvents extends JModelList
 		$query->join('LEFT', '#__users AS uam ON uam.id = a.modified_by');
 
 		// Filter by state
-		$state = $this->getState('filter.state');
+		$state      = $this->getState('filter.state');
+		$stateOwner = $this->getState('filter.state_owner') ? ' or a.created_by = ' . $user->id : '';
 		if (is_numeric($state)) {
-			$query->where('a.state = ' . (int)$state);
+			$query->where('(a.state = ' . (int)$state . $stateOwner . ')');
 		} else if (is_array($state)) {
 			ArrayHelper::toInteger($state);
-			$query->where('a.state in (' . implode(',', $state) . ')');
+			$query->where('(a.state in (' . implode(',', $state) . ')' . $stateOwner . ')');
 		}
-		// Do not show trashed links on the front-end
+		// Do not show trashed events on the front-end
 		$query->where('a.state != -2');
 
 		// Filter by start and end dates.
@@ -357,7 +362,9 @@ class DPCalendarModelEvents extends JModelList
 		// Filter by title
 		$searchString = $this->getState('filter.search');
 		if (!empty($searchString)) {
-			if (stripos($searchString, 'id:') === 0) {
+			if (stripos($searchString, 'uid:') === 0) {
+				$query->where('a.uid like ' . $this->getDbo()->quote(substr($searchString, 4)));
+			} else if (stripos($searchString, 'id:') === 0) {
 				$ids = ArrayHelper::toInteger(explode(',', substr($searchString, 3)));
 				$query->where('a.id in (' . implode(',', $ids) . ')');
 			} else {
@@ -605,7 +612,7 @@ class DPCalendarModelEvents extends JModelList
 		$this->setState('category.recursive', $app->input->getVar('layout') == 'module');
 
 		$user = JFactory::getUser();
-		if ((!$user->authorise('core.edit.state', 'com_dpcalendar')) && (!$user->authorise('core.edit', 'com_dpcalendar'))) {
+		if (!$user->authorise('core.edit.state', 'com_dpcalendar') && !$user->authorise('core.edit', 'com_dpcalendar')) {
 			// Limit to published for people who can't edit or edit.state.
 			$this->setState('filter.state', [1, 3]);
 

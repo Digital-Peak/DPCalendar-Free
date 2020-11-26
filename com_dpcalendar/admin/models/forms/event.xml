@@ -32,7 +32,7 @@
 			<option value="1">JYES</option>
 		</field>
 
-		<field type="dpradio" name="scheduling" default="0" class="dp-form-radio"
+		<field name="scheduling" type="dpradio" default="0" class="dp-form-radio"
 		       label="COM_DPCALENDAR_FIELD_SCHEDULING_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_DESC">
 			<option value="0">JNO</option>
 			<option value="DAILY">COM_DPCALENDAR_FIELD_SCHEDULING_DAILY</option>
@@ -135,17 +135,21 @@
 		<field name="id" type="hidden" readonly="true" default="0"
 		       label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
 		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
+		<field type="hidden" name="notify_changes" default="0"/>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
 		<field name="location_ids" type="sql" multiple="true"
 		       key_field="id" value_field="title"
 		       query="SELECT id, concat(title,' [',IFNULL(latitude, '0'),':',IFNULL(longitude, '0'),']') as title FROM #__dpcalendar_locations where state = 1 order by title"
-		       label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC"/>
+		       label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC">
+			<option></option>
+		</field>
 		<field name="rooms" type="dpcrooms" multiple="true" showon="location_ids!:"
 		       label="COM_DPCALENDAR_ROOMS" description="COM_DPCALENDAR_FIELD_ROOMS_DESC"/>
 		<field name="location_lookup" type="text" class="dp-form-input" autocomplete="0"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_LOOKUP_DESC"/>
-
 	</fieldset>
 	<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
 		<field name="capacity" type="text"
@@ -174,9 +178,8 @@
 		<field name="booking_options" type="subform" multiple="true"
 		       formsource="administrator/components/com_dpcalendar/models/forms/event_booking_options.xml"
 		       label="COM_DPCALENDAR_OPTIONS" description="COM_DPCALENDAR_FIELD_BOOKING_OPTIONS_DESC"/>
-		<field name="plugintype" type="plugins" folder="dpcalendarpay" default="0" multiple="true"
-		       label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
-			<option value="0">COM_DPCALENDAR_FIELD_PAYMENT_TYPE_ALL</option>
+		<field name="payment_provider" type="dppaymentprovider" multiple="true"
+		       label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC">
 		</field>
 		<field name="terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
 		       addfieldpath="/administrator/components/com_content/models/fields"
@@ -212,20 +215,17 @@
 		</field>
 		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" label="JGLOBAL_FIELD_CREATED_LABEL"
 		       description="JGLOBAL_FIELD_CREATED_DESC"/>
-		<field name="created_by" type="user" label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_Desc"/>
+		<field name="created_by" type="user" label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL" description="COM_DPCALENDAR_FIELD_AUTHOR_DESC"/>
 		<field name="created_by_alias" type="text" label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
 		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" label="JGLOBAL_FIELD_MODIFIED_LABEL"
 		       description="COM_DPCALENDAR_FIELD_MODIFIED_DESC"/>
 		<field name="modified_by" type="user" readonly="true" filter="unset" label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"/>
-		<field name="checked_out" type="hidden" filter="unset"/>
-		<field name="checked_out_time" type="hidden" filter="unset"/>
 		<field name="publish_up" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S" label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
 		       description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
 		<field name="publish_down" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL"
 		       description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
 		<field name="version_note" type="text" labelclass="control-label" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL"
 		       description="JGLOBAL_FIELD_VERSION_NOTE_DESC"/>
-		<field type="hidden" name="notify_changes" default="0"/>
 	</fieldset>
 	<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
 		<field name="xreference" type="text"
@@ -350,12 +350,10 @@
 			<field name="event_map_long" type="text" useglobal="true" validate="decimal"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-			<field name="event_textbefore" type="textarea"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"
-			       rows="5" cols="50" filter="safehtml"/>
-			<field name="event_textafter" type="textarea"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
-			       rows="5" cols="50" filter="safehtml"/>
+			<field name="event_textbefore" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
+			<field name="event_textafter" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 			<field name="event_count_clicks" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
 				<option value="0">JNO</option>
@@ -371,12 +369,9 @@
 	</fields>
 	<fields name="metadata">
 		<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
-
-			<field name="metakey" type="textarea" rows="3"
-			       cols="30"
+			<field name="metakey" type="textarea"
 			       label="JFIELD_META_KEYWORDS_LABEL" description="JFIELD_META_KEYWORDS_DESC"/>
-
-			<field name="metadesc" type="textarea" rows="3" cols="30"
+			<field name="metadesc" type="textarea"
 			       label="JFIELD_META_DESCRIPTION_LABEL" description="JFIELD_META_DESCRIPTION_DESC"/>
 			<field name="robots" type="list"
 			       label="JFIELD_METADATA_ROBOTS_LABEL" description="JFIELD_METADATA_ROBOTS_DESC">
@@ -386,8 +381,7 @@
 				<option value="index, nofollow">JGLOBAL_INDEX_NOFOLLOW</option>
 				<option value="noindex, nofollow">JGLOBAL_NOINDEX_NOFOLLOW</option>
 			</field>
-
-			<field name="rights" type="text" required="false" filter="string" cols="30" rows="2"
+			<field name="rights" type="text" filter="string"
 			       label="JFIELD_META_RIGHTS_LABEL" description="JFIELD_META_RIGHTS_DESC"/>
 		</fieldset>
 	</fields>

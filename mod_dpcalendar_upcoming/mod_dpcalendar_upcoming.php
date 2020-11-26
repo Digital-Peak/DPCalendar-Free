@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -44,6 +43,10 @@ $model->setState('filter.parentIds', $moduleParams->get('ids', ['root']));
 $ids = [];
 foreach ($model->getItems() as $calendar) {
 	$ids[] = $calendar->id;
+}
+
+if (!$ids) {
+	return;
 }
 
 $startDate = trim($moduleParams->get('start_date', ''));
@@ -161,14 +164,15 @@ foreach ($events as $event) {
 		if ($desc != $descTruncated) {
 			$event->alternative_readmore = JText::_('MOD_DPCALENDAR_UPCOMING_READ_MORE');
 
-			$desc = $layoutHelper->renderLayout(
+			// Meta data is handled differently
+			$desc = str_replace('itemprop="url"', '', $layoutHelper->renderLayout(
 				'joomla.content.readmore',
 				[
 					'item'   => $event,
 					'params' => new \Joomla\Registry\Registry(['access-view' => true]),
 					'link'   => $router->getEventRoute($event->id, $event->catid)
 				]
-			);
+			));
 
 			$desc = $descTruncated . $desc;
 		}

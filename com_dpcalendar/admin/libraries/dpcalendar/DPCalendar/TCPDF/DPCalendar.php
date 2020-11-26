@@ -1,8 +1,7 @@
 <?php
 /**
  * @package    DPCalendar
- * @author     Digital Peak http://www.digital-peak.com
- * @copyright  Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright  Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\TCPDF;
@@ -35,10 +34,10 @@ class DPCalendar extends \TCPDF
 	public function Footer()
 	{
 		$date = \DPCalendarHelper::getDate()->format(
-			$this->params->get('event_date_format', 'm.d.Y') . ' ' . $this->params->get('event_time_format', 'g:i a')
+			$this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params->get('event_time_format', 'H:i')
 		);
-		$this->Cell(30, 0, $date, 'T', false, 'L', 0, '', 0, false, 'T', 'M');
-		$this->Cell(120, 0, $this->params->get('invoice_footer'), 'T', false, 'C', 0, '', 0, false, 'T', 'C');
-		$this->Cell(0, 0, $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 'T', false, 'R', 0, '', 0, false, 'T', 'M');
+		$this->Cell(45, 0, $date, 'T', 0, 'L', 0, '', 0, false, 'T', 'M');
+		$this->Cell(125, 0, $this->params->get('invoice_footer'), 'T', 0, 'C', 0, '', 0, false, 'T', 'M');
+		$this->Cell(8, 0, $this->getAliasNumPage() . '/' . $this->getAliasNbPages(), 'T', 0, 'L', 0, '', 0, false, 'T', 'M');
 	}
 }

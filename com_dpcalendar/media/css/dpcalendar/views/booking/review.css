@@ -1,0 +1,98 @@
+.com-dpcalendar-booking-review .dp-button-bar {
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-booking-review .dp-button {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid #c0c0c0;
+	border-radius: 0.1rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	padding: 4px 10px;
+	color: #212529;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-booking-review .dp-button:disabled,
+.com-dpcalendar-booking-review .dp-button[disabled] {
+	background-color: #cccccc;
+	color: #666666;
+	cursor: not-allowed;
+}
+
+.com-dpcalendar-booking-review .dp-control, .com-dpcalendar-booking-review .control-group {
+	display: flex;
+	margin-bottom: 5px;
+}
+
+.com-dpcalendar-booking-review .dp-control__label, .com-dpcalendar-booking-review .control-group .control-label {
+	flex: 0 0 20%;
+	padding-top: 5px;
+	text-align: left;
+}
+
+.com-dpcalendar-booking-review .dp-control__input, .com-dpcalendar-booking-review .control-group .controls {
+	flex: 1 1 80%;
+}
+
+.com-dpcalendar-booking-review .dp-control_hidden {
+	display: none;
+}
+
+.com-dpcalendar-booking-review .control-group .form-text {
+	display: none;
+}
+
+@media screen and (max-width: 640px) {
+	.com-dpcalendar-booking-review .dp-control:not(.dp-control_hidden), .com-dpcalendar-booking-review .control-group:not(.dp-control_hidden) {
+		display: block;
+	}
+	.com-dpcalendar-booking-review .dp-control:not(.dp-control_hidden)__label, .com-dpcalendar-booking-review .control-group:not(.dp-control_hidden)__label, .com-dpcalendar-booking-review .dp-control:not(.dp-control_hidden)__input, .com-dpcalendar-booking-review .control-group:not(.dp-control_hidden)__input {
+		width: 100%;
+		margin-left: 0;
+	}
+	.com-dpcalendar-booking-review .control-group:not(.dp-control_hidden) {
+		display: block;
+	}
+	.com-dpcalendar-booking-review .control-group:not(.dp-control_hidden) control-label, .com-dpcalendar-booking-review .control-group:not(.dp-control_hidden) controls {
+		width: 100%;
+		margin-left: 0;
+	}
+}
+
+.com-dpcalendar-booking-review .dp-heading {
+	clear: both;
+	margin-bottom: 1rem;
+}
+
+.com-dpcalendar-booking-review .dp-heading_small {
+	border-bottom: none;
+}
+
+.com-dpcalendar-booking-review .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
+}
+
+.com-dpcalendar-booking-review .dp-form-input {
+	width: 100%;
+	min-height: 28px;
+	-webkit-box-sizing: border-box;
+	/* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;
+	/* Firefox, other Gecko */
+	box-sizing: border-box;
+	/* Opera/IE 8+ */
+}
+
+/*# sourceMappingURL=review.css.map */

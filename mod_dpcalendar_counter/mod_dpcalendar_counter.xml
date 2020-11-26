@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_counter</name>
 	<author>Digital Peak</author>
-	<creationDate>25 Nov 2020</creationDate>
-	<copyright>Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.</copyright>
+	<creationDate>26 Nov 2020</creationDate>
+	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>7.4.9</version>
+	<version>8.0.0</version>
 	<description>MOD_DPCALENDAR_COUNTER_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_counter">mod_dpcalendar_counter.php</filename>
@@ -27,6 +27,8 @@
 				       required="true"/>
 				<field name="filter" type="text" size="40" default=""
 				       label="MOD_DPCALENDAR_COUNTER_FIELD_FILTER_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_FILTER_DESC"/>
+				<field name="max_events" type="text" default="1"
+				       label="MOD_DPCALENDAR_COUNTER_FIELD_MAX_EVENTS_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_MAX_EVENTS_DESC"/>
 				<field name="description_length" type="text" default="" size="10"
 				       label="MOD_DPCALENDAR_COUNTER_FIELD_DESC_COUNT_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_DESC_COUNT_DESC"/>
 				<field name="show_as_popup" type="radio" default="0" class="btn-group"

@@ -16,7 +16,6 @@
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	padding: 4px 10px;
-	margin: 3px 0;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -386,54 +385,6 @@
 	background-image: url("../../../../images/icons/times-solid.svg") !important;
 }
 
-.com-dpcalendar-bookingform__payment-options {
-	display: none;
-	padding: 10px 0;
-}
-
-.com-dpcalendar-bookingform .dp-payment-option {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	padding: 10px 20px 10px 20px;
-	margin-bottom: 10px;
-	border: 2px solid #EEE;
-}
-
-.com-dpcalendar-bookingform .dp-payment-option:hover {
-	background-color: #dff0d8;
-	cursor: pointer;
-}
-
-.com-dpcalendar-bookingform .dp-payment-option__input {
-	display: none;
-}
-
-.com-dpcalendar-bookingform .dp-payment-option .dp-icon_angle-right {
-	flex: 0 0 15px;
-	margin-right: 20px;
-}
-
-.com-dpcalendar-bookingform .dp-payment-option .dp-icon_angle-right svg {
-	width: 2em;
-	height: 2em;
-}
-
-.com-dpcalendar-bookingform .dp-payment-option__image {
-	flex: 0 0 40px;
-	padding: 0 10px 0 0;
-}
-
-.com-dpcalendar-bookingform .dp-payment-option__image svg {
-	fill: #2D9EDE;
-	color: #2D9EDE;
-}
-
-.com-dpcalendar-bookingform .dp-payment-option__text {
-	flex: 1 1 200px;
-	margin: 0;
-}
-
 .com-dpcalendar-bookingform__events {
 	max-height: 500px;
 	overflow: auto;
@@ -508,7 +459,7 @@
 .com-dpcalendar-bookingform .dp-tax {
 	display: none;
 	width: 100%;
-	padding: 5px 0 5px 0;
+	padding: 5px 0;
 	text-align: right;
 }
 
@@ -516,6 +467,40 @@
 	display: inline-block;
 	min-width: 70px;
 	padding: 0 1em;
+}
+
+.com-dpcalendar-bookingform .dp-coupon {
+	padding: 5px 0;
+}
+
+.com-dpcalendar-bookingform .dp-coupon__code {
+	display: flex;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-bookingform .dp-coupon__code .dp-field-coupon {
+	flex: 1 0 50px;
+	margin: 0;
+}
+
+.com-dpcalendar-bookingform .dp-coupon__code .dp-field-coupon .dp-form-input, .com-dpcalendar-bookingform .dp-coupon__code .dp-field-coupon label {
+	margin: 0;
+}
+
+.com-dpcalendar-bookingform .dp-coupon__description {
+	display: none;
+	text-align: right;
+}
+
+.com-dpcalendar-bookingform .dp-coupon__content {
+	display: inline-block;
+	min-width: 70px;
+	padding: 0 1em;
+}
+
+.com-dpcalendar-bookingform .dp-coupon .dp-icon_redo {
+	margin-left: 5px;
 }
 
 .com-dpcalendar-bookingform .dp-price-total {

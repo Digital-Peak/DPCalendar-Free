@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -108,6 +107,16 @@ class DPCalendarModelLocations extends JModelList
 				$user->authorise('core.delete', 'com_dpcalendar')
 				|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $location->created_by == $user->id));
 
+			if ($location->country) {
+				$country = JModelLegacy::getInstance('Country', 'DPCalendarModel')->getItem($location->country);
+				if ($country) {
+					JFactory::getApplication()->getLanguage()->load('com_dpcalendar.countries',
+						JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+					$location->country_code       = $country->short_code;
+					$location->country_code_value = JText::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
+				}
+			}
+
 			if (!is_string($location->rooms) || $location->rooms == '{}') {
 				$location->rooms = [];
 				continue;
@@ -136,6 +145,19 @@ class DPCalendarModelLocations extends JModelList
 		// Join over the users for the checked out user.
 		$query->select('uc.name AS editor');
 		$query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
+
+		// Filter by tags
+		$tagIds = (array)$this->getState('filter.tags');
+		if ($tagIds) {
+			$query->join(
+				'LEFT',
+				$db->quoteName('#__contentitem_tag_map', 'tagmap') . ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' .
+				$db->quoteName('a.id') . ' AND ' . $db->quoteName('tagmap.type_alias') . ' = ' . $db->quote('com_dpcalendar.location')
+			);
+
+			ArrayHelper::toInteger($tagIds);
+			$query->where($db->quoteName('tagmap.tag_id') . ' in (' . implode(',', $tagIds) . ')');
+		}
 
 		// Filter by published state
 		$published = $this->getState('filter.state');

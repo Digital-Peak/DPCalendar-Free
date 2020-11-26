@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -19,12 +18,12 @@ class JFormFieldDatetimechooser extends JFormField
 
 		$dateFormat = (string)$this->element['format'];
 		if (empty($dateFormat)) {
-			$dateFormat = DPCalendarHelper::getComponentParameter('event_date_format', 'm.d.Y');
+			$dateFormat = DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y');
 		}
 
 		$timeFormat = (string)$this->element['formatTime'];
 		if (empty($timeFormat)) {
-			$timeFormat = DPCalendarHelper::getComponentParameter('event_time_format', 'g:i a');
+			$timeFormat = DPCalendarHelper::getComponentParameter('event_time_format', 'H:i');
 		}
 
 		$allDay   = (string)$this->element['all_day'] == '1';

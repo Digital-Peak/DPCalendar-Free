@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -125,7 +124,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 		JForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
 
-		$format = $params->get('event_form_date_format', 'm.d.Y') . ' ' . $params->get('event_form_time_format', 'g:i a');
+		$format = $params->get('event_form_date_format', 'd.m.Y') . ' ' . $params->get('event_form_time_format', 'H:i');
 		$date   = \DPCalendar\Helper\DPCalendarHelper::getDate();
 
 		$form = JForm::getInstance('com_dpcalendar.event', 'event', ['control' => 'jform']);
@@ -133,11 +132,11 @@ class DPCalendarModelCalendar extends JModelLegacy
 		$date->modify('+1 hour');
 		$form->setValue('end_date', null, $date->format($format, false));
 
-		$form->setFieldAttribute('start_date', 'format', $params->get('event_form_date_format', 'm.d.Y'));
-		$form->setFieldAttribute('start_date', 'formatTime', $params->get('event_form_time_format', 'g:i a'));
+		$form->setFieldAttribute('start_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
+		$form->setFieldAttribute('start_date', 'formatTime', $params->get('event_form_time_format', 'H:i'));
 		$form->setFieldAttribute('start_date', 'formated', true);
-		$form->setFieldAttribute('end_date', 'format', $params->get('event_form_date_format', 'm.d.Y'));
-		$form->setFieldAttribute('end_date', 'formatTime', $params->get('event_form_time_format', 'g:i a'));
+		$form->setFieldAttribute('end_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
+		$form->setFieldAttribute('end_date', 'formatTime', $params->get('event_form_time_format', 'H:i'));
 		$form->setFieldAttribute('end_date', 'formated', true);
 
 		$form->setFieldAttribute('start_date', 'min_time', $params->get('event_form_min_time'));

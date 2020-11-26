@@ -16,7 +16,6 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `images` text,
   `description` text,
   `schedule` text,
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `hits` int(11) NOT NULL DEFAULT '0',
   `capacity` int(11) DEFAULT NULL,
   `capacity_used` int(11) DEFAULT 0,
@@ -54,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `xreference` varchar(255) NULL COMMENT 'A reference to enable linkages to external data sets.',
   `publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `plugintype` text,
+  `payment_provider` text,
   PRIMARY KEY (`id`),
   KEY `idx_access` (`access`),
   KEY `idx_start_date` (`start_date`),
@@ -76,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) NOT NULL DEFAULT '',
   `alias` varchar(255) NOT NULL DEFAULT '',
-  `country` varchar(255) NOT NULL DEFAULT '',
+  `country` int(11) NOT NULL DEFAULT '0',
   `province` varchar(255) NOT NULL DEFAULT '',
   `city` varchar(255) NOT NULL DEFAULT '',
   `zip` varchar(255) NOT NULL DEFAULT '',
@@ -88,7 +87,6 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
   `url` varchar(250) NOT NULL DEFAULT '',
   `description` text,
   `color` varchar(250) NOT NULL DEFAULT '',
-  `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `state` tinyint(1) NOT NULL DEFAULT '0',
   `checked_out` int(11) NOT NULL DEFAULT '0',
   `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -110,6 +108,9 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
   KEY `idx_createdby` (`created_by`),
   KEY `idx_language` (`language`)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+
+INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `rules`, `field_mappings`, `router`, `content_history_options`) VALUES
+('Location', 'com_dpcalendar.location', '{"special":{"dbtable":"#__dpcalendar_locations","key":"id","type":"Location","prefix":"DPCalendarTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Location","prefix":"DPCalendarTable","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"state","core_alias":"alias","core_created_time":"created","core_modified_time":"modified","core_body":"description","core_publish_up":"publish_up","core_publish_down":"publish_down","core_access":"access", "core_params":"attribs","core_featured":"featured", "core_metadata":"metadata", "core_language":"language", "core_metakey":"metakey", "core_metadesc":"metadesc"}, "special":{}}', 'DPCalendarHelperRoute::getLocationRoute', '{"formFile":"administrator\\/components\\/com_dpcalendar\\/models\\/forms\\/location.xml", "hideFields":["checked_out"],"ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time", "hits"],"convertToInt":["publish_up", "publish_down", "featured"],"displayLookup":[{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"} ]}');
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_events_location` (
   `event_id` int(11) NOT NULL DEFAULT '0',
@@ -141,6 +142,8 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_bookings` (
   `invoice` longtext,
   `tax` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
   `tax_rate` DECIMAL(10, 5) DEFAULT NULL,
+  `coupon_id` int(11) DEFAULT NULL,
+  `coupon_rate` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
   `processor` VARCHAR(255) DEFAULT NULL,
   `net_amount` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
   `tax_amount` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
@@ -175,7 +178,6 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_tickets` (
   `number` varchar(255) NOT NULL DEFAULT '',
   `latitude` DECIMAL(12, 8) DEFAULT NULL,
   `longitude` DECIMAL(12, 8) DEFAULT NULL,
-  `seat` varchar(255) DEFAULT NULL,
   `remind_time` int(11) NOT NULL DEFAULT 0,
   `remind_type` tinyint(1) NOT NULL DEFAULT '1',
   `reminder_sent_date` datetime DEFAULT NULL,
@@ -192,6 +194,34 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_tickets` (
   KEY `state` (`state`),
   KEY `notify` (`reminder_sent_date`, `state`)
 ) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__dpcalendar_coupons` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `title` varchar(250) NOT NULL DEFAULT '',
+  `code` varchar(255) NOT NULL DEFAULT '',
+  `value` int(11) NOT NULL DEFAULT '0',
+  `type` varchar(250) NOT NULL DEFAULT 'percentage',
+  `calendars` text,
+  `users` text,
+  `emails` text,
+  `limit` int(11) DEFAULT NULL,
+  `state` tinyint(1) NOT NULL DEFAULT '0',
+  `checked_out` int(11) NOT NULL DEFAULT '0',
+  `checked_out_time` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `access` int(11) NOT NULL DEFAULT '1',
+  `ordering` int(11) NOT NULL DEFAULT '0',
+  `params` text,
+  `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `created_by` int(10) unsigned NOT NULL DEFAULT '0',
+  `modified` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` int(10) unsigned NOT NULL DEFAULT '0',
+  `publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `idx_checkout` (`checked_out`),
+  KEY `idx_state` (`state`),
+  KEY `idx_createdby` (`created_by`)
+) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_extcalendars` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,

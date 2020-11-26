@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -16,6 +15,10 @@ class DPCalendarTableLocation extends JTable
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_locations', 'id', $db);
+
+		if (DPCalendarHelper::isJoomlaVersion('4', '<')) {
+			JObserverMapper::addObserverClassToClass('JTableObserverTags', 'DPCalendarTableLocation', ['typeAlias' => 'com_dpcalendar.location']);
+		}
 
 		$this->setColumnAlias('published', 'state');
 	}

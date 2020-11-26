@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -58,15 +57,18 @@ foreach ($tmp as $date => $events) {
 	$description .= '</ul>';
 
 	$data[] = [
-		'id'          => $date,
-		'title'       => utf8_encode(chr(160)), // Space only works in IE, empty only in Chrome
-		'start'       => DPCalendarHelper::getDate($date)->format('Y-m-d'),
-		'end'         => DPCalendarHelper::getDate($date)->format('Y-m-d'),
-		'url'         => $url,
-		'allDay'      => true,
-		'description' => $description,
-		'view_class'  => 'dp-event-compact',
-		'rendering'   => 'background'
+		'id'              => $date,
+		'title'           => utf8_encode(chr(160)), // Space only works in IE, empty only in Chrome
+		'start'           => DPCalendarHelper::getDate($date)->format('Y-m-d'),
+		'end'             => DPCalendarHelper::getDate($date)->format('Y-m-d'),
+		'url'             => $url,
+		'allDay'          => true,
+		'description'     => $description,
+		'view_class'      => 'dp-event-compact',
+		'backgroundColor' => $this->params->get('event_color', '#135CAE'),
+		'borderColor'     => $this->params->get('event_color', '#135CAE'),
+		'textColor'       => '#' . \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($this->params->get('event_color', '#135CAE')),
+		'display'         => 'background'
 	];
 }
 

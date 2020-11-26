@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -26,6 +25,12 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/tools/default.css');
 					<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&task=caldav.sync">
 						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::SYNC]); ?>
 						<span><?php echo JText::_('COM_DPCALENDAR_VIEW_TOOLS_CALDAV'); ?></span>
+					</a>
+				</div>
+				<div class="dp-quick-icon">
+					<a class="dp-link dp-quick-icon__link" href="index.php?option=com_dpcalendar&view=tools&layout=translate">
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LANGUAGE]); ?>
+						<span><?php echo JText::_('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE'); ?></span>
 					</a>
 				</div>
 			</div>

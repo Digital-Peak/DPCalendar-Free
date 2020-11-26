@@ -74,6 +74,26 @@
 	}
 }
 
+.com-dpcalendar-list .dp-badge, .com-dpcalendar-list .dp-event__title_canceled, .com-dpcalendar-list .dp-event__title_unpublished, .com-dpcalendar-list .dp-event-tooltip_canceled, .com-dpcalendar-list .dp-event-tooltip_unpublished {
+	display: inline-block;
+	padding: .25em;
+	font-size: 70%;
+	font-weight: 700;
+	line-height: 1;
+	text-align: center;
+	border-radius: .2rem;
+}
+
+.com-dpcalendar-list .dp-badge_warning, .com-dpcalendar-list .dp-event__title_unpublished, .com-dpcalendar-list .dp-event-tooltip_unpublished {
+	color: #212529;
+	background-color: #ffc107;
+}
+
+.com-dpcalendar-list .dp-badge_info, .com-dpcalendar-list .dp-event__title_canceled, .com-dpcalendar-list .dp-event-tooltip_canceled {
+	color: #fff;
+	background-color: #17a2b8;
+}
+
 .com-dpcalendar-list .dp-event {
 	overflow: hidden;
 }
@@ -85,8 +105,8 @@
 	font-weight: bold;
 }
 
-.com-dpcalendar-list .dp-event__title_canceled {
-	margin-right: 5px;
+.com-dpcalendar-list .dp-event__title_canceled, .com-dpcalendar-list .dp-event__title_unpublished {
+	margin-left: 5px;
 }
 
 .com-dpcalendar-list .dp-event__title-dot {
@@ -185,7 +205,6 @@
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	padding: 4px 10px;
-	margin: 3px 0;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -253,6 +272,26 @@
 	font-size: 12px;
 }
 
+.com-dpcalendar-list .dp-event-tooltip .dp-badge, .com-dpcalendar-list .dp-event-tooltip .dp-event__title_canceled, .com-dpcalendar-list .dp-event-tooltip .dp-event__title_unpublished, .com-dpcalendar-list .dp-event-tooltip .dp-event-tooltip_canceled, .com-dpcalendar-list .dp-event-tooltip .dp-event-tooltip_unpublished {
+	display: inline-block;
+	padding: .25em;
+	font-size: 70%;
+	font-weight: 700;
+	line-height: 1;
+	text-align: center;
+	border-radius: .2rem;
+}
+
+.com-dpcalendar-list .dp-event-tooltip .dp-badge_warning, .com-dpcalendar-list .dp-event-tooltip .dp-event__title_unpublished, .com-dpcalendar-list .dp-event-tooltip .dp-event-tooltip_unpublished {
+	color: #212529;
+	background-color: #ffc107;
+}
+
+.com-dpcalendar-list .dp-event-tooltip .dp-badge_info, .com-dpcalendar-list .dp-event-tooltip .dp-event__title_canceled, .com-dpcalendar-list .dp-event-tooltip .dp-event-tooltip_canceled {
+	color: #fff;
+	background-color: #17a2b8;
+}
+
 .com-dpcalendar-list .dp-event-tooltip .dp-icon svg {
 	fill: currentColor;
 	width: 1em;
@@ -262,24 +301,20 @@
 
 .com-dpcalendar-list .dp-event-tooltip__link {
 	margin-right: .4rem;
-	color: #42a1ff;
 }
 
 .com-dpcalendar-list .dp-event-tooltip__actions {
-	border-top: 1px solid rgba(255, 255, 255, 0.5);
+	border-top: 1px solid rgba(0, 0, 0, 0.5);
 	margin-top: 5px;
 	padding-top: 4px;
-	color: #fff;
 }
 
 .com-dpcalendar-list .dp-event-tooltip__action {
-	color: #fff;
 	padding: 2px;
 	opacity: .85;
 }
 
 .com-dpcalendar-list .dp-event-tooltip__action:hover {
-	color: #fff;
 	opacity: 1;
 	text-decoration: none;
 }

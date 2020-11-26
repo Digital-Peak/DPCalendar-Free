@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -11,6 +10,11 @@ use Joomla\Utilities\ArrayHelper;
 
 class PlgContentDpcalendar extends JPlugin
 {
+	/** @var \Joomla\CMS\Application\CMSApplication */
+	protected $app;
+
+	protected $autoloadLanguage = true;
+
 	public function onContentPrepare($context, $item, $articleParams)
 	{
 		// Count how many times we need to process events
@@ -35,10 +39,7 @@ class PlgContentDpcalendar extends JPlugin
 			// Extract the parameters
 			$start  = $starts[0][1] + strlen($starts[0][0]);
 			$end    = $ends[0][1];
-			$params = explode(' ', str_replace([
-				'{{#events',
-				'}}'
-			], '', $starts[0][0]));
+			$params = explode(' ', str_replace(['{{#events', '}}'], '', $starts[0][0]));
 
 			// Load the module
 			$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
@@ -120,7 +121,7 @@ class PlgContentDpcalendar extends JPlugin
 				}
 
 				$event->text = $event->description;
-				JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$event->params, 0]);
+				$this->app->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$event->params, 0]);
 				$event->description = $event->text;
 			}
 
@@ -171,8 +172,19 @@ class PlgContentDpcalendar extends JPlugin
 			// The actually delete the event
 			if (!$model->delete($eventId)) {
 				// Add the error message
-				JFactory::getApplication()->enqueueMessage($model->getError(), 'error');
+				$this->app->enqueueMessage($model->getError(), 'error');
 			}
 		}
+	}
+
+	public function onContentPrepareForm($form)
+	{
+		if ($form->getName() != 'com_fields.field.com_dpcalendar.event') {
+			return true;
+		}
+
+		$form->loadFile(JPATH_PLUGINS . '/content/dpcalendar/forms/tickets.xml');
+
+		return true;
 	}
 }

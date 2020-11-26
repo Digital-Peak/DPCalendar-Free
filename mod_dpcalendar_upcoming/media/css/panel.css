@@ -93,6 +93,10 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-panel .dp-location {
+	display: inline-block;
+}
+
 .mod-dpcalendar-upcoming-panel .dp-location__description {
 	display: none;
 }
@@ -112,14 +116,13 @@
 	box-sizing: border-box;
 }
 
-.mod-dpcalendar-upcoming-panel .mod-dpcalendar-upcoming-panel__events {
+.mod-dpcalendar-upcoming-panel__events {
 	display: flex;
 	flex-wrap: wrap;
 	margin: 0 -5px;
 }
 
-.mod-dpcalendar-upcoming-panel__group,
-.mod-dpcalendar-upcoming-panel .mod-dpcalendar-upcoming-panel__event {
+.mod-dpcalendar-upcoming-panel__group, .mod-dpcalendar-upcoming-panel__event {
 	flex: 1 1 200px;
 	position: relative;
 	margin: 5px;
@@ -128,6 +131,10 @@
 .mod-dpcalendar-upcoming-panel__event {
 	background-color: #fff;
 	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
+}
+
+.mod-dpcalendar-upcoming-panel__event + div {
+	margin-top: 5px;
 }
 
 .mod-dpcalendar-upcoming-panel__information {

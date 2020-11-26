@@ -93,6 +93,10 @@
 	opacity: .7;
 }
 
+.mod-dpcalendar-upcoming-icon .dp-location {
+	display: inline-block;
+}
+
 .mod-dpcalendar-upcoming-icon .dp-location__description {
 	display: none;
 }
@@ -165,22 +169,9 @@
 	min-height: 3.7em;
 }
 
-.mod-dpcalendar-upcoming-icon__information .dp-link {
-	display: block;
-}
-
 .mod-dpcalendar-upcoming-icon__information__date::after {
 	content: "\A";
 	white-space: pre;
-}
-
-.mod-dpcalendar-upcoming-icon__information > .dp-icon {
-	float: left;
-	margin-right: .7em;
-}
-
-.mod-dpcalendar-upcoming-icon__information > .dp-icon svg {
-	width: 2.3em;
 }
 
 /*# sourceMappingURL=icon.css.map */

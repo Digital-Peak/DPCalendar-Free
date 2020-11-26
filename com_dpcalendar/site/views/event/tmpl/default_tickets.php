@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -11,12 +10,12 @@ if (!$this->params->get('event_show_tickets', 0) || !isset($this->event->tickets
 	return;
 }
 
-$format  = $this->params->get('event_date_format', 'm.d.Y') . ' ' . $this->params->get('event_time_format', 'g:i a');
+$format  = $this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params->get('event_time_format', 'H:i');
 $limited = $this->params->get('event_show_tickets') == '2';
 
 $hasPrice = false;
 foreach ($this->event->tickets as $ticket) {
-	if ($ticket->price && $ticket->price != '0.00') {
+	if ($ticket->price) {
 		$hasPrice = true;
 		break;
 	}
@@ -37,9 +36,6 @@ foreach ($this->event->tickets as $ticket) {
 			<th><?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?></th>
 			<?php if (!$limited) { ?>
 				<th><?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?></th>
-				<?php if ($this->params->get('ticket_show_seat', 1)) { ?>
-					<th><?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?></th>
-				<?php } ?>
 			<?php } ?>
 			<?php if (!$limited && $hasPrice) { ?>
 				<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></th>
@@ -67,11 +63,6 @@ foreach ($this->event->tickets as $ticket) {
 					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?>">
 						<?php echo $this->dateHelper->getDate($ticket->created)->format($format, true); ?>
 					</td>
-					<?php if ($this->params->get('ticket_show_seat', 1)) { ?>
-						<td data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL'); ?>">
-							<?php echo $ticket->seat; ?>
-						</td>
-					<?php } ?>
 				<?php } ?>
 				<?php if (!$limited && $hasPrice) { ?>
 					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?>">

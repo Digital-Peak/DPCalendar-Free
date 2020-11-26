@@ -1,16 +1,15 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 $event = $displayData['event'];
 
-$dateFormat = !empty($displayData['dateFormat']) ? $displayData['dateFormat'] : DPCalendarHelper::getComponentParameter('event_date_format', 'm.d.Y');
-$timeFormat = !empty($displayData['timeFormat']) ? $displayData['timeFormat'] : DPCalendarHelper::getComponentParameter('event_time_format', 'g:i a');
+$dateFormat = !empty($displayData['dateFormat']) ? $displayData['dateFormat'] : DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y');
+$timeFormat = !empty($displayData['timeFormat']) ? $displayData['timeFormat'] : DPCalendarHelper::getComponentParameter('event_time_format', 'H:i');
 
 $translator = !empty($displayData['translator']) ? $displayData['translator'] : new \DPCalendar\Translator\Translator();
 $dateFormat = $translator->translate($dateFormat);

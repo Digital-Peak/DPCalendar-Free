@@ -180,11 +180,10 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="textbefore" type="textarea" rows="5" cols="50" filter="safehtml"
+			<field name="textbefore" type="textarea" filter="raw" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
-			<field name="textafter" type="textarea"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
-			       rows="5" cols="50" filter="safehtml"/>
+			<field name="textafter" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 			<field name="show_event_as_popup" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_DESC">
@@ -404,12 +403,10 @@
 			<field name="event_map_long" type="text" useglobal="true" validate="decimal"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-			<field name="event_textbefore" type="textarea"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"
-			       rows="5" cols="50" filter="safehtml"/>
-			<field name="event_textafter" type="textarea"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"
-			       rows="5" cols="50" filter="safehtml"/>
+			<field name="event_textbefore" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
+			<field name="event_textafter" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 			<field name="event_count_clicks" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
 				<option value="0">JNO</option>
@@ -467,176 +464,68 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 
-			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TABS_LABEL"/>
-			<field name="event_form_change_location" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_LOCATION_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_LOCATION_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
+			<field name="event_form_hidden_tabs" type="list" multiple="true" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_DESC">
+				<option value="location">COM_DPCALENDAR_LOCATION</option>
+				<option value="booking">COM_DPCALENDAR_BOOKING</option>
+				<option value="publishing">COM_DPCALENDAR_PUBLISHING</option>
+				<option value="images:images">COM_DPCALENDAR_IMAGES</option>
+				<option value="params:jbasic">COM_DPCALENDAR_FIELDSET_OPTIONS</option>
+				<option value="metadata:jmetadata">JGLOBAL_FIELDSET_METADATA_OPTIONS</option>
 			</field>
-			<field name="event_form_change_metadata" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_METADATA_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_METADATA_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_book" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_BOOK_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_BOOK_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_options" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_OPTIONS_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_OPTIONS_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_publishing" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PUBLISHING_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PUBLISHING_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-
-			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DISPLAY_LABEL"/>
-			<field name="event_form_change_calid" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CALENDAR_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CALENDAR_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_show_end_time" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SHOW_END_TIME_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SHOW_END_TIME_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_scheduling" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULING_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULING_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_color" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_COLOR_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_COLOR_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_url" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_URL_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_URL_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_tags" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_TAGS_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_TAGS_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_images" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_IMAGES_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_IMAGES_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_description" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_DESCRIPTION_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_DESCRIPTION_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_schedule" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULE_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_SCHEDULE_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_capacity" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CAPACITY_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CAPACITY_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_capacity_used" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CAPACITY_USED_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_CAPACITY_USED_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_max_tickets" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_MAX_TICKETS_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_MAX_TICKETS_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_price" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PRICE_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PRICE_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_booking_closing_date" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_BOOKING_CLOSING_DATE_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_BOOKING_CLOSING_DATE_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_earlybird" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_EARLYBIRD_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_EARLYBIRD_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_user_discount" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_USER_DISCOUNT_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_USER_DISCOUNT_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_booking_options" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_BOOKING_OPTIONS_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_BOOKING_OPTIONS_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_payment" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PAYMENT_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_PAYMENT_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_terms" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_TERMS_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_TERMS_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_booking_information" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_BOOKING_INFORMATION_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_BOOKING_INFORMATION_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_access" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ACCESS_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ACCESS_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_access_content" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ACCESS_CONTENT_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_ACCESS_CONTENT_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
-			<field name="event_form_change_featured" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_FEATURED_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CHANGE_FEATURED_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
+			<field name="event_form_hidden_fields" type="list" multiple="true" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_DESC">
+				<option value="color">COM_DPCALENDAR_FIELD_COLOR_LABEL</option>
+				<option value="url">COM_DPCALENDAR_FIELD_URL_LABEL</option>
+				<option value="show_end_time">COM_DPCALENDAR_FIELD_SHOW_END_TIME_LABEL</option>
+				<option value="scheduling">COM_DPCALENDAR_FIELD_SCHEDULING_LABEL</option>
+				<option value="description">JGLOBAL_DESCRIPTION</option>
+				<option value="schedule">COM_DPCALENDAR_FIELD_SCHEDULE_LABEL</option>
+				<option value="location_ids">COM_DPCALENDAR_FIELD_LOCATION_LABEL</option>
+				<option value="rooms">COM_DPCALENDAR_ROOMS</option>
+				<option value="location_lookup">COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_LABEL</option>
+				<option value="capacity">COM_DPCALENDAR_FIELD_CAPACITY_LABEL</option>
+				<option value="capacity_used">COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL</option>
+				<option value="max_tickets">COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL</option>
+				<option value="booking_closing_date">COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL</option>
+				<option value="booking_series">COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL</option>
+				<option value="price">COM_DPCALENDAR_FIELD_PRICE_LABEL</option>
+				<option value="earlybird">COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL</option>
+				<option value="user_discount">COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL</option>
+				<option value="booking_options">COM_DPCALENDAR_OPTIONS</option>
+				<option value="payment_provider">COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL</option>
+				<option value="terms">COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL</option>
+				<option value="booking_assign_user_groups">COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_LABEL</option>
+				<option value="booking_information">COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL</option>
+				<option value="alias">JFIELD_ALIAS_LABEL</option>
+				<option value="tags">JTAG</option>
+				<option value="featured">JFEATURED</option>
+				<option value="hits">JGLOBAL_HITS</option>
+				<option value="state">JSTATUS</option>
+				<option value="access">JFIELD_ACCESS_LABEL</option>
+				<option value="access_content">COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL</option>
+				<option value="language">JFIELD_LANGUAGE_LABEL</option>
+				<option value="created">JGLOBAL_FIELD_CREATED_LABEL</option>
+				<option value="created_by">COM_DPCALENDAR_FIELD_AUTHOR_LABEL</option>
+				<option value="created_by_alias">JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL</option>
+				<option value="modified">JGLOBAL_FIELD_MODIFIED_LABEL</option>
+				<option value="modified_by">JGLOBAL_FIELD_MODIFIED_BY_LABEL</option>
+				<option value="publish_up">JGLOBAL_FIELD_PUBLISH_UP_LABEL</option>
+				<option value="publish_down">JGLOBAL_FIELD_PUBLISH_DOWN_LABEL</option>
+				<option value="version_note">JGLOBAL_FIELD_VERSION_NOTE_LABEL</option>
+				<option value="xreference">JFIELD_XREFERENCE_LABEL</option>
+				<option value="images:image_intro">COM_DPCALENDAR_FIELD_IMAGE_INTRO_LABEL</option>
+				<option value="images:image_intro_alt">COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL</option>
+				<option value="images:image_intro_caption">COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL</option>
+				<option value="images:image_full">COM_DPCALENDAR_FIELD_IMAGE_FULL_LABEL</option>
+				<option value="images:image_full_alt">COM_DPCALENDAR_FIELD_IMAGE_FULL_LABEL</option>
+				<option value="images:image_full_caption">COM_DPCALENDAR_FIELD_IMAGE_FULL_LABEL</option>
+				<option value="metadata:metakey">JFIELD_META_KEYWORDS_LABEL</option>
+				<option value="metadata:metadesc">JFIELD_META_DESCRIPTION_LABEL</option>
+				<option value="metadata:robots">JFIELD_METADATA_ROBOTS_LABEL</option>
+				<option value="metadata:rights">JFIELD_META_RIGHTS_LABEL</option>
 			</field>
 
 			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DEFAULT_VALUES_LABEL"/>
@@ -664,10 +553,8 @@
 			       label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
 			<field name="event_form_price" type="text" useglobal="true" size="6"
 			       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
-			<field name="event_form_plugintype" type="plugins" folder="dpcalendarpay" multiple="true"
-			       label="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_TYPE_DESC">
-				<option value="0">COM_DPCALENDAR_FIELD_PAYMENT_TYPE_ALL</option>
-			</field>
+			<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true"
+			       label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 			<field name="event_form_featured" type="list" useglobal="true" label="JFEATURED"
 			       description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
 				<option value="1">JYES</option>
@@ -829,7 +716,6 @@
 						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
 						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
 						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-						<option value="seat">COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL</option>
 					</field>
 				</form>
 			</field>
@@ -875,12 +761,6 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="ticket_show_seat" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_SEAT_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-			</field>
 			<field name="ticket_show_barcode" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_TICKET_SHOW_BARCODE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
@@ -904,7 +784,6 @@
 						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
 						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
 						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-						<option value="seat">COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL</option>
 					</field>
 				</form>
 			</field>
@@ -952,13 +831,6 @@
 			</field>
 			<field name="ticket_form_telephone" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
-				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
-				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
-			</field>
-			<field name="ticket_form_seat" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
 				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>

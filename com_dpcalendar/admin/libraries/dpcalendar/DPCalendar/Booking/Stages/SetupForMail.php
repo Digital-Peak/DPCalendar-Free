@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -34,7 +33,7 @@ class SetupForMail implements StageInterface
 		$params->set('show_header', false);
 
 		$payload->item->book_date_formatted = DPCalendarHelper::getDate($payload->item->book_date)
-			->format($params->get('event_date_format', 'm.d.Y') . ' ' . $params->get('event_time_format', 'g:i a'), true);
+			->format($params->get('event_date_format', 'd.m.Y') . ' ' . $params->get('event_time_format', 'H:i'), true);
 		$payload->mailVariables             = [
 			'booking'        => $payload->item,
 			'bookingDetails' => $payload->item->invoice,
@@ -46,8 +45,10 @@ class SetupForMail implements StageInterface
 			'countTickets'   => count($payload->tickets)
 		];
 
-		foreach ($payload->item->jcfields as $field) {
-			$payload->mailVariables['field-' . $field->name] = $field;
+		if (!empty($payload->item->jcfields)) {
+			foreach ($payload->item->jcfields as $field) {
+				$payload->mailVariables['field-' . $field->name] = $field;
+			}
 		}
 
 		if ($payload->eventsWithTickets) {

@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -35,7 +34,7 @@ if (!$this->event->earlybird) {
 						$date->setTime(23, 59, 59);
 					}
 				}
-				$dateFormated = $date->format($this->params->get('event_date_format', 'm.d.Y'), true); ?>
+				$dateFormated = $date->format($this->params->get('event_date_format', 'd.m.Y'), true); ?>
 				<?php echo JText::sprintf('COM_DPCALENDAR_VIEW_EVENT_EARLYBIRD_DISCOUNT_TEXT', $value, $dateFormated); ?>
 			</span>
 			<span class="dp-earlybird__description"><?php echo $this->event->earlybird->description[$index]; ?></span>

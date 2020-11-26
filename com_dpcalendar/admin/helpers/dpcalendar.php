@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -34,6 +33,11 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 				JText::_('COM_DPCALENDAR_SUBMENU_BOOKINGS'),
 				'index.php?option=com_dpcalendar&view=bookings',
 				$vName == 'bookings'
+			);
+			JHtmlSidebar::addEntry(
+				JText::_('COM_DPCALENDAR_SUBMENU_COUPONS'),
+				'index.php?option=com_dpcalendar&view=coupons',
+				$vName == 'coupons'
 			);
 			JHtmlSidebar::addEntry(
 				JText::_('COM_DPCALENDAR_SUBMENU_TAXRATES'),

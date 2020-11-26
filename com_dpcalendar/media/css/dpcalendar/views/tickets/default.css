@@ -39,7 +39,6 @@
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	padding: 4px 10px;
-	margin: 3px 0;
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -192,11 +191,24 @@
 }
 
 .com-dpcalendar-tickets .dp-form__search, .com-dpcalendar-tickets .dp-form__buttons {
-	float: left;
+	display: inline-flex;
+	align-items: center;
 }
 
 .com-dpcalendar-tickets .dp-form__limit {
 	float: right;
+}
+
+.com-dpcalendar-tickets .dp-form .dp-input {
+	margin: 0 5px 0 0;
+}
+
+.com-dpcalendar-tickets .dp-form .dp-input-checkbox {
+	margin-left: 5px;
+}
+
+.com-dpcalendar-tickets .dp-form .dp-button, .com-dpcalendar-tickets .dp-form .dp-label {
+	margin: 0;
 }
 
 .com-dpcalendar-tickets .dp-pagination__counter, .com-dpcalendar-tickets .dp-pagination__links {

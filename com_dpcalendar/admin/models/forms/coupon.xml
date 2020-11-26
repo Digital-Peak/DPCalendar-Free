@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset name="general" label="COM_DPCALENDAR_CONTENT"
+	          addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+	          addrulepath="/administrator/components/com_dpcalendar/models/rules">
+		<field name="id" type="hidden" readonly="true"
+		       label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
+		<field name="title" type="text" required="true" class="dp-form-input"
+		       label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_COUPON_TITLE_DESC"/>
+		<field name="code" type="text" required="true" class="dp-form-input"
+		       label="COM_DPCALENDAR_FIELD_COUPON_CODE_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_CODE_DESC"/>
+		<field name="value" type="text" pattern="\d*" required="true" class="dp-form-input"
+		       label="COM_DPCALENDAR_FIELD_COUPON_VALUE_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_VALUE_DESC"/>
+		<field name="type" type="list" required="true" default="percentage"
+		       label="COM_DPCALENDAR_FIELD_COUPON_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_TYPE_DESC">
+			<option value="percentage">COM_DPCALENDAR_FIELD_COUPON_TYPE_PERCENTAGE</option>
+			<option value="value">COM_DPCALENDAR_FIELD_COUPON_TYPE_VALUE</option>
+		</field>
+		<field name="limit" type="text" pattern="\d*" class="dp-form-input"
+		       label="COM_DPCALENDAR_FIELD_COUPON_LIMIT_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_LIMIT_DESC"/>
+		<field name="calendars" type="dpcalendar" extension="com_dpcalendar" multiple="true" class="dp-select" internal="true"
+		       label="COM_DPCALENDAR_FIELD_COUPON_CALENDARS_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_CALENDARS_DESC"/>
+		<field name="emails" type="textarea"
+		       label="COM_DPCALENDAR_FIELD_COUPON_EMAILS_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_EMAILS_DESC"/>
+		<field name="users" type="sql" query="select id, name from #__users" value_field="name" key_field="id" multiple="true" class="dp-select"
+		       label="COM_DPCALENDAR_FIELD_COUPON_USERS_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_USERS_DESC"/>
+	</fieldset>
+	<fieldset addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+	          name="publishing" label="COM_DPCALENDAR_PUBLISHING">
+		<field name="state" type="list" filter="intval" default="1"
+		       label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+
+		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+		       label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
+
+		<field name="created_by_alias" type="text"
+		       label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
+
+		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+		       label="JGLOBAL_FIELD_MODIFIED_LABEL"/>
+
+		<field name="checked_out" type="hidden" filter="unset"/>
+
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+
+		<field name="publish_up" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+		       label="JGLOBAL_FIELD_PUBLISH_UP_LABEL" description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
+
+		<field name="publish_down" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S"
+		       label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL" description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
+
+		<field name="ordering" type="text"
+		       label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC"/>
+
+		<field name="created_by" type="user"
+		       label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_Desc"/>
+
+		<field name="modified_by" type="user" readonly="true" filter="unset"
+		       label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"/>
+	</fieldset>
+</form>

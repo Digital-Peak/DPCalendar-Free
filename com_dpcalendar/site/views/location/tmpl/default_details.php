@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -52,10 +51,10 @@ if (!$this->params->get('locations_expand', 1)) {
 				</dd>
 			</dl>
 		<?php } ?>
-		<?php if ($this->location->country) { ?>
+		<?php if (!empty($this->location->country_code_value)) { ?>
 			<dl class="dp-description">
 				<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'); ?></dt>
-				<dd class="dp-description__description dp-location__country"><?php echo $this->location->country; ?></dd>
+				<dd class="dp-description__description dp-location__country"><?php echo $this->location->country_code_value; ?></dd>
 			</dl>
 		<?php } ?>
 		<?php if ($this->location->rooms) { ?>

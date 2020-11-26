@@ -1,13 +1,13 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Helper\HTTP;
 use Joomla\Registry\Registry;
 
 JLoader::import('joomla.application.component.modellist');
@@ -140,7 +140,7 @@ class DPCalendarModelImport extends JModelLegacy
 		}
 
 		// Fetch the content
-		$content = DPCalendarHelper::fetchContent('https://software77.net/geo-ip/?DL=1');
+		$content = (new HTTP())->get('https://software77.net/geo-ip/?DL=1')->dp->body;
 		if (empty($content)) {
 			throw new \Exception("Can't download the geolocation database from software77.net. Is the site blocked through a firewall?");
 		}

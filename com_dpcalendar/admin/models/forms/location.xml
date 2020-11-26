@@ -12,7 +12,7 @@
 		<field name="title" type="text" required="true" class="dp-form-input"
 		       label="JGLOBAL_TITLE" description="COM_DPCALENDAR_LOCATION_FIELD_TITLE_DESC"/>
 
-		<field name="country" type="text" class="dp-form-input"
+		<field name="country" type="dpcountries" class="dp-form-input"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_DESC"/>
 		<field name="province" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_DESC"/>
@@ -59,6 +59,7 @@
 			<option value="-2">JTRASHED</option>
 		</field>
 
+		<field name="tags" type="tag" multiple="true" label="JTAG" description="JTAG_DESC"/>
 		<field name="language" type="contentlanguage"
 		       label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
 			<option value="*">JALL</option>

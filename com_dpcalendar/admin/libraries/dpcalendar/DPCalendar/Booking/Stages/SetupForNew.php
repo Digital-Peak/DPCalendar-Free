@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -29,13 +28,23 @@ class SetupForNew implements StageInterface
 	/**
 	 * @var \DPCalendarModelTaxrate
 	 */
-	private $model = null;
+	private $taxRateModel = null;
 
-	public function __construct(\JApplicationCms $application, \JUser $user, \DPCalendarModelTaxrate $model)
-	{
-		$this->application = $application;
-		$this->user        = $user;
-		$this->model       = $model;
+	/**
+	 * @var \DPCalendarModelCoupon
+	 */
+	private $couponModel = null;
+
+	public function __construct(
+		\JApplicationCms $application,
+		\JUser $user,
+		\DPCalendarModelTaxrate $taxRateModel,
+		\DPCalendarModelCoupon $couponModel
+	) {
+		$this->application  = $application;
+		$this->user         = $user;
+		$this->taxRateModel = $taxRateModel;
+		$this->couponModel  = $couponModel;
 	}
 
 	public function __invoke($payload)
@@ -43,35 +52,50 @@ class SetupForNew implements StageInterface
 		// Default some data
 		$payload->data['price']    = 0;
 		$payload->data['tax']      = 0.00;
+		$payload->data['tax_rate'] = 0;
 		$payload->data['id']       = 0;
 		$payload->data['currency'] = DPCalendarHelper::getComponentParameter('currency', 'USD');
 
-		$taxRate                   = $this->model->getItemByCountry($payload->data['country']);
-		$payload->data['tax_rate'] = $taxRate ? $taxRate->rate : 0;
+		// Do not force state when not on front and is available
+		if (!$this->application->isClient('administrator') || empty($payload->data['state'])) {
+			$payload->data['state'] = !$payload->invite ? 0 : 5;
+		}
 
 		// On front we force the user id to the logged in user
 		if ($this->application->isClient('site') && !$payload->invite) {
 			$payload->data['user_id'] = $this->user->id;
 		}
 
-		$amountTickets = 0;
+		$amountTickets            = 0;
+		$payload->data['options'] = [];
 		foreach ($payload->events as $event) {
 			$this->handleOptions($payload, $event);
 			$amountTickets += $this->handleTickets($payload, $event, $amountTickets);
 		}
+		$payload->data['options'] = implode(',', $payload->data['options']);
 
 		if ($amountTickets == 0) {
 			throw new \Exception(\JText::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
 		}
 
-		// Publish if the price is 0 on the front
-		if (!$payload->data['price'] && !$payload->invite && $this->application->isClient('site')) {
-			$payload->data['state'] = 1;
+		$coupon = $this->couponModel->getItemByCode(
+			empty($payload->data['coupon_id']) ? null : $payload->data['coupon_id'],
+			$payload->data['price'],
+			$event->catid,
+			$payload->data['email'],
+			$payload->data['user_id']
+		);
+		if ($coupon && $coupon->id) {
+			$payload->data['coupon_id']   = $coupon->id;
+			$payload->data['coupon_rate'] = $coupon->discount_value;
+			$payload->data['price']       = $payload->data['price'] - $coupon->discount_value;
 		}
 
+		$taxRate = $this->taxRateModel->getItemByCountry($payload->data['country']);
 		if ($taxRate) {
-			$payload->data['tax']   = ($payload->data['price'] / 100) * $taxRate->rate;
-			$payload->data['price'] = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);
+			$payload->data['tax']      = ($payload->data['price'] / 100) * $taxRate->rate;
+			$payload->data['price']    = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);
+			$payload->data['tax_rate'] = $taxRate->rate;
 		}
 
 		return $payload;
@@ -80,24 +104,20 @@ class SetupForNew implements StageInterface
 	private function handleOptions($payload, $event)
 	{
 		// The booking options
-		$payload->data['options'] = [];
-		if (!empty($payload->data['event_id'][$event->id]['options'])) {
-			$amount = $payload->data['event_id'][$event->id]['options'];
-
-			foreach ($event->booking_options as $key => $option) {
-				$key = preg_replace('/\D/', '', $key);
-
-				if (!array_key_exists($key, $amount) || empty($amount[$key])) {
-					continue;
-				}
-
-				$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key];
-
-				$payload->data['price'] += $amount[$key] * $option->price;
-				$payload->data['state'] = 3;
-			}
+		if (empty($payload->data['event_id'][$event->id]['options'])) {
+			return;
 		}
-		$payload->data['options'] = implode(',', $payload->data['options']);
+
+		$amount = $payload->data['event_id'][$event->id]['options'];
+		foreach ($event->booking_options as $key => $option) {
+			$key = preg_replace('/\D/', '', $key);
+			if (!array_key_exists($key, $amount) || empty($amount[$key])) {
+				continue;
+			}
+
+			$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key];
+			$payload->data['price']     += $amount[$key] * $option->price;
+		}
 	}
 
 	private function handleTickets($payload, $event, $amountTickets)
@@ -123,9 +143,6 @@ class SetupForNew implements StageInterface
 				// Determine the price
 				$paymentRequired = Booking::paymentRequired($event);
 				if ($event->amount_tickets[$index] && $paymentRequired) {
-					// Set state to payment required
-					$payload->data['state'] = 3;
-
 					// Determine the price based on the amount of tickets
 					$payload->data['price'] += Booking::getPriceWithDiscount($value, $event) * $event->amount_tickets[$index];
 				}

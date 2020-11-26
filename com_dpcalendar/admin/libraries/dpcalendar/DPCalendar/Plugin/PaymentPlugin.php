@@ -1,25 +1,21 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\Plugin;
 
+defined('_JEXEC') or die();
+
+use DPCalendar\Helper\HTTP;
 use DPCalendar\Helper\LayoutHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
 use DPCalendar\Translator\Translator;
-use Omnipay\Common\AbstractGateway;
-use Omnipay\Common\Message\ResponseInterface;
-use Omnipay\Mollie\Message\Response\AbstractMollieResponse;
-
-defined('_JEXEC') or die();
+use Joomla\CMS\Application\CMSApplication;
 
 \JLoader::import('joomla.plugin.plugin');
 \JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-
-\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
 /**
  * Base plugin for all payment gateway plugins of DPCalendar.
@@ -41,32 +37,61 @@ abstract class PaymentPlugin extends \JPlugin
 	protected $autoloadLanguage = true;
 
 	/**
-	 * Returns the Omnipay gateway of the current payment provider.
-	 *
-	 * @return AbstractGateway
+	 * @var CMSApplication
 	 */
-	abstract protected function getPaymentGateway();
+	protected $app = null;
 
 	/**
-	 * Returns an array of fields to update the booking from the payment gateway.
+	 * Method to finish the transaction. Returns the data for the booking with transaction information.
 	 *
-	 * @param AbstractGateway   $gateway
-	 * @param ResponseInterface $response
-	 * @param \stdClass         $booking
+	 * @param           $data
+	 * @param           $booking
+	 * @param \stdClass $paymentProvider
+	 *
+	 * @return array
 	 */
-	abstract protected function getPaymentData(AbstractGateway $gateway, ResponseInterface $response, $booking);
+	abstract protected function finishTransaction($data, $booking, $paymentProvider);
+
+	/**
+	 * The function is called to render the payment provider output.
+	 * Some setup stuff can be done here or redirecting to a payment provider.
+	 *
+	 * @param \stdClass $booking
+	 * @param \stdClass $paymentProvider
+	 *
+	 * @return string
+	 */
+	protected function startTransaction($booking, $paymentProvider)
+	{
+		$purchaseParameters = $this->getPurchaseParameters($booking);
+
+		// Render the form of the plugin
+		return \JLayoutHelper::render(
+			'purchase.form',
+			[
+				'booking'         => $booking,
+				'paymentProvider' => $paymentProvider,
+				'params'          => $this->params,
+				'returnUrl'       => $purchaseParameters['returnUrl'],
+				'cancelUrl'       => $purchaseParameters['cancelUrl'],
+				'translator'      => new Translator(),
+				'layoutHelper'    => new LayoutHelper(),
+				'document'        => new HtmlDocument()
+			],
+			JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/layouts'
+		);
+	}
 
 	/**
 	 * The parameters for the purchase.
 	 *
-	 * @param AbstractGateway $gateway
-	 * @param \stdClass       $booking
+	 * @param \stdClass $booking
 	 *
 	 * @return array
 	 */
-	protected function getPurchaseParameters(AbstractGateway $gateway, $booking)
+	protected function getPurchaseParameters($booking)
 	{
-		// Compile the root url for the callback of the payment gateway
+		// Compile the root url for the callback
 		$rootURL    = rtrim(\JURI::base(), '/');
 		$subpathURL = \JURI::base(true);
 		if (!empty($subpathURL) && ($subpathURL != '/')) {
@@ -74,10 +99,10 @@ abstract class PaymentPlugin extends \JPlugin
 		}
 
 		$tmpl = '';
-		if ($t = \JFactory::getApplication()->input->get('tmpl')) {
+		if ($t = $this->app->input->get('tmpl')) {
 			$tmpl = '&tmpl=' . $t;
 		}
-		if ($t = \JFactory::getApplication()->input->getInt('Itemid')) {
+		if ($t = $this->app->input->getInt('Itemid')) {
 			$tmpl .= '&Itemid=' . $t;
 		}
 
@@ -88,13 +113,13 @@ abstract class PaymentPlugin extends \JPlugin
 
 		// The urls for call back actions
 		$purchaseParameters['returnUrl'] = $rootURL . \JRoute::_(
-			'index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . '&paymentmethod=' . $this->_name . $tmpl,
-			false
-		);
+				'index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . $tmpl,
+				false
+			);
 		$purchaseParameters['cancelUrl'] = $rootURL . \JRoute::_(
-			'index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . '&ptype=' . $this->_name . $tmpl,
-			false
-		);
+				'index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . $tmpl,
+				false
+			);
 
 		return $purchaseParameters;
 	}
@@ -103,96 +128,59 @@ abstract class PaymentPlugin extends \JPlugin
 	 * The function is called when the start page of the payment gateway should be displayed.
 	 * Some setup stuff can be done here.
 	 *
-	 * @param string    $paymentmethod
 	 * @param \stdClass $booking
 	 *
 	 * @return bool|string
 	 */
-	public function onDPPaymentNew($paymentmethod, $booking)
+	public function onDPPaymentNew($booking)
 	{
-		// Check if this plugin should handle the request
-		if ($paymentmethod != $this->_name && $paymentmethod != '0') {
+		$provider = null;
+		foreach ($this->onDPPaymentProviders() as $p) {
+			if ($p->id == $booking->processor) {
+				$provider = $p;
+			}
+		}
+
+		if (!$provider) {
 			return false;
 		}
 
-		// Setup
-		$gateway            = $this->getPaymentGateway();
-		$purchaseParameters = $this->getPurchaseParameters($gateway, $booking);
-
-		// Render the form of the plugin
-		$layout = \JLayoutHelper::render(
-			'purchase.form',
-			[
-				'booking'      => $booking,
-				'params'       => $this->params,
-				'returnUrl'    => $purchaseParameters['returnUrl'],
-				'cancelUrl'    => $purchaseParameters['cancelUrl'],
-				'translator'   => new Translator(),
-				'layoutHelper' => new LayoutHelper(),
-				'document'     => new HtmlDocument()
-			],
-			JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/layouts'
-		);
-
-		// When a layout exists, then just display it
-		if ($layout) {
-			return $layout;
-		}
-
-		// No layout, so the payment gateway is doing it's work
-		$response = $this->getNewResponse($gateway, $purchaseParameters, $booking);
-
-		// Mostly we redirect here, if there is an error cancel the payment
-		if ($response->isRedirect()) {
-			$response->redirect();
-		} else if (!$response->isSuccessful()) {
-			$this->cancelPayment(['b_id' => $booking->id], $response->getMessage() ?: 'Server error!');
-
-			return false;
-		}
-
-		// For safety redirect, but we should never land here
-		\JFactory::getApplication()->redirect($purchaseParameters['returnUrl']);
-
-		return true;
+		return $this->startTransaction($booking, $provider);
 	}
 
 	/**
-	 * @param string $bookingmethod
-	 * @param array  $data
+	 * Callback function when a booking is processed by the payment provider.
+	 *
+	 * @param \stdClass $booking
+	 * @param array     $data
 	 *
 	 * @return bool
 	 */
-	public function onDPPaymentCallBack($bookingmethod, $data)
+	public function onDPPaymentCallBack($booking, $data)
 	{
-		// Check if this plugin should handle the request
-		if ($bookingmethod != $this->_name) {
+		try {
+			$provider = null;
+			foreach ($this->onDPPaymentProviders() as $p) {
+				if ($p->id == $booking->processor) {
+					$provider = $p;
+				}
+			}
+
+			if (!$provider) {
+				return false;
+			}
+
+			// Get the response from the callback
+			$data = $this->finishTransaction($data, $booking, $provider);
+		} catch (\Exception $e) {
+			$this->app->enqueueMessage(ucfirst($this->_name) . ': ' . $e->getMessage(), 'error');
+			$this->app->redirect(\DPCalendarHelperRoute::getBookingRoute($booking) . '&layout=confirm');
+
 			return false;
 		}
 
-		// Get the objects to work on
-		$booking = \JModelLegacy::getInstance('Booking', 'DPCalendarModel')->getItem($data['b_id']);
-		$gateway = $this->getPaymentGateway();
-
-		// get the response from the callback
-		$response = $this->getCallBackResponse($gateway, $data, $booking);
-
-		// Redirect if needed or if it is failed, then cancel the payment
-		if ($response->isRedirect()) {
-			$response->redirect();
-		} else if (!$response->isSuccessful()) {
-			// Mollie makes the stupid thing to provide all data as message
-			$this->cancelPayment($data, $response instanceof AbstractMollieResponse ? '' : $response->getMessage());
-
-			return false;
-		}
-
-		// Collect the payment data
-		$data = $this->getPaymentData($gateway, $response, $booking);
-
-		// If it is a string, then we have an error message and need to cancel the booking
-		if (is_string($data)) {
-			$this->cancelPayment([], $data);
+		if ($data['state'] == 6) {
+			$this->cancelPayment([], '');
 
 			return false;
 		}
@@ -207,50 +195,47 @@ abstract class PaymentPlugin extends \JPlugin
 		// Load the booking so we can update only the values from the data array
 		$booking->load($data['id']);
 
-		// Set the current plugin as processor
-		$data['processor'] = $this->_name;
-
 		// Merge the old data with the new one
 		$data = array_merge($booking ? $booking->getProperties() : [], $data);
 
-		// Remove some invalid variables
-		$data = json_decode(str_replace('\u0000*\u0000_', '', json_encode($data)), true);
-		unset($data['errors']);
-
 		// Save the data and make sure no valid event is triggered
-		\JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['event_after_save' => 'dontusethisevent'])
-			->save($data, false, $this->sendNotificationsOnCallback);
+		\JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['event_after_save' => 'dontusethisevent'])->save($data);
 
 		return true;
 	}
 
 	/**
-	 * Get the statement of the plugin which will be used after the booking process is finished.
+	 * Get the payment providers of the plugin.
 	 *
-	 * @param \stdClass $booking
+	 * @param string $name
 	 *
 	 * @return \stdClass|void
 	 */
-	public function onDPPaymentStatement($booking)
+	public function onDPPaymentProviders($name = null)
 	{
-		// Check if this plugin should handle the request
-		if ($booking == null || $booking->processor != $this->_name) {
-			return;
+		if ($name && $name != $this->_name || !$this->params->get('providers')) {
+			return [];
 		}
 
-		// Check if there is a language string we want
-		$key = strip_tags('PLG_DPCALENDARPAY_' . strtoupper($this->_name) . '_PAYMENT_STATEMENT_TEXT');
-		if (!\JFactory::getLanguage()->hasKey($key)) {
-			return;
+		$providers = [];
+		foreach ($this->params->get('providers') as $index => $p) {
+			$provider     = clone $p;
+			$provider->id = $this->_name . '-' . $provider->id;
+
+			$provider->plugin_name = $this->_name;
+			$provider->plugin_type = $this->_type;
+
+			if (empty($provider->icon)) {
+				$provider->icon = 'media/plg_' . $provider->plugin_type . '_' . $provider->plugin_name . '/images/' . $provider->plugin_name . '.svg';
+			}
+			if (!empty($provider->icon) && strpos($provider->icon, '.svg') > 0) {
+				$provider->icon = JPATH_ROOT . '/' . $provider->icon;
+			}
+
+			$providers[] = $provider;
 		}
 
-		// Compile the statement object
-		$return            = new \stdClass();
-		$return->status    = true;
-		$return->type      = $this->_name;
-		$return->statement = \DPCalendar\Helper\DPCalendarHelper::getStringFromParams('payment_statement', $key, $this->params);
-
-		return $return;
+		return $providers;
 	}
 
 	/**
@@ -263,112 +248,25 @@ abstract class PaymentPlugin extends \JPlugin
 	 */
 	protected function cancelPayment($data, $msg = null)
 	{
-		// The app to work on
-		$app = \JFactory::getApplication();
-
 		// Make sure we have a booking to cancel
 		if (!isset($data['b_id'])) {
-			$data['b_id'] = $app->input->getInt('b_id');
+			$data['b_id'] = $this->app->input->getInt('b_id');
 		}
 
 		// Display the message and set it as failure
-		if (!is_null($msg)) {
-			$data['dpcalendar_failure_reason'] = $msg;
-			$app->enqueueMessage($msg, 'error');
+		if (!$msg) {
+			$this->app->enqueueMessage($msg, 'error');
 		}
-
-		// Log data in a file
-		$this->log($data, true);
 
 		// Redirect to pay.cancel task
-		$app->redirect(\JRoute::_('index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $data['b_id'] . '&ptype=' . $this->_name, false));
+		$this->app->redirect(\JRoute::_('index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $data['b_id'], false));
 	}
 
 	/**
-	 * Create the callback response which is responsible to get some transaction details.
-	 * Basically the purchase should be finished.
-	 *
-	 * @param AbstractGateway $gateway
-	 * @param array           $data
-	 * @param \stdClass       $booking
-	 *
-	 * @return ResponseInterface|null
+	 * @return HTTP
 	 */
-	protected function getCallBackResponse(AbstractGateway $gateway, $data, $booking)
+	protected function getHTTP()
 	{
-		// If there is a complete purchase function, then use it
-		if (method_exists($gateway, 'completePurchase')) {
-			return $gateway->completePurchase($this->getPurchaseParameters($gateway, $booking))->send();
-		}
-
-		// If there is a purchase function, then use it
-		if (method_exists($gateway, 'purchase')) {
-			return $gateway->purchase($this->getPurchaseParameters($gateway, $booking))->send();
-		}
-
-		// If we land here then authorize again, but we actually never should
-		return $gateway->authorize($this->getPurchaseParameters($gateway, $booking))->send();
-	}
-
-	/**
-	 * Get a response for a new booking. Often this is the case where a redirect is performed.
-	 *
-	 * @param AbstractGateway $gateway
-	 * @param array           $purchaseParameters
-	 * @param \stdClass       $booking
-	 *
-	 * @return ResponseInterface|null
-	 */
-	protected function getNewResponse(AbstractGateway $gateway, $purchaseParameters, $booking)
-	{
-		// If there is a complete purchase function, then use it
-		if (method_exists($gateway, 'purchase')) {
-			return $gateway->purchase($purchaseParameters)->send();
-		}
-
-		// Authorize against the payment gateway
-		return $gateway->authorize($purchaseParameters)->send();
-	}
-
-	/**
-	 * Log functionality.
-	 *
-	 * @param array   $data
-	 * @param boolean $isValid
-	 */
-	protected function log($data, $isValid)
-	{
-		$logFilenameBase = \JFactory::getApplication()->get('log_path') . '/plg_dpcalendarpay_' . strtolower($this->_name);
-
-		$logFile = $logFilenameBase . '.php';
-		\JLoader::import('joomla.filesystem.file');
-		if (!\JFile::exists($logFile)) {
-			$dummy = "<?php die(); ?>\n";
-			\JFile::write($logFile, $dummy);
-		} else {
-			if (@filesize($logFile) > 1048756) {
-				$altLog = $logFilenameBase . '-1.php';
-				if (\JFile::exists($altLog)) {
-					\JFile::delete($altLog);
-				}
-				\JFile::copy($logFile, $altLog);
-				\JFile::delete($logFile);
-				$dummy = "<?php die(); ?>\n";
-				\JFile::write($logFile, $dummy);
-			}
-		}
-		$logData = file_get_contents($logFile);
-		if ($logData === false) {
-			$logData = '';
-		}
-		$logData    .= "\n" . str_repeat('-', 80);
-		$pluginName = strtoupper($this->_name);
-		$logData    .= $isValid ? 'VALID ' . $pluginName . ' IPN' : 'INVALID ' . $pluginName . ' IPN *** FRAUD ATTEMPT OR INVALID NOTIFICATION ***';
-		$logData    .= "\nDate/time : " . gmdate('Y-m-d H:i:s') . " GMT\n\n";
-		foreach ($data as $key => $value) {
-			$logData .= '  ' . str_pad($key, 30, ' ') . print_r($value, true) . "\n";
-		}
-		$logData .= "\n";
-		\JFile::write($logFile, $logData);
+		return new HTTP();
 	}
 }

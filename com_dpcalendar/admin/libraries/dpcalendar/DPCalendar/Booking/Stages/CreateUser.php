@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\Booking\Stages;
@@ -42,6 +41,11 @@ class CreateUser implements StageInterface
 
 	public function __invoke($payload)
 	{
+		// Do not create when state is not active and previous state was active as well
+		if ($payload->item->state != 1 || ($payload->oldItem && $payload->oldItem->state == 1)) {
+			return $payload;
+		}
+
 		// Only create the user when respective setting is set and user_id is not set
 		if (\JComponentHelper::getParams('com_dpcalendar')->get('booking_registration', 1) != 2 || $payload->data['user_id']) {
 			return $payload;

@@ -1,16 +1,12 @@
+/**
+ * @package   DPCalendar
+ * @copyright Digital Peak GmbH. <https://www.digital-peak.com>
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ */
 (function () {
 	'use strict';
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
-			// Credit https://github.com/rxaviers/async-pool
 			function asyncPool(array, iteratorFn)
 			{
 				let i = 0;
@@ -32,7 +28,6 @@
 				};
 				return enqueue().then(() => Promise.all(ret));
 			}
-
 			asyncPool(document.querySelectorAll('.com-dpcalendar-tools-translate .dp-resource'), (resource) => {
 				return new Promise(resolve => {
 					DPCalendar.request(
@@ -41,11 +36,9 @@
 							for (const i in json.languages) {
 								const language = json.languages[i];
 								const el = resource.querySelector('.dp-resource__language[data-language="' + language.tag + '"] .dp-resource__percentage');
-
 								if (!el) {
 									continue;
 								}
-
 								el.innerHTML = language.percent + '%';
 								let label = 'success';
 								if (language.percent < 30) {
@@ -63,30 +56,24 @@
 					);
 				});
 			});
-
-			Joomla.submitbutton = function (task) {
+			Joomla.submitbutton = (task) => {
 				if (task != 'translate.update') {
 					return true;
 				}
-
 				asyncPool(document.querySelectorAll('.com-dpcalendar-tools-translate .dp-resource:nth-child(-n+6)'), (resource) => {
 					return new Promise(resolve => {
 						DPCalendar.request(
 							'task=translate.update',
-							function (json) {
+							() => {
 								resource.querySelector('.dp-resource__icon i').setAttribute('class', 'icon-checkmark-circle');
-
 								resolve();
 							},
 							'resource=' + resource.getAttribute('data-slug')
 						);
 					});
 				});
-
 				return true;
 			};
 		});
 	});
-
 }());
-//# sourceMappingURL=translate.js.map

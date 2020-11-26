@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -64,6 +63,7 @@ class DPCalendarModelCpanel extends JModelLegacy
 		$query->select('count(id) as total, sum(price) as price');
 		$query->from('#__dpcalendar_bookings');
 		$query->where('book_date > ' . $this->_db->quote($date->format('Y') . '-01-01'));
+		$query->where('state = 1');
 		$this->_db->setQuery($query);
 
 		$data['year'] = $this->_db->loadAssoc();
@@ -72,6 +72,7 @@ class DPCalendarModelCpanel extends JModelLegacy
 		$query->select('count(id) as total, sum(price) as price');
 		$query->from('#__dpcalendar_bookings');
 		$query->where('book_date > ' . $this->_db->quote($date->format('Y-m') . '-01'));
+		$query->where('state = 1');
 		$this->_db->setQuery($query);
 
 		$data['month'] = $this->_db->loadAssoc();
@@ -81,9 +82,18 @@ class DPCalendarModelCpanel extends JModelLegacy
 		$query->select('count(id) as total, sum(price) as price');
 		$query->from('#__dpcalendar_bookings');
 		$query->where('book_date > ' . $this->_db->quote($date->format('Y-m-d')));
+		$query->where('state = 1');
 		$this->_db->setQuery($query);
 
 		$data['week'] = $this->_db->loadAssoc();
+
+		$query = $this->_db->getQuery(true);
+		$query->select('count(id) as total, sum(price) as price');
+		$query->from('#__dpcalendar_bookings');
+		$query->where('state != 1');
+		$this->_db->setQuery($query);
+
+		$data['notactive'] = $this->_db->loadAssoc();
 
 		return $data;
 	}

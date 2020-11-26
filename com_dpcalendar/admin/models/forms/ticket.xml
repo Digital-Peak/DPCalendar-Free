@@ -15,13 +15,14 @@
 		       label="COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_PRICE_DESC"/>
 		<field name="state" type="list" default="1"
 		       label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
-			<option value="1">JPUBLISHED</option>
-			<option value="0">JUNPUBLISHED</option>
-			<option value="2">JARCHIVED</option>
-			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_NEED_PAYMENT</option>
+			<option value="1">COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED</option>
+			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
+			<option value="2">COM_DPCALENDAR_BOOKING_FIELD_STATE_TICKET_REVIEW</option>
+			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_CONFIRMATION</option>
 			<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
 			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
 			<option value="6">COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED</option>
+			<option value="7">COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED</option>
 			<option value="-2">JTRASHED</option>
 		</field>
 	</fieldset>
@@ -46,8 +47,6 @@
 		       label="COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_LABEL" description=""/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
-		<field name="seat" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_TICKET_FIELD_SEAT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_SEAT_DESC"/>
 		<field name="type" type="text" class="dp-form-input"
 		       label="COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_TYPE_DESC"/>
 

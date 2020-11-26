@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -15,7 +14,7 @@ if ($saveOrder && \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')
 	JHtml::_('sortablelist.sortable', 'extcalendarsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 ?>
-<div class="com-dpcalendar-locations__locations">
+<div class="com-dpcalendar-extcalendars__calendars">
 	<table class="dp-table" id="extcalendarsList">
 		<thead>
 		<tr>

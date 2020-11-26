@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -28,10 +27,18 @@ class SendPaidBookingMail implements StageInterface
 
 	public function __invoke($payload)
 	{
-		if (!$payload->oldItem
-			|| ($payload->oldItem->state != 3 && $payload->oldItem->state != 4)
-			|| $payload->item->state != 1
-			|| !$payload->mailParams->get('booking_send_mail_paid', 1)) {
+		// Never send when disabled, is new booking or has no price
+		if (!$payload->mailParams->get('booking_send_mail_paid', 2) || !$payload->oldItem || !$payload->item->price) {
+			return $payload;
+		}
+
+		// Never send a mail when we have been active or cancelled/refunded before
+		if (in_array($payload->oldItem->state, [1, 6, 7])) {
+			return $payload;
+		}
+
+		// Never send a mail when the booking is not active
+		if ($payload->item->state != 1) {
 			return $payload;
 		}
 

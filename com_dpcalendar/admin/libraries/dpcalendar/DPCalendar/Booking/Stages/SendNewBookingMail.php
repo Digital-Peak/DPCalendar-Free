@@ -1,11 +1,9 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
@@ -21,7 +19,7 @@ class SendNewBookingMail implements StageInterface
 	/**
 	 * @var \JMail
 	 */
-	private $mailer = null;
+	private $mailer;
 
 	public function __construct(\JMail $mailer)
 	{
@@ -30,17 +28,29 @@ class SendNewBookingMail implements StageInterface
 
 	public function __invoke($payload)
 	{
-		if ($payload->oldItem || !$payload->mailParams->get('booking_send_mail_new', 1)) {
+		// Never send when disabled or new booking
+		if (!$payload->mailParams->get('booking_send_mail_new', 2) || !$payload->oldItem) {
 			return $payload;
 		}
 
-		if ((float)$payload->item->price > 0 && $payload->mailParams->get('booking_send_mail_new', 1) == 2) {
+		// Never send a mail when booking has a price and no new should be sent when it has a price
+		if ($payload->item->price && $payload->mailParams->get('booking_send_mail_new', 2) == 2) {
+			return $payload;
+		}
+
+		// Never send a mail when we have been active or cancelled/refunded before
+		if (in_array($payload->oldItem->state, [1, 4, 5, 6, 7])) {
+			return $payload;
+		}
+
+		// Never send a mail when we are before or after activation process
+		if (in_array($payload->item->state, [0, 2, 3, 5, 6, 7])) {
 			return $payload;
 		}
 
 		// If a payment is required include the payment statement from the plugin
 		$oldDetails = $payload->mailVariables['bookingDetails'];
-		if ($payload->item->state == 3 || $payload->item->state == 4) {
+		if ($payload->item->state == 4) {
 			$payload->mailVariables['bookingDetails'] = $payload->mailVariables['bookingDetails']
 				. '<br/>' . Booking::getPaymentStatementFromPlugin($payload->item);
 		}

@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -43,6 +42,10 @@ foreach ($model->getItems() as $calendar) {
 	$ids[] = $calendar->id;
 }
 
+if (!$ids) {
+	return;
+}
+
 $startDate = trim($params->get('start_date', ''));
 if ($startDate == 'start of day') {
 	$startDate = $dateHelper->getDate(null, true, 'UTC');
@@ -60,7 +63,7 @@ $endDate->modify('+1 year');
 
 $model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 $model->getState();
-$model->setState('list.limit', 1);
+$model->setState('list.limit', $params->get('max_events', 1));
 $model->setState('list.direction', $params->get('order', 'asc'));
 $model->setState('category.id', $ids);
 $model->setState('category.recursive', true);
@@ -75,18 +78,14 @@ $model->setState('filter.tags', $params->get('filter_tags', []));
 $model->setState('filter.locations', $params->get('filter_locations', []));
 $model->setState('filter.my', $params->get('show_my_only', 0));
 
-$event = $model->getItems();
-if (empty($event)) {
-	$event = null;
-} else {
-	$event = reset($event);
-}
-
-$truncatedDescription = '';
-if ($event && ($params->get('description_length') > 0 || $params->get('description_length') === null)) {
-	$truncatedDescription = JHtml::_('string.truncate', $event->description, $params->get('description_length'));
-	$truncatedDescription = JHTML::_('content.prepare', $truncatedDescription);
-	$truncatedDescription = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($truncatedDescription);
+$events = $model->getItems();
+foreach ($events as $event) {
+	$event->truncatedDescription = '';
+	if ($params->get('description_length') > 0 || $params->get('description_length') === null) {
+		$event->truncatedDescription = JHtml::_('string.truncate', $event->description, $params->get('description_length'));
+		$event->truncatedDescription = JHTML::_('content.prepare', $event->truncatedDescription);
+		$event->truncatedDescription = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($event->truncatedDescription);
+	}
 }
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_counter', $params->get('layout', 'default'));

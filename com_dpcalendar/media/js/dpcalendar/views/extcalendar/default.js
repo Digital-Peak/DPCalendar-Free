@@ -1,13 +1,10 @@
+/**
+ * @package   DPCalendar
+ * @copyright Digital Peak GmbH. <https://www.digital-peak.com>
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ */
 (function () {
 	'use strict';
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/iframe-resizer/iframeresizer-contentwindow.js']);
 		loadDPAssets(['/com_dpcalendar/js/choices/choices.js', '/com_dpcalendar/css/choices/choices.css'], () => {
@@ -24,7 +21,6 @@
 				}
 			);
 		});
-
 		Joomla.submitbutton = (task) => {
 			const form = document.getElementsByName('adminForm')[0];
 			if (form && (task.indexOf('cancel') > -1 || task.indexOf('delete') > -1 || document.formvalidator.isValid(form))) {
@@ -32,6 +28,4 @@
 			}
 		};
 	});
-
 }());
-//# sourceMappingURL=default.js.map

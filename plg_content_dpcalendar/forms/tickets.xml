@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fields name="params">
+		<fieldset name="basic">
+			<field name="dpcalendar_cf_only_tickets" type="radio" default="0" class="btn-group"
+			       label="PLG_DPCALENDAR_CONTENT_FIELD_EVENT_ONLY_TICKETS_LABEL" description="PLG_DPCALENDAR_CONTENT_FIELD_EVENT_ONLY_TICKETS_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

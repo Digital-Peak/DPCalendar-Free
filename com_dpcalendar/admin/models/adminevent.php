@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -105,7 +104,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$form->setFieldAttribute('capacity_used', 'disabled', 'true');
 			$form->setFieldAttribute('max_tickets', 'disabled', 'true');
 			$form->setFieldAttribute('price', 'disabled', 'true');
-			$form->setFieldAttribute('plugintype', 'disabled', 'true');
+			$form->setFieldAttribute('payment_provider', 'disabled', 'true');
 			$form->setFieldAttribute('booking_assign_user_groups', 'disabled', 'true');
 
 			// Disable fields while saving.
@@ -114,7 +113,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$form->setFieldAttribute('capacity_used', 'filter', 'unset');
 			$form->setFieldAttribute('max_tickets', 'filter', 'unset');
 			$form->setFieldAttribute('price', 'filter', 'unset');
-			$form->setFieldAttribute('plugintype', 'filter', 'unset');
+			$form->setFieldAttribute('payment_provider', 'filter', 'unset');
 			$form->setFieldAttribute('booking_assign_user_groups', 'filter', 'unset');
 		}
 
@@ -268,8 +267,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data->user_discount = json_encode($newData);
 		}
 
-		if (!empty($data->plugintype) && is_string($data->plugintype)) {
-			$data->plugintype = explode(',', $data->plugintype);
+		if (!empty($data->payment_provider) && is_string($data->payment_provider)) {
+			$data->payment_provider = explode(',', $data->payment_provider);
 		}
 
 		if (!empty($data->booking_assign_user_groups) && is_string($data->booking_assign_user_groups)) {
@@ -432,8 +431,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['schedule'] = json_encode($data['schedule']);
 		}
 
-		if (!empty($data['plugintype']) && is_array($data['plugintype'])) {
-			$data['plugintype'] = implode(',', $data['plugintype']);
+		if (!empty($data['payment_provider']) && is_array($data['payment_provider'])) {
+			$data['payment_provider'] = implode(',', $data['payment_provider']);
 		}
 
 		if (!empty($data['booking_assign_user_groups']) && is_array($data['booking_assign_user_groups'])) {
@@ -713,7 +712,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		return $ticketsModel->getItems();
 	}
 
-
 	private function getDefaultValues(JObject $item)
 	{
 		$params = $this->getParams();
@@ -744,8 +742,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if (!$item->get('price')) {
 			$data['price'] = $params->get('event_form_price');
 		}
-		if (!$item->get('plugintype')) {
-			$data['plugintype'] = $params->get('event_form_plugintype');
+		if (!$item->get('payment_provider')) {
+			$data['payment_provider'] = $params->get('event_form_payment_provider');
 		}
 		if (!$item->get('terms')) {
 			$data['terms'] = $params->get('event_form_terms');

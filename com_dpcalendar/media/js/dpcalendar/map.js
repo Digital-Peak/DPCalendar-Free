@@ -1,13 +1,10 @@
+/**
+ * @package   DPCalendar
+ * @copyright Digital Peak GmbH. <https://www.digital-peak.com>
+ * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ */
 (function () {
 	'use strict';
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function createMarker(map, data, dragCallback)
 	{
 		const latitude = data.latitude;
@@ -15,20 +12,16 @@
 		if (latitude == null || latitude == '') {
 			return;
 		}
-
 		if (map.dpmap == null) {
 			if (map.dpCachedMarkers == null) {
 				map.dpCachedMarkers = [];
 			}
 			map.dpCachedMarkers.push({data: data, dragCallback: dragCallback});
-
 			return;
 		}
-
 		if (!data.color) {
 			data.color = '000000';
 		}
-
 		const markerParams = {draggable: dragCallback != null};
 		markerParams.icon = L.divIcon({
 			className: "dp-location-marker",
@@ -36,9 +29,7 @@
 			iconSize: [25, 30],
 			iconAnchor: [10, 35]
 		});
-
 		const marker = L.marker([latitude, longitude], markerParams);
-
 		const desc = data.description ? data.description : data.title;
 		if (desc) {
 			const popup = marker.bindPopup(desc);
@@ -46,79 +37,54 @@
 				popup.openPopup();
 			});
 		}
-
 		if (dragCallback) {
 			marker.on('dragend', (event) => {
 				dragCallback(event.target.getLatLng().lat, event.target.getLatLng().lng);
 			});
 		}
-
 		map.dpmap.dpMarkersCluster.addLayer(marker);
 		map.dpmap.dpMarkers.push(marker);
 		map.dpmap.dpBounds.extend(marker.getLatLng());
-
-		// Zoom out when needed to fit all markers
 		const boundsZoom = map.dpmap.getBoundsZoom(map.dpmap.dpBounds);
 		if (boundsZoom < map.dpmap.getZoom()) {
 			map.dpmap.setZoom(boundsZoom);
 		}
 		map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
-
 		return marker;
 	}
-
 	function clearMarkers(map)
 	{
 		if (map == null || map.dpmap == null || map.dpmap.dpMarkers == null) {
 			return;
 		}
-
 		map.dpmap.dpMarkers.forEach((marker) => {
 			map.dpmap.dpMarkersCluster.removeLayer(marker);
 		});
-
 		map.dpmap.dpMarkers = [];
 		map.dpmap.dpCachedMarkers = [];
 		map.dpmap.dpBounds = new L.latLngBounds();
-
 		const options = map.dpmap.dpElement.dataset;
 		map.dpmap.panTo([options.latitude ? options.latitude : 47, options.longitude ? options.longitude : 4]);
 	}
-
 	function moveMarker(map, marker, latitude, longitude)
 	{
 		if (!marker || map.dpmap == null) {
 			return;
 		}
-
 		marker.setLatLng([latitude, longitude]);
-
 		map.dpmap.dpBounds = new L.latLngBounds();
-
 		map.dpmap.dpMarkers.forEach((m) => {
 			map.dpmap.dpBounds.extend(marker.getLatLng());
 		});
-
 		map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function createMap(element)
 	{
 		if (typeof L === 'undefined') {
 			return;
 		}
-
 		element.classList.add('dp-map_loading');
-
 		const options = element.dataset;
-
 		const map = L.map(element, {
 			attributionControl: true,
 			fullscreenControl: true,
@@ -135,10 +101,8 @@
 			[options.latitude ? options.latitude : 47, options.longitude ? options.longitude : 4],
 			options.zoom ? options.zoom : 4
 		);
-
 		map.attributionControl.setPrefix('');
 		map.attributionControl.addAttribution(Joomla.getOptions('DPCalendar.map.tiles.attribution'));
-
 		if (Joomla.getOptions('DPCalendar.map.tiles.url') == 'google') {
 			let type = google.maps.MapTypeId.ROADMAP;
 			switch (options.type) {
@@ -164,13 +128,12 @@
 			const gl = L.mapboxGL({
 				accessToken: Joomla.getOptions('DPCalendar.map.mapbox.token'),
 				style: 'mapbox://styles/mapbox/streets-v11'
-			});
-			gl.on('load', () => {
+			}).addTo(map);
+			gl.getMapboxMap().on('load', () => {
 				element.classList.remove('dp-map_loading');
 				element.classList.add('dp-map_loaded');
 			});
 			map._layersMaxZoom = 19;
-			gl.addTo(map);
 		} else {
 			const tiles = L.tileLayer(Joomla.getOptions('DPCalendar.map.tiles.url'));
 			tiles.on('load', () => {
@@ -179,57 +142,42 @@
 			});
 			tiles.addTo(map);
 		}
-
-		// Marker cluster
 		map.dpMarkersCluster = L.markerClusterGroup();
 		map.addLayer(map.dpMarkersCluster);
-
 		map.dpBounds = new L.latLngBounds();
 		map.dpMarkers = [];
 		map.dpElement = element;
-
 		element.dpmap = map;
-
 		element.dispatchEvent(new CustomEvent('dp-map-loaded'));
-
 		if (Array.isArray(element.dpCachedMarkers)) {
 			element.dpCachedMarkers.forEach((m) => {
 				createMarker(element, m.data, m.dragCallback);
 			});
 			element.dpCachedMarkers = null;
 		}
-
 		return map;
 	}
-
-	// Set up the maps
 	function create(mapElement)
 	{
 		const options = mapElement.dataset;
-
 		if (options.width) {
 			mapElement.style.width = options.width;
 		}
-
 		if (options.height) {
 			mapElement.style.height = options.height;
 		}
-
 		if (!localStorage.getItem('DPCalendar.map.load') && mapElement.dataset.askConsent == 1) {
 			ask(mapElement);
 			return;
 		}
-
 		let assets = ['/com_dpcalendar/js/leaflet/leaflet.js', '/com_dpcalendar/css/leaflet/leaflet.css'];
 		if (Joomla.getOptions('DPCalendar.map.provider') == 'google') {
 			assets.push('https://maps.googleapis.com/maps/api/js?libraries=places&language=' + Joomla.getOptions('DPCalendar.map.google.lang') + '&key=' + Joomla.getOptions('DPCalendar.map.google.key'));
 		}
-
 		if (Joomla.getOptions('DPCalendar.map.provider') == 'mapbox') {
 			assets.push('https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css');
 			assets.push('https://api.tiles.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js');
 		}
-
 		loadDPAssets(assets, () => {
 			let assets = [];
 			if (Joomla.getOptions('DPCalendar.map.provider') == 'google') {
@@ -240,7 +188,6 @@
 			}
 			loadDPAssets(assets, () => {
 				createMap(mapElement);
-
 				let locationsContainer = mapElement.closest('.dp-location');
 				if (locationsContainer == null) {
 					locationsContainer = mapElement.closest('.dp-locations');
@@ -248,10 +195,8 @@
 				if (locationsContainer == null) {
 					return;
 				}
-
 				[].slice.call(locationsContainer.querySelectorAll('.dp-location__details')).forEach((location) => {
 					const data = location.dataset;
-
 					const desc = location.parentElement.querySelector('.dp-location__description');
 					if (!data.description && desc) {
 						data.description = desc.innerHTML;
@@ -261,7 +206,6 @@
 			});
 		});
 	}
-
 	function ask(element)
 	{
 		element.classList.add('dp-map_consent');
@@ -273,20 +217,11 @@
 			createMap(element);
 		});
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	function drawCircle(map, location, radius, type)
 	{
 		if (map.dpmap == null) {
 			return;
 		}
-
 		if (type == 'mile') {
 			radius = radius * 1.60934;
 		}
@@ -299,23 +234,12 @@
 		}).addTo(map.dpmap));
 		map.dpmap.panTo([location.latitude, location.longitude]);
 	}
-
-	/**
-	 * @package   DPCalendar
-	 * @author    Digital Peak http://www.digital-peak.com
-	 * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
-	 * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
-	 */
-
 	const DPCalendar = window.DPCalendar || {};
 	window.DPCalendar = DPCalendar;
-
 	DPCalendar.Map = {};
 	DPCalendar.Map.create = create;
 	DPCalendar.Map.createMarker = createMarker;
 	DPCalendar.Map.clearMarkers = clearMarkers;
 	DPCalendar.Map.moveMarker = moveMarker;
 	DPCalendar.Map.drawCircle = drawCircle;
-
 }());
-//# sourceMappingURL=map.js.map

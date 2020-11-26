@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -109,7 +108,7 @@ class DPCalendarModelAdminEvents extends JModelList
 		$search = $this->getUserStateFromRequest(
 			$this->context . '.filter.search_start',
 			'filter_search_start',
-			DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'), true),
+			DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'), true),
 			'none',
 			false
 		);
@@ -118,11 +117,11 @@ class DPCalendarModelAdminEvents extends JModelList
 				$search,
 				null,
 				true,
-				DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')
+				DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
 			);
 		} catch (Exception $e) {
 			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
-			$search = DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y'), true);
+			$search = DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'), true);
 
 			JFactory::getApplication()->setUserState($this->context . '.filter.search_start', $search);
 		}
@@ -136,7 +135,7 @@ class DPCalendarModelAdminEvents extends JModelList
 					$search,
 					null,
 					true,
-					DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')
+					DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
 				);
 			} catch (Exception $e) {
 				JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
@@ -280,7 +279,7 @@ class DPCalendarModelAdminEvents extends JModelList
 				$search,
 				null,
 				true,
-				DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')
+				DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
 			);
 			$search->setTime(0, 0);
 			$search = $db->quote($db->escape($search->toSql(), true));
@@ -292,7 +291,7 @@ class DPCalendarModelAdminEvents extends JModelList
 				$search,
 				null,
 				true,
-				DPCalendarHelper::getComponentParameter('event_form_date_format', 'm.d.Y')
+				DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
 			);
 			$search = $db->quote($db->escape($search->toSql(), true));
 			$query->where('a.end_date <= ' . $search);

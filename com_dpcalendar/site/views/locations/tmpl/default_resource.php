@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -30,69 +29,74 @@ $options                   = [];
 $options['requestUrlRoot'] = 'view=events&format=raw&limit=0&l=1&Itemid=' . $this->input->getInt('Itemid', 0);
 $options['calendarIds']    = $this->ids;
 
-$options['defaultView'] = $this->params->get('locations_default_view', 'resday');
+$options['initialView'] = $this->params->get('locations_default_view', 'resday');
+
 // Set up the header
-$options['header']           = ['left' => [], 'center' => [], 'right' => []];
-$options['header']['left'][] = 'prev';
-$options['header']['left'][] = 'next';
+$options['headerToolbar']           = ['left' => [], 'center' => [], 'right' => []];
+$options['headerToolbar']['left'][] = 'prev';
+$options['headerToolbar']['left'][] = 'next';
 if ($this->params->get('locations_header_show_datepicker', 1)) {
-	$options['header']['left'][] = 'datepicker';
+	$options['headerToolbar']['left'][] = 'datepicker';
 }
 if ($this->params->get('locations_header_show_print', 1)) {
-	$options['header']['left'][] = 'print';
+	$options['headerToolbar']['left'][] = 'print';
 }
-if ($this->params->get('locations_header_show_create', 1)) {
-	$options['header']['left'][] = 'add';
+if ($this->params->get('locations_header_show_create', 1) && \DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+	$options['headerToolbar']['left'][] = 'add';
 }
 if ($this->params->get('locations_header_show_title', 1)) {
-	$options['header']['center'][] = 'title';
+	$options['headerToolbar']['center'][] = 'title';
 }
-$options['header']['right'][] = 'resday';
-$options['header']['right'][] = 'resweek';
-$options['header']['right'][] = 'resmonth';
-$options['header']['right'][] = 'resyear';
+$options['headerToolbar']['right'][] = 'resday';
+$options['headerToolbar']['right'][] = 'resweek';
+$options['headerToolbar']['right'][] = 'resmonth';
+$options['headerToolbar']['right'][] = 'resyear';
 
-$options['header']['left']   = implode(',', $options['header']['left']);
-$options['header']['center'] = implode(',', $options['header']['center']);
-$options['header']['right']  = implode(',', $options['header']['right']);
+$options['headerToolbar']['left']   = implode(',', $options['headerToolbar']['left']);
+$options['headerToolbar']['center'] = implode(',', $options['headerToolbar']['center']);
+$options['headerToolbar']['right']  = implode(',', $options['headerToolbar']['right']);
 
 $options['height']          = 'auto';
-$options['slotLabelFormat'] = $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_axisformat', 'g:i a'));
-$options['slotWidth']       = $this->params->get('locations_column_width');
-$options['smallTimeFormat'] = $this->dateHelper->convertPHPDateToMoment($this->params->get('timeformat_day', 'g:i a'));
+$options['slotLabelFormat'] = $this->dateHelper->convertPHPDateToJS($this->params->get('locations_axisformat', 'H:i'));
+$options['slotMinWidth']    = $this->params->get('locations_column_width');
+$options['smallTimeFormat'] = $this->dateHelper->convertPHPDateToJS($this->params->get('timeformat_day', 'H:i'));
 
-$options['resources']         = $this->resources;
-$options['resourceLabelText'] = $this->translate('COM_DPCALENDAR_VIEW_LOCATIONS_LOCATIONS_AND_ROOMS');
+$options['resources']                 = $this->resources;
+$options['resourceAreaHeaderContent'] = $this->translate('COM_DPCALENDAR_VIEW_LOCATIONS_LOCATIONS_AND_ROOMS');
 
 $options['views']             = [];
 $options['views']['resyear']  = [
-	'titleFormat'     => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_year', 'Y')),
-	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_year', 'g:i a'))
+	'titleFormat'     => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_titleformat_year', 'Y')),
+	'eventTimeFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_timeformat_year', 'H:i')),
+	'slotLabelFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_axisformat_year', 'M j'))
 ];
 $options['views']['resmonth'] = [
-	'titleFormat'     => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_month', 'F Y')),
-	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_month', 'g:i a'))
+	'titleFormat'     => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_titleformat_month', 'F Y')),
+	'eventTimeFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_timeformat_month', 'H:i')),
+	'slotLabelFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_axisformat_month', 'l j'))
 ];
 $options['views']['resweek']  = [
-	'titleFormat'     => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_week', 'M j Y')),
-	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_week', 'g:i a'))
+	'titleFormat'     => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_titleformat_week', 'M j Y')),
+	'eventTimeFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_timeformat_week', 'H:i')),
+	'slotLabelFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_axisformat_week', 'D j H:i'))
 ];
 $options['views']['resday']   = [
-	'titleFormat'     => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_titleformat_day', 'F j Y')),
-	'eventTimeFormat' => $this->dateHelper->convertPHPDateToMoment($this->params->get('locations_timeformat_day', 'g:i a'))
+	'titleFormat'     => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_titleformat_day', 'F j Y')),
+	'eventTimeFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_timeformat_day', 'H:i')),
+	'slotLabelFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('locations_axisformat_day', 'H:i'))
 ];
 
 $max = $this->params->get('locations_max_time', 24);
 if (is_numeric($max)) {
 	$max = $max . ':00:00';
 }
-$options['maxTime'] = $max;
+$options['slotMaxTime'] = $max;
 
 $min = $this->params->get('locations_min_time', 0);
 if (is_numeric($min)) {
 	$min = $min . ':00:00';
 }
-$options['minTime'] = $min;
+$options['slotMinTime'] = $min;
 
 $options['use_hash']          = true;
 $options['event_create_form'] = 2;
@@ -103,7 +107,7 @@ $options['year']  = $now->format('Y', true);
 $options['month'] = $now->format('m', true);
 $options['date']  = $now->format('d', true);
 if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
-	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->return);
+	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->returnPage);
 }
 
 $this->dpdocument->addScriptOptions('view.locations.' . $this->input->getInt('Itemid', 0) . '.options', $options);

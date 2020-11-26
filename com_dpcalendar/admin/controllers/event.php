@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -59,8 +58,20 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		$data = $this->input->post->get('jform', [], 'array');
 
+		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
+			$data['all_day'] = '1';
+		}
+
+		if (!key_exists('all_day', $data)) {
+			$data['all_day'] = 0;
+		}
+
 		if (!key_exists('color', $data)) {
 			$data['color'] = '';
+		}
+
+		if (!key_exists('payment_provider', $data)) {
+			$data['payment_provider'] = '';
 		}
 
 		if (!empty($data['location_ids'])) {
@@ -78,6 +89,10 @@ class DPCalendarControllerEvent extends JControllerForm
 				}
 				$data['location_ids'][$index] = $location->id;
 			}
+		}
+
+		if ($this->getTask() == 'save2copy') {
+			$data['capacity_used'] = null;
 		}
 
 		$this->input->post->set('jform', $data);

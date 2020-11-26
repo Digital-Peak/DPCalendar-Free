@@ -1,13 +1,12 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\HTTP;
 use Joomla\Registry\Registry;
 
 JLoader::import('joomla.application.component.controller');
@@ -26,7 +25,6 @@ class DPCalendarControllerIcal extends JControllerLegacy
 
 		// Get the calendar
 		$calendar = DPCalendarHelper::getCalendar($this->input->getCmd('id'));
-
 		if (!$calendar) {
 			throw new Exception('Invalid calendar!');
 		}
@@ -35,7 +33,7 @@ class DPCalendarControllerIcal extends JControllerLegacy
 		if (!empty($calendar->icalurl)) {
 			header('Content-Type: text/calendar; charset=utf-8');
 			header('Content-disposition: attachment; filename="' . $calendar->title . '.ics"');
-			echo \DPCalendar\Helper\DPCalendarHelper::fetchContent($calendar->icalurl);
+			echo (new HTTP())->get($calendar->icalurl)->raw;
 			JFactory::getApplication()->close();
 		}
 
@@ -46,11 +44,8 @@ class DPCalendarControllerIcal extends JControllerLegacy
 		// Also include children when available
 		$calendars = [$this->input->getCmd('id')];
 		if (method_exists($calendar, 'getChildren')) {
-			$childrens = $calendar->getChildren();
-			if ($childrens) {
-				foreach ($childrens as $c) {
-					$calendars[] = $c->id;
-				}
+			foreach ($calendar->getChildren() as $c) {
+				$calendars[] = $c->id;
 			}
 		}
 

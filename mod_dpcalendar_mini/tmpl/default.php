@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -15,7 +14,6 @@ $document->loadScriptFile('dpcalendar/views/calendar/default.js');
 $document->loadScriptFile('dpcalendar/views/calendar/default.js');
 
 $document->loadStyleFile('default.css', 'mod_dpcalendar_mini');
-$document->addStyle('.mod-dpcalendar-mini-' . $module->id . ' .fc-bgevent { background-color: ' . $params->get('event_color', '#135CAE') . '}');
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_mini', '_scripts');
 

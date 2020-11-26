@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -339,9 +338,13 @@ class DPCalendarControllerEvent extends JControllerForm
 			$data['color'] = '';
 		}
 
+		if (!key_exists('payment_provider', $data)) {
+			$data['payment_provider'] = '';
+		}
+
 		$app        = JFactory::getApplication();
-		$dateFormat = $app->getParams()->get('event_form_date_format', 'm.d.Y');
-		$timeFormat = $app->getParams()->get('event_form_time_format', 'g:i a');
+		$dateFormat = $app->getParams()->get('event_form_date_format', 'd.m.Y');
+		$timeFormat = $app->getParams()->get('event_form_time_format', 'H:i');
 
 		if ($data['start_date_time'] == '') {
 			$data['start_date_time'] = DPCalendarHelper::getDate()->format($timeFormat);
@@ -377,7 +380,8 @@ class DPCalendarControllerEvent extends JControllerForm
 		// Format the end date to SQL format
 		$data['end_date'] = $end->toSql(false);
 
-		if ($data['location_ids']) {
+		if (!empty($data['location_ids'])) {
+			$data['location_ids'] = (array)$data['location_ids'];
 			foreach ($data['location_ids'] as $index => $locationId) {
 				if (is_numeric($locationId) || !$locationId) {
 					continue;
@@ -392,6 +396,10 @@ class DPCalendarControllerEvent extends JControllerForm
 				}
 				$data['location_ids'][$index] = $location->id;
 			}
+		}
+
+		if ($this->getTask() == 'save2copy') {
+			$data['capacity_used'] = null;
 		}
 
 		$this->input->post->set('jform', $data);

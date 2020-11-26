@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -13,7 +12,9 @@ $fields = $this->form->getFieldset();
 <div class="com-dpcalendar-eventform__flat-fields">
 	<?php foreach ($fields as $field) { ?>
 		<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
-		<?php if ($field->fieldname == 'rooms' && $this->params->get('event_form_change_location', 1)) { ?>
+		<?php if ($field->fieldname == 'rooms'
+			&& !in_array('location_ids', $this->params->get('event_form_hidden_fields', []))
+			&& !in_array('location', $this->params->get('event_form_hidden_tabs', []))) { ?>
 			<?php echo $this->loadTemplate('map'); ?>
 		<?php } ?>
 	<?php } ?>

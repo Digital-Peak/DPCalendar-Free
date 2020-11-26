@@ -1,14 +1,12 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
-$tmpl   = $this->input->getCmd('tmpl') ? '&tmpl=' . $this->input->getCmd('tmpl') : '';
-$action = $this->router->route('index.php?option=com_dpcalendar&view=invite' . $tmpl);
+$action = $this->router->route('index.php?option=com_dpcalendar&view=invite' . $this->tmpl);
 ?>
 <form class="com-dpcalendar-invite__form dp-form form-validate" method="post" name="adminForm" id="adminForm" action="<?php echo $action; ?>">
 	<div class="com-dpcalendar-invite__fields">

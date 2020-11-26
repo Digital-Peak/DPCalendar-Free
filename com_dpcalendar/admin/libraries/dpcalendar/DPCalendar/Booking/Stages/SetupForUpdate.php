@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
@@ -24,17 +23,27 @@ class SetupForUpdate implements StageInterface
 	 */
 	private $user = null;
 
-	public function __construct(\JApplicationCms $application, \JUser $user)
+	/**
+	 * @var \DPCalendarModelCoupon
+	 */
+	private $couponModel = null;
+
+	public function __construct(\JApplicationCms $application, \JUser $user, \DPCalendarModelCoupon $couponModel)
 	{
 		$this->application = $application;
 		$this->user        = $user;
+		$this->couponModel = $couponModel;
 	}
 
 	public function __invoke($payload)
 	{
-		// Unset the price, that it can't be changed afterwards through some form hacking
-		if ($this->application->isClient('site') && !$this->user->authorise('core.admin', 'com_dpcalendar')) {
+		// Unset some variables, that it can't be changed afterwards through some form hacking
+		if ($this->application->isClient('site') && !$this->user->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
 			unset($payload->data['price']);
+		}
+
+		if (!empty($payload->data['coupon_id']) && $coupon = $this->couponModel->getItem(['code' => $payload->data['coupon_id']])) {
+			$payload->data['coupon_id'] = $coupon->id;
 		}
 
 		return $payload;

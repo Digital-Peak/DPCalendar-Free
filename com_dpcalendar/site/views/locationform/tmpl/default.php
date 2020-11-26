@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -14,8 +13,7 @@ if ($this->params->get('location_form_show_map', 1) && $this->params->get('map_p
 $this->dpdocument->loadStyleFile('dpcalendar/views/locationform/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/locationform/default.js');
 
-$tmpl   = $this->input->getCmd('tmpl') ? '&tmpl=' . $this->input->getCmd('tmpl') : '';
-$action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id . $tmpl);
+$action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id . $this->tmpl);
 ?>
 <div class="com-dpcalendar-locationform<?php echo $this->pageclass_sfx ? ' com-dpcalendar-locationform-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>

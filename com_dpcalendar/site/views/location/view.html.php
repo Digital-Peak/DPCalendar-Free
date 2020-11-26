@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
@@ -11,7 +10,6 @@ JLoader::import('components.com_dpcalendar.helpers.schema', JPATH_ADMINISTRATOR)
 
 class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 {
-
 	public function display($tpl = null)
 	{
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
@@ -27,6 +25,9 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		if ($this->location->id == null) {
 			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
 		}
+
+		$this->location->tags = new JHelperTags();
+		$this->location->tags->getItemTags('com_dpcalendar.location', $this->location->id);
 
 		JLoader::import('joomla.application.component.model');
 		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
@@ -60,7 +61,7 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 
 		$this->resources[] = (object)['id' => $this->location->id, 'title' => $this->location->title, 'children' => $rooms];
 
-		$this->return = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;
+		$this->returnPage = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;
 	}
 
 	protected function prepareDocument()

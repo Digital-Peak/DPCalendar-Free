@@ -1,8 +1,7 @@
 <?php
 /**
  * @package   DPCalendar
- * @author    Digital Peak http://www.digital-peak.com
- * @copyright Copyright (C) 2007 - 2020 Digital Peak. All rights reserved.
+ * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 namespace DPCalendar\HTML\Document;
@@ -16,32 +15,6 @@ use DPCalendar\Helper\DPCalendarHelper;
  */
 class HtmlDocument
 {
-	const LIBRARY_CORE = 'core';
-	const LIBRARY_DPCORE = 'dpcore';
-	const LIBRARY_FULLCALENDAR = 'fullcalendar';
-	const LIBRARY_SCHEDULER = 'scheduler';
-	const LIBRARY_MODAL = 'modal';
-	const LIBRARY_MAP = 'map';
-	const LIBRARY_MD5 = 'md5';
-	const LIBRARY_URL = 'url';
-	const LIBRARY_MOMENT = 'moment';
-	const LIBRARY_DATEPICKER = 'date';
-	const LIBRARY_AUTOCOMPLETE = 'autocomplete';
-	const LIBRARY_SELECT = 'select';
-	const LIBRARY_TOOLTIP = 'tooltip';
-	const LIBRARY_FORM = 'form';
-	const LIBRARY_IFRAME_CHILD = 'iframe-child';
-	const LIBRARY_IFRAME_PARENT = 'iframe-parent';
-
-	/**
-	 * @param $name
-	 *
-	 * @deprecated Scripts are loaded in layout files and dependencyies in JS
-	 */
-	public function loadLibrary($name)
-	{
-	}
-
 	public function loadScriptFile($path, $extension = 'com_dpcalendar')
 	{
 		if (strpos($path, '//') === 0 || strpos($path, 'https://') === 0) {
@@ -55,13 +28,6 @@ class HtmlDocument
 			$coreLoaded = true;
 			// Load core
 			\JHtml::_('behavior.core');
-
-			// Load polyfill for IE
-			$ua = htmlentities($_SERVER['HTTP_USER_AGENT'], ENT_QUOTES, 'UTF-8');
-			if (preg_match('~MSIE|Internet Explorer~i', $ua) || (strpos($ua, 'Trident/7.0') !== false && strpos($ua, 'rv:11.0') !== false)) {
-				$this->loadScriptFile('dpcalendar/polyfill.js');
-				$this->loadScriptFile('/polyfill/promise.js');
-			}
 
 			// Load DPCalendar loader
 			$this->loadScriptFile('dpcalendar/loader.js');

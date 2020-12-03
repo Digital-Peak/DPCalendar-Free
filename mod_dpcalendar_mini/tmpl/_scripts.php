@@ -38,7 +38,7 @@ $document->addScriptOptions('itemid', $app->input->getInt('Itemid', 0));
 // The options which will be passed to the js library
 $options                   = [];
 $options['requestUrlRoot'] = 'view=events&limit=0&format=raw&compact=' . $params->get('compact_events', 2) .
-	'&openview=' . $params->get('open_view', 'agendaDay') . '&module-id=' . $module->id . '&Itemid=' . $app->input->getInt('Itemid', 0);
+	'&openview=' . $params->get('open_view', 'day') . '&module-id=' . $module->id . '&Itemid=' . $app->input->getInt('Itemid', 0);
 $options['calendarIds']    = [implode(',', $ids)];
 
 // Set the default view
@@ -108,7 +108,7 @@ if ($params->get('header_show_month', 1)) {
 	$options['headerToolbar']['right'][] = 'month';
 }
 if ($params->get('header_show_week', 1)) {
-	$options['headerToolbar']['right'][] = 'agendaWeek';
+	$options['headerToolbar']['right'][] = 'week';
 }
 if ($params->get('header_show_day', 1)) {
 	$options['headerToolbar']['right'][] = 'day';
@@ -137,13 +137,13 @@ $options['views']['month']      = [
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_month', 'D')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
 ];
-$options['views']['agendaWeek'] = [
+$options['views']['week'] = [
 	'titleFormat'            => $dateHelper->convertPHPDateToJS($params->get('titleformat_week', 'M j Y')),
 	'eventTimeFormat'        => $dateHelper->convertPHPDateToJS($params->get('timeformat_week', 'H:i')),
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_week', 'D n/j')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 ];
-$options['views']['agendaDay']  = [
+$options['views']['day']  = [
 	'titleFormat'            => $dateHelper->convertPHPDateToJS($params->get('titleformat_day', 'F j Y')),
 	'eventTimeFormat'        => $dateHelper->convertPHPDateToJS($params->get('timeformat_day', 'H:i')),
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_day', 'l')),

@@ -24,24 +24,26 @@
 			toggle.addEventListener('click', () => {
 				util.slideToggle(root.querySelector('.com-dpcalendar-calendar__list'), (fadeIn) => {
 					if (!fadeIn) {
-						root.querySelector('[data-direction="up"]').style.display = 'none';
-						root.querySelector('[data-direction="down"]').style.display = 'inline';
-					} else {
-						root.querySelector('[data-direction="up"]').style.display = 'inline';
-						root.querySelector('[data-direction="down"]').style.display = 'none';
+						root.querySelector('[data-direction="up"]').classList.add('dp-toggle_hidden');
+						root.querySelector('[data-direction="down"]').classList.remove('dp-toggle_hidden');
+						return;
 					}
+					root.querySelector('[data-direction="up"]').classList.remove('dp-toggle_hidden');
+					root.querySelector('[data-direction="down"]').classList.add('dp-toggle_hidden');
 				});
 			});
 		}
-		[].slice.call(calendar.parentElement.querySelectorAll('.com-dpcalendar-calendar__list .dp-input-checkbox')).forEach((input) => {
+		const calendars = [].slice.call(calendar.parentElement.querySelectorAll('.com-dpcalendar-calendar__calendars .dp-input-checkbox'));
+		calendars.forEach((input) => {
 			calendarIds.forEach((calId) => {
 				if (calId == input.value) {
 					input.checked = true;
 				}
 			});
-			input.addEventListener('click', () => {
-				const calId = input.value;
-				if (input.checked) {
+			input.addEventListener('click', (event) => {
+				const checkbox = event.target;
+				const calId = checkbox.value;
+				if (checkbox.checked) {
 					calendar.dpCalendar.addEventSource({
 						id: calId,
 						events: (fetchInfo, successCallback, failureCallback) => {
@@ -73,7 +75,7 @@
 		const toggleBoxes = document.querySelector('.com-dpcalendar-calendar__list-toggle .dp-input-checkbox');
 		if (toggleBoxes) {
 			toggleBoxes.addEventListener('click', () => {
-				[].slice.call(document.querySelectorAll('.com-dpcalendar-calendar__calendar-description .dp-input-checkbox')).forEach((input) => {
+				calendars.forEach((input) => {
 					input.checked = !toggleBoxes.checked;
 					input.click();
 				});

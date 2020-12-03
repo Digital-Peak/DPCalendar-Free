@@ -8,7 +8,7 @@ defined('_JEXEC') or die();
 
 use Joomla\Utilities\ArrayHelper;
 
-class PlgContentDpcalendar extends JPlugin
+class PlgContentDPCalendar extends JPlugin
 {
 	/** @var \Joomla\CMS\Application\CMSApplication */
 	protected $app;

@@ -551,8 +551,6 @@
 			       label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"/>
 			<field name="event_form_capacity" type="text" useglobal="true" size="6"
 			       label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
-			<field name="event_form_price" type="text" useglobal="true" size="6"
-			       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
 			<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 			<field name="event_form_featured" type="list" useglobal="true" label="JFEATURED"

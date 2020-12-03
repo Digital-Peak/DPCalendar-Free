@@ -95,6 +95,10 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 		}
 
 		foreach ($this->params->get('event_form_hidden_tabs', []) as $tabName) {
+			if (empty($tabName)) {
+				continue;
+			}
+
 			$parts = explode(':', $tabName);
 			$name  = $parts[0];
 			$group = null;
@@ -112,6 +116,10 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 		}
 
 		foreach ($this->params->get('event_form_hidden_fields', []) as $fieldName) {
+			if (empty($fieldName)) {
+				continue;
+			}
+
 			$parts = explode(':', $fieldName);
 			if (count($parts) > 1) {
 				$this->form->removeField($parts[1], $parts[0]);

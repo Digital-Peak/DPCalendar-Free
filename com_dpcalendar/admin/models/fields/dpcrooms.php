@@ -6,7 +6,6 @@
  */
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 JFormHelper::loadFieldClass('groupedlist');
 
 class JFormFieldDpcrooms extends JFormFieldGroupedList
@@ -18,6 +17,8 @@ class JFormFieldDpcrooms extends JFormFieldGroupedList
 		if (!$this->form->getValue('location_ids')) {
 			return parent::getGroups();
 		}
+
+		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
@@ -31,7 +32,6 @@ class JFormFieldDpcrooms extends JFormFieldGroupedList
 			}
 
 			$groups[$location->title] = [];
-
 			foreach ($location->rooms as $room) {
 				$groups[$location->title][] = JHtml::_('select.option', $location->id . '-' . $room->id, $room->title);
 			}

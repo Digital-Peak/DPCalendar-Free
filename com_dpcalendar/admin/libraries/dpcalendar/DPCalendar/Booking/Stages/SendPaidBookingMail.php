@@ -44,13 +44,13 @@ class SendPaidBookingMail implements StageInterface
 
 		// We have a successful payment
 		$subject = DPCalendarHelper::renderEvents(
-			[],
+			$payload->eventsWithTickets,
 			\JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_PAYED_SUBJECT'),
 			null,
 			$payload->mailVariables
 		);
 		$body    = DPCalendarHelper::renderEvents(
-			[],
+			$payload->eventsWithTickets,
 			DPCalendarHelper::getStringFromParams(
 				'bookingsys_paid_booking_mail',
 				'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_PAYED_BODY',

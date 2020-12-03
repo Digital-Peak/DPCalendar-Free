@@ -739,9 +739,6 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if (!$item->get('capacity') && $params->get('event_form_capacity') > 0) {
 			$data['capacity'] = $params->get('event_form_capacity');
 		}
-		if (!$item->get('price')) {
-			$data['price'] = $params->get('event_form_price');
-		}
 		if (!$item->get('payment_provider')) {
 			$data['payment_provider'] = $params->get('event_form_payment_provider');
 		}

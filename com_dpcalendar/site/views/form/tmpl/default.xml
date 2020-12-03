@@ -52,7 +52,7 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 
-			<field name="event_form_hidden_tabs" type="list" multiple="true" useglobal="true"
+			<field name="event_form_hidden_tabs" type="list" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_DESC">
 				<option value="location">COM_DPCALENDAR_LOCATION</option>
@@ -62,7 +62,7 @@
 				<option value="params:jbasic">COM_DPCALENDAR_FIELDSET_OPTIONS</option>
 				<option value="metadata:jmetadata">JGLOBAL_FIELDSET_METADATA_OPTIONS</option>
 			</field>
-			<field name="event_form_hidden_fields" type="list" multiple="true" useglobal="true"
+			<field name="event_form_hidden_fields" type="list" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_DESC">
 				<option value="color">COM_DPCALENDAR_FIELD_COLOR_LABEL</option>
@@ -135,8 +135,6 @@
 			       class="inputbox" size="1"/>
 			<field name="event_form_capacity" type="text" useglobal="true" size="6"
 			       label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
-			<field name="event_form_price" type="text" useglobal="true" size="6"
-			       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
 			<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 			<field name="event_form_featured" type="list" useglobal="true" label="JFEATURED"

@@ -108,6 +108,7 @@ class DPCalendarModelLocations extends JModelList
 				|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $location->created_by == $user->id));
 
 			if ($location->country) {
+				JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables', 'DPCalendarTable');
 				$country = JModelLegacy::getInstance('Country', 'DPCalendarModel')->getItem($location->country);
 				if ($country) {
 					JFactory::getApplication()->getLanguage()->load('com_dpcalendar.countries',

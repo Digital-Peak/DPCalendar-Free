@@ -47,7 +47,7 @@ foreach ($tmp as $date => $events) {
 	$year  = $parts[0];
 	$url   = JRoute::_(
 		'index.php?option=com_dpcalendar&view=calendar&id=0&ids=' . implode(',', $linkIDs) . $itemId .
-		'#year=' . $year . '&month=' . $month . '&day=' . $day . '&view=' . JFactory::getApplication()->input->get('openview', 'agendaDay')
+		'#year=' . $year . '&month=' . $month . '&day=' . $day . '&view=' . $this->app->input->get('openview', 'day')
 	);
 
 	$description = '<ul class="dp-events-list">';

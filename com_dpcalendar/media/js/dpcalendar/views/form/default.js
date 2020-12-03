@@ -295,7 +295,7 @@
 	{
 		const map = document.querySelector('.com-dpcalendar-eventform .dp-map');
 		if (map != null) {
-			map.addEventListener('dp-map-loaded', () => updateLocationFrame());
+			map.addEventListener('dp-map-loaded', updateLocationFrame);
 			watchElements([map]);
 		}
 		const rooms = document.querySelector('.com-dpcalendar-eventform .dp-field-rooms');
@@ -306,9 +306,7 @@
 		if (!geoComplete) {
 			return;
 		}
-		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js'], () => {
-			DPCalendar.autocomplete.create(geoComplete);
-		});
+		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js'], () => DPCalendar.autocomplete.create(geoComplete));
 		geoComplete.addEventListener('dp-autocomplete-select', (e) => {
 			DPCalendar.request(
 				'task=event.newlocation',
@@ -451,6 +449,12 @@
 	}
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js', '/com_dpcalendar/js/choices/choices.js', '/com_dpcalendar/css/choices/choices.css'], () => {
+			setup();
+			setup$1();
+			setup$2();
+			setup$3();
+			setup$4();
+			setup$5();
 			[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color):not(#jform_tags):not(.dp-timezone__select)')).forEach((select) => {
 				select._choicejs = new Choices(
 					select,
@@ -464,12 +468,6 @@
 					}
 				);
 			});
-			setup();
-			setup$1();
-			setup$2();
-			setup$3();
-			setup$4();
-			setup$5();
 		});
 		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS')) {
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls')).forEach((el) => {

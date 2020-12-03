@@ -397,11 +397,31 @@
 	display: none;
 }
 
-.com-dpcalendar-calendar__list .dp-description__label {
-	display: flex;
+.com-dpcalendar-calendar__list-toggle {
+	display: inline-flex;
+	align-items: center;
+	margin-bottom: 10px;
 }
 
-.com-dpcalendar-calendar__list .dp-input {
+.com-dpcalendar-calendar__list-toggle .dp-input-label {
+	margin: 0;
+}
+
+.com-dpcalendar-calendar__list .dp-calendar {
+	margin: 10px 0;
+}
+
+.com-dpcalendar-calendar__list .dp-calendar__label {
+	display: inline-flex;
+	align-items: center;
+	margin: 0;
+}
+
+.com-dpcalendar-calendar__list .dp-calendar__links {
+	margin-top: 5px;
+}
+
+.com-dpcalendar-calendar__list .dp-input-checkbox {
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	position: relative;
@@ -412,7 +432,7 @@
 	border-style: solid;
 }
 
-.com-dpcalendar-calendar__list .dp-input::before {
+.com-dpcalendar-calendar__list .dp-input-checkbox::before {
 	content: "✔";
 	position: absolute;
 	font-size: 1.2em;
@@ -421,11 +441,11 @@
 	visibility: hidden;
 }
 
-.com-dpcalendar-calendar__list .dp-input:checked::before {
+.com-dpcalendar-calendar__list .dp-input-checkbox:checked::before {
 	visibility: visible;
 }
 
-.com-dpcalendar-calendar__list .dp-input:not(:checked) {
+.com-dpcalendar-calendar__list .dp-input-checkbox:not(:checked) {
 	background-color: inherit !important;
 }
 
@@ -444,6 +464,16 @@
 	text-align: center;
 	clear: both;
 	width: 100%;
+	cursor: pointer;
+}
+
+.com-dpcalendar-calendar .dp-toggle_hidden {
+	display: none;
+}
+
+.com-dpcalendar-calendar .dp-toggle svg {
+	width: 1.5em;
+	height: 1.5em;
 }
 
 .com-dpcalendar-calendar__icons {

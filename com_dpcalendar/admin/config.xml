@@ -763,8 +763,6 @@
 		</field>
 		<field name="event_form_capacity" type="text" default="0"
 		       label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
-		<field name="event_form_price" type="text"
-		       label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
 		<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 		<field name="event_form_terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
@@ -926,12 +924,6 @@
 	</fieldset>
 	<fieldset name="tickets" label="COM_DPCALENDAR_TICKETS"
 	          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
-		<field name="tickets_expand_series" type="radio" class="btn-group" default="0"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_TICKETS_EXPAND_SERIES_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_TICKETS_EXPAND_SERIES_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
 		<field name="tickets_textbefore" type="textarea" filter="raw"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="tickets_textafter" type="textarea" filter="raw"

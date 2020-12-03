@@ -1,26 +1,3 @@
-@media print {
-	.com-dpcalendar-tickets .dp-print-hide {
-		display: none !important;
-	}
-	.com-dpcalendar-tickets a:link:after, .com-dpcalendar-tickets a:visited:after {
-		display: none;
-		content: "";
-	}
-	.com-dpcalendar-tickets dt {
-		float: left !important;
-		margin: 0 !important;
-		padding: 0 !important;
-		max-width: 150px;
-		min-width: 150px;
-	}
-	.com-dpcalendar-tickets dd {
-		float: left !important;
-		margin: 0 0 0 5px !important;
-		padding: 0 !important;
-		max-width: 350px;
-	}
-}
-
 .com-dpcalendar-tickets .dp-button-bar {
 	margin-bottom: 10px;
 }
@@ -49,6 +26,13 @@
 	background-color: #cccccc;
 	color: #666666;
 	cursor: not-allowed;
+}
+
+.com-dpcalendar-tickets .dp-icon svg {
+	fill: currentColor;
+	width: 1em;
+	height: 1em;
+	vertical-align: -2px;
 }
 
 .com-dpcalendar-tickets .dp-table {
@@ -183,11 +167,35 @@
 	margin: 0;
 }
 
-.com-dpcalendar-tickets .dp-icon svg {
-	fill: currentColor;
-	width: 1em;
-	height: 1em;
-	vertical-align: -2px;
+.com-dpcalendar-tickets .dp-toggle {
+	cursor: pointer;
+}
+
+.com-dpcalendar-tickets .dp-toggle_hidden {
+	display: none;
+}
+
+@media print {
+	.com-dpcalendar-tickets .dp-print-hide {
+		display: none !important;
+	}
+	.com-dpcalendar-tickets a:link:after, .com-dpcalendar-tickets a:visited:after {
+		display: none;
+		content: "";
+	}
+	.com-dpcalendar-tickets dt {
+		float: left !important;
+		margin: 0 !important;
+		padding: 0 !important;
+		max-width: 150px;
+		min-width: 150px;
+	}
+	.com-dpcalendar-tickets dd {
+		float: left !important;
+		margin: 0 0 0 5px !important;
+		padding: 0 !important;
+		max-width: 350px;
+	}
 }
 
 .com-dpcalendar-tickets .dp-form__search, .com-dpcalendar-tickets .dp-form__buttons {
@@ -209,6 +217,32 @@
 
 .com-dpcalendar-tickets .dp-form .dp-button, .com-dpcalendar-tickets .dp-form .dp-label {
 	margin: 0;
+}
+
+.com-dpcalendar-tickets .dp-table td {
+	vertical-align: top;
+}
+
+.com-dpcalendar-tickets .dp-ticket__event-link {
+	display: block;
+	min-width: 150px;
+}
+
+.com-dpcalendar-tickets .dp-ticket__event-link .dp-date {
+	display: block;
+}
+
+.com-dpcalendar-tickets .dp-ticket__event-instance {
+	margin-bottom: 5px;
+}
+
+.com-dpcalendar-tickets .dp-toggle svg {
+	width: 1.5em;
+	height: 1.5em;
+}
+
+.com-dpcalendar-tickets .dp-ticket__event-instances {
+	display: none;
 }
 
 .com-dpcalendar-tickets .dp-pagination__counter, .com-dpcalendar-tickets .dp-pagination__links {

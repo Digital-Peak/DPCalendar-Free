@@ -245,7 +245,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 
 			$db->setQuery("select * from #__extensions where folder like 'dpcalendarpay'");
 			foreach ($db->loadObjectList() as $plugin) {
-				if (!$plugin->params || $plugin->params == '[]' || $plugin->params == '{}') {
+				if (!$plugin->params || $plugin->params == '[]' || $plugin->params == '{}' || strpos($plugin->params, 'providers0') !== false) {
 					continue;
 				}
 

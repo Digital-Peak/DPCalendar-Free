@@ -36,7 +36,7 @@ class CollectEventsAndTickets implements StageInterface
 		if ($payload->oldItem) {
 			$payload->tickets = $payload->oldItem->tickets;
 			foreach ($payload->tickets as $ticket) {
-				$payload->events[] = $this->model->getEvent($ticket->event_id);
+				$payload->events[$ticket->event_id] = $this->model->getEvent($ticket->event_id);
 			}
 			$payload->eventsWithTickets = $payload->events;
 

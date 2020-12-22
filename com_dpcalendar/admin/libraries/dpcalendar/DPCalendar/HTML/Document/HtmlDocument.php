@@ -55,6 +55,10 @@ class HtmlDocument
 
 	public function addStyle($content)
 	{
+		if (!$content) {
+			return;
+		}
+
 		\JFactory::getApplication()->getDocument()->addStyleDeclaration($content);
 	}
 

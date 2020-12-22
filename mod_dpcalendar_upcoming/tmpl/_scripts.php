@@ -17,3 +17,4 @@ if ($params->get('show_map')) {
 
 // Load the stylesheet
 $document->loadStyleFile(str_replace('_:', '', $params->get('layout', 'default')) . '.css', 'mod_dpcalendar_upcoming');
+$document->addStyle($params->get('custom_css'));

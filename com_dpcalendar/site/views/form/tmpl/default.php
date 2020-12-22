@@ -14,6 +14,7 @@ if (!in_array('location_ids', $this->params->get('event_form_hidden_fields', [])
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/form/default.js');
+$this->dpdocument->addStyle($this->params->get('event_form_custom_css'));
 
 if (DPCalendarHelper::isFree()) {
 	$this->translator->translateJS('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');

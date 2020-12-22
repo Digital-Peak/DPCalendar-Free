@@ -141,17 +141,16 @@ class DPCalendarTableEvent extends JTable
 
 			$tagsChanged = !isset($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
-			if ($this->price != $table->price || $this->booking_options != $table->booking_options || ($hardReset && $this->rrule)) {
+			if ($this->price != $table->price || $this->booking_options != $table->booking_options || ($hardReset && $this->rrule && $this->booking_series != 1)) {
 				// Check for tickets
-				$db    = JFactory::getDbo();
-				$query = $db->getQuery(true);
+				$query = $this->getDbo()->getQuery(true);
 				$query->select('t.id')
 					->from('#__dpcalendar_tickets as t')
 					->join('LEFT', '#__dpcalendar_events as e on e.original_id=' . (int)$this->id)
 					->where('(t.event_id = ' . (int)$this->id . ' or t.event_id = ' . (int)$this->original_id . ' or t.event_id = e.id)')
 					->where('t.state >= 0');
-				$db->setQuery($query);
-				if ($db->loadResult()) {
+				$this->getDbo()->setQuery($query);
+				if ($this->getDbo()->loadResult()) {
 					$this->all_day         = $table->all_day;
 					$this->start_date      = $table->start_date;
 					$this->end_date        = $table->end_date;

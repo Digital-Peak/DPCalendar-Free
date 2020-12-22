@@ -310,6 +310,11 @@ abstract class DPCalendarPlugin extends \JPlugin
 
 		try {
 			$content = $this->fetchContent(str_replace('webcal://', 'https://', $calendar->params->get('uri')));
+
+			if (strpos($content, 'BEGIN:') === false) {
+				throw new \Exception($content);
+			}
+
 			$content = str_replace("BEGIN:VCALENDAR\r\n", '', $content);
 			$content = str_replace("BEGIN:VCALENDAR\n", '', $content);
 			$content = str_replace("\r\nEND:VCALENDAR", '', $content);
@@ -1077,7 +1082,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$uri .= $u->toString(['query', 'fragment']);
 
 		$headers = [
-			'Accept-Language: ' . \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag())
+			'Accept-Language: ' . \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag()),
+			'Accept: */*'
 		];
 		$data    = (new HTTP())->get($uri, null, null, $headers);
 		if (!empty($data->dp->headers['Content-Encoding']) && $data->dp->headers['Content-Encoding'] == 'gzip') {

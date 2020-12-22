@@ -14,6 +14,7 @@ if ($this->params->get('event_show_map', '1')
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/event/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/event/default.js');
+$this->dpdocument->addStyle($this->params->get('event_custom_css'));
 
 $contentClass = '';
 if ($imageContent = $this->loadTemplate('image_full')) {

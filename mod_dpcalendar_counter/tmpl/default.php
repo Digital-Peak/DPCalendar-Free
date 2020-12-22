@@ -27,6 +27,7 @@ $translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_SECOND');
 
 $document->loadStyleFile('default.css', 'mod_dpcalendar_counter');
 $document->loadScriptFile('default.js', 'mod_dpcalendar_counter');
+$document->addStyle($params->get('custom_css'));
 ?>
 <div class="mod-dpcalendar-counter mod-dpcalendar-counter-<?php echo $module->id; ?>">
 	<?php foreach ($events as $event) { ?>

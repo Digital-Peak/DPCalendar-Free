@@ -238,9 +238,8 @@ class DPCalendarModelLocation extends JModelAdmin
 		if (empty($table->id)) {
 			// Set ordering to the last item if not set
 			if (empty($table->ordering)) {
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__dpcalendar_locations');
-				$max = $db->loadResult();
+				$this->getDbo()->setQuery('SELECT MAX(ordering) FROM #__dpcalendar_locations');
+				$max = $this->getDbo()->loadResult();
 
 				$table->ordering = $max + 1;
 			} else {

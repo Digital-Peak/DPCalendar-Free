@@ -12,6 +12,7 @@ if ($this->params->get('locations_show_map', 1) && $this->params->get('map_provi
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/locations/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/locations/default.js');
+$this->dpdocument->addStyle($this->params->get('locations_custom_css'));
 ?>
 <div class="com-dpcalendar-locations dp-location<?php echo $this->pageclass_sfx ? ' com-dpcalendar-locations-' . $this->pageclass_sfx : ''; ?>s">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>

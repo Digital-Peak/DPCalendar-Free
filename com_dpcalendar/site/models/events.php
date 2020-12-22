@@ -47,6 +47,7 @@ class DPCalendarModelEvents extends JModelList
 			$options->set('limit', $this->getState('list.limit'));
 		}
 		$options->set('order', $this->getState('list.direction', 'ASC'));
+		$options->set('expand', $this->getState('filter.expand', '1'));
 		$options->set('publish_date', $this->getState('filter.publish_date'));
 
 		// Add location filter
@@ -224,6 +225,10 @@ class DPCalendarModelEvents extends JModelList
 			'LEFT',
 			'(select original_id, max(end_date) as max_date, min(start_date) as min_date from #__dpcalendar_events group by original_id) ser on ' . ($this->getState('filter.expand') ? 'ser.original_id = a.original_id and a.original_id > 0' : 'ser.original_id = a.id')
 		);
+
+		// Join over the original
+		$query->select('o.title as original_title, o.rrule as original_rrule');
+		$query->join('LEFT', '#__dpcalendar_events AS o ON o.id = a.original_id');
 
 		// Join locations
 		$query->select("GROUP_CONCAT(v.id SEPARATOR ', ') location_ids");

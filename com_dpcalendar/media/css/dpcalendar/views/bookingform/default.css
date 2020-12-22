@@ -35,7 +35,7 @@
 	vertical-align: -2px;
 }
 
-.com-dpcalendar-bookingform .dp-info-box {
+.com-dpcalendar-bookingform .dp-info-box, .com-dpcalendar-bookingform .com-dpcalendar-bookingform__existing-booking {
 	padding: 8px 35px 8px 14px;
 	margin-bottom: 18px;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
@@ -53,7 +53,7 @@
 	color: #3c763d;
 }
 
-.com-dpcalendar-bookingform .dp-info-box_error {
+.com-dpcalendar-bookingform .dp-info-box_error, .com-dpcalendar-bookingform .com-dpcalendar-bookingform__existing-booking {
 	color: #721c24;
 	background-color: #f8d7da;
 	border-color: #f5c6cb;
@@ -516,6 +516,11 @@
 	display: inline-block;
 	min-width: 70px;
 	padding: 0 1em;
+}
+
+.com-dpcalendar-bookingform__existing-booking {
+	font-size: 1.3em;
+	line-height: 1.3em;
 }
 
 .com-dpcalendar-bookingform .dp-term {

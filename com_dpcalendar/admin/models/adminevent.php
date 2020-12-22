@@ -424,19 +424,19 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		if (isset($data['booking_options']) && is_array($data['booking_options'])) {
-			$data['booking_options'] = json_encode($data['booking_options']);
+			$data['booking_options'] = $data['booking_options'] ? json_encode($data['booking_options']) : '';
 		}
 
 		if (isset($data['schedule']) && is_array($data['schedule'])) {
-			$data['schedule'] = json_encode($data['schedule']);
+			$data['schedule'] = $data['schedule'] ? json_encode($data['schedule']) : '';
 		}
 
-		if (!empty($data['payment_provider']) && is_array($data['payment_provider'])) {
-			$data['payment_provider'] = implode(',', $data['payment_provider']);
+		if (isset($data['payment_provider']) && is_array($data['payment_provider'])) {
+			$data['payment_provider'] = $data['payment_provider'] ? implode(',', $data['payment_provider']) : '';
 		}
 
-		if (!empty($data['booking_assign_user_groups']) && is_array($data['booking_assign_user_groups'])) {
-			$data['booking_assign_user_groups'] = implode(',', $data['booking_assign_user_groups']);
+		if (isset($data['booking_assign_user_groups']) && is_array($data['booking_assign_user_groups'])) {
+			$data['booking_assign_user_groups'] = $data['booking_assign_user_groups'] ? implode(',', $data['booking_assign_user_groups']) : '';
 		}
 
 		// Only apply the default values on create
@@ -454,9 +454,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$event = $this->getItem($id);
 		$app->setUserState('dpcalendar.event.id', $id);
 
-		$db = JFactory::getDbo();
-		$db->setQuery('select id from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
-		$rows   = $db->loadObjectList();
+		$this->getDbo()->setQuery('select id from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
+		$rows   = $this->getDbo()->loadObjectList();
 		$values = '';
 
 		$fieldModel = JModelLegacy::getInstance('Field', 'FieldsModel', ['ignore_request' => true]);
@@ -501,14 +500,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		// Delete the location associations for the events which do not exist anymore
 		if (!$this->getState($this->getName() . '.new')) {
-			$db->setQuery('delete from #__dpcalendar_events_location where event_id in (' . implode(',', $allIds) . ')');
-			$db->execute();
+			$this->getDbo()->setQuery('delete from #__dpcalendar_events_location where event_id in (' . implode(',', $allIds) . ')');
+			$this->getDbo()->execute();
 		}
 
 		// Insert the new associations
 		if (!empty($values)) {
-			$db->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $values);
-			$db->execute();
+			$this->getDbo()->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $values);
+			$this->getDbo()->execute();
 		}
 
 		if (!empty($event->location_ids)) {
@@ -649,10 +648,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		try {
-			$db = $this->getDbo();
-
-			$db->setQuery('UPDATE #__dpcalendar_events SET featured = ' . (int)$value . ' WHERE id IN (' . implode(',', $pks) . ')');
-			$db->execute();
+			$this->getDbo()->setQuery('UPDATE #__dpcalendar_events SET featured = ' . (int)$value . ' WHERE id IN (' . implode(',', $pks) . ')');
+			$this->getDbo()->execute();
 		} catch (Exception $e) {
 			$this->setError($e->getMessage());
 

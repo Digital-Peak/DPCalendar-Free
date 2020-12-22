@@ -275,6 +275,11 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 				);
 			}
 		}
+		if (version_compare($version, '8.0.2') == -1) {
+			if (is_dir(JPATH_PLUGINS . '/dpcalendarpay/2checkout')) {
+				JFolder::delete(JPATH_PLUGINS . '/dpcalendarpay/2checkout');
+			}
+		}
 	}
 
 	public function preflight($type, $parent)

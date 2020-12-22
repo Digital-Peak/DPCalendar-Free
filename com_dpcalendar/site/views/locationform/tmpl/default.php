@@ -12,6 +12,7 @@ if ($this->params->get('location_form_show_map', 1) && $this->params->get('map_p
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/locationform/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/locationform/default.js');
+$this->dpdocument->addStyle($this->params->get('location_form_custom_css'));
 
 $action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id . $this->tmpl);
 ?>

@@ -12,6 +12,7 @@ if ($this->params->get('show_map', 1) && $this->params->get('map_provider', 'ope
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/calendar/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
+$this->dpdocument->addStyle($this->params->get('calendar_custom_css'));
 
 $this->loadTemplate('options');
 ?>

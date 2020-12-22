@@ -286,6 +286,9 @@
 			<field name="screen_size_list_view" type="text" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SCREEN_SIZE_LIST_VIEW_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SCREEN_SIZE_LIST_VIEW_DESC"/>
+			<field name="calendar_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 			<field name="calendar_filter_locations" type="location"
 			       multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_LABEL"
@@ -418,6 +421,9 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="form" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_LABEL">
 			<field name="event_form_date_format" type="text" useglobal="true"
@@ -464,7 +470,7 @@
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 
-			<field name="event_form_hidden_tabs" type="list" multiple="true" useglobal="true"
+			<field name="event_form_hidden_tabs" type="list" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_DESC">
 				<option value="location">COM_DPCALENDAR_LOCATION</option>
@@ -474,7 +480,7 @@
 				<option value="params:jbasic">COM_DPCALENDAR_FIELDSET_OPTIONS</option>
 				<option value="metadata:jmetadata">JGLOBAL_FIELDSET_METADATA_OPTIONS</option>
 			</field>
-			<field name="event_form_hidden_fields" type="list" multiple="true" useglobal="true"
+			<field name="event_form_hidden_fields" type="list" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_DESC">
 				<option value="color">COM_DPCALENDAR_FIELD_COLOR_LABEL</option>
@@ -565,6 +571,9 @@
 			<field name="event_form_description" type="editor" buttons="true"
 			       hide="pagebreak,readmore" class="input-xlarge" filter="JComponentHelper::filterText"
 			       label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
+			<field name="event_form_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
 			<field name="booking_fields_order" type="subform" multiple="true"
@@ -626,6 +635,9 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="booking_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="booking_form" label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_LABEL"
 		          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
@@ -696,7 +708,10 @@
 				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 			</field>
 			<field name="booking_form_default_country" type="dpcountries" class="dp-form-input dp-select"
-			       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>
+			       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"/>
+			<field name="booking_form_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="ticket" label="COM_DPCALENDAR_TICKET"
 		          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
@@ -765,6 +780,9 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="ticket_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="ticket_form" label="COM_DPCALENDAR_FIELD_CONFIG_TICKETFORM_LABEL"
 		          description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
@@ -848,6 +866,9 @@
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
 				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 			</field>
+			<field name="ticket_form_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="integration"
 		          label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_LABEL">

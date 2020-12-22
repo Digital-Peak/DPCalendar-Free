@@ -102,9 +102,8 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 		if (empty($table->id)) {
 			// Set ordering to the last item if not set
 			if (empty($table->ordering)) {
-				$db = JFactory::getDbo();
-				$db->setQuery('SELECT MAX(ordering) FROM #__dpcalendar_extcalendars');
-				$max = $db->loadResult();
+				$this->getDbo()->setQuery('SELECT MAX(ordering) FROM #__dpcalendar_extcalendars');
+				$max = $this->getDbo()->loadResult();
 
 				$table->ordering = $max + 1;
 			} else {
@@ -144,19 +143,17 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 				}
 			}
 			if ($ids) {
-				$db = $this->_db;
-
 				// Delete the events
-				$db->setQuery("delete from #__dpcalendar_events where catid in ('" . implode("','", $ids) . "')");
-				$db->execute();
+				$this->getDbo()->setQuery("delete from #__dpcalendar_events where catid in ('" . implode("','", $ids) . "')");
+				$this->getDbo()->execute();
 
 				// Delete the location associations
-				$db->setQuery('delete from #__dpcalendar_events_location where event_id not in (select id from #__dpcalendar_events)');
-				$db->execute();
+				$this->getDbo()->setQuery('delete from #__dpcalendar_events_location where event_id not in (select id from #__dpcalendar_events)');
+				$this->getDbo()->execute();
 
 				// Clearing the sync token
-				$db->setQuery("update #__dpcalendar_extcalendars set sync_date = null, sync_token = null where plugin = '" . $plugin . "'");
-				$db->execute();
+				$this->getDbo()->setQuery("update #__dpcalendar_extcalendars set sync_date = null, sync_token = null where plugin = '" . $plugin . "'");
+				$this->getDbo()->execute();
 			}
 		}
 

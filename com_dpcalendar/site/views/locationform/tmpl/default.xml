@@ -77,6 +77,9 @@
 			<field name="location_form_map_longitude" type="text" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
+			<field name="location_form_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 	</fields>
 </metadata>

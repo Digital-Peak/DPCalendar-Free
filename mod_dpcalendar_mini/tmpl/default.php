@@ -12,8 +12,8 @@ if ($params->get('show_map', 1)) {
 
 $document->loadScriptFile('dpcalendar/views/calendar/default.js');
 $document->loadScriptFile('dpcalendar/views/calendar/default.js');
-
 $document->loadStyleFile('default.css', 'mod_dpcalendar_mini');
+$document->addStyle($params->get('custom_css'));
 
 require JModuleHelper::getLayoutPath('mod_dpcalendar_mini', '_scripts');
 

@@ -146,6 +146,9 @@
 			<field name="locations_max_time" type="text" useglobal="true" showon="locations_show_resource_view:1"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
+			<field name="locations_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 			<field name="locations_filter_tags" type="tag" multiple="true" mode="nested"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC"/>
@@ -268,6 +271,9 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="location_custom_css" type="textarea" filter="raw" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 	</fields>
 </metadata>

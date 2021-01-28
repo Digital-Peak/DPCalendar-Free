@@ -20,7 +20,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=coupon&co_i
 			<div class="com-dpcalendar-couponform__content dp-grid">
 				<div class="com-dpcalendar-couponform__fields">
 					<?php foreach ($this->form->getFieldset($name) as $field) { ?>
-						<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
+						<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 					<?php } ?>
 				</div>
 			</div>

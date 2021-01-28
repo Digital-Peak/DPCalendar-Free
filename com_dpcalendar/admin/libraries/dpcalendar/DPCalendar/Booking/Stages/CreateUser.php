@@ -8,10 +8,7 @@ namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\Booking;
-use DPCalendar\Helper\DateHelper;
-use DPCalendar\Helper\DPCalendarHelper;
-use DPCalendar\Translator\Translator;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\User\UserHelper;
 use League\Pipeline\StageInterface;
 
@@ -63,6 +60,7 @@ class CreateUser implements StageInterface
 		}
 
 		$this->application->getLanguage()->load('com_users', JPATH_SITE);
+		Form::addFormPath(JPATH_SITE . '/components/com_users/forms');
 
 		$data['name']         = $payload->data['name'];
 		$data['email1']       = $payload->data['email'];

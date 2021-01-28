@@ -482,6 +482,7 @@
 							ignoreAttributes: true,
 							appendTo: document.body,
 							theme: 'light',
+							onShow: (instance) => instance.popper.querySelector('div[role="tooltip"]').classList.add('show'),
 							popperOptions: {
 								modifiers: [
 									{

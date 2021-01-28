@@ -12,7 +12,7 @@ defined('_JEXEC') or die();
 		<div class="dp-location-group dp-location-group-<?php echo $id; ?>">
 			<?php if ($id) { ?>
 				<h2 class="dp-location-group__label">
-					<?php echo $this->params->get('locations_output_grouping') != 'country' ? $id : $locations[0]->country_code_value; ?>
+					<?php echo $this->params->get('locations_output_grouping', 0) != 'country' ? $id : $locations[0]->country_code_value; ?>
 				</h2>
 			<?php } ?>
 			<div class="dp-location-group__locations">
@@ -44,8 +44,10 @@ defined('_JEXEC') or die();
 								</button>
 								<button type="button" class="dp-button dp-button-action dp-button-map-directions" data-target="new"
 										data-href="<?php echo \DPCalendar\Helper\Location::getDirectionsLink($location); ?>">
-									<?php echo $this->layoutHelper->renderLayout('block.icon',
-										['icon' => \DPCalendar\HTML\Block\Icon::DIRECTIONS]); ?>
+									<?php echo $this->layoutHelper->renderLayout(
+										'block.icon',
+										['icon' => \DPCalendar\HTML\Block\Icon::DIRECTIONS]
+									); ?>
 									<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
 									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
 								</button>

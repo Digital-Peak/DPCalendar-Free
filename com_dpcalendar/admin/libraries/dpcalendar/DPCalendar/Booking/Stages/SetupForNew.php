@@ -89,6 +89,8 @@ class SetupForNew implements StageInterface
 			$payload->data['coupon_id']   = $coupon->id;
 			$payload->data['coupon_rate'] = $coupon->discount_value;
 			$payload->data['price']       = $payload->data['price'] - $coupon->discount_value;
+		} else {
+			$payload->data['coupon_id'] = 0;
 		}
 
 		$taxRate = $this->taxRateModel->getItemByCountry($payload->data['country']);

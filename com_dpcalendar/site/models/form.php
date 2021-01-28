@@ -33,7 +33,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 	public function invite($eventId, $userIds, $groups)
 	{
 		foreach ($groups as $groupId) {
-			$userIds = array_merge($userIds, JFactory::getACL()->getUsersByGroup($groupId));
+			$userIds = array_merge($userIds, \JAccess::getUsersByGroup($groupId));
 		}
 		$event = JModelLegacy::getInstance('Event', 'DPCalendarModel')->getItem($eventId);
 		$lang  = JFactory::$language;
@@ -56,7 +56,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			}
 
 			if ($u->getParam('language') && JFactory::getLanguage()->getTag() != $u->getParam('language')) {
-				JFactory::getConfig()->set('language', $u->getParam('language'));
+				JFactory::getApplication()->set('language', $u->getParam('language'));
 				JFactory::$language = null;
 				JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 			}
@@ -105,7 +105,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 				'bookingDetails' => $details,
 				'bookingLink'    => DPCalendarHelperRoute::getBookingRoute($booking, true),
 				'bookingUid'     => $booking->uid,
-				'sitename'       => JFactory::getConfig()->get('sitename'),
+				'sitename'       => JFactory::getApplication()->get('sitename'),
 				'user'           => $u->name
 			];
 
@@ -193,13 +193,19 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$form->setFieldAttribute('created_by', 'type', 'sql');
 			$form->setFieldAttribute('created_by', 'key_field', 'value');
 			$form->setFieldAttribute('created_by', 'value_field', 'text');
-			$form->setFieldAttribute('created_by', 'query',
-				'select id as value, name as text from #__users union all select null, null order by text');
+			$form->setFieldAttribute(
+				'created_by',
+				'query',
+				'select id as value, name as text from #__users union all select null, null order by text'
+			);
 			$form->setFieldAttribute('modified_by', 'type', 'sql');
 			$form->setFieldAttribute('modified_by', 'key_field', 'value');
 			$form->setFieldAttribute('modified_by', 'value_field', 'text');
-			$form->setFieldAttribute('modified_by', 'query',
-				'select id as value, name as text from #__users union all select null, null order by text');
+			$form->setFieldAttribute(
+				'modified_by',
+				'query',
+				'select id as value, name as text from #__users union all select null, null order by text'
+			);
 		}
 
 		return $return;

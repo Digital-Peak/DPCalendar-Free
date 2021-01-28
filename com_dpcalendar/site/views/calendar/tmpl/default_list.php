@@ -22,6 +22,7 @@ if ($this->params->get('show_selection', 1) == 2) {
 			<?php $style = 'background-color: #' . $calendar->color . ';'; ?>
 			<?php $style .= 'border-color: #' . $calendar->color . ';'; ?>
 			<?php $style .= 'color: #' . \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($calendar->color); ?>
+			<?php $icalRoute = $this->router->getCalendarIcalRoute($calendar->id); ?>
 			<div class="dp-calendar">
 				<label for="cal-<?php echo $calendar->id; ?>" class="dp-input-label dp-calendar__label">
 					<input type="checkbox" name="cal-<?php echo $calendar->id; ?>" value="<?php echo $calendar->id; ?>"
@@ -33,12 +34,11 @@ if ($this->params->get('show_selection', 1) == 2) {
 				</label>
 				<div class="dp-calendar__links">
 					<?php if ((!empty($calendar->icalurl) || !$calendar->external) && $this->params->get('show_export_links', 1)) { ?>
-						<a href="<?php echo str_replace(['http://', 'https://'], 'webcal://',
-							$this->router->getCalendarIcalRoute($calendar->id)); ?>"
+						<a href="<?php echo str_replace(['http://', 'https://'], 'webcal://', $icalRoute); ?>"
 						   class="dp-link dp-link-subscribe">
 							[<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_SUBSCRIBE'); ?>]
 						</a>
-						<a href="<?php echo $this->router->getCalendarIcalRoute($calendar->id); ?>" class="dp-link">
+						<a href="<?php echo $icalRoute; ?>" class="dp-link">
 							[<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ICAL'); ?>]
 						</a>
 						<?php if (!$this->user->guest && $token = (new \Joomla\Registry\Registry($this->user->params))->get('token')) { ?>

@@ -7,11 +7,9 @@
 namespace DPCalendar\Sabre\DAV\Auth\Backend;
 
 use Sabre\DAV\Auth\Backend;
-use Sabre\HTTP;
 
 class Joomla extends Backend\AbstractBasic
 {
-
 	protected function validateUserPass($username, $password)
 	{
 		$authenticate = \JAuthentication::getInstance();

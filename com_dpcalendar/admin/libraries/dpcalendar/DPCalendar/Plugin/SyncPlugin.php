@@ -32,7 +32,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 
 		$internal = !filter_var($uri, FILTER_VALIDATE_URL);
 		if ($internal && strpos($uri, '/') !== 0) {
-			$uri = JPATH_ROOT . DS . $uri;
+			$uri = JPATH_ROOT . '/' . $uri;
 		}
 
 		$syncToken = rand();

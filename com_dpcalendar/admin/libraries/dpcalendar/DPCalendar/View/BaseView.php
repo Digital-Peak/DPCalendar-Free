@@ -221,14 +221,15 @@ class BaseView extends \JViewLegacy
 	protected function handleNoAccess()
 	{
 		if (!$this->user->guest) {
-			throw new \Exception($this->translate('JERROR_ALERTNOAUTHOR'), 403);
+			throw new \Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'), 403);
 		}
 
 		$active = $this->app->getMenu()->getActive();
 		$link   = new \JUri(\JRoute::_('index.php?option=com_users&view=login&Itemid=' . $active->id, false));
 		$link->setVar('return', base64_encode('index.php?Itemid=' . $active->id));
 
-		$this->app->redirect(\JRoute::_($link), $this->translate('COM_DPCALENDAR_NOT_LOGGED_IN'), 'warning');
+		$this->app->enqueueMessage($this->translate('COM_DPCALENDAR_NOT_LOGGED_IN'), 'warning');
+		$this->app->redirect(\JRoute::_($link));
 
 		return false;
 	}

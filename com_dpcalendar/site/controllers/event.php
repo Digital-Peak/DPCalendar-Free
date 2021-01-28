@@ -136,8 +136,14 @@ class DPCalendarControllerEvent extends JControllerForm
 				return false;
 			}
 		}
-		// Redirect to the return page.
-		$this->setRedirect($this->getReturnPage(), JText::_('COM_DPCALENDAR_DELETE_SUCCESS'));
+		// Redirect to the return page
+		$redirect = $this->getReturnPage();
+
+		// J4 router redirects to the delete task again
+		if ($return = $this->input->getVar('return', null, 'default', 'base64')) {
+			$redirect = base64_decode($return);
+		}
+		$this->setRedirect($redirect, JText::_('COM_DPCALENDAR_DELETE_SUCCESS'));
 
 		return true;
 	}
@@ -223,9 +229,9 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		if (empty($return) || !JUri::isInternal(base64_decode($return))) {
 			return JURI::base();
-		} else {
-			return JRoute::_(base64_decode($return), false) . $hash;
 		}
+
+		return JRoute::_(base64_decode($return), false) . $hash;
 	}
 
 	public function move()
@@ -538,6 +544,11 @@ class DPCalendarControllerEvent extends JControllerForm
 			$data['end_date_time'],
 			$data['all_day'] == '1'
 		);
+
+		if ($data['all_day']) {
+			$startDate->setTime(0, 0, 0);
+			$endDate->setTime(23, 59, 59);
+		}
 
 		// End date is exclusive
 		$endDate->modify('-1 second');

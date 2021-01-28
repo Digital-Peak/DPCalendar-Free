@@ -7,9 +7,8 @@
 defined('_JEXEC') or die();
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-Jloader::import('components.com_categories.models.fields.categoryedit', JPATH_ADMINISTRATOR);
 
-class JFormFieldDPCalendarEdit extends JFormFieldCategoryEdit
+class JFormFieldDPCalendarEdit extends JFormFieldCategory
 {
 	public $type = 'DPCalendarEdit';
 

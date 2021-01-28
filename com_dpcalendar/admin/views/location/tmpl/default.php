@@ -21,11 +21,12 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 			<div class="com-dpcalendar-locationform__content dp-grid">
 				<div class="com-dpcalendar-locationform__fields">
 					<?php foreach ($this->form->getFieldset($name) as $field) { ?>
-						<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
+						<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 					<?php } ?>
 				</div>
 				<?php if ($name == 'general' && $this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
-					<div class="com-dpcalendar-locationform__map dp-map" data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
+					<div class="com-dpcalendar-locationform__map dp-map"
+						 data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
 				<?php } ?>
 			</div>
 			<?php echo JHtml::_('bootstrap.endTab'); ?>

@@ -112,14 +112,10 @@ abstract class PaymentPlugin extends \JPlugin
 		$purchaseParameters['currency'] = strtoupper(\DPCalendarHelper::getComponentParameter('currency', 'USD'));
 
 		// The urls for call back actions
-		$purchaseParameters['returnUrl'] = $rootURL . \JRoute::_(
-				'index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . $tmpl,
-				false
-			);
-		$purchaseParameters['cancelUrl'] = $rootURL . \JRoute::_(
-				'index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . $tmpl,
-				false
-			);
+		$purchaseParameters['returnUrl'] = \JRoute::_('index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . $tmpl, false);
+		$purchaseParameters['returnUrl'] = $rootURL . $purchaseParameters['returnUrl'];
+		$purchaseParameters['cancelUrl'] = \JRoute::_('index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . $tmpl, false);
+		$purchaseParameters['cancelUrl'] = $rootURL . $purchaseParameters['cancelUrl'];
 
 		return $purchaseParameters;
 	}

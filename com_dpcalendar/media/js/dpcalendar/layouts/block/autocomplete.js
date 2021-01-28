@@ -74,7 +74,7 @@
 			items.forEach((item, index) => {
 				const e = document.createElement('a');
 				e.href = '#';
-				e.innerHTML = '<strong>' + item.title + '</strong> <span>' + item.details + '</span>';
+				e.innerHTML = '<strong class="dp-autocomplete__item-title">' + item.title + '</strong> <span class="dp-autocomplete__item-details">' + item.details + '</span>';
 				e.classList.add('dp-autocomplete__result');
 				if (item.title == input.value) {
 					e.classList.add('dp-autocomplete__result_selected');

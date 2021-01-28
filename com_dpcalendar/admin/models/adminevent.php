@@ -147,7 +147,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$form->removeField('booking_series');
 			if ($item->booking_series == 1) {
 				foreach ($form->getFieldset('booking') as $field) {
-					$form->removeField($field->fieldname);
+					$form->removeField(DPCalendarHelper::getFieldName($field));
 				}
 			}
 		}
@@ -544,7 +544,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 					null,
 					[
 						'ticketLink' => DPCalendarHelperRoute::getTicketRoute($ticket, true),
-						'sitename'   => JFactory::getConfig()->get('sitename'),
+						'sitename'   => JFactory::getApplication()->get('sitename'),
 						'user'       => JFactory::getUser()->name
 					]
 				);
@@ -820,7 +820,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_' . strtoupper($action) . '_BODY'),
 			null,
 			[
-				'sitename' => JFactory::getConfig()->get('sitename'),
+				'sitename' => JFactory::getApplication()->get('sitename'),
 				'user'     => $user->name
 			]
 		);
@@ -836,7 +836,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$authors = array_unique($authors);
 
 		$extraVars = [
-			'sitename' => JFactory::getConfig()->get('sitename'),
+			'sitename' => JFactory::getApplication()->get('sitename'),
 			'user'     => $user->name
 		];
 

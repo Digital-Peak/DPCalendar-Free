@@ -11,7 +11,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=invite' . $
 <form class="com-dpcalendar-invite__form dp-form form-validate" method="post" name="adminForm" id="adminForm" action="<?php echo $action; ?>">
 	<div class="com-dpcalendar-invite__fields">
 		<?php foreach ($this->form->getFieldSet() as $field) { ?>
-			<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
+			<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 		<?php } ?>
 	</div>
 	<input type="hidden" name="task" class="dp-input dp-input-hidden">

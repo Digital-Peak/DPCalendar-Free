@@ -355,7 +355,6 @@ class PlgSampledataDPCalendar extends JPlugin
 				'rrule'        => 'FREQ=WEEKLY;BYDAY=WE',
 				'start_date'   => $start->toSql(),
 				'end_date'     => $end->toSql(),
-				'images'       => '{"image_full":"images\\/joomla_black.png","image_full_alt":"","image_full_caption":"","image_intro":"","image_intro_alt":"","image_intro_caption":""}',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_2_DESC',
 				'location_ids' => $locationIds[0]
 			]);
@@ -981,7 +980,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['assignment'] = 0;
 			$data['access']     = (int)$this->app->get('access', 1);
 			$data['client_id']  = 0;
-			$data['position']   = 'position-7';
+			$data['position']   = DPCalendarHelper::isJoomlaVersion(4, '<') ? 'position-7' : 'sidebar-right';
 
 			$model = JModelLegacy::getInstance('Module', 'ModulesModel');
 			if (!$model->save($data)) {
@@ -1049,9 +1048,9 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			// Set unicodeslugs if alias is empty
 			if (trim(str_replace('-', '', $data['alias']) == '')) {
-				$unicode       = JFactory::getConfig()->set('unicodeslugs', 1);
+				$unicode       = JFactory::getApplication()->set('unicodeslugs', 1);
 				$data['alias'] = JApplicationHelper::stringURLSafe($data['title']);
-				JFactory::getConfig()->set('unicodeslugs', $unicode);
+				JFactory::getApplication()->set('unicodeslugs', $unicode);
 			}
 
 			$data['published']         = 1;
@@ -1211,9 +1210,9 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			// Set unicodeslugs if alias is empty
 			if (trim(str_replace('-', '', $alias) == '')) {
-				$unicode = JFactory::getConfig()->set('unicodeslugs', 1);
+				$unicode = JFactory::getApplication()->set('unicodeslugs', 1);
 				$alias   = JApplicationHelper::stringURLSafe($data['title']);
-				JFactory::getConfig()->set('unicodeslugs', $unicode);
+				JFactory::getApplication()->set('unicodeslugs', $unicode);
 			}
 
 			$data['parent_id']       = 1;
@@ -1334,7 +1333,7 @@ class PlgSampledataDPCalendar extends JPlugin
 		}
 
 		// Disable mail
-		JFactory::getConfig()->set('mailonline', false);
+		JFactory::getApplication()->set('mailonline', false);
 	}
 
 	private function clearTable($name)

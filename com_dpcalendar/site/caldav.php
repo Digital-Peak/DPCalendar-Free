@@ -5,7 +5,6 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 define('_JEXEC', 1);
-define('DS', DIRECTORY_SEPARATOR);
 
 $path = dirname(dirname(dirname(__FILE__)));
 if (isset($_SERVER["SCRIPT_FILENAME"])) {
@@ -25,8 +24,17 @@ class DPCalendarCalDavServer extends JApplicationCms
 {
 	public function __construct(JInput $input = null, JRegistry $config = null, JApplicationWebClient $client = null)
 	{
-		JFactory::getConfig()->set('caching', 0);
-		JFactory::getConfig()->set('debug', false);
+		if (!$config && Joomla\CMS\Version::MAJOR_VERSION == 4) {
+			$config = Joomla\CMS\Factory::getContainer()->get('config');
+		}
+		if (!$config) {
+			$config = Joomla\CMS\Factory::getConfig();
+		}
+		$config->set('caching', 0);
+		$config->set('debug', false);
+
+		// Register the application name
+		$this->name = 'caldav';
 
 		parent::__construct($input, $config, $client);
 	}
@@ -35,10 +43,18 @@ class DPCalendarCalDavServer extends JApplicationCms
 	{
 		function exception_error_handler($errno, $errstr, $errfile, $errline)
 		{
+			// Ignore deprecated messages
+			if ($errno == E_USER_DEPRECATED) {
+				return;
+			}
+
 			JLog::add('Something crashed during a CalDAV request on ' . $errfile . ' ' . $errline . PHP_EOL . $errstr, JLog::ERROR, 'com_dpcalendar');
 			if (JDEBUG) {
 				$text = '';
 				foreach (debug_backtrace() as $item) {
+					if (empty($item['line'])) {
+						continue;
+					}
 					$text .= PHP_EOL . $item['line'] . ' ' . $item['file'];
 				}
 
@@ -50,9 +66,15 @@ class DPCalendarCalDavServer extends JApplicationCms
 		set_error_handler("exception_error_handler");
 
 		try {
+			if (Joomla\CMS\Version::MAJOR_VERSION == 4) {
+				$this->setContainer(Joomla\CMS\Factory::getContainer());
+				$this->setSession(Joomla\CMS\Factory::getContainer()->get('session.web.site'));
+				$this->setDispatcher(Joomla\CMS\Factory::getContainer()->get('dispatcher'));
+			}
+
 			JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-			$config = JFactory::getConfig();
+			$config = JFactory::getApplication();
 
 			// Load the right language
 			$siteLanguage = \JComponentHelper::getParams('com_languages')->get('site', 'en-GB');
@@ -61,7 +83,8 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$this->initialiseApp();
 
 			$pdo = new \PDO(
-				'mysql:host=' . $config->get('host') . ';dbname=' . $config->get('db') . ';charset=utf8', $config->get('user'),
+				'mysql:host=' . $config->get('host') . ';dbname=' . $config->get('db') . ';charset=utf8',
+				$config->get('user'),
 				$config->get('password')
 			);
 			$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -105,7 +128,6 @@ class DPCalendarCalDavServer extends JApplicationCms
 			$server->addPlugin(new \Sabre\CalDAV\Schedule\Plugin());
 
 			$server->addPlugin(new \Sabre\DAV\Browser\Plugin());
-
 			$server->start();
 		} catch (Exception $e) {
 			$message = 'Something crashed during a CalDAV request: ' . PHP_EOL . $e;
@@ -134,7 +156,7 @@ class DPCalendarCalDavServer extends JApplicationCms
 
 	public function getCfg($varname, $default = null)
 	{
-		$config = JFactory::getConfig();
+		$config = JFactory::getApplication();
 
 		return $config->get('' . $varname, $default);
 	}

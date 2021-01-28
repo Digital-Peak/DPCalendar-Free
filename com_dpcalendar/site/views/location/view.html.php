@@ -23,7 +23,7 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		$this->location = $this->getModel()->getItem($this->input->getInt('id'));
 
 		if ($this->location->id == null) {
-			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'), 404);
+			throw new Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'), 404);
 		}
 
 		$this->location->tags = new JHelperTags();

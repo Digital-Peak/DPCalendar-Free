@@ -1019,7 +1019,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 					continue;
 				}
 
-				$form->removeField($field->fieldname, $group);
+				$form->removeField(DPCalendarHelper::getFieldName($field), $group);
 			}
 		}
 
@@ -1048,7 +1048,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$form->setFieldAttribute('location_ids', 'multiple', false);
 
 		foreach ($form->getGroup('com_fields') as $item) {
-			$form->removeField($item->fieldname, $item->group);
+			$form->removeField(DPCalendarHelper::getFieldName($item), $item->group);
 		}
 	}
 

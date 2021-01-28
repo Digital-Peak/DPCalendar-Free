@@ -60,7 +60,7 @@
 				if (task != 'translate.update') {
 					return true;
 				}
-				asyncPool(document.querySelectorAll('.com-dpcalendar-tools-translate .dp-resource:nth-child(-n+6)'), (resource) => {
+				asyncPool(document.querySelectorAll('.com-dpcalendar-tools-translate .dp-resource'), (resource) => {
 					return new Promise(resolve => {
 						DPCalendar.request(
 							'task=translate.update',

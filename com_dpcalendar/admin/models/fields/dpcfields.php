@@ -28,7 +28,7 @@ class JFormFieldDPCFields extends JFormFieldList
 		foreach ($form->getFieldset() as $field) {
 			$isHidden = false;
 			foreach ($hide as $toHide) {
-				if (!fnmatch($toHide, $field->fieldname) && $field->type != 'Spacer') {
+				if (!fnmatch($toHide, DPCalendarHelper::getFieldName($field)) && $field->type != 'Spacer') {
 					continue;
 				}
 
@@ -40,7 +40,7 @@ class JFormFieldDPCFields extends JFormFieldList
 				continue;
 			}
 
-			$options[] = JHtml::_('select.option', $field->fieldname, JText::_($field->getTitle()));
+			$options[] = JHtml::_('select.option', DPCalendarHelper::getFieldName($field), JText::_($field->getTitle()));
 		}
 
 		$fields = FieldsHelper::getFields('com_dpcalendar.' . $this->element['section']);

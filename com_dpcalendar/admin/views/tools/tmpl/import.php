@@ -42,7 +42,7 @@ $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_IMPORT_WA
 					<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_END_DATE_BEFORE_LABEL'); ?>:
 				</label>
 				<?php $end = $this->dateHelper->getDate(); ?>
-				<?php $end->modify('+2 month');; ?>
+				<?php $end->modify('+2 month'); ?>
 				<?php echo JHtml::_(
 					'calendar',
 					$this->escape($end),

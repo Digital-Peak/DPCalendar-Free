@@ -5,7 +5,6 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 define('_JEXEC', 1);
-define('DS', DIRECTORY_SEPARATOR);
 
 $path = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
 if (isset($_SERVER["SCRIPT_FILENAME"])) {
@@ -42,11 +41,11 @@ class DPCalendarEventSync extends JApplicationCli
 	public function doExecute()
 	{
 		// Disabling session handling otherwise it will result in an error
-		JFactory::getConfig()->set('session_handler', 'none');
+		JFactory::getApplication()->set('session_handler', 'none');
 
 		// Setting HOST
 		if (empty($_SERVER['HTTP_HOST'])) {
-			$_SERVER['HTTP_HOST'] = JFactory::getConfig()->get('live_site');
+			$_SERVER['HTTP_HOST'] = JFactory::getApplication()->get('live_site');
 		}
 
 		// Run as super admin
@@ -79,7 +78,7 @@ class DPCalendarEventSync extends JApplicationCli
 
 	public function getCfg($varname, $default = null)
 	{
-		return JFactory::getConfig()->get('' . $varname, $default);
+		return JFactory::getApplication()->get('' . $varname, $default);
 	}
 
 	public static function getRouter($name = '', array $options = [])

@@ -433,6 +433,10 @@ class DPCalendarTableEvent extends JTable
 
 	public function delete($pk = null)
 	{
+		if (!$this->catid) {
+			$this->load($pk);
+		}
+
 		$success = parent::delete($pk);
 		if ($success && $pk > 0) {
 			$this->_db->setQuery('delete from #__dpcalendar_events where original_id = ' . (int)$pk);
@@ -441,7 +445,6 @@ class DPCalendarTableEvent extends JTable
 			$this->_db->execute();
 		}
 		if ($success && $this->catid) {
-			$this->load($pk);
 			DPCalendarHelper::increaseEtag($this->catid);
 		}
 

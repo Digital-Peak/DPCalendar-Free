@@ -50,12 +50,12 @@ abstract class CalDAVPlugin extends SyncPlugin
 		$exdate = $original->EXDATE;
 		if ($exdate === null) {
 			$original->add('EXDATE', '');
-			$original->EXDATE->add('VALUE', 'DATE' . ($oldEvent->all_day ? '' : '-TIME'));
 		}
 		$rec = \DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd' . ($oldEvent->all_day ? '' : '\THis\Z'));
 
 		try {
 			$original->EXDATE = trim($exdate . ',' . $rec, ',');
+			$original->EXDATE->add('VALUE', 'DATE' . ($oldEvent->all_day ? '' : '-TIME'));
 
 			// Echo '<pre>' . $c->serialize() . '</pre>'; die();
 			$this->updateCalDAVEvent($eventId, $c->serialize(), $calendarId);

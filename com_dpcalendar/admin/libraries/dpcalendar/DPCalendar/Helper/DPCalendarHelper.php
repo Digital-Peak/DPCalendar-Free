@@ -8,11 +8,8 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
-
-if (!defined('DS')) {
-	define('DS', DIRECTORY_SEPARATOR);
-}
 
 \JLoader::import('joomla.application.component.helper');
 \JLoader::import('joomla.application.categories');
@@ -22,7 +19,6 @@ if (!defined('DS')) {
 \JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');
 
 if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
-	\JLoader::registerAlias('JFormFieldCategoryEdit', '\\Joomla\\Component\\Categories\\Administrator\\Field\\CategoryeditField');
 	\JLoader::registerAlias('UsersModelRegistration', '\\Joomla\\Component\\Users\\Site\\Model\\RegistrationModel');
 }
 \JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
@@ -142,14 +138,18 @@ class DPCalendarHelper
 	 */
 	public static function deobfuscate($string)
 	{
-		$tmp = @convert_uudecode(base64_decode($string));
+		try {
+			$tmp = @convert_uudecode(base64_decode($string));
 
-		// Probably not obfuscated
-		if (!$tmp) {
+			// Probably not obfuscated
+			if (!$tmp) {
+				return $string;
+			}
+
+			return $tmp;
+		} catch (\Exception $e) {
 			return $string;
 		}
-
-		return $tmp;
 	}
 
 	public static function parseImages($event)
@@ -754,16 +754,15 @@ class DPCalendarHelper
 		header('Content-Disposition: attachement; filename="' . $realName . 's-' . date('YmdHi') . '.csv";');
 		fpassthru($f);
 
-		\JFactory::getApplication()->close();
+		Factory::getApplication()->close();
 	}
 
 	public static function doPluginAction($plugin, $action, $data = null)
 	{
 		\JPluginHelper::importPlugin('dpcalendar');
 
-		$enabled = \JPluginHelper::isEnabled('dpcalendar', $plugin);
-		if (!$enabled) {
-			$db    = \JFactory::getDbo();
+		if (!\JPluginHelper::isEnabled('dpcalendar', $plugin)) {
+			$db    = Factory::getDbo();
 			$query = $db->getQuery(true)
 				->select('folder AS type, element AS name, params')
 				->from('#__extensions')
@@ -774,15 +773,17 @@ class DPCalendarHelper
 
 			\JLoader::import('dpcalendar.' . $plugin . '.' . $plugin, JPATH_PLUGINS);
 
-			$className  = 'Plg' . $p->type . $p->name;
-			$dispatcher = \JEventDispatcher::getInstance();
-			$p          = (array)$p;
-			new $className($dispatcher, $p);
+			$className      = 'Plg' . $p->type . $p->name;
+			$dispatcher     = DPCalendarHelper::isJoomlaVersion(4, '>=') ?
+				Factory::getApplication()->getDispatcher() : \JEventDispatcher::getInstance();
+			$p              = (array)$p;
+			$pluginInstance = new $className($dispatcher, $p);
+			if (DPCalendarHelper::isJoomlaVersion(4, '>=')) {
+				$pluginInstance->registerListeners();
+			}
 		}
 
-		$result = \JFactory::getApplication()->triggerEvent('onDPCalendarDoAction', [$action, $plugin]);
-
-		return $result;
+		return Factory::getApplication()->triggerEvent('onDPCalendarDoAction', [$action, $plugin]);
 	}
 
 	public static function isJoomlaVersion($version, $operator = '==')
@@ -924,7 +925,7 @@ class DPCalendarHelper
 			return true;
 		}
 
-		return (substr($haystack, -$length) === $needle);
+		return substr($haystack, -$length) === $needle;
 	}
 
 	public static function matches($text, $query)
@@ -1038,6 +1039,20 @@ class DPCalendarHelper
 				return array_search($f1->id, $keys) - array_search($f2->id, $keys);
 			}
 		);
+	}
+
+	public static function getFieldName($field, $forRender = false)
+	{
+		$fieldName = str_replace($field->formControl . '_', '', $field->id);
+		if ($field->group) {
+			$fieldName = str_replace($field->group . '_', '', $fieldName);
+		}
+
+		if ($forRender) {
+			$fieldName = 'dp-field-' . str_replace('_', '-', $fieldName);
+		}
+
+		return $fieldName;
 	}
 
 	public static function parseHtml($text)

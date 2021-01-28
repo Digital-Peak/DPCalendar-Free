@@ -529,7 +529,7 @@ class Location
 		if (!empty($tmp->address->city)) {
 			$locObject->city = $tmp->address->city;
 		}
-		if (!empty ($tmp->address->town)) {
+		if (!empty($tmp->address->town)) {
 			$locObject->city = $tmp->address->town;
 		}
 		if (!empty($tmp->address->postcode)) {

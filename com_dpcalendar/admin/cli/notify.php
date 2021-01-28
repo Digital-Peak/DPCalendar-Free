@@ -5,7 +5,6 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 define('_JEXEC', 1);
-define('DS', DIRECTORY_SEPARATOR);
 
 $path = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
 if (isset($_SERVER["SCRIPT_FILENAME"])) {
@@ -48,7 +47,7 @@ class DPCalendarEventNotifier extends JApplicationCli
 	{
 		try {
 			JLog::add('Loading the database configuration', JLog::DEBUG, 'com_dpcalendar');
-			$config = JFactory::getConfig();
+			$config = JFactory::getApplication();
 
 			// Disabling session handling otherwise it will result in an error
 			$config->set('session_handler', 'none');
@@ -125,14 +124,14 @@ class DPCalendarEventNotifier extends JApplicationCli
 			JLog::add('Settig up the texts', JLog::DEBUG, 'com_dpcalendar');
 
 			$siteLanguage = JComponentHelper::getParams('com_languages')->get('site', $this->get('language', 'en-GB'));
-			JFactory::getConfig()->set('language', JUser::getInstance($ticket->user_id)->getParam('language', $siteLanguage));
+			JFactory::getApplication()->set('language', JUser::getInstance($ticket->user_id)->getParam('language', $siteLanguage));
 			JFactory::$language = null;
-			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . DS . 'components' . DS . 'com_dpcalendar');
+			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR .  '/components/com_dpcalendar');
 
 			$subject = DPCalendarHelper::renderEvents($events, JText::_('COM_DPCALENDAR_BOOK_NOTIFICATION_EVENT_SUBJECT'), null);
 
 			$variables                = [
-				'sitename' => JFactory::getConfig()->get('sitename'),
+				'sitename' => JFactory::getApplication()->get('sitename'),
 				'user'     => JFactory::getUser()->name
 			];
 			$variables['hasLocation'] = !empty($events[0]->locations);
@@ -167,7 +166,7 @@ class DPCalendarEventNotifier extends JApplicationCli
 
 	public function getCfg($varname, $default = null)
 	{
-		$config = JFactory::getConfig();
+		$config = JFactory::getApplication();
 
 		return $config->get('' . $varname, $default);
 	}

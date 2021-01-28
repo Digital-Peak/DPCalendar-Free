@@ -44,6 +44,8 @@ class SetupForUpdate implements StageInterface
 
 		if (!empty($payload->data['coupon_id']) && $coupon = $this->couponModel->getItem(['code' => $payload->data['coupon_id']])) {
 			$payload->data['coupon_id'] = $coupon->id;
+		} else {
+			$payload->data['coupon_id'] = 0;
 		}
 
 		return $payload;

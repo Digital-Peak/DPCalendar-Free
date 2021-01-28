@@ -18,14 +18,7 @@ class DPCalendarModelEvents extends JModelList
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = [
-				'id',
-				'a.id',
-				'title',
-				'a.title',
-				'hits',
-				'a.hits'
-			];
+			$config['filter_fields'] = ['id', 'a.id', 'title', 'a.title', 'hits', 'a.hits'];
 		}
 
 		parent::__construct($config);
@@ -216,7 +209,7 @@ class DPCalendarModelEvents extends JModelList
 		if ($user->id > 0 && !DPCalendarHelper::isFree()) {
 			// Join to tickets to add a field if the logged in user has a ticket for the event
 			$query->select('t.id as booking');
-			$query->join('LEFT', '#__dpcalendar_tickets AS t ON t.event_id = a.id and t.user_id = ' . (int)$user->id);
+			$query->join('LEFT', '#__dpcalendar_tickets AS t ON (t.event_id = a.id or t.event_id = a.original_id) and t.user_id = ' . (int)$user->id);
 		}
 
 		// Join on series max/min

@@ -63,8 +63,7 @@
 }
 
 .com-dpcalendar-eventform .dp-datepicker__input {
-	border-right: 0px;
-	margin-right: -2px;
+	margin-right: -3px;
 }
 
 .com-dpcalendar-eventform .dp-datepicker__button {

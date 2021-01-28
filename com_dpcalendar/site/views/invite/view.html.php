@@ -17,7 +17,7 @@ class DPCalendarViewInvite extends \DPCalendar\View\BaseView
 
 		$event = JModelLegacy::getInstance('Event', 'DPCalendarModel')->getItem($this->input->getInt('id'));
 		if (!$event || !$event->id || $this->user->authorise('dpcalendar.invite', 'com_dpcalendar.category.' . $event->catid) !== true) {
-			throw new Exception(JText::_('JERROR_ALERTNOAUTHOR'));
+			throw new Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'));
 		}
 
 		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');

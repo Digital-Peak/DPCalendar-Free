@@ -22,16 +22,15 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 		}
 
 		// The stats data
-		$data = [
-			'resource'  => $resource,
-			'languages' => []
-		];
+		$data = ['resource' => $resource, 'languages' => []];
 
 		// Loop over the local languages
 		foreach (JLanguageHelper::getKnownLanguages() as $language) {
-			$resourceData       = Transifex::getData('resource/' . $resource . '/stats');
-			$transifexLanguages = json_decode($resourceData['data']);
-			foreach ($transifexLanguages as $langCode => $tr) {
+			foreach (Transifex::getData('resource/' . $resource . '/stats') as $langCode => $tr) {
+				// Ignore DP related property
+				if ($langCode == 'dp') {
+					continue;
+				}
 				$code = Transifex::getLangCode($langCode);
 				if ($code === false || $code != $language['tag']) {
 					continue;
@@ -61,8 +60,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 		}
 
 		// The stats
-		$resourceData = Transifex::getData('resource/' . $resource . '/stats');
-		foreach ((array)json_decode($resourceData['data']) as $langCode => $lang) {
+		foreach (Transifex::getData('resource/' . $resource . '/stats') as $langCode => $lang) {
 			// Ignore empty languages
 			if ((int)$lang->completed < 1) {
 				continue;
@@ -78,7 +76,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 
 			// Get the content of the language
 			$content = Transifex::getData('resource/' . $resource . '/translation/' . $code . '?file=1');
-			if (empty($content['data']) || $content['info']['http_code'] > 200) {
+			if (empty($content->dp->body) || $content->dp->info->http_code > 200) {
 				continue;
 			}
 
@@ -86,7 +84,8 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 			$path = '';
 			if (strpos($resource, 'com_') !== false) {
 				$path = strpos($resource, '-admin') !== false ? JPATH_ADMINISTRATOR : JPATH_ROOT;
-				$path .= '/components/com_dpcalendar/language/' . $code . '/' . $code . '.' . str_replace(['-', '.admin'], ['.', ''], $resource);
+				$path .= '/components/com_dpcalendar/language/' . $code . '/' . $code . '.'
+					. str_replace(['-', '.admin', '.site'], ['.', '', ''], $resource);
 			}
 
 			if (strpos($resource, 'mod_') === 0) {
@@ -106,16 +105,16 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 			}
 
 			// Check if it is a sys path
-			$path .= strpos($resource, '-sys') !== false ? '.sys' : '';
+			$path .= strpos($resource, '-sys') !== false && strpos($path, '.sys') === false ? '.sys' : '';
 			$path .= '.ini';
 
 			// When the file doesn't exist, ignore it
-			if (empty($path) || !JFile::exists($path)) {
-				continue;
+			if (!is_dir(dirname($path))) {
+				mkdir(dirname($path), 0777, true);
 			}
 
 			// Write the content
-			JFile::write($path, $content['data']);
+			file_put_contents($path, $content->dp->body);
 		}
 
 		// Sent the conformation

@@ -222,8 +222,7 @@
 }
 
 .com-dpcalendar-blog .dp-datepicker__input {
-	border-right: 0px;
-	margin-right: -2px;
+	margin-right: -3px;
 }
 
 .com-dpcalendar-blog .dp-datepicker__button {
@@ -423,6 +422,19 @@
 		max-height: 200px;
 		object-fit: cover;
 	}
+}
+
+.pika-single th,
+.pika-single td {
+	border-style: solid;
+	border-width: 1px;
+	padding: 0;
+	vertical-align: top;
+	border-color: #ddd;
+}
+
+.pika-single button {
+	text-align: center;
 }
 
 /*# sourceMappingURL=blog.css.map */

@@ -50,7 +50,7 @@ if (!empty($this->event->tickets)) {
 				<?php if ($field->fieldname == 'title' || $field->fieldname == 'alias') { ?>
 					<?php continue; ?>
 				<?php } ?>
-				<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
+				<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 			<?php } ?>
 			<?php if ($name == 'location') { ?>
 				<?php echo $this->loadTemplate('map'); ?>

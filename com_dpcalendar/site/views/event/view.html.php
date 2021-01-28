@@ -21,7 +21,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event = $this->get('Item');
 
 		if ($event == null || !$event->id) {
-			throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
+			throw new Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
 
 		// Use the options from the event
@@ -40,7 +40,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		if (!in_array($event->access, $levels) ||
 			((in_array($event->access, $levels) && (isset($event->category_access) && !in_array($event->category_access, $levels))))
 		) {
-			$this->setError(JText::_('JERROR_ALERTNOAUTHOR'));
+			$this->setError($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'));
 
 			return false;
 		}

@@ -22,11 +22,11 @@ class DPCalendarModelCalendar extends JModelLegacy
 
 		$this->setState('filter.extension', 'com_dpcalendar');
 
-		if (JFactory::getApplication()->input->getVar('ids', null) == null) {
+		if (!$app->input->getVar('ids')) {
 			$this->setState('filter.parentIds', $this->state->get('parameters.menu', new Registry())->get('ids'));
 			$this->setState('filter.categories', []);
 		} else {
-			$this->setState('filter.categories', explode(',', JFactory::getApplication()->input->getVar('ids', null)));
+			$this->setState('filter.categories', explode(',', $app->input->getVar('ids')));
 			$this->setState('filter.parentIds', $this->setState('filter.categories'));
 		}
 

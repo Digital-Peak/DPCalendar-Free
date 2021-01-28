@@ -32,8 +32,7 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 			<th><?php echo JHtml::_('searchtools.sort', 'JAUTHOR', 'a.created_by', $listDirn, $listOrder); ?></th>
 			<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'a.language', $listDirn, $listOrder); ?></th>
 			<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
-			<th><?php echo JHtml::_('searchtools.sort', 'COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE', 'original_title', $listDirn,
-					$listOrder); ?></th>
+			<th><?php echo JHtml::_('searchtools.sort', 'COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE', 'original_title', $listDirn, $listOrder); ?></th>
 		</tr>
 		</thead>
 		<tbody>

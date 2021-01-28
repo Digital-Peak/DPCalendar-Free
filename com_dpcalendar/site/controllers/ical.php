@@ -33,7 +33,12 @@ class DPCalendarControllerIcal extends JControllerLegacy
 		if (!empty($calendar->icalurl)) {
 			header('Content-Type: text/calendar; charset=utf-8');
 			header('Content-disposition: attachment; filename="' . $calendar->title . '.ics"');
-			echo (new HTTP())->get($calendar->icalurl)->raw;
+
+			$headers = [
+				'Accept-Language: ' . \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag()),
+				'Accept: */*'
+			];
+			echo (new HTTP())->get($calendar->icalurl, null, null, $headers)->dp->body;
 			JFactory::getApplication()->close();
 		}
 

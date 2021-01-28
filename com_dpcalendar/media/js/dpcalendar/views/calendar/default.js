@@ -52,9 +52,13 @@
 				quickAdd.style.display = 'none';
 			}
 		};
-		window.addEventListener('hashchange', () => {
-			quickAdd.querySelector('input[name=urlhash]').value = window.location.hash;
+		document.addEventListener('click', (event) => {
+			if (quickAdd.contains(event.target) || event.target.classList.contains('dp-autocomplete__item-title')) {
+				return;
+			}
+			quickAdd.style.display = 'none';
 		});
+		window.addEventListener('hashchange', () => quickAdd.querySelector('input[name=urlhash]').value = window.location.hash);
 		quickAdd.querySelector('input[name=urlhash]').value = window.location.hash;
 		quickAdd.querySelector('.dp-quickadd__button-submit').addEventListener('click', () => {
 			quickAdd.querySelector('input[name=task]').value = 'event.save';

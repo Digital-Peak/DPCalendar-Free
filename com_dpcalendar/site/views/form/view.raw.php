@@ -34,7 +34,7 @@ class DPCalendarViewForm extends JViewLegacy
 		}
 
 		if ($authorised !== true) {
-			throw new Exception('JERROR_ALERTNOAUTHOR', 403);
+			throw new Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'), 403);
 		}
 
 		if (!empty($this->item)) {

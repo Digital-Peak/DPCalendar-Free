@@ -23,7 +23,7 @@ $fieldSets = ['general' => $fieldSets['general']] + $fieldSets;
 		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&id=' . (int)$this->item->id); ?>">
 		<?php foreach ($fieldSets as $name => $fieldSet) { ?>
 			<?php foreach ($this->form->getFieldset($name) as $field) { ?>
-				<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
+				<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 			<?php } ?>
 		<?php } ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">

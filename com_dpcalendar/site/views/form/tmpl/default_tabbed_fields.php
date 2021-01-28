@@ -20,7 +20,7 @@ defined('_JEXEC') or die();
 		</label>
 		<div class="dp-tabs__tab dp-tabs__tab-<?php echo $name; ?>">
 			<?php foreach ($fields as $field) { ?>
-				<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
+				<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 			<?php } ?>
 			<?php if ($name == 'location'
 				&& !in_array('location_ids', $this->params->get('event_form_hidden_fields', []))

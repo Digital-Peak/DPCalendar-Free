@@ -110,8 +110,9 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			if ($group == 'metadata') {
 				$this->form->removeField('xreference');
 			}
+
 			foreach ($this->form->getFieldset($name) as $field) {
-				$this->form->removeField($field->fieldname, $group);
+				$this->form->removeField(DPCalendarHelper::getFieldName($field), $group);
 			}
 		}
 

@@ -154,7 +154,7 @@ class PlgUserDPCalendar extends JPlugin
 			return true;
 		}
 
-		if ($form->getName() != 'com_users.profile'
+		if ($form->getName() != 'com_users.profile' && $form->getName() != 'com_admin.profile'
 			&& !(JFactory::getApplication()->isClient('administrator') && $form->getName() == 'com_users.user')) {
 			return true;
 		}

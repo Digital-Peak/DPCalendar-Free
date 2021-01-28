@@ -6,10 +6,6 @@
  */
 defined('_JEXEC') or die();
 
-if (!defined('DS')) {
-	define('DS', DIRECTORY_SEPARATOR);
-}
-
 JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');
 
 JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);

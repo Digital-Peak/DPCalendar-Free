@@ -61,7 +61,7 @@
 				);
 			});
 		});
-		const userField = document.getElementById('jform_user_id');
+		const userField = document.getElementById('jform_user_id_id');
 		if (!userField) {
 			return;
 		}

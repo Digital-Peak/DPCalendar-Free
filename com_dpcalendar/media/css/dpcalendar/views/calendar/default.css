@@ -30,8 +30,7 @@
 }
 
 .com-dpcalendar-calendar .dp-datepicker__input {
-	border-right: 0px;
-	margin-right: -2px;
+	margin-right: -3px;
 }
 
 .com-dpcalendar-calendar .dp-datepicker__button {
@@ -322,8 +321,10 @@
 	width: 100%;
 }
 
-.com-dpcalendar-calendar .dp-quickadd .controls .dp-input, .com-dpcalendar-calendar .dp-quickadd .controls .dp-select {
+.com-dpcalendar-calendar .dp-quickadd .controls .dp-input, .com-dpcalendar-calendar .dp-quickadd .controls .dp-form-input, .com-dpcalendar-calendar .dp-quickadd .controls .dp-select {
+	height: inherit;
 	margin-bottom: 0;
+	padding: 5px;
 }
 
 .com-dpcalendar-calendar .dp-quickadd .dp-datepicker {

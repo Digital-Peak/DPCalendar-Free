@@ -10,33 +10,11 @@ defined('_JEXEC') or die();
 
 class Transifex
 {
-
-	private static $apiUrl = 'https://www.transifex.com/api/2/project/DPCalendar';
 	private static $languages = [];
 
 	public static function getData($path)
 	{
-		$url     = trim(self::$apiUrl, '/') . '/' . $path;
-		$ch      = curl_init();
-		$info    = '';
-		$timeout = 120;
-		curl_setopt($ch, CURLOPT_URL, $url);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-		curl_setopt($ch, CURLOPT_USERPWD, 'api:1/8c747f282bd8e1c117cf52c98989e604f9f17864');
-		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout);
-		curl_setopt($ch, CURLOPT_TIMEOUT, 400);
-		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-
-		// Get the data
-		$data = curl_exec($ch);
-
-		// Get info about the request
-		$info = curl_getinfo($ch);
-
-		// Close the request
-		curl_close($ch);
-
-		return ['data' => $data, 'info' => $info];
+		return (new HTTP())->get('https://www.transifex.com/api/2/project/DPCalendar/' . $path, 'api', '1/8c747f282bd8e1c117cf52c98989e604f9f17864');
 	}
 
 	public static function getLangCode($lang, $inverse = false)

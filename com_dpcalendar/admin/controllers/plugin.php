@@ -8,7 +8,6 @@ defined('_JEXEC') or die();
 
 class DPCalendarControllerPlugin extends JControllerLegacy
 {
-
 	public function action()
 	{
 		DPCalendarHelper::doPluginAction($this->input->getWord('dpplugin', $this->input->getWord('plugin')), $this->input->getWord('action'));

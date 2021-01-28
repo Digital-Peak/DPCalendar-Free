@@ -435,7 +435,7 @@
 		Joomla.submitbutton = (task) => {
 			const form = document.getElementsByName('adminForm')[0];
 			if (form && (task.indexOf('reload') > -1 || task.indexOf('cancel') > -1 || task.indexOf('delete') > -1 || document.formvalidator.isValid(form))) {
-				const text = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
+				const text = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION', '');
 				if (text && ['save', 'save2new', 'apply'].indexOf(task.replace('event.', '')) > -1 && confirm(text)) {
 					document.getElementById('jform_notify_changes').value = 1;
 				}
@@ -469,7 +469,7 @@
 				);
 			});
 		});
-		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS')) {
+		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS', '')) {
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls')).forEach((el) => {
 				const option = document.createElement('span');
 				option.className = 'dp-free-information-text';

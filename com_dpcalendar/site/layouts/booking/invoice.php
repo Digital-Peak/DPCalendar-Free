@@ -184,11 +184,13 @@ foreach ($fields as $key => $field) {
 				<tr>
 					<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_EVENT'); ?></td>
 					<td style="width:70%">
-						<?php echo $ticket->event_title . ' [' . $displayData['dateHelper']->getDateStringFromEvent(
-								$ticket,
-								$params->get('event_date_format'),
-								$params->get('event_time_format')
-							) . ']'; ?>
+						<?php echo $ticket->event_title; ?> [
+						<?php echo $displayData['dateHelper']->getDateStringFromEvent(
+							$ticket,
+							$params->get('event_date_format'),
+							$params->get('event_time_format')
+						); ?>
+						]
 					</td>
 				</tr>
 				<?php if (!empty($ticket->event_prices)) { ?>

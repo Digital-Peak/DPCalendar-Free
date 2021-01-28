@@ -100,19 +100,25 @@ class DPCalendarModelLocations extends JModelList
 			}
 
 			$location->params = new Registry($location->params);
-			$location->params->set('access-edit',
+			$location->params->set(
+				'access-edit',
 				$user->authorise('core.edit', 'com_dpcalendar')
-				|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $location->created_by == $user->id));
-			$location->params->set('access-delete',
+				|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $location->created_by == $user->id)
+			);
+			$location->params->set(
+				'access-delete',
 				$user->authorise('core.delete', 'com_dpcalendar')
-				|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $location->created_by == $user->id));
+				|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $location->created_by == $user->id)
+			);
 
 			if ($location->country) {
 				JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables', 'DPCalendarTable');
 				$country = JModelLegacy::getInstance('Country', 'DPCalendarModel')->getItem($location->country);
 				if ($country) {
-					JFactory::getApplication()->getLanguage()->load('com_dpcalendar.countries',
-						JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+					JFactory::getApplication()->getLanguage()->load(
+						'com_dpcalendar.countries',
+						JPATH_ADMINISTRATOR . '/components/com_dpcalendar'
+					);
 					$location->country_code       = $country->short_code;
 					$location->country_code_value = JText::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
 				}

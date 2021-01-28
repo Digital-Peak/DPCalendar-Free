@@ -13,10 +13,10 @@ class DPCalendarModelLocation extends JModelAdmin
 {
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
-	protected $batch_commands = array(
+	protected $batch_commands = [
 		'language_id' => 'batchLanguage',
 		'country_id'  => 'batchCountry',
-	);
+	];
 
 	protected function canDelete($record)
 	{
@@ -53,12 +53,16 @@ class DPCalendarModelLocation extends JModelAdmin
 
 		$user         = JFactory::getUser();
 		$item->params = new Registry($item->params);
-		$item->params->set('access-edit',
+		$item->params->set(
+			'access-edit',
 			$user->authorise('core.edit', 'com_dpcalendar')
-			|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $item->created_by == $user->id));
-		$item->params->set('access-delete',
+			|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $item->created_by == $user->id)
+		);
+		$item->params->set(
+			'access-delete',
 			$user->authorise('core.delete', 'com_dpcalendar')
-			|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $item->created_by == $user->id));
+			|| ($user->authorise('core.edit.own', 'com_dpcalendar') && $item->created_by == $user->id)
+		);
 
 		if ($item->country) {
 			$country = JModelLegacy::getInstance('Country', 'DPCalendarModel')->getItem($item->country);
@@ -147,7 +151,7 @@ class DPCalendarModelLocation extends JModelAdmin
 					'location'         => $data,
 					'backLinkFull'     => DPCalendarHelperRoute::getLocationRoute((object)$data, true),
 					'formattedAddress' => \DPCalendar\Helper\Location::format([(object)$data]),
-					'sitename'         => JFactory::getConfig()->get('sitename'),
+					'sitename'         => JFactory::getApplication()->get('sitename'),
 					'user'             => JFactory::getUser()->name
 				]
 			);

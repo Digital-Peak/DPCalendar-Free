@@ -11,7 +11,7 @@ $fields = $this->form->getFieldset();
 ?>
 <div class="com-dpcalendar-eventform__flat-fields">
 	<?php foreach ($fields as $field) { ?>
-		<?php echo $field->renderField(['class' => 'dp-field-' . str_replace('_', '-', $field->fieldname)]); ?>
+		<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 		<?php if ($field->fieldname == 'rooms'
 			&& !in_array('location_ids', $this->params->get('event_form_hidden_fields', []))
 			&& !in_array('location', $this->params->get('event_form_hidden_tabs', []))) { ?>

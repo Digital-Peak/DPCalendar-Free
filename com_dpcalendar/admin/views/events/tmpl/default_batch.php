@@ -30,12 +30,13 @@ if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 						</label>
 						<?php echo JHtml::_(
 							'access.assetgrouplist',
-							'batch[access_content_id]', '',
+							'batch[access_content_id]',
+							'',
 							'class="inputbox"',
-							array(
+							[
 								'title' => $this->translate('JLIB_HTML_BATCH_NOCHANGE'),
 								'id'    => 'batch-access-content'
-							)
+							]
 						); ?>
 					</div>
 				</div>

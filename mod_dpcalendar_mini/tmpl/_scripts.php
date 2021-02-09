@@ -101,6 +101,9 @@ if ($params->get('header_show_navigation', 1)) {
 	$options['headerToolbar']['left'][] = 'prev';
 	$options['headerToolbar']['left'][] = 'next';
 }
+if ($params->get('header_show_create', 1) && \DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+	$options['headerToolbar']['left'][] = 'add';
+}
 if ($params->get('header_show_title', 1)) {
 	$options['headerToolbar']['center'][] = 'title';
 }
@@ -165,6 +168,12 @@ $options['show_map']              = $params->get('show_map', 1);
 $options['event_create_form']     = 0;
 $options['screen_size_list_view'] = 0;
 $options['use_hash']              = false;
+if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+	$router                      = new \DPCalendar\Router\Router();
+	$input                       = JFactory::getApplication()->input;
+	$returnPage                  = $input->getInt('Itemid', null) ? 'index.php?Itemid=' . $input->getInt('Itemid', null) : null;
+	$options['event_create_url'] = $router->getEventFormRoute(0, $returnPage, null, false);
+}
 
 // Set the actual date
 $now              = DPCalendarHelper::getDate($params->get('start_date'));

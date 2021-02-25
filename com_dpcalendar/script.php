@@ -307,6 +307,10 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 
 	public function postflight($type, $parent)
 	{
+		if ($parent->getElement() != 'com_dpcalendar') {
+			return;
+		}
+
 		JLoader::import('joomla.filesystem.folder');
 		if (JFolder::exists(JPATH_ADMINISTRATOR . '/components/com_falang/contentelements')) {
 			JFile::copy(

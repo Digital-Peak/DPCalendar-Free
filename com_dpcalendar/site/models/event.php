@@ -25,8 +25,13 @@ class DPCalendarModelEvent extends JModelItem
 		$pk = $app->input->getVar('id');
 		$this->setState('event.id', $pk);
 
-		// Load the parameters.
-		$params = $app->isClient('administrator') ? JComponentHelper::getParams('com_dpcalendar') : $app->getParams();
+		$params = method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
+		if (!$params->get('event_form_fields_order_')) {
+			$params->set(
+				'event_form_fields_order_',
+				JComponentHelper::getParams('com_dpcalendar')->get('event_form_fields_order_', new stdClass())
+			);
+		}
 		$this->setState('params', $params);
 		$this->setState('filter.public', $params->get('event_show_tickets'));
 

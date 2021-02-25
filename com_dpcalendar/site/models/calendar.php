@@ -17,8 +17,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 
 	protected function populateState()
 	{
-		$app    = JFactory::getApplication();
-		$params = $app->isClient('site') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
+		$app = JFactory::getApplication();
 
 		$this->setState('filter.extension', 'com_dpcalendar');
 
@@ -30,7 +29,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 			$this->setState('filter.parentIds', $this->setState('filter.categories'));
 		}
 
-		$this->setState('params', $params);
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 
 		$this->setState('filter.published', 1);
 		$this->setState('filter.access', true);

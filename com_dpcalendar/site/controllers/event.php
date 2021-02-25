@@ -348,6 +348,13 @@ class DPCalendarControllerEvent extends JControllerForm
 			$data['payment_provider'] = '';
 		}
 
+		foreach (['schedule', 'price', 'earlybird', 'user_discount', 'booking_options'] as $field) {
+			if (key_exists($field, $data)) {
+				continue;
+			}
+			$data[$field] = [];
+		}
+
 		$app        = JFactory::getApplication();
 		$dateFormat = $app->getParams()->get('event_form_date_format', 'd.m.Y');
 		$timeFormat = $app->getParams()->get('event_form_time_format', 'H:i');

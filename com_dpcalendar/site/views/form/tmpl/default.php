@@ -22,6 +22,8 @@ if (DPCalendarHelper::isFree()) {
 
 if (!empty($this->event->tickets)) {
 	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
+	$this->translator->translateJS('JYES');
+	$this->translator->translateJS('JNO');
 }
 
 $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id);

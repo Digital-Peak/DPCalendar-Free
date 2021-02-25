@@ -25,7 +25,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 			<?php foreach ($events as $index => $event) { ?>
 				<?php $displayData['event'] = $event; ?>
 				<?php $startDate = $dateHelper->getDate($event->start_date, $event->all_day); ?>
-				<div class="mod-dpcalendar-upcoming-horizontal__event  dp-event dp-event_<?php echo $event->ongoing_start_date ? 'started' : 'future'; ?> <?php echo !$groupHeading ? 'mod-dpcalendar-upcoming-horizontal__group' : ''; ?>">
+				<div class="mod-dpcalendar-upcoming-horizontal__event  dp-event dp-event_<?php echo $event->ongoing_start_date ? ($event->ongoing_end_date ? 'started' : 'finished') : 'future'; ?><?php echo !$groupHeading ? ' mod-dpcalendar-upcoming-horizontal__group' : ''; ?>">
 					<?php echo $layoutHelper->renderLayout('block.flatcalendar', ['date' => $startDate, 'color' => $event->color]); ?>
 					<div class="mod-dpcalendar-upcoming-horizontal__information">
 						<?php if ($event->state == 3) { ?>
@@ -41,10 +41,10 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 								<?php foreach ($event->locations as $location) { ?>
 									<div class="dp-location">
 										<div class="dp-location__details"
-											  data-latitude="<?php echo $location->latitude; ?>"
-											  data-longitude="<?php echo $location->longitude; ?>"
-											  data-title="<?php echo $location->title; ?>"
-											  data-color="<?php echo $event->color; ?>"></div>
+											 data-latitude="<?php echo $location->latitude; ?>"
+											 data-longitude="<?php echo $location->longitude; ?>"
+											 data-title="<?php echo $location->title; ?>"
+											 data-color="<?php echo $event->color; ?>"></div>
 										<?php if ($params->get('show_location')) { ?>
 											<a href="<?php echo $router->getLocationRoute($location); ?>" class="dp-location__url dp-link">
 												<?php echo $location->title; ?>

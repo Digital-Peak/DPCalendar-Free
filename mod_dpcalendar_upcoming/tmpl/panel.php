@@ -25,7 +25,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 			<?php foreach ($events as $index => $event) { ?>
 				<?php $displayData['event'] = $event; ?>
 				<?php $startDate = $dateHelper->getDate($event->start_date, $event->all_day); ?>
-				<div class="mod-dpcalendar-upcoming-panel__event dp-event dp-event_<?php echo $event->ongoing_start_date ? 'started' : 'future'; ?>">
+				<div class="mod-dpcalendar-upcoming-panel__event dp-event dp-event_<?php echo $event->ongoing_start_date ? ($event->ongoing_end_date ? 'started' : 'finished') : 'future'; ?>">
 					<?php if ($event->images->image_intro) { ?>
 						<div class="mod-dpcalendar-upcoming-panel__image">
 							<figure class="dp-figure">

@@ -8,6 +8,8 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Uri\Uri;
+
 class Ical
 {
 	public static function createIcalFromCalendar($calendarId, $asDownload = false)
@@ -284,9 +286,17 @@ class Ical
 
 		$text[] = 'X-ACCESS:' . $event->access;
 		$text[] = 'X-HITS:' . $event->hits;
-		$text[] = 'X-URL:' . ($event->url ?:
-				\DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
+		$text[] = 'X-URL:' . ($event->url ?: \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
 		$text[] = 'X-COLOR:' . $event->color;
+
+		if ($event->images && $event->images->image_full) {
+			$image  = $event->images->image_full;
+			$text[] = 'X-IMAGE-FULL:' . (strpos($image, 'http') !== 0 ? Uri::base() : '') . $image;
+		}
+		if ($event->images && $event->images->image_intro) {
+			$image  = $event->images->image_intro;
+			$text[] = 'X-IMAGE-INTRO:' . (strpos($image, 'http') !== 0 ? Uri::base() : '') . $image;
+		}
 		$text[] = 'X-SHOW-END-TIME:' . $event->show_end_time;
 
 		if ($event->publish_up != $nullDate) {

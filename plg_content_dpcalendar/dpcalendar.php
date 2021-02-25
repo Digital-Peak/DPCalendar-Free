@@ -81,6 +81,9 @@ class PlgContentDPCalendar extends JPlugin
 					$model->setState('list.start-date', 0);
 					$model->setState('list.end-date', null);
 				}
+				if ($paramKey == 'my') {
+					$model->setState('filter.my', (boolean)$paramValue);
+				}
 				if ($paramKey == 'limit') {
 					$model->setState('list.limit', (int)$paramValue);
 				}

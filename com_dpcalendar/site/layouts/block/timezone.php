@@ -17,6 +17,7 @@ $regions = [
 	'Antarctica' => DateTimeZone::ANTARCTICA,
 	'Aisa'       => DateTimeZone::ASIA,
 	'Atlantic'   => DateTimeZone::ATLANTIC,
+	'Atlantic'   => DateTimeZone::AUSTRALIA,
 	'Europe'     => DateTimeZone::EUROPE,
 	'Indian'     => DateTimeZone::INDIAN,
 	'Pacific'    => DateTimeZone::PACIFIC

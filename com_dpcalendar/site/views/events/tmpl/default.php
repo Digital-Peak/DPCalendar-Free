@@ -69,7 +69,6 @@ foreach ($this->items as $event) {
 		'id'              => $event->id,
 		'title'           => $this->compactMode == 0 ? htmlspecialchars_decode($event->title) : utf8_encode(chr(160)),
 		'start'           => DPCalendarHelper::getDate($event->start_date, $event->all_day)->format($format, true),
-		'url'             => DPCalendarHelperRoute::getEventRoute($event->id, $event->catid),
 		'editable'        => $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $this->user->id),
 		'backgroundColor' => '#' . $event->color,
 		'borderColor'     => '#' . $event->color,
@@ -84,6 +83,10 @@ foreach ($this->items as $event) {
 			'dp-event_' . ($event->capacity == $event->capacity_used ? 'booked-out' : 'not-booked-out')
 		]
 	];
+
+	if ($this->params->get('show_event_as_popup') != 2) {
+		$eventData['url'] = DPCalendarHelperRoute::getEventRoute($event->id, $event->catid);
+	}
 
 	if ($event->state == 3 && $this->compactMode == 0) {
 		$eventData['title'] = '[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ' . $eventData['title'];

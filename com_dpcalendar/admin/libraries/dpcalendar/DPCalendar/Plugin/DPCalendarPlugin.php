@@ -874,9 +874,18 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$tmpEvent->publish_down = $publishDown;
 		}
 
-		$image = (string)$event->{'x-image'};
+		$tmpEvent->images = new \stdClass();
+		$image            = (string)$event->{'x-image'};
 		if (!empty($image)) {
 			$tmpEvent->images->image_full = $image;
+		}
+		$image            = (string)$event->{'x-image-full'};
+		if (!empty($image)) {
+			$tmpEvent->images->image_full = $image;
+		}
+		$image            = (string)$event->{'x-image-intro'};
+		if (!empty($image)) {
+			$tmpEvent->images->image_intro = $image;
 		}
 
 		$showEndTime = $event->{'x-show-end-time'};
@@ -1059,7 +1068,6 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		$internal = !filter_var($uri, FILTER_VALIDATE_URL);
-
 		if ($internal && strpos($uri, '/') !== 0) {
 			$uri = JPATH_ROOT . '/' . $uri;
 		}

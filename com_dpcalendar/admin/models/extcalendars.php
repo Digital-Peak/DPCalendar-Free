@@ -62,9 +62,7 @@ class DPCalendarModelExtcalendars extends JModelList
 		$plugin = $this->getUserStateFromRequest($this->context . '.filter.plugin', 'dpplugin', '');
 		$this->setState('filter.plugin', $plugin);
 
-		// Load the parameters.
-		$params = JComponentHelper::getParams('com_dpcalendar');
-		$this->setState('params', $params);
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 
 		// List state information.
 		parent::populateState('a.ordering', 'asc');

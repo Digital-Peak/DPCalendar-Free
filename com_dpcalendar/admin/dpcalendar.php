@@ -58,6 +58,9 @@ if ($input->get('task') == 'locationform.save') {
 	$input->set('task', 'location.save');
 }
 
+\Joomla\CMS\Plugin\PluginHelper::importPlugin('dpcalendar');
+\Joomla\CMS\Factory::getApplication()->triggerEvent('onDPCalendarBeforeExecute', [\Joomla\CMS\Factory::getApplication()->input]);
+
 // Execute the task
 $controller = JControllerLegacy::getInstance('DPCalendar');
 $controller->execute($input->get('task'));

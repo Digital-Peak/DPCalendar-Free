@@ -8,6 +8,19 @@
 	<fields name="params"
 	        addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 		<fieldset name="basic">
+			<field name="event_form_flat_mode" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_FLAT_MODE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_FLAT_MODE_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="event_form_fields_order_" type="subform" multiple="true"
+			       layout="joomla.form.field.subform.repeatable-table" showon="event_form_flat_mode:1"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
+				<form>
+					<field name="field" type="dpcfields" section="event" hide="id,scheduling*,notify_changes,checked_out*,options"
+					       label="COM_DPCALENDAR_FIELD"/>
+				</form>
+			</field>
 			<field name="event_form_date_format" type="text" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>

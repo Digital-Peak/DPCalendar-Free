@@ -65,9 +65,8 @@ class DPCalendarModelLocations extends JModelList
 		$this->setState('filter.longitude', null);
 		$this->setState('filter.longitude', null);
 
-		// Load the parameters.
-		$params = JComponentHelper::getParams('com_dpcalendar');
-		$this->setState('params', $params);
+		$app = JFactory::getApplication();
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 
 		// List state information.
 		parent::populateState('a.title', 'asc');

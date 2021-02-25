@@ -617,7 +617,6 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-
 		<field name="event_form_fields_order_" type="subform" multiple="true"
 		       layout="joomla.form.field.subform.repeatable-table" showon="event_form_flat_mode:1"
 		       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">

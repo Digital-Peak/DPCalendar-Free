@@ -569,7 +569,7 @@ class DPCalendarModelEvents extends JModelList
 	{
 		// Initialise variables
 		$app    = JFactory::getApplication();
-		$params = $app->isClient('site') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
+		$params = method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
 
 		// List state information
 		if ($app->input->getInt('limit', null) === null) {

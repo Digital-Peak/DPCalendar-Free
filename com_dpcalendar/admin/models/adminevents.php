@@ -98,8 +98,8 @@ class DPCalendarModelAdminEvents extends JModelList
 		$this->setState('filter.tag', $tag);
 
 		// Load the parameters.
-		$params = JComponentHelper::getParams('com_dpcalendar');
-		$this->setState('params', $params);
+		$app = JFactory::getApplication();
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 
 		// List state information.
 		parent::populateState('a.start_date', 'asc');

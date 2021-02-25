@@ -141,8 +141,8 @@ class HTTP
 			curl_setopt($ch, CURLOPT_POSTFIELDS, $body);
 		}
 
-		$headers = [];
-		curl_setopt($ch, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$headers) {
+		$responseHeaders = [];
+		curl_setopt($ch, CURLOPT_HEADERFUNCTION, function ($curl, $header) use (&$responseHeaders) {
 			$headerData = explode(':', $header, 2);
 
 			// Ignore invalid headers
@@ -150,7 +150,7 @@ class HTTP
 				return strlen($header);
 			}
 
-			$headers[strtolower(trim($headerData[0]))][] = trim(trim($headerData[1]), '\"');
+			$responseHeaders[strtolower(trim($headerData[0]))][] = trim(trim($headerData[1]), '\"');
 
 			return strlen($header);
 		});
@@ -184,7 +184,7 @@ class HTTP
 		$data->dp          = new \stdClass();
 		$data->dp->body    = $output;
 		$data->dp->info    = (object)$info;
-		$data->dp->headers = $headers;
+		$data->dp->headers = $responseHeaders;
 
 		return $data;
 	}

@@ -51,9 +51,8 @@ class DPCalendarModelCountries extends JModelList
 		$authorId = $this->getUserStateFromRequest($this->context . '.filter.author_id', 'filter_author_id');
 		$this->setState('filter.author_id', $authorId);
 
-		// Load the parameters
-		$params = JComponentHelper::getParams('com_dpcalendar');
-		$this->setState('params', $params);
+		$app = JFactory::getApplication();
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 
 		// List state information
 		parent::populateState('a.id', 'asc');

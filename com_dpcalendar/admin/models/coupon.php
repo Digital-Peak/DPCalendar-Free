@@ -125,12 +125,7 @@ class DPCalendarModelCoupon extends \Joomla\CMS\MVC\Model\AdminModel
 
 		$this->setState('return_page', base64_decode($return));
 
-		$params = JComponentHelper::getParams('com_dpcalendar');
-
-		if ($app->isClient('site')) {
-			$params = $app->getParams();
-		}
-		$this->setState('params', $params);
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	public function getReturnPage()

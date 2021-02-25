@@ -81,8 +81,7 @@ class DPCalendarModelCountry extends JModelAdmin
 
 		$this->setState('return_page', base64_decode($return));
 
-		$params = JComponentHelper::getParams('com_dpcalendar');
-		$this->setState('params', $params);
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	public function getReturnPage()

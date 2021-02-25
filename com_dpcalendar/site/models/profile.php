@@ -111,7 +111,7 @@ class DPCalendarModelProfile extends JModelList
 	protected function populateState($ordering = null, $direction = null)
 	{
 		$app    = JFactory::getApplication();
-		$params = JComponentHelper::getParams('com_dpcalendar');
+		$params = method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
 
 		if (JFactory::getApplication()->input->getInt('limit', null) === null) {
 			$limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'));

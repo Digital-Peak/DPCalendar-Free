@@ -433,18 +433,33 @@
 			});
 		});
 		Joomla.submitbutton = (task) => {
-			const form = document.getElementsByName('adminForm')[0];
-			if (form && (task.indexOf('reload') > -1 || task.indexOf('cancel') > -1 || task.indexOf('delete') > -1 || document.formvalidator.isValid(form))) {
-				const text = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION', '');
-				if (text && ['save', 'save2new', 'apply'].indexOf(task.replace('event.', '')) > -1 && confirm(text)) {
-					document.getElementById('jform_notify_changes').value = 1;
-				}
-				const loader = document.querySelector('.dp-loader');
-				if (loader) {
-					loader.classList.remove('dp-loader_hidden');
-				}
-				Joomla.submitform(task, form);
+			const loader = document.querySelector('.dp-loader');
+			if (loader) {
+				loader.classList.remove('dp-loader_hidden');
 			}
+			const form = document.getElementsByName('adminForm')[0];
+			if (!form || (task.indexOf('reload') === -1 && task.indexOf('cancel') === -1 && task.indexOf('delete') === -1 && !document.formvalidator.isValid(form))) {
+				return;
+			}
+			const text = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION', '');
+			if (!text || ['save', 'save2new', 'apply'].indexOf(task.replace('event.', '')) === -1) {
+				Joomla.submitform(task, form);
+				return;
+			}
+			loadDPAssets(['/com_dpcalendar/js/tingle/tingle.js', '/com_dpcalendar/css/tingle/tingle.css'], () => {
+				const modal = new tingle.modal({footer: true, closeMethods: []});
+				modal.setContent(text);
+				modal.addFooterBtn(Joomla.JText._('JYES'), 'dp-button', () => {
+					modal.close();
+					document.getElementById('jform_notify_changes').value = 1;
+					Joomla.submitform(task, form);
+				});
+				modal.addFooterBtn(Joomla.JText._('JNO'), 'dp-button', () => {
+					modal.close();
+					Joomla.submitform(task, form);
+				});
+				modal.open();
+			});
 		};
 	}
 	document.addEventListener('DOMContentLoaded', () => {

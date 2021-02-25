@@ -154,12 +154,14 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 
 		$this->setState('return_page', base64_decode($return));
 
-		// Load the parameters.
-		if ($app->isClient('site')) {
-			$this->setState('params', $app->getParams());
-		} else {
-			$this->setState('params', JComponentHelper::getParams('com_dpcalendar'));
+		$params = method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
+		if (!$params->get('event_form_fields_order_')) {
+			$params->set(
+				'event_form_fields_order_',
+				JComponentHelper::getParams('com_dpcalendar')->get('event_form_fields_order_', new stdClass())
+			);
 		}
+		$this->setState('params', $params);
 
 		$this->setState('layout', JFactory::getApplication()->input->getCmd('layout'));
 	}

@@ -9,9 +9,13 @@ namespace DPCalendar\View;
 defined('_JEXEC') or die();
 
 use DPCalendar\Translator\Translator;
+use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\MVC\View\HtmlView;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\Registry\Registry;
 
-class BaseView extends \JViewLegacy
+class BaseView extends HtmlView
 {
 	protected $state;
 	protected $params;
@@ -37,7 +41,7 @@ class BaseView extends \JViewLegacy
 		$this->app   = \JFactory::getApplication();
 		$this->input = $this->app->input;
 		$this->user  = \JFactory::getUser();
-		$this->tmpl = $this->input->getCmd('tmpl') ? '&tmpl=' . $this->input->getCmd('tmpl') : '';
+		$this->tmpl  = $this->input->getCmd('tmpl') ? '&tmpl=' . $this->input->getCmd('tmpl') : '';
 
 		$state = $this->get('State');
 
@@ -45,15 +49,8 @@ class BaseView extends \JViewLegacy
 			$state = new Registry();
 		}
 
-		$tmp = clone $state->get('params', new Registry());
-		if (method_exists($this->app, 'getParams')) {
-			$tmp->merge($this->app->getParams('com_dpcalendar'));
-		} else {
-			$tmp->merge(\JComponentHelper::getParams('com_dpcalendar'));
-		}
-
 		$this->state  = $state;
-		$this->params = $tmp;
+		$this->params = $state->get('params', new Registry());
 
 		$this->dpdocument   = new \DPCalendar\HTML\Document\HtmlDocument();
 		$this->dateHelper   = new \DPCalendar\Helper\DateHelper();
@@ -186,10 +183,13 @@ class BaseView extends \JViewLegacy
 			' {background-image: url(../media/com_dpcalendar/images/admin/48-' . $this->icon . '.png);background-repeat: no-repeat;}'
 		);
 
-		if ($canDo->get('core.admin', 'com_dpcalendar')) {
+		if ($canDo->get('core.admin', 'com_dpcalendar') && !($this->getModel() instanceof FormModel)) {
 			\JToolbarHelper::preferences('com_dpcalendar');
 			\JToolbarHelper::divider();
 		}
+
+		PluginHelper::importPlugin('dpcalendar');
+		$this->app->triggerEvent('onDPCalendarAfterToolbar', [$this->getName(), Toolbar::getInstance('toolbar')]);
 	}
 
 	/**

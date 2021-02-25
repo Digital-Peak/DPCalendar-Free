@@ -18,7 +18,7 @@ class DPCalendarModelDavcalendar extends JModelAdmin
 
 	public function getForm($data = [], $loadData = true)
 	{
-		$form = $this->loadForm('com_dpcalendar.davcalendar', 'davcalendar', ['control'   => 'jform', 'load_data' => $loadData]);
+		$form = $this->loadForm('com_dpcalendar.davcalendar', 'davcalendar', ['control' => 'jform', 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
@@ -51,15 +51,13 @@ class DPCalendarModelDavcalendar extends JModelAdmin
 		$this->setState('form.id', $pk);
 
 		$return = $app->input->get('return', null, 'default', 'base64');
-
 		if (!JUri::isInternal(base64_decode($return))) {
 			$return = null;
 		}
 
 		$this->setState('return_page', base64_decode($return));
 
-		$params = $app->getParams();
-		$this->setState('params', $params);
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 
 		$this->setState('layout', $app->input->getCmd('layout'));
 	}

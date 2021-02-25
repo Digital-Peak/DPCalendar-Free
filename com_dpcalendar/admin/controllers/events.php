@@ -27,68 +27,6 @@ class DPCalendarControllerEvents extends JControllerAdmin
 		return $model;
 	}
 
-	public function csvexport()
-	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
-
-		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-
-		$fields                   = [];
-		$fields['id']             = JText::_('JGRID_HEADING_ID');
-		$fields['title']          = JText::_('JGLOBAL_TITLE');
-		$fields['calendar']       = JText::_('COM_DPCALENDAR_CALENDAR');
-		$fields['color']          = JText::_('COM_DPCALENDAR_FIELD_COLOR_LABEL');
-		$fields['url']            = JText::_('COM_DPCALENDAR_FIELD_URL_LABEL');
-		$fields['start_date']     = JText::_('COM_DPCALENDAR_FIELD_START_DATE_LABEL');
-		$fields['end_date']       = JText::_('COM_DPCALENDAR_FIELD_END_DATE_LABEL');
-		$fields['all_day']        = JText::_('COM_DPCALENDAR_FIELD_ALL_DAY_LABEL');
-		$fields['rrule']          = JText::_('COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_LABEL');
-		$fields['description']    = JText::_('JGLOBAL_DESCRIPTION');
-		$fields['locations']      = JText::_('COM_DPCALENDAR_LOCATIONS');
-		$fields['alias']          = JText::_('JFIELD_ALIAS_LABEL');
-		$fields['featured']       = JText::_('JFEATURED');
-		$fields['status']         = JText::_('JSTATUS');
-		$fields['access']         = JText::_('JFIELD_ACCESS_LABEL');
-		$fields['access_content'] = JText::_('COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL');
-		$fields['language']       = JText::_('JFIELD_LANGUAGE_LABEL');
-		$fields['created']        = JText::_('JGLOBAL_FIELD_CREATED_LABEL');
-		$fields['created_by']     = JText::_('JGLOBAL_FIELD_CREATED_BY_LABEL');
-		$fields['modified']       = JText::_('JGLOBAL_FIELD_MODIFIED_LABEL');
-		$fields['modified_by']    = JText::_('JGLOBAL_FIELD_MODIFIED_BY_LABEL');
-		$fields['uid']            = JText::_('COM_DPCALENDAR_UID');
-		$fields['timezone']       = JText::_('COM_DPCALENDAR_TIMEZONE');
-
-		$parser = function ($name, $event) {
-			switch ($name) {
-				case 'calendar':
-					return \DPCalendar\Helper\DPCalendarHelper::getCalendar($event->catid)->title;
-				case 'status':
-					return \DPCalendar\Helper\Booking::getStatusLabel($event);
-				case 'locations':
-					if (empty($event->locations)) {
-						return '';
-					}
-
-					return \DPCalendar\Helper\Location::format($event->locations);
-				case 'start_date':
-				case 'end_date':
-					return \DPCalendar\Helper\DPCalendarHelper::getDate($event->$name)->format($event->all_day ? 'Y-m-d' : 'Y-m-d H:i:s', true);
-				case 'created':
-				case 'modified':
-					if ($event->$name == '0000-00-00 00:00:00') {
-						return '';
-					}
-
-					return \DPCalendar\Helper\DPCalendarHelper::getDate($event->$name)->format('Y-m-d H:i:s', true);
-				case 'timezone':
-					return \DPCalendar\Helper\DPCalendarHelper::getDate()->getTimezone()->getName();
-				default:
-					return $event->$name;
-			}
-		};
-		DPCalendarHelper::exportCsv('adminevent', $fields, $parser);
-	}
-
 	public function featured()
 	{
 		// Check for request forgeries

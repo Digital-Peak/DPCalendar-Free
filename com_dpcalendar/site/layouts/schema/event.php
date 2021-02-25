@@ -5,6 +5,7 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
+
 ?>
 <div itemtype="http://schema.org/Event" itemscope>
 	<?php echo $displayData['layoutHelper']->renderLayout('schema.name', $displayData); ?>

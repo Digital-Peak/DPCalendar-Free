@@ -15,14 +15,27 @@ JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/
 
 class DPCalendarModelAdminEvent extends JModelAdmin
 {
+	public $typeAlias = 'com_dpcalendar.event';
 	protected $text_prefix = 'COM_DPCALENDAR';
 	protected $name = 'event';
+
+	protected $batch_commands = [
+		'assetgroup_id'     => 'batchAccess',
+		'language_id'       => 'batchLanguage',
+		'tag'               => 'batchTag',
+		'color_id'          => 'batchColor',
+		'access_content_id' => 'batchAccessContent',
+		'capacity_id'       => 'batchCapacity'
+	];
 
 	protected function populateState()
 	{
 		parent::populateState();
 
 		$this->setState($this->getName() . '.id', JFactory::getApplication()->input->getInt('e_id'));
+
+		$app = JFactory::getApplication();
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	protected function canDelete($record)
@@ -568,71 +581,81 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 	}
 
-	public function batch($commands, $pks, $contexts)
-	{
-		$result = parent::batch($commands, $pks, $contexts);
-
-		if (!empty($commands['color_id']) || !empty($commands['access_content_id']) || !empty($commands['capacity_id'])) {
-			$table = $this->getTable();
-			foreach ($pks as $pk) {
-				$table->reset();
-				$table->load($pk);
-
-				if (!empty($commands['color_id'])) {
-					$table->color = $commands['color_id'];
-				}
-
-				if (!empty($commands['access_content_id'])) {
-					$table->access_content = $commands['access_content_id'];
-				}
-
-				if (!empty($commands['capacity_id'])) {
-					$table->capacity = $commands['capacity_id'];
-				}
-
-				if (!$table->store()) {
-					$this->setError($table->getError());
-
-					return false;
-				}
-			}
-
-			$this->cleanCache();
-
-			return true;
-		}
-
-		return $result;
-	}
-
 	protected function batchTag($value, $pks, $contexts)
 	{
 		$return = parent::batchTag($value, $pks, $contexts);
+		if (!$return) {
+			return $return;
+		}
 
-		if ($return) {
-			$user  = JFactory::getUser();
-			$table = $this->getTable();
-			foreach ($pks as $pk) {
-				if ($user->authorise('core.edit', $contexts[$pk])) {
-					$table->reset();
-					$table->load($pk);
+		$user  = JFactory::getUser();
+		$table = $this->getTable();
+		foreach ($pks as $pk) {
+			if ($user->authorise('core.edit', $contexts[$pk])) {
+				$table->reset();
+				$table->load($pk);
 
-					// If we are a recurring event, then save the tags on the
-					// children too
-					if ($table->original_id == '-1') {
-						$newTags = new JHelperTags();
-						$newTags = $newTags->getItemTags('com_dpcalendar.event', $table->id);
-						$newTags = array_map(function ($t) {
-							return $t->id;
-						}, $newTags);
+				// If we are a recurring event, then save the tags on the children too
+				if ($table->original_id == '-1') {
+					$newTags = new JHelperTags();
+					$newTags = $newTags->getItemTags('com_dpcalendar.event', $table->id);
+					$newTags = array_map(function ($t) {
+						return $t->id;
+					}, $newTags);
 
-						$table->populateTags($newTags);
-					}
+					$table->populateTags($newTags);
 				}
 			}
 		}
 
 		return $return;
+	}
+
+	protected function batchColor($value, $pks, $contexts)
+	{
+		return $this->performBatch('color', $value, $pks, $contexts);
+	}
+
+	protected function batchAccessContent($value, $pks, $contexts)
+	{
+		return $this->performBatch('access_content', $value, $pks, $contexts);
+	}
+
+	protected function batchCapacity($value, $pks, $contexts)
+	{
+		return $this->performBatch('capacity', $value, $pks, $contexts);
+	}
+
+	private function performBatch(string $property, $value, $pks, $contexts)
+	{
+		$this->initBatch();
+
+		foreach ($pks as $pk) {
+			if ($this->user->authorise('core.edit', $contexts[$pk])) {
+				$this->table->reset();
+				$this->table->load($pk);
+				$this->table->$property = $value;
+
+				if (!empty($this->type)) {
+					$this->createTagsHelper($this->tagsObserver, $this->type, $pk, $this->typeAlias, $this->table);
+				}
+
+				if (!$this->table->store()) {
+					$this->setError($this->table->getError());
+
+					return false;
+				}
+			} else {
+				$this->setError(\JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
+
+				return false;
+			}
+		}
+
+		// Clean the cache
+		$this->cleanCache();
+
+		return true;
 	}
 
 	public function featured($pks, $value = 0)

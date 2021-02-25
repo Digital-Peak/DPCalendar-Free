@@ -133,26 +133,26 @@ if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $resourc
 }
 
 // Set up the views
-$options['views']               = [];
-$options['views']['month']      = [
+$options['views']          = [];
+$options['views']['month'] = [
 	'titleFormat'            => $dateHelper->convertPHPDateToJS($params->get('titleformat_month', 'F Y')),
 	'eventTimeFormat'        => $dateHelper->convertPHPDateToJS($params->get('timeformat_month', 'H:i')),
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_month', 'D')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
 ];
-$options['views']['week'] = [
+$options['views']['week']  = [
 	'titleFormat'            => $dateHelper->convertPHPDateToJS($params->get('titleformat_week', 'M j Y')),
 	'eventTimeFormat'        => $dateHelper->convertPHPDateToJS($params->get('timeformat_week', 'H:i')),
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_week', 'D n/j')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 ];
-$options['views']['day']  = [
+$options['views']['day']   = [
 	'titleFormat'            => $dateHelper->convertPHPDateToJS($params->get('titleformat_day', 'F j Y')),
 	'eventTimeFormat'        => $dateHelper->convertPHPDateToJS($params->get('timeformat_day', 'H:i')),
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_day', 'l')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
 ];
-$options['views']['list']       = [
+$options['views']['list']  = [
 	'titleFormat'       => $dateHelper->convertPHPDateToJS($params->get('titleformat_list', 'M j Y')),
 	'eventTimeFormat'   => $dateHelper->convertPHPDateToJS($params->get('timeformat_list', 'H:i')),
 	'dayHeaderFormat'   => $dateHelper->convertPHPDateToJS($params->get('columnformat_list', 'D')),

@@ -186,6 +186,12 @@ foreach ($events as $event) {
 	}
 	$event->ongoing_start_date = $date < $now ? $date : null;
 
+	$date = $dateHelper->getDate($event->end_date);
+	if (!empty($event->series_min_end_date) && !$moduleParams->get('expand', 1)) {
+		$date = $dateHelper->getDate($event->series_min_end_date);
+	}
+	$event->ongoing_end_date = $date > $now ? $date : null;
+
 	if ($moduleParams->get('show_display_events')) {
 		$event->displayEvent                    = new stdClass();
 		$results                                = $app->triggerEvent(

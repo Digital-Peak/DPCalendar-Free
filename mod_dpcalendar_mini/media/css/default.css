@@ -233,8 +233,42 @@
 	z-index: 1001 !important;
 }
 
+.tingle-modal .dp-button-bar {
+	margin-bottom: 10px;
+}
+
+.tingle-modal .dp-button {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid #c0c0c0;
+	border-radius: 0.1rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	padding: 4px 10px;
+	color: #212529;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.tingle-modal .dp-button:disabled,
+.tingle-modal .dp-button[disabled] {
+	background-color: #cccccc;
+	color: #666666;
+	cursor: not-allowed;
+}
+
 .tingle-modal-box__content {
 	padding: 1rem;
+}
+
+.tingle-modal-box__footer .dp-button {
+	margin-right: 10px;
 }
 
 .dp-events-list {

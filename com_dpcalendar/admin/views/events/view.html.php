@@ -83,10 +83,6 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 			$bar->appendButton('Custom', $dhtml, 'batch');
 		}
 
-		if ($canDo->get('core.admin', 'com_dpcalendar')) {
-			JToolbarHelper::custom('events.csvexport', 'download', '', 'COM_DPCALENDAR_CSV_EXPORT', false);
-		}
-
 		parent::addToolbar();
 	}
 

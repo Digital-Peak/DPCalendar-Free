@@ -104,15 +104,13 @@ class DPCalendarModelTaxrate extends JModelAdmin
 		$this->setState('form.id', $pk);
 
 		$return = $app->input->getVar('return', null, 'default', 'base64');
-
 		if (!JUri::isInternal(base64_decode($return))) {
 			$return = null;
 		}
 
 		$this->setState('return_page', base64_decode($return));
 
-		$params = JComponentHelper::getParams('com_dpcalendar');
-		$this->setState('params', $params);
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	public function getReturnPage()

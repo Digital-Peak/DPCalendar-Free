@@ -708,55 +708,6 @@ class DPCalendarHelper
 		return $lang;
 	}
 
-	public static function exportCsv($name, $fieldsToLabels, $valueParser)
-	{
-		$name     = strtolower($name);
-		$realName = str_replace('admin', '', $name);
-		$model    = \JModelLegacy::getInstance(ucfirst($name) . 's', 'DPCalendarModel', ['ignore_request' => false]);
-		$model->setState('list.limit', 1000);
-		$items = $model->getItems();
-
-		$f         = fopen('php://memory', 'w');
-		$delimiter = ',';
-		$fields    = [];
-		if ($items) {
-			$line = [];
-			foreach ($fieldsToLabels as $fieldLabel) {
-				$line[] = $fieldLabel;
-			}
-			$fields = array_merge($fields, \FieldsHelper::getFields('com_dpcalendar.' . $realName));
-			foreach ($fields as $field) {
-				$line[] = $field->label;
-			}
-
-			fputcsv($f, $line, $delimiter);
-		}
-
-		foreach ($items as $item) {
-			\JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $realName, &$item, &$item->params, 0]);
-			$line = [];
-			foreach ($fieldsToLabels as $fieldName => $fieldLabel) {
-				$line[] = $valueParser($fieldName, $item);
-			}
-
-			if ($fields) {
-				foreach ($fields as $field) {
-					if (isset($item->jcfields) && key_exists($field->id, $item->jcfields)) {
-						$line[] = html_entity_decode(strip_tags($item->jcfields[$field->id]->value));
-					}
-				}
-			}
-			fputcsv($f, $line, $delimiter);
-		}
-		fseek($f, 0);
-		// echo stream_get_contents($f);die;
-		header('Content-Type: application/csv');
-		header('Content-Disposition: attachement; filename="' . $realName . 's-' . date('YmdHi') . '.csv";');
-		fpassthru($f);
-
-		Factory::getApplication()->close();
-	}
-
 	public static function doPluginAction($plugin, $action, $data = null)
 	{
 		\JPluginHelper::importPlugin('dpcalendar');
@@ -879,19 +830,22 @@ class DPCalendarHelper
 			$users = array_merge($users, \JAccess::getUsersByGroup($groupId));
 		}
 
-		$users     = array_unique($users);
-		$userMails = [];
-		foreach ($users as $user) {
-			$u = \JUser::getTable();
-			if ($u->load($user)) {
-				$mailer = \JFactory::getMailer();
-				$mailer->setSubject($subject);
-				$mailer->setBody($message);
-				$mailer->IsHTML(true);
-				$mailer->addRecipient($u->email);
-				$mailer->Send();
-				$userMails[$user] = $u;
+		$currentUser = Factory::getUser();
+		$users       = array_unique($users);
+		$userMails   = [];
+		foreach ($users as $userId) {
+			$user = Factory::getUser($userId);
+			if ($user->id == $currentUser->id) {
+				continue;
 			}
+
+			$mailer = \JFactory::getMailer();
+			$mailer->setSubject($subject);
+			$mailer->setBody($message);
+			$mailer->IsHTML(true);
+			$mailer->addRecipient($user->email);
+			$mailer->Send();
+			$userMails[$userId] = $user;
 		}
 
 		return $userMails;

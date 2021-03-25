@@ -68,10 +68,14 @@ if (!$this->params->get('locations_expand', 1)) {
 			</dl>
 		<?php } ?>
 		<?php if ($this->location->url) { ?>
+			<?php $u = JUri::getInstance($this->location->url); ?>
 			<dl class="dp-description">
 				<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_FIELD_URL_LABEL'); ?></dt>
 				<dd class="dp-description__description dp-location__url">
-					<a href="<?php echo $this->location->url; ?>" class="dp-link"><?php echo $this->location->url; ?></a>
+					<a href="<?php echo $this->location->url; ?>" class="dp-link"
+					   target="<?php echo $u->getHost() && JUri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
+						<?php echo $this->location->url; ?>
+					</a>
 				</dd>
 			</dl>
 		<?php } ?>

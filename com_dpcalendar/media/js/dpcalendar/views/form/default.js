@@ -5,7 +5,7 @@
  */
 (function () {
 	'use strict';
-	function setup()
+	function setup$5()
 	{
 		const rrule = document.getElementById('jform_rrule');
 		if (!rrule) {
@@ -210,7 +210,7 @@
 			}
 		}
 	}
-	function setup$1()
+	function setup$4()
 	{
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
 		[].slice.call(document.querySelectorAll('#jform_all_day input')).forEach((input) => {
@@ -291,7 +291,7 @@
 			observer.observe(mapElement);
 		});
 	}
-	function setup$2()
+	function setup$3()
 	{
 		const map = document.querySelector('.com-dpcalendar-eventform .dp-map');
 		if (map != null) {
@@ -363,7 +363,7 @@
 			DPCalendar.Map.createMarker(map, {latitude: parts[0], longitude: parts[1], title: content});
 		});
 	}
-	function setup$3()
+	function setup$2()
 	{
 		if (parseInt(document.getElementById('jform_id').value) != 0) {
 			return
@@ -389,7 +389,7 @@
 			});
 		});
 	}
-	function setup$4()
+	function setup$1()
 	{
 		const captcha = document.querySelector('.dp-field-captcha');
 		if (!captcha) {
@@ -397,7 +397,7 @@
 		}
 		document.querySelector('.com-dpcalendar-eventform__form').appendChild(captcha);
 	}
-	function setup$5()
+	function setup()
 	{
 		document.getElementById('jform_catid').addEventListener('change', (e) => {
 			for (let i = 0; i < e.target.length; i++) {
@@ -464,12 +464,12 @@
 	}
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js', '/com_dpcalendar/js/choices/choices.js', '/com_dpcalendar/css/choices/choices.css'], () => {
-			setup();
-			setup$1();
-			setup$2();
-			setup$3();
-			setup$4();
 			setup$5();
+			setup$4();
+			setup$3();
+			setup$2();
+			setup$1();
+			setup();
 			[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color):not(#jform_tags):not(.dp-timezone__select)')).forEach((select) => {
 				select._choicejs = new Choices(
 					select,

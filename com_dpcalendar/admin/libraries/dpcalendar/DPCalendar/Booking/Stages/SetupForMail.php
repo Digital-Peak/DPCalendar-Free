@@ -26,8 +26,6 @@ class SetupForMail implements StageInterface
 
 	public function __invoke($payload)
 	{
-		$this->application->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-
 		// Create the booking details for mail notification
 		$params = clone \JComponentHelper::getParams('com_dpcalendar');
 		$params->set('show_header', false);

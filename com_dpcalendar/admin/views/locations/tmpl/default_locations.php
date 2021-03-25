@@ -37,7 +37,7 @@ if ($saveOrder) {
 		</th>
 		<th class="dp-table__col-state"><?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?></th>
 		<th><?php echo JHtml::_('searchtools.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?></th>
-		<th><?php echo JHtml::_('searchtools.sort', 'COM_DPCALENDAR_VIEW_LOCATION_DETAILS', 'a.access', $listDirn, $listOrder); ?></th>
+		<th><?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_DETAILS'); ?></th>
 		<th class="dp-table__col-color">
 			<?php echo JHtml::_('searchtools.sort', 'COM_DPCALENDAR_FIELD_COLOR_LABEL', 'a.color', $listDirn, $listOrder); ?>
 		</th>
@@ -95,7 +95,8 @@ if ($saveOrder) {
 				</td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_COLOR_LABEL'); ?>">
 					<?php $color = $item->color ?: DPCalendarHelper::getCalendar($item->catid)->color; ?>
-					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($color); ?>" class="dp-location__color">
+					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($color); ?>"
+						 class="dp-location__color">
 						<?php echo $this->escape($color); ?>
 					</div>
 				</td>

@@ -6,15 +6,33 @@
  */
 namespace DPCalendar\Translator;
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Language;
+use Joomla\CMS\Language\Text;
+
 class Translator
 {
+	/**
+	 * @var Language $language
+	 */
+	private $language;
+
+	public function __construct(Language $language = null)
+	{
+		if ($language === null) {
+			$language = Factory::getLanguage();
+		}
+
+		$this->language = $language;
+	}
+
 	public function translate($string)
 	{
-		return \JText::_($string);
+		return $this->language->_($string);
 	}
 
 	public function translateJS($string)
 	{
-		\JText::script($string);
+		Text::script($string);
 	}
 }

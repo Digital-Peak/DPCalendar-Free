@@ -88,7 +88,7 @@
 					return false;
 				});
 				map.querySelector('.dp-map').addEventListener('dp-map-loaded', () => update(map));
-				watchElements(map.querySelectorAll('.dp-map'));
+				watchElements([].slice.call(map.querySelectorAll('.dp-map')));
 				const geoComplete = map.querySelector('.dp-input_location');
 				if (geoComplete && geoComplete.dataset.dpAutocomplete == 1) {
 					loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js'], () => {

@@ -112,10 +112,14 @@ defined('_JEXEC') or die();
 								</dl>
 							<?php } ?>
 							<?php if ($location->url) { ?>
+								<?php $u = JUri::getInstance($location->url); ?>
 								<dl class="dp-description">
 									<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_FIELD_URL_LABEL'); ?></dt>
 									<dd class="dp-description__description dp-location__url">
-										<a href="<?php echo $location->url; ?>" class="dp-link"><?php echo $location->url; ?></a>
+										<a href="<?php echo $location->url; ?>" class="dp-link"
+										   target="<?php echo $u->getHost() && JUri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
+											<?php echo $location->url; ?>
+										</a>
 									</dd>
 								</dl>
 							<?php } ?>

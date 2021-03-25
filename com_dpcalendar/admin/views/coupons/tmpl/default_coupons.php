@@ -14,6 +14,8 @@ if ($saveOrder) {
 	$saveOrderingUrl = 'index.php?option=com_dpcalendar&task=coupons.saveOrderAjax&tmpl=component';
 	JHtml::_('sortablelist.sortable', 'couponsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
+$format    = DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y') . ' '
+	. DPCalendarHelper::getComponentParameter('event_time_format', 'H:i');
 ?>
 <div class="com-dpcalendar-coupons__coupons">
 	<table class="dp-table dp-coupons-table" id="couponList">
@@ -37,6 +39,8 @@ if ($saveOrder) {
 		</th>
 		<th class="dp-table__col-state"><?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?></th>
 		<th><?php echo JHtml::_('searchtools.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?></th>
+		<th><?php echo JHtml::_('searchtools.sort', 'JAUTHOR', 'a.author_name', $listDirn, $listOrder); ?></th>
+		<th><?php echo JHtml::_('searchtools.sort', 'JGLOBAL_CREATED', 'a.created', $listDirn, $listOrder); ?></th>
 		<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
 		</tr>
 		</thead>
@@ -83,6 +87,12 @@ if ($saveOrder) {
 						<?php echo $this->escape($item->title); ?>
 					<?php } ?>
 					<span><?php echo $this->translate('COM_DPCALENDAR_FIELD_COUPON_CODE_LABEL') . ': ' . $this->escape($item->code); ?></span>
+				</td>
+				<td data-column="<?php echo $this->translate('JAUTHOR'); ?>">
+					<?php echo $item->author_name; ?>
+				</td>
+				<td data-column="<?php echo $this->translate('JGLOBAL_CREATED'); ?>">
+					<?php echo DPCalendarHelper::getDate($item->created)->format($format, true); ?>
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ID'); ?>"><?php echo (int)$item->id; ?></td>
 			</tr>

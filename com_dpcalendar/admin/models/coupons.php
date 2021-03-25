@@ -20,20 +20,16 @@ class DPCalendarModelCoupons extends JModelList
 				'a.checked_out',
 				'code',
 				'a.code',
-				'checked_out_time',
-				'a.checked_out_time',
 				'state',
+				'a.title',
+				'title',
 				'a.state',
 				'created',
 				'a.created',
 				'created_by',
 				'a.created_by',
 				'ordering',
-				'a.ordering',
-				'publish_up',
-				'a.publish_up',
-				'publish_down',
-				'a.publish_down'
+				'a.ordering'
 			];
 		}
 
@@ -69,18 +65,22 @@ class DPCalendarModelCoupons extends JModelList
 
 	protected function getListQuery()
 	{
-		// Create a new query object.
+		// Create a new query object
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
 		$user  = JFactory::getUser();
 
-		// Select the required fields from the table.
+		// Select the required fields from the table
 		$query->select($this->getState('list.select', 'a.*'));
 		$query->from($db->quoteName('#__dpcalendar_coupons') . ' AS a');
 
-		// Join over the users for the checked out user.
+		// Join over the users for the checked out user
 		$query->select('uc.name AS editor');
 		$query->join('LEFT', '#__users AS uc ON uc.id=a.checked_out');
+
+		// Join over the users for the author
+		$query->select('ua.name AS author_name');
+		$query->join('LEFT', '#__users AS ua ON ua.id = a.created_by');
 
 		// Filter by published state
 		$published = $this->getState('filter.state');

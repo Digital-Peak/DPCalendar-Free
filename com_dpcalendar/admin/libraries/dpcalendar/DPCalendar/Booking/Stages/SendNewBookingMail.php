@@ -52,13 +52,13 @@ class SendNewBookingMail implements StageInterface
 		$oldDetails = $payload->mailVariables['bookingDetails'];
 		if ($payload->item->state == 4) {
 			$payload->mailVariables['bookingDetails'] = $payload->mailVariables['bookingDetails']
-				. '<br/>' . Booking::getPaymentStatementFromPlugin($payload->item);
+				. '<br/>' . Booking::getPaymentStatementFromPlugin($payload->item, null, $payload->language);
 		}
 
 		// Send a mail to the booker
 		$subject = DPCalendarHelper::renderEvents(
 			$payload->eventsWithTickets,
-			\JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_SUBJECT'),
+			$payload->language->_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_SUBJECT'),
 			null,
 			$payload->mailVariables
 		);
@@ -68,7 +68,8 @@ class SendNewBookingMail implements StageInterface
 				DPCalendarHelper::getStringFromParams(
 					'bookingsys_new_booking_mail',
 					'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_BODY',
-					$payload->mailParams
+					$payload->mailParams,
+					$payload->language
 				),
 				null,
 				$payload->mailVariables

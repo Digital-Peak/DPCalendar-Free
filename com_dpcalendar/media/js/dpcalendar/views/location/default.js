@@ -28,7 +28,7 @@
 	}
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js']);
-		watchElements(document.querySelectorAll('.com-dpcalendar-location__map .dp-map'));
+		watchElements([].slice.call(document.querySelectorAll('.com-dpcalendar-location__map .dp-map')));
 		if (document.querySelector('.com-dpcalendar-location__resource')) {
 			loadDPAssets(['/com_dpcalendar/js/dpcalendar/calendar.js']);
 		}

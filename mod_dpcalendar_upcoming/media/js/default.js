@@ -27,7 +27,7 @@
 		});
 	}
 	document.addEventListener('DOMContentLoaded', () => {
-		watchElements(document.querySelectorAll('.mod-dpcalendar-upcoming .dp-map'));
+		watchElements([].slice.call(document.querySelectorAll('.mod-dpcalendar-upcoming .dp-map')));
 		if (document.querySelector('.mod-dpcalendar-upcoming').getAttribute('data-popup') == 0) {
 			return;
 		}

@@ -6,6 +6,8 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Router\Route;
+
 class DPCalendarHelperRoute
 {
 	private static $lookup;
@@ -19,8 +21,7 @@ class DPCalendarHelperRoute
 		}
 
 		// Create the link
-		$link = ($full ? JUri::root() : '') . 'index.php?option=com_dpcalendar&view=event&id=' . $id;
-
+		$link = 'index.php?option=com_dpcalendar&view=event&id=' . $id;
 		if ($tmpl = JFactory::getApplication()->input->getWord('tmpl')) {
 			$link .= '&tmpl=' . $tmpl;
 		}
@@ -47,10 +48,10 @@ class DPCalendarHelperRoute
 		}
 
 		if (!$autoRoute) {
-			return $link;
+			return ($full ? JUri::root() : '') . $link;
 		}
 
-		return JRoute::_($link, false);
+		return Route::_($link, false, Route::TLS_IGNORE, $full);
 	}
 
 	public static function getFormRoute($id, $return = null, $append = null)
@@ -374,6 +375,7 @@ class DPCalendarHelperRoute
 	{
 		// Is needed for smart search categories indexing
 		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+
 		return self::getCalendarRoute($catid);
 	}
 

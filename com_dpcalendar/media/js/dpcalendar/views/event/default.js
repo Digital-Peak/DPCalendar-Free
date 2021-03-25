@@ -28,7 +28,7 @@
 	}
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js']);
-		watchElements(document.querySelectorAll('.com-dpcalendar-event__locations .dp-map'));
+		watchElements([].slice.call(document.querySelectorAll('.com-dpcalendar-event__locations .dp-map')));
 		const mailButton = document.querySelector('.com-dpcalendar-event__actions .dp-button-mail');
 		if (mailButton) {
 			mailButton.addEventListener('click', (event) => {

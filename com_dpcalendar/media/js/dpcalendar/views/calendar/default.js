@@ -28,7 +28,7 @@
 	}
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/calendar.js']);
-		watchElements(document.querySelectorAll('.com-dpcalendar-calendar__map'));
+		watchElements([].slice.call(document.querySelectorAll('.com-dpcalendar-calendar__map')));
 		const noLink = document.querySelector('.com-dpcalendar-calendar_printable');
 		if (noLink) {
 			setInterval(() => {

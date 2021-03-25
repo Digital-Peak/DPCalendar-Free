@@ -6,31 +6,24 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
 use Joomla\Utilities\ArrayHelper;
 
-JLoader::import('joomla.application.component.controllerform');
-
-class DPCalendarControllerEvent extends JControllerForm
+class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormController
 {
+	protected $urlVar = 'e_id';
+
 	protected function allowAdd($data = [])
 	{
-		// Initialise variables.
-		$user       = JFactory::getUser();
+		// Initialise variables
 		$categoryId = ArrayHelper::getValue($data, 'catid', $this->input->getInt('filter_category_id'), 'int');
-		$allow      = null;
 
-		if ($categoryId) {
-			// If the category has been passed in the URL check it.
-			$allow = $user->authorise('core.create', $this->option . '.category.' . $categoryId);
-		}
-
-		if ($allow === null) {
-			// In the absense of better information, revert to the component
-			// permissions.
+		if (!$categoryId) {
+			// In the absense of better information, revert to the component permissions
 			return parent::allowAdd($data);
-		} else {
-			return $allow;
 		}
+
+		return Factory::getUser()->authorise('core.create', $this->option . '.category.' . $categoryId);
 	}
 
 	protected function allowEdit($data = [], $key = 'id')
@@ -355,6 +348,11 @@ class DPCalendarControllerEvent extends JControllerForm
 				];
 		}
 		DPCalendarHelper::sendMessage(null, empty($data), $data);
+	}
+
+	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'e_id')
+	{
+		return parent::getRedirectToItemAppend($recordId, $urlVar);
 	}
 
 	private function transformDatesToSql()

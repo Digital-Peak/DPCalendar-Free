@@ -44,9 +44,8 @@ class CreateInvoice implements StageInterface
 			return $payload;
 		}
 
-		$this->application->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-		$this->application->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-		$translator = new Translator();
+		$payload->language->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		$translator = new Translator($payload->language);
 
 		$booking = clone $payload->item;
 		if (!empty($booking->country_code)) {

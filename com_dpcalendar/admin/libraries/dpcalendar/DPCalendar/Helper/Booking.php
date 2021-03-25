@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 use DPCalendar\TCPDF\DPCalendar;
 use DPCalendar\Translator\Translator;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
+use Joomla\CMS\Language\Language;
 use Joomla\Registry\Registry;
 
 \JLoader::import('joomla.application.component.helper');
@@ -29,22 +29,26 @@ class Booking
 	 * @param \stdClass $tickets
 	 * @param Registry  $params
 	 * @param string    $toFile
+	 * @param Language  $language
 	 *
 	 * @return string
 	 */
-	public static function createInvoice($booking, $tickets, $params, $toFile = false)
+	public static function createInvoice($booking, $tickets, $params, $toFile = false, $language = null)
 	{
 		try {
 			$details = $booking->invoice;
 
 			if (!$details) {
-				\JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+				if ($language == null) {
+					$language = Factory::getLanguage();
+				}
+				$language->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 				$details = \DPCalendarHelper::renderLayout(
 					'booking.invoice',
 					[
 						'booking'    => $booking,
 						'tickets'    => $tickets,
-						'translator' => new Translator(),
+						'translator' => new Translator($language),
 						'dateHelper' => new DateHelper(),
 						'params'     => $params
 					]
@@ -294,7 +298,7 @@ class Booking
 	 *
 	 * @return string
 	 */
-	public static function getPaymentStatementFromPlugin($booking, $params = null)
+	public static function getPaymentStatementFromPlugin($booking, $params = null, $language = null)
 	{
 		\JPluginHelper::importPlugin('dpcalendarpay');
 
@@ -337,12 +341,12 @@ class Booking
 			}
 		}
 
-		$text = trim(strip_tags($provider->payment_statement));
-		if (Factory::getLanguage()->hasKey($text)) {
-			$text = Text::_($text);
-		} else {
-			$text = $provider->payment_statement;
+		if ($language == null) {
+			$language = Factory::getLanguage();
 		}
+
+		$text = trim(strip_tags($provider->payment_statement));
+		$text = $language->hasKey($text) ? $language->_($text) : $provider->payment_statement;
 
 		return \DPCalendarHelper::renderEvents([], $text, $params, $vars);
 	}

@@ -206,7 +206,7 @@ foreach ($fields as $key => $field) {
 					<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?></td>
 					<td style="width:70%"><?php echo $ticket->name; ?></td>
 				</tr>
-				<?php if ($ticket->price && $ticket->price != '0.00') { ?>
+				<?php if ($hasPrice && $ticket->price && $ticket->price != '0.00') { ?>
 					<tr>
 						<td style="width:30%"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></td>
 						<td style="width:70%"><?php echo DPCalendarHelper::renderPrice($ticket->price, $params->get('currency_symbol', '$')); ?></td>

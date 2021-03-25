@@ -10,6 +10,7 @@ namespace DPCalendar\Booking\Stages;
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Language\Text;
 use League\Pipeline\StageInterface;
 
 class SendNotificationMail implements StageInterface
@@ -34,13 +35,13 @@ class SendNotificationMail implements StageInterface
 		// Send the notification to the groups
 		$subject = DPCalendarHelper::renderEvents(
 			$payload->eventsWithTickets,
-			\JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_SUBJECT'),
+			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_SUBJECT'),
 			null,
 			$payload->mailVariables
 		);
 		$body    = DPCalendarHelper::renderEvents(
 			$payload->eventsWithTickets,
-			\JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_BODY'),
+			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_BODY'),
 			null,
 			$payload->mailVariables
 		);

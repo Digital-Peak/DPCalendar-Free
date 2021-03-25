@@ -302,7 +302,6 @@ class DPCalendarTableEvent extends JTable
 			$this->_db->qn('description') . ' = ' . $this->_db->q($this->description),
 			$this->_db->qn('schedule') . ' = ' . $this->_db->q($this->schedule),
 			$this->_db->qn('capacity') . ' = ' . ($this->capacity === null ? 'NULL' : $this->_db->q($this->capacity)),
-			$this->_db->qn('capacity_used') . ' = ' . $this->_db->q($this->capacity_used),
 			$this->_db->qn('max_tickets') . ' = ' . $this->_db->q($this->max_tickets),
 			$this->_db->qn('booking_closing_date') . ' = ' . $this->_db->q($this->booking_closing_date),
 			$this->_db->qn('booking_series') . ' = ' . $this->_db->q($this->booking_series),
@@ -342,6 +341,11 @@ class DPCalendarTableEvent extends JTable
 				", DATE_FORMAT(start_date, CASE WHEN all_day = '1' THEN '%Y%m%d' ELSE '%Y%m%d%H%i' END))";
 		} else {
 			$files[] = $this->_db->qn('xreference') . ' = null';
+		}
+
+		// Reset capacity used only when the whole series can be booked
+		if ($this->booking_series == 1) {
+			$files[] = $this->_db->qn('capacity_used') . ' = ' . $this->_db->q($this->capacity_used);
 		}
 
 		$query->set($files);

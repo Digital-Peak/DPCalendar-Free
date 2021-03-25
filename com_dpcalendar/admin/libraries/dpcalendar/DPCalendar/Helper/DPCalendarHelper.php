@@ -566,13 +566,17 @@ class DPCalendarHelper
 		return \JLayoutHelper::render($layout, $data, null, ['component' => 'com_dpcalendar', 'client' => 0]);
 	}
 
-	public static function getStringFromParams($key, $default, $params)
+	public static function getStringFromParams($key, $default, $params, $language = null)
 	{
 		$text = $params->get($key, $default);
 		$text = trim(strip_tags($text));
 
-		if (\JFactory::getLanguage()->hasKey($text)) {
-			return \JText::_($text);
+		if (!$language) {
+			$language = Factory::getLanguage();
+		}
+
+		if ($language->hasKey($text)) {
+			return $language->_($text);
 		}
 
 		return $params->get($key, $default);

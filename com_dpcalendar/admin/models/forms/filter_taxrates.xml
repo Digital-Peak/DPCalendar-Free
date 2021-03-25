@@ -23,6 +23,8 @@
 			<option value="a.state DESC">JSTATUS_DESC</option>
 			<option value="a.title ASC">JGLOBAL_TITLE_ASC</option>
 			<option value="a.title DESC">JGLOBAL_TITLE_DESC</option>
+			<option value="a.rate ASC">COM_DPCALENDAR_VIEWS_FILTERS_RATE_ASC</option>
+			<option value="a.rate DESC">COM_DPCALENDAR_VIEWS_FILTERS_RATE_DESC</option>
 			<option value="a.created_by ASC">JAUTHOR_ASC</option>
 			<option value="a.created_by DESC">JAUTHOR_DESC</option>
 			<option value="a.created ASC">JDATE_ASC</option>

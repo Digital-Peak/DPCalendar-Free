@@ -133,6 +133,10 @@
 	}
 }
 
+.com-dpcalendar-adminlist .js-stools {
+	display: unset;
+}
+
 .com-dpcalendar-adminlist .js-stools-container-bar {
 	width: unset;
 }
@@ -186,6 +190,7 @@
 .com-dpcalendar-adminlist__footer {
 	padding: 20px;
 	text-align: center;
+	clear: both;
 }
 
 .com-dpcalendar-adminlist__batch .dp-batch-calendar {

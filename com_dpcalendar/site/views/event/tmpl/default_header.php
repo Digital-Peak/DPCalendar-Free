@@ -50,7 +50,7 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 			<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'); ?>
 		</button>
 	<?php } ?>
-	<?php if ($mailtoUrl) { ?>
+	<?php if ($mailtoUrl && $this->params->get('event_show_mail', 1)) { ?>
 		<button type="button" class="dp-button dp-button-mail" data-mailtohref="<?php echo $mailtoUrl; ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAIL]); ?>
 			<?php echo $this->translate('JGLOBAL_EMAIL'); ?>

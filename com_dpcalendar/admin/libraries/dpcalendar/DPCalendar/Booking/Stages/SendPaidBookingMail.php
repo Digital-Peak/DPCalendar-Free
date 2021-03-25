@@ -4,7 +4,6 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
@@ -45,7 +44,7 @@ class SendPaidBookingMail implements StageInterface
 		// We have a successful payment
 		$subject = DPCalendarHelper::renderEvents(
 			$payload->eventsWithTickets,
-			\JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_PAYED_SUBJECT'),
+			$payload->language->_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_PAYED_SUBJECT'),
 			null,
 			$payload->mailVariables
 		);
@@ -54,7 +53,8 @@ class SendPaidBookingMail implements StageInterface
 			DPCalendarHelper::getStringFromParams(
 				'bookingsys_paid_booking_mail',
 				'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_PAYED_BODY',
-				$payload->mailParams
+				$payload->mailParams,
+				$payload->language
 			),
 			null,
 			$payload->mailVariables

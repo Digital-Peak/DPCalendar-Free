@@ -59,7 +59,7 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			$this->form->setValue('catid', null, $requestParams['catid']);
 		}
 
-		if (key_exists('location_ids', $requestParams)) {
+		if (key_exists('location_ids', $requestParams) && $requestParams['location_ids'] && reset($requestParams['location_ids'])) {
 			$this->form->setValue('location_ids', null, $requestParams['location_ids']);
 		}
 

@@ -11,30 +11,42 @@ defined('_JEXEC') or die();
 use DPCalendar\Helper\DateHelper;
 use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Translator\Translator;
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\Registry\Registry;
 use League\Pipeline\StageInterface;
 
 class CreateInvoice implements StageInterface
 {
 	/**
-	 * @var \JApplicationCms
+	 * @var CMSApplication
 	 */
-	private $application = null;
+	private $application;
 
 	/**
 	 * @var \DPCalendarTableBooking
 	 */
-	private $bookingTable = null;
+	private $bookingTable;
 
 	/**
 	 * @var \DPCalendarModelCountry
 	 */
 	private $model;
 
-	public function __construct(\JApplicationCms $application, \DPCalendarTableBooking $bookingTable, \DPCalendarModelCountry $model)
-	{
+	/**
+	 * @var Registry
+	 */
+	private $params;
+
+	public function __construct(
+		CMSApplication $application,
+		\DPCalendarTableBooking $bookingTable,
+		\DPCalendarModelCountry $model,
+		Registry $params
+	) {
 		$this->application  = $application;
 		$this->bookingTable = $bookingTable;
 		$this->model        = $model;
+		$this->params       = $params;
 	}
 
 	public function __invoke($payload)
@@ -54,7 +66,6 @@ class CreateInvoice implements StageInterface
 			$booking->country = $translator->translate('COM_DPCALENDAR_COUNTRY_' . $this->model->getItem($booking->country)->short_code);
 		}
 
-		$params = clone \JComponentHelper::getParams('com_dpcalendar');
 
 		$details = DPCalendarHelper::renderLayout(
 			'booking.invoice',
@@ -63,7 +74,7 @@ class CreateInvoice implements StageInterface
 				'tickets'    => $payload->tickets,
 				'translator' => $translator,
 				'dateHelper' => new DateHelper(),
-				'params'     => $params
+				'params'     => $this->params
 			]
 		);
 

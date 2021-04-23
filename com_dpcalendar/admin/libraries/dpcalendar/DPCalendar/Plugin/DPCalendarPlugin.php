@@ -71,6 +71,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$start = null;
 		if (strlen($s) == 8) {
 			$start = \JFactory::getDate(substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' 00:00');
+			// Start date must be inclusive, @see VEvent::isInTimeRange
+			$start->modify('-1 second');
 		} else {
 			$start = \JFactory::getDate(
 				substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' ' . substr($s, 8, 2) . ':' . substr($s, 10, 2)

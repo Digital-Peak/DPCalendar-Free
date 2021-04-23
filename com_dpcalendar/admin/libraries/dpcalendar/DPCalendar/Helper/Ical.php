@@ -289,11 +289,11 @@ class Ical
 		$text[] = 'X-URL:' . ($event->url ?: \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
 		$text[] = 'X-COLOR:' . $event->color;
 
-		if ($event->images && $event->images->image_full) {
+		if ($event->images && !empty($event->images->image_full)) {
 			$image  = $event->images->image_full;
 			$text[] = 'X-IMAGE-FULL:' . (strpos($image, 'http') !== 0 ? Uri::base() : '') . $image;
 		}
-		if ($event->images && $event->images->image_intro) {
+		if ($event->images && !empty($event->images->image_intro)) {
 			$image  = $event->images->image_intro;
 			$text[] = 'X-IMAGE-INTRO:' . (strpos($image, 'http') !== 0 ? Uri::base() : '') . $image;
 		}
@@ -320,16 +320,11 @@ class Ical
 	 * Returns a VTIMEZONE component for a Olson timezone identifier
 	 * with daylight transitions covering the given date range.
 	 *
-	 * @param
-	 *            string Timezone ID as used in PHP's Date functions
-	 * @param
-	 *            integer Unix timestamp with first date/time in this timezone
-	 * @param
-	 *            integer Unix timestap with last date/time in this timezone
+	 * @param string Timezone ID as used in PHP's Date functions
+	 * @param integer Unix timestamp with first date/time in this timezone
+	 * @param integer Unix timestap with last date/time in this timezone
 	 *
-	 * @return mixed A Sabre\VObject\Component object representing a VTIMEZONE
-	 *         definition
-	 *         or false if no timezone information is available
+	 * @return mixed A Sabre\VObject\Component object representing a VTIMEZONE definition or false if no timezone information is available
 	 */
 	private static function generateVtimezone($tzid, $from = 0, $to = 0)
 	{
@@ -349,6 +344,11 @@ class Ical
 		// get all transitions for one year back/ahead
 		$year        = 86400 * 360;
 		$transitions = $tz->getTransitions($from - $year, $to + $year);
+
+		// Some parsers do need components like standard or daylight
+		if (count($transitions) <= 1) {
+			return;
+		}
 
 		$vcalendar = new \Sabre\VObject\Component\VCalendar();
 		$vt        = $vcalendar->createComponent('VTIMEZONE');

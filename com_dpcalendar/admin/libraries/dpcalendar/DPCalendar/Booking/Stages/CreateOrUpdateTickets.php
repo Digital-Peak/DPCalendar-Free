@@ -110,7 +110,7 @@ class CreateOrUpdateTickets implements StageInterface
 
 					$ticket->event_id = $event->id;
 
-					if (!$this->model->save((array)$ticket)) {
+					if (!$this->model->save((array)$ticket, false)) {
 						throw new \Exception($this->model->getError());
 					}
 

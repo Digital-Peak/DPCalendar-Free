@@ -4,30 +4,37 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\Registry\Registry;
 use League\Pipeline\StageInterface;
 
 class SetupForMail implements StageInterface
 {
 	/**
-	 * @var \JApplicationCms
+	 * @var CMSApplication
 	 */
-	private $application = null;
+	private $application;
 
-	public function __construct(\JApplicationCms $application)
+	/**
+	 * @var Registry
+	 */
+	private $params;
+
+	public function __construct(CMSApplication $application, Registry $params)
 	{
 		$this->application = $application;
+		$this->params      = $params;
 	}
 
 	public function __invoke($payload)
 	{
 		// Create the booking details for mail notification
-		$params = clone \JComponentHelper::getParams('com_dpcalendar');
+		$params = clone $this->params;
 		$params->set('show_header', false);
 
 		$payload->item->book_date_formatted = DPCalendarHelper::getDate($payload->item->book_date)

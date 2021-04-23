@@ -13,9 +13,9 @@ class DPCalendarController extends JControllerLegacy
 	public function display($cachable = false, $urlparams = false)
 	{
 		$cachable = true;
-		$user = JFactory::getUser();
+		$user     = JFactory::getUser();
 
-		$id = JFactory::getApplication()->input->getVar('e_id');
+		$id    = JFactory::getApplication()->input->getVar('e_id');
 		$vName = JFactory::getApplication()->input->getCmd('view', 'calendar');
 		JFactory::getApplication()->input->set('view', $vName);
 
@@ -24,16 +24,16 @@ class DPCalendarController extends JControllerLegacy
 		}
 
 		$safeurlparams = [
-				'id' => 'STRING',
-				'limit' => 'UINT',
-				'limitstart' => 'UINT',
-				'filter_order' => 'CMD',
-				'filter_order_Dir' => 'CMD',
-				'lang' => 'CMD'
+			'id'               => 'STRING',
+			'limit'            => 'UINT',
+			'limitstart'       => 'UINT',
+			'filter_order'     => 'CMD',
+			'filter_order_Dir' => 'CMD',
+			'lang'             => 'CMD'
 		];
 
 		// Check for edit form.
-		if ($vName == 'form' && ! $this->checkEditId('com_dpcalendar.edit.event', $id)) {
+		if ($vName == 'form' && is_numeric($id) && !$this->checkEditId('com_dpcalendar.edit.event', $id)) {
 			// Somehow the person just went to the form - we don't allow that.
 			throw new Exception(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
 		}

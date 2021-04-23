@@ -32,7 +32,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const CALENDAR = 'calendar';
+	const CALENDAR = 'calendar-alt';
 
 	/**
 	 * The cancel icon.
@@ -95,7 +95,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const EDIT = 'pencil';
+	const EDIT = 'pencil-alt';
 
 	/**
 	 * The exclamation icon.
@@ -109,7 +109,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const EXTERNAL = 'external-link-square';
+	const EXTERNAL = 'external-link-square-alt';
 
 	/**
 	 * The file icon.
@@ -144,7 +144,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const LOCATION = 'map-marker';
+	const LOCATION = 'map-marker-alt';
 
 	/**
 	 * The lock icon.
@@ -165,14 +165,14 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const MAP = 'map-marked';
+	const MAP = 'map-marked-alt';
 
 	/**
 	 * The money icon.
 	 *
 	 * @var string
 	 */
-	const MONEY = 'money-bill';
+	const MONEY = 'money-bill-alt';
 
 	/**
 	 * The multiple item icon.
@@ -228,7 +228,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	const SIGNUP = 'sign-in';
+	const SIGNUP = 'sign-in-alt';
 
 	/**
 	 * The single item icon.

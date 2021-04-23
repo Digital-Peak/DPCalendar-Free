@@ -8,6 +8,7 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
 
@@ -183,14 +184,14 @@ class DPCalendarHelper
 
 	public static function dayToString($day, $abbr = false)
 	{
-		$date = new \JDate();
+		$date = new Date();
 
 		return addslashes($date->dayToString($day, $abbr));
 	}
 
 	public static function monthToString($month, $abbr = false)
 	{
-		$date = new \JDate();
+		$date = new Date();
 
 		return addslashes($date->monthToString($month, $abbr));
 	}

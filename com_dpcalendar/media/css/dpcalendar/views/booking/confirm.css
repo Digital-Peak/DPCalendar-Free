@@ -214,6 +214,10 @@
 	font-size: small;
 }
 
+.com-dpcalendar-booking__tickets .dp-ticket {
+	border-top: 1px solid #c0c0c0;
+}
+
 .com-dpcalendar-booking .dp-term {
 	display: flex;
 	align-items: center;

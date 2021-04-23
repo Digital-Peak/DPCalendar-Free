@@ -439,7 +439,7 @@
 		};
 		iconHandler('angle-left', 'prev');
 		iconHandler('angle-right', 'next');
-		iconHandler('calendar', 'datepicker');
+		iconHandler('calendar-alt', 'datepicker');
 		iconHandler('print', 'print');
 		iconHandler('plus', 'add');
 	}

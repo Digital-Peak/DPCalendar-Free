@@ -16,57 +16,7 @@ if ($imageUrl && !filter_var($imageUrl, FILTER_VALIDATE_URL)) {
 	$imageUrl = trim(JUri::root(), '/') . '/' . trim($imageUrl, '/');
 }
 
-$fields   = [];
-$fields[] = (object)['id' => 'name', 'name' => 'name', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'];
-$fields[] = (object)['id' => 'email', 'name' => 'email'];
-$fields[] = (object)[
-	'id'    => 'country',
-	'name'  => 'country' . (!empty($ticket->country_code_value) ? '_code_value' : ''),
-	'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'
-];
-$fields[] = (object)['id' => 'province', 'name' => 'province', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL'];
-$fields[] = (object)['id' => 'city', 'name' => 'city', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL'];
-$fields[] = (object)['id' => 'zip', 'name' => 'zip', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL'];
-$fields[] = (object)['id' => 'street', 'name' => 'street', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL'];
-$fields[] = (object)['id' => 'number', 'name' => 'number', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL'];
-$fields[] = (object)['id' => 'telephone', 'name' => 'telephone'];
-
-// The fields are not fetched, load them
-if (!isset($ticket->jcfields)) {
-	JPluginHelper::importPlugin('content');
-	$ticket->text = '';
-	JFactory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.ticket', &$ticket, &$params, 0]);
-}
-
-$fields = array_merge($fields, $ticket->jcfields);
-
-\DPCalendar\Helper\DPCalendarHelper::sortFields($fields, $params->get('ticket_fields_order', new stdClass()));
-foreach ($fields as $key => $field) {
-	if (!$params->get('ticket_show_' . $field->name, 1)) {
-		unset($fields[$key]);
-	}
-
-	$label = 'COM_DPCALENDAR_BOOKING_FIELD_' . strtoupper($field->name) . '_LABEL';
-	if (isset($field->label)) {
-		$label = $field->label;
-	}
-
-	$content = '';
-	if (property_exists($ticket, $field->name)) {
-		$content = $ticket->{$field->name};
-	}
-	if (property_exists($field, 'value')) {
-		$content = $field->value;
-	}
-
-	if (!$content) {
-		unset($fields[$key]);
-		continue;
-	}
-
-	$field->dpDisplayLabel   = $label;
-	$field->dpDisplayContent = $content;
-}
+$fields = \DPCalendar\Helper\FieldsOrder::getTicketFields($ticket, $params, \Joomla\CMS\Factory::getApplication());
 ?>
 <div class="dp-ticket-details">
 	<?php if ($params->get('show_header', true)) { ?>

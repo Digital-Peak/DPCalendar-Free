@@ -317,17 +317,9 @@
 			       layout="joomla.form.field.subform.repeatable-table"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
-					<field name="field" type="dpcfields" section="booking" label="COM_DPCALENDAR_FIELD">
-						<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
-						<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
-						<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
-						<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
-						<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
-						<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
-						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
-						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
-						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-					</field>
+					<field name="field" type="dpcfields" section="booking"
+					       hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,payer_email,latitude,longitude"
+					       label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
 			<field name="booking_show_country" type="list" useglobal="true"
@@ -382,17 +374,9 @@
 			       layout="joomla.form.field.subform.repeatable-table"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
-					<field name="field" type="dpcfields" section="booking" label="COM_DPCALENDAR_FIELD">
-						<option value="name">COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL</option>
-						<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
-						<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
-						<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
-						<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
-						<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
-						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
-						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
-						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-					</field>
+					<field name="field" type="dpcfields" section="booking"
+					       hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,payer_email,latitude,longitude,options"
+					       label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
 			<field name="booking_form_country" type="list" useglobal="true"
@@ -456,17 +440,9 @@
 			       layout="joomla.form.field.subform.repeatable-table"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
-					<field name="field" type="dpcfields" section="ticket" label="COM_DPCALENDAR_FIELD">
-						<option value="name">COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL</option>
-						<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
-						<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
-						<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
-						<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
-						<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
-						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
-						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
-						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-					</field>
+					<field name="field" type="dpcfields" section="ticket"
+					       hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude"
+					       label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
 			<field name="ticket_show_country" type="list" useglobal="true"
@@ -527,17 +503,9 @@
 			       layout="joomla.form.field.subform.repeatable-table"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
-					<field name="field" type="dpcfields" section="ticket" label="COM_DPCALENDAR_FIELD">
-						<option value="name">COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL</option>
-						<option value="email">COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL</option>
-						<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
-						<option value="province">COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL</option>
-						<option value="city">COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL</option>
-						<option value="zip">COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL</option>
-						<option value="street">COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL</option>
-						<option value="number">COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL</option>
-						<option value="telephone">COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL</option>
-					</field>
+					<field name="field" type="dpcfields" section="ticket"
+					       hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude"
+					       label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
 			<field name="ticket_form_country" type="list" useglobal="true"

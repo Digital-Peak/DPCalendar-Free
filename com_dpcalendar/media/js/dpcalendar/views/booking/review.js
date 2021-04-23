@@ -15,7 +15,10 @@
 		});
 		Joomla.submitbutton = (task) => {
 			const form = document.getElementsByName('adminForm')[0];
-			if (form && (task.indexOf('cancel') > -1 || task.indexOf('review') > -1 || document.formvalidator.isValid(form))) {
+			if (!form) {
+				return;
+			}
+			if (task.indexOf('abort') > -1 || (task.indexOf('review') > -1 && document.formvalidator.isValid(form))) {
 				Joomla.submitform(task, form);
 			}
 		};

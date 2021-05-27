@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>23 Apr 2021</creationDate>
+	<creationDate>27 May 2021</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.0.6</version>
+	<version>8.1.0</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -149,6 +149,15 @@
 				       label="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_LIST_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_COLUMN_FORMAT_LIST_DESC"
 				       size="50"/>
+				<field name="axisformat_month" type="text" default="l j"
+				       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_MONTH_LABEL"
+				       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_MONTH_DESC"/>
+				<field name="axisformat_week" type="text" default="D j H:i"
+				       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_WEEK_LABEL"
+				       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_WEEK_DESC"/>
+				<field name="axisformat_day" type="text" default="H:i"
+				       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_LABEL"
+				       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_DESC"/>
 				<field name="dayformat_list" type="text" default="l"
 				       label="MOD_DPCALENDAR_MINI_FIELD_DAY_FORMAT_LIST_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_DAY_FORMAT_LIST_DESC"
@@ -156,10 +165,6 @@
 				<field name="dateformat_list" type="text" default="F j, Y"
 				       label="MOD_DPCALENDAR_MINI_FIELD_DATE_FORMAT_LIST_LABEL"
 				       description="MOD_DPCALENDAR_MINI_FIELD_DATE_FORMAT_LIST_DESC"
-				       size="50"/>
-				<field name="axisformat" type="text" default="H:i"
-				       label="MOD_DPCALENDAR_MINI_FIELD_AXIS_FORMAT_LABEL"
-				       description="MOD_DPCALENDAR_MINI_FIELD_AXIS_FORMAT_DESC"
 				       size="50"/>
 				<field name="list_range" type="text" default="30"
 				       label="MOD_DPCALENDAR_MINI_FIELD_LIST_RANGE_LABEL"

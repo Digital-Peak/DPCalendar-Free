@@ -63,9 +63,10 @@ $options['smallTimeFormat'] = $this->dateHelper->convertPHPDateToJS($this->param
 
 $options['resources']                 = $this->resources;
 $options['resourceAreaHeaderContent'] = $this->translate('COM_DPCALENDAR_VIEW_LOCATION_LOCATION_AND_ROOMS');
+$options['resourceOrder']             = 'title,id';
 
-$options['views']             = [];
-$options['views']['resyear']  = [
+$options['views']            = [];
+$options['views']['resyear'] = [
 	'titleFormat'     => $this->dateHelper->convertPHPDateToJS($this->params->get('location_titleformat_year', 'Y')),
 	'eventTimeFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('location_timeformat_year', 'H:i')),
 	'slotLabelFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('location_axisformat_year', 'M j'))
@@ -75,12 +76,12 @@ $options['views']['resmonth'] = [
 	'eventTimeFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('location_timeformat_month', 'H:i')),
 	'slotLabelFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('location_axisformat_month', 'l j'))
 ];
-$options['views']['resweek']  = [
+$options['views']['resweek'] = [
 	'titleFormat'     => $this->dateHelper->convertPHPDateToJS($this->params->get('location_titleformat_week', 'M j Y')),
 	'eventTimeFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('location_timeformat_week', 'H:i')),
 	'slotLabelFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('location_axisformat_week', 'D j H:i'))
 ];
-$options['views']['resday']   = [
+$options['views']['resday'] = [
 	'titleFormat'     => $this->dateHelper->convertPHPDateToJS($this->params->get('location_titleformat_day', 'F j Y')),
 	'eventTimeFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('location_timeformat_day', 'H:i')),
 	'slotLabelFormat' => $this->dateHelper->convertPHPDateToJS($this->params->get('location_axisformat_day', 'H:i'))

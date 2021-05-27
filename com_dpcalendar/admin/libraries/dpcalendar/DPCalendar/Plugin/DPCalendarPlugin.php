@@ -31,9 +31,9 @@ use Sabre\VObject\Reader;
  */
 abstract class DPCalendarPlugin extends \JPlugin
 {
-	public $extCalendarsCache = null;
-	protected $identifier = null;
-	protected $cachingEnabled = true;
+	public $extCalendarsCache   = null;
+	protected $identifier       = null;
+	protected $cachingEnabled   = true;
 	protected $autoloadLanguage = true;
 
 	public function getIdentifier()
@@ -291,13 +291,13 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$action         = $calendar->params->get('action-create', 'false');
 			$cal->canCreate = $user->authorise('core.create', 'com_dpcalendar.extcalendar.' . $calendar->id) &&
 				($action == 'true' || $action === true || $action == 1);
-			$action         = $calendar->params->get('action-edit', 'false');
-			$cal->canEdit   = $user->authorise('core.edit', 'com_dpcalendar.extcalendar.' . $calendar->id) &&
+			$action       = $calendar->params->get('action-edit', 'false');
+			$cal->canEdit = $user->authorise('core.edit', 'com_dpcalendar.extcalendar.' . $calendar->id) &&
 				($action == 'true' || $action === true || $action == 1);
 			$action         = $calendar->params->get('action-delete', 'false');
 			$cal->canDelete = $user->authorise('core.delete', 'com_dpcalendar.extcalendar.' . $calendar->id) &&
 				($action == 'true' || $action === true || $action == 1);
-			$calendars[]    = $cal;
+			$calendars[] = $cal;
 		}
 
 		return $calendars;
@@ -661,54 +661,55 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 */
 	protected function createEvent($id, $calendarId)
 	{
-		$event                   = new \stdClass();
-		$event->id               = $this->identifier . '-' . $calendarId . '-' . $id;
-		$event->alias            = $id;
-		$event->catid            = $this->identifier . '-' . $calendarId;
-		$event->category_access  = 1;
-		$event->category_alias   = $calendarId;
-		$event->category_title   = \DPCalendarHelper::getCalendar($event->catid)->title;
-		$event->parent_alias     = '';
-		$event->parent_id        = 0;
-		$event->original_id      = 0;
-		$event->title            = '';
-		$event->rrule            = null;
-		$event->recurrence_id    = null;
-		$event->start_date       = '';
-		$event->end_date         = '';
-		$event->show_end_time    = true;
-		$event->all_day          = 0;
-		$event->color            = '';
-		$event->url              = '';
-		$event->price            = [];
-		$event->locations        = [];
-		$event->rooms            = null;
-		$event->hits             = 0;
-		$event->capacity         = 0;
-		$event->capacity_used    = 0;
-		$event->booking_options  = null;
-		$event->booking_series   = 0;
-		$event->description      = '';
-		$event->schedule         = '';
-		$event->state            = 1;
-		$event->access           = 1;
-		$event->access_content   = 1;
-		$event->language         = '*';
-		$event->created          = '';
-		$event->created_by       = 0;
-		$event->created_by_alias = '';
-		$event->modified         = '';
-		$event->modified_by      = 0;
-		$event->params           = '';
-		$event->metadesc         = null;
-		$event->metakey          = null;
-		$event->metadata         = new Registry();
-		$event->author           = null;
-		$event->xreference       = $event->id;
-		$event->images           = null;
-		$event->checked_out      = null;
-		$event->publish_up       = null;
-		$event->publish_down     = null;
+		$event                       = new \stdClass();
+		$event->id                   = $this->identifier . '-' . $calendarId . '-' . $id;
+		$event->alias                = $id;
+		$event->catid                = $this->identifier . '-' . $calendarId;
+		$event->category_access      = 1;
+		$event->category_alias       = $calendarId;
+		$event->category_title       = \DPCalendarHelper::getCalendar($event->catid)->title;
+		$event->parent_alias         = '';
+		$event->parent_id            = 0;
+		$event->original_id          = 0;
+		$event->title                = '';
+		$event->rrule                = null;
+		$event->recurrence_id        = null;
+		$event->start_date           = '';
+		$event->end_date             = '';
+		$event->show_end_time        = true;
+		$event->all_day              = 0;
+		$event->color                = '';
+		$event->url                  = '';
+		$event->price                = [];
+		$event->locations            = [];
+		$event->rooms                = null;
+		$event->hits                 = 0;
+		$event->capacity             = 0;
+		$event->capacity_used        = 0;
+		$event->booking_options      = null;
+		$event->booking_waiting_list = 0;
+		$event->booking_series       = 0;
+		$event->description          = '';
+		$event->schedule             = '';
+		$event->state                = 1;
+		$event->access               = 1;
+		$event->access_content       = 1;
+		$event->language             = '*';
+		$event->created              = '';
+		$event->created_by           = 0;
+		$event->created_by_alias     = '';
+		$event->modified             = '';
+		$event->modified_by          = 0;
+		$event->params               = '';
+		$event->metadesc             = null;
+		$event->metakey              = null;
+		$event->metadata             = new Registry();
+		$event->author               = null;
+		$event->xreference           = $event->id;
+		$event->images               = null;
+		$event->checked_out          = null;
+		$event->publish_up           = null;
+		$event->publish_down         = null;
 
 		return $event;
 	}
@@ -847,13 +848,14 @@ abstract class DPCalendarPlugin extends \JPlugin
 			$tmpEvent->color = $color;
 		}
 
+		$url = (string)$event->URL;
+		if (!empty($url)) {
+			$tmpEvent->url = $url;
+		}
+
 		$url = (string)$event->{'x-url'};
 		if (!empty($url)) {
 			$tmpEvent->url = $url;
-		} else {
-			if ($url = (string)$event->URL) {
-				$tmpEvent->url = $url;
-			}
 		}
 
 		$alias = (string)$event->{'x-alias'};
@@ -877,17 +879,33 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		$tmpEvent->images = new \stdClass();
-		$image            = (string)$event->{'x-image'};
-		if (!empty($image)) {
-			$tmpEvent->images->image_full = $image;
+		$tmpImageData     = (string)$event->{'x-image'};
+		if (!empty($tmpImageData)) {
+			$tmpEvent->images->image_full = $tmpImageData;
 		}
-		$image            = (string)$event->{'x-image-full'};
-		if (!empty($image)) {
-			$tmpEvent->images->image_full = $image;
+		$tmpImageData = (string)$event->{'x-image-full'};
+		if (!empty($tmpImageData)) {
+			$tmpEvent->images->image_full = $tmpImageData;
 		}
-		$image            = (string)$event->{'x-image-intro'};
-		if (!empty($image)) {
-			$tmpEvent->images->image_intro = $image;
+		$tmpImageData = (string)$event->{'x-image-full-alt'};
+		if (!empty($tmpImageData)) {
+			$tmpEvent->images->image_full_alt = $tmpImageData;
+		}
+		$tmpImageData = (string)$event->{'x-image-full-caption'};
+		if (!empty($tmpImageData)) {
+			$tmpEvent->images->image_full_caption = $tmpImageData;
+		}
+		$tmpImageData = (string)$event->{'x-image-intro'};
+		if (!empty($tmpImageData)) {
+			$tmpEvent->images->image_intro = $tmpImageData;
+		}
+		$tmpImageData = (string)$event->{'x-image-intro-alt'};
+		if (!empty($tmpImageData)) {
+			$tmpEvent->images->image_intro_alt = $tmpImageData;
+		}
+		$tmpImageData = (string)$event->{'x-image-intro-caption'};
+		if (!empty($tmpImageData)) {
+			$tmpEvent->images->image_intro_caption = $tmpImageData;
 		}
 
 		$showEndTime = $event->{'x-show-end-time'};
@@ -907,7 +925,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 					$locationModel->getState();
 					$locationModel->setState('list.limit', 1);
 				}
-				list ($latitude, $longitude) = explode(';', $geo);
+				list($latitude, $longitude) = explode(';', $geo);
 				$locationModel->setState('filter.latitude', $latitude);
 				$locationModel->setState('filter.longitude', $longitude);
 
@@ -920,8 +938,8 @@ abstract class DPCalendarPlugin extends \JPlugin
 						$tmpEvent->location_ids[] = $dpLocation->id;
 					}
 				} else {
-					list ($latitude, $longitude) = explode(';', $geo);
-					$locationObject = \DPCalendar\Helper\Location::get($latitude . ',' . $longitude, true, $location);
+					list($latitude, $longitude) = explode(';', $geo);
+					$locationObject             = \DPCalendar\Helper\Location::get($latitude . ',' . $longitude, true, $location);
 
 					$locations[] = $locationObject;
 				}
@@ -932,13 +950,12 @@ abstract class DPCalendarPlugin extends \JPlugin
 		$tmpEvent->locations = $locations;
 		$tmpEvent->all_day   = $allDay ? 1 : 0;
 
-		if ($original !== null) {
-			if ($recId !== null) {
-				$tmpEvent->original_id = $this->identifier . '-' . $calendarId . '-' . $event->UID . '_0';
-			} else {
-				$tmpEvent->rrule       = (string)$original->RRULE;
-				$tmpEvent->original_id = -1;
-			}
+		if ($original !== null && $recId !== null) {
+			$tmpEvent->original_id = $this->identifier . '-' . $calendarId . '-' . $event->UID . '_0';
+		}
+		if ($original !== null && $recId === null) {
+			$tmpEvent->rrule       = (string)$original->RRULE;
+			$tmpEvent->original_id = -1;
 		}
 
 		return $tmpEvent;
@@ -990,7 +1007,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 
 		if (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
-			list ($latitude, $longitude) = explode(';', $location);
+			list($latitude, $longitude)    = explode(';', $location);
 			$locationFilterData->latitude  = str_replace('latitude=', '', $latitude);
 			$locationFilterData->longitude = str_replace('longitude=', '', $longitude);
 		} else {
@@ -1095,7 +1112,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 			'Accept-Language: ' . \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag()),
 			'Accept: */*'
 		];
-		$data    = (new HTTP())->get($uri, null, null, $headers);
+		$data = (new HTTP())->get($uri, null, null, $headers);
 		if (!empty($data->dp->headers['Content-Encoding']) && $data->dp->headers['Content-Encoding'] == 'gzip') {
 			return gzinflate(substr($data->dp->body, 10, -8));
 		}

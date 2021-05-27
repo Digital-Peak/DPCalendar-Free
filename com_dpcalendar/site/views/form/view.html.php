@@ -121,6 +121,11 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 				continue;
 			}
 
+			if ($fieldName == 'catid') {
+				$this->form->setFieldAttribute('catid', 'type', 'hidden');
+				continue;
+			}
+
 			$parts = explode(':', $fieldName);
 			if (count($parts) > 1) {
 				$this->form->removeField($parts[1], $parts[0]);

@@ -51,7 +51,10 @@ class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 		$this->quickaddForm = $this->getModel()->getQuickAddForm($this->params);
 
 		$this->resources = [];
-		if ($this->params->get('calendar_filter_locations') && $this->params->get('calendar_resource_views') && !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
+		if ($this->params->get('calendar_filter_locations')
+			&& $this->params->get('calendar_resource_views')
+			&& $this->getLayout() == 'default'
+			&& !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
 			// Load the model
 			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
@@ -67,6 +70,10 @@ class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 					}
 				}
 			}
+		}
+
+		if (strpos($this->getLayout(), 'timeline') !== false) {
+			$this->resources = array_values($this->doNotListCalendars);
 		}
 
 		$this->returnPage = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;

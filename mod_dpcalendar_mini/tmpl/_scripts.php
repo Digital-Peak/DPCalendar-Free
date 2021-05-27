@@ -30,6 +30,7 @@ $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 $translator->translateJS('JCANCEL');
 $translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
+$translator->translateJS('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 
 $document->addScriptOptions('calendar.names', $dateHelper->getNames());
 $document->addScriptOptions('timezone', $dateHelper->getDate()->getTimezone()->getName());
@@ -90,10 +91,7 @@ if ($params->get('calendar_height', 0) > 0) {
 	$options['height'] = 'auto';
 }
 
-$options['slotEventOverlap']  = (boolean)$params->get('overlap_events', 1);
-$options['slotDuration']      = '00:' . $params->get('agenda_slot_minutes', 30) . ':00';
-$options['slotLabelInterval'] = '00:' . $params->get('agenda_slot_minutes', 30) . ':00';
-$options['slotLabelFormat']   = $dateHelper->convertPHPDateToJS($params->get('axisformat', 'H:i'));
+$options['slotEventOverlap'] = (boolean)$params->get('overlap_events', 1);
 
 // Set up the header
 $options['headerToolbar'] = ['left' => [], 'center' => [], 'right' => []];
@@ -144,12 +142,18 @@ $options['views']['week']  = [
 	'titleFormat'            => $dateHelper->convertPHPDateToJS($params->get('titleformat_week', 'M j Y')),
 	'eventTimeFormat'        => $dateHelper->convertPHPDateToJS($params->get('timeformat_week', 'H:i')),
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_week', 'D n/j')),
+	'slotDuration'           => $dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
+	'slotLabelInterval'      => $dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
+	'slotLabelFormat'        => $dateHelper->convertPHPDateToJS($params->get('axisformat_week', 'D j H:i')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 ];
 $options['views']['day']   = [
 	'titleFormat'            => $dateHelper->convertPHPDateToJS($params->get('titleformat_day', 'F j Y')),
 	'eventTimeFormat'        => $dateHelper->convertPHPDateToJS($params->get('timeformat_day', 'H:i')),
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_day', 'l')),
+	'slotDuration'           => $dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
+	'slotLabelInterval'      => $dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
+	'slotLabelFormat'        => $dateHelper->convertPHPDateToJS($params->get('axisformat_day', 'H:i')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
 ];
 $options['views']['list']  = [

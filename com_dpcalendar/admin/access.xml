@@ -19,6 +19,7 @@
 		<action name="core.edit" title="JACTION_EDIT" description="COM_CATEGORIES_ACCESS_EDIT_DESC"/>
 		<action name="core.edit.state" title="JACTION_EDITSTATE" description="COM_CATEGORIES_ACCESS_EDITSTATE_DESC"/>
 		<action name="core.edit.own" title="JACTION_EDITOWN" description="COM_CATEGORIES_ACCESS_EDITOWN_DESC"/>
+		<action name="dpcalendar.admin.book" title="COM_DPCALENDAR_ACCESS_ADMIN_BOOK" description="COM_DPCALENDAR_ACCESS_ADMIN_BOOK_DESC"/>
 		<action name="dpcalendar.book" title="COM_DPCALENDAR_ACCESS_BOOK" description="COM_DPCALENDAR_ACCESS_BOOK_DESC"/>
 		<action name="dpcalendar.invite" title="COM_DPCALENDAR_ACCESS_INVITE" description="COM_DPCALENDAR_ACCESS_INVITE_DESC"/>
 	</section>

@@ -6,11 +6,21 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Language;
+use Joomla\CMS\Language\LanguageHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Table\Table;
+
 if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
 	return;
 }
 
-class PlgSampledataDPCalendar extends JPlugin
+class PlgSampledataDPCalendar extends CMSPlugin
 {
 	protected $db;
 	protected $app;
@@ -26,8 +36,8 @@ class PlgSampledataDPCalendar extends JPlugin
 	{
 		$data              = new stdClass();
 		$data->name        = $this->_name;
-		$data->title       = JText::_('PLG_SAMPLEDATA_DPCALENDAR_OVERVIEW_TITLE');
-		$data->description = JText::_('PLG_SAMPLEDATA_DPCALENDAR_OVERVIEW_DESC');
+		$data->title       = Text::_('PLG_SAMPLEDATA_DPCALENDAR_OVERVIEW_TITLE');
+		$data->description = Text::_('PLG_SAMPLEDATA_DPCALENDAR_OVERVIEW_DESC');
 		$data->icon        = 'calendar';
 		$data->steps       = 9;
 
@@ -231,11 +241,11 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$response          = new stdClass();
 			$response->success = true;
-			$response->message = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP1_SUCCESS');
-		} catch (Exception $e) {
+			$response->message = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP1_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 1, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 1, $e->getMessage());
 		}
 
 		return $response;
@@ -307,11 +317,11 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$response          = new stdClass();
 			$response->success = true;
-			$response->message = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP2_SUCCESS');
-		} catch (Exception $e) {
+			$response->message = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP2_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 2, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 2, $e->getMessage());
 		}
 
 		return $response;
@@ -381,11 +391,11 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$response          = new stdClass();
 			$response->success = true;
-			$response->message = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP3_SUCCESS');
-		} catch (Exception $e) {
+			$response->message = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP3_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 3, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 3, $e->getMessage());
 		}
 
 		return $response;
@@ -403,17 +413,21 @@ class PlgSampledataDPCalendar extends JPlugin
 			$locationIds = $this->app->getUserState('sampledata.dpcalendar.locations');
 
 			$this->createEvent([
-				'catid'               => 1,
-				'title'               => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_TITLE',
-				'rrule'               => 'FREQ=WEEKLY;BYDAY=SA',
-				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":480,"image_full_width":800,"image_full_height":480}',
-				'description'         => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_DESC',
-				'color'               => '3c3d3c',
-				'capacity'            => '80',
-				'max_tickets'         => 2,
-				'price'               => '{"value":["45.00"],"label":[""],"description":[""]}',
-				'booking_information' => '<p>Every attendee needs to bring his own clothes.</p>',
-				'location_ids'        => $locationIds[4]
+				'catid'                => 1,
+				'title'                => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_TITLE',
+				'rrule'                => 'FREQ=WEEKLY;BYDAY=SA',
+				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":480,"image_full_width":800,"image_full_height":480}',
+				'description'          => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_DESC',
+				'color'                => 'ebb31a',
+				'capacity'             => '80',
+				'capacity_used'        => '80',
+				'max_tickets'          => 2,
+				'booking_waiting_list' => 1,
+				'booking_series'       => 1,
+				'booking_closing_date' => '+2 months',
+				'price'                => '{"value":["45.00"],"label":[""],"description":[""]}',
+				'booking_information'  => '<p>Every attendee needs to bring his own clothes.</p>',
+				'location_ids'         => $locationIds[4]
 			]);
 			$this->createEvent([
 				'catid'                => 1,
@@ -437,22 +451,23 @@ class PlgSampledataDPCalendar extends JPlugin
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_8_DESC',
 				'schedule'     => '{"schedule0":{"title":"Intro","duration":"10","description":"Welcome the attendees."},"schedule1":{"title":"Warmup","duration":"20","description":"Making yourself ready."},"schedule2":{"title":"Exercise","duration":"60","description":"Training the different styles."},"schedule3":{"title":"Feedback","duration":"10","description":"Discussion round amongst the attendees."}}',
 				'capacity'     => null,
-				'max_tickets'  => 2,
+				'max_tickets'  => 20,
 				'location_ids' => $locationIds[0]
 			]);
 			$this->createEvent([
-				'catid'           => 1,
-				'title'           => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_TITLE',
-				'rrule'           => 'FREQ=WEEKLY;BYDAY=SU',
-				'images'          => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":351,"image_full_width":800,"image_full_height":351}',
-				'description'     => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_DESC',
-				'color'           => 'c42323',
-				'capacity'        => '20',
-				'max_tickets'     => 2,
-				'price'           => '{"value":["55","68","89"],"label":["Kids","Student","Adults"],"description":["Age: 1 - 5 years","Needs an ID","Age: Older than 6 years"]}',
-				'earlybird'       => '{"value":["20"],"type":["percentage"],"date":["-2 days"],"label":["Early Bird Discount"],"description":[" Decide early, pay less"]}',
-				'booking_options' => '{"booking_options0":{"price":"15","amount":"1","label":"Lunch box small","description":"A small snack"},"booking_options1":{"price":"25","amount":"1","label":"Lunch box big","description":"For the hungry ones"}}',
-				'location_ids'    => $locationIds[1]
+				'catid'                => 1,
+				'title'                => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_TITLE',
+				'rrule'                => 'FREQ=WEEKLY;BYDAY=SU',
+				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":351,"image_full_width":800,"image_full_height":351}',
+				'description'          => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_DESC',
+				'color'                => 'c42323',
+				'capacity'             => '15',
+				'max_tickets'          => 5,
+				'booking_waiting_list' => 1,
+				'price'                => '{"value":["55","68","89"],"label":["Kids","Student","Adults"],"description":["Age: 1 - 5 years","Needs an ID","Age: Older than 6 years"]}',
+				'earlybird'            => '{"value":["20"],"type":["percentage"],"date":["-2 days"],"label":["Early Bird Discount"],"description":[" Decide early, pay less"]}',
+				'booking_options'      => '{"booking_options0":{"price":"15","amount":"1","label":"Lunch box small","description":"A small snack"},"booking_options1":{"price":"25","amount":"1","label":"Lunch box big","description":"For the hungry ones"}}',
+				'location_ids'         => $locationIds[1]
 			]);
 
 			$this->createEvent([
@@ -470,13 +485,13 @@ class PlgSampledataDPCalendar extends JPlugin
 				'location_ids'        => $locationIds[1]
 			]);
 
-			$response          = new stdClass();
+			$response          = new \stdClass();
 			$response->success = true;
-			$response->message = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP4_SUCCESS');
-		} catch (Exception $e) {
+			$response->message = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP4_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 4, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 4, $e->getMessage());
 		}
 
 		return $response;
@@ -533,11 +548,11 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$response          = new stdClass();
 			$response->success = true;
-			$response->message = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP5_SUCCESS');
-		} catch (Exception $e) {
+			$response->message = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP5_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 5, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 5, $e->getMessage());
 		}
 
 		return $response;
@@ -597,11 +612,11 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$response          = new stdClass();
 			$response->success = true;
-			$response->message = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP6_SUCCESS');
-		} catch (Exception $e) {
+			$response->message = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP6_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 6, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 6, $e->getMessage());
 		}
 
 		return $response;
@@ -617,8 +632,8 @@ class PlgSampledataDPCalendar extends JPlugin
 			$this->setUp();
 
 			// Create tax rate
-			$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
-			\JModelLegacy::getInstance('Taxrate', 'DPCalendarModel', ['ignore_request' => true])->save([
+			$model = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::getInstance('Taxrate', 'DPCalendarModel', ['ignore_request' => true])->save([
 				'title'     => 'VAT',
 				'rate'      => 10,
 				'state'     => 1,
@@ -635,7 +650,7 @@ class PlgSampledataDPCalendar extends JPlugin
 					$calendarIds[] = $calendarId;
 				}
 			}
-			$couponModel = \JModelLegacy::getInstance('Coupon', 'DPCalendarModel', ['ignore_request' => true]);
+			$couponModel = BaseDatabaseModel::getInstance('Coupon', 'DPCalendarModel', ['ignore_request' => true]);
 			$couponModel->save([
 				'title'     => 'Coupon',
 				'code'      => 'DEMO',
@@ -655,7 +670,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				'latitude'  => 31.81603810,
 				'longitude' => -99.51209860,
 				'event_id'  => [4 => ['tickets' => [0 => 1]]],
-				'state'     => 3,
+				'state'     => 8,
 				'coupon_id' => 'DEMO',
 				'processor' => 'manual-1'
 			]);
@@ -700,11 +715,11 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$response            = [];
 			$response['success'] = true;
-			$response['message'] = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP7_SUCCESS');
-		} catch (Exception $e) {
+			$response['message'] = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP7_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 7, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 7, $e->getMessage());
 		}
 
 		return $response;
@@ -716,10 +731,10 @@ class PlgSampledataDPCalendar extends JPlugin
 			return;
 		}
 
-		if (!JComponentHelper::isEnabled('com_menus')) {
+		if (!ComponentHelper::isEnabled('com_menus')) {
 			$response            = [];
 			$response['success'] = true;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_SKIPPED', 8, 'com_menus');
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_SKIPPED', 8, 'com_menus');
 
 			return $response;
 		}
@@ -729,7 +744,7 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			if (count($this->languageCache) > 1) {
 				foreach ($this->languageCache as $code => $language) {
-					$menuTable = JTable::getInstance('Type', 'JTableMenu');
+					$menuTable = Table::getInstance('Type', 'JTableMenu');
 
 					$menuTable->bind([
 						'menutype'    => 'dpcalendar-' . $code,
@@ -749,47 +764,54 @@ class PlgSampledataDPCalendar extends JPlugin
 				'home'   => count($this->languageCache) > 1 ? 1 : 0,
 				'params' => ['ids' => [0]]
 			]);
+			if (!DPCalendarHelper::isFree()) {
+				$this->createMenuItem([
+					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_2_TITLE',
+					'link'   => 'view=calendar&layout=timeline',
+					'params' => ['ids' => [0, 1]]
+				]);
+			}
 			$this->createMenuItem([
-				'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_2_TITLE',
+				'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_3_TITLE',
 				'link'  => 'view=event&id=',
 				'id'    => 4
 			]);
 
 			if (!DPCalendarHelper::isFree()) {
 				$this->createMenuItem([
-					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_3_TITLE',
+					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_4_TITLE',
 					'link'   => 'view=list',
 					'params' => ['ids' => [1]]
 				]);
 				$this->createMenuItem([
-					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_4_TITLE',
+					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_5_TITLE',
 					'link'   => 'view=list&layout=blog',
 					'params' => ['ids' => [1]]
 				]);
 				$this->createMenuItem([
-					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_5_TITLE',
+					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_6_TITLE',
 					'link'   => 'view=list&layout=timeline',
 					'params' => ['ids' => [1]]
 				]);
 				$this->createMenuItem([
-					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_6_TITLE',
+					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_7_TITLE',
 					'link'   => 'view=map',
 					'params' => ['ids' => [0], 'map_view_radius' => '-1']
 				]);
 			}
 			$this->createMenuItem([
-				'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_7_TITLE',
+				'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_8_TITLE',
 				'link'   => 'view=locations',
 				'params' => ['ids' => [$locationIds[0], $locationIds[1]]]
 			]);
 			$this->createMenuItem([
-				'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_8_TITLE',
+				'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_9_TITLE',
 				'link'  => 'view=location&id=' . $locationIds[6]
 			]);
 
 			if (!DPCalendarHelper::isFree()) {
 				$this->createMenuItem([
-					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_9_TITLE',
+					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_10_TITLE',
 					'link'   => 'view=calendar',
 					'params' => [
 						'ids'                       => [2],
@@ -803,42 +825,42 @@ class PlgSampledataDPCalendar extends JPlugin
 						'max_time'                  => '20:00',
 						'business_hours_start'      => '7:00',
 						'business_hours_end'        => '17:00',
-						'business_hours_days'       => '["1","2","3","4","5","6","0"]',
+						'business_hours_days'       => [1, 2, 3, 4, 5, 6, 0],
 						'calendar_filter_locations' => [$locationIds[6]],
 						'calendar_resource_views'   => ['day']
 					]
 				]);
 				$this->createMenuItem([
-					'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_10_TITLE',
+					'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_11_TITLE',
 					'link'  => 'view=bookings'
 				]);
 				$this->createMenuItem([
-					'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_11_TITLE',
+					'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_12_TITLE',
 					'link'  => 'view=tickets'
 				]);
 				$this->createMenuItem([
-					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_12_TITLE',
+					'title'  => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_13_TITLE',
 					'link'   => 'view=calendar',
 					'params' => [
 						'ids'            => [3, 4],
-						'textbefore'     => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_12_TEXT',
+						'textbefore'     => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_13_TEXT',
 						'show_selection' => 3,
 						'map_zoom'       => 3
 					]
 				]);
 				$this->createMenuItem([
-					'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_13_TITLE',
+					'title' => 'PLG_SAMPLEDATA_DPCALENDAR_MENU_ITEM_14_TITLE',
 					'link'  => 'view=profile'
 				]);
 			}
 
 			$response            = [];
 			$response['success'] = true;
-			$response['message'] = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP8_SUCCESS');
-		} catch (Exception $e) {
+			$response['message'] = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP8_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 8, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 8, $e->getMessage());
 		}
 
 		return $response;
@@ -850,10 +872,10 @@ class PlgSampledataDPCalendar extends JPlugin
 			return;
 		}
 
-		if (!JComponentHelper::isEnabled('com_modules')) {
+		if (!ComponentHelper::isEnabled('com_modules')) {
 			$response            = [];
 			$response['success'] = true;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_SKIPPED', 9, 'com_modules');
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_SKIPPED', 9, 'com_modules');
 
 			return $response;
 		}
@@ -903,11 +925,11 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$response            = [];
 			$response['success'] = true;
-			$response['message'] = JText::_('PLG_SAMPLEDATA_DPCALENDAR_STEP9_SUCCESS');
-		} catch (Exception $e) {
+			$response['message'] = Text::_('PLG_SAMPLEDATA_DPCALENDAR_STEP9_SUCCESS');
+		} catch (\Exception $e) {
 			$response            = [];
 			$response['success'] = false;
-			$response['message'] = JText::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 9, $e->getMessage());
+			$response['message'] = Text::sprintf('PLG_SAMPLEDATA_DPCALENDAR_STEP_FAILED', 9, $e->getMessage());
 		}
 
 		return $response;
@@ -929,10 +951,10 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['default_value'] = null;
 			$data['access']        = (int)$this->app->get('access', 1);
 
-			$model = JModelLegacy::getInstance('Field', 'FieldsModel');
+			$model = BaseDatabaseModel::getInstance('Field', 'FieldsModel');
 			if (!$model->save($data)) {
-				JFactory::getLanguage()->load('com_fields');
-				throw new Exception(JText::_($model->getError()));
+				Factory::getLanguage()->load('com_fields');
+				throw new Exception(Text::_($model->getError()));
 			}
 			$newIds[$code] = $data['name'];
 		}
@@ -951,7 +973,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				}
 			}
 
-			if (in_array($code, self::$europeanDateFormatLanguages)) {
+			if (in_array($code, self::$europeanDateFormatLanguages, true)) {
 				switch ($data['module']) {
 					case 'mod_dpcalendar_map':
 					case 'mod_dpcalendar_upcoming':
@@ -982,10 +1004,10 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['client_id']  = 0;
 			$data['position']   = DPCalendarHelper::isJoomlaVersion(4, '<') ? 'position-7' : 'sidebar-right';
 
-			$model = JModelLegacy::getInstance('Module', 'ModulesModel');
+			$model = BaseDatabaseModel::getInstance('Module', 'ModulesModel');
 			if (!$model->save($data)) {
-				JFactory::getLanguage()->load('com_modules');
-				throw new Exception(JText::_($model->getError()));
+				Factory::getLanguage()->load('com_modules');
+				throw new Exception(Text::_($model->getError()));
 			}
 		}
 	}
@@ -1008,7 +1030,7 @@ class PlgSampledataDPCalendar extends JPlugin
 				$data['params']['textbefore'] = $language->_($data['params']['textbefore']);
 			}
 
-			if (in_array($code, self::$europeanDateFormatLanguages)) {
+			if (in_array($code, self::$europeanDateFormatLanguages, true)) {
 				switch ($data['link']) {
 					case 'view=calendar':
 						$data['params']['timeformat_month'] = 'H:i';
@@ -1017,14 +1039,17 @@ class PlgSampledataDPCalendar extends JPlugin
 						$data['params']['timeformat_list']  = 'H:i';
 						$data['params']['weekstart']        = 1;
 					// Params for calendar
+					// no break
 					case 'view=list':
 					case 'view=list&layout=blog':
 					case 'view=list&layout=timeline':
 						$data['params']['list_title_format'] = 'd.m.Y';
 					// Params for list
+					// no break
 					case 'view=map':
 						$data['params']['map_date_format'] = 'H:i';
 					// Params for map
+					// no break
 					case 'view=event&id=':
 						$data['params']['event_date_format'] = 'd.m.Y';
 						$data['params']['event_time_format'] = 'H:i';
@@ -1039,8 +1064,8 @@ class PlgSampledataDPCalendar extends JPlugin
 			// Set values which are always the same
 			$data['id']              = 0;
 			$data['title']           = $language->_($data['title']);
-			$data['created_user_id'] = JFactory::getUser()->id;
-			$data['alias']           = JApplicationHelper::stringURLSafe($data['title']);
+			$data['created_user_id'] = Factory::getUser()->id;
+			$data['alias']           = ApplicationHelper::stringURLSafe($data['title']);
 			$data['link']            = 'index.php?option=com_dpcalendar&' . $data['link'];
 			$data['menutype']        = count($this->languageCache) > 1 ? 'dpcalendar-' . $code : 'mainmenu';
 			$data['component_id']    = $componentId;
@@ -1048,9 +1073,9 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			// Set unicodeslugs if alias is empty
 			if (trim(str_replace('-', '', $data['alias']) == '')) {
-				$unicode       = JFactory::getApplication()->set('unicodeslugs', 1);
-				$data['alias'] = JApplicationHelper::stringURLSafe($data['title']);
-				JFactory::getApplication()->set('unicodeslugs', $unicode);
+				$unicode       = Factory::getApplication()->set('unicodeslugs', 1);
+				$data['alias'] = ApplicationHelper::stringURLSafe($data['title']);
+				Factory::getApplication()->set('unicodeslugs', $unicode);
 			}
 
 			$data['published']         = 1;
@@ -1065,7 +1090,7 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['template_style_id'] = 0;
 			$data['parent_id']         = 1;
 
-			$model = JModelLegacy::getInstance('Item', 'MenusModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('Item', 'MenusModel', ['ignore_request' => true]);
 			if (!$model->save($data)) {
 				// When not fully translated we can have duplicates on the alias
 				$data['alias'] = $data['alias'] . '-' . $code;
@@ -1084,7 +1109,7 @@ class PlgSampledataDPCalendar extends JPlugin
 
 		$eventIds = $this->app->getUserState('sampledata.dpcalendar.events', []);
 
-		$originalData['user_id'] = JFactory::getUser()->id;
+		$originalData['user_id'] = Factory::getUser()->id;
 		foreach ($this->languageCache as $code => $language) {
 			$data = $originalData;
 			foreach ($data['event_id'] as $eventId => $tickets) {
@@ -1092,13 +1117,13 @@ class PlgSampledataDPCalendar extends JPlugin
 				unset($data['event_id'][$eventId]);
 			}
 
-			$model           = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+			$model           = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
 			$data['country'] = $model->getItem(['short_code' => $data['country']])->id;
 
-			$model = JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
 
 			if (!$model->save($data)) {
-				throw new Exception(JText::_($model->getError()));
+				throw new Exception(Text::_($model->getError()));
 			}
 
 			// Create only one booking
@@ -1162,9 +1187,9 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$data = $this->convertCustomFields($data, $code, $language);
 
-			$model = JModelLegacy::getInstance('AdminEvent', 'DPCalendarModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('AdminEvent', 'DPCalendarModel', ['ignore_request' => true]);
 			if (!$model->save($data)) {
-				throw new Exception(JText::_($model->getError()));
+				throw new Exception(Text::_($model->getError()));
 			}
 
 			$newIds[$code] = $model->getItem()->id;
@@ -1181,12 +1206,12 @@ class PlgSampledataDPCalendar extends JPlugin
 		$data['access']   = (int)$this->app->get('access', 1);
 		$data['language'] = '*';
 
-		$model           = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+		$model           = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
 		$data['country'] = $model->getItem(['short_code' => $data['country']])->id;
 
-		$model = JModelLegacy::getInstance('Location', 'DPCalendarModel');
+		$model = BaseDatabaseModel::getInstance('Location', 'DPCalendarModel');
 		if (!$model->save($data)) {
-			throw new Exception(JText::_($model->getError()));
+			throw new Exception(Text::_($model->getError()));
 		}
 
 		return $model->getItem()->id;
@@ -1206,20 +1231,20 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data = $originalData;
 
 			$data['title'] = $language->_($data['title']) . (count($this->languageCache) > 1 ? ' (' . $code . ')' : '');
-			$alias         = JApplicationHelper::stringURLSafe($data['title']);
+			$alias         = ApplicationHelper::stringURLSafe($data['title']);
 
 			// Set unicodeslugs if alias is empty
 			if (trim(str_replace('-', '', $alias) == '')) {
-				$unicode = JFactory::getApplication()->set('unicodeslugs', 1);
-				$alias   = JApplicationHelper::stringURLSafe($data['title']);
-				JFactory::getApplication()->set('unicodeslugs', $unicode);
+				$unicode = Factory::getApplication()->set('unicodeslugs', 1);
+				$alias   = ApplicationHelper::stringURLSafe($data['title']);
+				Factory::getApplication()->set('unicodeslugs', $unicode);
 			}
 
 			$data['parent_id']       = 1;
 			$data['id']              = 0;
 			$data['published']       = 1;
 			$data['access']          = (int)$this->app->get('access', 1);
-			$data['created_user_id'] = JFactory::getUser()->id;
+			$data['created_user_id'] = Factory::getUser()->id;
 			$data['extension']       = 'com_dpcalendar';
 			$data['level']           = 1;
 			$data['alias']           = $code . '-' . $alias;
@@ -1228,7 +1253,7 @@ class PlgSampledataDPCalendar extends JPlugin
 
 			$data = $this->convertCustomFields($data, $code, $language);
 
-			$model = JModelLegacy::getInstance('Category', 'CategoriesModel');
+			$model = BaseDatabaseModel::getInstance('Category', 'CategoriesModel');
 			if (!$model->save($data)) {
 				throw new Exception($model->getError());
 			}
@@ -1251,9 +1276,9 @@ class PlgSampledataDPCalendar extends JPlugin
 			$data['language'] = count($this->languageCache) > 1 ? $code : '*';
 			$data['state']    = 1;
 
-			$model = JModelLegacy::getInstance('Extcalendar', 'DPCalendarModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('Extcalendar', 'DPCalendarModel', ['ignore_request' => true]);
 			if (!$model->save($data)) {
-				throw new Exception(JText::_($model->getError()));
+				throw new Exception(Text::_($model->getError()));
 			}
 
 			$newIds[$code] = ($originalData['plugin'] == 'ical' ? 'i-' : 'g-') . $model->getItem()->id;
@@ -1268,12 +1293,12 @@ class PlgSampledataDPCalendar extends JPlugin
 	{
 		$data = $originalData;
 
-		// We use here JText because we create only one calendar
-		$data['displayname'] = JText::_($data['displayname']);
+		// We use here Text because we create only one calendar
+		$data['displayname'] = Text::_($data['displayname']);
 
-		$model = JModelLegacy::getInstance('Davcalendar', 'DPCalendarModel', ['ignore_request' => true]);
+		$model = BaseDatabaseModel::getInstance('Davcalendar', 'DPCalendarModel', ['ignore_request' => true]);
 		if (!$model->save($data)) {
-			throw new Exception(JText::_($model->getError()));
+			throw new Exception(Text::_($model->getError()));
 		}
 
 		$id = $model->getItem()->id;
@@ -1291,7 +1316,7 @@ class PlgSampledataDPCalendar extends JPlugin
 	private function getEvent($id)
 	{
 		$start = \DPCalendar\Helper\DPCalendarHelper::getDate('+1 day');
-		$model = JModelLegacy::getInstance('Adminevents', 'DPCalendarModel', ['ignore_request' => true]);
+		$model = BaseDatabaseModel::getInstance('Adminevents', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('filter.children', $id);
 		$model->setState('filter.search_start', $start->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')));
 		$model->setState('list.limit', 1);
@@ -1306,34 +1331,34 @@ class PlgSampledataDPCalendar extends JPlugin
 
 	private function setUp()
 	{
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/', 'DPCalendarModel');
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables/');
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models/', 'DPCalendarModel');
-		JTable::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/tables/');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/', 'DPCalendarModel');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables/');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models/', 'DPCalendarModel');
+		Table::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/tables/');
 
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models/', 'CategoriesModel');
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/tables/');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models/', 'CategoriesModel');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/tables/');
 
 		JLoader::register('MenusHelper', JPATH_ADMINISTRATOR . '/components/com_menus/helpers/menus.php');
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/models/', 'MenusModel');
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables/');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/models/', 'MenusModel');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_menus/tables/');
 
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_modules/models/', 'ModulesModel');
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_modules/tables/');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_modules/models/', 'ModulesModel');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_modules/tables/');
 
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_fields/models/', 'FieldsModel');
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_fields/tables/');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_fields/models/', 'FieldsModel');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_fields/tables/');
 
-		JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-		foreach (JLanguageHelper::getContentLanguages() as $language) {
-			$lang = JLanguage::getInstance($language->lang_code);
+		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		foreach (LanguageHelper::getContentLanguages() as $language) {
+			$lang = Language::getInstance($language->lang_code);
 			$lang->load('plg_sampledata_' . $this->_name, JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name);
 
 			$this->languageCache[$language->lang_code] = $lang;
 		}
 
 		// Disable mail
-		JFactory::getApplication()->set('mailonline', false);
+		Factory::getApplication()->set('mailonline', false);
 	}
 
 	private function clearTable($name)

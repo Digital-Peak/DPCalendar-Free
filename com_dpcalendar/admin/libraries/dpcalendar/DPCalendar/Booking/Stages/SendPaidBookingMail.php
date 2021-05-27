@@ -10,16 +10,17 @@ defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Booking;
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Mail\Mail;
 use League\Pipeline\StageInterface;
 
 class SendPaidBookingMail implements StageInterface
 {
 	/**
-	 * @var \JMail
+	 * @var Mail
 	 */
 	private $mailer = null;
 
-	public function __construct(\JMail $mailer)
+	public function __construct(Mail $mailer)
 	{
 		$this->mailer = $mailer;
 	}

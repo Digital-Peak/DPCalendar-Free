@@ -34,7 +34,6 @@ class Ical
 		// ini_set('memory_limit', '512M');
 
 		$items = $eventsModel->getItems();
-
 		if (!is_array($items)) {
 			$items = [];
 		}
@@ -284,18 +283,30 @@ class Ical
 			$text[]   = 'SEQUENCE:' . ($modified->format('U') - $created->format('U'));
 		}
 
+		$text[] = 'URL:' . ($event->url ?: \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
 		$text[] = 'X-ACCESS:' . $event->access;
 		$text[] = 'X-HITS:' . $event->hits;
-		$text[] = 'X-URL:' . ($event->url ?: \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
 		$text[] = 'X-COLOR:' . $event->color;
 
 		if ($event->images && !empty($event->images->image_full)) {
 			$image  = $event->images->image_full;
 			$text[] = 'X-IMAGE-FULL:' . (strpos($image, 'http') !== 0 ? Uri::base() : '') . $image;
 		}
+		if ($event->images && !empty($event->images->image_full_alt)) {
+			$text[] = 'X-IMAGE-FULL-ALT:' . $event->images->image_full_alt;
+		}
+		if ($event->images && !empty($event->images->image_full_caption)) {
+			$text[] = 'X-IMAGE-FULL-CAPTION:' . $event->images->image_full_caption;
+		}
 		if ($event->images && !empty($event->images->image_intro)) {
 			$image  = $event->images->image_intro;
 			$text[] = 'X-IMAGE-INTRO:' . (strpos($image, 'http') !== 0 ? Uri::base() : '') . $image;
+		}
+		if ($event->images && !empty($event->images->image_intro_alt)) {
+			$text[] = 'X-IMAGE-INTRO-ALT:' . $event->images->image_intro_alt;
+		}
+		if ($event->images && !empty($event->images->image_intro_caption)) {
+			$text[] = 'X-IMAGE-INTRO-CAPTION:' . $event->images->image_intro_caption;
 		}
 		$text[] = 'X-SHOW-END-TIME:' . $event->show_end_time;
 

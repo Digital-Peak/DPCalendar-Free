@@ -8,17 +8,13 @@ defined('_JEXEC') or die();
 
 class DPCalendarController extends JControllerLegacy
 {
-
 	public function display($cachable = false, $urlparams = false)
 	{
 		$view = $this->input->get('view');
-
-		if (!$view) {
-			if ($this->input->get->get('filter')) {
-				$view = 'events';
-			} else {
-				$view = 'cpanel';
-			}
+		if (!$view && $this->input->get->get('filter')) {
+			$view = 'events';
+		} else if (!$view) {
+			$view = 'cpanel';
 		}
 
 		$this->input->set('view', $view);

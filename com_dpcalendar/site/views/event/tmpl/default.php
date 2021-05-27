@@ -35,6 +35,9 @@ if ($ctaContent = $this->loadTemplate('cta')) {
 if ($descriptionContent = $this->loadTemplate('description')) {
 	$contentClass .= ' has-description';
 }
+if ($bookingFormContent = $this->loadTemplate('booking_form')) {
+	$contentClass .= ' has-bookingform';
+}
 if ($bookingsContent = $this->loadTemplate('bookings')) {
 	$contentClass .= ' has-bookings';
 }
@@ -65,6 +68,7 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 	<?php echo $informationContent; ?>
 	<?php echo $headerContent; ?>
 	<?php echo $ctaContent; ?>
+	<?php echo $bookingFormContent; ?>
 	<?php echo $descriptionContent; ?>
 	<?php echo $bookingsContent; ?>
 	<?php echo $seriesContent; ?>

@@ -11,17 +11,20 @@ defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Booking;
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\User\User;
 use League\Pipeline\StageInterface;
 
 class SetupForNew implements StageInterface
 {
 	/**
-	 * @var \JApplicationCms
+	 * @var CMSApplication
 	 */
 	private $application = null;
 
 	/**
-	 * @var \JUser
+	 * @var User
 	 */
 	private $user = null;
 
@@ -35,16 +38,23 @@ class SetupForNew implements StageInterface
 	 */
 	private $couponModel = null;
 
+	/**
+	 * @var bool
+	 */
+	private $autoAssignUser = false;
+
 	public function __construct(
-		\JApplicationCms $application,
-		\JUser $user,
+		CMSApplication $application,
+		User $user,
 		\DPCalendarModelTaxrate $taxRateModel,
-		\DPCalendarModelCoupon $couponModel
+		\DPCalendarModelCoupon $couponModel,
+		$autoAssignUser
 	) {
-		$this->application  = $application;
-		$this->user         = $user;
-		$this->taxRateModel = $taxRateModel;
-		$this->couponModel  = $couponModel;
+		$this->application    = $application;
+		$this->user           = $user;
+		$this->taxRateModel   = $taxRateModel;
+		$this->couponModel    = $couponModel;
+		$this->autoAssignUser = $autoAssignUser;
 	}
 
 	public function __invoke($payload)
@@ -56,13 +66,8 @@ class SetupForNew implements StageInterface
 		$payload->data['id']       = 0;
 		$payload->data['currency'] = DPCalendarHelper::getComponentParameter('currency', 'USD');
 
-		// Do not force state when not on front and is available
-		if (!$this->application->isClient('administrator') || empty($payload->data['state'])) {
-			$payload->data['state'] = !$payload->invite ? 0 : 5;
-		}
-
 		// On front we force the user id to the logged in user
-		if ($this->application->isClient('site') && !$payload->invite) {
+		if ($this->autoAssignUser) {
 			$payload->data['user_id'] = $this->user->id;
 		}
 
@@ -75,7 +80,37 @@ class SetupForNew implements StageInterface
 		$payload->data['options'] = implode(',', $payload->data['options']);
 
 		if ($amountTickets == 0) {
-			throw new \Exception(\JText::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
+			throw new \Exception(Text::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
+		}
+
+		// Do not force state when not on front and is available
+		if (!$this->application->isClient('administrator') || empty($payload->data['state'])) {
+			// When skipping the review step always, set state to tickets reviewed
+			if ($payload->data['state'] == 0
+				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 1) == 0) {
+				$payload->data['state'] = 2;
+			}
+
+			// When skipping to review step on one ticket, set state to tickets reviewed
+			if ($payload->data['state'] == 0
+				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 1) == 2
+				&& $amountTickets == 1) {
+				$payload->data['state'] = 2;
+			}
+
+			// When tickets are reviewed and confirmation step should be skipped, set state to confirmed
+			if (!$payload->data['price']
+				&& $payload->data['state'] == 2
+				&& !\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_confirm_step', 1)) {
+				$payload->data['state'] = 3;
+			}
+
+			// When tickets are reviewed and capacity is full and waiting list is active, put it on the waiting list
+			$event = reset($payload->events);
+			if ($payload->data['state'] == 2 && (count($payload->events) == 1 || $event->booking_series != 2)
+				&& $event->capacity != null && $event->capacity_used >= $event->capacity && $event->booking_waiting_list) {
+				$payload->data['state'] = 8;
+			}
 		}
 
 		$coupon = $this->couponModel->getItemByCode(
@@ -118,7 +153,7 @@ class SetupForNew implements StageInterface
 			}
 
 			$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key];
-			$payload->data['price']     += $amount[$key] * $option->price;
+			$payload->data['price'] += $amount[$key] * $option->price;
 		}
 	}
 
@@ -132,7 +167,7 @@ class SetupForNew implements StageInterface
 		if (!$event->price) {
 			// Free event
 			$event->amount_tickets[0] = $this->getAmountTickets($event, $payload, $amount, 0, $amountTickets);
-			$amountTickets            += $event->amount_tickets[0];
+			$amountTickets += $event->amount_tickets[0];
 
 			if (!$newTickets && $event->amount_tickets[0]) {
 				$newTickets = true;
@@ -140,7 +175,7 @@ class SetupForNew implements StageInterface
 		} else {
 			foreach ($event->price->value as $index => $value) {
 				$event->amount_tickets[$index] = $this->getAmountTickets($event, $payload, $amount, $index, $amountTickets);
-				$amountTickets                 += $event->amount_tickets[$index];
+				$amountTickets += $event->amount_tickets[$index];
 
 				// Determine the price
 				$paymentRequired = Booking::paymentRequired($event);
@@ -181,8 +216,8 @@ class SetupForNew implements StageInterface
 		// If there are already booked tickets and the limit is hit, reduce the amount
 		$amountTickets = $amount[$index] > ($event->max_tickets - $bookedTickets) ? $event->max_tickets - $bookedTickets : $amount[$index];
 
-		// If the amount is bigger than the available space, reduce it
-		if ($event->capacity !== null && $amountTickets > ($event->capacity - $event->capacity_used - $alreadyCollected)) {
+		// If the amount is bigger than the available space, reduce it when waiting list is not activated
+		if ($event->capacity !== null && $amountTickets > ($event->capacity - $event->capacity_used - $alreadyCollected) && !$event->booking_waiting_list) {
 			$amountTickets = $event->capacity - $event->capacity_used - $alreadyCollected;
 		}
 
@@ -190,7 +225,7 @@ class SetupForNew implements StageInterface
 		if ($amountTickets < 1 && $amount[$index] > 0) {
 			$amountTickets = 0;
 			$this->application->enqueueMessage(
-				\JText::sprintf(
+				Text::sprintf(
 					'COM_DPCALENDAR_BOOK_ERROR_CAPACITY_EXHAUSTED_USER',
 					$event->price ? $event->price->label[$index] : '',
 					$event->title

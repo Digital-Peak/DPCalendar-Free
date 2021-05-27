@@ -78,7 +78,7 @@ class CreateOrUpdateTickets implements StageInterface
 		}
 
 		$payload->tickets = [];
-		foreach ($events = $payload->events as $event) {
+		foreach ($payload->events as $event) {
 			$prices = $event->price;
 
 			if (!$prices) {

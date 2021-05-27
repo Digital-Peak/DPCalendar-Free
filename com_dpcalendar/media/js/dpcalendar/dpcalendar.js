@@ -200,9 +200,7 @@
 		return slideUp(target, fn);
 	};
 	[].slice.call(document.querySelectorAll('.dp-button-print')).forEach((button) => {
-		button.addEventListener('click', () => {
-			DPCalendar.print(button.getAttribute('data-selector'));
-		});
+		button.addEventListener('click', () => DPCalendar.print(button.getAttribute('data-selector')));
 	});
 	[].slice.call(document.querySelectorAll('.dp-button-action[data-href]')).forEach((el) => {
 		el.addEventListener('click', () => {
@@ -222,9 +220,7 @@
 		});
 	});
 	[].slice.call(document.querySelectorAll('.dp-tabs__input')).forEach((tab) => {
-		tab.addEventListener('click', () => {
-			localStorage.setItem('dp-tabs-' + tab.name, tab.id);
-		});
+		tab.addEventListener('click', () => localStorage.setItem('dp-tabs-' + tab.name, tab.id));
 		if (localStorage.getItem('dp-tabs-' + tab.name) == tab.id) {
 			tab.checked = true;
 		}
@@ -252,15 +248,16 @@
 			target.style.removeProperty('transition-duration');
 			target.style.removeProperty('transition-property');
 			if (fn) {
-				fn(false);
+				fn(false, target);
 			}
 		}, 710);
 	};
 	let slideDown = (target, fn) => {
 		target.style.removeProperty('display');
 		let display = window.getComputedStyle(target).display;
-		if (display === 'none')
+		if (display === 'none') {
 			display = 'block';
+		}
 		target.style.display = display;
 		let height = target.offsetHeight;
 		target.style.overflow = 'hidden';
@@ -284,7 +281,7 @@
 			target.style.removeProperty('transition-duration');
 			target.style.removeProperty('transition-property');
 			if (fn) {
-				fn(true);
+				fn(true, target);
 			}
 		}, 710);
 	};

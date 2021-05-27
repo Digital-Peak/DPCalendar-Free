@@ -12,6 +12,7 @@ use DPCalendar\TCPDF\DPCalendar;
 use DPCalendar\Translator\Translator;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Language;
+use Joomla\CMS\Language\Text;
 use Joomla\Registry\Registry;
 
 \JLoader::import('joomla.application.component.helper');
@@ -19,7 +20,6 @@ use Joomla\Registry\Registry;
 
 class Booking
 {
-
 	/**
 	 * Creates a PDF for the given booking and tickets.
 	 * If to file is set, then the PDF will be written to a file and the file
@@ -244,13 +244,12 @@ class Booking
 			return false;
 		}
 
-		if ($event->capacity !== null && $event->capacity_used >= $event->capacity) {
+		if ($event->capacity !== null && $event->capacity_used >= $event->capacity && !$event->booking_waiting_list) {
 			return false;
 		}
 
 		$now                = \DPCalendarHelper::getDate();
 		$regstrationEndDate = self::getRegistrationEndDate($event);
-
 		if ($regstrationEndDate->format('U') < $now->format('U')) {
 			return false;
 		}
@@ -364,7 +363,7 @@ class Booking
 	 * @param integer  $earlyBirdIndex
 	 * @param integer  $userGroupIndex
 	 *
-	 * @return number
+	 * @return float
 	 */
 	public static function getPriceWithDiscount($price, $event, $earlyBirdIndex = -1, $userGroupIndex = -1)
 	{
@@ -465,11 +464,15 @@ class Booking
 			case 7:
 				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED';
 				break;
+				break;
+			case 8:
+				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING';
+				break;
 			case -2:
 				$status = 'JTRASHED';
 				break;
 		}
 
-		return \JText::_($status);
+		return Text::_($status);
 	}
 }

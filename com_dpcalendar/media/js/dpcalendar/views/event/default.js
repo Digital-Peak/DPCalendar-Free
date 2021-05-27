@@ -5,8 +5,7 @@
  */
 (function () {
 	'use strict';
-	function watchElements(elements)
-	{
+	function watchElements(elements) {
 		elements.forEach((mapElement) => {
 			if ('IntersectionObserver' in window === false) {
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
@@ -27,8 +26,23 @@
 		});
 	}
 	document.addEventListener('DOMContentLoaded', () => {
-		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js']);
-		watchElements([].slice.call(document.querySelectorAll('.com-dpcalendar-event__locations .dp-map')));
+		watchElements(document.querySelectorAll('.com-dpcalendar-event__locations .dp-map'));
+		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
+			if (!document.querySelector('.com-dpcalendar-event__booking-form')) {
+				return;
+			}
+			document.querySelector('.com-dpcalendar-event__cta .dp-button_cta').addEventListener('click', (e) => {
+				e.preventDefault();
+				DPCalendar.slideToggle(document.querySelector('.com-dpcalendar-event__booking-form'), (show, element) => {
+					if (show) {
+						element.classList.remove('dp-toggle_hidden');
+					} else {
+						element.classList.add('dp-toggle_hidden');
+					}
+				});
+				return false;
+			});
+		});
 		const mailButton = document.querySelector('.com-dpcalendar-event__actions .dp-button-mail');
 		if (mailButton) {
 			mailButton.addEventListener('click', (event) => {

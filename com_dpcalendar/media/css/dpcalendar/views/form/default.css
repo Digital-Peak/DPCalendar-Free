@@ -130,24 +130,24 @@
 	padding: 8px 35px 8px 14px;
 	margin-bottom: 18px;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	color: #c09853;
-	background-color: #fcf8e3;
-	border: 1px solid #fbeed5;
+	color: #664d03;
+	background-color: #fff3cd;
+	border: 1px solid #ffecb5;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
 
 .com-dpcalendar-eventform .dp-info-box_success {
-	background-color: #dff0d8;
-	border-color: #d6e9c6;
-	color: #3c763d;
+	color: #0f5132;
+	background-color: #d1e7dd;
+	border-color: #badbcc;
 }
 
 .com-dpcalendar-eventform .dp-info-box_error {
-	color: #721c24;
+	color: #842029;
 	background-color: #f8d7da;
-	border-color: #f5c6cb;
+	border-color: #f5c2c7;
 }
 
 .com-dpcalendar-eventform .dp-form-input {

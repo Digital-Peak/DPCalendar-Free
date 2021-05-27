@@ -188,8 +188,8 @@
 }
 
 .com-dpcalendar-map .dp-event-tooltip .dp-badge_info, .com-dpcalendar-map .dp-event-tooltip .dp-event-tooltip_canceled {
-	color: #fff;
-	background-color: #17a2b8;
+	color: #212529;
+	background-color: #0dcaf0;
 }
 
 .com-dpcalendar-map .dp-event-tooltip .dp-icon svg {
@@ -217,6 +217,10 @@
 .com-dpcalendar-map .dp-event-tooltip__action:hover {
 	opacity: 1;
 	text-decoration: none;
+}
+
+.com-dpcalendar-map .dp-event-tooltip__capacity {
+	margin-right: 5px;
 }
 
 .com-dpcalendar-map .dp-map_consent {

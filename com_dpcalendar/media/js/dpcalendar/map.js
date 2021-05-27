@@ -5,8 +5,7 @@
  */
 (function () {
 	'use strict';
-	function createMarker(map, data, dragCallback)
-	{
+	function createMarker(map, data, dragCallback) {
 		const latitude = data.latitude;
 		const longitude = data.longitude;
 		if (latitude == null || latitude == '') {
@@ -24,7 +23,7 @@
 		}
 		const markerParams = {draggable: dragCallback != null};
 		markerParams.icon = L.divIcon({
-			className: "dp-location-marker",
+			className: 'dp-location-marker',
 			html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#' + String(data.color).replace('#', '') + '" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
 			iconSize: [25, 30],
 			iconAnchor: [10, 35]
@@ -33,53 +32,38 @@
 		const desc = data.description ? data.description : data.title;
 		if (desc) {
 			const popup = marker.bindPopup(desc);
-			marker.on('click', (e) => {
-				popup.openPopup();
-			});
+			marker.on('click', () => popup.openPopup());
 		}
 		if (dragCallback) {
-			marker.on('dragend', (event) => {
-				dragCallback(event.target.getLatLng().lat, event.target.getLatLng().lng);
-			});
+			marker.on('dragend', (event) => dragCallback(event.target.getLatLng().lat, event.target.getLatLng().lng));
 		}
 		map.dpmap.dpMarkersCluster.addLayer(marker);
 		map.dpmap.dpMarkers.push(marker);
 		map.dpmap.dpBounds.extend(marker.getLatLng());
-		const boundsZoom = map.dpmap.getBoundsZoom(map.dpmap.dpBounds);
-		if (boundsZoom < map.dpmap.getZoom()) {
-			map.dpmap.setZoom(boundsZoom);
-		}
-		map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
+		map.dpmap.setView(map.dpmap.dpBounds.getCenter(), Math.min(map.dpmap.getBoundsZoom(map.dpmap.dpBounds), map.dpmap.getZoom()));
 		return marker;
 	}
-	function clearMarkers(map)
-	{
+	function clearMarkers(map) {
 		if (map == null || map.dpmap == null || map.dpmap.dpMarkers == null) {
 			return;
 		}
-		map.dpmap.dpMarkers.forEach((marker) => {
-			map.dpmap.dpMarkersCluster.removeLayer(marker);
-		});
+		map.dpmap.dpMarkers.forEach((marker) => map.dpmap.dpMarkersCluster.removeLayer(marker));
 		map.dpmap.dpMarkers = [];
 		map.dpmap.dpCachedMarkers = [];
 		map.dpmap.dpBounds = new L.latLngBounds();
 		const options = map.dpmap.dpElement.dataset;
 		map.dpmap.panTo([options.latitude ? options.latitude : 47, options.longitude ? options.longitude : 4]);
 	}
-	function moveMarker(map, marker, latitude, longitude)
-	{
+	function moveMarker(map, marker, latitude, longitude) {
 		if (!marker || map.dpmap == null) {
 			return;
 		}
 		marker.setLatLng([latitude, longitude]);
 		map.dpmap.dpBounds = new L.latLngBounds();
-		map.dpmap.dpMarkers.forEach((m) => {
-			map.dpmap.dpBounds.extend(marker.getLatLng());
-		});
+		map.dpmap.dpMarkers.forEach((m) => map.dpmap.dpBounds.extend(marker.getLatLng()));
 		map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
 	}
-	function createMap(element)
-	{
+	function createMap(element) {
 		if (typeof L === 'undefined') {
 			return;
 		}
@@ -150,15 +134,12 @@
 		element.dpmap = map;
 		element.dispatchEvent(new CustomEvent('dp-map-loaded'));
 		if (Array.isArray(element.dpCachedMarkers)) {
-			element.dpCachedMarkers.forEach((m) => {
-				createMarker(element, m.data, m.dragCallback);
-			});
+			element.dpCachedMarkers.forEach((m) => createMarker(element, m.data, m.dragCallback));
 			element.dpCachedMarkers = null;
 		}
 		return map;
 	}
-	function create(mapElement)
-	{
+	function create(mapElement) {
 		const options = mapElement.dataset;
 		if (options.width) {
 			mapElement.style.width = options.width;
@@ -206,8 +187,7 @@
 			});
 		});
 	}
-	function ask(element)
-	{
+	function ask(element) {
 		element.classList.add('dp-map_consent');
 		element.textContent = Joomla.JText._('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_CONSENT_INFO_TEXT');
 		element.addEventListener('click', () => {
@@ -217,8 +197,7 @@
 			createMap(element);
 		});
 	}
-	function drawCircle(map, location, radius, type)
-	{
+	function drawCircle(map, location, radius, type) {
 		if (map.dpmap == null) {
 			return;
 		}

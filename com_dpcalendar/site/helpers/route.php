@@ -30,6 +30,9 @@ class DPCalendarHelperRoute
 
 		if (\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
 			$link .= '&calid=' . $calId;
+			if ($defaultItemId) {
+				$link .= '&force_item_id=' . $defaultItemId;
+			}
 		} else {
 			$needles = ['event' => [(int)$id]];
 			if ($calId > 0 || (!is_numeric($calId) && $calId != 'root')) {

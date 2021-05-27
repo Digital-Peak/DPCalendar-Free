@@ -187,6 +187,13 @@ class Location
 			self::fillObjectFromOpenStreetMap($location, $locObject);
 		}
 
+		// Reset coordinates, so we have them always the same. Providers can shift them
+		$coordinates = explode(',', $location);
+		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+			$locObject->latitude  = $coordinates[0];
+			$locObject->longitude = $coordinates[1];
+		}
+
 		if ($fill) {
 			try {
 				$table = \JTable::getInstance('Location', 'DPCalendarTable');

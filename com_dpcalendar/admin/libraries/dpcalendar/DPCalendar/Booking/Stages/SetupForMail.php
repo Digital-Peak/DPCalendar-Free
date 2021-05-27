@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Router\Route;
 use Joomla\Registry\Registry;
 use League\Pipeline\StageInterface;
 
@@ -37,17 +38,26 @@ class SetupForMail implements StageInterface
 		$params = clone $this->params;
 		$params->set('show_header', false);
 
-		$payload->item->book_date_formatted = DPCalendarHelper::getDate($payload->item->book_date)
-			->format($params->get('event_date_format', 'd.m.Y') . ' ' . $params->get('event_time_format', 'H:i'), true);
+		$format                             = $params->get('event_date_format', 'd.m.Y') . ' ' . $params->get('event_time_format', 'H:i');
+		$payload->item->book_date_formatted = DPCalendarHelper::getDate($payload->item->book_date)->format($format, true);
 		$payload->mailVariables             = [
-			'booking'        => $payload->item,
-			'bookingDetails' => $payload->item->invoice,
-			'bookingLink'    => \DPCalendarHelperRoute::getBookingRoute($payload->item, true),
-			'bookingUid'     => $payload->item->uid,
-			'sitename'       => $this->application->get('sitename'),
-			'user'           => $payload->item->name,
-			'tickets'        => $payload->tickets,
-			'countTickets'   => count($payload->tickets)
+			'booking'           => $payload->item,
+			'bookingDetails'    => $payload->item->invoice,
+			'bookingLink'       => \DPCalendarHelperRoute::getBookingRoute($payload->item, true),
+			'bookingCancelLink' => Route::link(
+				'site',
+				'index.php?option=com_dpcalendar&task=booking.cancel&b_id=' . $payload->item->id,
+				false,
+				Route::TLS_IGNORE,
+				true
+			),
+			'bookingUid'   => $payload->item->uid,
+			'sitename'     => $this->application->get('sitename'),
+			'user'         => $payload->item->name,
+			'tickets'      => $payload->tickets,
+			'countTickets' => $payload->tickets ? count($payload->tickets) : 0,
+			'acceptUrl'    => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, true, true),
+			'declineUrl'   => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, false, true)
 		];
 
 		if (!empty($payload->item->jcfields)) {

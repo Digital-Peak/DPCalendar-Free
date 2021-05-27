@@ -19,7 +19,6 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$this->state->set('filter.state_owner', true);
 
 		$event = $this->get('Item');
-
 		if ($event == null || !$event->id) {
 			throw new Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
@@ -63,20 +62,20 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		);
 		$event->description = $event->text;
 
-		$event->displayEvent                    = new stdClass();
-		$results                                = JFactory::getApplication()->triggerEvent(
+		$event->displayEvent = new stdClass();
+		$results             = JFactory::getApplication()->triggerEvent(
 			'onContentAfterTitle',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->afterDisplayTitle = trim(implode("\n", $results));
 
-		$results                                   = JFactory::getApplication()->triggerEvent(
+		$results = JFactory::getApplication()->triggerEvent(
 			'onContentBeforeDisplay',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->beforeDisplayContent = trim(implode("\n", $results));
 
-		$results                                  = JFactory::getApplication()->triggerEvent(
+		$results = JFactory::getApplication()->triggerEvent(
 			'onContentAfterDisplay',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
@@ -150,9 +149,16 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		}
 
 		$this->noBookingMessage = $this->getBookingMessage($event);
-
 		if ($this->originalEvent && $this->originalEvent->booking_series == 1) {
 			$this->noBookingMessage = $this->getBookingMessage($this->originalEvent);
+		}
+
+		if ($this->noBookingMessage === null && $this->params->get('event_show_booking_form')) {
+			require JPATH_SITE . '/components/com_dpcalendar/controllers/bookingform.php';
+			// Set some variables for the booking form view
+			$this->app->input->set('view', 'bookingform');
+			$this->app->input->set('layout', 'default');
+			$this->app->input->set('e_id', $this->event->id);
 		}
 
 		// Taxes stuff
@@ -196,7 +202,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		}
 
 		// Check if full
-		if ($event->capacity > 0 && $event->capacity_used >= $event->capacity) {
+		if ($event->capacity !== null && $event->capacity > 0 && $event->capacity_used >= $event->capacity && !$event->booking_waiting_list) {
 			return $this->translate('COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_CAPACITY_FULL');
 		}
 
@@ -215,11 +221,15 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		}
 
 		// Set the ticket count
-		$ticketCount = $event->max_tickets ? $event->max_tickets : 1;
+		$ticketCount = $event->max_tickets ?: 1;
 
 		// If ticket count is higher than available space, reduce it
 		if ($event->capacity !== null && $ticketCount > ($event->capacity - $event->capacity_used)) {
 			$ticketCount = $event->capacity - $event->capacity_used;
+		}
+
+		if (!$ticketCount && $event->booking_waiting_list) {
+			return null;
 		}
 
 		// Remove the already booked tickets from the ticket count

@@ -6,6 +6,10 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\User\User;
+
 JLoader::import('components.com_dpcalendar.models.adminevent', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 
@@ -33,18 +37,17 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 	public function invite($eventId, $userIds, $groups)
 	{
 		foreach ($groups as $groupId) {
-			$userIds = array_merge($userIds, \JAccess::getUsersByGroup($groupId));
+			$userIds = array_merge($userIds, Access::getUsersByGroup($groupId));
 		}
-		$event = JModelLegacy::getInstance('Event', 'DPCalendarModel')->getItem($eventId);
-		$lang  = JFactory::$language;
+		$event = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel')->getItem($eventId);
 
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
 
 		foreach (array_unique($userIds) as $uid) {
-			$bookingModel = JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
-			$ticketsModel = JModelLegacy::getInstance('Tickets', 'DPCalendarModel', ['ignore_request' => true]);
+			$bookingModel = BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
+			$ticketsModel = BaseDatabaseModel::getInstance('Tickets', 'DPCalendarModel', ['ignore_request' => true]);
 
-			$u = JUser::getInstance($uid);
+			$u = User::getInstance($uid);
 			if ($u->guest) {
 				continue;
 			}
@@ -53,12 +56,6 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$ticketsModel->setState('filter.ticket_holder', $u->id);
 			if ($ticketsModel->getItems()) {
 				continue;
-			}
-
-			if ($u->getParam('language') && JFactory::getLanguage()->getTag() != $u->getParam('language')) {
-				JFactory::getApplication()->set('language', $u->getParam('language'));
-				JFactory::$language = null;
-				JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 			}
 
 			$amount = [];
@@ -70,59 +67,18 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 				$amount[0] = 1;
 			}
 
-			$booking = $bookingModel->save(
+			$bookingModel->save(
 				[
 					'event_id' => [$event->id => ['tickets' => $amount]],
 					'name'     => $u->name,
 					'email'    => $u->email,
 					'user_id'  => $u->id,
-					'country'  => 0
+					'country'  => 0,
+					'state'    => 5
 				],
 				true
 			);
-			if (!$booking) {
-				continue;
-			}
-
-			// Create the booking details for mail notification
-			$params = clone JComponentHelper::getParams('com_dpcalendar');
-			$params->set('show_header', false);
-
-			$details = DPCalendarHelper::renderLayout(
-				'booking.invoice',
-				[
-					'booking'    => $booking,
-					'tickets'    => $booking->tickets,
-					'translator' => new \DPCalendar\Translator\Translator(),
-					'dateHelper' => new \DPCalendar\Helper\DateHelper(),
-					'params'     => $params
-				]
-			);
-
-			$additionalVars = [
-				'acceptUrl'      => DPCalendarHelperRoute::getInviteChangeRoute($booking, true, true),
-				'declineUrl'     => DPCalendarHelperRoute::getInviteChangeRoute($booking, false, true),
-				'bookingDetails' => $details,
-				'bookingLink'    => DPCalendarHelperRoute::getBookingRoute($booking, true),
-				'bookingUid'     => $booking->uid,
-				'sitename'       => JFactory::getApplication()->get('sitename'),
-				'user'           => $u->name
-			];
-
-			$subject = DPCalendarHelper::renderEvents([$event], JText::_('COM_DPCALENDAR_INVITE_NOTIFICATION_EVENT_SUBJECT'));
-
-			$body = DPCalendarHelper::renderEvents([$event], JText::_('COM_DPCALENDAR_INVITE_NOTIFICATION_EVENT_BODY'), null, $additionalVars);
-
-			$mailer = JFactory::getMailer();
-			$mailer->setSubject($subject);
-			$mailer->setBody($body);
-			$mailer->IsHTML(true);
-			$mailer->addRecipient($u->email);
-			$mailer->Send();
 		}
-
-		// Resetting the language to it's old state
-		JFactory::$language = $lang;
 
 		return true;
 	}

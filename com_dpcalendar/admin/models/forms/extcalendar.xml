@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
 	<fieldset name="general" addfieldpath="/administrator/components/com_dpcalendar/models/fields">
-		<field name="title" type="text" required="true"
+		<field name="title" type="text" required="true" class="dp-form-input"
 		       label="JGLOBAL_TITLE" description="COM_DPCALENDAR_EXTCALENDAR_FIELD_TITLE_DESC"/>
 		<field name="color" type="color" default="A32929" size="6"
 		       label="COM_DPCALENDAR_EXTCALENDAR_FIELD_COLOR_LABEL"

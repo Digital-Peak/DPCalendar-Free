@@ -5,8 +5,7 @@
  */
 (function () {
 	'use strict';
-	function watchElements(elements)
-	{
+	function watchElements(elements) {
 		elements.forEach((mapElement) => {
 			if ('IntersectionObserver' in window === false) {
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));

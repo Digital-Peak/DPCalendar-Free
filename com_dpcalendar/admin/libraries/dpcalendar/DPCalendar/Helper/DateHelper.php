@@ -157,4 +157,17 @@ class DateHelper
 
 		return \JText::_(strtr($format, $replacements));
 	}
+
+	public static function minutesToDuration($minutes)
+	{
+		if (!$minutes) {
+			return '00:00:00';
+		}
+
+		$buffer = str_pad(floor($minutes / 60), 2, '0', STR_PAD_LEFT);
+		$buffer .= ':';
+		$buffer .= str_pad($minutes % 60, 2, STR_PAD_LEFT);
+
+		return $buffer . ':00';
+	}
 }

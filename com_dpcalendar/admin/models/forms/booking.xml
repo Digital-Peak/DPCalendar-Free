@@ -19,6 +19,7 @@
 			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
 			<option value="6">COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED</option>
 			<option value="7">COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED</option>
+			<option value="8">COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING</option>
 			<option value="-2">JTRASHED</option>
 		</field>
 		<field name="name" type="text" required="true" class="dp-form-input"

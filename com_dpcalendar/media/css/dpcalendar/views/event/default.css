@@ -29,24 +29,24 @@
 	padding: 8px 35px 8px 14px;
 	margin-bottom: 18px;
 	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
-	color: #c09853;
-	background-color: #fcf8e3;
-	border: 1px solid #fbeed5;
+	color: #664d03;
+	background-color: #fff3cd;
+	border: 1px solid #ffecb5;
 	-webkit-border-radius: 4px;
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
 
 .com-dpcalendar-event .dp-info-box_success {
-	background-color: #dff0d8;
-	border-color: #d6e9c6;
-	color: #3c763d;
+	color: #0f5132;
+	background-color: #d1e7dd;
+	border-color: #badbcc;
 }
 
 .com-dpcalendar-event .dp-info-box_error {
-	color: #721c24;
+	color: #842029;
 	background-color: #f8d7da;
-	border-color: #f5c6cb;
+	border-color: #f5c2c7;
 }
 
 .com-dpcalendar-event .dp-description {
@@ -319,9 +319,14 @@
 	grid-column: 1 / 4;
 }
 
+.com-dpcalendar-event__booking-form {
+	grid-column: 1 / 4;
+	grid-row: 6 / 7;
+}
+
 .com-dpcalendar-event__description {
 	grid-column: 1 / 3;
-	grid-row: 6 / 10;
+	grid-row: 7 / 11;
 }
 
 .com-dpcalendar-event:not(.has-bookings):not(.has-series):not(.has-locations):not(.has-schedule) .com-dpcalendar-event__description {
@@ -337,29 +342,29 @@
 }
 
 .com-dpcalendar-event__booking {
-	grid-row: 6 / 7;
-}
-
-.com-dpcalendar-event__schedule {
 	grid-row: 7 / 8;
 }
 
-.com-dpcalendar-event__series {
+.com-dpcalendar-event__schedule {
 	grid-row: 8 / 9;
 }
 
-.com-dpcalendar-event__locations {
+.com-dpcalendar-event__series {
 	grid-row: 9 / 10;
+}
+
+.com-dpcalendar-event__locations {
+	grid-row: 10 / 11;
 }
 
 .com-dpcalendar-event__tickets {
 	grid-column: 1 / 4;
-	grid-row: 11 / 12;
+	grid-row: 12 / 13;
 }
 
 .com-dpcalendar-event__custom-text-after {
 	grid-column: 1 / 4;
-	grid-row: 11 / 12;
+	grid-row: 12 / 13;
 }
 
 .com-dpcalendar-event .dp-badge, .com-dpcalendar-event .com-dpcalendar-event__title_canceled, .com-dpcalendar-event .com-dpcalendar-event__title_unpublished {
@@ -378,8 +383,16 @@
 }
 
 .com-dpcalendar-event .dp-badge_info, .com-dpcalendar-event .com-dpcalendar-event__title_canceled {
-	color: #fff;
-	background-color: #17a2b8;
+	color: #212529;
+	background-color: #0dcaf0;
+}
+
+.com-dpcalendar-event .dp-toggle {
+	cursor: pointer;
+}
+
+.com-dpcalendar-event .dp-toggle_hidden {
+	display: none;
 }
 
 .com-dpcalendar-event__title_canceled, .com-dpcalendar-event__title_unpublished {
@@ -412,6 +425,10 @@
 	width: 100%;
 }
 
+.com-dpcalendar-event__actions .dp-button {
+	margin-bottom: 0.5em;
+}
+
 .com-dpcalendar-event__information, .com-dpcalendar-event__cta {
 	overflow: auto;
 }
@@ -433,13 +450,19 @@
 	margin-right: 5px;
 }
 
-.com-dpcalendar-event__actions, .com-dpcalendar-event__cta {
+.com-dpcalendar-event:not(.has-bookingform) .com-dpcalendar-event__actions, .com-dpcalendar-event:not(.has-bookingform) .com-dpcalendar-event__cta, .com-dpcalendar-event__booking-form {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 	box-sizing: border-box;
 }
 
 .com-dpcalendar-event__cta_disabled {
 	font-style: italic;
+}
+
+.com-dpcalendar-event .com-dpcalendar-bookingform__actions .dp-button-cancel,
+.com-dpcalendar-event .com-dpcalendar-bookingform__events .dp-heading,
+.com-dpcalendar-event .com-dpcalendar-bookingform__series {
+	display: none;
 }
 
 .com-dpcalendar-event__information, .com-dpcalendar-event__actions, .com-dpcalendar-event__cta, .com-dpcalendar-event__description, .com-dpcalendar-event_small {

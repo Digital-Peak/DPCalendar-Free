@@ -140,18 +140,13 @@ class DPCalendarModelImport extends JModelLegacy
 		}
 
 		// Fetch the content
-		$content = (new HTTP())->get('https://software77.net/geo-ip/?DL=1')->dp->body;
+		$content = (new HTTP())->get('https://iptoasn.com/data/ip2country-v4-u32.tsv.gz')->dp->body;
 		if (empty($content)) {
-			throw new \Exception("Can't download the geolocation database from software77.net. Is the site blocked through a firewall?");
+			throw new \Exception("Can't download the geolocation database from iptoasn.com. Is the site blocked through a firewall?");
 		}
 
 		if ($content instanceof Exception) {
 			throw $content;
-		}
-
-		// Sometimes you get a rate limit exceeded
-		if (stristr($content, 'Rate limited exceeded') !== false) {
-			throw new \Exception("You hit the rate limit of software77 to download the geo database, try again in 24 hours.");
 		}
 
 		// Ensure the directory exists
@@ -162,7 +157,7 @@ class DPCalendarModelImport extends JModelLegacy
 		// Store the downloaded file
 		$ret = file_put_contents($geoDBDirectory . '/tmp.gz', $content);
 		if ($ret === false) {
-			throw new \Exception("Could not write the geolocation database to the temp folder. Are the permissions correct?");
+			throw new \Exception('Could not write the geolocation database to the temp folder. Are the permissions correct?');
 		}
 
 		// Free up some memory
@@ -199,8 +194,8 @@ class DPCalendarModelImport extends JModelLegacy
 			}
 
 			// Parse the line
-			$data = explode(',', str_replace('"', '', $line));
-			if (count($data) < 4) {
+			$data = explode("\t", $line);
+			if (count($data) < 3 || $data[2] === 'None') {
 				continue;
 			}
 
@@ -221,7 +216,7 @@ class DPCalendarModelImport extends JModelLegacy
 			}
 
 			// The data array
-			$buffer .= '[\'' . $data[0] . '\', \'' . $data[1] . '\', \'' . $data[4] . '\'],' . PHP_EOL;
+			$buffer .= '[\'' . $data[0] . '\', \'' . $data[1] . '\', \'' . $data[2] . '\'],' . PHP_EOL;
 
 			// Write the buffer
 			file_put_contents($geoDBDirectory . '/' . $fileName, $buffer, FILE_APPEND | LOCK_EX);

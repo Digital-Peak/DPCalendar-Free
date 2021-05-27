@@ -765,6 +765,9 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if (!$item->get('terms')) {
 			$data['terms'] = $params->get('event_form_terms');
 		}
+		if (!$item->get('booking_information')) {
+			$data['booking_information'] = $params->get('event_form_booking_information');
+		}
 		if (!$item->get('access')) {
 			$data['access'] = $params->get('event_form_access');
 		}

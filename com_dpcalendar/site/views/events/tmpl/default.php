@@ -18,7 +18,7 @@ foreach ($this->items as $event) {
 
 	// Set up the locations
 	$locations   = [];
-	$resourceIds = [];
+	$resourceIds = [$event->catid];
 	if (!empty($event->locations)) {
 		foreach ($event->locations as $location) {
 			$locations[] = [
@@ -43,7 +43,7 @@ foreach ($this->items as $event) {
 	$fgcolor = null;
 
 	// Inverse the color
-	if ($this->params->get('adjust_fg_color', '0') == '1') {
+	if ($this->params->get('adjust_fg_color', '2') == '1') {
 		$fgcolor = $event->color;
 		$rgb     = '';
 		for ($x = 0; $x < 3; $x++) {
@@ -55,7 +55,7 @@ foreach ($this->items as $event) {
 	}
 
 	// Black or white computation
-	if ($this->params->get('adjust_fg_color', '0') == '2') {
+	if ($this->params->get('adjust_fg_color', '2') == '2') {
 		$fgcolor = '#' . \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($event->color);
 	}
 
@@ -76,6 +76,8 @@ foreach ($this->items as $event) {
 		'allDay'          => (bool)$event->all_day,
 		'description'     => $description,
 		'location'        => $locations,
+		'capacity'        => $event->capacity,
+		'capacity_used'   => $event->capacity_used,
 		'classNames'      => [
 			'dp-event',
 			'dp-event-' . $event->id,

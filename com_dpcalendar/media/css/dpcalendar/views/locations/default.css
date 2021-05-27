@@ -186,6 +186,21 @@
 	white-space: normal;
 }
 
+.com-dpcalendar-locations .fc-event .dp-event__capacity {
+	display: flex;
+	align-items: center;
+}
+
+.com-dpcalendar-locations .fc-event .dp-event__capacity-icon {
+	width: 1em;
+	height: 1em;
+	margin-right: 5px;
+}
+
+.com-dpcalendar-locations .fc-event .fc-list-event-title .dp-event__capacity {
+	float: right;
+}
+
 .com-dpcalendar-locations .fc-bgevent-skeleton {
 	pointer-events: none;
 }
@@ -333,8 +348,8 @@
 }
 
 .dp-event-tooltip .dp-badge_info, .dp-event-tooltip .dp-event-tooltip_canceled {
-	color: #fff;
-	background-color: #17a2b8;
+	color: #212529;
+	background-color: #0dcaf0;
 }
 
 .dp-event-tooltip .dp-icon svg {
@@ -362,6 +377,10 @@
 .dp-event-tooltip__action:hover {
 	opacity: 1;
 	text-decoration: none;
+}
+
+.dp-event-tooltip__capacity {
+	margin-right: 5px;
 }
 
 .tippy-tooltip {

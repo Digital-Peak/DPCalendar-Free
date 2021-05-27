@@ -88,5 +88,31 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 				); ?>
 			</a>
 		<?php } ?>
+		<?php if ($event->capacity === null || $event->capacity > 0) { ?>
+			<span class="dp-event-tooltip__capacity">
+				<?php echo $displayData['layoutHelper']->renderLayout(
+					'block.icon',
+					[
+						'icon'  => \DPCalendar\HTML\Block\Icon::USERS,
+						'title' => $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_LABEL')
+					]
+				); ?>
+				<?php if ($event->capacity === null) { ?>
+					<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED'); ?>
+				<?php } else { ?>
+					<?php echo $event->capacity_used . '/' . (int)$event->capacity; ?>
+				<?php } ?>
+			</span>
+			<span class="dp-event-tooltip__price">
+				<?php echo $displayData['layoutHelper']->renderLayout(
+					'block.icon',
+					[
+						'icon'  => \DPCalendar\HTML\Block\Icon::MONEY,
+						'title' => $displayData['translator']->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL')
+					]
+				); ?>
+				<?php echo $displayData['translator']->translate($event->price ? 'COM_DPCALENDAR_VIEW_CALENDAR_PAID_EVENT' : 'COM_DPCALENDAR_VIEW_CALENDAR_FREE_EVENT'); ?>
+			</span>
+		<?php } ?>
 	</div>
 </div>

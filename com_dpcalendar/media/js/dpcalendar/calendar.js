@@ -5,8 +5,7 @@
  */
 (function () {
 	'use strict';
-	function getCalendarIds(calendar, options, util)
-	{
+	function getCalendarIds(calendar, options, util) {
 		if (localStorage.getItem(options['storageId']) == null) {
 			localStorage.setItem(options['storageId'], JSON.stringify(options['calendarIds']));
 			return options['calendarIds'];
@@ -15,14 +14,13 @@
 			return options['calendarIds'].indexOf(calId) !== -1;
 		});
 	}
-	function attachStateListeners(calendar, options, util)
-	{
+	function attachStateListeners(calendar, options, util) {
 		const calendarIds = getCalendarIds(calendar, options);
 		const root = calendar.parentElement;
-		const toggle = root.querySelector('.com-dpcalendar-calendar__toggle');
+		const toggle = root.querySelector('.com-dpcalendar-calendar__toggle, .com-dpcalendar-calendar-timeline__toggle');
 		if (toggle) {
 			toggle.addEventListener('click', () => {
-				util.slideToggle(root.querySelector('.com-dpcalendar-calendar__list'), (fadeIn) => {
+				util.slideToggle(root.querySelector('.com-dpcalendar-calendar__list, .com-dpcalendar-calendar-timeline__list'), (fadeIn) => {
 					if (!fadeIn) {
 						root.querySelector('[data-direction="up"]').classList.add('dp-toggle_hidden');
 						root.querySelector('[data-direction="down"]').classList.remove('dp-toggle_hidden');
@@ -33,7 +31,7 @@
 				});
 			});
 		}
-		const calendars = [].slice.call(calendar.parentElement.querySelectorAll('.com-dpcalendar-calendar__calendars .dp-input-checkbox'));
+		const calendars = [].slice.call(calendar.parentElement.querySelectorAll('.com-dpcalendar-calendar__calendars .dp-input-checkbox, .com-dpcalendar-calendar-timeline__calendars .dp-input-checkbox'));
 		calendars.forEach((input) => {
 			calendarIds.forEach((calId) => {
 				if (calId == input.value) {
@@ -72,7 +70,7 @@
 				localStorage.setItem(options['storageId'], JSON.stringify(calendarIds));
 			});
 		});
-		const toggleBoxes = document.querySelector('.com-dpcalendar-calendar__list-toggle .dp-input-checkbox');
+		const toggleBoxes = document.querySelector('.com-dpcalendar-calendar__list-toggle .dp-input-checkbox, .com-dpcalendar-calendar-timeline__list-toggle .dp-input-checkbox');
 		if (toggleBoxes) {
 			toggleBoxes.addEventListener('click', () => {
 				calendars.forEach((input) => {
@@ -369,8 +367,7 @@
 			return false;
 		});
 	}
-	function setup$1(calendar, options)
-	{
+	function setup$1(calendar, options) {
 		options['customButtons'] = {};
 		if (options['headerToolbar'].left.indexOf('datepicker')) {
 			options['customButtons'].datepicker = {
@@ -410,12 +407,14 @@
 				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'),
 				icon: 'icon-print',
 				click: () => {
-					let loc = document.location.href.replace(/\?/, "\?layout=print&tmpl=component\&");
-					if (loc == document.location.href) {
-						loc = document.location.href.replace(/#/, "\?layout=print&tmpl=component#");
-					}
-					const printWindow = window.open(loc);
-					printWindow.focus();
+					const printWindow = window.open();
+					loadDPAssets(['/com_dpcalendar/js/domurl/url.js'], () => {
+						const url = new Url();
+						url.query.layout = 'print' + (options['resources'] ? 'timeline' : '');
+						url.query.tmpl = 'component';
+						printWindow.location.href = url.decode(url.toString());
+						printWindow.focus();
+					});
 				}
 			};
 		}
@@ -427,8 +426,7 @@
 			};
 		}
 	}
-	function adaptIcons(calendar)
-	{
+	function adaptIcons(calendar) {
 		const iconHandler = (iconName, buttonName) => {
 			const icon = calendar.parentElement.querySelector('.dp-icon_' + iconName);
 			const button = calendar.parentElement.querySelector('.fc-' + buttonName + '-button .fc-icon');
@@ -456,6 +454,17 @@
 		};
 		options['eventContent'] = (info) => {
 			let content = '<span class="dp-event__time">' + info.timeText + '</span><span class="dp-event__title">' + info.event.title + '</span>';
+			if (info.event.extendedProps.capacity !== undefined && info.event.extendedProps.capacity != 0) {
+				content += '<span class="dp-event__capacity"><svg class="dp-event__capacity-icon"><use href="#dp-icon-users"/></svg>';
+				content += '<span class="dp-event__capacity-text">';
+				if (info.event.extendedProps.capacity === null) {
+					content += Joomla.JText._('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
+				} else {
+					content += info.event.extendedProps.capacity_used + '/' + info.event.extendedProps.capacity;
+				}
+				content += '</span>';
+				content += '</span>';
+			}
 			if (info.view.type == 'list') {
 				content = '<a href="' + info.event.url + '">' + content + '</a>';
 			}
@@ -464,6 +473,9 @@
 		options['eventDidMount'] = (info) => {
 			if (info.event.view_class) {
 				info.el.classList.add(info.event.view_class);
+			}
+			if (info.view.type != 'list') {
+				info.el.style.fill = info.event.textColor;
 			}
 			let desc = info.event.extendedProps.description;
 			if (desc) {
@@ -702,8 +714,7 @@
 		}
 		return rawHMACMD5(key, string)
 	};
-	function createCalendar(calendar, options)
-	{
+	function createCalendar(calendar, options) {
 		const assets = ['/com_dpcalendar/js/popper/popper.js'];
 		if (!window.Intl && typeof window.Intl !== 'object') {
 			assets.push('/com_dpcalendar/js/polyfill/intl.js');
@@ -746,6 +757,12 @@
 					return dayjs(date.start.array).format(titleFormat);
 				};
 				options['views'][viewMapping[view]] = views[view];
+				if (views[view]['slotDuration'] && views[view]['slotDuration'].indexOf('{') > -1) {
+					views[view]['slotDuration'] = JSON.parse(views[view]['slotDuration']);
+				}
+				if (views[view]['slotLabelInterval'] && views[view]['slotLabelInterval'].indexOf('{') > -1) {
+					views[view]['slotLabelInterval'] = JSON.parse(views[view]['slotLabelInterval']);
+				}
 			});
 			if (options['headerToolbar']['right']) {
 				let headers = '';

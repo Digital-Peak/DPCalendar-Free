@@ -104,6 +104,14 @@ class DPCalendarRules extends \JComponentRouterRulesMenu
 
 	private function processForEvent(&$query)
 	{
+		// If menu item is forced
+		if (!empty($query['force_item_id'])) {
+			$query['Itemid'] = $query['force_item_id'];
+			unset($query['force_item_id']);
+
+			return;
+		}
+
 		// Check if it is an event query and a calendar is available
 		if (empty($query['view']) || $query['view'] != 'event' || empty($query['calid'])) {
 			return;

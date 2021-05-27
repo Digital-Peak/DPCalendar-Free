@@ -210,8 +210,7 @@
 			}
 		}
 	}
-	function setup$4()
-	{
+	function setup$4() {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
 		[].slice.call(document.querySelectorAll('#jform_all_day input')).forEach((input) => {
 			input.addEventListener('click', (e) => {
@@ -238,11 +237,12 @@
 		[].slice.call(document.querySelectorAll('#jform_start_date, #jform_start_date_time, #jform_end_date, #jform_end_date_time, #jform_rooms')).forEach((input) => {
 			input.addEventListener('change', check);
 		});
-		document.getElementById('jform_catid').addEventListener('change', check);
+		if (document.getElementById('jform_catid')) {
+			document.getElementById('jform_catid').addEventListener('change', check);
+		}
 		check();
 	}
-	function checkOverlapping()
-	{
+	function checkOverlapping() {
 		const box = document.querySelector('.com-dpcalendar-eventform__overlapping');
 		if (!box) {
 			return;
@@ -270,8 +270,7 @@
 			);
 		});
 	}
-	function watchElements(elements)
-	{
+	function watchElements(elements) {
 		elements.forEach((mapElement) => {
 			if ('IntersectionObserver' in window === false) {
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/map.js'], () => DPCalendar.Map.create(mapElement));
@@ -397,20 +396,21 @@
 		}
 		document.querySelector('.com-dpcalendar-eventform__form').appendChild(captcha);
 	}
-	function setup()
-	{
-		document.getElementById('jform_catid').addEventListener('change', (e) => {
-			for (let i = 0; i < e.target.length; i++) {
-				if (e.target.value && isNaN(parseInt(e.target.options[i].value))) {
-					const loader = document.querySelector('.dp-loader');
-					if (loader) {
-						loader.classList.remove('dp-loader_hidden');
+	function setup() {
+		if (document.getElementById('jform_catid')) {
+			document.getElementById('jform_catid').addEventListener('change', (e) => {
+				for (let i = 0; i < e.target.length; i++) {
+					if (e.target.value && isNaN(parseInt(e.target.options[i].value))) {
+						const loader = document.querySelector('.dp-loader');
+						if (loader) {
+							loader.classList.remove('dp-loader_hidden');
+						}
+						Joomla.submitbutton('event.reload');
+						return true;
 					}
-					Joomla.submitbutton('event.reload');
-					return true;
 				}
-			}
-		});
+			});
+		}
 		const locationIds = document.getElementById('jform_location_ids');
 		if (locationIds) {
 			locationIds.addEventListener('change', (e) => {

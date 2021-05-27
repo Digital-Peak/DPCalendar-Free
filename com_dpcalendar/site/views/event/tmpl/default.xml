@@ -60,6 +60,18 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_show_booking_form" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_bookings" type="list" useglobal="true"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 			<field name="event_show_price" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_DESC">
@@ -81,12 +93,6 @@
 			<field name="event_show_series" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-			</field>
-			<field name="event_show_bookings" type="list" useglobal="true"
-			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
-			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
@@ -220,6 +226,7 @@
 			<field name="event_form_hidden_fields" type="list" multiple="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_DESC">
+				<option value="catid">COM_DPCALENDAR_CALENDAR</option>
 				<option value="color">COM_DPCALENDAR_FIELD_COLOR_LABEL</option>
 				<option value="url">COM_DPCALENDAR_FIELD_URL_LABEL</option>
 				<option value="show_end_time">COM_DPCALENDAR_FIELD_SHOW_END_TIME_LABEL</option>

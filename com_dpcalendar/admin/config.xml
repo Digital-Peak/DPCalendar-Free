@@ -713,6 +713,7 @@
 			<option value="capacity">COM_DPCALENDAR_FIELD_CAPACITY_LABEL</option>
 			<option value="capacity_used">COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL</option>
 			<option value="max_tickets">COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL</option>
+			<option value="booking_opening_date">COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_LABEL</option>
 			<option value="booking_closing_date">COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL</option>
 			<option value="booking_series">COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL</option>
 			<option value="price">COM_DPCALENDAR_FIELD_PRICE_LABEL</option>

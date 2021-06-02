@@ -262,6 +262,32 @@ class Booking
 		return $calendar->canBook;
 	}
 
+    /**
+	 * Return the opening start date for the event registration.
+	 *
+	 * @param \stdClass $event
+	 *
+	 * @return \Joomla\CMS\Date\Date
+	 */
+	public static function getRegistrationStartDate($event)
+	{
+		// When no opening date, use the event published date
+		if (empty($event->booking_opening_date)) {
+			return \DPCalendarHelper::getDate($event->created);
+		}
+
+		// Check if it is a relative date
+		if (strpos($event->booking_opening_date, '-') === 0 || strpos($event->booking_opening_date, '+') === 0) {
+			$date = \DPCalendarHelper::getDate($event->start_date);
+			$date->modify($event->booking_opening_date);
+
+			return $date;
+		}
+
+		// Absolute date
+		return \DPCalendarHelper::getDate($event->booking_opening_date);
+	}
+
 	/**
 	 * Return the closing end date for the event.
 	 *

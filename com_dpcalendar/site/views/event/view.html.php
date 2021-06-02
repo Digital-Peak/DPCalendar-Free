@@ -206,7 +206,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 			return $this->translate('COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_CAPACITY_FULL');
 		}
 
-		// // Check if registration started
+		// Check if registration started
 		$now                   = \DPCalendarHelper::getDate();
 		$registrationStartDate = \DPCalendar\Helper\Booking::getRegistrationStartDate($event);
 		if ($registrationStartDate->format('U') > $now->format('U')) {

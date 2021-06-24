@@ -18,7 +18,7 @@ class DPCalendarControllerEvent extends JControllerForm
 {
 	protected $view_item = 'form';
 	protected $view_list = 'calendar';
-	protected $option = 'com_dpcalendar';
+	protected $option    = 'com_dpcalendar';
 
 	public function add()
 	{
@@ -36,16 +36,15 @@ class DPCalendarControllerEvent extends JControllerForm
 			$this->input->getVar('id'),
 			'string'
 		));
-		$allow    = null;
+		$allow = null;
 		if ($calendar) {
 			$allow = $calendar->canCreate;
 		}
 
 		if ($allow === null) {
 			return parent::allowAdd($data);
-		} else {
-			return $allow;
 		}
+		return $allow;
 	}
 
 	protected function allowEdit($data = [], $key = 'id')
@@ -61,9 +60,8 @@ class DPCalendarControllerEvent extends JControllerForm
 			$calendar = DPCalendarHelper::getCalendar($event->catid);
 
 			return $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == JFactory::getUser()->id);
-		} else {
-			return parent::allowEdit($data, $key);
 		}
+		return parent::allowEdit($data, $key);
 	}
 
 	protected function allowDelete($data = [], $key = 'id')
@@ -295,7 +293,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			$event = $model->getItem($data['id']);
 
 			if ($event->start_date == $data['start_date'] && $event->end_date == $data['end_date']) {
-				$displayData          = [
+				$displayData = [
 					'router'       => new Router(),
 					'layoutHelper' => new LayoutHelper(),
 					'translator'   => new Translator(),
@@ -505,7 +503,7 @@ class DPCalendarControllerEvent extends JControllerForm
 				$return = DPCalendarHelperRoute::getFormRoute(0, $this->getReturnPage());
 				$this->setRedirect($return);
 			}
-		} else if (!$this->redirect) {
+		} elseif (!$this->redirect) {
 			$this->setRedirect(
 				DPCalendarHelperRoute::getEventRoute($app->getUserState('dpcalendar.event.id'), $data['catid'])
 			);
@@ -537,6 +535,10 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		$data = $this->input->get('jform', [], 'array');
 
+		if (!key_exists('all_day', $data)) {
+			$data['all_day'] = false;
+		}
+
 		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
 			$data['all_day'] = '1';
 		}
@@ -546,7 +548,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			$data['start_date_time'],
 			$data['all_day'] == '1'
 		);
-		$endDate   = DPCalendarHelper::getDateFromString(
+		$endDate = DPCalendarHelper::getDateFromString(
 			$data['end_date'],
 			$data['end_date_time'],
 			$data['all_day'] == '1'
@@ -724,7 +726,7 @@ class DPCalendarControllerEvent extends JControllerForm
 			$data['start_date_time'],
 			$data['all_day'] == '1'
 		)->toSql(false);
-		$data['end_date']   = DPCalendarHelper::getDateFromString(
+		$data['end_date'] = DPCalendarHelper::getDateFromString(
 			$data['end_date'],
 			$data['end_date_time'],
 			$data['all_day'] == '1'
@@ -749,8 +751,7 @@ class DPCalendarControllerEvent extends JControllerForm
 
 		$data = [];
 		if ($location->title) {
-			$data =
-				[
+			$data = [
 					'id'      => $location->id,
 					'display' => $location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
 				];

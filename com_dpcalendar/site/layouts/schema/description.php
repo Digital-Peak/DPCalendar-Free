@@ -7,4 +7,4 @@
 defined('_JEXEC') or die();
 
 ?>
-<meta itemprop="description" content="<?php echo htmlentities(strip_tags($displayData['event']->description)); ?>">
+<meta itemprop="description" content="<?php echo htmlentities(strip_tags($displayData['event']->description), ENT_COMPAT, 'UTF-8'); ?>">

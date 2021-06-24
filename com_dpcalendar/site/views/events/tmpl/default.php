@@ -76,8 +76,8 @@ foreach ($this->items as $event) {
 		'allDay'          => (bool)$event->all_day,
 		'description'     => $description,
 		'location'        => $locations,
-		'capacity'        => $event->capacity,
-		'capacity_used'   => $event->capacity_used,
+		'capacity'        => $this->compactMode == 0 ? $event->capacity : 0,
+		'capacity_used'   => $this->compactMode == 0 ? $event->capacity_used : 0,
 		'classNames'      => [
 			'dp-event',
 			'dp-event-' . $event->id,

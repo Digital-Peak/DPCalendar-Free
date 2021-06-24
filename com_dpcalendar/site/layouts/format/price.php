@@ -29,9 +29,9 @@ if (key_exists('currency', $displayData) && $displayData['currency']) {
 }
 
 if ($currency == '$' || $currency == '£') {
-	echo htmlentities($currency . ' ' . $price);
+	echo htmlentities($currency . ' ' . $price, ENT_COMPAT, 'UTF-8');
 
 	return;
 }
 
-echo htmlentities($price . ' ' . $currency);
+echo htmlentities($price . ' ' . $currency, ENT_COMPAT, 'UTF-8');

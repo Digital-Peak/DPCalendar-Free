@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
@@ -29,8 +30,8 @@ class SendNewBookingMail implements StageInterface
 
 	public function __invoke($payload)
 	{
-		// Never send when disabled or new booking
-		if (!$payload->mailParams->get('booking_send_mail_new', 2) || !$payload->oldItem) {
+		// Never send when disabled
+		if (!$payload->mailParams->get('booking_send_mail_new', 2)) {
 			return $payload;
 		}
 
@@ -40,7 +41,7 @@ class SendNewBookingMail implements StageInterface
 		}
 
 		// Never send a mail when we have been active, cancelled or refunded before
-		if (in_array($payload->oldItem->state, [1, 4, 6, 7])) {
+		if ($payload->oldItem && in_array($payload->oldItem->state, [1, 4, 6, 7])) {
 			return $payload;
 		}
 
@@ -63,7 +64,7 @@ class SendNewBookingMail implements StageInterface
 			null,
 			$payload->mailVariables
 		);
-		$body    = trim(
+		$body = trim(
 			DPCalendarHelper::renderEvents(
 				$payload->eventsWithTickets,
 				DPCalendarHelper::getStringFromParams(
@@ -87,7 +88,7 @@ class SendNewBookingMail implements StageInterface
 			if ($payload->mailParams->get('booking_include_ics', 1)) {
 				$icsFile = JPATH_ROOT . '/tmp/' . $payload->item->uid . '.ics';
 				$content = Ical::createIcalFromEvents($payload->eventsWithTickets, false, true);
-				if (!$content || !\JFile::write($icsFile, $content)) {
+				if (!$content || !file_put_contents($icsFile, $content)) {
 					$icsFile = null;
 				} else {
 					$this->mailer->addAttachment($icsFile);

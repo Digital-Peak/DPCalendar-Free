@@ -28,10 +28,10 @@ if (!$price || !is_array($price->value) || empty($price->value)) {
 		<div itemprop="offers" itemtype="https://schema.org/Offer" itemscope>
 			<meta itemprop="price" content="<?php echo $value; ?>">
 			<?php if ($price->label[$key]) { ?>
-				<meta itemprop="name" content="<?php echo htmlentities($price->label[$key]); ?>">
+				<meta itemprop="name" content="<?php echo htmlentities($price->label[$key], ENT_COMPAT, 'UTF-8'); ?>">
 			<?php } ?>
 			<?php if ($price->description[$key]) { ?>
-				<meta itemprop="description" content="<?php echo htmlentities(strip_tags($price->description[$key])); ?>">
+				<meta itemprop="description" content="<?php echo htmlentities(strip_tags($price->description[$key]), ENT_COMPAT, 'UTF-8'); ?>">
 			<?php } ?>
 		</div>
 	<?php } ?>

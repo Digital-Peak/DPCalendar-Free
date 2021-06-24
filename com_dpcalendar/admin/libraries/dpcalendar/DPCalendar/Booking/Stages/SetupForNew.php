@@ -87,22 +87,22 @@ class SetupForNew implements StageInterface
 		if (!$this->application->isClient('administrator') || empty($payload->data['state'])) {
 			// When skipping the review step always, set state to tickets reviewed
 			if ($payload->data['state'] == 0
-				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 1) == 0) {
+				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 0) {
 				$payload->data['state'] = 2;
 			}
 
 			// When skipping to review step on one ticket, set state to tickets reviewed
 			if ($payload->data['state'] == 0
-				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 1) == 2
+				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 2
 				&& $amountTickets == 1) {
 				$payload->data['state'] = 2;
 			}
 
-			// When tickets are reviewed and confirmation step should be skipped, set state to confirmed
+			// When tickets are reviewed and confirmation step should be skipped, set state to active
 			if (!$payload->data['price']
 				&& $payload->data['state'] == 2
 				&& !\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_confirm_step', 1)) {
-				$payload->data['state'] = 3;
+				$payload->data['state'] = 1;
 			}
 
 			// When tickets are reviewed and capacity is full and waiting list is active, put it on the waiting list

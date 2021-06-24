@@ -212,27 +212,6 @@
 	}
 	function setup$4() {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
-		[].slice.call(document.querySelectorAll('#jform_all_day input')).forEach((input) => {
-			input.addEventListener('click', (e) => {
-				if (input.value == 0) {
-					document.getElementById('jform_start_date_time').style.display = 'inline-block';
-					document.getElementById('jform_end_date_time').style.display = 'inline-block';
-				} else {
-					document.getElementById('jform_start_date_time').style.display = 'none';
-					document.getElementById('jform_end_date_time').style.display = 'none';
-				}
-				checkOverlapping();
-			});
-		});
-		if (document.getElementById('jform_all_day0').checked
-			|| (!document.getElementById('jform_all_day0').checked && !document.getElementById('jform_all_day1').checked)
-		) {
-			document.getElementById('jform_start_date_time').style.display = 'inline-block';
-			document.getElementById('jform_end_date_time').style.display = 'inline-block';
-		} else {
-			document.getElementById('jform_start_date_time').style.display = 'none';
-			document.getElementById('jform_end_date_time').style.display = 'none';
-		}
 		const check = DPCalendar.debounce(checkOverlapping, 2000);
 		[].slice.call(document.querySelectorAll('#jform_start_date, #jform_start_date_time, #jform_end_date, #jform_end_date_time, #jform_rooms')).forEach((input) => {
 			input.addEventListener('change', check);
@@ -241,6 +220,25 @@
 			document.getElementById('jform_catid').addEventListener('change', check);
 		}
 		check();
+		const allDayAdapter = (showDates) => {
+			if (showDates) {
+				document.getElementById('jform_start_date_time').style.display = 'inline-block';
+				document.getElementById('jform_end_date_time').style.display = 'inline-block';
+				return;
+			}
+			document.getElementById('jform_start_date_time').style.display = 'none';
+			document.getElementById('jform_end_date_time').style.display = 'none';
+		};
+		[].slice.call(document.querySelectorAll('#jform_all_day input')).forEach((input) => {
+			input.addEventListener('click', (e) => allDayAdapter(input.value == 0) && checkOverlapping());
+		});
+		const allDayField = document.querySelector('#jform_all_day');
+		if (allDayField && allDayField.tagName.toLowerCase() == 'input') {
+			allDayAdapter(allDayField.value == 0);
+			return;
+		}
+		allDayAdapter(document.getElementById('jform_all_day0').checked
+			|| (!document.getElementById('jform_all_day0').checked && !document.getElementById('jform_all_day1').checked));
 	}
 	function checkOverlapping() {
 		const box = document.querySelector('.com-dpcalendar-eventform__overlapping');
@@ -471,6 +469,9 @@
 			setup$1();
 			setup();
 			[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color):not(#jform_tags):not(.dp-timezone__select)')).forEach((select) => {
+				if (select.options.length > 100) {
+					return;
+				}
 				select._choicejs = new Choices(
 					select,
 					{
@@ -485,7 +486,7 @@
 			});
 		});
 		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS', '')) {
-			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls')).forEach((el) => {
+			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls, #com-dpcalendar-form-Content #booking .controls')).forEach((el) => {
 				const option = document.createElement('span');
 				option.className = 'dp-free-information-text';
 				option.innerText = Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');

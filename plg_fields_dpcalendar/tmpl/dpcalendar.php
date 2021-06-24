@@ -29,6 +29,6 @@ foreach ($value as $calendarId) {
 		continue;
 	}
 
-	$texts[] = '<a href="' . DPCalendarHelperRoute::getCalendarRoute($calendarId) . '">' . htmlentities($calendar->title) . '</a>';
+	$texts[] = '<a href="' . DPCalendarHelperRoute::getCalendarRoute($calendarId) . '">' . htmlentities($calendar->title, ENT_COMPAT, 'UTF-8') . '</a>';
 }
 echo implode(', ', $texts);

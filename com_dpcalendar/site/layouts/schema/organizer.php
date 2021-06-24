@@ -9,6 +9,6 @@ defined('_JEXEC') or die();
 $authorName = $displayData['event']->created_by_alias ?: $displayData['userHelper']->getUser($displayData['event']->created_by)->name;
 ?>
 <div itemprop="organizer" itemscope itemtype="http://schema.org/Organization">
-	<meta itemprop="name" content="<?php echo htmlentities($authorName); ?>">
+	<meta itemprop="name" content="<?php echo htmlentities($authorName, ENT_COMPAT, 'UTF-8'); ?>">
 	<meta itemprop="url" content="<?php echo $displayData['event']->url ?: JUri::getInstance()->toString(); ?>">
 </div>

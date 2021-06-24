@@ -4,12 +4,14 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Response\JsonResponse;
 use Joomla\Registry\Registry;
 
 \JLoader::import('joomla.application.component.helper');
@@ -39,7 +41,7 @@ class DPCalendarHelper
 			if ($calendar == null) {
 				return null;
 			}
-			$user = \JFactory::getUser();
+			$user = Factory::getUser();
 
 			$calendar->params   = new Registry($calendar->params);
 			$calendar->color    = str_replace('#', '', $calendar->params->get('color', '3366CC'));
@@ -62,7 +64,7 @@ class DPCalendarHelper
 			}
 		} else {
 			\JPluginHelper::importPlugin('dpcalendar');
-			$tmp = \JFactory::getApplication()->triggerEvent('onCalendarsFetch', [$id]);
+			$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch', [$id]);
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
 					foreach ($calendars as $fetchedCalendar) {
@@ -91,8 +93,8 @@ class DPCalendarHelper
 		$params = new Registry($calendar->params);
 		$params->set('etag', $params->get('etag', 1) + 1);
 
-		$db = \JFactory::getDbo();
-		$db->setQuery('update #__categories set params = ' . \JFactory::getDbo()->q($params->toString()) . ' where id = ' . $db->q($calendar->id));
+		$db = Factory::getDbo();
+		$db->setQuery('update #__categories set params = ' . Factory::getDbo()->q($params->toString()) . ' where id = ' . $db->q($calendar->id));
 		$db->execute();
 	}
 
@@ -105,9 +107,9 @@ class DPCalendarHelper
 
 	public static function getFrLanguage()
 	{
-		$language = \JFactory::getApplication()->get('language');
+		$language = Factory::getApplication()->get('language');
 
-		$user = \JFactory::getUser();
+		$user = Factory::getUser();
 		if ($user->get('id')) {
 			$userLanguage = $user->getParam('language');
 			if (!empty($userLanguage)) {
@@ -163,22 +165,22 @@ class DPCalendarHelper
 		$event->images = new \stdClass();
 
 
-		$event->images->image_intro            = isset($images->image_intro) ? $images->image_intro : null;
-		$event->images->image_intro_width      = isset($images->image_intro_width) ? $images->image_intro_width : null;
-		$event->images->image_intro_height     = isset($images->image_intro_height) ? $images->image_intro_height : null;
-		$event->images->image_intro_alt        = isset($images->image_intro_alt) ? $images->image_intro_alt : null;
-		$event->images->image_intro_caption    = isset($images->image_intro_caption) ? $images->image_intro_caption : null;
-		$dimensions                            = $event->images->image_intro_width ? ' width="' . $event->images->image_intro_width . '"' : '';
-		$dimensions                            .= $event->images->image_intro_height ? ' height="' . $event->images->image_intro_height . '"' : '';
+		$event->images->image_intro         = isset($images->image_intro) ? $images->image_intro : null;
+		$event->images->image_intro_width   = isset($images->image_intro_width) ? $images->image_intro_width : null;
+		$event->images->image_intro_height  = isset($images->image_intro_height) ? $images->image_intro_height : null;
+		$event->images->image_intro_alt     = isset($images->image_intro_alt) ? $images->image_intro_alt : null;
+		$event->images->image_intro_caption = isset($images->image_intro_caption) ? $images->image_intro_caption : null;
+		$dimensions                         = $event->images->image_intro_width ? ' width="' . $event->images->image_intro_width . '"' : '';
+		$dimensions .= $event->images->image_intro_height ? ' height="' . $event->images->image_intro_height . '"' : '';
 		$event->images->image_intro_dimensions = trim($dimensions);
 
-		$event->images->image_full            = isset($images->image_full) ? $images->image_full : null;
-		$event->images->image_full_width      = isset($images->image_full_width) ? $images->image_full_width : null;
-		$event->images->image_full_height     = isset($images->image_full_height) ? $images->image_full_height : null;
-		$event->images->image_full_alt        = isset($images->image_full_alt) ? $images->image_full_alt : null;
-		$event->images->image_full_caption    = isset($images->image_full_caption) ? $images->image_full_caption : null;
-		$dimensions                           = $event->images->image_full_width ? ' width="' . $event->images->image_full_width . '"' : '';
-		$dimensions                           .= $event->images->image_full_height ? ' height="' . $event->images->image_full_height . '"' : '';
+		$event->images->image_full         = isset($images->image_full) ? $images->image_full : null;
+		$event->images->image_full_width   = isset($images->image_full_width) ? $images->image_full_width : null;
+		$event->images->image_full_height  = isset($images->image_full_height) ? $images->image_full_height : null;
+		$event->images->image_full_alt     = isset($images->image_full_alt) ? $images->image_full_alt : null;
+		$event->images->image_full_caption = isset($images->image_full_caption) ? $images->image_full_caption : null;
+		$dimensions                        = $event->images->image_full_width ? ' width="' . $event->images->image_full_width . '"' : '';
+		$dimensions .= $event->images->image_full_height ? ' height="' . $event->images->image_full_height . '"' : '';
 		$event->images->image_full_dimensions = trim($dimensions);
 	}
 
@@ -201,11 +203,11 @@ class DPCalendarHelper
 		if ($date instanceof \JDate) {
 			$dateObj = clone $date;
 		} else {
-			$dateObj = \JFactory::getDate($date, $tz);
+			$dateObj = Factory::getDate($date, $tz);
 		}
 
-		$timezone = \JFactory::getApplication()->getCfg('offset');
-		$user     = \JFactory::getUser();
+		$timezone = Factory::getApplication()->getCfg('offset');
+		$user     = Factory::getUser();
 		if ($user->get('id')) {
 			$userTimezone = $user->getParam('timezone');
 			if (!empty($userTimezone)) {
@@ -213,7 +215,7 @@ class DPCalendarHelper
 			}
 		}
 
-		$timezone = \JFactory::getSession()->get('user-timezone', $timezone, 'DPCalendar');
+		$timezone = Factory::getSession()->get('user-timezone', $timezone, 'DPCalendar');
 
 		if (!$allDay) {
 			$dateObj->setTimezone(new \DateTimeZone($timezone));
@@ -269,7 +271,7 @@ class DPCalendarHelper
 			'THU',
 			'FRI'
 		];
-		$lang     = \JLanguage::getInstance('en-GB');
+		$lang = \JLanguage::getInstance('en-GB');
 		foreach ($replaces as $key) {
 			$string = str_replace(\JText::_($key), $lang->_($key), $string);
 		}
@@ -356,14 +358,14 @@ class DPCalendarHelper
 			$params = \JComponentHelper::getParams('com_dpcalendar');
 		}
 
-		\JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
-		$return = \JFactory::getApplication()->input->getInt('Itemid', null);
+		$return = Factory::getApplication()->input->getInt('Itemid', null);
 		if (!empty($return)) {
 			$return = \JRoute::_('index.php?Itemid=' . $return, false);
 		}
 
-		$user = \JFactory::getUser();
+		$user = Factory::getUser();
 
 		$lastHeading = '';
 
@@ -384,7 +386,7 @@ class DPCalendarHelper
 
 			$variables['canBook']  = \DPCalendar\Helper\Booking::openForBooking($event);
 			$variables['bookLink'] = \DPCalendarHelperRoute::getBookingFormRouteFromEvent($event, $return);
-			$variables['booking']  = isset($event->booking) ? (boolean)$event->booking : false;
+			$variables['booking']  = isset($event->booking) ? (bool)$event->booking : false;
 
 			$variables['calendarLink'] = \DPCalendarHelperRoute::getCalendarRoute($event->catid);
 			$variables['backLink']     = \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid);
@@ -465,7 +467,7 @@ class DPCalendarHelper
 			self::parseImages($event);
 			$variables['images'] = $event->images;
 
-			$author                  = \JFactory::getUser($event->created_by);
+			$author                  = Factory::getUser($event->created_by);
 			$variables['author']     = $author->name;
 			$variables['authorMail'] = $author->email;
 			if (!empty($event->created_by_alias)) {
@@ -625,7 +627,7 @@ class DPCalendarHelper
 			$h = $params->get('avatar_height', 0);
 			if ($w != 0) {
 				$w = 'width="' . $w . '"';
-			} else if ($h == 0) {
+			} elseif ($h == 0) {
 				$w = 'width="80"';
 			} else {
 				$w = '';
@@ -702,7 +704,7 @@ class DPCalendarHelper
 			'zh-CN',
 			'zh-TW'
 		];
-		$lang      = self::getFrLanguage();
+		$lang = self::getFrLanguage();
 		if (!in_array($lang, $languages)) {
 			$lang = substr($lang, 0, strpos($lang, '-'));
 		}
@@ -725,12 +727,12 @@ class DPCalendarHelper
 				->where('type = ' . $db->quote('plugin'))
 				->where('folder = ' . $db->quote('dpcalendar'))
 				->where('element = ' . $db->quote($plugin));
-			$p     = $db->setQuery($query)->loadObject();
+			$p = $db->setQuery($query)->loadObject();
 
 			\JLoader::import('dpcalendar.' . $plugin . '.' . $plugin, JPATH_PLUGINS);
 
-			$className      = 'Plg' . $p->type . $p->name;
-			$dispatcher     = DPCalendarHelper::isJoomlaVersion(4, '>=') ?
+			$className  = 'Plg' . $p->type . $p->name;
+			$dispatcher = DPCalendarHelper::isJoomlaVersion(4, '>=') ?
 				Factory::getApplication()->getDispatcher() : \JEventDispatcher::getInstance();
 			$p              = (array)$p;
 			$pluginInstance = new $className($dispatcher, $p);
@@ -759,12 +761,12 @@ class DPCalendarHelper
 
 	public static function canCreateEvent()
 	{
-		$user   = \JFactory::getUser();
+		$user   = Factory::getUser();
 		$canAdd = $user->authorise('core.create', 'com_dpcalendar') || count($user->getAuthorisedCategories('com_dpcalendar', 'core.create'));
 
 		if (!$canAdd) {
 			\JPluginHelper::importPlugin('dpcalendar');
-			$tmp = \JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+			$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
 					foreach ($tmpCalendars as $calendar) {
@@ -789,7 +791,7 @@ class DPCalendarHelper
 	{
 		\JPluginHelper::importPlugin('captcha');
 
-		$userGroups    = \JAccess::getGroupsByUser(\JFactory::getUser()->id, false);
+		$userGroups    = \JAccess::getGroupsByUser(Factory::getUser()->id, false);
 		$accessCaptcha = array_intersect(self::getComponentParameter('captcha_groups', [1]), $userGroups);
 
 		return \JPluginHelper::isEnabled('captcha') && $accessCaptcha;
@@ -799,12 +801,14 @@ class DPCalendarHelper
 	{
 		ob_clean();
 
-		if ($message) {
-			\JFactory::getApplication()->enqueueMessage($message, $error ? 'error' : 'message');
-		}
-		echo new \JResponseJson($data);
+		header('Content-Type: application/json');
 
-		\JFactory::getApplication()->close();
+		if ($message) {
+			Factory::getApplication()->enqueueMessage($message, $error ? 'error' : 'message');
+		}
+		echo new JsonResponse($data);
+
+		Factory::getApplication()->close();
 	}
 
 	/**
@@ -844,7 +848,7 @@ class DPCalendarHelper
 				continue;
 			}
 
-			$mailer = \JFactory::getMailer();
+			$mailer = Factory::getMailer();
 			$mailer->setSubject($subject);
 			$mailer->setBody($message);
 			$mailer->IsHTML(true);
@@ -924,11 +928,11 @@ class DPCalendarHelper
 				if (strpos($text, substr($q, 1)) !== false) {
 					return false;
 				}
-			} else if (self::startsWith($q, '+')) {
+			} elseif (self::startsWith($q, '+')) {
 				if (strpos($text, substr($q, 1)) === false) {
 					return false;
 				}
-			} else if (strpos($text, $q) === false) {
+			} elseif (strpos($text, $q) === false) {
 				return false;
 			}
 		}
@@ -982,8 +986,8 @@ class DPCalendarHelper
 			$fields,
 			function ($f1, $f2) use ($order, $keys) {
 				$fieldName = property_exists($f1, 'fieldname') ? 'fieldname' : 'name';
-				$k1        = in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order) : -1;
-				$k2        = in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order) : -1;
+				$k1 = in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order) : -1;
+				$k2 = in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order) : -1;
 
 				if ($k1 >= 0 && $k2 < 0) {
 					return -1;
@@ -1032,11 +1036,11 @@ class DPCalendarHelper
 		</a\s*>                      # </A> closing tag.
 		)                              # End $2:
 		%ix';
-		$text                 = preg_replace_callback($section_html_pattern, [
+		$text = preg_replace_callback($section_html_pattern, [
 			'DPCalendarHelper',
 			'linkifyHtmlCallback'
 		], $text);
-		$text                 = nl2br($text);
+		$text = nl2br($text);
 
 		return $text;
 	}

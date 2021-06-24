@@ -6,6 +6,14 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
+
 if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
 	return;
 }
@@ -18,7 +26,7 @@ $userHelper   = new \DPCalendar\Helper\UserHelper();
 $router       = new \DPCalendar\Router\Router();
 $translator   = new \DPCalendar\Translator\Translator();
 
-$cParams      = clone JComponentHelper::getParams('com_dpcalendar');
+$cParams      = clone ComponentHelper::getParams('com_dpcalendar');
 $moduleParams = $cParams->merge($params);
 
 // The display data
@@ -33,11 +41,12 @@ $displayData = [
 	'params'       => $moduleParams
 ];
 
-JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+Factory::getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');
 JLoader::import('joomla.application.component.model');
-JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-$model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
+$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
 $model->getState();
 $model->setState('filter.parentIds', $moduleParams->get('ids', ['root']));
 $ids = [];
@@ -65,7 +74,7 @@ $endDate = trim($moduleParams->get('end_date', ''));
 if ($endDate == 'same day') {
 	$endDate = clone $startDate;
 	$endDate->setTime(23, 59, 59);
-} else if ($endDate) {
+} elseif ($endDate) {
 	$tmp = $dateHelper->getDate($endDate);
 	$tmp->sub(new DateInterval("PT" . $tmp->format("s") . "S"));
 	$tmp->sub(new DateInterval("PT" . ($tmp->format("i") % 15) . "M"));
@@ -74,7 +83,7 @@ if ($endDate == 'same day') {
 	$endDate = null;
 }
 
-$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 $model->getState();
 $model->setState('list.limit', $moduleParams->get('max_events', 5));
 $model->setState('list.direction', $moduleParams->get('order', 'asc'));
@@ -85,7 +94,7 @@ $model->setState('filter.search', $moduleParams->get('filter', ''));
 $model->setState('filter.ongoing', $moduleParams->get('ongoing', 0));
 $model->setState('filter.expand', $moduleParams->get('expand', 1));
 $model->setState('filter.state', [1, 3]);
-$model->setState('filter.language', JFactory::getLanguage());
+$model->setState('filter.language', Factory::getLanguage());
 $model->setState('filter.publish_date', true);
 $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
@@ -108,16 +117,16 @@ if ($moduleParams->get('sort', 'start_date') == 'start_date') {
 
 		if ($moduleParams->get('order', 'asc') !== 'asc') {
 			$tmp = $d1;
-			$d1  = $d2;
-			$d2  = $tmp;
+			$d1 = $d2;
+			$d2 = $tmp;
 		}
 
 		return strcmp($d1->format('c', true), $d2->format('c', true));
 	});
 }
 
-JPluginHelper::importPlugin('content');
-JPluginHelper::importPlugin('dpcalendar');
+PluginHelper::importPlugin('content');
+PluginHelper::importPlugin('dpcalendar');
 $now = $dateHelper->getDate();
 
 // The grouping option
@@ -152,7 +161,7 @@ foreach ($events as $event) {
 		$router->getEventRoute($event->id, $event->catid, false, true, $moduleParams->get('default_menu_item'))
 	);
 
-	$desc = $params->get('description_length') === '0' ? '' : JHTML::_('content.prepare', $event->description);
+	$desc = $params->get('description_length') === '0' ? '' : HTMLHelper::_('content.prepare', $event->description);
 	if ($desc && $params->get('description_length') > 0) {
 		$descTruncated = JHtmlString::truncateComplex($desc, $params->get('description_length', null));
 
@@ -162,7 +171,7 @@ foreach ($events as $event) {
 		}
 
 		if ($desc != $descTruncated) {
-			$event->alternative_readmore = JText::_('MOD_DPCALENDAR_UPCOMING_READ_MORE');
+			$event->alternative_readmore = Text::_('MOD_DPCALENDAR_UPCOMING_READ_MORE');
 
 			// Meta data is handled differently
 			$desc = str_replace('itemprop="url"', '', $layoutHelper->renderLayout(
@@ -193,20 +202,20 @@ foreach ($events as $event) {
 	$event->ongoing_end_date = $date > $now ? $date : null;
 
 	if ($moduleParams->get('show_display_events')) {
-		$event->displayEvent                    = new stdClass();
-		$results                                = $app->triggerEvent(
+		$event->displayEvent = new stdClass();
+		$results             = $app->triggerEvent(
 			'onContentAfterTitle',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->afterDisplayTitle = trim(implode("\n", $results));
 
-		$results                                   = $app->triggerEvent(
+		$results = $app->triggerEvent(
 			'onContentBeforeDisplay',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->beforeDisplayContent = trim(implode("\n", $results));
 
-		$results                                  = $app->triggerEvent(
+		$results = $app->triggerEvent(
 			'onContentAfterDisplay',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
@@ -219,4 +228,4 @@ if (!empty($return)) {
 	$return = $router->route('index.php?Itemid=' . $return);
 }
 
-require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', $moduleParams->get('layout', 'default'));
+require ModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', $moduleParams->get('layout', 'default'));

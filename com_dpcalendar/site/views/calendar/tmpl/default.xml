@@ -522,6 +522,7 @@
 				<option value="catid">COM_DPCALENDAR_CALENDAR</option>
 				<option value="color">COM_DPCALENDAR_FIELD_COLOR_LABEL</option>
 				<option value="url">COM_DPCALENDAR_FIELD_URL_LABEL</option>
+				<option value="all_day">COM_DPCALENDAR_FIELD_ALL_DAY_LABEL</option>
 				<option value="show_end_time">COM_DPCALENDAR_FIELD_SHOW_END_TIME_LABEL</option>
 				<option value="scheduling">COM_DPCALENDAR_FIELD_SCHEDULING_LABEL</option>
 				<option value="description">JGLOBAL_DESCRIPTION</option>

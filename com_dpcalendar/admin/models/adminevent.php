@@ -4,20 +4,30 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Language;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
-JLoader::import('joomla.application.component.modeladmin');
 JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
 
-class DPCalendarModelAdminEvent extends JModelAdmin
+class DPCalendarModelAdminEvent extends AdminModel
 {
-	public $typeAlias = 'com_dpcalendar.event';
+	public $typeAlias      = 'com_dpcalendar.event';
 	protected $text_prefix = 'COM_DPCALENDAR';
-	protected $name = 'event';
+	protected $name        = 'event';
 
 	protected $batch_commands = [
 		'assetgroup_id'     => 'batchAccess',
@@ -32,10 +42,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	{
 		parent::populateState();
 
-		$this->setState($this->getName() . '.id', JFactory::getApplication()->input->getInt('e_id'));
+		$this->setState($this->getName() . '.id', Factory::getApplication()->input->getInt('e_id'));
 
-		$app = JFactory::getApplication();
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$app = Factory::getApplication();
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	protected function canDelete($record)
@@ -44,37 +54,35 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			if ($record->state != -2) {
 				return false;
 			}
-			$user     = JFactory::getUser();
+			$user     = Factory::getUser();
 			$calendar = DPCalendarHelper::getCalendar($record->catid);
 
-			if ($calendar->canDelete || ($calendar->canEditOwn && $record->created_by == JFactory::getUser()->id)) {
+			if ($calendar->canDelete || ($calendar->canEditOwn && $record->created_by == Factory::getUser()->id)) {
 				return true;
-			} else {
-				return parent::canDelete($record);
 			}
+			return parent::canDelete($record);
 		}
 	}
 
 	protected function canEditState($record)
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		if (!empty($record->catid)) {
 			return $user->authorise('core.edit.state', 'com_dpcalendar.category.' . (int)$record->catid);
-		} else {
-			return parent::canEditState('com_dpcalendar');
 		}
+		return parent::canEditState('com_dpcalendar');
 	}
 
 	public function getTable($type = 'Event', $prefix = 'DPCalendarTable', $config = [])
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	public function getForm($data = [], $loadData = true)
 	{
 		// Load plugins for form manipulation
-		JPluginHelper::importPlugin('dpcalendar');
+		PluginHelper::importPlugin('dpcalendar');
 
 		// Get the form.
 		$form = $this->loadForm('com_dpcalendar.event', 'event', ['control' => 'jform', 'load_data' => $loadData]);
@@ -111,23 +119,27 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$form->setFieldAttribute('end_date', 'all_day', $item->all_day);
 
 		if (DPCalendarHelper::isFree()) {
-			// Disable fields for display.
-			$form->setFieldAttribute('rrule', 'disabled', 'true');
-			$form->setFieldAttribute('capacity', 'disabled', 'true');
-			$form->setFieldAttribute('capacity_used', 'disabled', 'true');
-			$form->setFieldAttribute('max_tickets', 'disabled', 'true');
-			$form->setFieldAttribute('price', 'disabled', 'true');
-			$form->setFieldAttribute('payment_provider', 'disabled', 'true');
-			$form->setFieldAttribute('booking_assign_user_groups', 'disabled', 'true');
+			foreach (['rrule',
+				'capacity_used',
+				'max_tickets',
+				'booking_closing_date',
+				'booking_series',
+				'booking_waiting_list',
+				'price',
+				'earlybird',
+				'user_discount',
+				'booking_options',
+				'payment_provider',
+				'terms',
+				'booking_assign_user_groups',
+				'booking_information'] as $field) {
+				// Disable fields for display
+				$form->setFieldAttribute($field, 'disabled', 'true');
 
-			// Disable fields while saving.
-			$form->setFieldAttribute('rrule', 'filter', 'unset');
-			$form->setFieldAttribute('capacity', 'filter', 'unset');
-			$form->setFieldAttribute('capacity_used', 'filter', 'unset');
-			$form->setFieldAttribute('max_tickets', 'filter', 'unset');
-			$form->setFieldAttribute('price', 'filter', 'unset');
-			$form->setFieldAttribute('payment_provider', 'filter', 'unset');
-			$form->setFieldAttribute('booking_assign_user_groups', 'filter', 'unset');
+				// Disable fields while saving
+				$form->setFieldAttribute($field, 'filter', 'unset');
+			}
+			$form->setFieldAttribute('capacity', 'disabled', 'true');
 		}
 
 		if (!DPCalendarHelper::isCaptchaNeeded()) {
@@ -170,7 +182,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Check the session for previously entered form data.
 		$data = $app->getUserState('com_dpcalendar.edit.event.data', []);
@@ -191,11 +203,11 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		if (is_array($data)) {
-			$data = new JObject($data);
+			$data = new CMSObject($data);
 		}
 
 		if ($data instanceof stdClass) {
-			$data = new JObject($data);
+			$data = new CMSObject($data);
 		}
 
 		$data->setProperties($this->getDefaultValues($data));
@@ -296,8 +308,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$pk   = (!empty($pk)) ? $pk : $this->getState($this->getName() . '.id');
 		$item = null;
 		if (!empty($pk) && !is_numeric($pk)) {
-			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', [$pk]);
+			PluginHelper::importPlugin('dpcalendar');
+			$tmp = Factory::getApplication()->triggerEvent('onEventFetch', [$pk]);
 			if (!empty($tmp)) {
 				$item = $tmp[0];
 			}
@@ -305,14 +317,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$item = parent::getItem($pk);
 			if ($item != null) {
 				// Convert the params field to an array.
-				$registry = new JRegistry();
+				$registry = new Registry();
 				if (!empty($item->metadata)) {
 					$registry->loadString($item->metadata);
 				}
 				$item->metadata = $registry->toArray();
 
 				// Convert the images field to an array.
-				$registry = new JRegistry();
+				$registry = new Registry();
 				if (!empty($item->images)) {
 					$registry->loadString($item->images);
 				}
@@ -328,7 +340,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 						}
 					}
 
-					$item->tags = new JHelperTags();
+					$item->tags = new TagsHelper();
 					$item->tags->getTagIds($item->id, 'com_dpcalendar.event');
 				}
 				$item->tickets = $this->getTickets($item->id);
@@ -370,7 +382,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			$data['images'] = (string)$registry;
 		}
 
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Migrate subform data to old repeatable format
 		if (isset($data['price']) && is_array($data['price'])) {
@@ -454,7 +466,11 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 		// Only apply the default values on create
 		if (empty($data['id'])) {
-			$data = array_merge($data, $this->getDefaultValues(new JObject($data)));
+			$data = array_merge($data, $this->getDefaultValues(new CMSObject($data)));
+		}
+
+		if (DPCalendarHelper::isFree()) {
+			$data['capacity'] = 0;
 		}
 
 		$success = parent::save($data);
@@ -471,7 +487,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$rows   = $this->getDbo()->loadObjectList();
 		$values = '';
 
-		$fieldModel = JModelLegacy::getInstance('Field', 'FieldsModel', ['ignore_request' => true]);
+		$fieldModel = BaseDatabaseModel::getInstance('Field', 'FieldsModel', ['ignore_request' => true]);
 
 		// Loading the fields
 		$fields = FieldsHelper::getFields('com_dpcalendar.event', $event);
@@ -524,8 +540,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		if (!empty($event->location_ids)) {
-			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+			$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->setState('list.limit', 100);
 			$model->setState('filter.search', 'ids:' . implode(',', $event->location_ids));
 			$event->locations = $model->getItems();
@@ -540,7 +556,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			foreach ($tickets as $ticket) {
 				$language = $app->getLanguage()->getTag();
 				if ($ticket->user_id) {
-					$language = JFactory::getUser($ticket->user_id)->getParam('language') ?: $language;
+					$language = Factory::getUser($ticket->user_id)->getParam('language') ?: $language;
 
 					if (!array_key_exists($language, $langs)) {
 						$l = Language::getInstance($language, $app->get('debug_lang'));
@@ -557,12 +573,12 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 					null,
 					[
 						'ticketLink' => DPCalendarHelperRoute::getTicketRoute($ticket, true),
-						'sitename'   => JFactory::getApplication()->get('sitename'),
-						'user'       => JFactory::getUser()->name
+						'sitename'   => Factory::getApplication()->get('sitename'),
+						'user'       => Factory::getUser()->name
 					]
 				);
 
-				$mailer = JFactory::getMailer();
+				$mailer = Factory::getMailer();
 				$mailer->setSubject($subject);
 				$mailer->setBody($body);
 				$mailer->IsHTML(true);
@@ -588,7 +604,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			return $return;
 		}
 
-		$user  = JFactory::getUser();
+		$user  = Factory::getUser();
 		$table = $this->getTable();
 		foreach ($pks as $pk) {
 			if ($user->authorise('core.edit', $contexts[$pk])) {
@@ -597,7 +613,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 
 				// If we are a recurring event, then save the tags on the children too
 				if ($table->original_id == '-1') {
-					$newTags = new JHelperTags();
+					$newTags = new TagsHelper();
 					$newTags = $newTags->getItemTags('com_dpcalendar.event', $table->id);
 					$newTags = array_map(function ($t) {
 						return $t->id;
@@ -723,8 +739,8 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		if (empty($eventId) || DPCalendarHelper::isFree()) {
 			return [];
 		}
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		$ticketsModel = JModelLegacy::getInstance('Tickets', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$ticketsModel = BaseDatabaseModel::getInstance('Tickets', 'DPCalendarModel');
 		$ticketsModel->getState();
 		$ticketsModel->setState('filter.event_id', $eventId);
 		$ticketsModel->setState('list.limit', 10000);
@@ -732,7 +748,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		return $ticketsModel->getItems();
 	}
 
-	private function getDefaultValues(JObject $item)
+	private function getDefaultValues(CMSObject $item)
 	{
 		$params = $this->getParams();
 		$data   = [];
@@ -798,10 +814,10 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$params = $this->getState('params');
 
 		if (!$params) {
-			if (JFactory::getApplication()->isClient('site')) {
-				$params = JFactory::getApplication()->getParams();
+			if (Factory::getApplication()->isClient('site')) {
+				$params = Factory::getApplication()->getParams();
 			} else {
-				$params = JComponentHelper::getParams('com_dpcalendar');
+				$params = ComponentHelper::getParams('com_dpcalendar');
 			}
 		}
 
@@ -811,7 +827,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 	private function sendMail($action, $events)
 	{
 		// The current user
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		// The event authors
 		$authors = [];
@@ -835,18 +851,18 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		}
 
 		// Load the language
-		JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
 		// Create the subject
-		$subject = DPCalendarHelper::renderEvents($events, JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_' . strtoupper($action)));
+		$subject = DPCalendarHelper::renderEvents($events, Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_' . strtoupper($action)));
 
 		// Create the body
 		$body = DPCalendarHelper::renderEvents(
 			$events,
-			JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_' . strtoupper($action) . '_BODY'),
+			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_' . strtoupper($action) . '_BODY'),
 			null,
 			[
-				'sitename' => JFactory::getApplication()->get('sitename'),
+				'sitename' => Factory::getApplication()->get('sitename'),
 				'user'     => $user->name
 			]
 		);
@@ -862,14 +878,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		$authors = array_unique($authors);
 
 		$extraVars = [
-			'sitename' => JFactory::getApplication()->get('sitename'),
+			'sitename' => Factory::getApplication()->get('sitename'),
 			'user'     => $user->name
 		];
 
 		// Create the subject
 		$subject = DPCalendarHelper::renderEvents(
 			$events,
-			JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_SUBJECT_' . strtoupper($action)),
+			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_SUBJECT_' . strtoupper($action)),
 			null,
 			$extraVars
 		);
@@ -877,14 +893,14 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 		// Create the body
 		$body = DPCalendarHelper::renderEvents(
 			$events,
-			JText::_('COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_' . strtoupper($action) . '_BODY'),
+			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_' . strtoupper($action) . '_BODY'),
 			null,
 			$extraVars
 		);
 
 		// Loop over the authors to send the notification
 		foreach ($authors as $author) {
-			$u = \JUser::getTable();
+			$u = User::getTable();
 
 			// Load the user
 			if (!$u->load($author)) {
@@ -892,7 +908,7 @@ class DPCalendarModelAdminEvent extends JModelAdmin
 			}
 
 			// Send the mail
-			$mailer = \JFactory::getMailer();
+			$mailer = Factory::getMailer();
 			$mailer->setSubject($subject);
 			$mailer->setBody($body);
 			$mailer->IsHTML(true);

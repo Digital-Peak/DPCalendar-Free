@@ -6,6 +6,7 @@
  */
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
@@ -1133,6 +1134,10 @@ class PlgSampledataDPCalendar extends CMSPlugin
 
 	private function createEvent($originalData)
 	{
+		if (array_key_exists('capacity', $originalData) && DPCalendarHelper::isFree()) {
+			unset($originalData['capacity']);
+		}
+
 		if (!empty($originalData['location_ids']) && !is_array($originalData['location_ids'])) {
 			$originalData['location_ids'] = [$originalData['location_ids']];
 		}

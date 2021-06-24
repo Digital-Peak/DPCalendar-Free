@@ -4,8 +4,15 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\Booking;
+use DPCalendar\HTML\Block\Icon;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
 
 $event = $displayData['event'];
 if (!$event) {
@@ -13,23 +20,23 @@ if (!$event) {
 }
 $params = $displayData['params'];
 if (!$params) {
-	$params = new \Joomla\Registry\Registry();
+	$params = new Registry();
 }
 
 // Compile the return url
 $return = $displayData['input']->getInt('Itemid', null);
 if (!empty($return)) {
-	$uri    = clone JUri::getInstance();
+	$uri    = clone Uri::getInstance();
 	$uri    = $uri->toString(['scheme', 'host', 'port']);
 	$return = $uri . $displayData['router']->route('index.php?Itemid=' . $return, false);
 }
 
 $calendar = DPCalendarHelper::getCalendar($event->catid);
-$user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getUser();
+$user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUser();
 ?>
 <div class="dp-event-tooltip">
 	<div class="dp-event-tooltip__date">
-		<?php echo $displayData['layoutHelper']->renderLayout(
+	<?php echo $displayData['layoutHelper']->renderLayout(
 			'event.datestring',
 			[
 				'event'      => $event,
@@ -49,15 +56,15 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 	<?php } ?>
 	<?php if ($params->get('tooltip_show_description', 1) && $params->get('description_length', 100)) { ?>
 		<div class="dp-event-tooltip__description">
-			<?php echo JHtml::_('string.truncateComplex', $event->description, $params->get('description_length', 100)); ?>
+			<?php echo HTMLHelper::_('string.truncateComplex', $event->description, $params->get('description_length', 100)); ?>
 		</div>
 	<?php } ?>
 	<div class="dp-event-tooltip__actions dp-button-bar">
-		<?php if (\DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+		<?php if (Booking::openForBooking($event)) { ?>
 			<a href="<?php echo $displayData['router']->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-event-tooltip__action dp-link">
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
-					['icon' => \DPCalendar\HTML\Block\Icon::PLUS, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_BOOK')]
+					['icon' => Icon::PLUS, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_BOOK')]
 				); ?>
 			</a>
 		<?php } ?>
@@ -66,15 +73,15 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
 					[
-						'icon'  => \DPCalendar\HTML\Block\Icon::LOCK,
-						'title' => JText::sprintf('COM_DPCALENDAR_VIEW_EVENT_CHECKED_OUT_BY', JFactory::getUser($event->checked_out)->name)
+						'icon'  => Icon::LOCK,
+						'title' => Text::sprintf('COM_DPCALENDAR_VIEW_EVENT_CHECKED_OUT_BY', Factory::getUser($event->checked_out)->name)
 					]
 				); ?>
 			<?php } else { ?>
 				<a href="<?php echo $displayData['router']->getEventFormRoute($event->id, $return); ?>" class="dp-event-tooltip__action dp-link">
 					<?php echo $displayData['layoutHelper']->renderLayout(
 						'block.icon',
-						['icon' => \DPCalendar\HTML\Block\Icon::EDIT, 'title' => $displayData['translator']->translate('JACTION_EDIT')]
+						['icon' => Icon::EDIT, 'title' => $displayData['translator']->translate('JACTION_EDIT')]
 					); ?>
 				</a>
 			<?php } ?>
@@ -82,9 +89,9 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 		<?php if ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
 			<a href="<?php echo $displayData['router']->getEventDeleteRoute($event->id, $return); ?>"
 			   class="dp-event-tooltip__action dp-event-tooltip__action-delete dp-link">
-				<?php echo $displayData['layoutHelper']->renderLayout(
+			   <?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
-					['icon' => \DPCalendar\HTML\Block\Icon::DELETE, 'title' => $displayData['translator']->translate('JACTION_DELETE')]
+					['icon' => Icon::DELETE, 'title' => $displayData['translator']->translate('JACTION_DELETE')]
 				); ?>
 			</a>
 		<?php } ?>
@@ -92,10 +99,7 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 			<span class="dp-event-tooltip__capacity">
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
-					[
-						'icon'  => \DPCalendar\HTML\Block\Icon::USERS,
-						'title' => $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_LABEL')
-					]
+					['icon' => Icon::USERS, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_LABEL')]
 				); ?>
 				<?php if ($event->capacity === null) { ?>
 					<?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED'); ?>
@@ -106,12 +110,9 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : JFactory::getU
 			<span class="dp-event-tooltip__price">
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
-					[
-						'icon'  => \DPCalendar\HTML\Block\Icon::MONEY,
-						'title' => $displayData['translator']->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL')
-					]
+					['icon' => Icon::MONEY, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL')]
 				); ?>
-				<?php echo $displayData['translator']->translate($event->price ? 'COM_DPCALENDAR_VIEW_CALENDAR_PAID_EVENT' : 'COM_DPCALENDAR_VIEW_CALENDAR_FREE_EVENT'); ?>
+				<?php echo $displayData['translator']->translate('COM_DPCALENDAR_VIEW_CALENDAR_' . ($event->price ? 'PAID' : 'FREE') . '_EVENT'); ?>
 			</span>
 		<?php } ?>
 	</div>

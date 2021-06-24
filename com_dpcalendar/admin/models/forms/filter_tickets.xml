@@ -3,7 +3,7 @@
 	<fields name="filter">
 		<field name="search" type="text" label="" description=""
 			hint="JSEARCH_FILTER" />
-		<field name="state" type="status" label="COM_CONTENT_FILTER_PUBLISHED"
+		<field name="state" type="list" label="COM_CONTENT_FILTER_PUBLISHED"
 			description="COM_CONTENT_FILTER_PUBLISHED_DESC" onchange="this.form.submit();">
 			<option value="">JOPTION_SELECT_PUBLISHED</option>
 			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>

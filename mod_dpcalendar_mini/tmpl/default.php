@@ -24,9 +24,10 @@ $compact = $params->get('compact_events', 2) == 1 ? 'compact' : 'expanded';
 		<?php echo $layoutHelper->renderLayout('block.loader', $displayData); ?>
 	</div>
 	<div class="mod-dpcalendar-mini__calendar dp-calendar"
-		 data-popupwidth="<?php echo $params->get('popup_width'); ?>"
-		 data-popupheight="<?php echo $params->get('popup_height'); ?>"
-		 data-options="DPCalendar.module.mini.<?php echo $module->id; ?>.options"></div>
+		data-popupwidth="<?php echo $params->get('popup_width'); ?>"
+		data-popupheight="<?php echo $params->get('popup_height'); ?>"
+	 	data-hidden-days='<?php echo json_encode(\Joomla\Utilities\ArrayHelper::toInteger($params->get('hidden_days', []))); ?>'
+		data-options="DPCalendar.module.mini.<?php echo $module->id; ?>.options"></div>
 	<?php require JModuleHelper::getLayoutPath('mod_dpcalendar_mini', 'default_map'); ?>
 	<?php require JModuleHelper::getLayoutPath('mod_dpcalendar_mini', 'default_icons'); ?>
 </div>

@@ -256,6 +256,19 @@ class DPCalendarRouter extends JComponentRouterView
 			$calIds = $active->getParams()->get('ids');
 		}
 
+		if (count($calIds) === 1 && $calIds[0] == -1) {
+			// Fetch external calendars
+			JPluginHelper::importPlugin('dpcalendar');
+			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+			if (!empty($tmp)) {
+				foreach ($tmp as $tmpCalendars) {
+					foreach ($tmpCalendars as $calendar) {
+						$calIds[] = $calendar->id;
+					}
+				}
+			}
+		}
+
 		foreach ($calIds as $index => $calId) {
 			// If the event belongs to the external calendar, return the segment as it is the id
 			if (!is_numeric($calId) && strpos($segment, $calId) === 0) {

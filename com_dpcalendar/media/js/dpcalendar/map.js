@@ -177,7 +177,7 @@
 					return;
 				}
 				[].slice.call(locationsContainer.querySelectorAll('.dp-location__details')).forEach((location) => {
-					const data = location.dataset;
+					const data = Object.assign({}, location.dataset);
 					const desc = location.parentElement.querySelector('.dp-location__description');
 					if (!data.description && desc) {
 						data.description = desc.innerHTML;

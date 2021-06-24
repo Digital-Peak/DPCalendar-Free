@@ -55,20 +55,6 @@
 	margin-right: .7rem;
 }
 
-.mod-dpcalendar-upcoming-horizontal .dp-link_cta {
-	display: inline-block;
-	margin-top: 10px;
-	padding: 5px 15px;
-}
-
-.mod-dpcalendar-upcoming-horizontal .dp-link_cta.dp-button {
-	background-color: #2D9EDE;
-	font-weight: bold;
-	text-transform: uppercase;
-	color: #000000;
-	border: 0;
-}
-
 .mod-dpcalendar-upcoming-horizontal__date {
 	font-style: italic;
 	padding: 2px 0;
@@ -97,8 +83,26 @@
 	display: inline-block;
 }
 
-.mod-dpcalendar-upcoming-horizontal .dp-location__description {
+.mod-dpcalendar-upcoming-horizontal .dp-location__description, .mod-dpcalendar-upcoming-horizontal .dp-location_hidden {
 	display: none;
+}
+
+.mod-dpcalendar-upcoming-horizontal .dp-link {
+	margin-bottom: 0.7rem;
+}
+
+.mod-dpcalendar-upcoming-horizontal .dp-link_cta {
+	display: inline-block;
+	margin-top: 10px;
+	padding: 5px 15px;
+}
+
+.mod-dpcalendar-upcoming-horizontal .dp-link_cta.dp-button {
+	background-color: #2D9EDE;
+	font-weight: bold;
+	text-transform: uppercase;
+	color: #000000;
+	border: 0;
 }
 
 .mod-dpcalendar-upcoming-horizontal__map {

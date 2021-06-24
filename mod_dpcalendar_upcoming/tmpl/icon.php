@@ -43,9 +43,11 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 						<?php } ?>
 						<?php if (($params->get('show_location') || $params->get('show_map')) && isset($event->locations) && $event->locations) { ?>
 							<div class="mod-dpcalendar-upcoming-icon__location">
-								<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
+								<?php if ($params->get('show_location')) { ?>
+									<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
+								<?php } ?>
 								<?php foreach ($event->locations as $location) { ?>
-									<div class="dp-location">
+									<div class="dp-location<?php echo !$params->get('show_location') ? ' dp-location_hidden' : ''; ?>">
 										<div class="dp-location__details"
 											 data-latitude="<?php echo $location->latitude; ?>"
 											 data-longitude="<?php echo $location->longitude; ?>"
@@ -114,8 +116,9 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 							<figure class="dp-figure">
 								<a href="<?php echo $event->realUrl; ?>" class="dp-event-url dp-link">
 									<img class="dp-image" src="<?php echo $event->images->image_intro; ?>"
-										 alt="<?php echo $event->images->image_intro_alt; ?>"
-										 loading="lazy" <?php echo $event->images->image_intro_dimensions; ?>>
+										aria-label="<?php echo $event->images->image_intro_alt; ?>"
+										alt="<?php echo $event->images->image_intro_alt; ?>"
+										loading="lazy" <?php echo $event->images->image_intro_dimensions; ?>>
 								</a>
 								<?php if ($event->images->image_intro_caption) { ?>
 									<figcaption class="dp-figure__caption"><?php echo $event->images->image_intro_caption; ?></figcaption>

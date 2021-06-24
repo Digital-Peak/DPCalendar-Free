@@ -8,4 +8,4 @@ defined('_JEXEC') or die();
 
 $authorName = $displayData['event']->created_by_alias ?: $displayData['userHelper']->getUser($displayData['event']->created_by)->name;
 ?>
-<meta itemprop="performer" content="<?php echo htmlentities($authorName); ?>">
+<meta itemprop="performer" content="<?php echo htmlentities($authorName, ENT_COMPAT, 'UTF-8'); ?>">

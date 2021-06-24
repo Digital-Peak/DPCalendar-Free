@@ -4,10 +4,15 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Access\Access;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\User\User;
 
 JLoader::import('components.com_dpcalendar.models.adminevent', JPATH_ADMINISTRATOR);
@@ -90,53 +95,53 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 
 	protected function populateState()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Load state from the request.
-		$pk = JFactory::getApplication()->input->getVar('e_id');
+		$pk = Factory::getApplication()->input->getVar('e_id');
 		$this->setState('event.id', $pk);
 
 		// Add compatibility variable for default naming conventions.
 		$this->setState('form.id', $pk);
 
-		$categoryId = JFactory::getApplication()->input->getVar('catid');
+		$categoryId = Factory::getApplication()->input->getVar('catid');
 		$this->setState('event.catid', $categoryId);
 
-		$return = JFactory::getApplication()->input->getVar('return', null, 'default', 'base64');
+		$return = Factory::getApplication()->input->getVar('return', null, 'default', 'base64');
 
-		if (!JUri::isInternal(base64_decode($return))) {
+		if (!Uri::isInternal(base64_decode($return))) {
 			$return = null;
 		}
 
 		$this->setState('return_page', base64_decode($return));
 
-		$params = method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
+		$params = method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
 		if (!$params->get('event_form_fields_order_')) {
 			$params->set(
 				'event_form_fields_order_',
-				JComponentHelper::getParams('com_dpcalendar')->get('event_form_fields_order_', new stdClass())
+				ComponentHelper::getParams('com_dpcalendar')->get('event_form_fields_order_', new stdClass())
 			);
 		}
 		$this->setState('params', $params);
 
-		$this->setState('layout', JFactory::getApplication()->input->getCmd('layout'));
+		$this->setState('layout', Factory::getApplication()->input->getCmd('layout'));
 	}
 
 	public function getForm($data = [], $loadData = true)
 	{
-		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
+		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 
 		return parent::getForm($data, $loadData);
 	}
 
-	protected function preprocessForm(JForm $form, $data, $group = 'content')
+	protected function preprocessForm(Form $form, $data, $group = 'content')
 	{
 		$return = parent::preprocessForm($form, $data, $group);
 		$form->setFieldAttribute('user_id', 'type', 'hidden');
 
 		$params = $this->getState('params');
 		if (!$params) {
-			$params = JFactory::getApplication()->getParams();
+			$params = Factory::getApplication()->getParams();
 		}
 
 		$form->setFieldAttribute('start_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
@@ -147,7 +152,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		$form->setFieldAttribute('xreference', 'readonly', true);
 
 		// User field doesn't work on front
-		if (JFactory::getApplication()->isClient('site')) {
+		if (Factory::getApplication()->isClient('site')) {
 			$form->setFieldAttribute('created_by', 'type', 'sql');
 			$form->setFieldAttribute('created_by', 'key_field', 'value');
 			$form->setFieldAttribute('created_by', 'value_field', 'text');

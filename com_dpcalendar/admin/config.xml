@@ -688,8 +688,7 @@
 		       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 
 		<field name="event_form_hidden_tabs" type="list" multiple="true"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_DESC">
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_DESC">
 			<option value="location">COM_DPCALENDAR_LOCATION</option>
 			<option value="booking">COM_DPCALENDAR_BOOKING</option>
 			<option value="publishing">COM_DPCALENDAR_PUBLISHING</option>
@@ -698,11 +697,11 @@
 			<option value="metadata:jmetadata">JGLOBAL_FIELDSET_METADATA_OPTIONS</option>
 		</field>
 		<field name="event_form_hidden_fields" type="list" multiple="true"
-		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_LABEL"
-		       description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_DESC">
+		       label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_DESC">
 			<option value="catid">COM_DPCALENDAR_CALENDAR</option>
 			<option value="color">COM_DPCALENDAR_FIELD_COLOR_LABEL</option>
 			<option value="url">COM_DPCALENDAR_FIELD_URL_LABEL</option>
+			<option value="all_day">COM_DPCALENDAR_FIELD_ALL_DAY_LABEL</option>
 			<option value="show_end_time">COM_DPCALENDAR_FIELD_SHOW_END_TIME_LABEL</option>
 			<option value="scheduling">COM_DPCALENDAR_FIELD_SCHEDULING_LABEL</option>
 			<option value="description">JGLOBAL_DESCRIPTION</option>

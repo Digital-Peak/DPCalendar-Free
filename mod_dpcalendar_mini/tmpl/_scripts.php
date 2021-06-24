@@ -144,7 +144,7 @@ $options['views']['week']  = [
 	'dayHeaderFormat'        => $dateHelper->convertPHPDateToJS($params->get('columnformat_week', 'D n/j')),
 	'slotDuration'           => $dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
 	'slotLabelInterval'      => $dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
-	'slotLabelFormat'        => $dateHelper->convertPHPDateToJS($params->get('axisformat_week', 'D j H:i')),
+	'slotLabelFormat'        => $dateHelper->convertPHPDateToJS($params->get('axisformat_week', 'H:i')),
 	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
 ];
 $options['views']['day']   = [

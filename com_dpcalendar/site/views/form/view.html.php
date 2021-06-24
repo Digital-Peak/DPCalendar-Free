@@ -121,8 +121,8 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 				continue;
 			}
 
-			if ($fieldName == 'catid') {
-				$this->form->setFieldAttribute('catid', 'type', 'hidden');
+			if (in_array($fieldName, ['catid', 'all_day'])) {
+				$this->form->setFieldAttribute($fieldName, 'type', 'hidden');
 				continue;
 			}
 

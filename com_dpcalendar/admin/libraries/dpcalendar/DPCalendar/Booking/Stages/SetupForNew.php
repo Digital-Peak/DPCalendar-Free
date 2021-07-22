@@ -85,6 +85,10 @@ class SetupForNew implements StageInterface
 
 		// Do not force state when not on front and is available
 		if (!$this->application->isClient('administrator') || empty($payload->data['state'])) {
+			if (!array_key_exists('state', $payload->data)) {
+				$payload->data['state'] = 0;
+			}
+
 			// When skipping the review step always, set state to tickets reviewed
 			if ($payload->data['state'] == 0
 				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 0) {
@@ -128,7 +132,7 @@ class SetupForNew implements StageInterface
 			$payload->data['coupon_id'] = 0;
 		}
 
-		$taxRate = $this->taxRateModel->getItemByCountry($payload->data['country']);
+		$taxRate = !empty($payload->data['country']) ? $this->taxRateModel->getItemByCountry($payload->data['country']) : null;
 		if ($taxRate) {
 			$payload->data['tax']      = ($payload->data['price'] / 100) * $taxRate->rate;
 			$payload->data['price']    = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);

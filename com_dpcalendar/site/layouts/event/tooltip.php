@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Booking;
@@ -36,7 +37,7 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUs
 ?>
 <div class="dp-event-tooltip">
 	<div class="dp-event-tooltip__date">
-	<?php echo $displayData['layoutHelper']->renderLayout(
+		<?php echo $displayData['layoutHelper']->renderLayout(
 			'event.datestring',
 			[
 				'event'      => $event,
@@ -45,6 +46,7 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUs
 			]
 		); ?>
 	</div>
+	<div class="dp-event-tooltip__calendar">[<?php echo $calendar ? $calendar->title : $this->event->catid; ?>]</div>
 	<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
 		<?php echo $event->title; ?>
 	</a>
@@ -88,8 +90,8 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUs
 		<?php } ?>
 		<?php if ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
 			<a href="<?php echo $displayData['router']->getEventDeleteRoute($event->id, $return); ?>"
-			   class="dp-event-tooltip__action dp-event-tooltip__action-delete dp-link">
-			   <?php echo $displayData['layoutHelper']->renderLayout(
+				class="dp-event-tooltip__action dp-event-tooltip__action-delete dp-link">
+				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
 					['icon' => Icon::DELETE, 'title' => $displayData['translator']->translate('JACTION_DELETE')]
 				); ?>

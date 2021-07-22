@@ -528,18 +528,27 @@
 	vertical-align: -2px;
 }
 
+.dp-event-tooltip__date, .dp-event-tooltip__calendar {
+	display: inline-block;
+}
+
+.dp-event-tooltip__calendar {
+	margin-left: 0.2rem;
+	font-weight: bold;
+}
+
 .dp-event-tooltip__link {
-	margin-right: .4rem;
+	display: block;
 }
 
 .dp-event-tooltip__actions {
 	border-top: 1px solid rgba(0, 0, 0, 0.5);
-	margin-top: 5px;
-	padding-top: 4px;
+	margin-top: 0.5rem;
+	padding-top: 0.5rem;
 }
 
 .dp-event-tooltip__action {
-	padding: 2px;
+	padding: 0.2rem;
 	opacity: .85;
 }
 
@@ -549,7 +558,7 @@
 }
 
 .dp-event-tooltip__capacity {
-	margin-right: 5px;
+	margin-right: 0.5rem;
 }
 
 .tippy-tooltip {

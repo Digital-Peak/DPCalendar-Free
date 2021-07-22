@@ -8,7 +8,7 @@ namespace DPCalendar\Plugin;
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\HTTP;
+use DigitalPeak\ThinHTTP as HTTP;
 use DPCalendar\Helper\LayoutHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
 use DPCalendar\Translator\Translator;

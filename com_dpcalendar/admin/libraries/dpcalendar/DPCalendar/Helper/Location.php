@@ -4,19 +4,21 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use DigitalPeak\ThinHTTP as HTTP;
 use Joomla\Registry\Registry;
 
 \JTable::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
 
 class Location
 {
-	private static $locationCache = null;
+	private static $locationCache    = null;
 	private static $nomatimLanguages = ['en', 'de', 'it', 'fr'];
-	private static $googleLanguages = [
+	private static $googleLanguages  = [
 		'ar',
 		'eu',
 		'bg',
@@ -572,7 +574,7 @@ class Location
 
 		$lang = \DPCalendarHelper::getFrLanguage();
 		$lang = substr($lang, 0, strpos($lang, '-'));
-		$url  .= '&language=' . $lang;
+		$url .= '&language=' . $lang;
 
 		$tmp = (new HTTP())->get($url);
 		if (!$tmp || empty($tmp->features)) {

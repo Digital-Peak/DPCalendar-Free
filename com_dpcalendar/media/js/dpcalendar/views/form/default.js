@@ -469,7 +469,7 @@
 			setup$1();
 			setup();
 			[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color):not(#jform_tags):not(.dp-timezone__select)')).forEach((select) => {
-				if (select.options.length > 100) {
+				if (select.options.length > 1000) {
 					return;
 				}
 				select._choicejs = new Choices(

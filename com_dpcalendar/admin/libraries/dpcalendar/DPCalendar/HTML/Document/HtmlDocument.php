@@ -4,11 +4,14 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\HTML\Document;
 
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
 
 /**
  * Html document.
@@ -18,7 +21,7 @@ class HtmlDocument
 	public function loadScriptFile($path, $extension = 'com_dpcalendar')
 	{
 		if (strpos($path, '//') === 0 || strpos($path, 'https://') === 0) {
-			\JFactory::getDocument()->addScript($path, [], ['defer' => true]);
+			Factory::getDocument()->addScript($path, [], ['defer' => true]);
 
 			return;
 		}
@@ -27,30 +30,30 @@ class HtmlDocument
 		if (!$coreLoaded) {
 			$coreLoaded = true;
 			// Load core
-			\JHtml::_('behavior.core');
+			HTMLHelper::_('behavior.core');
 
 			// Load DPCalendar loader
 			$this->loadScriptFile('dpcalendar/loader.js');
 		}
 
 		$path = str_replace('.js', '.min.js', $path);
-		\JHtml::_('script', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto'], ['defer' => true]);
+		HTMLHelper::_('script', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto'], ['defer' => true]);
 	}
 
 	public function addScript($content)
 	{
-		\JFactory::getApplication()->getDocument()->addScriptDeclaration($content);
+		Factory::getApplication()->getDocument()->addScriptDeclaration($content);
 	}
 
 	public function addScriptOptions($key, $options)
 	{
-		\JFactory::getApplication()->getDocument()->addScriptOptions('DPCalendar.' . $key, $options);
+		Factory::getApplication()->getDocument()->addScriptOptions('DPCalendar.' . $key, $options);
 	}
 
 	public function loadStyleFile($path, $extension = 'com_dpcalendar')
 	{
 		$path = str_replace('.css', '.min.css', $path);
-		\JHtml::_('stylesheet', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto']);
+		HTMLHelper::_('stylesheet', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto']);
 	}
 
 	public function addStyle($content)
@@ -59,7 +62,7 @@ class HtmlDocument
 			return;
 		}
 
-		\JFactory::getApplication()->getDocument()->addStyleDeclaration($content);
+		Factory::getApplication()->getDocument()->addStyleDeclaration($content);
 	}
 
 	private static function getGoogleLanguage()
@@ -122,7 +125,7 @@ class HtmlDocument
 			'zh-CN',
 			'zh-TW'
 		];
-		$lang      = DPCalendarHelper::getFrLanguage();
+		$lang = DPCalendarHelper::getFrLanguage();
 		if (!in_array($lang, $languages)) {
 			$lang = substr($lang, 0, strpos($lang, '-'));
 		}

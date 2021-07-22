@@ -20,10 +20,10 @@ if ($calendarLink && $this->params->get('event_show_calendar', '1') == '2') {
 <dl class="dp-description">
 	<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_CALENDAR'); ?></dt>
 	<dd class="dp-description__description">
-		<?php if ($calendarLink) { ?>
+		<?php if ($calendarLink && $calendar) { ?>
 			<a href="<?php echo $calendarLink; ?>" class="dp-link"><?php echo $calendar->title; ?></a>
 		<?php } else { ?>
-			<?php echo $calendar != null ? $calendar->title : $this->event->catid; ?>
+			<?php echo $calendar ? $calendar->title : $this->event->catid; ?>
 		<?php } ?>
 	</dd>
 </dl>

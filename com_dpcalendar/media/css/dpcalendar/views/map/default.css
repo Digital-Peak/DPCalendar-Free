@@ -199,18 +199,27 @@
 	vertical-align: -2px;
 }
 
+.com-dpcalendar-map .dp-event-tooltip__date, .com-dpcalendar-map .dp-event-tooltip__calendar {
+	display: inline-block;
+}
+
+.com-dpcalendar-map .dp-event-tooltip__calendar {
+	margin-left: 0.2rem;
+	font-weight: bold;
+}
+
 .com-dpcalendar-map .dp-event-tooltip__link {
-	margin-right: .4rem;
+	display: block;
 }
 
 .com-dpcalendar-map .dp-event-tooltip__actions {
 	border-top: 1px solid rgba(0, 0, 0, 0.5);
-	margin-top: 5px;
-	padding-top: 4px;
+	margin-top: 0.5rem;
+	padding-top: 0.5rem;
 }
 
 .com-dpcalendar-map .dp-event-tooltip__action {
-	padding: 2px;
+	padding: 0.2rem;
 	opacity: .85;
 }
 
@@ -220,7 +229,7 @@
 }
 
 .com-dpcalendar-map .dp-event-tooltip__capacity {
-	margin-right: 5px;
+	margin-right: 0.5rem;
 }
 
 .com-dpcalendar-map .dp-map_consent {

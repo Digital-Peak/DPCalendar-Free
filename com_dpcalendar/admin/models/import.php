@@ -7,7 +7,7 @@
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
-use DPCalendar\Helper\HTTP;
+use DigitalPeak\ThinHTTP as HTTP;
 use Joomla\Registry\Registry;
 
 JLoader::import('joomla.application.component.modellist');

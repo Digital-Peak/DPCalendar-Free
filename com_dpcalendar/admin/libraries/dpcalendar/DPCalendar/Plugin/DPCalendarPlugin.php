@@ -10,7 +10,7 @@ namespace DPCalendar\Plugin;
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
-use DPCalendar\Helper\HTTP;
+use DigitalPeak\ThinHTTP as HTTP;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Sabre\VObject\Parser\Parser;

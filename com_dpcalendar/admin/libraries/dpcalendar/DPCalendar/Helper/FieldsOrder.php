@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
@@ -39,8 +40,16 @@ class FieldsOrder
 
 		$bookingFields = array_merge($bookingFields, $booking->jcfields);
 
+		// Adjust country when it is the value
+		$order = $params->get('booking_fields_order', new \stdClass());
+		foreach ($order as $index => $field) {
+			if ($field->field == 'country') {
+				$order->{$index}->field = 'country' . (!empty($booking->country_code_value) ? '_code_value' : '');
+			}
+		}
+
 		// Sort the fields
-		\DPCalendar\Helper\DPCalendarHelper::sortFields($bookingFields, $params->get('booking_fields_order', new \stdClass()));
+		DPCalendarHelper::sortFields($bookingFields, $order);
 
 		// Prepare the booking fields
 		foreach ($bookingFields as $key => $field) {
@@ -103,7 +112,15 @@ class FieldsOrder
 
 		$ticketFields = array_merge($ticketFields, $ticket->jcfields);
 
-		\DPCalendar\Helper\DPCalendarHelper::sortFields($ticketFields, $params->get('ticket_fields_order', new \stdClass()));
+		// Adjust caountry when it it the value
+		$order = $params->get('ticket_fields_order', new \stdClass());
+		foreach ($order as $index => $field) {
+			if ($field->field == 'country') {
+				$order->{$index}->field = 'country' . (!empty($ticket->country_code_value) ? '_code_value' : '');
+			}
+		}
+
+		DPCalendarHelper::sortFields($ticketFields, $order);
 
 		foreach ($ticketFields as $key => $field) {
 			if (!$params->get('ticket_show_' . $field->name, 1)) {

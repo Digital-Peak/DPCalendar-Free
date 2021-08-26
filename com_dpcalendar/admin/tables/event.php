@@ -200,6 +200,11 @@ class DPCalendarTableEvent extends JTable
 			$this->images = json_encode($images);
 		}
 
+		// On some front end templates the color is set with none
+		if ($this->color == 'none') {
+			$this->color = '';
+		}
+
 		// Attempt to store the user data.
 		$success = parent::store(true);
 		if ($success) {

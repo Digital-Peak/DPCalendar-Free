@@ -11,6 +11,8 @@ defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
 use DigitalPeak\ThinHTTP as HTTP;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Sabre\VObject\Parser\Parser;
@@ -29,7 +31,7 @@ use Sabre\VObject\Reader;
 /**
  * This is the base class for the DPCalendar plugins.
  */
-abstract class DPCalendarPlugin extends \JPlugin
+abstract class DPCalendarPlugin extends CMSPlugin
 {
 	public $extCalendarsCache   = null;
 	protected $identifier       = null;
@@ -104,13 +106,13 @@ abstract class DPCalendarPlugin extends \JPlugin
 	 * - length-type: The length type in kilometers or miles
 	 *
 	 * @param string   $content
-	 * @param \JDate   $startDate
-	 * @param \JDate   $endDate
+	 * @param Date     $startDate
+	 * @param Date     $endDate
 	 * @param Registry $options
 	 *
 	 * @return array
 	 */
-	public function fetchEvents($calendarId, \JDate $startDate = null, \JDate $endDate = null, Registry $options)
+	public function fetchEvents($calendarId, Date $startDate = null, Date $endDate = null, Registry $options)
 	{
 		$s = $startDate;
 		if ($s) {
@@ -232,10 +234,10 @@ abstract class DPCalendarPlugin extends \JPlugin
 		usort(
 			$events,
 			function ($event1, $event2) use ($order) {
-				$first  = $event1;
+				$first = $event1;
 				$second = $event2;
 				if (strtolower($order) == 'desc') {
-					$first  = $event2;
+					$first = $event2;
 					$second = $event1;
 				}
 
@@ -303,7 +305,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		return $calendars;
 	}
 
-	protected function getContent($calendarId, \JDate $startDate = null, \JDate $endDate = null, Registry $options)
+	protected function getContent($calendarId, Date $startDate = null, Date $endDate = null, Registry $options)
 	{
 		$calendar = $this->getDbCal($calendarId);
 		if (empty($calendar)) {
@@ -400,7 +402,7 @@ abstract class DPCalendarPlugin extends \JPlugin
 		}
 	}
 
-	public function onEventsFetch($calendarId, \JDate $startDate = null, \JDate $endDate = null, Registry $options = null)
+	public function onEventsFetch($calendarId, Date $startDate = null, Date $endDate = null, Registry $options = null)
 	{
 		if (strpos($calendarId, $this->identifier) !== 0) {
 			return [];

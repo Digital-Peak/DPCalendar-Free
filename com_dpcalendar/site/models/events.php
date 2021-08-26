@@ -288,7 +288,7 @@ class DPCalendarModelEvents extends JModelList
 		$stateOwner = $this->getState('filter.state_owner') ? ' or a.created_by = ' . $user->id : '';
 		if (is_numeric($state)) {
 			$query->where('(a.state = ' . (int)$state . $stateOwner . ')');
-		} else if (is_array($state)) {
+		} elseif (is_array($state)) {
 			ArrayHelper::toInteger($state);
 			$query->where('(a.state in (' . implode(',', $state) . ')' . $stateOwner . ')');
 		}
@@ -321,22 +321,22 @@ class DPCalendarModelEvents extends JModelList
 			// Timed events must be searched in UTC timezone
 			$startDateString = $db->quote($startDate->toSql());
 			$endDateString   = $db->quote($endDate->toSql());
-			$dateCondition   .= '(a.all_day = 0 and a.start_date between ' . $startDateString . ' and ' . $endDateString . ') ';
-			$dateCondition   .= 'or (a.all_day = 0 and a.end_date between ' . $startDateString . ' and ' . $endDateString . ') ';
-			$dateCondition   .= 'or (a.all_day = 0 and a.start_date < ' . $startDateString . ' and a.end_date > ' . $endDateString . ') ';
+			$dateCondition .= '(a.all_day = 0 and a.start_date between ' . $startDateString . ' and ' . $endDateString . ') ';
+			$dateCondition .= 'or (a.all_day = 0 and a.end_date between ' . $startDateString . ' and ' . $endDateString . ') ';
+			$dateCondition .= 'or (a.all_day = 0 and a.start_date < ' . $startDateString . ' and a.end_date > ' . $endDateString . ') ';
 
 			// We need to use it in the user timezone to match the correct day when the day shifts because of the timezone
 			$startDateString = $db->quote($startDate->format('Y-m-d', true));
 			$endDateString   = $db->quote($endDate->format('Y-m-d', true));
-			$dateCondition   .= 'or (a.all_day = 1 and a.start_date between ' . $startDateString . ' and ' . $endDateString . ') ';
-			$dateCondition   .= 'or (a.all_day = 1 and a.end_date between ' . $startDateString . ' and ' . $endDateString . ') ';
-			$dateCondition   .= 'or (a.all_day = 1 and a.start_date < ' . $startDateString . ' and a.end_date > ' . $endDateString . ')';
+			$dateCondition .= 'or (a.all_day = 1 and a.start_date between ' . $startDateString . ' and ' . $endDateString . ') ';
+			$dateCondition .= 'or (a.all_day = 1 and a.end_date between ' . $startDateString . ' and ' . $endDateString . ') ';
+			$dateCondition .= 'or (a.all_day = 1 and a.start_date < ' . $startDateString . ' and a.end_date > ' . $endDateString . ')';
 
 			$dateCondition .= ')';
 		}
 
 		if ($this->getState('filter.ongoing', 0) == 1) {
-			$now           = DPCalendarHelper::getDate();
+			$now = DPCalendarHelper::getDate();
 			$dateCondition .= ' or ' . $db->quote($now->toSql()) . ' between a.start_date and a.end_date';
 			$dateCondition .= ' or (a.start_date=' . $db->quote($now->format('Y-m-d')) . ' and a.all_day=1)';
 			$dateCondition .= ' or (a.end_date=' . $db->quote($now->format('Y-m-d')) . ' and a.all_day=1)';
@@ -362,7 +362,7 @@ class DPCalendarModelEvents extends JModelList
 		if (!empty($searchString)) {
 			if (stripos($searchString, 'uid:') === 0) {
 				$query->where('a.uid like ' . $this->getDbo()->quote(substr($searchString, 4)));
-			} else if (stripos($searchString, 'id:') === 0) {
+			} elseif (stripos($searchString, 'id:') === 0) {
 				$ids = ArrayHelper::toInteger(explode(',', substr($searchString, 3)));
 				$query->where('a.id in (' . implode(',', $ids) . ')');
 			} else {
@@ -519,13 +519,13 @@ class DPCalendarModelEvents extends JModelList
 		$searchQuery = '';
 		foreach ($terms as $termsKey => $search) {
 			$searchQuery .= '(';
-			$operator    = ' LIKE ';
-			$condition   = ' OR ';
+			$operator  = ' LIKE ';
+			$condition = ' OR ';
 			if (strpos($search, '-') === 0) {
 				$search    = substr($search, 1);
 				$operator  = ' NOT LIKE ';
 				$condition = ' AND ';
-			} else if (strpos($search, '+') === 0) {
+			} elseif (strpos($search, '+') === 0) {
 				$search = substr($search, 1);
 			}
 
@@ -573,7 +573,7 @@ class DPCalendarModelEvents extends JModelList
 
 		// List state information
 		if ($app->input->getInt('limit', null) === null) {
-			$limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->getCfg('list_limit'));
+			$limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->get('list_limit'));
 			$this->setState('list.limit', $limit);
 		} else {
 			$this->setState('list.limit', $app->input->getInt('limit', 0));

@@ -4,9 +4,16 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
+
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
+use Recurr\Transformer\TextTransformer;
 
 class DateHelper
 {
@@ -30,39 +37,41 @@ class DateHelper
 			$parts['UNTIL'] = substr($parts['UNTIL'], 0, 8);
 		}
 
-		$rule->loadFromArray($parts);
 
 		$translator = new \Recurr\Transformer\Translator();
 		try {
 			$translator->loadLocale(substr(DPCalendarHelper::getFrLanguage(), 0, 2));
 		} catch (\InvalidArgumentException $e) {
-			//Translation doesn't exist, ignore it
+			// Translation doesn't exist, ignore it
 		}
-		$textTransformer = new \Recurr\Transformer\TextTransformer($translator);
 
-		$string = ucfirst($textTransformer->transform($rule));
-
-		return $string;
+		try {
+			$rule->loadFromArray($parts);
+			return ucfirst((new TextTransformer($translator))->transform($rule));
+		} catch (\Exception $e) {
+			// Do not crash as some rules are not parseable for the transformator
+		}
+		return '';
 	}
 
 	public function getDate($date = null, $allDay = null, $tz = null)
 	{
-		if ($date instanceof \JDate) {
+		if ($date instanceof Date) {
 			$dateObj = clone $date;
 		} else {
-			$dateObj = \JFactory::getDate($date, $tz);
+			$dateObj = Factory::getDate($date, $tz);
 		}
 
-		$timezone = \JFactory::getApplication()->getCfg('offset');
-		$user     = \JFactory::getUser();
-		if ($user->get('id')) {
+		$timezone = Factory::getApplication()->get('offset');
+		$user     = Factory::getUser();
+		if ($user->id) {
 			$userTimezone = $user->getParam('timezone');
 			if (!empty($userTimezone)) {
 				$timezone = $userTimezone;
 			}
 		}
 
-		$timezone = \JFactory::getSession()->get('user-timezone', $timezone, 'DPCalendar');
+		$timezone = Factory::getSession()->get('user-timezone', $timezone, 'DPCalendar');
 
 		if (!$allDay) {
 			$dateObj->setTimezone(new \DateTimeZone($timezone));
@@ -73,7 +82,7 @@ class DateHelper
 
 	public function getDateStringFromEvent($event, $dateFormat = null, $timeFormat = null)
 	{
-		return \JLayoutHelper::render(
+		return LayoutHelper::render(
 			'event.datestring',
 			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat],
 			null,
@@ -155,7 +164,7 @@ class DateHelper
 			$replacements['\\' . $from] = '[' . $from . ']';
 		}
 
-		return \JText::_(strtr($format, $replacements));
+		return Text::_(strtr($format, $replacements));
 	}
 
 	public static function minutesToDuration($minutes)

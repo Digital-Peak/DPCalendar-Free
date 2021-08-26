@@ -370,7 +370,7 @@
 }
 
 .com-dpcalendar-eventform .dp-timezone .choices__button {
-	background-image: url("../../../../images/icons/times-solid.svg") !important;
+	background-image: url("../../../../images/icons/times.svg") !important;
 }
 
 .com-dpcalendar-eventform .dp-timezone__label {
@@ -427,7 +427,7 @@
 }
 
 .com-dpcalendar-eventform .choices__button {
-	background-image: url("../../../../images/icons/times-solid.svg") !important;
+	background-image: url("../../../../images/icons/times.svg") !important;
 }
 
 .com-dpcalendar-eventform__overlapping {

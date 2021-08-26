@@ -9,9 +9,13 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\Router\Route;
 use Joomla\Registry\Registry;
 
 \JLoader::import('joomla.application.component.helper');
@@ -206,7 +210,7 @@ class DPCalendarHelper
 			$dateObj = Factory::getDate($date, $tz);
 		}
 
-		$timezone = Factory::getApplication()->getCfg('offset');
+		$timezone = Factory::getApplication()->get('offset');
 		$user     = Factory::getUser();
 		if ($user->get('id')) {
 			$userTimezone = $user->getParam('timezone');
@@ -355,14 +359,14 @@ class DPCalendarHelper
 			$events = [];
 		}
 		if ($params == null) {
-			$params = \JComponentHelper::getParams('com_dpcalendar');
+			$params = ComponentHelper::getParams('com_dpcalendar');
 		}
 
 		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
 		$return = Factory::getApplication()->input->getInt('Itemid', null);
 		if (!empty($return)) {
-			$return = \JRoute::_('index.php?Itemid=' . $return, false);
+			$return = Route::_('index.php?Itemid=' . $return, false);
 		}
 
 		$user = Factory::getUser();
@@ -380,7 +384,7 @@ class DPCalendarHelper
 			$variables['canEdit']    = $calendar && ($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id));
 			$variables['editLink']   = \DPCalendarHelperRoute::getFormRoute($event->id, $return);
 			$variables['canDelete']  = $calendar && ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id));
-			$variables['deleteLink'] = \JRoute::_(
+			$variables['deleteLink'] = Route::_(
 				'index.php?option=com_dpcalendar&task=event.delete&e_id=' . $event->id . '&return=' . base64_encode($return)
 			);
 
@@ -420,6 +424,7 @@ class DPCalendarHelper
 				$variables['color'] = $calendar->color;
 			}
 
+			$variables['id']            = $event->id;
 			$variables['calendarName']  = $calendar != null ? $calendar->title : $event->catid;
 			$variables['title']         = $event->title;
 			$variables['date']          = strip_tags(self::getDateStringFromEvent($event, $dateformat, $timeformat));
@@ -453,12 +458,12 @@ class DPCalendarHelper
 			}
 
 			try {
-				$variables['description'] = \JHTML::_('content.prepare', $event->description);
+				$variables['description'] = HTMLHelper::_('content.prepare', $event->description);
 			} catch (\Exception $e) {
 				$variables['description'] = $event->description;
 			}
 			if ($params->get('description_length', 0) > 0) {
-				$variables['description'] = \JHtml::_('string.truncate', $variables['description'], $params->get('description_length', 0));
+				$variables['description'] = HTMLHelper::_('string.truncate', $variables['description'], $params->get('description_length', 0));
 			}
 
 			$variables['url']  = $event->url;
@@ -475,7 +480,7 @@ class DPCalendarHelper
 			}
 			$variables['avatar'] = self::getAvatar($author->id, $author->email, $params);
 
-			$variables['capacity']          = $event->capacity == null ? \JText::_('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED') : $event->capacity;
+			$variables['capacity']          = $event->capacity == null ? Text::_('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED') : $event->capacity;
 			$variables['capacityUsed']      = $event->capacity_used;
 			$variables['capacityRemaining'] = $event->capacity == null ? null : $event->capacity - $event->capacity_used;
 			if (isset($event->bookings)) {
@@ -496,12 +501,12 @@ class DPCalendarHelper
 			$variables['copyGoogleUrl'] .= '&dates=' . self::getDate($event->start_date, $event->all_day)->format($copyDateTimeFormat, true) . '%2F' .
 				$end->format($copyDateTimeFormat, true);
 			$variables['copyGoogleUrl'] .= '&location=' . urlencode($location);
-			$variables['copyGoogleUrl'] .= '&details=' . urlencode(\JHtml::_('string.truncate', $event->description, 200));
+			$variables['copyGoogleUrl'] .= '&details=' . urlencode(HTMLHelper::_('string.truncate', $event->description, 200));
 			$variables['copyGoogleUrl'] .= '&hl=' . self::getFrLanguage() . '&ctz=' .
 				self::getDate($event->start_date, $event->all_day)->getTimezone()->getName();
 			$variables['copyGoogleUrl'] .= '&sf=true&output=xml';
 
-			$variables['copyOutlookUrl'] = \JRoute::_("index.php?option=com_dpcalendar&view=event&format=raw&id=" . $event->id);
+			$variables['copyOutlookUrl'] = Route::_("index.php?option=com_dpcalendar&view=event&format=raw&id=" . $event->id);
 
 			$groupHeading = self::getDate($event->start_date, $event->all_day)->format($params->get('grouping', ''), true);
 			if ($groupHeading != $lastHeading) {
@@ -521,30 +526,30 @@ class DPCalendarHelper
 		$configuration['canCreate']  = self::canCreateEvent();
 		$configuration['createLink'] = \DPCalendarHelperRoute::getFormRoute(0, $return);
 
-		$configuration['calendarNameLabel'] = \JText::_('COM_DPCALENDAR_CALENDAR');
-		$configuration['titleLabel']        = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_TITLE');
-		$configuration['dateLabel']         = \JText::_('COM_DPCALENDAR_DATE');
-		$configuration['locationLabel']     = \JText::_('COM_DPCALENDAR_LOCATION');
-		$configuration['descriptionLabel']  = \JText::_('COM_DPCALENDAR_DESCRIPTION');
-		$configuration['commentsLabel']     = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COMMENTS');
-		$configuration['eventLabel']        = \JText::_('COM_DPCALENDAR_EVENT');
-		$configuration['authorLabel']       = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_AUTHOR');
-		$configuration['bookingsLabel']     = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_BOOKINGS');
-		$configuration['bookLabel']         = \JText::_('COM_DPCALENDAR_BOOK');
-		$configuration['bookingLabel']      = \JText::_('COM_DPCALENDAR_BOOKED');
-		$configuration['capacityLabel']     = \JText::_('COM_DPCALENDAR_FIELD_CAPACITY_LABEL');
-		$configuration['capacityUsedLabel'] = \JText::_('COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL');
-		$configuration['hitsLabel']         = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_HITS');
-		$configuration['urlLabel']          = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_URL');
-		$configuration['copyLabel']         = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY');
-		$configuration['copyGoogleLabel']   = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_GOOGLE');
-		$configuration['copyOutlookLabel']  = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_OUTLOOK');
+		$configuration['calendarNameLabel'] = Text::_('COM_DPCALENDAR_CALENDAR');
+		$configuration['titleLabel']        = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_TITLE');
+		$configuration['dateLabel']         = Text::_('COM_DPCALENDAR_DATE');
+		$configuration['locationLabel']     = Text::_('COM_DPCALENDAR_LOCATION');
+		$configuration['descriptionLabel']  = Text::_('COM_DPCALENDAR_DESCRIPTION');
+		$configuration['commentsLabel']     = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COMMENTS');
+		$configuration['eventLabel']        = Text::_('COM_DPCALENDAR_EVENT');
+		$configuration['authorLabel']       = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_AUTHOR');
+		$configuration['bookingsLabel']     = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_BOOKINGS');
+		$configuration['bookLabel']         = Text::_('COM_DPCALENDAR_BOOK');
+		$configuration['bookingLabel']      = Text::_('COM_DPCALENDAR_BOOKED');
+		$configuration['capacityLabel']     = Text::_('COM_DPCALENDAR_FIELD_CAPACITY_LABEL');
+		$configuration['capacityUsedLabel'] = Text::_('COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL');
+		$configuration['hitsLabel']         = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_HITS');
+		$configuration['urlLabel']          = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_URL');
+		$configuration['copyLabel']         = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY');
+		$configuration['copyGoogleLabel']   = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_GOOGLE');
+		$configuration['copyOutlookLabel']  = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_COPY_OUTLOOK');
 		$configuration['language']          = substr(self::getFrLanguage(), 0, 2);
-		$configuration['editLabel']         = \JText::_('JACTION_EDIT');
-		$configuration['createLabel']       = \JText::_('JACTION_CREATE');
-		$configuration['deleteLabel']       = \JText::_('JACTION_DELETE');
+		$configuration['editLabel']         = Text::_('JACTION_EDIT');
+		$configuration['createLabel']       = Text::_('JACTION_CREATE');
+		$configuration['deleteLabel']       = Text::_('JACTION_DELETE');
 
-		$configuration['emptyText'] = \JText::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_NO_EVENT_TEXT');
+		$configuration['emptyText'] = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_NO_EVENT_TEXT');
 
 		try {
 			$m = new \Mustache_Engine();

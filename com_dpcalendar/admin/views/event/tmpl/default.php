@@ -43,7 +43,9 @@ if (!empty($this->event->tickets)) {
 		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id); ?>">
 		<div class="dp-form__title">
 			<?php echo $this->form->getField('title')->renderField(['class' => 'dp-field-title']); ?>
-			<?php echo $this->form->getField('alias')->renderField(['class' => 'dp-field-alias']); ?>
+			<?php if ($this->form->getField('alias')) { ?>
+				<?php echo $this->form->getField('alias')->renderField(['class' => 'dp-field-alias']); ?>
+			<?php } ?>
 		</div>
 		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>

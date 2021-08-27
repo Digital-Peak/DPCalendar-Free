@@ -1,7 +1,5 @@
 
-#DPCalendar, a Joomla event calendar
-Hello
-
+# DPCalendar, a Joomla event calendar
 This is the source of DPCalendar. Here you will find the component, some modules and plugins of DPCalendar.
 
 ## PREREQUISITS

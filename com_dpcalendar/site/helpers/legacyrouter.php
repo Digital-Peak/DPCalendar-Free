@@ -4,11 +4,14 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JLoader::import('joomla.application.categories');
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Component\Router\Rules\RulesInterface;
+use Joomla\CMS\Factory;
 
-class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
+class DPCalendarRouterLegacy implements RulesInterface
 {
 	public function preprocess(&$query)
 	{
@@ -17,9 +20,9 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 	public function build(&$query, &$segments)
 	{
 		// Get a menu item based on Itemid or currently active
-		$app = JFactory::getApplication();
-		$menu = $app->getMenu();
-		$params = JComponentHelper::getParams('com_dpcalendar');
+		$app      = Factory::getApplication();
+		$menu     = $app->getMenu();
+		$params   = ComponentHelper::getParams('com_dpcalendar');
 		$advanced = $params->get('sef_advanced_link', 0);
 
 		// We need a menu item. Either the one specified in the query, or the
@@ -30,9 +33,9 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 			$menuItem = $menu->getItem($query['Itemid']);
 		}
 
-		$mView = (empty($menuItem->query['view'])) ? null : $menuItem->query['view'];
+		$mView  = (empty($menuItem->query['view'])) ? null : $menuItem->query['view'];
 		$mCatid = (empty($menuItem->query['calid'])) ? null : $menuItem->query['calid'];
-		$mId = (empty($menuItem->query['id'])) ? null : $menuItem->query['id'];
+		$mId    = (empty($menuItem->query['id'])) ? null : $menuItem->query['id'];
 
 		if (isset($query['view'])) {
 			$view = $query['view'];
@@ -64,14 +67,14 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 				$calid = null;
 				if ($view == 'event' && isset($query['calid'])) {
 					$calid = $query['calid'];
-				} else if (isset($query['id'])) {
+				} elseif (isset($query['id'])) {
 					$calid = $query['id'];
 				}
 
 				JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 				$menuCatid = $mId;
-				$category = DPCalendarHelper::getCalendar($calid);
+				$category  = DPCalendarHelper::getCalendar($calid);
 
 				if ($category && ! $category->external) {
 					// TODO Throw error that the category either not exists or
@@ -86,7 +89,7 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 						}
 
 						if ($advanced) {
-							list ($tmp, $id) = explode(':', $id, 2);
+							list($tmp, $id) = explode(':', $id, 2);
 						}
 
 						$array[] = $id;
@@ -96,7 +99,7 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 
 				if ($view == 'event') {
 					if ($advanced) {
-						list ($tmp, $id) = explode(':', $query['id'], 2);
+						list($tmp, $id) = explode(':', $query['id'], 2);
 					} else {
 						$id = $query['id'];
 					}
@@ -129,17 +132,17 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 		// Get the active menu item.
-		$app = JFactory::getApplication();
-		$menu = $app->getMenu();
-		$item = $menu->getActive();
-		$params = JComponentHelper::getParams('com_dpcalendar');
+		$app      = Factory::getApplication();
+		$menu     = $app->getMenu();
+		$item     = $menu->getActive();
+		$params   = ComponentHelper::getParams('com_dpcalendar');
 		$advanced = $params->get('sef_advanced_link', 0);
 
 		// Count route segments
 		$count = count($segments);
 
 		if (! empty($segments) && $segments[0] == 'events') {
-			$vars['view'] = $segments[0];
+			$vars['view']   = $segments[0];
 			$vars['format'] = 'raw';
 			return $vars;
 		}
@@ -147,7 +150,7 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 		// Standard routing for events.
 		if (! isset($item)) {
 			$vars['view'] = $segments[0];
-			$vars['id'] = $segments[$count - 1];
+			$vars['id']   = $segments[$count - 1];
 			return $vars;
 		}
 
@@ -166,17 +169,17 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 		foreach ($segments as $segment) {
 			foreach ($categories as $category) {
 				if (($category->slug == $segment) || ($advanced && $category->alias == str_replace(':', '-', $segment))) {
-					$vars['id'] = $category->id;
+					$vars['id']   = $category->id;
 					$vars['view'] = 'calendar';
-					$categories = $category->getChildren();
-					$found = 1;
+					$categories   = $category->getChildren();
+					$found        = 1;
 					break;
 				}
 			}
 
 			if ($found == 0) {
 				if ($advanced) {
-					$db = JFactory::getDBO();
+					$db    = Factory::getDBO();
 					$query = 'SELECT id FROM #__dpcalendar_events WHERE catid = ' . $vars['id'] . ' AND alias = ' .
 						$db->quote(str_replace(':', '-', $segment));
 					$db->setQuery($query);
@@ -185,7 +188,7 @@ class DPCalendarRouterLegacy implements JComponentRouterRulesInterface
 					$id = $segment;
 				}
 
-				$vars['id'] = $id;
+				$vars['id']   = $id;
 				$vars['view'] = 'event';
 
 				break;

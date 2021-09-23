@@ -4,9 +4,16 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Session\Session;
 use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormController
@@ -38,7 +45,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 		if ($event != null && $event->id) {
 			$calendar = DPCalendarHelper::getCalendar($event->catid);
 
-			return $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == JFactory::getUser()->id);
+			return $calendar->canEdit || ($calendar->canEditOwn && $event->created_by == Factory::getUser()->id);
 		}
 
 		// Since there is no asset tracking, revert to the component permissions
@@ -84,6 +91,14 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 			}
 		}
 
+		if (DPCalendarHelper::isFree()) {
+			foreach (DPCalendarHelper::$DISABLED_FREE_FIELDS as $field) {
+				if (array_key_exists($field, $data)) {
+					unset($data[$field]);
+				}
+			}
+		}
+
 		if ($this->getTask() == 'save2copy') {
 			$data['capacity_used'] = null;
 		}
@@ -92,7 +107,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 
 		$result = false;
 		if (!is_numeric($data['catid'])) {
-			JPluginHelper::importPlugin('dpcalendar');
+			PluginHelper::importPlugin('dpcalendar');
 			$data['id'] = $this->input->getInt($urlVar, null);
 
 			$model     = $this->getModel();
@@ -104,7 +119,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 				$validData['end_date']   = DPCalendarHelper::getDate($validData['end_date'])->toSql(true);
 			}
 
-			$tmp = JFactory::getApplication()->triggerEvent('onEventSave', [$validData]);
+			$tmp = Factory::getApplication()->triggerEvent('onEventSave', [$validData]);
 			foreach ($tmp as $newEventId) {
 				if ($newEventId === false) {
 					continue;
@@ -113,7 +128,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 				switch ($this->getTask()) {
 					case 'apply':
 						$this->setRedirect(
-							JRoute::_(
+							Route::_(
 								'index.php?option=' . $this->option . '&view=' .
 								$this->view_item . $this->getRedirectToItemAppend($newEventId, $urlVar),
 								false
@@ -122,7 +137,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 						break;
 					case 'save2new':
 						$this->setRedirect(
-							JRoute::_(
+							Route::_(
 								'index.php?option=' . $this->option . '&view=' . $this->view_item . $this->getRedirectToItemAppend(null, $urlVar),
 								false
 							)
@@ -130,7 +145,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 						break;
 					default:
 						$this->setRedirect(
-							JRoute::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->getRedirectToListAppend(), false)
+							Route::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->getRedirectToListAppend(), false)
 						);
 						break;
 				}
@@ -154,10 +169,10 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 
 	public function batch($model = null)
 	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		// Preset the redirect
-		$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=events' . $this->getRedirectToListAppend(), false));
+		$this->setRedirect(Route::_('index.php?option=com_dpcalendar&view=events' . $this->getRedirectToListAppend(), false));
 
 		return parent::batch($this->getModel());
 	}
@@ -176,7 +191,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 
 	public function similar()
 	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$formData = $this->input->get('jform', [], 'array');
 
@@ -184,7 +199,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 			DPCalendarHelper::sendMessage(null);
 		}
 
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 		$model = $this->getModel('Events');
 		$model->getState();
 		$model->setState('list.limit', 5);
@@ -210,7 +225,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 			$item          = new stdClass();
 			$item->value   = $e->id;
 			$item->title   = $e->title;
-			$desc          = strip_tags(JHtml::_('string.truncate', $e->description, 100));
+			$desc          = strip_tags(HTMLHelper::_('string.truncate', $e->description, 100));
 			$item->details = '[' . DPCalendarHelper::getDateStringFromEvent($e) . '] ' . $desc;
 			$data[]        = $item;
 		}
@@ -220,7 +235,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 
 	public function overlapping()
 	{
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$data = $this->input->get('jform', [], 'array');
 
@@ -233,7 +248,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 			$data['start_date_time'],
 			$data['all_day'] == '1'
 		);
-		$endDate   = DPCalendarHelper::getDateFromString(
+		$endDate = DPCalendarHelper::getDateFromString(
 			$data['end_date'],
 			$data['end_date_time'],
 			$data['all_day'] == '1'
@@ -242,7 +257,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 		// End date is exclusive
 		$endDate->modify('-1 second');
 
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 		$model = $this->getModel('Events');
 		$model->getState();
 		$model->setState('list.limit', 4);
@@ -276,7 +291,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 			unset($events[$key]);
 		}
 
-		JFactory::getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');
+		Factory::getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');
 
 		// Reset the end date
 		$endDate->modify('+1 second');
@@ -289,7 +304,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 		$date                 = strip_tags(DPCalendarHelper::getDateStringFromEvent($event));
 		$message              = DPCalendarHelper::renderEvents(
 			$events,
-			JText::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
+			Text::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
 			null,
 			[
 				'checkDate'    => $date,
@@ -307,9 +322,9 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 	public function reloadfromevent($key = null, $urlVar = 'e_id')
 	{
 		// Check for request forgeries.
-		\JSession::checkToken() or jexit(\JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 		$data = $this->getModel('Event')->getItem($this->input->getInt('template_event_id'));
 
@@ -335,14 +350,13 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 	public function newlocation()
 	{
 		// Check for request forgeries
-		\JSession::checkToken() or jexit(\JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
 		$location = \DPCalendar\Helper\Location::get($this->input->getString('lookup'), false, $this->input->getString('lookup_title'));
 
 		$data = [];
 		if ($location->title) {
-			$data =
-				[
+			$data = [
 					'id'      => $location->id,
 					'display' => $location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
 				];
@@ -368,7 +382,7 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 			$data['start_date_time'],
 			$data['all_day'] == '1'
 		)->toSql(false);
-		$data['end_date']   = DPCalendarHelper::getDateFromString(
+		$data['end_date'] = DPCalendarHelper::getDateFromString(
 			$data['end_date'],
 			$data['end_date_time'],
 			$data['all_day'] == '1'

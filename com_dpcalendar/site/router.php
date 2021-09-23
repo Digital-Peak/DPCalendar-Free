@@ -4,57 +4,66 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JLoader::import('joomla.application.categories');
+use DPCalendar\Router\Rules\DPCalendarRules;
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Component\Router\RouterView;
+use Joomla\CMS\Component\Router\RouterViewConfiguration;
+use Joomla\CMS\Component\Router\Rules\NomenuRules;
+use Joomla\CMS\Component\Router\Rules\StandardRules;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Plugin\PluginHelper;
 
-class DPCalendarRouter extends JComponentRouterView
+class DPCalendarRouter extends RouterView
 {
 	public function __construct($app = null, $menu = null)
 	{
-		$params = JComponentHelper::getParams('com_dpcalendar');
+		$params = ComponentHelper::getParams('com_dpcalendar');
 
-		$calendar = new JComponentRouterViewconfiguration('calendar');
+		$calendar = new RouterViewConfiguration('calendar');
 		$calendar->setKey('ids');
 		$this->registerView($calendar);
 
-		$list = new JComponentRouterViewconfiguration('list');
+		$list = new RouterViewConfiguration('list');
 		$list->setKey('ids');
 		$list->addLayout('blog');
 		$this->registerView($list);
 
-		$map = new JComponentRouterViewconfiguration('map');
+		$map = new RouterViewConfiguration('map');
 		$map->setKey('ids');
 		$this->registerView($map);
 
-		$event = new JComponentRouterViewconfiguration('event');
+		$event = new RouterViewConfiguration('event');
 		$event->setKey('id');
 		$event->setParent($calendar, 'calid');
 		$this->registerView($event);
 
-		$form = new JComponentRouterViewconfiguration('form');
+		$form = new RouterViewConfiguration('form');
 		$this->registerView($form);
 
-		$locations = new JComponentRouterViewconfiguration('locations');
+		$locations = new RouterViewConfiguration('locations');
 		$locations->setKey('ids');
 		$this->registerView($locations);
 
-		$location = new JComponentRouterViewconfiguration('location');
+		$location = new RouterViewConfiguration('location');
 		$location->setKey('id');
 		$location->setParent($locations, 'id');
 		$this->registerView($location);
 
-		$form = new JComponentRouterViewconfiguration('locationform');
+		$form = new RouterViewConfiguration('locationform');
 		$form->setKey('l_id');
 		$this->registerView($form);
 
-		$bookings = new JComponentRouterViewconfiguration('bookings');
+		$bookings = new RouterViewConfiguration('bookings');
 		$this->registerView($bookings);
 
-		$tickets = new JComponentRouterViewconfiguration('tickets');
+		$tickets = new RouterViewConfiguration('tickets');
 		$this->registerView($tickets);
 
-		$profile = new JComponentRouterViewconfiguration('profile');
+		$profile = new RouterViewConfiguration('profile');
 		$this->registerView($profile);
 
 		parent::__construct($app, $menu);
@@ -62,9 +71,9 @@ class DPCalendarRouter extends JComponentRouterView
 		if ($params->get('sef_advanced', 1)) {
 			JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-			$this->attachRule(new \DPCalendar\Router\Rules\DPCalendarRules($this));
-			$this->attachRule(new JComponentRouterRulesStandard($this));
-			$this->attachRule(new JComponentRouterRulesNomenu($this));
+			$this->attachRule(new DPCalendarRules($this));
+			$this->attachRule(new StandardRules($this));
+			$this->attachRule(new NomenuRules($this));
 		} else {
 			JLoader::register('DPCalendarRouterLegacy', __DIR__ . '/helpers/legacyrouter.php');
 			$this->attachRule(new DPCalendarRouterLegacy());
@@ -116,7 +125,7 @@ class DPCalendarRouter extends JComponentRouterView
 
 	public function getCalendarSegment($id, $query)
 	{
-		$category = JCategories::getInstance($this->getName())->get($id);
+		$category = Categories::getInstance($this->getName())->get($id);
 
 		if (!$category) {
 			return [];
@@ -155,7 +164,7 @@ class DPCalendarRouter extends JComponentRouterView
 		}
 
 		if (!strpos($id, ':')) {
-			$db      = JFactory::getDbo();
+			$db      = Factory::getDbo();
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
 				->from($dbquery->qn('#__dpcalendar_events'))
@@ -183,7 +192,7 @@ class DPCalendarRouter extends JComponentRouterView
 		}
 
 		if (!strpos($id, ':')) {
-			$db      = JFactory::getDbo();
+			$db      = Factory::getDbo();
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
 				->from($dbquery->qn('#__dpcalendar_locations'))
@@ -201,7 +210,7 @@ class DPCalendarRouter extends JComponentRouterView
 	public function getLocationsSegment($id, $query)
 	{
 		if (!strpos($id, ':')) {
-			$db      = JFactory::getDbo();
+			$db      = Factory::getDbo();
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
 				->from($dbquery->qn('#__dpcalendar_locations'))
@@ -224,7 +233,7 @@ class DPCalendarRouter extends JComponentRouterView
 	public function getCalendarId($segment, $query)
 	{
 		if (isset($query['id'])) {
-			$category = JCategories::getInstance($this->getName(), ['access' => false])->get($query['id']);
+			$category = Categories::getInstance($this->getName(), ['access' => false])->get($query['id']);
 
 			if ($category) {
 				foreach ($category->getChildren() as $child) {
@@ -258,8 +267,8 @@ class DPCalendarRouter extends JComponentRouterView
 
 		if (count($calIds) === 1 && $calIds[0] == -1) {
 			// Fetch external calendars
-			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+			PluginHelper::importPlugin('dpcalendar');
+			$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
 					foreach ($tmpCalendars as $calendar) {
@@ -276,11 +285,11 @@ class DPCalendarRouter extends JComponentRouterView
 			}
 		}
 
-		$db      = JFactory::getDbo();
+		$db      = Factory::getDbo();
 		$dbquery = $db->getQuery(true);
 		$dbquery->select($dbquery->qn('id'))
 			->from($dbquery->qn('#__dpcalendar_events'))
-			->where('alias = ' . $dbquery->q($segment));
+			->where('(alias = ' . $dbquery->q($segment) . ' or id = ' . (int)$segment . ')');
 
 		if ($calIds && !in_array('-1', $calIds)) {
 			// Loop over the calids, they can be string as with DB cache of external events
@@ -307,11 +316,11 @@ class DPCalendarRouter extends JComponentRouterView
 
 	public function getLocationId($segment, $query)
 	{
-		$db      = JFactory::getDbo();
+		$db      = Factory::getDbo();
 		$dbquery = $db->getQuery(true);
 		$dbquery->select($dbquery->qn('id'))
 			->from($dbquery->qn('#__dpcalendar_locations'))
-			->where('alias = ' . $dbquery->q($segment));
+			->where('(alias = ' . $dbquery->q($segment) . ' or id = ' . (int)$segment . ')');
 		$db->setQuery($dbquery);
 
 		return (int)$db->loadResult();

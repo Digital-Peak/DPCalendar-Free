@@ -22,16 +22,6 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 {
 	public $typeAlias = 'com_dpcalendar.event';
 
-	public function save($data)
-	{
-		// Reset capacity
-		if (in_array('capacity', $this->getParams()->get('event_form_hidden_fields', []))) {
-			$data['capacity'] = $this->getParams()->get('event_form_capacity');
-		}
-
-		return parent::save($data);
-	}
-
 	/**
 	 * Invites the given users or groups to the event with the given id.
 	 *

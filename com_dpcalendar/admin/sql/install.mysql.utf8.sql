@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   KEY `idx_createdby` (`created_by`),
   KEY `idx_featured_catid` (`featured`,`catid`),
   KEY `idx_language` (`language`),
-  KEY `idx_xreference` (`xreference`)
+  KEY `idx_xreference` (`xreference`),
+  KEY idx_original_id (original_id)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `rules`, `field_mappings`, `router`, `content_history_options`) VALUES

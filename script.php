@@ -4,12 +4,16 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScript
 {
-	protected $minimumPhp = '7.4.0';
-	protected $minimumJoomla = '3.9.0';
+	protected $minimumPhp      = '7.4.0';
+	protected $minimumJoomla   = '3.9.0';
 	protected $allowDowngrades = true;
 
 	public function preflight($type, $parent)
@@ -20,7 +24,7 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 
 		$version = null;
 		$this->run("select * from `#__extensions` where element = 'pkg_dpcalendar'");
-		$package = JFactory::getDbo()->loadObject();
+		$package = Factory::getDbo()->loadObject();
 		if ($package) {
 			$info = json_decode($package->manifest_cache);
 			if (isset($info->version)) {
@@ -28,12 +32,12 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 			}
 		}
 
-		if ($version && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '6.0.0') < 0) {
-			JFactory::getApplication()->enqueueMessage(
-				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 6.0.0 running. Please install the latest release from version 6 first.',
+		if ($version && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '7.0.0') < 0) {
+			Factory::getApplication()->enqueueMessage(
+				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 7.0.0 running. Please install the latest release from version 7 first.',
 				'error'
 			);
-			JFactory::getApplication()->redirect('index.php?option=com_installer&view=install');
+			Factory::getApplication()->redirect('index.php?option=com_installer&view=install');
 
 			return false;
 		}
@@ -60,31 +64,41 @@ class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 		}
 
 		if ($type == 'update') {
-			$updater = function ($installer, $eid) {
+			$updater = function ($event) {
+				$installer = $event;
+				if ($installer instanceof \Joomla\Event\Event) {
+					$installer = $installer->getArgument('installer');
+				}
+
 				if ($installer->getManifest()->packagename != 'dpcalendar') {
 					return;
 				}
 
 				// Set the download ID if available
-				JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-				$model = JModelLegacy::getInstance('Cpanel', 'DPCalendarModel');
+				BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+				$model = BaseDatabaseModel::getInstance('Cpanel', 'DPCalendarModel');
 				$model->refreshUpdateSite();
 			};
 
 			// Update sites are created in a plugin
-			JEventDispatcher::getInstance()->register('onExtensionAfterInstall', $updater);
-			JEventDispatcher::getInstance()->register('onExtensionAfterUpdate', $updater);
+			if (DPCalendarHelper::isJoomlaVersion(4, '>=')) {
+				Factory::getApplication()->getDispatcher()->addListener('onExtensionAfterInstall', $updater);
+				Factory::getApplication()->getDispatcher()->addListener('onExtensionAfterUpdate', $updater);
+			} else {
+				\JEventDispatcher::getInstance()->register('onExtensionAfterInstall', $updater);
+				\JEventDispatcher::getInstance()->register('onExtensionAfterUpdate', $updater);
+			}
 		}
 	}
 
 	private function run($query)
 	{
 		try {
-			$db = JFactory::getDBO();
+			$db = Factory::getDBO();
 			$db->setQuery($query);
 			$db->execute();
 		} catch (Exception $e) {
-			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+			Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
 		}
 	}
 }

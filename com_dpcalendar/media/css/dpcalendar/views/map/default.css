@@ -121,6 +121,7 @@
 }
 
 .com-dpcalendar-map .dp-timezone .choices {
+	width: 100%;
 	font-size: inherit;
 }
 

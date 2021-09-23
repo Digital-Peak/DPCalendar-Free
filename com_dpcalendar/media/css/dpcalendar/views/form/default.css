@@ -75,13 +75,15 @@
 	margin-bottom: 5px;
 }
 
-.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label {
+.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label,
+.com-dpcalendar-eventform .control-group .form-label {
 	flex: 0 0 20%;
 	padding-top: 5px;
 	text-align: left;
 }
 
-.com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls {
+.com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls,
+.com-dpcalendar-eventform .control-group .form-control {
 	flex: 1 1 80%;
 }
 
@@ -104,7 +106,8 @@
 	.com-dpcalendar-eventform .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-eventform .control-group:not(.dp-control_hidden) control-label, .com-dpcalendar-eventform .control-group:not(.dp-control_hidden) controls {
+	.com-dpcalendar-eventform .control-group:not(.dp-control_hidden) control-label,
+	.com-dpcalendar-eventform .control-group:not(.dp-control_hidden) controls {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -337,6 +340,7 @@
 }
 
 .com-dpcalendar-eventform .dp-timezone .choices {
+	width: 100%;
 	font-size: inherit;
 }
 
@@ -394,6 +398,7 @@
 }
 
 .com-dpcalendar-eventform .choices {
+	width: 100%;
 	font-size: inherit;
 }
 

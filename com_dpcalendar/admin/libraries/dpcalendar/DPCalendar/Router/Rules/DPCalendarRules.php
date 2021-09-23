@@ -4,14 +4,16 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Router\Rules;
 
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
-use Joomla\Registry\Registry;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Component\Router\Rules\MenuRules;
 
-class DPCalendarRules extends \JComponentRouterRulesMenu
+class DPCalendarRules extends MenuRules
 {
 	public function preprocess(&$query)
 	{
@@ -27,7 +29,7 @@ class DPCalendarRules extends \JComponentRouterRulesMenu
 		parent::buildLookup($language);
 
 		// Getting the required variables to match the parent lookup
-		$component = \JComponentHelper::getComponent('com_' . $this->router->getName());
+		$component = ComponentHelper::getComponent('com_' . $this->router->getName());
 
 		$attributes = ['component_id'];
 		$values     = [(int)$component->id];

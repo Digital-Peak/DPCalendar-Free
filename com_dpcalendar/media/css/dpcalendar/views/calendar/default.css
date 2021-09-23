@@ -96,6 +96,7 @@
 }
 
 .com-dpcalendar-calendar .dp-timezone .choices {
+	width: 100%;
 	font-size: inherit;
 }
 

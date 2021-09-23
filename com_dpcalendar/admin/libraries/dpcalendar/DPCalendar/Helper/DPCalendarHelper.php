@@ -9,20 +9,23 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\Version;
 use Joomla\Registry\Registry;
 
-\JLoader::import('joomla.application.component.helper');
-\JLoader::import('joomla.application.categories');
-\JLoader::import('joomla.environment.browser');
-\JLoader::import('joomla.filesystem.file');
-\JLoader::import('joomla.filesystem.folder');
 \JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');
 
 if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
@@ -32,6 +35,23 @@ if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 
 class DPCalendarHelper
 {
+	public static $DISABLED_FREE_FIELDS = [
+		'rrule',
+		'capacity_used',
+		'max_tickets',
+		'booking_closing_date',
+		'booking_series',
+		'booking_waiting_list',
+		'price',
+		'earlybird',
+		'user_discount',
+		'booking_options',
+		'payment_provider',
+		'terms',
+		'booking_assign_user_groups',
+		'booking_information'
+	];
+
 	public static $calendars = [];
 
 	public static function getCalendar($id)
@@ -41,7 +61,7 @@ class DPCalendarHelper
 		}
 		$calendar = null;
 		if (is_numeric($id) || $id == 'root') {
-			$calendar = \JCategories::getInstance('DPCalendar')->get($id);
+			$calendar = Categories::getInstance('DPCalendar')->get($id);
 			if ($calendar == null) {
 				return null;
 			}
@@ -67,7 +87,7 @@ class DPCalendarHelper
 				}
 			}
 		} else {
-			\JPluginHelper::importPlugin('dpcalendar');
+			PluginHelper::importPlugin('dpcalendar');
 			$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch', [$id]);
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
@@ -104,7 +124,7 @@ class DPCalendarHelper
 
 	public static function getComponentParameter($key, $defaultValue = null)
 	{
-		$params = \JComponentHelper::getParams('com_dpcalendar');
+		$params = ComponentHelper::getParams('com_dpcalendar');
 
 		return $params->get($key, $defaultValue);
 	}
@@ -202,29 +222,23 @@ class DPCalendarHelper
 		return addslashes($date->monthToString($month, $abbr));
 	}
 
-	public static function getDate($date = null, $allDay = null, $tz = null)
+	public static function getDate($date = null, $allDay = null, $tz = null): Date
 	{
-		if ($date instanceof \JDate) {
-			$dateObj = clone $date;
-		} else {
-			$dateObj = Factory::getDate($date, $tz);
+		$dateObj = $date instanceof Date ? clone $date : Factory::getDate($date, $tz);
+		if ($allDay) {
+			return $dateObj;
 		}
 
 		$timezone = Factory::getApplication()->get('offset');
 		$user     = Factory::getUser();
-		if ($user->get('id')) {
+		if ($user->id) {
 			$userTimezone = $user->getParam('timezone');
 			if (!empty($userTimezone)) {
 				$timezone = $userTimezone;
 			}
 		}
 
-		$timezone = Factory::getSession()->get('user-timezone', $timezone, 'DPCalendar');
-
-		if (!$allDay) {
-			$dateObj->setTimezone(new \DateTimeZone($timezone));
-		}
-
+		$dateObj->setTimezone(new \DateTimeZone(Factory::getSession()->get('user-timezone', $timezone, 'DPCalendar')));
 		return $dateObj;
 	}
 
@@ -275,9 +289,9 @@ class DPCalendarHelper
 			'THU',
 			'FRI'
 		];
-		$lang = \JLanguage::getInstance('en-GB');
+		$lang = Language::getInstance('en-GB');
 		foreach ($replaces as $key) {
-			$string = str_replace(\JText::_($key), $lang->_($key), $string);
+			$string = str_replace(Text::_($key), $lang->_($key), $string);
 		}
 
 		if (empty($dateFormat)) {
@@ -303,7 +317,7 @@ class DPCalendarHelper
 
 	public static function getDateStringFromEvent($event, $dateFormat = null, $timeFormat = null, $noTags = false)
 	{
-		$text = \JLayoutHelper::render(
+		$text = LayoutHelper::render(
 			'event.datestring',
 			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat],
 			null,
@@ -571,7 +585,7 @@ class DPCalendarHelper
 	public static function renderLayout($layout, $data = [])
 	{
 		// Framework specific content is not loaded
-		return \JLayoutHelper::render($layout, $data, null, ['component' => 'com_dpcalendar', 'client' => 0]);
+		return LayoutHelper::render($layout, $data, null, ['component' => 'com_dpcalendar', 'client' => 0]);
 	}
 
 	public static function getStringFromParams($key, $default, $params, $language = null)
@@ -610,7 +624,7 @@ class DPCalendarHelper
 		$cbLoader  = JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php';
 		$jomsocial = JPATH_ROOT . '/components/com_community/libraries/core.php';
 		$easy      = JPATH_ADMINISTRATOR . '/components/com_easysocial/includes/foundry.php';
-		if ((($avatarProvider == 1 && !\JFile::exists($jomsocial)) || $avatarProvider == 4) && \JFile::exists($cbLoader)) {
+		if ((($avatarProvider == 1 && !file_exists($jomsocial)) || $avatarProvider == 4) && file_exists($cbLoader)) {
 			include_once $cbLoader;
 			$cbUser = \CBuser::getInstance($userId);
 			if ($cbUser !== null) {
@@ -620,11 +634,11 @@ class DPCalendarHelper
 				$image = selectTemplate() . 'images/avatar/tnnophoto_n.png';
 			}
 		}
-		if (($avatarProvider == 1 || $avatarProvider == 3) && \JFile::exists($jomsocial)) {
+		if (($avatarProvider == 1 || $avatarProvider == 3) && file_exists($jomsocial)) {
 			include_once $jomsocial;
 			$image = \CFactory::getUser($userId)->getThumbAvatar();
 		}
-		if (($avatarProvider == 1 || $avatarProvider == 5) && \JFile::exists($easy)) {
+		if (($avatarProvider == 1 || $avatarProvider == 5) && file_exists($easy)) {
 			$image = \Foundry::user($userId)->getAvatar();
 		}
 		if ($image != null) {
@@ -722,9 +736,9 @@ class DPCalendarHelper
 
 	public static function doPluginAction($plugin, $action, $data = null)
 	{
-		\JPluginHelper::importPlugin('dpcalendar');
+		PluginHelper::importPlugin('dpcalendar');
 
-		if (!\JPluginHelper::isEnabled('dpcalendar', $plugin)) {
+		if (!PluginHelper::isEnabled('dpcalendar', $plugin)) {
 			$db    = Factory::getDbo();
 			$query = $db->getQuery(true)
 				->select('folder AS type, element AS name, params')
@@ -736,9 +750,8 @@ class DPCalendarHelper
 
 			\JLoader::import('dpcalendar.' . $plugin . '.' . $plugin, JPATH_PLUGINS);
 
-			$className  = 'Plg' . $p->type . $p->name;
-			$dispatcher = DPCalendarHelper::isJoomlaVersion(4, '>=') ?
-				Factory::getApplication()->getDispatcher() : \JEventDispatcher::getInstance();
+			$className      = 'Plg' . $p->type . $p->name;
+			$dispatcher     = DPCalendarHelper::isJoomlaVersion(4, '>=') ? Factory::getApplication()->getDispatcher() : \JEventDispatcher::getInstance();
 			$p              = (array)$p;
 			$pluginInstance = new $className($dispatcher, $p);
 			if (DPCalendarHelper::isJoomlaVersion(4, '>=')) {
@@ -751,7 +764,7 @@ class DPCalendarHelper
 
 	public static function isJoomlaVersion($version, $operator = '==')
 	{
-		$release = (new \JVersion())->getShortVersion();
+		$release = (new Version())->getShortVersion();
 		switch ($operator) {
 			case '>=':
 				return substr($release, 0, strlen($version)) >= $version;
@@ -770,7 +783,7 @@ class DPCalendarHelper
 		$canAdd = $user->authorise('core.create', 'com_dpcalendar') || count($user->getAuthorisedCategories('com_dpcalendar', 'core.create'));
 
 		if (!$canAdd) {
-			\JPluginHelper::importPlugin('dpcalendar');
+			PluginHelper::importPlugin('dpcalendar');
 			$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
@@ -789,17 +802,17 @@ class DPCalendarHelper
 
 	public static function isFree()
 	{
-		return !\JFile::exists(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables/booking.php');
+		return !file_exists(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables/booking.php');
 	}
 
 	public static function isCaptchaNeeded()
 	{
-		\JPluginHelper::importPlugin('captcha');
+		PluginHelper::importPlugin('captcha');
 
-		$userGroups    = \JAccess::getGroupsByUser(Factory::getUser()->id, false);
+		$userGroups    = Access::getGroupsByUser(Factory::getUser()->id, false);
 		$accessCaptcha = array_intersect(self::getComponentParameter('captcha_groups', [1]), $userGroups);
 
-		return \JPluginHelper::isEnabled('captcha') && $accessCaptcha;
+		return PluginHelper::isEnabled('captcha') && $accessCaptcha;
 	}
 
 	public static function sendMessage($message, $error = false, array $data = [])
@@ -841,7 +854,7 @@ class DPCalendarHelper
 
 		$users = [];
 		foreach ($groups as $groupId) {
-			$users = array_merge($users, \JAccess::getUsersByGroup($groupId));
+			$users = array_merge($users, Access::getUsersByGroup($groupId));
 		}
 
 		$currentUser = Factory::getUser();
@@ -958,7 +971,7 @@ class DPCalendarHelper
 		// Move captcha to bottom
 		if (!in_array('captcha', $order)) {
 			foreach ($fields as $index => $field) {
-				if (!$field instanceof \JFormField || $field->fieldname != 'captcha') {
+				if (!$field instanceof FormField || $field->fieldname != 'captcha') {
 					continue;
 				}
 
@@ -1108,7 +1121,7 @@ class DPCalendarHelper
 
 	public static function fixImageLinks($buffer)
 	{
-		$base = \JUri::base(true) . '/';
+		$base = Uri::base(true) . '/';
 
 		// Copied from SEF plugin
 		// Check for all unknown protocals (a protocol must contain at least one alpahnumeric character followed by a ":").

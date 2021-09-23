@@ -4,15 +4,19 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-use Joomla\Registry\Registry;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\Utilities\ArrayHelper;
 
-JLoader::import('joomla.application.component.modellist');
 JLoader::import('components.com_dpcalendar.tables.booking', JPATH_ADMINISTRATOR);
 
-class DPCalendarModelTickets extends JModelList
+class DPCalendarModelTickets extends ListModel
 {
 	public function __construct($config = [])
 	{
@@ -44,12 +48,12 @@ class DPCalendarModelTickets extends JModelList
 		$published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
 		$this->setState('filter.state', $published);
 		$bookingId = $this->getUserStateFromRequest($this->context . '.filter.booking_id', 'filter_booking_id');
-		$this->setState('filter.booking_id', !$bookingId ? JFactory::getApplication()->input->get('b_id') : $bookingId);
+		$this->setState('filter.booking_id', !$bookingId ? Factory::getApplication()->input->get('b_id') : $bookingId);
 		$eventId = $this->getUserStateFromRequest($this->context . '.filter.event_id', 'filter_event_id');
-		$this->setState('filter.event_id', !$eventId ? JFactory::getApplication()->input->get('e_id') : $eventId);
+		$this->setState('filter.event_id', !$eventId ? Factory::getApplication()->input->get('e_id') : $eventId);
 
-		$app = JFactory::getApplication();
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$app = Factory::getApplication();
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
 		parent::populateState('e.start_date', 'asc');
 	}
@@ -63,14 +67,14 @@ class DPCalendarModelTickets extends JModelList
 
 		foreach ($items as $item) {
 			if ($item->country) {
-				$country = JModelLegacy::getInstance('Country', 'DPCalendarModel')->getItem($item->country);
+				$country = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel')->getItem($item->country);
 				if ($country) {
-					JFactory::getApplication()->getLanguage()->load(
+					Factory::getApplication()->getLanguage()->load(
 						'com_dpcalendar.countries',
 						JPATH_ADMINISTRATOR . '/components/com_dpcalendar'
 					);
 					$item->country_code       = $country->short_code;
-					$item->country_code_value = JText::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
+					$item->country_code_value = Text::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
 				}
 			}
 
@@ -90,7 +94,7 @@ class DPCalendarModelTickets extends JModelList
 
 	protected function getListQuery()
 	{
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
@@ -114,7 +118,7 @@ class DPCalendarModelTickets extends JModelList
 		if (!empty($search)) {
 			if (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
-			} else if (stripos($search, 'author:') === 0) {
+			} elseif (stripos($search, 'author:') === 0) {
 				$search = $db->quote('%' . $db->escape(substr($search, 7), true) . '%');
 				$query->where(
 					'(a.name LIKE ' . $search . ' OR b.name LIKE ' . $search . ' OR ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search .
@@ -138,7 +142,9 @@ class DPCalendarModelTickets extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} else if ($published === '') {
+		} elseif (is_array($published)) {
+			$query->where('(a.state IN (' . implode(',', ArrayHelper::toInteger($published)) . '))');
+		} elseif ($published === '') {
 			$query->where('(a.state IN (0, 1, 2, 3, 4, 5, 6, 7))');
 		}
 
@@ -147,14 +153,14 @@ class DPCalendarModelTickets extends JModelList
 		if (is_numeric($authorId)) {
 			$type = $this->getState('filter.ticket_holder.include', true) ? '= ' : '<>';
 			$query->where('a.user_id ' . $type . (int)$authorId);
-		} else if ($this->getState('filter.public')) {
+		} elseif ($this->getState('filter.public')) {
 			$query->where('public = 1');
-		} else if (!$user->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
+		} elseif (!$user->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
 			if ($user->guest) {
 				$query->where('public = 1');
 			}
 
-			if (JFactory::getApplication()->isClient('site')) {
+			if (Factory::getApplication()->isClient('site')) {
 				$query->where('(e.created_by = ' . (int)$user->id . ' or a.user_id = ' . (int)$user->id . ')');
 			}
 		}
@@ -196,10 +202,10 @@ class DPCalendarModelTickets extends JModelList
 	public function getEvent($eventId = null, $force = false)
 	{
 		if ($eventId == null) {
-			$eventId = JFactory::getApplication()->input->get('e_id');
+			$eventId = Factory::getApplication()->input->get('e_id');
 		}
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		$model = JModelLegacy::getInstance('Event', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$model = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel');
 
 		return $model->getItem($eventId);
 	}

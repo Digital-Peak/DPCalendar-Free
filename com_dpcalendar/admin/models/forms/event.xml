@@ -186,7 +186,7 @@
 		<field name="payment_provider" type="dppaymentprovider" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 		<field name="terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
-		       addfieldpath="/administrator/components/com_content/models/fields"
+		       addfieldpath="/administrator/components/com_content/models/fields" addfieldprefix="Joomla\Component\Content\Administrator\Field"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
 		<field name="booking_assign_user_groups" type="usergrouplist" multiple="true"
 		       label="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_DESC"/>

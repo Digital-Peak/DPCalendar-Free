@@ -4,18 +4,21 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Router;
+
+use Joomla\CMS\Router\Route;
 
 class Router
 {
 	public function route($url, $xhtml = true)
 	{
-		return \JRoute::_($url, $xhtml);
+		return Route::_($url, $xhtml);
 	}
 
 	public function getCalendarRoute($calId)
 	{
-		return \JRoute::_(\DPCalendarHelperRoute::getCalendarRoute($calId));
+		return Route::_(\DPCalendarHelperRoute::getCalendarRoute($calId));
 	}
 
 	public function getCalendarIcalRoute($calId, $token = '')
@@ -30,12 +33,12 @@ class Router
 
 	public function getEventFormRoute($id, $return = null, $append = null, $xhtml = true)
 	{
-		return \JRoute::_(\DPCalendarHelperRoute::getFormRoute($id, $return, $append), $xhtml);
+		return Route::_(\DPCalendarHelperRoute::getFormRoute($id, $return, $append), $xhtml);
 	}
 
 	public function getEventDeleteRoute($id, $return = null)
 	{
-		return \JRoute::_('index.php?option=com_dpcalendar&task=event.delete&e_id=' . $id . '&return=' . base64_encode($return));
+		return Route::_('index.php?option=com_dpcalendar&task=event.delete&e_id=' . $id . '&return=' . base64_encode($return));
 	}
 
 	public function getLocationRoute($location)

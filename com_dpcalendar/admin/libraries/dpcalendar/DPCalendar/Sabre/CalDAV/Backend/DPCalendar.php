@@ -4,53 +4,66 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Sabre\CalDAV\Backend;
 
-use Sabre\VObject;
-use Sabre\CalDAV;
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Helper\Ical;
+use DPCalendar\Helper\Location;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Categories\Categories;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
+use Sabre\CalDAV\Backend\PDO;
+use Sabre\CalDAV\Plugin;
+use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
+use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Exception\Forbidden;
+use Sabre\VObject\Reader;
 
 \JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 \JLoader::import('components.com_dpcalendar.helpers.ical', JPATH_ADMINISTRATOR);
 
-\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-class DPCalendar extends CalDAV\Backend\PDO
+class DPCalendar extends PDO
 {
 	public function getCalendarsForUser($principalUri)
 	{
 		$calendars = parent::getCalendarsForUser($principalUri);
 
-		$user = \JFactory::getUser();
+		$user = Factory::getUser();
 
 		// The calendar instance to get the calendars from
-		$cal = \DPCalendarHelper::getCalendar('root');
+		$cal = DPCalendarHelper::getCalendar('root');
 
 		// Check if we are a guest
 		if ($user->guest) {
 			// Get the calendar and ignoring the access flag, this is needed on authentication
-			$cal = \JCategories::getInstance('DPCalendar', ['access' => false])->get('root');
+			$cal = Categories::getInstance('DPCalendar', ['access' => false])->get('root');
 		}
 
 		foreach ($cal->getChildren(true) as $calendar) {
 			$writePermission = $user->authorise('core.edit', 'com_dpcalendar.category.' . $calendar->id) &&
 				$user->authorise('core.delete', 'com_dpcalendar.category.' . $calendar->id);
 
-			$params      = new \JRegistry($calendar->params);
+			$params      = new Registry($calendar->params);
 			$calendars[] = [
-				'id'                                                                 => 'dp-' . $calendar->id,
-				'uri'                                                                => 'dp-' . $calendar->id,
-				'principaluri'                                                       => $principalUri,
-				'{' . CalDAV\Plugin::NS_CALENDARSERVER . '}getctag'                  => $params->get('etag', 1),
-				'{' . CalDAV\Plugin::NS_CALDAV . '}supported-calendar-component-set' => new CalDAV\Xml\Property\SupportedCalendarComponentSet([
+				'id'                                                          => 'dp-' . $calendar->id,
+				'uri'                                                         => 'dp-' . $calendar->id,
+				'principaluri'                                                => $principalUri,
+				'{' . Plugin::NS_CALENDARSERVER . '}getctag'                  => $params->get('etag', 1),
+				'{' . Plugin::NS_CALDAV . '}supported-calendar-component-set' => new SupportedCalendarComponentSet([
 					'VEVENT',
 					'VTODO'
 				]),
-				'{DAV:}displayname'                                                  => $calendar->title,
-				'{urn:ietf:params:xml:ns:caldav}calendar-description'                => $calendar->description,
-				'{urn:ietf:params:xml:ns:caldav}calendar-timezone'                   => '',
-				'{http://apple.com/ns/ical/}calendar-order'                          => 1,
-				'{http://apple.com/ns/ical/}calendar-color'                          => $params->get('color', '3366CC')
+				'{DAV:}displayname'                                   => $calendar->title,
+				'{urn:ietf:params:xml:ns:caldav}calendar-description' => $calendar->description,
+				'{urn:ietf:params:xml:ns:caldav}calendar-timezone'    => '',
+				'{http://apple.com/ns/ical/}calendar-order'           => 1,
+				'{http://apple.com/ns/ical/}calendar-color'           => $params->get('color', '3366CC')
 			];
 		}
 
@@ -63,16 +76,16 @@ class DPCalendar extends CalDAV\Backend\PDO
 			return parent::getMultipleCalendarObjects($calendarId, $uris);
 		}
 
-		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('category.id', str_replace('dp-', '', $calendarId));
 		$model->setState('category.recursive', false);
 		$model->setState('list.limit', 10000);
 		$model->setState('filter.ongoing', true);
 		$model->setState('filter.state', 1);
-		$model->setState('filter.language', \JFactory::getLanguage());
+		$model->setState('filter.language', Factory::getLanguage());
 		$model->setState('filter.publish_date', true);
 		$model->setState('list.start-date', '0');
-		$model->setState('list.end-date', \DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
+		$model->setState('list.end-date', DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
 		$model->setState('list.ordering', 'start_date');
 		$model->setState('list.direction', 'asc');
 		$model->setState('filter.expand', false);
@@ -106,7 +119,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 		if (!empty($event->id)) {
 			// The event needs to be loaded through the model to get
 			// locations, tags, etc.
-			$model = \JModelLegacy::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
 			$event = $model->getItem($event->id);
 			$this->log('Getting calendar object ' . $objectUri . ' on calendar ' . $calendarId);
 
@@ -120,16 +133,16 @@ class DPCalendar extends CalDAV\Backend\PDO
 			return parent::getCalendarObjects($calendarId);
 		}
 
-		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('category.id', str_replace('dp-', '', $calendarId));
 		$model->setState('category.recursive', false);
 		$model->setState('list.limit', 10000);
 		$model->setState('filter.ongoing', true);
 		$model->setState('filter.state', 1);
-		$model->setState('filter.language', \JFactory::getLanguage());
+		$model->setState('filter.language', Factory::getLanguage());
 		$model->setState('filter.publish_date', true);
 		$model->setState('list.start-date', '0');
-		$model->setState('list.end-date', \DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
+		$model->setState('list.end-date', DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
 		$model->setState('list.ordering', 'start_date');
 		$model->setState('list.direction', 'asc');
 		$model->setState('filter.expand', false);
@@ -151,7 +164,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 			return parent::calendarQuery($calendarId, $filters);
 		}
 
-		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('list.limit', 1000);
 		$model->setState('category.id', str_replace('dp-', '', $calendarId));
@@ -200,21 +213,21 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 		$this->log('Creating calendar object ' . $objectUri . ' on calendar ' . $calendarId);
 
-		$calendar = \DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
+		$calendar = DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
 		if (!$calendar || !$calendar->canCreate) {
 			$this->log('No permission to create ' . $objectUri . ' on calendar ' . $calendarId);
 			throw new Forbidden();
 		}
 
 		$event        = $this->getTable();
-		$vEvent       = VObject\Reader::read($calendarData)->VEVENT;
-		$event->alias = \JApplicationHelper::stringURLSafe($vEvent->SUMMARY->getValue());
+		$vEvent       = Reader::read($calendarData)->VEVENT;
+		$event->alias = ApplicationHelper::stringURLSafe($vEvent->SUMMARY->getValue());
 		$event->catid = str_replace('dp-', '', $calendarId);
 		$event->state = 1;
 		$event->uid   = $objectUri;
 
 		$this->merge($event, $vEvent);
-		\DPCalendarHelper::increaseEtag($event->catid);
+		DPCalendarHelper::increaseEtag($event->catid);
 	}
 
 	public function updateCalendarObject($calendarId, $objectUri, $calendarData)
@@ -225,7 +238,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 		$this->log('Updating calendar object ' . $objectUri . ' on calendar ' . $calendarId);
 
-		$calendar = \DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
+		$calendar = DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
 		if (!$calendar || !$calendar->canEdit) {
 			$this->log('No permission to update ' . $objectUri . ' on calendar ' . $calendarId);
 			throw new Forbidden();
@@ -233,11 +246,11 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 		$event = $this->getTable();
 		$event->load(['uid' => $objectUri]);
-		$obj = VObject\Reader::read($calendarData);
+		$obj = Reader::read($calendarData);
 
 		if ($event->original_id == '0') {
 			$this->merge($event, $obj->VEVENT);
-			\DPCalendarHelper::increaseEtag($event->catid);
+			DPCalendarHelper::increaseEtag($event->catid);
 
 			return;
 		}
@@ -250,7 +263,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 			}
 		}
 
-		$db = \JFactory::getDbo();
+		$db = Factory::getDbo();
 		$db->setQuery('select * from #__dpcalendar_events where original_id = ' . $db->quote($event->id));
 		$children = $db->loadObjectList('', 'DPCalendarTableEvent');
 
@@ -268,7 +281,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 			}
 		}
 
-		\DPCalendarHelper::increaseEtag($event->catid);
+		DPCalendarHelper::increaseEtag($event->catid);
 	}
 
 	public function deleteCalendarObject($calendarId, $objectUri)
@@ -276,7 +289,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
 			$this->log('Deleting calendar object ' . $objectUri . ' on calendar ' . $calendarId);
 
-			$calendar = \DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
+			$calendar = DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
 			if (!$calendar || (!$calendar->canDelete && !$calendar->canEditOwn)) {
 				$this->log('No permission to delete ' . $objectUri . ' on calendar ' . $calendarId);
 				throw new Forbidden();
@@ -285,19 +298,19 @@ class DPCalendar extends CalDAV\Backend\PDO
 			$event = $this->getTable();
 			$event->load(['uid' => $objectUri]);
 
-			if (!$calendar->canDelete && $event->created_by != \JFactory::getUser()->id) {
+			if (!$calendar->canDelete && $event->created_by != Factory::getUser()->id) {
 				$this->log('No permission to delete ' . $objectUri . ' on calendar ' . $calendarId . ' because not the owner');
 				throw new Forbidden();
 			}
 
-			if ($event->checked_out != 0 && $event->checked_out == \JFactory::getUser()->id) {
+			if ($event->checked_out != 0 && $event->checked_out == Factory::getUser()->id) {
 				$this->log('Event ' . $objectUri . ' on calendar ' . $calendarId . ' is checked out');
 				throw new Forbidden();
 			}
 
 			$event->state = -2;
 			$event->store();
-			$model = \JModelLegacy::getInstance(
+			$model = BaseDatabaseModel::getInstance(
 				'Form',
 				'DPCalendarModel',
 				['event_before_delete' => 'nooperationtocatch', 'event_after_delete' => 'nooperationtocatch']
@@ -305,10 +318,10 @@ class DPCalendar extends CalDAV\Backend\PDO
 			$model->delete($event->id);
 
 			if ($model->getError()) {
-				throw new \Sabre\DAV\Exception\BadRequest('Error happened deleting the event: ' . $model->getError());
+				throw new BadRequest('Error happened deleting the event: ' . $model->getError());
 			}
 
-			\DPCalendarHelper::increaseEtag(str_replace('dp-', '', $calendarId));
+			DPCalendarHelper::increaseEtag(str_replace('dp-', '', $calendarId));
 
 			return;
 		}
@@ -320,7 +333,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 	{
 		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
 			$this->log('Update calendar ' . $calendarId . 'with propatch');
-			\DPCalendarHelper::increaseEtag(str_replace('dp-', '', $calendarId));
+			DPCalendarHelper::increaseEtag(str_replace('dp-', '', $calendarId));
 
 			return;
 		}
@@ -330,12 +343,12 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 	private function getTable($type = 'Event')
 	{
-		\JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
 
-		return \JTable::getInstance($type, 'DPCalendarTable');
+		return Table::getInstance($type, 'DPCalendarTable');
 	}
 
-	private function merge(\JTable $dpEvent, $vEvent)
+	private function merge(Table $dpEvent, $vEvent)
 	{
 		if (isset($vEvent->SUMMARY)) {
 			$dpEvent->title = $vEvent->SUMMARY->getValue();
@@ -354,7 +367,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 		} else {
 			$start = $start->setTimezone(new \DateTimeZone('UTC'));
 		}
-		$dpEvent->start_date = $start->format(\JFactory::getDbo()->getDateFormat());
+		$dpEvent->start_date = $start->format(Factory::getDbo()->getDateFormat());
 
 		$end = $vEvent->DTEND->getDateTime();
 		if ($dpEvent->all_day) {
@@ -363,7 +376,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 		} else {
 			$end = $end->setTimezone(new \DateTimeZone('UTC'));
 		}
-		$dpEvent->end_date = $end->format(\JFactory::getDbo()->getDateFormat());
+		$dpEvent->end_date = $end->format(Factory::getDbo()->getDateFormat());
 
 		/*
 		 * Most CalDAV clients do not support this attribute, means it will
@@ -391,12 +404,12 @@ class DPCalendar extends CalDAV\Backend\PDO
 			$locationString = str_replace('\,', ',', $locationString);
 			$locationString = str_replace('\;', ';', $locationString);
 
-			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 			$location = null;
 			if (isset($vEvent->GEO) && $vEvent->GEO->getValue()) {
 				$parts = explode(';', $vEvent->GEO->getValue());
 				if (count($parts) == 2) {
-					$model = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+					$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 					$model->getState();
 					$model->setState('list.limit', 1);
 					$model->setState('filter.latitude', $parts[0]);
@@ -410,7 +423,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 			}
 
 			if (!$location) {
-				$model = \JModelLegacy::getInstance('Locations', 'DPCalendarModel');
+				$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel');
 				$model->getState();
 				$model->setState('list.limit', 10000);
 
@@ -422,7 +435,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 					}
 				}
 				if (!$location) {
-					$location = \DPCalendar\Helper\Location::get($locationString);
+					$location = Location::get($locationString);
 				}
 			}
 			if ($location) {
@@ -430,30 +443,32 @@ class DPCalendar extends CalDAV\Backend\PDO
 			}
 		}
 
-		$model = \JModelLegacy::getInstance(
+		$model = BaseDatabaseModel::getInstance(
 			'Form',
 			'DPCalendarModel',
 			['event_before_save' => 'nooperationtocatch', 'event_after_save' => 'nooperationtocatch']
 		);
 
-		// Unset capacity, otherwise it will default to null which is unlimited, but we want the default value
 		$data = $dpEvent->getProperties();
-		unset($data['capacity']);
+
+		// Unset capacity, otherwise it will default to null which is unlimited, but we want the default value
+		$data             = $dpEvent->getProperties();
+		$data['capacity'] = DPCalendarHelper::getComponentParameter('event_form_capacity', '0');
 
 		$model->save($data);
 
 		if ($model->getError()) {
-			throw new \Sabre\DAV\Exception\BadRequest('Error happened storing the event: ' . $model->getError());
+			throw new BadRequest('Error happened storing the event: ' . $model->getError());
 		}
 	}
 
 	private function toSabreArray($event)
 	{
-		$ical = \DPCalendar\Helper\Ical::createIcalFromEvents([$event]);
+		$ical = Ical::createIcalFromEvents([$event]);
 		$data = [
 			'id'           => $event->id,
 			'uri'          => $event->uid,
-			'lastmodified' => \DPCalendarHelper::getDate($event->modified)->format('U'),
+			'lastmodified' => DPCalendarHelper::getDate($event->modified)->format('U'),
 			'calendarid'   => 'dp-' . $event->catid,
 			'size'         => strlen($ical),
 			'etag'         => '"' . md5($ical) . '"',
@@ -465,7 +480,7 @@ class DPCalendar extends CalDAV\Backend\PDO
 
 	private function log($message)
 	{
-		$path = \JFactory::getApplication()->get('log_path') . '/dpcalendar.debug.log';
+		$path = Factory::getApplication()->get('log_path') . '/dpcalendar.debug.log';
 		file_put_contents($path, date('c') . ' ' . $message . PHP_EOL, FILE_APPEND);
 	}
 }

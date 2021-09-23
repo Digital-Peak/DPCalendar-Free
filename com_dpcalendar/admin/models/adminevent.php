@@ -119,20 +119,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		$form->setFieldAttribute('end_date', 'all_day', $item->all_day);
 
 		if (DPCalendarHelper::isFree()) {
-			foreach (['rrule',
-				'capacity_used',
-				'max_tickets',
-				'booking_closing_date',
-				'booking_series',
-				'booking_waiting_list',
-				'price',
-				'earlybird',
-				'user_discount',
-				'booking_options',
-				'payment_provider',
-				'terms',
-				'booking_assign_user_groups',
-				'booking_information'] as $field) {
+			foreach (DPCalendarHelper::$DISABLED_FREE_FIELDS as $field) {
 				// Disable fields for display
 				$form->setFieldAttribute($field, 'disabled', 'true');
 

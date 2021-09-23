@@ -78,13 +78,15 @@
 	margin-bottom: 5px;
 }
 
-.com-dpcalendar-adminform .dp-control__label, .com-dpcalendar-adminform .control-group .control-label {
+.com-dpcalendar-adminform .dp-control__label, .com-dpcalendar-adminform .control-group .control-label,
+.com-dpcalendar-adminform .control-group .form-label {
 	flex: 0 0 20%;
 	padding-top: 5px;
 	text-align: left;
 }
 
-.com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls {
+.com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls,
+.com-dpcalendar-adminform .control-group .form-control {
 	flex: 1 1 80%;
 }
 
@@ -107,13 +109,15 @@
 	.com-dpcalendar-adminform .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-adminform .control-group:not(.dp-control_hidden) control-label, .com-dpcalendar-adminform .control-group:not(.dp-control_hidden) controls {
+	.com-dpcalendar-adminform .control-group:not(.dp-control_hidden) control-label,
+	.com-dpcalendar-adminform .control-group:not(.dp-control_hidden) controls {
 		width: 100%;
 		margin-left: 0;
 	}
 }
 
 .com-dpcalendar-adminform .choices {
+	width: 100%;
 	font-size: inherit;
 }
 

@@ -12,7 +12,6 @@ alter table `#__dpcalendar_events` CHANGE `params` `params` text;
 alter table `#__dpcalendar_events` CHANGE `metakey` `metakey` text;
 alter table `#__dpcalendar_events` CHANGE `metadesc` `metadesc` text;
 alter table `#__dpcalendar_events` CHANGE `metadata` `metadata` text;
-alter table `#__dpcalendar_events` CHANGE `plugintype` `plugintype` text;
 
 alter table `#__dpcalendar_locations` CHANGE `rooms` `rooms` text;
 alter table `#__dpcalendar_locations` CHANGE `description` `description` text;

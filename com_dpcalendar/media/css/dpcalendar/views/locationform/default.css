@@ -59,13 +59,15 @@
 	margin-bottom: 5px;
 }
 
-.com-dpcalendar-locationform .dp-control__label, .com-dpcalendar-locationform .control-group .control-label {
+.com-dpcalendar-locationform .dp-control__label, .com-dpcalendar-locationform .control-group .control-label,
+.com-dpcalendar-locationform .control-group .form-label {
 	flex: 0 0 20%;
 	padding-top: 5px;
 	text-align: left;
 }
 
-.com-dpcalendar-locationform .dp-control__input, .com-dpcalendar-locationform .control-group .controls {
+.com-dpcalendar-locationform .dp-control__input, .com-dpcalendar-locationform .control-group .controls,
+.com-dpcalendar-locationform .control-group .form-control {
 	flex: 1 1 80%;
 }
 
@@ -88,7 +90,8 @@
 	.com-dpcalendar-locationform .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-locationform .control-group:not(.dp-control_hidden) control-label, .com-dpcalendar-locationform .control-group:not(.dp-control_hidden) controls {
+	.com-dpcalendar-locationform .control-group:not(.dp-control_hidden) control-label,
+	.com-dpcalendar-locationform .control-group:not(.dp-control_hidden) controls {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -265,6 +268,7 @@
 }
 
 .com-dpcalendar-locationform .dp-timezone .choices {
+	width: 100%;
 	font-size: inherit;
 }
 

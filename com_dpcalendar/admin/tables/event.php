@@ -4,14 +4,25 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\InputFilter;
+use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Image\Image;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
+use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\Reader;
 
-class DPCalendarTableEvent extends JTable
+class DPCalendarTableEvent extends Table
 {
 	public function __construct(&$db = null)
 	{
@@ -30,26 +41,28 @@ class DPCalendarTableEvent extends JTable
 		}
 
 		if ($db == null) {
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 		}
 		parent::__construct('#__dpcalendar_events', 'id', $db);
 
 		$this->setColumnAlias('published', 'state');
 
-		$this->access         = DPCalendarHelper::getComponentParameter('event_form_access', $this->access);
-		$this->access_content = DPCalendarHelper::getComponentParameter('event_form_access_content');
+		// Set access flag as they are set in the base class already from props
+		$params               = method_exists(Factory::getApplication(), 'getParams') ? Factory::getApplication()->getParams() : ComponentHelper::getParams('com_dpcalendar');
+		$this->access         = $params->get('event_form_access', $this->access);
+		$this->access_content = $params->get('event_form_access_content');
 	}
 
 	public function bind($array, $ignore = '')
 	{
 		if (is_array($array) && isset($array['params']) && is_array($array['params'])) {
-			$registry = new JRegistry();
+			$registry = new Registry();
 			$registry->loadArray($array['params']);
 			$array['params'] = (string)$registry;
 		}
 
 		if (is_array($array) && isset($array['metadata']) && is_array($array['metadata'])) {
-			$registry = new JRegistry();
+			$registry = new Registry();
 			$registry->loadArray($array['metadata']);
 			$array['metadata'] = (string)$registry;
 		}
@@ -64,19 +77,19 @@ class DPCalendarTableEvent extends JTable
 	public function store($updateNulls = false)
 	{
 		// Needs reset, so no caching of now
-		JFactory::$dates = [];
-		$date            = DPCalendarHelper::getDate();
-		$user            = JFactory::getUser();
+		Factory::$dates = [];
+		$date           = DPCalendarHelper::getDate();
+		$user           = Factory::getUser();
 		if ($this->id) {
 			// Existing item
 			$this->modified    = $date->toSql();
-			$this->modified_by = $user->get('id');
+			$this->modified_by = $user->id;
 		}
 		if (!$this->id && !intval($this->created)) {
 			$this->created = $date->toSql();
 		}
 		if (!$this->id && empty($this->created_by)) {
-			$this->created_by = $user->get('id');
+			$this->created_by = $user->id;
 		}
 
 		// Quick add checks
@@ -92,7 +105,7 @@ class DPCalendarTableEvent extends JTable
 				break;
 			}
 
-			$this->alias = JApplicationHelper::stringURLSafe(StringHelper::increment($this->alias, 'dash'));
+			$this->alias = ApplicationHelper::stringURLSafe(StringHelper::increment($this->alias, 'dash'));
 		}
 
 		$start = DPCalendarHelper::getDate($this->start_date, $this->all_day);
@@ -125,7 +138,7 @@ class DPCalendarTableEvent extends JTable
 			$this->rrule .= ';UNTIL=' . $until->format('Y') . '0101T000000Z';
 		}
 
-		$table       = JTable::getInstance('Event', 'DPCalendarTable');
+		$table       = Table::getInstance('Event', 'DPCalendarTable');
 		$hardReset   = false;
 		$tagsChanged = isset($this->newTags) && !$this->newTags;
 		if ($this->id > 0) {
@@ -133,7 +146,7 @@ class DPCalendarTableEvent extends JTable
 
 			// If there is a new rrule or date configuration do a hard reset
 			$hardReset = $this->all_day != $table->all_day || $this->start_date != $table->start_date || $this->end_date != $table->end_date || $this->rrule != $table->rrule;
-			$oldTags   = new JHelperTags();
+			$oldTags   = new TagsHelper();
 			$oldTags   = $oldTags->getItemTags('com_dpcalendar.event', $this->id);
 			$oldTags   = array_map(function ($t) {
 				return $t->id;
@@ -159,8 +172,8 @@ class DPCalendarTableEvent extends JTable
 					$this->booking_options = $table->booking_options;
 					$hardReset             = false;
 
-					JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-					JFactory::getApplication()->enqueueMessage(JText::_('COM_DPCALENDAR_ERR_TABLE_NO_PRICE_CHANGE'), 'notice');
+					Factory::getApplication()->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+					Factory::getApplication()->enqueueMessage(Text::_('COM_DPCALENDAR_ERR_TABLE_NO_PRICE_CHANGE'), 'notice');
 				}
 			}
 		}
@@ -239,16 +252,17 @@ class DPCalendarTableEvent extends JTable
 			$text[] = 'END:VEVENT';
 			$text[] = 'END:VCALENDAR';
 
-			$cal = Sabre\VObject\Reader::read(implode(PHP_EOL, $text));
+			/** @var VCalendar $cal */
+			$cal = Reader::read(implode(PHP_EOL, $text));
 			$cal = $cal->expand(new DateTime('1970-01-01'), new DateTime('2038-01-01'));
 			foreach ($cal->VEVENT as $vevent) {
 				$startDate = DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $this->all_day);
 				$endDate   = DPCalendarHelper::getDate($vevent->DTEND->getDateTime()->format('U'), $this->all_day);
 
-				$table = JTable::getInstance('Event', 'DPCalendarTable');
+				$table = Table::getInstance('Event', 'DPCalendarTable');
 				$table->bind((array)$this, ['id']);
 
-				$table->alias         = JApplicationHelper::stringURLSafe($table->alias . '-' . $startDate->format('U'));
+				$table->alias         = ApplicationHelper::stringURLSafe($table->alias . '-' . $startDate->format('U'));
 				$table->start_date    = $startDate->toSql();
 				$table->recurrence_id = $startDate->format('Ymd' . (!$table->all_day ? '\THis\Z' : ''));
 				$table->end_date      = $endDate->toSql();
@@ -365,20 +379,20 @@ class DPCalendarTableEvent extends JTable
 
 	public function check()
 	{
-		if (JFilterInput::checkAttribute(['start_date', $this->start_date])) {
-			$this->setError(JText::_('COM_DPCALENDAR_ERR_TABLES_PROVIDE_START_DATE'));
+		if (InputFilter::checkAttribute(['start_date', $this->start_date])) {
+			$this->setError(Text::_('COM_DPCALENDAR_ERR_TABLES_PROVIDE_START_DATE'));
 
 			return false;
 		}
-		if (JFilterInput::checkAttribute(['end_date', $this->end_date])) {
-			$this->setError(JText::_('COM_DPCALENDAR_ERR_TABLES_PROVIDE_END_DATE'));
+		if (InputFilter::checkAttribute(['end_date', $this->end_date])) {
+			$this->setError(Text::_('COM_DPCALENDAR_ERR_TABLES_PROVIDE_END_DATE'));
 
 			return false;
 		}
 
 		// Check for valid name
 		if (trim($this->title) == '') {
-			$this->setError(JText::_('COM_DPCALENDAR_ERR_TABLES_TITLE') . ' [' . $this->catid . ']');
+			$this->setError(Text::_('COM_DPCALENDAR_ERR_TABLES_TITLE') . ' [' . $this->catid . ']');
 
 			return false;
 		}
@@ -386,9 +400,9 @@ class DPCalendarTableEvent extends JTable
 		if (empty($this->alias)) {
 			$this->alias = $this->title;
 		}
-		$this->alias = JApplicationHelper::stringURLSafe($this->alias);
+		$this->alias = ApplicationHelper::stringURLSafe($this->alias);
 		if (trim(str_replace('-', '', $this->alias)) == '') {
-			$this->alias = JFactory::getDate($this->start_date)->format('Y-m-d-H-i-s');
+			$this->alias = Factory::getDate($this->start_date)->format('Y-m-d-H-i-s');
 		}
 
 		// Check the publish down date is not earlier than publish up.
@@ -473,7 +487,7 @@ class DPCalendarTableEvent extends JTable
 
 		// If there are no primary keys set check to see if the instance key is set.
 		if (empty($pks) && !$this->$k) {
-			$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+			$this->setError(Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 
 			return false;
 		}

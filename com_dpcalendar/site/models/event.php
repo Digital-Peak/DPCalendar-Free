@@ -4,43 +4,51 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Multilanguage;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Model\ItemModel;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 
-class DPCalendarModelEvent extends JModelItem
+class DPCalendarModelEvent extends ItemModel
 {
 	protected $view_item = 'contact';
-	protected $_item = null;
-	protected $_context = 'com_dpcalendar.event';
+	protected $_item     = null;
+	protected $_context  = 'com_dpcalendar.event';
 
 	protected function populateState()
 	{
-		$app = JFactory::getApplication('site');
+		$app = Factory::getApplication('site');
 
 		// Load state from the request.
 		$pk = $app->input->getVar('id');
 		$this->setState('event.id', $pk);
 
-		$params = method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
+		$params = method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
 		if (!$params->get('event_form_fields_order_')) {
 			$params->set(
 				'event_form_fields_order_',
-				JComponentHelper::getParams('com_dpcalendar')->get('event_form_fields_order_', new stdClass())
+				ComponentHelper::getParams('com_dpcalendar')->get('event_form_fields_order_', new stdClass())
 			);
 		}
 		$this->setState('params', $params);
 		$this->setState('filter.public', $params->get('event_show_tickets'));
 
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		if (!$user->authorise('core.edit.state', 'com_dpcalendar') && !$user->authorise('core.edit', 'com_dpcalendar')) {
 			$this->setState('filter.state', [1, 3]);
 		}
 
-		$this->setState('filter.language', JLanguageMultilang::isEnabled());
+		$this->setState('filter.language', Multilanguage::isEnabled());
 	}
 
 	public function &getItem($pk = null)
@@ -50,12 +58,12 @@ class DPCalendarModelEvent extends JModelItem
 		if ($this->_item === null) {
 			$this->_item = [];
 		}
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		if (!isset($this->_item[$pk])) {
 			if (!empty($pk) && !is_numeric($pk)) {
-				JPluginHelper::importPlugin('dpcalendar');
-				$tmp = JFactory::getApplication()->triggerEvent('onEventFetch', [$pk]);
+				PluginHelper::importPlugin('dpcalendar');
+				$tmp = Factory::getApplication()->triggerEvent('onEventFetch', [$pk]);
 				if (!empty($tmp)) {
 					$tmp[0]->params   = new Registry($tmp[0]->params);
 					$this->_item[$pk] = $tmp[0];
@@ -72,7 +80,7 @@ class DPCalendarModelEvent extends JModelItem
 					$case_when = ' CASE WHEN ';
 					$case_when .= $query->charLength('a.alias');
 					$case_when .= ' THEN ';
-					$b_id      = $query->castAsChar('a.id');
+					$b_id = $query->castAsChar('a.id');
 					$case_when .= $query->concatenate([$b_id, 'a.alias'], ':');
 					$case_when .= ' ELSE ';
 					$case_when .= $b_id . ' END as slug';
@@ -80,7 +88,7 @@ class DPCalendarModelEvent extends JModelItem
 					$case_when1 = ' CASE WHEN ';
 					$case_when1 .= $query->charLength('c.alias');
 					$case_when1 .= ' THEN ';
-					$c_id       = $query->castAsChar('c.id');
+					$c_id = $query->castAsChar('c.id');
 					$case_when1 .= $query->concatenate([$c_id, 'c.alias'], ':');
 					$case_when1 .= ' ELSE ';
 					$case_when1 .= $c_id . ' END as catslug';
@@ -110,13 +118,13 @@ class DPCalendarModelEvent extends JModelItem
 					$query->select('co.id AS contactid, co.alias as contactalias, co.catid as contactcatid');
 					$query->join('LEFT', '#__contact_details AS co on co.user_id = a.created_by
 					and (co.published = 1 or co.published is null)
-					and (co.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR co.language IS NULL)');
+					and (co.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR co.language IS NULL)');
 
 					$query->where('a.id = ' . (int)$pk);
 
 					// Filter by start and end dates.
 					$nullDate = $db->quote($db->getNullDate());
-					$nowDate  = $db->quote(JFactory::getDate()->toSql());
+					$nowDate  = $db->quote(Factory::getDate()->toSql());
 
 					// Filter by published state.
 					$state      = $this->getState('filter.state', []);
@@ -141,20 +149,21 @@ class DPCalendarModelEvent extends JModelItem
 					$data = $db->loadObject();
 
 					if (empty($data)) {
-						throw new Exception(JText::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
+						throw new Exception(Text::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 					}
 
-					JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+					BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 					if (!DPCalendarHelper::isFree()) {
-						$ticketsModel = JModelLegacy::getInstance('Tickets', 'DPCalendarModel', ['ignore_request' => true]);
+						$ticketsModel = BaseDatabaseModel::getInstance('Tickets', 'DPCalendarModel', ['ignore_request' => true]);
 						$ticketsModel->getState();
 						$ticketsModel->setState('filter.event_id', $data->id);
 						$ticketsModel->setState('filter.public', $this->getState('filter.public'));
+						$ticketsModel->setState('filter.state', [0, 1, 2, 3, 4, 5, 6, 7, 8]);
 						$ticketsModel->setState('list.limit', 10000);
 						$data->tickets = $ticketsModel->getItems();
 					}
 
-					$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+					$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 					$model->getState();
 					$model->setState('list.ordering', 'ordering');
 					$model->setState('list.direction', 'asc');
@@ -201,7 +210,7 @@ class DPCalendarModelEvent extends JModelItem
 
 		// Implement View Level Access
 		if (!$user->authorise('core.admin', 'com_dpcalendar') && !in_array($item->access_content, $user->getAuthorisedViewLevels())) {
-			$item->title               = JText::_('COM_DPCALENDAR_EVENT_BUSY');
+			$item->title               = Text::_('COM_DPCALENDAR_EVENT_BUSY');
 			$item->location            = '';
 			$item->locations           = [];
 			$item->location_ids        = null;
@@ -264,8 +273,8 @@ class DPCalendarModelEvent extends JModelItem
 
 	public function getSeriesEventsModel($event)
 	{
-		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
 		$model->setState('list.limit', 5);

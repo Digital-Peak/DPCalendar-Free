@@ -51,9 +51,7 @@
 			});
 		}
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-events .dp-event .dp-link-featured')).forEach((link) => {
-			link.addEventListener('click', (e) => {
-				return listItemTask('cb' + link.getAttribute('data-cb'), link.getAttribute('data-state'));
-			});
+			link.addEventListener('click', (e) => Joomla.listItemTask('cb' + link.getAttribute('data-cb'), link.getAttribute('data-state')));
 		});
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-events-modal .dp-link')).forEach((link) => {
 			link.addEventListener('click', (e) => {
@@ -81,4 +79,4 @@
 			});
 		});
 	});
-}());
+})();

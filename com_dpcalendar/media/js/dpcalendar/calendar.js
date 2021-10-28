@@ -793,4 +793,4 @@
 			createCalendar(el, options);
 		});
 	});
-}());
+})();

@@ -13,6 +13,7 @@ use DPCalendar\Helper\Location;
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Categories\Categories;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Log\Log;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
@@ -27,6 +28,8 @@ use Sabre\VObject\Reader;
 \JLoader::import('components.com_dpcalendar.helpers.ical', JPATH_ADMINISTRATOR);
 
 BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+
+Log::addLogger(['text_file' => 'com_dpcalendar.caldav.backend.php'], Log::WARNING, 'com_dpcalendar-caldav-backend');
 
 class DPCalendar extends PDO
 {
@@ -97,7 +100,7 @@ class DPCalendar extends PDO
 			}
 			$data[$event->uid] = $this->toSabreArray($event);
 		}
-		$this->log('Getting multiple calendar objects ' . implode(',', $uris) . ' on calendar ' . $calendarId);
+		Log::add('Getting multiple calendar objects ' . implode(',', $uris) . ' on calendar ' . $calendarId, Log::INFO, 'com_dpcalendar-caldav-backend');
 
 		return $data;
 	}
@@ -121,7 +124,7 @@ class DPCalendar extends PDO
 			// locations, tags, etc.
 			$model = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
 			$event = $model->getItem($event->id);
-			$this->log('Getting calendar object ' . $objectUri . ' on calendar ' . $calendarId);
+			Log::add('Getting calendar object ' . $objectUri . ' on calendar ' . $calendarId, Log::INFO, 'com_dpcalendar-caldav-backend');
 
 			return $this->toSabreArray($event);
 		}
@@ -211,11 +214,11 @@ class DPCalendar extends PDO
 			return parent::createCalendarObject($calendarId, $objectUri, $calendarData);
 		}
 
-		$this->log('Creating calendar object ' . $objectUri . ' on calendar ' . $calendarId);
+		Log::add('Creating calendar object ' . $objectUri . ' on calendar ' . $calendarId, Log::INFO, 'com_dpcalendar-caldav-backend');
 
 		$calendar = DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
 		if (!$calendar || !$calendar->canCreate) {
-			$this->log('No permission to create ' . $objectUri . ' on calendar ' . $calendarId);
+			Log::add('No permission to create ' . $objectUri . ' on calendar ' . $calendarId, Log::WARNING, 'com_dpcalendar-caldav-backend');
 			throw new Forbidden();
 		}
 
@@ -236,11 +239,11 @@ class DPCalendar extends PDO
 			return parent::updateCalendarObject($calendarId, $objectUri, $calendarData);
 		}
 
-		$this->log('Updating calendar object ' . $objectUri . ' on calendar ' . $calendarId);
+		Log::add('Updating calendar object ' . $objectUri . ' on calendar ' . $calendarId, Log::INFO, 'com_dpcalendar-caldav-backend');
 
 		$calendar = DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
 		if (!$calendar || !$calendar->canEdit) {
-			$this->log('No permission to update ' . $objectUri . ' on calendar ' . $calendarId);
+			Log::add('No permission to update ' . $objectUri . ' on calendar ' . $calendarId, Log::WARNING, 'com_dpcalendar-caldav-backend');
 			throw new Forbidden();
 		}
 
@@ -287,11 +290,11 @@ class DPCalendar extends PDO
 	public function deleteCalendarObject($calendarId, $objectUri)
 	{
 		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
-			$this->log('Deleting calendar object ' . $objectUri . ' on calendar ' . $calendarId);
+			Log::add('Deleting calendar object ' . $objectUri . ' on calendar ' . $calendarId, Log::INFO, 'com_dpcalendar-caldav-backend');
 
 			$calendar = DPCalendarHelper::getCalendar(str_replace('dp-', '', $calendarId));
 			if (!$calendar || (!$calendar->canDelete && !$calendar->canEditOwn)) {
-				$this->log('No permission to delete ' . $objectUri . ' on calendar ' . $calendarId);
+				Log::add('No permission to delete ' . $objectUri . ' on calendar ' . $calendarId, Log::WARNING, 'com_dpcalendar-caldav-backend');
 				throw new Forbidden();
 			}
 
@@ -299,12 +302,12 @@ class DPCalendar extends PDO
 			$event->load(['uid' => $objectUri]);
 
 			if (!$calendar->canDelete && $event->created_by != Factory::getUser()->id) {
-				$this->log('No permission to delete ' . $objectUri . ' on calendar ' . $calendarId . ' because not the owner');
+				Log::add('No permission to delete ' . $objectUri . ' on calendar ' . $calendarId . ' because not the owner', Log::WARNING, 'com_dpcalendar-caldav-backend');
 				throw new Forbidden();
 			}
 
 			if ($event->checked_out != 0 && $event->checked_out == Factory::getUser()->id) {
-				$this->log('Event ' . $objectUri . ' on calendar ' . $calendarId . ' is checked out');
+				Log::add('Event ' . $objectUri . ' on calendar ' . $calendarId . ' is checked out', Log::WARNING, 'com_dpcalendar-caldav-backend');
 				throw new Forbidden();
 			}
 
@@ -332,7 +335,7 @@ class DPCalendar extends PDO
 	public function updateCalendar($calendarId, \Sabre\DAV\PropPatch $propPatch)
 	{
 		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
-			$this->log('Update calendar ' . $calendarId . 'with propatch');
+			Log::add('Update calendar ' . $calendarId . 'with propatch', Log::INFO, 'com_dpcalendar-caldav-backend');
 			DPCalendarHelper::increaseEtag(str_replace('dp-', '', $calendarId));
 
 			return;
@@ -448,6 +451,7 @@ class DPCalendar extends PDO
 			'DPCalendarModel',
 			['event_before_save' => 'nooperationtocatch', 'event_after_save' => 'nooperationtocatch']
 		);
+		$model->getState();
 
 		$data = $dpEvent->getProperties();
 
@@ -476,11 +480,5 @@ class DPCalendar extends PDO
 		];
 
 		return $data;
-	}
-
-	private function log($message)
-	{
-		$path = Factory::getApplication()->get('log_path') . '/dpcalendar.debug.log';
-		file_put_contents($path, date('c') . ' ' . $message . PHP_EOL, FILE_APPEND);
 	}
 }

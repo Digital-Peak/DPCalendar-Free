@@ -10,4 +10,4 @@
 			iFrameResize({log: false});
 		});
 	});
-}());
+})();

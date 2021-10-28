@@ -82,7 +82,7 @@
 				e.addEventListener('click', (ev) => {
 					ev.preventDefault();
 					input.value = item.title;
-					input.dispatchEvent(new CustomEvent('dp-autocomplete-select', {detail: item}));
+					input.dispatchEvent(new CustomEvent('dp-autocomplete-select', { detail: item }));
 					root.parentElement.removeChild(root);
 					return false;
 				});
@@ -92,16 +92,17 @@
 			if (items && !root.querySelector('.dp-autocomplete__result_selected')) {
 				root.querySelector('.dp-autocomplete__result').classList.add('dp-autocomplete__result_selected');
 			}
-			DPCalendar.slideToggle(root, () => {
-				root.scrollTop = root.querySelector('.dp-autocomplete__result_selected').offsetTop;
-			});
+			DPCalendar.slideToggle(root, () => root.scrollTop = root.querySelector('.dp-autocomplete__result_selected').offsetTop);
 			Popper.createPopper(input, root, {
 				placement: 'bottom-start',
 				modifiers: [{
 					name: 'sameWidth',
 					enabled: true,
-					fn: ({state}) => {
+					fn: ({ state }) => {
 						state.styles.popper.width = state.rects.reference.width + `px`;
+					},
+					effect: ({ state }) => {
+						state.elements.popper.style.width = state.elements.reference.offsetWidth + 'px';
 					},
 					phase: 'beforeWrite',
 					requires: ['computeStyles']
@@ -109,4 +110,4 @@
 			});
 		});
 	};
-}());
+})();

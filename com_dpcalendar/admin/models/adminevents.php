@@ -7,11 +7,13 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Table\Table;
 use Joomla\Utilities\ArrayHelper;
 
-JLoader::import('joomla.application.component.modellist');
-
-class DPCalendarModelAdminEvents extends JModelList
+class DPCalendarModelAdminEvents extends ListModel
 {
 	public function __construct($config = [])
 	{
@@ -99,7 +101,7 @@ class DPCalendarModelAdminEvents extends JModelList
 
 		// Load the parameters.
 		$app = JFactory::getApplication();
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
 		// List state information.
 		parent::populateState('a.start_date', 'asc');
@@ -120,10 +122,12 @@ class DPCalendarModelAdminEvents extends JModelList
 				DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
 			);
 		} catch (Exception $e) {
-			JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+			if ($search) {
+				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+			}
 			$search = DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'), true);
 
-			JFactory::getApplication()->setUserState($this->context . '.filter.search_start', $search);
+			Factory::getApplication()->setUserState($this->context . '.filter.search_start', $search);
 		}
 		$this->setState('filter.search_start', $search);
 
@@ -138,7 +142,7 @@ class DPCalendarModelAdminEvents extends JModelList
 					DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
 				);
 			} catch (Exception $e) {
-				JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 				$search = '';
 
 				JFactory::getApplication()->setUserState($this->context . '.filter.search_end', $search);
@@ -165,7 +169,7 @@ class DPCalendarModelAdminEvents extends JModelList
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user  = JFactory::getUser();
+		$user  = Factory::getUser();
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'a.*'));
@@ -199,7 +203,7 @@ class DPCalendarModelAdminEvents extends JModelList
 		$eventType = $this->getState('filter.event_type');
 		if ($eventType == 0) {
 			$query->where('a.original_id > -1');
-		} else if ($eventType == 1) {
+		} elseif ($eventType == 1) {
 			$query->where('(a.original_id = -1 or a.original_id = 0)');
 		}
 
@@ -224,7 +228,7 @@ class DPCalendarModelAdminEvents extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} else if ($published === '') {
+		} elseif ($published === '') {
 			$query->where('a.state IN (0, 1, 3)');
 		}
 
@@ -235,14 +239,14 @@ class DPCalendarModelAdminEvents extends JModelList
 		$baselevel  = 1;
 		$categoryId = $this->getState('filter.category_id');
 		if (is_numeric($categoryId)) {
-			$cat_tbl = JTable::getInstance('Category', 'JTable');
+			$cat_tbl = Table::getInstance('Category', 'JTable');
 			$cat_tbl->load($categoryId);
 			$rgt       = $cat_tbl->rgt;
 			$lft       = $cat_tbl->lft;
 			$baselevel = (int)$cat_tbl->level;
 			$query->where('c.lft >= ' . (int)$lft);
 			$query->where('c.rgt <= ' . (int)$rgt);
-		} else if (is_array($categoryId)) {
+		} elseif (is_array($categoryId)) {
 			ArrayHelper::toInteger($categoryId);
 			$categoryId = implode(',', $categoryId);
 			$query->where('a.catid IN (' . $categoryId . ')');
@@ -265,7 +269,7 @@ class DPCalendarModelAdminEvents extends JModelList
 		if (!empty($search)) {
 			if (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
-			} else if (stripos($search, 'author:') === 0) {
+			} elseif (stripos($search, 'author:') === 0) {
 				$search = $db->quote('%' . $db->escape(substr($search, 7), true) . '%');
 				$query->where('(ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			} else {

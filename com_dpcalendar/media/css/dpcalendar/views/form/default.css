@@ -347,8 +347,8 @@
 .com-dpcalendar-eventform .dp-timezone .choices__inner, .com-dpcalendar-eventform .dp-timezone .choices__input {
 	min-height: unset;
 	padding: 0 !important;
-	background-color: inherit;
-	font-size: inherit;
+	background-color: unset;
+	font-size: unset;
 }
 
 .com-dpcalendar-eventform .dp-timezone .choices__input, .com-dpcalendar-eventform .dp-timezone .choices__input:focus {
@@ -405,8 +405,8 @@
 .com-dpcalendar-eventform .choices__inner, .com-dpcalendar-eventform .choices__input {
 	min-height: unset;
 	padding: 0 !important;
-	background-color: inherit;
-	font-size: inherit;
+	background-color: unset;
+	font-size: unset;
 }
 
 .com-dpcalendar-eventform .choices__input, .com-dpcalendar-eventform .choices__input:focus {

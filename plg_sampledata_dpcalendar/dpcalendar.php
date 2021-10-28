@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
@@ -1121,6 +1122,12 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$model           = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
 			$data['country'] = $model->getItem(['short_code' => $data['country']])->id;
 
+			// Defaults
+			$data['txn_type']     = '';
+			$data['txn_currency'] = '';
+			$data['payer_id']     = '';
+			$data['payer_email']  = '';
+
 			$model = BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
 
 			if (!$model->save($data)) {
@@ -1145,6 +1152,9 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$originalData['state'] = 1;
 		}
 		$originalData['access'] = (int)$this->app->get('access', 1);
+		if (!isset($originalData['access_content'])) {
+			$originalData['access_content'] = $originalData['access'];
+		}
 
 		if (!isset($originalData['all_day'])) {
 			$originalData['all_day'] = 0;
@@ -1191,6 +1201,10 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$data['language'] = count($this->languageCache) > 1 ? $code : '*';
 
 			$data = $this->convertCustomFields($data, $code, $language);
+
+			// Defaults
+			$data['orderurl']  = '';
+			$data['cancelurl'] = '';
 
 			$model = BaseDatabaseModel::getInstance('AdminEvent', 'DPCalendarModel', ['ignore_request' => true]);
 			if (!$model->save($data)) {

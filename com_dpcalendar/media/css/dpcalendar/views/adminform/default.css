@@ -124,8 +124,8 @@
 .com-dpcalendar-adminform .choices__inner, .com-dpcalendar-adminform .choices__input {
 	min-height: unset;
 	padding: 0 !important;
-	background-color: inherit;
-	font-size: inherit;
+	background-color: unset;
+	font-size: unset;
 }
 
 .com-dpcalendar-adminform .choices__input, .com-dpcalendar-adminform .choices__input:focus {

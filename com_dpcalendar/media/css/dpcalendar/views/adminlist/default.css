@@ -173,7 +173,8 @@
 	width: 1%;
 }
 
-.com-dpcalendar-adminlist .dp-table td, .com-dpcalendar-adminlist .dp-table th {
+.com-dpcalendar-adminlist .dp-table td,
+.com-dpcalendar-adminlist .dp-table th {
 	text-align: left;
 	border-left: 0;
 }
@@ -181,6 +182,10 @@
 .com-dpcalendar-adminlist .dp-table tfoot tr td {
 	background-color: inherit !important;
 	border-bottom: 0;
+}
+
+.com-dpcalendar-adminlist .dp-link-featured.active {
+	color: #ffb514;
 }
 
 .com-dpcalendar-adminlist-modal .dp-link {

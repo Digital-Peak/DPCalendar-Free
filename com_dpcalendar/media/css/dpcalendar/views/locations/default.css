@@ -117,8 +117,8 @@
 .com-dpcalendar-locations .dp-timezone .choices__inner, .com-dpcalendar-locations .dp-timezone .choices__input {
 	min-height: unset;
 	padding: 0 !important;
-	background-color: inherit;
-	font-size: inherit;
+	background-color: unset;
+	font-size: unset;
 }
 
 .com-dpcalendar-locations .dp-timezone .choices__input, .com-dpcalendar-locations .dp-timezone .choices__input:focus {

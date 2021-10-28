@@ -435,6 +435,11 @@ class DPCalendarControllerEvent extends FormController
 					unset($data[$field]);
 				}
 			}
+
+			// Unset also the capacity
+			if (array_key_exists('capacity', $data)) {
+				unset($data['capacity']);
+			}
 		}
 
 		$this->input->post->set('jform', $data);

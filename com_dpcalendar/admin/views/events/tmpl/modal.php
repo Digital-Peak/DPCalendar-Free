@@ -37,7 +37,7 @@ $function = $this->input->getCmd('function', 'jSelectEvent');
 				<?php foreach ($this->items as $i => $item) { ?>
 					<tr>
 						<td class="dp-table__col-expand">
-							<a class="dp-link"
+							<a class="dp-link" href="javascript:void(0)"
 							data-id="<?php echo $item->id; ?>"
 							data-title="<?php echo $this->escape(addslashes($item->title)); ?>"
 							data-calid="<?php echo $this->escape($item->catid); ?>"

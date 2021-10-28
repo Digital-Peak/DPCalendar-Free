@@ -221,4 +221,4 @@
 	DPCalendar.Map.clearMarkers = clearMarkers;
 	DPCalendar.Map.moveMarker = moveMarker;
 	DPCalendar.Map.drawCircle = drawCircle;
-}());
+})();

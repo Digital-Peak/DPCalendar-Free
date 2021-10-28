@@ -32,4 +32,4 @@
 			loadDPAssets(['/com_dpcalendar/js/dpcalendar/calendar.js']);
 		}
 	});
-}());
+})();

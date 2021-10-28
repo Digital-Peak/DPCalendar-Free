@@ -7,17 +7,22 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Registry\Registry;
 
-class DPCalendarModelCalendar extends JModelLegacy
+class DPCalendarModelCalendar extends ListModel
 {
-
-	private $items = null;
+	private $items    = null;
 	private $allItems = null;
 
-	protected function populateState()
+	protected function populateState($ordering = null, $direction = null)
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		$this->setState('filter.extension', 'com_dpcalendar');
 
@@ -29,7 +34,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 			$this->setState('filter.parentIds', $this->setState('filter.categories'));
 		}
 
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
 		$this->setState('filter.published', 1);
 		$this->setState('filter.access', true);
@@ -37,7 +42,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 
 	protected function getStoreId($id = '')
 	{
-		// Compile the store id.
+		// Compile the store id
 		$id .= ':' . $this->getState('filter.extension');
 		$id .= ':' . $this->getState('filter.published');
 		$id .= ':' . $this->getState('filter.access');
@@ -48,7 +53,7 @@ class DPCalendarModelCalendar extends JModelLegacy
 	public function getItems()
 	{
 		if (!$this->items) {
-			$app    = JFactory::getApplication();
+			$app    = Factory::getApplication();
 			$menu   = $app->getMenu();
 			$active = $menu->getActive();
 			$params = new Registry();
@@ -89,8 +94,8 @@ class DPCalendarModelCalendar extends JModelLegacy
 			}
 
 			// Add external calendars or only the private ones when not all is set
-			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent(
+			PluginHelper::importPlugin('dpcalendar');
+			$tmp = Factory::getApplication()->triggerEvent(
 				'onCalendarsFetch',
 				[null, in_array('-1', $this->getState('filter.parentIds', ['root'])) ? null : 'cd']
 			);
@@ -120,13 +125,13 @@ class DPCalendarModelCalendar extends JModelLegacy
 	{
 		JLoader::import('joomla.form.form');
 
-		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
-		JForm::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
+		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
+		Form::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
 
 		$format = $params->get('event_form_date_format', 'd.m.Y') . ' ' . $params->get('event_form_time_format', 'H:i');
-		$date   = \DPCalendar\Helper\DPCalendarHelper::getDate();
+		$date   = DPCalendarHelper::getDate();
 
-		$form = JForm::getInstance('com_dpcalendar.event', 'event', ['control' => 'jform']);
+		$form = Form::getInstance('com_dpcalendar.event', 'event', ['control' => 'jform']);
 		$form->setValue('start_date', null, $date->format($format, false));
 		$date->modify('+1 hour');
 		$form->setValue('end_date', null, $date->format($format, false));
@@ -142,6 +147,9 @@ class DPCalendarModelCalendar extends JModelLegacy
 		$form->setFieldAttribute('start_date', 'max_time', $params->get('event_form_max_time'));
 		$form->setFieldAttribute('end_date', 'min_time', $params->get('event_form_min_time'));
 		$form->setFieldAttribute('end_date', 'max_time', $params->get('event_form_max_time'));
+
+		// Enable to load only calendars with create permission
+		$form->setFieldAttribute('catid', 'action', 'true');
 
 		return $form;
 	}

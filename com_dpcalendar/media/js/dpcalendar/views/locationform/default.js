@@ -191,4 +191,4 @@
 			document.getElementById('jform_title').value = result.formated;
 		}
 	}
-}());
+})();

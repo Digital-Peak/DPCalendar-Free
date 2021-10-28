@@ -199,15 +199,27 @@ class DPCalendarTableEvent extends Table
 
 		if (!empty($this->images) && $this->images != '{}') {
 			$images = json_decode($this->images);
-			if (!empty($images->image_intro) && file_exists(JPATH_ROOT . '/' . $images->image_intro)) {
-				$props                      = Image::getImageFileProperties(JPATH_ROOT . '/' . $images->image_intro);
-				$images->image_intro_width  = $props->width;
-				$images->image_intro_height = $props->height;
+			if (!empty($images->image_intro)) {
+				$path = JPATH_ROOT . '/' . $images->image_intro;
+				if ($hashPos = strpos($images->image_intro, '#')) {
+					$path = JPATH_ROOT . '/' . substr($images->image_intro, 0, $hashPos);
+				}
+				if (file_exists($path)) {
+					$props                      = Image::getImageFileProperties($path);
+					$images->image_intro_width  = $props->width;
+					$images->image_intro_height = $props->height;
+				}
 			}
-			if (!empty($images->image_full) && file_exists(JPATH_ROOT . '/' . $images->image_full)) {
-				$props                     = Image::getImageFileProperties(JPATH_ROOT . '/' . $images->image_full);
-				$images->image_full_width  = $props->width;
-				$images->image_full_height = $props->height;
+			if (!empty($images->image_full)) {
+				$path = JPATH_ROOT . '/' . $images->image_full;
+				if ($hashPos = strpos($images->image_full, '#')) {
+					$path = JPATH_ROOT . '/' . substr($images->image_full, 0, $hashPos);
+				}
+				if (file_exists($path)) {
+					$props                     = Image::getImageFileProperties($path);
+					$images->image_full_width  = $props->width;
+					$images->image_full_height = $props->height;
+				}
 			}
 
 			$this->images = json_encode($images);

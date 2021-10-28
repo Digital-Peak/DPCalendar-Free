@@ -5,8 +5,7 @@
  */
 (function () {
 	'use strict';
-	function setup$5()
-	{
+	function setup$5() {
 		const rrule = document.getElementById('jform_rrule');
 		if (!rrule) {
 			return;
@@ -25,8 +24,7 @@
 			updateFormFromRule();
 		});
 	}
-	function updateFormFromRule()
-	{
+	function updateFormFromRule() {
 		if (!document.getElementById('jform_scheduling')) {
 			changeVisiblity();
 			return;
@@ -101,8 +99,7 @@
 		});
 		changeVisiblity();
 	}
-	function updateRuleFromForm()
-	{
+	function updateRuleFromForm() {
 		if (!document.getElementById('jform_scheduling')) {
 			return;
 		}
@@ -172,8 +169,7 @@
 		}
 		document.getElementById('jform_rrule').value = rule;
 	}
-	function changeVisiblity()
-	{
+	function changeVisiblity() {
 		document.querySelector('.dp-field-scheduling-end-date').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-interval').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-repeat-count').classList.add('dp-control_hidden');
@@ -288,8 +284,7 @@
 			observer.observe(mapElement);
 		});
 	}
-	function setup$3()
-	{
+	function setup$3() {
 		const map = document.querySelector('.com-dpcalendar-eventform .dp-map');
 		if (map != null) {
 			map.addEventListener('dp-map-loaded', updateLocationFrame);
@@ -341,8 +336,7 @@
 			);
 		});
 	}
-	function updateLocationFrame()
-	{
+	function updateLocationFrame() {
 		const map = document.querySelector('.com-dpcalendar-eventform .dp-map');
 		if (map == null || map.dpmap == null) {
 			return;
@@ -357,11 +351,10 @@
 			if (parts.length < 2 || (parts[0] == 0 && parts[1] == 0)) {
 				return;
 			}
-			DPCalendar.Map.createMarker(map, {latitude: parts[0], longitude: parts[1], title: content});
+			DPCalendar.Map.createMarker(map, { latitude: parts[0], longitude: parts[1], title: content });
 		});
 	}
-	function setup$2()
-	{
+	function setup$2() {
 		if (parseInt(document.getElementById('jform_id').value) != 0) {
 			return
 		}
@@ -377,17 +370,14 @@
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
 					DPCalendar.request(
 						'task=event.similar',
-						(json) => {
-							DPCalendar.autocomplete.setItems(titleInput, json.data);
-						},
+						(json) => DPCalendar.autocomplete.setItems(titleInput, json.data),
 						DPCalendar.formToQueryString(document.querySelector('.com-dpcalendar-eventform__form'), 'input:not([name=task]), select') + '&id=' + url.query.e_id
 					);
 				});
 			});
 		});
 	}
-	function setup$1()
-	{
+	function setup$1() {
 		const captcha = document.querySelector('.dp-field-captcha');
 		if (!captcha) {
 			return;
@@ -445,7 +435,7 @@
 				return;
 			}
 			loadDPAssets(['/com_dpcalendar/js/tingle/tingle.js', '/com_dpcalendar/css/tingle/tingle.css'], () => {
-				const modal = new tingle.modal({footer: true, closeMethods: []});
+				const modal = new tingle.modal({ footer: true, closeMethods: [] });
 				modal.setContent(text);
 				modal.addFooterBtn(Joomla.JText._('JYES'), 'dp-button', () => {
 					modal.close();
@@ -494,4 +484,4 @@
 			});
 		}
 	});
-}());
+})();

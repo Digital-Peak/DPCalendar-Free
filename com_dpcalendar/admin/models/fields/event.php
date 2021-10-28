@@ -5,96 +5,23 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
+defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session;
 
-defined('_JEXEC') or die();
-
-JLoader::import('joomla.form.formfield');
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-class JFormFieldEvent extends JFormField
+class JFormFieldEvent extends FormField
 {
 	protected $type = 'Event';
 
 	protected function getInput()
-	{
-		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
-			return $this->getJ4Input();
-		}
-
-		return $this->getJ3Input();
-	}
-
-	protected function getJ3Input()
-	{
-		// Load modal behavior
-		JHtml::_('behavior.modal', 'a.modal');
-
-		// Build the script
-		$script   = [];
-		$script[] = '    function jSelectEvent_' . $this->id . '(id, title, object) {';
-		$script[] = '        document.getElementById("' . $this->id . '_id").value = id;';
-		$script[] = '        document.getElementById("' . $this->id . '_name").value = title;';
-		$script[] = '        jQuery("#' . $this->id . '_id").trigger("change");';
-		$script[] = '        SqueezeBox.close();';
-		$script[] = '    }';
-
-		// Add to document head
-		JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
-
-		// Setup variables for display
-		$html = [];
-		$link = 'index.php?option=com_dpcalendar&amp;view=events&amp;layout=modal' . '&amp;tmpl=component&amp;function=jSelectEvent_' . $this->id;
-
-		$db    = JFactory::getDbo();
-		$query = $db->getQuery(true);
-		$query->select('title');
-		$query->from('#__dpcalendar_events');
-		$query->where('id=' . (int)$this->value);
-		$db->setQuery($query);
-
-		if ($this->value && !$title = $db->loadResult()) {
-			JFactory::getApplication()->enqueueMessage($db->getErrorMsg(), 500);
-
-			return;
-		}
-
-		if (empty($title)) {
-			$title = JText::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT');
-		}
-		$title = htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
-
-		// The current event input field
-
-		$html[] = '  <div class="blank input-append">';
-		$html[] = '  <input type="text" id="' . $this->id . '_name" value="' . $title . '" disabled="disabled" size="35" />';
-		$html[] = '    <a class="modal btn btn-primary" title="' . JText::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT') . '" href="' . $link .
-			'" rel="{handler: \'iframe\', size: {x:800, y:450}}">' . JText::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT_BUTTON') . '</a>';
-		$html[] = '  </div>';
-
-		// The active event id field
-		if (0 == (int)$this->value) {
-			$value = '';
-		} else {
-			$value = (int)$this->value;
-		}
-
-		$class = '';
-		if ($this->required) {
-			$class = ' class="required modal-value"';
-		}
-
-		$onchange = $this->onchange ? ' onchange="' . $this->onchange . '"' : '';
-
-		$html[] = '<input type="hidden" id="' . $this->id . '_id"' . $class . ' name="' . $this->name . '" value="' . $value . '" ' . $onchange . '/>';
-
-		return implode("\n", $html);
-	}
-
-	protected function getJ4Input()
 	{
 		$allowNew       = ((string)$this->element['new'] == 'true');
 		$allowEdit      = ((string)$this->element['edit'] == 'true');
@@ -113,11 +40,16 @@ class JFormFieldEvent extends JFormField
 		// Create the modal id.
 		$modalId = 'Event_' . $this->id;
 
-		/** @var \Joomla\CMS\WebAsset\WebAssetManager $wa */
-		$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
+		if (DPCalendarHelper::isJoomlaVersion('4', '<')) {
+			HTMLHelper::_('jquery.framework');
+			HTMLHelper::_('script', 'system/modal-fields.js', ['version' => 'auto', 'relative' => true]);
+		} else {
+			/** @var \Joomla\CMS\WebAsset\WebAssetManager $wa */
+			$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
 
-		// Add the modal field script to the document head.
-		$wa->useScript('field.modal-fields');
+			// Add the modal field script to the document head.
+			$wa->useScript('field.modal-fields');
+		}
 
 		// Script to proxy the select modal function to the modal-fields.js file.
 		if ($allowSelect) {
@@ -128,14 +60,10 @@ class JFormFieldEvent extends JFormField
 			}
 
 			if (!isset($scriptSelect[$this->id])) {
-				$wa->addInlineScript(
-					"
+				Factory::getDocument()->addScriptDeclaration("
 				window.jSelectEvent_" . $this->id . " = function (id, title, catid, object, url, language) {
 					window.processModalSelect('Event', '" . $this->id . "', id, title, catid, object, url, language);
-				}",
-					[],
-					['type' => 'module']
-				);
+				}");
 
 				Text::script('JGLOBAL_ASSOCIATIONS_PROPAGATE_FAILED');
 
@@ -144,13 +72,13 @@ class JFormFieldEvent extends JFormField
 		}
 
 		// Setup variables for display.
-		$linkArticles = 'index.php?option=com_dpcalendar&amp;view=events&amp;layout=modal&amp;tmpl=component&amp;' . \Joomla\CMS\Session\Session::getFormToken() . '=1';
-		$linkArticle  = 'index.php?option=com_dpcalendar&amp;view=event&amp;layout=modal&amp;tmpl=component&amp;' . \Joomla\CMS\Session\Session::getFormToken() . '=1';
+		$linkArticles = 'index.php?option=com_dpcalendar&amp;view=events&amp;layout=modal&amp;tmpl=component&amp;' . Session::getFormToken() . '=1';
+		$linkArticle  = 'index.php?option=com_dpcalendar&amp;view=event&amp;layout=modal&amp;tmpl=component&amp;' . Session::getFormToken() . '=1';
 
 		if (isset($this->element['language'])) {
 			$linkArticles .= '&amp;forcedLanguage=' . $this->element['language'];
-			$linkArticle  .= '&amp;forcedLanguage=' . $this->element['language'];
-			$modalTitle   = Text::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT') . ' &#8212; ' . $this->element['label'];
+			$linkArticle .= '&amp;forcedLanguage=' . $this->element['language'];
+			$modalTitle = Text::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT') . ' &#8212; ' . $this->element['label'];
 		} else {
 			$modalTitle = Text::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT');
 		}
@@ -185,19 +113,15 @@ class JFormFieldEvent extends JFormField
 
 		$html .= '<input class="form-control" id="' . $this->id . '_name" type="text" value="' . $title . '" readonly size="35">';
 
-		if ($allowSelect || $allowNew || $allowEdit || $allowClear) {
-			$html .= '<span class="input-group-append">';
-		}
-
 		// Select article button
 		if ($allowSelect) {
 			$html .= '<button'
 				. ' class="btn btn-primary' . ($value ? ' hidden' : '') . '"'
 				. ' id="' . $this->id . '_select"'
-				. ' data-toggle="modal"'
+				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
-				. ' data-target="#ModalSelect' . $modalId . '">'
-				. '<span class="fas fa-file" aria-hidden="true"></span> ' . Text::_('JSELECT')
+				. ' data-bs-target="#ModalSelect' . $modalId . '" data-target="#ModalSelect' . $modalId . '">'
+				. '<span class="icon-file" aria-hidden="true"></span> ' . Text::_('JSELECT')
 				. '</button>';
 		}
 
@@ -206,10 +130,10 @@ class JFormFieldEvent extends JFormField
 			$html .= '<button'
 				. ' class="btn btn-secondary' . ($value ? ' hidden' : '') . '"'
 				. ' id="' . $this->id . '_new"'
-				. ' data-toggle="modal"'
+				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
-				. ' data-target="#ModalNew' . $modalId . '">'
-				. '<span class="fas fa-plus" aria-hidden="true"></span> ' . Text::_('JACTION_CREATE')
+				. ' data-bs-target="#ModalNew' . $modalId . '" data-target="#ModalNew' . $modalId . '">'
+				. '<span class="icon-plus" aria-hidden="true"></span> ' . Text::_('JACTION_CREATE')
 				. '</button>';
 		}
 
@@ -218,10 +142,10 @@ class JFormFieldEvent extends JFormField
 			$html .= '<button'
 				. ' class="btn btn-secondary' . ($value ? '' : ' hidden') . '"'
 				. ' id="' . $this->id . '_edit"'
-				. ' data-toggle="modal"'
+				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
-				. ' data-target="#ModalEdit' . $modalId . '">'
-				. '<span class="fas fa-pen-square" aria-hidden="true"></span> ' . Text::_('JACTION_EDIT')
+				. ' data-bs-target="#ModalEdit' . $modalId . '" data-target="#ModalEdit' . $modalId . '">'
+				. '<span class="icon-pen-square" aria-hidden="true"></span> ' . Text::_('JACTION_EDIT')
 				. '</button>';
 		}
 
@@ -237,7 +161,7 @@ class JFormFieldEvent extends JFormField
 		}
 
 		if ($allowSelect || $allowNew || $allowEdit || $allowClear) {
-			$html .= '</span></span>';
+			$html .= '</span>';
 		}
 
 		// Select article modal
@@ -252,7 +176,7 @@ class JFormFieldEvent extends JFormField
 					'width'      => '800px',
 					'bodyHeight' => 70,
 					'modalWidth' => 80,
-					'footer'     => '<button type="button" class="btn btn-secondary" data-dismiss="modal">'
+					'footer'     => '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">'
 						. Text::_('JLIB_HTML_BEHAVIOR_CLOSE') . '</button>',
 				]
 			);

@@ -71,4 +71,4 @@
 			quickAdd.style.display = 'none';
 		});
 	});
-}());
+})();

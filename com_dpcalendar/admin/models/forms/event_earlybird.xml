@@ -11,7 +11,7 @@
 		<field name="date" type="text"
 		       label="COM_DPCALENDAR_FIELD_EARLYBIRD_DATE_LABEL" description="COM_DPCALENDAR_FIELD_EARLYBIRD_DATE_DESC"/>
 		<field name="label" type="text" label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL_LABEL"/>
-		<field name="description" type="textarea" filter="raw"
+		<field name="description" type="textarea" filter="JComponentHelper::filterText"
 		       label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
 	</fields>
 </form>

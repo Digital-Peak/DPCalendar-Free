@@ -4,15 +4,20 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\CMSPlugin;
 
 if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
 	return;
 }
 
-class PlgSearchDPCalendar extends JPlugin
+class PlgSearchDPCalendar extends CMSPlugin
 {
-
 	public function __construct(&$subject, $config)
 	{
 		parent::__construct($subject, $config);
@@ -40,18 +45,18 @@ class PlgSearchDPCalendar extends JPlugin
 			return [];
 		}
 
-		JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 		JLoader::import('joomla.application.component.model');
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('list.limit', $this->params->get('search_limit', 50));
 		$model->setState('category.id', 'root');
 		$model->setState('category.recursive', true);
 		$model->setState('filter.ongoing', 1);
 		$model->setState('filter.expand', true);
-		$model->setState('filter.my', $this->params->get('show_my_only', 0));
+		$model->setState('filter.author', $this->params->get('show_my_only', 0) == '1' ? '-1' : '0');
 
 		if ($this->params->get('pastevents', 1)) {
 			$model->setState('list.start-date', 0);
@@ -107,7 +112,7 @@ class PlgSearchDPCalendar extends JPlugin
 			$events[$key]->browsernav = $item->title;
 			$events[$key]->href       = DPCalendarHelperRoute::getEventRoute($item->id, $item->catid);
 
-			$events[$key]->text = $item->title . '<br/>' . JText::_('COM_DPCALENDAR_DATE') . ' ' .
+			$events[$key]->text = $item->title . '<br/>' . Text::_('COM_DPCALENDAR_DATE') . ' ' .
 				DPCalendarHelper::getDateStringFromEvent($item, $this->params->get('date_format'), $this->params->get('time_format'));
 		}
 

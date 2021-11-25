@@ -117,7 +117,7 @@ class DPCalendarModelCoupon extends \Joomla\CMS\MVC\Model\AdminModel
 		$this->setState('coupon.id', $pk);
 		$this->setState('form.id', $pk);
 
-		$return = $app->input->getVar('return', null, 'default', 'base64');
+		$return = $app->input->get('return', null, 'default', 'base64');
 
 		if (!JUri::isInternal(base64_decode($return))) {
 			$return = null;

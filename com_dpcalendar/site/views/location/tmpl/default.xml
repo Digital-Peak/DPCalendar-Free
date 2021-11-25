@@ -68,13 +68,19 @@
 				<option value="resday">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
 				<option value="resyear">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_YEAR</option>
 			</field>
-			<field name="location_header_show_datepicker" type="radio" class="btn-group" showon="location_show_resource_view:1" useglobal="true"
+			<field name="location_header_show_datepicker" type="list" showon="location_show_resource_view:1" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="location_header_show_title" type="radio" class="btn-group" showon="location_show_resource_view:1" useglobal="true"
+			<field name="location_header_show_today" type="list" showon="location_show_resource_view:1" useglobal="true"
+					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_LABEL"
+					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="location_header_show_title" type="list" showon="location_show_resource_view:1" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_DESC">
 				<option value="0">JNO</option>
@@ -132,7 +138,7 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="location_custom_css" type="textarea" filter="raw" useglobal="true"
+			<field name="location_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>

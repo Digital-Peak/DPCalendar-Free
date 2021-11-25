@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Plugin;
 
 defined('_JEXEC') or die();
@@ -47,7 +48,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 
 			if (key_exists('ETag', $response->headers)) {
 				$syncToken = $response->headers['ETag'];
-			} else if (key_exists('Last-Modified', $response->headers)) {
+			} elseif (key_exists('Last-Modified', $response->headers)) {
 				$syncToken = $response->headers['Last-Modified'];
 			}
 		}
@@ -258,6 +259,6 @@ abstract class SyncPlugin extends DPCalendarPlugin
 
 		$db = \JFactory::getDbo();
 		$db->setQuery('delete from #__dpcalendar_events where catid = ' . $db->q($this->identifier . '-' . $calendar->id));
-		$db->query();
+		$db->execute();
 	}
 }

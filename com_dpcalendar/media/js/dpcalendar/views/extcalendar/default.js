@@ -6,21 +6,7 @@
 (function () {
 	'use strict';
 	document.addEventListener('DOMContentLoaded', () => {
-		loadDPAssets(['/com_dpcalendar/js/iframe-resizer/iframeresizer-contentwindow.js']);
-		loadDPAssets(['/com_dpcalendar/js/choices/choices.js', '/com_dpcalendar/css/choices/choices.css'], () => {
-			const select = document.querySelector('.com-dpcalendar-extcalendar select');
-			select._choicejs = new Choices(
-				select,
-				{
-					itemSelectText: '',
-					noChoicesText: '',
-					shouldSortItems: false,
-					shouldSort: false,
-					removeItemButton: true,
-					searchResultLimit: 30
-				}
-			);
-		});
+		loadDPAssets(['/com_dpcalendar/js/iframe-resizer/iframeresizer-contentwindow.js', '/com_dpcalendar/js/dpcalendar/layouts/block/select.js']);
 		Joomla.submitbutton = (task) => {
 			const form = document.getElementsByName('adminForm')[0];
 			if (form && (task.indexOf('cancel') > -1 || task.indexOf('delete') > -1 || document.formvalidator.isValid(form))) {

@@ -136,9 +136,9 @@
 			<field name="event_map_long" type="text" useglobal="true" validate="decimal"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-			<field name="event_textbefore" type="textarea" filter="raw" useglobal="true"
+			<field name="event_textbefore" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
-			<field name="event_textafter" type="textarea" filter="raw" useglobal="true"
+			<field name="event_textafter" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 			<field name="event_count_clicks" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
@@ -151,7 +151,7 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="event_custom_css" type="textarea" filter="raw" useglobal="true"
+			<field name="event_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -240,6 +240,7 @@
 				<option value="capacity">COM_DPCALENDAR_FIELD_CAPACITY_LABEL</option>
 				<option value="capacity_used">COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL</option>
 				<option value="max_tickets">COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL</option>
+				<option value="booking_opening_date">COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_LABEL</option>
 				<option value="booking_closing_date">COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL</option>
 				<option value="booking_series">COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL</option>
 				<option value="price">COM_DPCALENDAR_FIELD_PRICE_LABEL</option>
@@ -314,9 +315,9 @@
 				<option value="*">JALL</option>
 			</field>
 			<field name="event_form_description" type="editor" buttons="true"
-			       hide="pagebreak,readmore" class="input-xlarge" filter="JComponentHelper::filterText"
+			       class="input-xlarge" filter="JComponentHelper::filterText"
 			       label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
-			<field name="event_form_custom_css" type="textarea" filter="raw" useglobal="true"
+			<field name="event_form_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -372,7 +373,7 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="booking_custom_css" type="textarea" filter="raw" useglobal="true"
+			<field name="booking_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -438,7 +439,7 @@
 			</field>
 			<field name="booking_form_default_country" type="dpcountries" class="dp-form-input dp-select"
 			       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"/>
-			<field name="booking_form_custom_css" type="textarea" filter="raw" useglobal="true"
+			<field name="booking_form_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -501,7 +502,7 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="ticket_custom_css" type="textarea" filter="raw" useglobal="true"
+			<field name="ticket_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -579,7 +580,7 @@
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
 				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 			</field>
-			<field name="ticket_form_custom_css" type="textarea" filter="raw" useglobal="true"
+			<field name="ticket_form_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>

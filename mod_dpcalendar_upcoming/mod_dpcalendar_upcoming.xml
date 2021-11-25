@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_upcoming</name>
 	<author>Digital Peak</author>
-	<creationDate>28 Oct 2021</creationDate>
+	<creationDate>25 Nov 2021</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.1.5</version>
+	<version>8.2.0</version>
 	<description>MOD_DPCALENDAR_UPCOMING_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_upcoming">mod_dpcalendar_upcoming.php</filename>
@@ -21,139 +21,138 @@
 	<scriptfile>script.php</scriptfile>
 	<config>
 		<fields name="params" addfieldpath="/administrator/components/com_dpcalendar/models/fields"
-		        addrulepath="/administrator/components/com_dpcalendar/models/rules">
+				addrulepath="/administrator/components/com_dpcalendar/models/rules">
 			<fieldset name="basic">
-				<field name="ids" type="dpcalendar" multiple="true"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SELECT_CALENDARS_DESC"
-				       extension="com_dpcalendar" label="MOD_DPCALENDAR_UPCOMING_FIELD_SELECT_CALENDARS_LABEL"
-				       required="true">
+				<field name="ids" type="dpcalendar" class="dp-select" required="true" multiple="true" extension="com_dpcalendar"
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_SELECT_CALENDARS_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_SELECT_CALENDARS_DESC">
 					<option value="root">JALL</option>
 				</field>
 				<field name="date_format" type="text" size="80"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_FORMAT_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_FORMAT_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_FORMAT_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_FORMAT_DESC"/>
 				<field name="time_format" type="text" size="80"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_TIME_FORMAT_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_TIME_FORMAT_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_TIME_FORMAT_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_TIME_FORMAT_DESC"/>
 				<field name="max_events" type="text" default="5"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MAX_EVENTS_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_MAX_EVENTS_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_MAX_EVENTS_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_MAX_EVENTS_DESC"/>
 				<field name="order" type="radio" default="asc" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_DESC">
 					<option value="asc">MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_ASCENDING</option>
 					<option value="desc">MOD_DPCALENDAR_UPCOMING_FIELD_ORDER_DESCENDING</option>
 				</field>
 				<field name="sort" type="list" default="start_date"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SORT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SORT_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_SORT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SORT_DESC">
 					<option value="start_date">MOD_DPCALENDAR_UPCOMING_FIELD_SORT_START_DATE</option>
 					<option value="modified">MOD_DPCALENDAR_UPCOMING_FIELD_SORT_MODIFIED</option>
 					<option value="created">MOD_DPCALENDAR_UPCOMING_FIELD_SORT_ADDED</option>
 				</field>
 				<field name="filter" type="text"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_DESC"/>
 				<field name="description_length" type="text"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DESC_COUNT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DESC_COUNT_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_DESC_COUNT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DESC_COUNT_DESC"/>
 				<field name="show_location" type="radio" default="0" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_LOCATION_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_LOCATION_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_LOCATION_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_LOCATION_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_price" type="radio" default="0" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_PRICE_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_PRICE_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_PRICE_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_PRICE_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_booking" type="radio" default="1" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_BOOKING_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_BOOKING_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_BOOKING_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_BOOKING_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_display_events" type="radio" default="0" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_DISPLAY_DATA_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_DISPLAY_DATA_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_DISPLAY_DATA_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_DISPLAY_DATA_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="ongoing" type="radio" default="0" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_ONGOING_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_ONGOING_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_ONGOING_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_ONGOING_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="expand" type="radio" default="1" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_EXPAND_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_EXPAND_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_EXPAND_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_EXPAND_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_as_popup" type="radio" default="0" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_OPEN_POPUP_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_OPEN_POPUP_DESC">
-					<option value="1">JYES</option>
-					<option value="0">JNO</option>
-				</field>
-				<field name="show_my_only" type="radio" default="0" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MY_ONLY_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MY_ONLY_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_OPEN_POPUP_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_OPEN_POPUP_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_map" type="radio" class="btn-group" default="0"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MAP_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MAP_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MAP_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_MAP_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="map_zoom" type="text" default="4" showon="show_map:1"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_ZOOM_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_ZOOM_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_ZOOM_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_ZOOM_DESC"/>
 				<field name="map_width" type="text" default="100%" showon="show_map:1"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_WIDTH_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_WIDTH_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_WIDTH_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_WIDTH_DESC"/>
 				<field name="map_height" type="text" default="350px" showon="show_map:1"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_HEIGHT_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_HEIGHT_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_HEIGHT_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_HEIGHT_DESC"/>
 				<field name="map_lat" type="text" default="47" validate="decimal" showon="show_map:1"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_LATITUDE_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_LATITUDE_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_LATITUDE_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_LATITUDE_DESC"/>
 				<field name="map_long" type="text" default="4" validate="decimal" showon="show_map:1"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_LONGITUDE_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_LONGITUDE_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_LONGITUDE_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_MAP_LONGITUDE_DESC"/>
+				<field name="filter_author" type="dpauthor" default="0" table_name="dpcalendar_events"
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_AUTHOR_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_AUTHOR_DESC">
+					<option value="-1">MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_AUTHOR_MY</option>
+					<option value="0">JNONE</option>
+				</field>
 				<field name="filter_featured" type="radio" class="btn-group" default="0"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_FEATURED_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_FEATURED_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_FEATURED_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_FEATURED_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="filter_locations" type="location" multiple="true"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LOCATIONS_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LOCATIONS_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LOCATIONS_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_LOCATIONS_DESC"/>
 				<field name="filter_tags" type="tag" multiple="true" mode="nested"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_TAGS_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_TAGS_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_TAGS_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_FILTER_TAGS_DESC"/>
 				<field name="default_menu_item" type="menuitem" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_MENU_ITEM_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_MENU_ITEM_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_MENU_ITEM_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_MENU_ITEM_DESC">
 					<option></option>
 				</field>
 				<field name="empty_text" type="radio" default="1" class="btn-group"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_EMPTY_TEXT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_EMPTY_TEXT_DESC">
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_EMPTY_TEXT_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_SHOW_EMPTY_TEXT_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="start_date" type="text"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_START_DESC"/>
 				<field name="end_date" type="text"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_LABEL" description="MOD_DPCALENDAR_UPCOMING_FIELD_DATE_END_DESC"/>
 				<field name="output_grouping" type="text"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_OUTPUT_GROUPING_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_OUTPUT_GROUPING_DESC"/>
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_OUTPUT_GROUPING_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_OUTPUT_GROUPING_DESC"/>
 				<field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL"
-				       description="JFIELD_ALT_MODULE_LAYOUT_DESC" default="_:default"/>
+						description="JFIELD_ALT_MODULE_LAYOUT_DESC" default="_:default"/>
 				<field name="moduleclass_sfx" type="text"
-				       label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-				<field name="custom_css" type="textarea" filter="raw"
-				       label="MOD_DPCALENDAR_UPCOMING_FIELD_CUSTOM_CSS_LABEL"
-				       description="MOD_DPCALENDAR_UPCOMING_FIELD_CUSTOM_CSS_DESC"/>
+						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+				<field name="custom_css" type="textarea" filter="JComponentHelper::filterText"
+						label="MOD_DPCALENDAR_UPCOMING_FIELD_CUSTOM_CSS_LABEL"
+						description="MOD_DPCALENDAR_UPCOMING_FIELD_CUSTOM_CSS_DESC"/>
 			</fieldset>
 		</fields>
 	</config>

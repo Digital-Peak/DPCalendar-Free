@@ -4,11 +4,13 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DPCalendarHelper;
 
 // Loading the strings for javascript
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
-$this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_MONTH');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_WEEK');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_DAY');
@@ -25,12 +27,12 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_FUTURE')
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_WEEK');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
 
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 
 $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
-$this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 $this->translator->translateJS('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 
@@ -43,8 +45,7 @@ $params = $this->params;
 
 // The options which will be passed to the js library
 $options                   = [];
-$options['requestUrlRoot'] = 'view=events&format=raw&limit=0&my=' . $params->get('show_my_only_calendar', '0') .
-	'&Itemid=' . $this->input->getInt('Itemid', 0);
+$options['requestUrlRoot'] = 'view=events&format=raw&limit=0&Itemid=' . $this->input->getInt('Itemid', 0);
 $options['calendarIds']    = $this->selectedCalendars;
 
 // Set the default view
@@ -104,13 +105,16 @@ if ($params->get('header_show_navigation', 1)) {
 	$options['headerToolbar']['left'][] = 'prev';
 	$options['headerToolbar']['left'][] = 'next';
 }
+if ($params->get('header_show_today', 1)) {
+	$options['headerToolbar']['left'][] = 'today';
+}
 if ($params->get('header_show_datepicker', 1)) {
 	$options['headerToolbar']['left'][] = 'datepicker';
 }
 if ($params->get('header_show_print', 1)) {
 	$options['headerToolbar']['left'][] = 'print';
 }
-if ($params->get('header_show_create', 1) && \DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+if ($params->get('header_show_create', 1) && DPCalendarHelper::canCreateEvent()) {
 	$options['headerToolbar']['left'][] = 'add';
 }
 if ($params->get('header_show_title', 1)) {
@@ -136,7 +140,7 @@ $options['headerToolbar']['center'] = implode(',', $options['headerToolbar']['ce
 $options['headerToolbar']['right']  = implode(',', $options['headerToolbar']['right']);
 
 $resourceViews = $params->get('calendar_resource_views');
-if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $this->resources) {
+if (!DPCalendarHelper::isFree() && $resourceViews && $this->resources) {
 	$options['resources']           = $this->resources;
 	$options['datesAboveResources'] = true;
 }
@@ -184,7 +188,7 @@ $options['show_map']              = $params->get('show_map', 1);
 $options['event_create_form']     = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
 $options['use_hash']              = true;
-if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+if (DPCalendarHelper::canCreateEvent()) {
 	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->returnPage, null, false);
 }
 

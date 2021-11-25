@@ -4,14 +4,23 @@
  * @copyright Copyright (C) 2021 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Helper;
 
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\Registry\Registry;
 
 trait ExportTrait
 {
+	/** @var CMSApplication $app */
+	protected $app;
+
+	/** @var Registry $params */
+	public $params;
+
 	public function getEventData()
 	{
 		$fields                   = [];
@@ -63,6 +72,8 @@ trait ExportTrait
 					return DPCalendarHelper::getDate($event->$name)->format('Y-m-d H:i:s', true);
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
+				case 'description':
+					return $this->params->get('export_strip_html') ? strip_tags($event->description) : $event->description;
 				default:
 					return $event->$name;
 			}
@@ -93,13 +104,14 @@ trait ExportTrait
 		$fields['event']        = Text::_('COM_DPCALENDAR_EVENT');
 		$fields['event_author'] = Text::_('COM_DPCALENDAR_FIELD_AUTHOR_LABEL');
 		$fields['event_calid']  = Text::_('COM_DPCALENDAR_CALENDAR');
+		$fields['timezone']     = Text::_('COM_DPCALENDAR_TIMEZONE');
 
 		$parser = function ($name, $booking) {
 			switch ($name) {
 				case 'status':
 					return Booking::getStatusLabel($booking);
 				case 'book_date':
-					return DPCalendarHelper::getDate($booking->$name)->format('c');
+					return DPCalendarHelper::getDate($booking->$name)->format('Y-m-d H:i:s', true);
 				case 'event':
 					$events = [];
 					foreach ($booking->tickets as $ticket) {
@@ -121,6 +133,8 @@ trait ExportTrait
 					}
 
 					return implode(', ', array_unique($calendars));
+				case 'timezone':
+					return DPCalendarHelper::getDate()->getTimezone()->getName();
 				default:
 					return $booking->$name;
 			}
@@ -151,6 +165,7 @@ trait ExportTrait
 		$fields['created']     = Text::_('JGLOBAL_CREATED');
 		$fields['type']        = Text::_('COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL');
 		$fields['event_calid'] = Text::_('COM_DPCALENDAR_CALENDAR');
+		$fields['timezone']    = Text::_('COM_DPCALENDAR_TIMEZONE');
 
 		$parser = function ($name, $ticket) {
 			switch ($name) {
@@ -158,12 +173,19 @@ trait ExportTrait
 					return Booking::getStatusLabel($ticket);
 				case 'created':
 					return DPCalendarHelper::getDate($ticket->$name)->format('c');
+				case 'start_date':
+				case 'end_date':
+					return DPCalendarHelper::getDate($ticket->$name)->format($ticket->all_day ? 'Y-m-d' : 'Y-m-d H:i:s', true);
+				case 'created':
+					return DPCalendarHelper::getDate($ticket->$name)->format('Y-m-d H:i:s', true);
 				case 'type':
 					if (!BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel')->getEvent($ticket->event_id)->price) {
 						return '';
 					}
 
 					return BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel')->getEvent($ticket->event_id)->price->label[$ticket->type];
+				case 'timezone':
+					return DPCalendarHelper::getDate()->getTimezone()->getName();
 				default:
 					return $ticket->$name;
 			}
@@ -209,7 +231,8 @@ trait ExportTrait
 			if ($fields) {
 				foreach ($fields as $field) {
 					if (isset($item->jcfields) && key_exists($field->id, $item->jcfields)) {
-						$line[] = html_entity_decode(strip_tags($item->jcfields[$field->id]->value));
+						$line[] = $this->params->get('export_strip_html')
+							? html_entity_decode(strip_tags($item->jcfields[$field->id]->value)) : $item->jcfields[$field->id]->value;
 					}
 				}
 			}

@@ -15,7 +15,7 @@ class DPCalendarController extends JControllerLegacy
 		$cachable = true;
 		$user     = JFactory::getUser();
 
-		$id    = JFactory::getApplication()->input->getVar('e_id');
+		$id    = JFactory::getApplication()->input->get('e_id');
 		$vName = JFactory::getApplication()->input->getCmd('view', 'calendar');
 		JFactory::getApplication()->input->set('view', $vName);
 

@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 if (!key_exists('item', $displayData) || !key_exists('context', $displayData)) {
@@ -46,11 +47,6 @@ if (!$fields) {
 		<?php if (!isset($field->value) || $field->value == '') { ?>
 			<?php continue; ?>
 		<?php } ?>
-		<dl class="dp-description dp-field-<?php echo $field->name; ?> <?php echo $field->params->get('render_class'); ?>">
-			<?php if ($field->params->get('showlabel', 1)) { ?>
-				<dt class="dp-description__label"><?php echo JText::_($field->label); ?></dt>
-			<?php } ?>
-			<dd class="dp-description__description"><?php echo $field->value; ?></dd>
-		</dl>
+		<?php echo FieldsHelper::render($context, 'field.' . $field->params->get('layout', 'render'), ['field' => $field]); ?>
 	<?php } ?>
 </div>

@@ -4,9 +4,19 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPCalendarViewEvent extends \DPCalendar\View\BaseView
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+
+class DPCalendarViewEvent extends BaseView
 {
 	protected $event;
 
@@ -20,7 +30,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 
 		$event = $this->get('Item');
 		if ($event == null || !$event->id) {
-			throw new Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
+			throw new \Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
 
 		// Use the options from the event
@@ -34,24 +44,27 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event->slug = $event->alias ? ($event->id . ':' . $event->alias) : $event->id;
 
 		// Check the access to the event
-		$levels = JFactory::getUser()->getAuthorisedViewLevels();
+		$levels = Factory::getUser()->getAuthorisedViewLevels();
 
 		if (!in_array($event->access, $levels) ||
 			((in_array($event->access, $levels) && (isset($event->category_access) && !in_array($event->category_access, $levels))))
 		) {
-			$this->setError($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'));
-
-			return false;
+			throw new \Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'));
 		}
 
-		$event->tags = new JHelperTags();
+		if ($this->getLayout() === 'mailtickets' && !$event->params->get('send-tickets-mail')) {
+			$this->app->enqueueMessage($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'), 'error');
+			$this->app->redirect($this->router->getEventRoute($event->id, $event->catid));
+		}
+
+		$event->tags = new TagsHelper();
 		$event->tags->getItemTags('com_dpcalendar.event', $event->id);
 
-		JPluginHelper::importPlugin('dpcalendar');
-		JPluginHelper::importPlugin('content');
+		PluginHelper::importPlugin('dpcalendar');
+		PluginHelper::importPlugin('content');
 
 		$event->text = $event->description;
-		JFactory::getApplication()->triggerEvent(
+		$this->app->triggerEvent(
 			'onContentPrepare',
 			[
 				'com_dpcalendar.event',
@@ -63,19 +76,19 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$event->description = $event->text;
 
 		$event->displayEvent = new stdClass();
-		$results             = JFactory::getApplication()->triggerEvent(
+		$results             = $this->app->triggerEvent(
 			'onContentAfterTitle',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->afterDisplayTitle = trim(implode("\n", $results));
 
-		$results = JFactory::getApplication()->triggerEvent(
+		$results = $this->app->triggerEvent(
 			'onContentBeforeDisplay',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
 		$event->displayEvent->beforeDisplayContent = trim(implode("\n", $results));
 
-		$results = JFactory::getApplication()->triggerEvent(
+		$results = $this->app->triggerEvent(
 			'onContentAfterDisplay',
 			['com_dpcalendar.event', &$event, &$event->params, 0]
 		);
@@ -112,7 +125,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 
 		$this->avatar     = '';
 		$this->authorName = '';
-		$author           = JFactory::getUser($event->created_by);
+		$author           = Factory::getUser($event->created_by);
 		if ($author) {
 			$this->authorName = $event->created_by_alias ? $event->created_by_alias : $author->name;
 
@@ -131,7 +144,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$this->event->contact_link = '';
 		if (!empty($event->contactid)) {
 			JLoader::register('ContactHelperRoute', JPATH_SITE . '/components/com_contact/helpers/route.php');
-			$this->event->contact_link = JRoute::_(
+			$this->event->contact_link = Route::_(
 				ContactHelperRoute::getContactRoute($event->contactid . ':' . $event->contactalias, $event->contactcatid)
 			);
 		}
@@ -164,11 +177,38 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		// Taxes stuff
 		$this->taxRate = null;
 		if ($this->country = \DPCalendar\Helper\Location::getCountryForIp()) {
-			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			$model         = \JModelLegacy::getInstance('Taxrate', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model         = BaseDatabaseModel::getInstance('Taxrate', 'DPCalendarModel', ['ignore_request' => true]);
 			$this->taxRate = $model->getItemByCountry($this->country->id);
 
 			$this->app->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		}
+
+		if (!isset($event->tickets)) {
+			$event->tickets = [];
+		}
+
+		foreach ($event->tickets as $ticket) {
+			// Try to find the label of the ticket type
+			$ticket->price_label = '';
+			if ($event->price) {
+				if (array_key_exists($ticket->type, $event->price->label) && $event->price->label[$ticket->type]) {
+					$ticket->price_label = $event->price->label[$ticket->type];
+				}
+			}
+		}
+
+		if ($this->getLayout() === 'mailtickets') {
+			$this->setModel(BaseDatabaseModel::getInstance('Form', 'DPCalendarModel'));
+			$this->returnPage = $this->get('ReturnPage');
+
+			Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
+			Form::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
+			$this->mailTicketsForm = Form::getInstance('com_dpcalendar.mailtickets', 'mailtickets', ['control' => 'jform']);
+			$this->mailTicketsForm->setValue('subject', null, $this->translate('COM_DPCALENDAR_FIELD_MAILTICKETS_SUBJECT_DEFAULT'));
+			$this->mailTicketsForm->setValue('body', null, $this->translate('COM_DPCALENDAR_FIELD_MAILTICKETS_MESSAGE_DEFAULT'));
+			$this->mailTicketsForm->setValue('event_id', null, $event->id);
+			HTMLHelper::_('behavior.formvalidator');
 		}
 
 		return parent::init();
@@ -204,6 +244,20 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		// Check if full
 		if ($event->capacity !== null && $event->capacity > 0 && $event->capacity_used >= $event->capacity && !$event->booking_waiting_list) {
 			return $this->translate('COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_CAPACITY_FULL');
+		}
+
+		// Check if registration started
+		$now                   = \DPCalendarHelper::getDate();
+		$registrationStartDate = \DPCalendar\Helper\Booking::getRegistrationStartDate($event);
+		if ($registrationStartDate->format('U') > $now->format('U')) {
+			return JText::sprintf(
+				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_START',
+				$registrationStartDate->format($this->params->get('event_date_format', 'd.m.Y'), true),
+				$registrationStartDate->format('H:i') != '00:00' ? $registrationStartDate->format(
+					$this->params->get('event_time_format', 'h:i a'),
+					true
+				) : ''
+			);
 		}
 
 		// Check if registration ended

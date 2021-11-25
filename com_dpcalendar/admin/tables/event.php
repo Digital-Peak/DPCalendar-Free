@@ -334,6 +334,7 @@ class DPCalendarTableEvent extends Table
 			$this->_db->qn('schedule') . ' = ' . $this->_db->q($this->schedule),
 			$this->_db->qn('capacity') . ' = ' . ($this->capacity === null ? 'NULL' : $this->_db->q($this->capacity)),
 			$this->_db->qn('max_tickets') . ' = ' . $this->_db->q($this->max_tickets),
+			$this->_db->qn('booking_opening_date') . ' = ' . $this->_db->q($this->booking_opening_date),
 			$this->_db->qn('booking_closing_date') . ' = ' . $this->_db->q($this->booking_closing_date),
 			$this->_db->qn('booking_series') . ' = ' . $this->_db->q($this->booking_series),
 			$this->_db->qn('booking_waiting_list') . ' = ' . $this->_db->q($this->booking_waiting_list),

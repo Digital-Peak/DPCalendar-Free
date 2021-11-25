@@ -1,10 +1,47 @@
-.com-dpcalendar-event .dp-heading {
-	clear: both;
-	margin-bottom: 1rem;
+.com-dpcalendar-event .dp-button-bar {
+	margin-bottom: 10px;
 }
 
-.com-dpcalendar-event .dp-heading_small {
-	border-bottom: none;
+.com-dpcalendar-event .dp-button {
+	display: inline-block;
+	font-weight: 400;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	border: 1px solid #c0c0c0;
+	border-radius: 0.1rem;
+	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	padding: 4px 10px;
+	color: #212529;
+	background-color: #fefefe;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-event .dp-button:disabled,
+.com-dpcalendar-event .dp-button[disabled] {
+	background-color: #cccccc;
+	color: #666666;
+	cursor: not-allowed;
+}
+
+.com-dpcalendar-event .dp-description {
+	display: flex;
+	flex-wrap: wrap;
+	margin-bottom: 10px;
+}
+
+.com-dpcalendar-event .dp-description__label {
+	flex: 0 0 160px;
+	text-align: left;
+}
+
+.com-dpcalendar-event .dp-description__description {
+	flex: 1 1 200px;
+	word-break: break-word;
 }
 
 .com-dpcalendar-event .dp-figure {
@@ -16,6 +53,15 @@
 	display: block;
 	width: 100%;
 	box-sizing: border-box;
+}
+
+.com-dpcalendar-event .dp-heading {
+	clear: both;
+	margin-bottom: 1rem;
+}
+
+.com-dpcalendar-event .dp-heading_small {
+	border-bottom: none;
 }
 
 .com-dpcalendar-event .dp-icon svg {
@@ -49,103 +95,148 @@
 	border-color: #f5c2c7;
 }
 
-.com-dpcalendar-event .dp-description {
-	display: flex;
+.com-dpcalendar-event .dp-button-map-site, .com-dpcalendar-event .dp-button-map-directions {
+	background-color: #4258FF;
+	color: #ffffff;
+	border: 1px solid #0f2bff;
+}
+
+.com-dpcalendar-event .dp-select {
+	width: 100%;
+}
+
+.com-dpcalendar-event .dp-select-element {
+	border: 0 !important;
+	clip: rect(0 0 0 0) !important;
+	clip-path: inset(50%) !important;
+	height: 1px !important;
+	overflow: hidden !important;
+	padding: 0 !important;
+	position: absolute !important;
+	white-space: nowrap !important;
+	width: 1px !important;
+}
+
+.com-dpcalendar-event .dp-select-container {
+	width: 100%;
+	min-width: 300px;
+	position: relative;
+}
+
+.com-dpcalendar-event .dp-select-container__options {
+	background: #ffffff;
+	border-radius: 4px;
+	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
+	max-height: 300px;
+	opacity: 0;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	padding: 0;
+	pointer-events: none;
+	transition: 300ms ease-in-out;
+	width: 100%;
+	z-index: 10001;
+}
+
+.com-dpcalendar-event .dp-select-container__options.open {
+	opacity: 1;
+	pointer-events: all;
+}
+
+.com-dpcalendar-event .dp-select-container__options-selected {
+	display: inline-flex;
 	flex-wrap: wrap;
-	margin-bottom: 10px;
+	row-gap: 0.5rem;
 }
 
-.com-dpcalendar-event .dp-description__label {
-	flex: 0 0 160px;
-	text-align: left;
+.com-dpcalendar-event .dp-select-container__handler {
+	width: 100%;
 }
 
-.com-dpcalendar-event .dp-description__description {
-	flex: 1 1 200px;
-	word-break: break-word;
+.com-dpcalendar-event .dp-select-container_unstyled, .com-dpcalendar-event .dp-select-container__input_unstyled {
+	display: block;
+	width: 100%;
+	cursor: pointer;
+	border: 1px solid #ced4da;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
+	padding: .2rem;
+	border-radius: .25rem;
+	transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	box-sizing: border-box;
 }
 
-.com-dpcalendar-event .dp-button-bar {
-	margin-bottom: 10px;
-}
-
-.com-dpcalendar-event .dp-button {
+.com-dpcalendar-event .dp-select-input {
 	display: inline-block;
-	font-weight: 400;
-	text-align: center;
-	white-space: nowrap;
-	vertical-align: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-	border: 1px solid #c0c0c0;
-	border-radius: 0.1rem;
-	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	padding: 4px 10px;
-	color: #212529;
-	background-color: #fefefe;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	margin: 0;
+	padding: 0;
+	outline: none;
+	border: 0;
+	box-shadow: none;
+	width: 1ch;
 }
 
-.com-dpcalendar-event .dp-button:disabled,
-.com-dpcalendar-event .dp-button[disabled] {
-	background-color: #cccccc;
-	color: #666666;
+.com-dpcalendar-event .dp-select-input:disabled {
 	cursor: not-allowed;
 }
 
-.com-dpcalendar-event .dp-timezone {
-	display: flex;
-	align-items: center;
+.com-dpcalendar-event .dp-select-input:focus-visible {
+	color: inherit;
+	box-shadow: none;
 }
 
-.com-dpcalendar-event .dp-timezone .choices {
-	width: 100%;
-	font-size: inherit;
+.com-dpcalendar-event .dp-select-option {
+	position: relative;
+	padding: 0.2rem 1rem;
+	cursor: pointer;
 }
 
-.com-dpcalendar-event .dp-timezone .choices__inner, .com-dpcalendar-event .dp-timezone .choices__input {
-	min-height: unset;
-	padding: 0 !important;
-	background-color: unset;
-	font-size: unset;
-}
-
-.com-dpcalendar-event .dp-timezone .choices__input, .com-dpcalendar-event .dp-timezone .choices__input:focus {
-	border: 0 !important;
-	box-shadow: unset;
-}
-
-.com-dpcalendar-event .dp-timezone .choices__list--multiple .choices__item {
-	margin: 3px;
-	padding: 2px 10px;
-	border-radius: 2px;
-	background-color: #2D9EDE;
-	border: 1px solid #1d82bb;
-	color: #000;
-}
-
-.com-dpcalendar-event .dp-timezone .choices__list--dropdown {
-	z-index: 1001;
-}
-
-.com-dpcalendar-event .dp-timezone .choices__list--dropdown .choices__item {
-	padding: 3px;
-}
-
-.com-dpcalendar-event .dp-timezone .choices__button {
-	background-image: url("../../../../images/icons/times.svg") !important;
-}
-
-.com-dpcalendar-event .dp-timezone__label {
+.com-dpcalendar-event .dp-select-option-group__label {
+	display: block;
 	font-weight: bold;
-	margin-right: 10px;
+	margin: 0.2rem 0;
+	padding: 0.2rem 0.5rem;
+	border-bottom: 1px solid #cecece;
 }
 
-.com-dpcalendar-event .dp-timezone .choices {
-	min-width: 300px;
-	margin: 0;
+.com-dpcalendar-event .dp-select-option[data-selected="true"], .com-dpcalendar-event .dp-select-option:hover {
+	background: #ddd;
+}
+
+.com-dpcalendar-event .dp-select-option[data-disabled="true"] {
+	background: #fff;
+	color: #999;
+	cursor: not-allowed;
+}
+
+.com-dpcalendar-event .dp-select-option-input {
+	cursor: pointer;
+}
+
+.com-dpcalendar-event .dp-select-option[data-selected="true"] {
+	display: inline-flex;
+	align-items: center;
+	margin-right: 0.5rem;
+}
+
+.com-dpcalendar-event .dp-select-option__icon {
+	display: flex;
+	margin-left: 0.5rem;
+}
+
+.com-dpcalendar-event .dp-select-option__icon svg {
+	width: 1rem;
+	height: 1rem;
+}
+
+.com-dpcalendar-event .dp-select-option_selected {
+	background-color: rgba(0, 0, 0, 0.1);
+}
+
+.com-dpcalendar-event .dp-select_error {
+	border: 3px solid #f5515c;
 }
 
 .com-dpcalendar-event .dp-table {
@@ -169,7 +260,8 @@
 	text-align: center;
 }
 
-.com-dpcalendar-event .dp-table__thead, .com-dpcalendar-event .dp-table thead {
+.com-dpcalendar-event .dp-table__thead,
+.com-dpcalendar-event .dp-table thead {
 	text-align: left;
 	vertical-align: bottom;
 }
@@ -198,7 +290,8 @@
 	.com-dpcalendar-event .dp-table tr {
 		display: block;
 	}
-	.com-dpcalendar-event .dp-table__thead, .com-dpcalendar-event .dp-table thead {
+	.com-dpcalendar-event .dp-table__thead,
+	.com-dpcalendar-event .dp-table thead {
 		display: none;
 	}
 	.com-dpcalendar-event .dp-table tr {
@@ -228,10 +321,14 @@
 	}
 }
 
-.com-dpcalendar-event .dp-button-map-site, .com-dpcalendar-event .dp-button-map-directions {
-	background-color: #4258FF;
-	color: #ffffff;
-	border: 1px solid #0f2bff;
+.com-dpcalendar-event .dp-timezone {
+	display: flex;
+	align-items: center;
+}
+
+.com-dpcalendar-event .dp-timezone__label {
+	font-weight: bold;
+	margin-right: 10px;
 }
 
 .com-dpcalendar-event .dp-map_consent {

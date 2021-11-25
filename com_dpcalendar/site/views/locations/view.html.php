@@ -25,7 +25,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 		}
 
 		$this->getModel()->setState('filter.tags', $this->params->get('locations_filter_tags'));
-		$this->getModel()->setState('filter.my', $this->params->get('locations_show_my_only'));
+		$this->getModel()->setState('filter.author', $this->params->get('locations_filter_author', 0));
 		$this->getModel()->setState('list.limit', 1000);
 		$this->getModel()->setState('filter.state', 1);
 

@@ -4,14 +4,19 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
-JLoader::import('joomla.application.component.modellist');
-
-class DPCalendarModelLocations extends JModelList
+class DPCalendarModelLocations extends ListModel
 {
 	public function __construct($config = [])
 	{
@@ -51,30 +56,30 @@ class DPCalendarModelLocations extends JModelList
 
 	protected function populateState($ordering = null, $direction = null)
 	{
-		// Load the filter state.
+		// Load the filter state
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
 
 		$published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
 		$this->setState('filter.state', $published);
-		$authorId = $this->getUserStateFromRequest($this->context . '.filter.author_id', 'filter_author_id');
-		$this->setState('filter.author_id', $authorId);
+		$authorId = $this->getUserStateFromRequest($this->context . '.filter.author', 'filter_created_by');
+		$this->setState('filter.author', $authorId);
 		$language = $this->getUserStateFromRequest($this->context . '.filter.language', 'filter_language', '');
 		$this->setState('filter.language', $language);
 
 		$this->setState('filter.longitude', null);
 		$this->setState('filter.longitude', null);
 
-		$app = JFactory::getApplication();
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$app = Factory::getApplication();
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
-		// List state information.
+		// List state information
 		parent::populateState('a.title', 'asc');
 	}
 
 	protected function getStoreId($id = '')
 	{
-		// Compile the store id.
+		// Compile the store id
 		$id .= ':' . $this->getState('filter.search');
 		$id .= ':' . $this->getState('filter.state');
 		$id .= ':' . $this->getState('filter.language');
@@ -92,7 +97,7 @@ class DPCalendarModelLocations extends JModelList
 			return [];
 		}
 
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		foreach ($locations as $location) {
 			if (empty($location->color)) {
 				$location->color = \DPCalendar\Helper\Location::getColor($location);
@@ -111,15 +116,15 @@ class DPCalendarModelLocations extends JModelList
 			);
 
 			if ($location->country) {
-				JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables', 'DPCalendarTable');
-				$country = JModelLegacy::getInstance('Country', 'DPCalendarModel')->getItem($location->country);
+				Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables', 'DPCalendarTable');
+				$country = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel')->getItem($location->country);
 				if ($country) {
-					JFactory::getApplication()->getLanguage()->load(
+					Factory::getApplication()->getLanguage()->load(
 						'com_dpcalendar.countries',
 						JPATH_ADMINISTRATOR . '/components/com_dpcalendar'
 					);
 					$location->country_code       = $country->short_code;
-					$location->country_code_value = JText::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
+					$location->country_code_value = Text::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
 				}
 			}
 
@@ -138,7 +143,7 @@ class DPCalendarModelLocations extends JModelList
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user  = JFactory::getUser();
+		$user  = Factory::getUser();
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'a.*'));
@@ -169,15 +174,8 @@ class DPCalendarModelLocations extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} else if ($published === '') {
+		} elseif ($published === '') {
 			$query->where('(a.state IN (0, 1))');
-		}
-
-		// Filter by author
-		$authorId = $this->getState('filter.author_id');
-		if (is_numeric($authorId)) {
-			$type = $this->getState('filter.author_id.include', true) ? '= ' : '<>';
-			$query->where('a.created_by ' . $type . (int)$authorId);
 		}
 
 		// Filter by search in title
@@ -187,7 +185,7 @@ class DPCalendarModelLocations extends JModelList
 				$ids = explode(',', substr($search, 4));
 				ArrayHelper::toInteger($ids);
 				$query->where('a.id in (' . implode(',', $ids) . ')');
-			} else if (stripos($search, 'id:') === 0) {
+			} elseif (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
 			} else {
 				$search = $db->quote('%' . $db->escape($search, true) . '%');
@@ -196,14 +194,9 @@ class DPCalendarModelLocations extends JModelList
 			}
 		}
 
-		// Filter on the language.
+		// Filter on the language
 		if ($language = $this->getState('filter.language')) {
 			$query->where('a.language = ' . $db->quote($language));
-		}
-
-		// Filter on the author.
-		if ($createdBy = $this->getState('filter.created_by')) {
-			$query->where('a.created_by = ' . $db->quote($createdBy));
 		}
 
 		$latitude  = trim($this->getState('filter.latitude'));
@@ -222,11 +215,11 @@ class DPCalendarModelLocations extends JModelList
 		if (!empty($location)) {
 			if (is_object($location)) {
 				$data = $location;
-			} else if (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
-				list ($latitude, $longitude) = explode(';', $location);
-				$data            = new stdClass();
-				$data->latitude  = str_replace('latitude=', '', $latitude);
-				$data->longitude = str_replace('longitude=', '', $longitude);
+			} elseif (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
+				list($latitude, $longitude) = explode(';', $location);
+				$data                       = new stdClass();
+				$data->latitude             = str_replace('latitude=', '', $latitude);
+				$data->longitude            = str_replace('longitude=', '', $longitude);
 			} else {
 				$data = \DPCalendar\Helper\Location::get($location, false);
 			}
@@ -250,13 +243,13 @@ class DPCalendarModelLocations extends JModelList
 						a.latitude > " . $db->quote($latitudeMin) . " AND
 						a.latitude < " . $db->quote($latitudeMax)
 				);
-			} else if ($radius > -1) {
+			} elseif ($radius > -1) {
 				$query->where('1 = 0');
 			}
 		}
 
-		if ($this->getState('filter.my')) {
-			$query->where('a.created_by = ' . (int)$user->id);
+		if ($author = $this->getState('filter.author')) {
+			$query->where('a.created_by = ' . (int)($author == '-1' ? $user->id : $author));
 		}
 
 		// Add the list ordering clause.

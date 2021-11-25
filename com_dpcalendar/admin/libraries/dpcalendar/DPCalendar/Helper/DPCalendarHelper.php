@@ -179,6 +179,17 @@ class DPCalendarHelper
 		}
 	}
 
+	public static function parseReadMore($event)
+	{
+		$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
+
+		if (!preg_match($pattern, $event->description)) {
+			$event->introText = '';
+			return;
+		}
+		list($event->introText, $event->description) = preg_split($pattern, $event->description, 2);
+	}
+
 	public static function parseImages($event)
 	{
 		if (is_string($event->images)) {

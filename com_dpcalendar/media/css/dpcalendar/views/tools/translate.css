@@ -87,7 +87,8 @@
 	text-align: center;
 }
 
-.com-dpcalendar-tools-translate .dp-table__thead, .com-dpcalendar-tools-translate .dp-table thead {
+.com-dpcalendar-tools-translate .dp-table__thead,
+.com-dpcalendar-tools-translate .dp-table thead {
 	text-align: left;
 	vertical-align: bottom;
 }
@@ -116,7 +117,8 @@
 	.com-dpcalendar-tools-translate .dp-table tr {
 		display: block;
 	}
-	.com-dpcalendar-tools-translate .dp-table__thead, .com-dpcalendar-tools-translate .dp-table thead {
+	.com-dpcalendar-tools-translate .dp-table__thead,
+	.com-dpcalendar-tools-translate .dp-table thead {
 		display: none;
 	}
 	.com-dpcalendar-tools-translate .dp-table tr {
@@ -176,13 +178,18 @@
 }
 
 .com-dpcalendar-tools-translate__footer {
-	padding: 20px;
+	padding: 2rem;
 	text-align: center;
 }
 
+.com-dpcalendar-tools-translate .dp-table {
+	border: 0;
+	background-color: #ffffff;
+}
+
 @media screen and (max-width: 767px) {
-	.com-dpcalendar-tools-translate .dp-table td {
-		padding-left: 1em;
+	.com-dpcalendar-tools-translate .dp-table {
+		padding-left: 1rem;
 	}
 }
 

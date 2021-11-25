@@ -4,7 +4,12 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Helper\ModuleHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
 	return;
@@ -28,13 +33,13 @@ $displayData = [
 	'params'       => $params
 ];
 
-JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-JFactory::getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');
+$app->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+$app->getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');
 
 JLoader::import('joomla.application.component.model');
-JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-$model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
+$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
 $model->getState();
 $model->setState('filter.parentIds', $params->get('ids', ['root']));
 $ids = [];
@@ -47,10 +52,10 @@ if (!$ids) {
 }
 
 $resources = [];
-if ($params->get('calendar_filter_locations') && $params->get('calendar_resource_views') && !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
+if ($params->get('calendar_filter_locations') && $params->get('calendar_resource_views') && !DPCalendarHelper::isFree()) {
 	// Load the model
-	JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-	$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+	BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+	$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 	$model->getState();
 	$model->setState('list.limit', 10000);
 	$model->setState('filter.search', 'ids:' . implode(',', $params->get('calendar_filter_locations')));
@@ -73,4 +78,4 @@ if ($params->get('calendar_filter_locations') && $params->get('calendar_resource
 	}
 }
 
-require JModuleHelper::getLayoutPath('mod_dpcalendar_mini', $params->get('layout', 'default'));
+require ModuleHelper::getLayoutPath('mod_dpcalendar_mini', $params->get('layout', 'default'));

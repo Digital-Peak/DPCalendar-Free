@@ -4,43 +4,53 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\View;
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Router\Router;
 use DPCalendar\Translator\Translator;
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\FormModel;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
 use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\User\User;
+use Joomla\Input\Input;
 use Joomla\Registry\Registry;
 
 class BaseView extends HtmlView
 {
 	protected $state;
 	protected $params;
+
+	/** @var Input */
 	protected $input = null;
 
-	/**
-	 * @var \JApplicationCms
-	 */
+	/** @var CMSApplication */
 	protected $app = null;
 
-	/**
-	 * @var \JUser
-	 */
+	/** @var User */
 	protected $user = null;
 
-	/**
-	 * @var Translator
-	 */
+	/** @var Translator */
 	protected $translator = null;
+
+	/** @var Router */
+	protected $router = null;
 
 	public function display($tpl = null)
 	{
-		$this->app   = \JFactory::getApplication();
+		$this->app   = Factory::getApplication();
 		$this->input = $this->app->input;
-		$this->user  = \JFactory::getUser();
+		$this->user  = Factory::getUser();
 		$this->tmpl  = $this->input->getCmd('tmpl') ? '&tmpl=' . $this->input->getCmd('tmpl') : '';
 
 		$state = $this->get('State');
@@ -87,16 +97,16 @@ class BaseView extends HtmlView
 			throw new \Exception(implode("\n", $errors), 500);
 		}
 
-		if ($this->getModel() instanceof \JModelForm) {
-			\JHtml::_('behavior.keepalive');
-			\JHtml::_('behavior.formvalidator');
+		if ($this->getModel() instanceof FormModel) {
+			HTMLHelper::_('behavior.keepalive');
+			HTMLHelper::_('behavior.formvalidator');
 
 			if ($this->params->get('save_history') && \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
-				\JHtml::_('behavior.modal', 'a.modal_jform_contenthistory');
+				HTMLHelper::_('behavior.modal', 'a.modal_jform_contenthistory');
 			}
 
 			if ($this->app->isClient('administrator') && \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
-				\JHtml::_('behavior.tabstate');
+				HTMLHelper::_('behavior.tabstate');
 			}
 		}
 
@@ -106,7 +116,7 @@ class BaseView extends HtmlView
 			$this->addToolbar();
 
 			// Only render the sidebar when we are not editing a form, modal or Joomla 4
-			if (!($this->getModel() instanceof \JModelAdmin)
+			if (!($this->getModel() instanceof AdminModel)
 				&& $this->input->get('tmpl') != 'component'
 				&& \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
 				$this->sidebar = \JHtmlSidebar::render();
@@ -132,7 +142,7 @@ class BaseView extends HtmlView
 		if ($menu) {
 			$this->params->def('page_heading', $this->params->get('page_title', $menu->title));
 		} else {
-			$this->params->def('page_heading', \JText::_('COM_DPCALENDAR_DEFAULT_PAGE_TITLE'));
+			$this->params->def('page_heading', $this->translate('COM_DPCALENDAR_DEFAULT_PAGE_TITLE'));
 		}
 
 		// Check for empty title and add site name if param is set
@@ -177,15 +187,15 @@ class BaseView extends HtmlView
 		if (empty($this->icon)) {
 			$this->icon = strtolower($this->getName());
 		}
-		\JToolbarHelper::title(\JText::_($this->title), $this->icon);
-		\JFactory::getDocument()->addStyleDeclaration(
+		ToolbarHelper::title($this->translate($this->title), $this->icon);
+		$this->document->addStyleDeclaration(
 			'.icon-48-' . $this->icon .
 			' {background-image: url(../media/com_dpcalendar/images/admin/48-' . $this->icon . '.png);background-repeat: no-repeat;}'
 		);
 
 		if ($canDo->get('core.admin', 'com_dpcalendar') && !($this->getModel() instanceof FormModel)) {
-			\JToolbarHelper::preferences('com_dpcalendar');
-			\JToolbarHelper::divider();
+			ToolbarHelper::preferences('com_dpcalendar');
+			ToolbarHelper::divider();
 		}
 
 		PluginHelper::importPlugin('dpcalendar');
@@ -225,11 +235,11 @@ class BaseView extends HtmlView
 		}
 
 		$active = $this->app->getMenu()->getActive();
-		$link   = new \JUri(\JRoute::_('index.php?option=com_users&view=login&Itemid=' . $active->id, false));
+		$link   = new Uri(Route::_('index.php?option=com_users&view=login&Itemid=' . $active->id, false));
 		$link->setVar('return', base64_encode('index.php?Itemid=' . $active->id));
 
 		$this->app->enqueueMessage($this->translate('COM_DPCALENDAR_NOT_LOGGED_IN'), 'warning');
-		$this->app->redirect(\JRoute::_($link));
+		$this->app->redirect(Route::_($link));
 
 		return false;
 	}

@@ -9,10 +9,19 @@ namespace DPCalendar\Plugin;
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\DPCalendarHelper;
 use DigitalPeak\ThinHTTP as HTTP;
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Helper\Ical;
+use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Sabre\VObject\Parser\Parser;
@@ -26,7 +35,7 @@ use Sabre\VObject\Reader;
 \JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 \JLoader::import('components.com_dpcalendar.tables.location', JPATH_ADMINISTRATOR);
 
-\JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
+Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
 
 /**
  * This is the base class for the DPCalendar plugins.
@@ -55,7 +64,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$uid = substr($eventId, 0, $pos);
 			\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
-			$content = $this->getContent($calendarId, \DPCalendarHelper::getDate('2000-01-01'), null, new Registry());
+			$content = $this->getContent($calendarId, DPCalendarHelper::getDate('2000-01-01'), null, new Registry());
 			if (is_array($content)) {
 				$content = implode(PHP_EOL, $content);
 			}
@@ -72,11 +81,11 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 		$start = null;
 		if (strlen($s) == 8) {
-			$start = \JFactory::getDate(substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' 00:00');
+			$start = Factory::getDate(substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' 00:00');
 			// Start date must be inclusive, @see VEvent::isInTimeRange
 			$start->modify('-1 second');
 		} else {
-			$start = \JFactory::getDate(
+			$start = Factory::getDate(
 				substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' ' . substr($s, 8, 2) . ':' . substr($s, 10, 2)
 			);
 		}
@@ -123,7 +132,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$e = clone $endDate;
 		}
 
-		\DPCalendarHelper::increaseMemoryLimit(100 * 1024 * 1024);
+		DPCalendarHelper::increaseMemoryLimit(100 * 1024 * 1024);
 
 		// Remove any time limit
 		@set_time_limit(0);
@@ -153,10 +162,10 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 
 		if ($startDate == null) {
-			$startDate = \DPCalendarHelper::getDate();
+			$startDate = DPCalendarHelper::getDate();
 		}
 		if ($endDate == null) {
-			$endDate = \DPCalendarHelper::getDate();
+			$endDate = DPCalendarHelper::getDate();
 			$endDate->modify('+5 year');
 		}
 		$data = $cal->VEVENT;
@@ -200,7 +209,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		foreach ($data as $event) {
 			if (!empty($filter)) {
 				$string = StringHelper::strtolower($event->SUMMARY) . ' ' . StringHelper::strtolower($event->DESCRIPTION) . ' ' . StringHelper::strtolower($event->LOCATION);
-				if (!\DPCalendarHelper::matches($string, $filter)) {
+				if (!DPCalendarHelper::matches($string, $filter)) {
 					continue;
 				}
 			}
@@ -256,9 +265,9 @@ abstract class DPCalendarPlugin extends CMSPlugin
 	{
 		if ($this->extCalendarsCache === null) {
 			\JLoader::import('joomla.application.component.model');
-			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-			$model = \JModelLegacy::getInstance('Extcalendars', 'DPCalendarModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('Extcalendars', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->getState();
 			$model->setState('filter.plugin', str_replace('dpcalendar_', '', $this->_name));
 			$model->setState('filter.state', 1);
@@ -268,7 +277,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$this->extCalendarsCache = $model->getItems();
 		}
 
-		$user      = \JFactory::getUser();
+		$user      = Factory::getUser();
 		$calendars = [];
 		foreach ($this->extCalendarsCache as $calendar) {
 			if (!empty($calendarIds) && !in_array($calendar->id, $calendarIds)) {
@@ -284,7 +293,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$cal->icalurl        = $this->getIcalUrl($cal);
 
 			// Null the sync date
-			if (!$cal->sync_date || $cal->sync_date == \JFactory::getDbo()->getNullDate()) {
+			if (!$cal->sync_date || $cal->sync_date == Factory::getDbo()->getNullDate()) {
 				$cal->sync_date = null;
 			}
 
@@ -385,7 +394,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			return;
 		}
 
-		$cache = \JFactory::getCache('plg_' . $this->_type . '_' . $this->_name);
+		$cache = Factory::getCache('plg_' . $this->_type . '_' . $this->_name);
 		$cache->setCaching($params->get('cache', 1) == '1' && $this->cachingEnabled);
 		$cache->setLifeTime($params->get('cache_time', 900) / 60);
 		$cache->options['locking'] = false;
@@ -412,7 +421,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		$id = str_replace($this->identifier . '-', '', $calendarId);
 
-		$cache = \JFactory::getCache('plg_' . $this->_type . '_' . $this->_name, 'callback');
+		$cache = Factory::getCache('plg_' . $this->_type . '_' . $this->_name, 'callback');
 		$cache->setCaching($params->get('cache', 1) == '1' && $this->cachingEnabled);
 		$cache->setLifeTime($params->get('cache_time', 900) / 60);
 		$cache->options['locking'] = false;
@@ -484,14 +493,14 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		if ((!isset($data['id']) || empty($data['id'])) && !$calendar->canCreate) {
 			// No create permission
-			\JFactory::getApplication()->enqueueMessage(\JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), 'error');
 
 			return false;
 		}
 
 		if (isset($data['id']) && $data['id'] && !$calendar->canEdit) {
 			// No edit permission
-			\JFactory::getApplication()->enqueueMessage(\JText::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), 'error');
 
 			return false;
 		}
@@ -510,7 +519,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$newEventId = $this->saveEvent($id[1], $id[0], $data);
 		}
 		if ($newEventId != false) {
-			$cache = \JFactory::getCache('plg_' . $this->_type . '_' . $this->_name);
+			$cache = Factory::getCache('plg_' . $this->_type . '_' . $this->_name);
 			$cache->clean();
 		}
 
@@ -541,14 +550,14 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		$calendar = $this->getDbCal($id[0]);
 		if (!$calendar->canDelete) {
-			\JFactory::getApplication()->enqueueMessage(\JText::_('JLIB_APPLICATION_ERROR_DELETE_NOT_PERMITTED'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('JLIB_APPLICATION_ERROR_DELETE_NOT_PERMITTED'), 'error');
 
 			return false;
 		}
 
 		$success = $this->deleteEvent($id[1], $id[0]);
 		if ($success != false) {
-			$cache = \JFactory::getCache('plg_' . $this->_type . '_' . $this->_name);
+			$cache = Factory::getCache('plg_' . $this->_type . '_' . $this->_name);
 			$cache->clean();
 		}
 
@@ -569,7 +578,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 	public function onContentPrepareForm($form, $data)
 	{
-		if (!($form instanceof \JForm)) {
+		if (!($form instanceof Form)) {
 			$this->_subject->setError('JERROR_NOT_A_FORM');
 
 			return false;
@@ -618,7 +627,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 
 		$eventId = '';
-		if ($data->id) {
+		if (!empty($data->id)) {
 			$id = str_replace($this->identifier . ':', $this->identifier . '-', $data->id);
 			$id = explode('-', str_replace($this->identifier . '-', '', $id), 2);
 			if (count($id) == 2) {
@@ -669,7 +678,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$event->catid                = $this->identifier . '-' . $calendarId;
 		$event->category_access      = 1;
 		$event->category_alias       = $calendarId;
-		$event->category_title       = \DPCalendarHelper::getCalendar($event->catid)->title;
+		$event->category_title       = DPCalendarHelper::getCalendar($event->catid)->title;
 		$event->parent_alias         = '';
 		$event->parent_id            = 0;
 		$event->original_id          = 0;
@@ -691,6 +700,8 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$event->booking_options      = null;
 		$event->booking_waiting_list = 0;
 		$event->booking_series       = 0;
+		$event->booking_opening_date = null;
+		$event->booking_closing_date = null;
 		$event->description          = '';
 		$event->schedule             = '';
 		$event->state                = 1;
@@ -728,7 +739,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$allDay = strtolower($event->{'X-MICROSOFT-CDO-ALLDAYEVENT'}) == 'true';
 		}
 
-		$startDate = \DPCalendarHelper::getDate($event->DTSTART->getDateTime()->format('U'), $allDay);
+		$startDate = DPCalendarHelper::getDate($event->DTSTART->getDateTime()->format('U'), $allDay);
 
 		$endDate = null;
 		if ($event->DURATION != null) {
@@ -744,7 +755,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 				$endDate = clone $startDate;
 				$endDate->setTime(23, 59, 59);
 			} else {
-				$endDate = \DPCalendarHelper::getDate($event->DTEND->getDateTime()->format('U'), $allDay);
+				$endDate = DPCalendarHelper::getDate($event->DTEND->getDateTime()->format('U'), $allDay);
 				if ($allDay) {
 					$endDate->modify('-1 day');
 				}
@@ -797,17 +808,17 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$title                 = (string)$event->SUMMARY;
 		$title                 = str_replace('\n', ' ', $title);
 		$title                 = str_replace('\N', ' ', $title);
-		$tmpEvent->title       = \DPCalendar\Helper\Ical::icalDecode($title);
-		$tmpEvent->alias       = \JApplicationHelper::stringURLSafe($tmpEvent->title);
-		$tmpEvent->description = \DPCalendar\Helper\Ical::icalDecode((string)$event->DESCRIPTION);
+		$tmpEvent->title       = Ical::icalDecode($title);
+		$tmpEvent->alias       = ApplicationHelper::stringURLSafe($tmpEvent->title);
+		$tmpEvent->description = Ical::icalDecode((string)$event->DESCRIPTION);
 
 		$created = $event->CREATED;
 		if (!empty($created)) {
-			$tmpEvent->created = \DPCalendarHelper::getDate($created->getDateTime()->format('U'))->toSql();
+			$tmpEvent->created = DPCalendarHelper::getDate($created->getDateTime()->format('U'))->toSql();
 		}
 		$modified = $event->{'LAST-MODIFIED'};
 		if (!empty($modified)) {
-			$tmpEvent->modified = \DPCalendarHelper::getDate($modified->getDateTime()->format('U'))->toSql();
+			$tmpEvent->modified = DPCalendarHelper::getDate($modified->getDateTime()->format('U'))->toSql();
 		}
 
 		$description = (string)$event->{'X-ALT-DESC'};
@@ -846,7 +857,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		// Add none standard properties
 		$color = (string)$event->{'x-color'};
-		if (!empty($color) && !\DPCalendarHelper::getCalendar($tmpEvent->catid)->color_force) {
+		if (!empty($color) && !DPCalendarHelper::getCalendar($tmpEvent->catid)->color_force) {
 			$tmpEvent->color = $color;
 		}
 
@@ -922,8 +933,8 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			if (!empty($geo) && strpos($geo, ';') !== false) {
 				static $locationModel = null;
 				if ($locationModel == null) {
-					\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-					$locationModel = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+					BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+					$locationModel = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 					$locationModel->getState();
 					$locationModel->setState('list.limit', 1);
 				}
@@ -985,7 +996,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 	protected function log($message)
 	{
-		\JFactory::getApplication()->enqueueMessage((string)$message, 'warning');
+		Factory::getApplication()->enqueueMessage((string)$message, 'warning');
 	}
 
 	protected function matchLocationFilterEvent($event, Registry $options)
@@ -1032,7 +1043,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		return $within;
 	}
 
-	protected function cleanupFormForEdit($ccalendarId, \JForm $form, $data)
+	protected function cleanupFormForEdit($ccalendarId, Form $form, $data)
 	{
 		$hideFieldsets['params']   = 'jbasic';
 		$hideFieldsets[]           = 'booking';
@@ -1078,7 +1089,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$form->setFieldAttribute('location_ids', 'multiple', false);
 
 		foreach ($form->getGroup('com_fields') as $item) {
-			$form->removeField(DPCalendarHelper::getFieldName($item), $item->group);
+			$form->removeField($item->fieldname, $item->group);
 		}
 	}
 
@@ -1093,9 +1104,9 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$uri = JPATH_ROOT . '/' . $uri;
 		}
 
-		if ($internal && \JFolder::exists($uri)) {
+		if ($internal && Folder::exists($uri)) {
 			$content = '';
-			foreach (\JFolder::files($uri, '\.ics', true, true) as $file) {
+			foreach (Folder::files($uri, '\.ics', true, true) as $file) {
 				$content .= file_get_contents($file);
 			}
 
@@ -1106,12 +1117,12 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			return file_get_contents($uri);
 		}
 
-		$u   = \JUri::getInstance($uri);
+		$u   = Uri::getInstance($uri);
 		$uri = $u->toString(['scheme', 'user', 'pass', 'host', 'port', 'path']);
 		$uri .= $u->toString(['query', 'fragment']);
 
 		$headers = [
-			'Accept-Language: ' . \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag()),
+			'Accept-Language: ' . Factory::getUser()->getParam('language', Factory::getLanguage()->getTag()),
 			'Accept: */*'
 		];
 		$data = (new HTTP())->get($uri, null, null, $headers);

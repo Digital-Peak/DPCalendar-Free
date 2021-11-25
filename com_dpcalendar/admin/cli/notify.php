@@ -157,7 +157,7 @@ class DPCalendarEventNotifier extends JApplicationCli
 			$query->set('reminder_sent_date=' . $db->quote(DPCalendarHelper::getDate()->toSql()));
 			$query->where('id=' . (int)$ticket->id);
 			$db->setQuery($query);
-			$db->query();
+			$db->execute();
 		} catch (Exception $e) {
 			JLog::add('Error sending mail! Exception is: ' . PHP_EOL . $e, JLog::ERROR, 'com_dpcalendar');
 		}

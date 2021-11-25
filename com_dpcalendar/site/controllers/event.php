@@ -7,7 +7,9 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\LayoutHelper;
+use DPCalendar\Helper\Location;
 use DPCalendar\Router\Router;
 use DPCalendar\Translator\Translator;
 use Joomla\CMS\Application\SiteApplication;
@@ -40,7 +42,7 @@ class DPCalendarControllerEvent extends FormController
 		$calendar = DPCalendarHelper::getCalendar(ArrayHelper::getValue(
 			$data,
 			'catid',
-			$this->input->getVar('id'),
+			$this->input->getString('id'),
 			'string'
 		));
 		$allow = null;
@@ -94,7 +96,7 @@ class DPCalendarControllerEvent extends FormController
 	public function cancel($key = 'e_id')
 	{
 		$return   = true;
-		$recordId = $this->input->getVar($key);
+		$recordId = $this->input->getString($key);
 		if (!$recordId || is_numeric($recordId)) {
 			$return = parent::cancel($key);
 		}
@@ -105,11 +107,10 @@ class DPCalendarControllerEvent extends FormController
 
 	public function delete($key = 'e_id')
 	{
-		$recordId = $this->input->getVar($key);
+		$recordId = $this->input->getString($key);
 
 		if (!$this->allowDelete([$key => $recordId], $key)) {
-			$this->setError(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
-			$this->setMessage($this->getError(), 'error');
+			$this->setMessage(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
 
 			$this->setRedirect(
 				Route::_('index.php?option=' . $this->option . '&view=' . $this->view_list . $this->getRedirectToListAppend(), false)
@@ -128,8 +129,7 @@ class DPCalendarControllerEvent extends FormController
 		if (is_numeric($event->id)) {
 			$this->getModel()->getTable('Event', 'DPCalendarTable')->publish([$recordId], -2);
 			if (!$this->getModel()->delete($recordId)) {
-				$this->setError(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
-				$this->setMessage($this->getModel()->getError(), 'error');
+				$this->setMessage(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
 
 				$this->setRedirect(
 					Route::_(
@@ -145,7 +145,7 @@ class DPCalendarControllerEvent extends FormController
 		$redirect = $this->getReturnPage();
 
 		// J4 router redirects to the delete task again
-		if ($return = $this->input->getVar('return', null, 'default', 'base64')) {
+		if ($return = $this->input->get('return', null, 'default', 'base64')) {
 			$redirect = base64_decode($return);
 		}
 		$this->setRedirect($redirect, Text::_('COM_DPCALENDAR_DELETE_SUCCESS'));
@@ -156,12 +156,11 @@ class DPCalendarControllerEvent extends FormController
 	public function edit($key = 'id', $urlVar = 'e_id')
 	{
 		$context  = "$this->option.edit.$this->context";
-		$cid      = $this->input->getVar('cid', [], 'post', 'array');
-		$recordId = (count($cid) ? $cid[0] : $this->input->getVar($urlVar));
+		$cid      = $this->input->get('cid', [], 'post', 'array');
+		$recordId = (count($cid) ? $cid[0] : $this->input->getString($urlVar));
 
 		if (!$this->allowEdit([$key => $recordId], $key)) {
-			$this->setError(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
-			$this->setMessage($this->getError(), 'error');
+			$this->setMessage(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
 
 			$this->setRedirect(
 				Route::_(
@@ -226,7 +225,7 @@ class DPCalendarControllerEvent extends FormController
 
 	protected function getReturnPage()
 	{
-		$return = $this->input->getVar('return', null, 'default', 'base64');
+		$return = $this->input->get('return', null, 'default', 'base64');
 		$hash   = $this->input->getString('urlhash');
 		if ($hash) {
 			$hash = '#' . trim($hash, '#');
@@ -242,7 +241,7 @@ class DPCalendarControllerEvent extends FormController
 	public function move()
 	{
 		$data       = [];
-		$data['id'] = $this->input->getVar('id');
+		$data['id'] = $this->input->getString('id');
 		$success    = false;
 		$model      = $this->getModel('form', 'DPCalendarModel', ['ignore_request' => false]);
 		// Load state, so the event id won't be overwritten on load state
@@ -312,7 +311,7 @@ class DPCalendarControllerEvent extends FormController
 				];
 				$displayData['event'] = $event;
 				$description          = trim($displayData['layoutHelper']->renderLayout('event.tooltip', $displayData));
-				$description          = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
+				$description          = DPCalendarHelper::fixImageLinks($description);
 
 				DPCalendarHelper::sendMessage(
 					Text::_('JLIB_APPLICATION_SAVE_SUCCESS'),
@@ -416,7 +415,7 @@ class DPCalendarControllerEvent extends FormController
 
 				list($title, $coordinates) = explode(' [', $locationId);
 
-				$location = \DPCalendar\Helper\Location::get(trim($coordinates, ']'), true, $title);
+				$location = Location::get(trim($coordinates, ']'), true, $title);
 				if (!$location->id) {
 					unset($data['location_ids'][$index]);
 					continue;
@@ -448,7 +447,7 @@ class DPCalendarControllerEvent extends FormController
 		$calendar = DPCalendarHelper::getCalendar($data['catid']);
 		if ($calendar->external) {
 			PluginHelper::importPlugin('dpcalendar');
-			$data['id'] = $this->input->getVar($urlVar, null);
+			$data['id'] = $this->input->getString($urlVar, null);
 
 			$app->setUserState('com_dpcalendar.edit.event.data', $data);
 
@@ -556,6 +555,29 @@ class DPCalendarControllerEvent extends FormController
 			base64_decode($this->input->getBase64('return')),
 			Text::_('COM_DPCALENDAR_SENT_INVITATION')
 		);
+	}
+
+	public function mailtickets()
+	{
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+
+		$data = $this->input->post->get('jform', [], 'array');
+		$this->getModel()->mailtickets((int)$data['event_id'], $data['subject'], $data['body'], $data['tickets']);
+
+		$this->setRedirect(
+			$this->getReturnPage(),
+			Text::_('COM_DPCALENDAR_CONTROLLER_EVENT_MAILTICKETS_SENT')
+		);
+	}
+
+	public function mailticketsuser()
+	{
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
+
+		$data = $this->input->post->get('jform', [], 'array');
+		$this->getModel()->mailtickets($data['event_id'], $data['subject'], $data['body'], [-1]);
+
+		$this->setRedirect($this->getReturnPage());
 	}
 
 	public function overlapping()
@@ -732,7 +754,7 @@ class DPCalendarControllerEvent extends FormController
 		$data->id = !empty($formData['id']) ? $formData['id'] : 0;
 
 		// Reset the color when equal to calendar
-		if ($data->color == \DPCalendar\Helper\DPCalendarHelper::getCalendar($data->catid)->color) {
+		if ($data->color == DPCalendarHelper::getCalendar($data->catid)->color) {
 			$data->color = '';
 		}
 
@@ -776,7 +798,7 @@ class DPCalendarControllerEvent extends FormController
 		// Check for request forgeries
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		$location = \DPCalendar\Helper\Location::get($this->input->getString('lookup'), false, $this->input->getString('lookup_title'));
+		$location = Location::get($this->input->getString('lookup'), false, $this->input->getString('lookup_title'));
 
 		$data = [];
 		if ($location->title) {

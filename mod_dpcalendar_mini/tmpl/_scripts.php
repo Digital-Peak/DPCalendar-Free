@@ -7,7 +7,6 @@
 defined('_JEXEC') or die();
 
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
-$translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_MONTH');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_WEEK');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_DAY');
@@ -24,12 +23,12 @@ $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_FUTURE');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_WEEK');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
 
+$translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 
 $translator->translateJS('JCANCEL');
 $translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
-$translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $translator->translateJS('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 
 $document->addScriptOptions('calendar.names', $dateHelper->getNames());

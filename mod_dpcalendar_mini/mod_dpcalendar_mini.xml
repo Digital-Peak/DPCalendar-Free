@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>28 Oct 2021</creationDate>
+	<creationDate>25 Nov 2021</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.1.5</version>
+	<version>8.2.0</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -22,7 +22,7 @@
 			 addfieldpath="/administrator/components/com_dpcalendar/models/fields"
 			 addrulepath="/administrator/components/com_dpcalendar/models/rules">
 			<fieldset name="basic">
-				<field name="ids" type="dpcalendar" multiple="true" extension="com_dpcalendar" required="true"
+				<field name="ids" type="dpcalendar" multiple="true" class="dp-select" extension="com_dpcalendar" required="true"
 					label="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_DESC"/>
 				<field name="compact_events" type="list" default="2"
 					label="MOD_DPCALENDAR_MINI_FIELD_COMPACT_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_COMPACT_DESC">
@@ -38,11 +38,6 @@
 					<option value="week">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_WEEK</option>
 					<option value="day">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_DAY</option>
 					<option value="list">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_LIST</option>
-				</field>
-				<field name="show_my_only_calendar" type="radio" class="btn-group" default="0"
-					label="MOD_DPCALENDAR_MINI_FIELD_SHOW_MY_ONLY_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_SHOW_MY_ONLY_DESC">
-					<option value="1">JYES</option>
-					<option value="0">JNO</option>
 				</field>
 				<field name="default_view" type="list" default="month"
 					label="MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_DESC">
@@ -221,30 +216,36 @@
 					<option value="6">SATURDAY</option>
 					<option value="0">SUNDAY</option>
 				</field>
+				<field name="calendar_filter_author" type="dpauthor" default="0" table_name="dpcalendar_events"
+						label="MOD_DPCALENDAR_MINI_FIELD_FILTER_AUTHOR_LABEL"
+						description="MOD_DPCALENDAR_MINI_FIELD_FILTER_AUTHOR_DESC">
+					<option value="-1">MOD_DPCALENDAR_MINI_FIELD_FILTER_AUTHOR_MY</option>
+					<option value="0">JNONE</option>
+				</field>
 				<field name="calendar_filter_locations" type="location" multiple="true"
-				    label="MOD_DPCALENDAR_MINI_FIELD_FILTER_LOCATIONS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_FILTER_LOCATIONS_DESC"/>
+					label="MOD_DPCALENDAR_MINI_FIELD_FILTER_LOCATIONS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_FILTER_LOCATIONS_DESC"/>
 				<field name="calendar_resource_views" type="list" multiple="true" showon="calendar_filter_locations!:"
-				    label="MOD_DPCALENDAR_MINI_FIELD_RESOURCES_VIEWS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_RESOURCES_VIEWS_DESC">
+					label="MOD_DPCALENDAR_MINI_FIELD_RESOURCES_VIEWS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_RESOURCES_VIEWS_DESC">
 					<option value=""></option>
 					<option value="month">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_MONTH</option>
 					<option value="week">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_WEEK</option>
 					<option value="day">MOD_DPCALENDAR_MINI_FIELD_DEFAULT_VIEW_DAY</option>
 				</field>
 				<field name="calendar_filter_tags" type="tag" multiple="true" mode="nested"
-				    label="MOD_DPCALENDAR_MINI_FIELD_FILTER_TAGS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_FILTER_TAGS_DESC"/>
+					label="MOD_DPCALENDAR_MINI_FIELD_FILTER_TAGS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_FILTER_TAGS_DESC"/>
 				<field name="screen_size_list_view" type="text" default="500"
-				    label="MOD_DPCALENDAR_MINI_FIELD_SCREEN_SIZE_LIST_VIEW_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_SCREEN_SIZE_LIST_VIEW_DESC"/>
+					label="MOD_DPCALENDAR_MINI_FIELD_SCREEN_SIZE_LIST_VIEW_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_SCREEN_SIZE_LIST_VIEW_DESC"/>
 			</fieldset>
 
 			<fieldset name="advanced">
 				<field name="start_date" type="text"
-				    label="MOD_DPCALENDAR_MINI_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_DATE_START_DESC"/>
+					label="MOD_DPCALENDAR_MINI_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_DATE_START_DESC"/>
 				<field name="layout" type="modulelayout"
 					label="JFIELD_ALT_LAYOUT_LABEL" description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
 				<field name="moduleclass_sfx" type="text"
-				    label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-				<field name="custom_css" type="textarea" filter="raw"
-				    label="MOD_DPCALENDAR_MINI_FIELD_CUSTOM_CSS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_CUSTOM_CSS_DESC"/>
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+				<field name="custom_css" type="textarea" filter="JComponentHelper::filterText"
+					label="MOD_DPCALENDAR_MINI_FIELD_CUSTOM_CSS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_CUSTOM_CSS_DESC"/>
 			</fieldset>
 		</fields>
 	</config>

@@ -68,20 +68,24 @@
 								week = 'last';
 							}
 							if (week) {
-								document.getElementById('jform_scheduling_monthly_week')._choicejs.setChoiceByValue([week]);
+								document.getElementById('jform_scheduling_monthly_week').value = week;
+								document.getElementById('jform_scheduling_monthly_week').dispatchEvent(new Event('change'));
 							}
 							if (day) {
-								document.getElementById('jform_scheduling_monthly_week_days')._choicejs.setChoiceByValue([day]);
+								document.getElementById('jform_scheduling_monthly_week_days').value = day;
+								document.getElementById('jform_scheduling_monthly_week_days').dispatchEvent(new Event('change'));
 							}
 						} else {
-							document.getElementById('jform_scheduling_weekly_days')._choicejs.setChoiceByValue([value]);
+							document.getElementById('jform_scheduling_weekly_days').value = value;
+							document.getElementById('jform_scheduling_weekly_days').dispatchEvent(new Event('change'));
 						}
 					});
 					break;
 				case 'BYMONTHDAY':
 					document.getElementById('jform_scheduling_monthly_options').querySelector('input[value="by_day"]').checked = true;
 					parts[1].split(',').forEach((value) => {
-						document.getElementById('jform_scheduling_monthly_days')._choicejs.setChoiceByValue([value]);
+						document.getElementById('jform_scheduling_monthly_days').value = value;
+						document.getElementById('jform_scheduling_monthly_days').dispatchEvent(new Event('change'));
 					});
 					break;
 				case 'COUNT':
@@ -308,18 +312,10 @@
 					}
 					geoComplete.value = '';
 					const select = document.getElementById('jform_location_ids');
-					if (select._choicejs.getValue(true).indexOf(json.data.id) != -1) {
+					if ([].slice.call(select.selectedOptions).map((option) => option.value).indexOf(json.data.id) != -1) {
 						return;
 					}
-					select._choicejs.setChoices(
-						[{
-							value: json.data.id ? json.data.id : json.data.display,
-							label: json.data.display,
-							selected: true
-						}],
-						'value',
-						'label'
-					);
+					select.add(new Option(json.data.display, json.data.id ? json.data.id : json.data.display, false, true));
 					updateLocationFrame();
 				},
 				'lookup=' + e.detail.value + '&lookup_title=' + e.detail.title
@@ -405,7 +401,7 @@
 				if (!document.getElementById('jform_rooms')) {
 					return true;
 				}
-				if (isNaN(e.detail.value)) {
+				if (isNaN(e.target.value)) {
 					return;
 				}
 				const loader = document.querySelector('.dp-loader');
@@ -416,9 +412,7 @@
 			});
 		}
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform__actions .dp-button')).forEach((button) => {
-			button.addEventListener('click', () => {
-				Joomla.submitbutton('event.' + button.getAttribute('data-task'));
-			});
+			button.addEventListener('click', () => Joomla.submitbutton('event.' + button.getAttribute('data-task')));
 		});
 		Joomla.submitbutton = (task) => {
 			const loader = document.querySelector('.dp-loader');
@@ -451,29 +445,13 @@
 		};
 	}
 	document.addEventListener('DOMContentLoaded', () => {
-		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js', '/com_dpcalendar/js/choices/choices.js', '/com_dpcalendar/css/choices/choices.css'], () => {
+		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js', '/com_dpcalendar/js/dpcalendar/layouts/block/select.js'], () => {
 			setup$5();
 			setup$4();
 			setup$3();
 			setup$2();
 			setup$1();
 			setup();
-			[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform select:not(#jform_color):not(#jform_tags):not(.dp-timezone__select)')).forEach((select) => {
-				if (select.options.length > 1000) {
-					return;
-				}
-				select._choicejs = new Choices(
-					select,
-					{
-						itemSelectText: '',
-						noChoicesText: '',
-						shouldSortItems: false,
-						shouldSort: false,
-						removeItemButton: select.id != 'jform_catid',
-						searchResultLimit: 30
-					}
-				);
-			});
 		});
 		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS', '')) {
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls, #com-dpcalendar-form-Content #booking .controls')).forEach((el) => {

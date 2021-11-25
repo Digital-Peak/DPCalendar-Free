@@ -6,6 +6,7 @@
  */
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
@@ -20,7 +21,7 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	protected function canDelete($record)
 	{
-		if (!empty($record->id) && $record->state != -2) {
+		if (!empty($record->id) && $record->state != -2 && !Factory::getApplication()->isClient('api')) {
 			return false;
 		}
 
@@ -31,11 +32,11 @@ class DPCalendarModelLocation extends JModelAdmin
 	{
 		$item = parent::getItem($pk);
 
-		if ($item->rooms && $item->rooms != '{}') {
-			$item->rooms = json_decode($item->rooms);
-		} else {
-			$item->rooms = [];
+		if (!$item) {
+			return $item;
 		}
+
+		$item->rooms = $item->rooms && $item->rooms != '{}' ? json_decode($item->rooms) : [];
 
 		if (empty($item->color)) {
 			$item->color = \DPCalendar\Helper\Location::getColor($item);
@@ -269,7 +270,7 @@ class DPCalendarModelLocation extends JModelAdmin
 		$this->setState('location.id', $pk);
 		$this->setState('form.id', $pk);
 
-		$return = $app->input->getVar('return', null, 'default', 'base64');
+		$return = $app->input->get('return', null, 'default', 'base64');
 
 		if (!JUri::isInternal(base64_decode($return))) {
 			$return = null;
@@ -289,8 +290,10 @@ class DPCalendarModelLocation extends JModelAdmin
 			$pks = (array)$pks;
 			ArrayHelper::toInteger($pks);
 			$this->_db->setQuery('delete from #__dpcalendar_events_location where location_id in (' . implode(',', $pks) . ')');
-			$this->_db->query();
+			$this->_db->execute();
 		}
+
+		return $success;
 	}
 
 	public function getReturnPage()

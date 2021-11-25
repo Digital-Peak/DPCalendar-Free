@@ -15,6 +15,7 @@ if (!$this->event->description && !$this->event->displayEvent->afterDisplayConte
 		<?php echo $this->translate('COM_DPCALENDAR_DESCRIPTION'); ?>
 	</h<?php echo $this->heading + 2; ?>>
 	<div class="com-dpcalendar-event__description-content">
+		<?php echo JHTML::_('content.prepare', $this->event->introText); ?>
 		<?php echo JHTML::_('content.prepare', $this->event->description); ?>
 	</div>
 	<div class="com-dpcalendar-event__event-text">

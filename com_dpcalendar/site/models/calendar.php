@@ -26,11 +26,11 @@ class DPCalendarModelCalendar extends ListModel
 
 		$this->setState('filter.extension', 'com_dpcalendar');
 
-		if (!$app->input->getVar('ids')) {
+		if (!$app->input->getString('ids')) {
 			$this->setState('filter.parentIds', $this->state->get('parameters.menu', new Registry())->get('ids'));
 			$this->setState('filter.categories', []);
 		} else {
-			$this->setState('filter.categories', explode(',', $app->input->getVar('ids')));
+			$this->setState('filter.categories', explode(',', $app->input->getString('ids')));
 			$this->setState('filter.parentIds', $this->setState('filter.categories'));
 		}
 

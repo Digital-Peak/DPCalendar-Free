@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Component\ComponentHelper;
@@ -41,8 +42,8 @@ $displayData = [
 	'params'       => $moduleParams
 ];
 
-Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-Factory::getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');
+$app->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+$app->getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');
 JLoader::import('joomla.application.component.model');
 BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
@@ -98,7 +99,7 @@ $model->setState('filter.language', Factory::getLanguage());
 $model->setState('filter.publish_date', true);
 $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
-$model->setState('filter.my', $moduleParams->get('show_my_only', 0));
+$model->setState('filter.author', $moduleParams->get('filter_author', 0));
 $model->setState('filter.featured', $moduleParams->get('filter_featured', 0));
 $model->setState('filter.tags', $moduleParams->get('filter_tags', []));
 $model->setState('filter.locations', $moduleParams->get('filter_locations', []));
@@ -162,7 +163,7 @@ foreach ($events as $event) {
 	);
 
 	$desc = $params->get('description_length') === '0' ? '' : HTMLHelper::_('content.prepare', $event->description);
-	if ($desc && $params->get('description_length') > 0) {
+	if (!$event->introText && $desc && $params->get('description_length') > 0) {
 		$descTruncated = JHtmlString::truncateComplex($desc, $params->get('description_length', null));
 
 		// Move the dots inside the last tag
@@ -186,7 +187,7 @@ foreach ($events as $event) {
 			$desc = $descTruncated . $desc;
 		}
 	}
-	$event->truncatedDescription = $desc;
+	$event->truncatedDescription = $event->introText ?: $desc;
 
 	// Determine if the event is running
 	$date = $dateHelper->getDate($event->start_date);

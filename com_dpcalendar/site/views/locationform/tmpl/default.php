@@ -14,6 +14,8 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/locationform/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/locationform/default.js');
 $this->dpdocument->addStyle($this->params->get('location_form_custom_css'));
 
+$this->translator->translateJS('COM_DPCALENDAR_OPTIONS');
+
 $action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id . $this->tmpl);
 ?>
 <div class="com-dpcalendar-locationform<?php echo $this->pageclass_sfx ? ' com-dpcalendar-locationform-' . $this->pageclass_sfx : ''; ?>">

@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 if (!$this->params->get('locations_show_resource_view', 1) || \DPCalendar\Helper\DPCalendarHelper::isFree()) {
@@ -15,11 +16,13 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_WEEK');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_DAY');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_YEAR');
 
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 
 $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
+$this->translator->translateJS('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 
 $this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());
 $this->dpdocument->addScriptOptions('timezone', $this->dateHelper->getDate()->getTimezone()->getName());
@@ -35,6 +38,9 @@ $options['initialView'] = $this->params->get('locations_default_view', 'resday')
 $options['headerToolbar']           = ['left' => [], 'center' => [], 'right' => []];
 $options['headerToolbar']['left'][] = 'prev';
 $options['headerToolbar']['left'][] = 'next';
+if ($this->params->get('locations_header_show_today', 1)) {
+	$options['headerToolbar']['left'][] = 'today';
+}
 if ($this->params->get('locations_header_show_datepicker', 1)) {
 	$options['headerToolbar']['left'][] = 'datepicker';
 }

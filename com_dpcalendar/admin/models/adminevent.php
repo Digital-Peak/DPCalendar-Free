@@ -51,7 +51,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 	protected function canDelete($record)
 	{
 		if (!empty($record->id)) {
-			if ($record->state != -2) {
+			if ($record->state != -2 && !Factory::getApplication()->isClient('api')) {
 				return false;
 			}
 			$user     = Factory::getUser();

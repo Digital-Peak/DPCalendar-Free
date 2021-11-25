@@ -6,22 +6,9 @@
 (function () {
 	'use strict';
 	document.addEventListener('DOMContentLoaded', () => {
+		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/select.js']);
 		[].slice.call(document.querySelectorAll('.dp-timezone__select')).forEach((select) => {
-			loadDPAssets(['/com_dpcalendar/js/choices/choices.js', '/com_dpcalendar/css/choices/choices.css'], () => {
-				select._choicejs = new Choices(
-					select,
-					{
-						itemSelectText: '',
-						noChoicesText: '',
-						shouldSortItems: false,
-						shouldSort: false,
-						searchResultLimit: 30
-					}
-				);
-				select.addEventListener('change', () => {
-					select.form.submit();
-				});
-			});
+			select.addEventListener('change', () => select.form.submit());
 		});
 	});
 })();

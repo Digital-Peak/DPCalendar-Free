@@ -4,16 +4,22 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\MVC\Model\ListModel;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
-JLoader::import('joomla.application.component.modellist');
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 
-class DPCalendarModelEvents extends JModelList
+class DPCalendarModelEvents extends ListModel
 {
 	public function __construct($config = [])
 	{
@@ -52,8 +58,8 @@ class DPCalendarModelEvents extends JModelList
 		$containsExternalEvents = false;
 
 		if (in_array('root', $categoryIds)) {
-			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+			PluginHelper::importPlugin('dpcalendar');
+			$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
 					foreach ($tmpCalendars as $calendar) {
@@ -77,8 +83,8 @@ class DPCalendarModelEvents extends JModelList
 				$endDate = DPCalendarHelper::getDate($this->getState('list.end-date'));
 			}
 
-			JPluginHelper::importPlugin('dpcalendar');
-			$tmp = JFactory::getApplication()->triggerEvent('onEventsFetch', [$catId, $startDate, $endDate, $options]);
+			PluginHelper::importPlugin('dpcalendar');
+			$tmp = Factory::getApplication()->triggerEvent('onEventsFetch', [$catId, $startDate, $endDate, $options]);
 			if (!empty($tmp)) {
 				$containsExternalEvents = true;
 				foreach ($tmp as $events) {
@@ -109,8 +115,8 @@ class DPCalendarModelEvents extends JModelList
 			return [];
 		}
 
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('list.ordering', 'ordering');
 		$model->setState('list.direction', 'asc');
@@ -157,10 +163,10 @@ class DPCalendarModelEvents extends JModelList
 			$item->schedule = $item->schedule ?: null;
 
 			// Implement View Level Access
-			if (!JFactory::getUser()->authorise('core.admin', 'com_dpcalendar')
-				&& !in_array($item->access_content, JFactory::getUser()->getAuthorisedViewLevels())
+			if (!Factory::getUser()->authorise('core.admin', 'com_dpcalendar')
+				&& !in_array($item->access_content, Factory::getUser()->getAuthorisedViewLevels())
 			) {
-				$item->title               = JText::_('COM_DPCALENDAR_EVENT_BUSY');
+				$item->title               = Text::_('COM_DPCALENDAR_EVENT_BUSY');
 				$item->location            = '';
 				$item->locations           = [];
 				$item->location_ids        = null;
@@ -177,6 +183,7 @@ class DPCalendarModelEvents extends JModelList
 			}
 
 			\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
+			\DPCalendar\Helper\DPCalendarHelper::parseReadMore($item);
 		}
 
 		return $items;
@@ -184,7 +191,7 @@ class DPCalendarModelEvents extends JModelList
 
 	protected function getListQuery()
 	{
-		$user   = JFactory::getUser();
+		$user   = Factory::getUser();
 		$groups = implode(',', $user->getAuthorisedViewLevels());
 
 		// Create a new query object.
@@ -235,8 +242,8 @@ class DPCalendarModelEvents extends JModelList
 				$categoryIds = [$categoryIds];
 			}
 			if (in_array('root', $categoryIds)) {
-				JPluginHelper::importPlugin('dpcalendar');
-				$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+				PluginHelper::importPlugin('dpcalendar');
+				$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 				if (!empty($tmp)) {
 					foreach ($tmp as $tmpCalendars) {
 						foreach ($tmpCalendars as $calendar) {
@@ -297,7 +304,7 @@ class DPCalendarModelEvents extends JModelList
 
 		// Filter by start and end dates.
 		$nullDate = $db->quote($db->getNullDate());
-		$date     = JFactory::getDate();
+		$date     = Factory::getDate();
 		$nowDate  = $db->quote($date->toSql());
 
 		if ($this->getState('filter.publish_date')) {
@@ -349,7 +356,7 @@ class DPCalendarModelEvents extends JModelList
 
 		// Filter by language
 		if ($this->getState('filter.language')) {
-			$query->where('a.language in (' . $db->quote(JFactory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
+			$query->where('a.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
 		}
 
 		// Filter for featured events
@@ -433,8 +440,8 @@ class DPCalendarModelEvents extends JModelList
 		// Search for a location
 		$location = $this->getState('filter.location');
 		if ($location) {
-			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->getState();
 			$model->setState('filter.location', $location);
 			$model->setState('filter.radius', $this->getState('filter.radius', 20));
@@ -477,10 +484,11 @@ class DPCalendarModelEvents extends JModelList
 			$query->where($db->quoteName('tagmap.tag_id') . ' in (' . implode(',', $tagIds) . ')');
 		}
 
-		if ($this->getState('filter.my')) {
-			$cond = 'a.created_by = ' . (int)$user->id;
+		if ($author = $this->getState('filter.author')) {
+			// My events when author is -1
+			$cond = 'a.created_by = ' . (int)($author == '-1' ? $user->id : $author);
 
-			if ($user->id > 0 && !DPCalendarHelper::isFree()) {
+			if ($author == '-1' && $user->id > 0 && !DPCalendarHelper::isFree()) {
 				$cond .= ' or t.id is not null';
 			}
 			$query->where('(' . $cond . ')');
@@ -514,7 +522,7 @@ class DPCalendarModelEvents extends JModelList
 		if (!$terms) {
 			return '';
 		}
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		$searchQuery = '';
 		foreach ($terms as $termsKey => $search) {
@@ -555,8 +563,8 @@ class DPCalendarModelEvents extends JModelList
 
 	public function setStateFromParams(Registry $params)
 	{
-		// Filter for my
-		$this->setState('filter.my', $params->get('show_my_only_calendar', $params->get('show_my_only_list')));
+		// Filter for author
+		$this->setState('filter.author', $params->get('calendar_filter_author', $params->get('list_filter_author', 0)));
 
 		// Filter for locations
 		$this->setState('filter.locations', $params->get('calendar_filter_locations', $params->get('list_filter_locations')));
@@ -568,8 +576,8 @@ class DPCalendarModelEvents extends JModelList
 	protected function populateState($ordering = null, $direction = null)
 	{
 		// Initialise variables
-		$app    = JFactory::getApplication();
-		$params = method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar');
+		$app    = Factory::getApplication();
+		$params = method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
 
 		// List state information
 		if ($app->input->getInt('limit', null) === null) {
@@ -599,7 +607,7 @@ class DPCalendarModelEvents extends JModelList
 		}
 		$this->setState('list.direction', $listOrder);
 
-		$id = $app->input->getVar('ids', null);
+		$id = $app->input->getString('ids', null);
 		if (!is_array($id)) {
 			$id = explode(',', $id);
 		}
@@ -607,9 +615,9 @@ class DPCalendarModelEvents extends JModelList
 			$id = $params->get('ids');
 		}
 		$this->setState('category.id', $id);
-		$this->setState('category.recursive', $app->input->getVar('layout') == 'module');
+		$this->setState('category.recursive', $app->input->getString('layout') == 'module');
 
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 		if (!$user->authorise('core.edit.state', 'com_dpcalendar') && !$user->authorise('core.edit', 'com_dpcalendar')) {
 			// Limit to published for people who can't edit or edit.state.
 			$this->setState('filter.state', [1, 3]);

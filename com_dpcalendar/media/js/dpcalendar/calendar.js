@@ -11,7 +11,7 @@
 			return options['calendarIds'];
 		}
 		return JSON.parse(localStorage.getItem(options['storageId'])).filter((calId) => {
-			return options['calendarIds'].indexOf(calId) !== -1;
+			return options['calendarIds'].findIndex((id) => String(id) === String(calId)) >= 0;
 		});
 	}
 	function attachStateListeners(calendar, options, util) {

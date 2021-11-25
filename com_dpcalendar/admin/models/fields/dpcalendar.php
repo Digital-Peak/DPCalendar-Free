@@ -4,10 +4,17 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\HTML\Document\HtmlDocument;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Plugin\PluginHelper;
+
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-JFormHelper::loadFieldClass('category');
+FormHelper::loadFieldClass('category');
 
 class JFormFieldDPCalendar extends JFormFieldCategory
 {
@@ -15,14 +22,18 @@ class JFormFieldDPCalendar extends JFormFieldCategory
 
 	protected function getOptions()
 	{
+		$doc = new HtmlDocument();
+		$doc->loadScriptFile('dpcalendar/fields/dpcalendar.js');
+		$doc->loadStyleFile('dpcalendar/fields/dpcalendar.css');
+
 		$options = parent::getOptions();
 
-		if ((boolean)$this->element->attributes()->internal) {
+		if ((bool)$this->element->attributes()->internal) {
 			return $options;
 		}
 
-		JPluginHelper::importPlugin('dpcalendar');
-		$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+		PluginHelper::importPlugin('dpcalendar');
+		$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 		if (empty($tmp)) {
 			return $options;
 		}
@@ -33,7 +44,7 @@ class JFormFieldDPCalendar extends JFormFieldCategory
 				if (strpos($calendar->id, 'cd-') === 0) {
 					continue;
 				}
-				$options[] = JHtml::_('select.option', $calendar->id, $calendar->title);
+				$options[] = HTMLHelper::_('select.option', $calendar->id, $calendar->title);
 			}
 		}
 

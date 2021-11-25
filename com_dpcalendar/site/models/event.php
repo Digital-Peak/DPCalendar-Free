@@ -30,7 +30,7 @@ class DPCalendarModelEvent extends ItemModel
 		$app = Factory::getApplication('site');
 
 		// Load state from the request.
-		$pk = $app->input->getVar('id');
+		$pk = $app->input->getString('id');
 		$this->setState('event.id', $pk);
 
 		$params = method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
@@ -227,6 +227,7 @@ class DPCalendarModelEvent extends ItemModel
 		}
 
 		\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
+		\DPCalendar\Helper\DPCalendarHelper::parseReadMore($item);
 
 		$item->params->set(
 			'access-tickets',
@@ -235,6 +236,11 @@ class DPCalendarModelEvent extends ItemModel
 		);
 		$item->params->set(
 			'access-bookings',
+			is_numeric($item->catid) &&
+			((!$user->guest && $item->created_by == $user->id) || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
+		);
+		$item->params->set(
+			'send-tickets-mail',
 			is_numeric($item->catid) &&
 			((!$user->guest && $item->created_by == $user->id) || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
 		);

@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_counter</name>
 	<author>Digital Peak</author>
-	<creationDate>28 Oct 2021</creationDate>
+	<creationDate>25 Nov 2021</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.1.5</version>
+	<version>8.2.0</version>
 	<description>MOD_DPCALENDAR_COUNTER_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_counter">mod_dpcalendar_counter.php</filename>
@@ -21,72 +21,71 @@
 	<config>
 		<fields name="params" addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 			<fieldset name="basic">
-				<field name="ids" type="dpcalendar" multiple="true"
-				       description="MOD_DPCALENDAR_COUNTER_FIELD_SELECT_CALENDARS_DESC"
-				       extension="com_dpcalendar" label="MOD_DPCALENDAR_COUNTER_FIELD_SELECT_CALENDARS_LABEL"
-				       required="true"/>
+				<field name="ids" type="dpcalendar" multiple="true" required="true" class="dp-select" extension="com_dpcalendar"
+						label="MOD_DPCALENDAR_COUNTER_FIELD_SELECT_CALENDARS_LABEL"
+						description="MOD_DPCALENDAR_COUNTER_FIELD_SELECT_CALENDARS_DESC"/>
 				<field name="filter" type="text" size="40" default=""
-				       label="MOD_DPCALENDAR_COUNTER_FIELD_FILTER_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_FILTER_DESC"/>
+						label="MOD_DPCALENDAR_COUNTER_FIELD_FILTER_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_FILTER_DESC"/>
 				<field name="max_events" type="text" default="1"
-				       label="MOD_DPCALENDAR_COUNTER_FIELD_MAX_EVENTS_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_MAX_EVENTS_DESC"/>
+						label="MOD_DPCALENDAR_COUNTER_FIELD_MAX_EVENTS_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_MAX_EVENTS_DESC"/>
 				<field name="description_length" type="text" default="" size="10"
-				       label="MOD_DPCALENDAR_COUNTER_FIELD_DESC_COUNT_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_DESC_COUNT_DESC"/>
+						label="MOD_DPCALENDAR_COUNTER_FIELD_DESC_COUNT_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_DESC_COUNT_DESC"/>
 				<field name="show_as_popup" type="radio" default="0" class="btn-group"
-				       label="MOD_DPCALENDAR_COUNTER_FIELD_OPEN_POPUP_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_OPEN_POPUP_DESC">
-					<option value="1">JYES</option>
-					<option value="0">JNO</option>
-				</field>
-				<field name="show_my_only" type="radio" default="0" class="btn-group"
-				       label="MOD_DPCALENDAR_COUNTER_SHOW_MY_ONLY_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_MY_ONLY_DESC">
+						label="MOD_DPCALENDAR_COUNTER_FIELD_OPEN_POPUP_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_OPEN_POPUP_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_field_year" type="radio" default="1" class="btn-group"
-				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_YEAR_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_YEAR_DESC">
+						label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_YEAR_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_YEAR_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_field_month" type="radio" default="1" class="btn-group"
-				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_MONTH_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_MONTH_DESC">
+						label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_MONTH_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_MONTH_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_field_week" type="radio" default="1" class="btn-group"
-				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_WEEK_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_WEEK_DESC">
+						label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_WEEK_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_WEEK_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_field_day" type="radio" default="1" class="btn-group"
-				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_DAY_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_DAY_DESC">
+						label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_DAY_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_DAY_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
 				<field name="show_field_hour" type="radio" default="1" class="btn-group"
-				       label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_HOUR_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_HOUR_DESC">
+						label="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_HOUR_LABEL" description="MOD_DPCALENDAR_COUNTER_SHOW_FIELD_HOUR_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
 				</field>
-				<field name="disable_counting" type="radio" default="0"
-				       class="btn-group" label="MOD_DPCALENDAR_COUNTER_DISABLE_COUNTING_LABEL"
-				       description="MOD_DPCALENDAR_COUNTER_DISABLE_COUNTING_DESC">
+				<field name="disable_counting" type="radio" default="0" class="btn-group"
+						label="MOD_DPCALENDAR_COUNTER_DISABLE_COUNTING_LABEL"
+						description="MOD_DPCALENDAR_COUNTER_DISABLE_COUNTING_DESC">
 					<option value="1">JYES</option>
 					<option value="0">JNO</option>
+				</field>
+				<field name="filter_author" type="dpauthor" default="0" table_name="dpcalendar_events"
+						label="MOD_DPCALENDAR_COUNTER_FILTER_AUTHOR_LABEL" description="MOD_DPCALENDAR_COUNTER_FILTER_AUTHOR_DESC">
+					<option value="-1">MOD_DPCALENDAR_COUNTER_FILTER_AUTHOR_MY</option>
+					<option value="0">JNONE</option>
 				</field>
 				<field name="filter_locations" type="location" multiple="true"
-				       label="MOD_DPCALENDAR_COUNTER_FILTER_LOCATIONS_LABEL" description="MOD_DPCALENDAR_COUNTER_FILTER_LOCATIONS_DESC"/>
+						label="MOD_DPCALENDAR_COUNTER_FILTER_LOCATIONS_LABEL" description="MOD_DPCALENDAR_COUNTER_FILTER_LOCATIONS_DESC"/>
 				<field name="filter_tags" type="tag" multiple="true" mode="nested"
-				       label="MOD_DPCALENDAR_COUNTER_FILTER_TAGS_LABEL" description="MOD_DPCALENDAR_COUNTER_FILTER_TAGS_DESC"/>
+						label="MOD_DPCALENDAR_COUNTER_FILTER_TAGS_LABEL" description="MOD_DPCALENDAR_COUNTER_FILTER_TAGS_DESC"/>
 			</fieldset>
 			<fieldset name="advanced">
 				<field name="start_date" type="text"
-				       label="MOD_DPCALENDAR_COUNTER_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_DATE_START_DESC"/>
+						label="MOD_DPCALENDAR_COUNTER_FIELD_DATE_START_LABEL" description="MOD_DPCALENDAR_COUNTER_FIELD_DATE_START_DESC"/>
 				<field name="layout" type="modulelayout" label="JFIELD_ALT_LAYOUT_LABEL"
-				       description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
+						description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
 				<field name="moduleclass_sfx" type="text"
-				       label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
-				<field name="custom_css" type="textarea" filter="raw"
-				       label="MOD_DPCALENDAR_COUNTER_FIELD_CUSTOM_CSS_LABEL"
-				       description="MOD_DPCALENDAR_COUNTER_FIELD_CUSTOM_CSS_DESC"/>
+						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+				<field name="custom_css" type="textarea" filter="JComponentHelper::filterText"
+						label="MOD_DPCALENDAR_COUNTER_FIELD_CUSTOM_CSS_LABEL"
+						description="MOD_DPCALENDAR_COUNTER_FIELD_CUSTOM_CSS_DESC"/>
 			</fieldset>
 		</fields>
 	</config>

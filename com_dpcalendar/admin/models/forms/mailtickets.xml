@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+		name="content">
+		<field name="subject" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_FIELD_MAILTICKETS_SUBJECT_LABEL" description="COM_DPCALENDAR_FIELD_MAILTICKETS_SUBJECT_DESC"/>
+		<field name="body" type="editor"
+			label="COM_DPCALENDAR_FIELD_MAILTICKETS_MESSAGE_LABEL" description="COM_DPCALENDAR_FIELD_MAILTICKETS_MESSAGE_DESC"/>
+		<field name="event_id" type="hidden" />
+	</fieldset>
+</form>

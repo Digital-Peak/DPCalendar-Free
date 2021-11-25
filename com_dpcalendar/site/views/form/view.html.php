@@ -30,7 +30,7 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 			return $this->handleNoAccess();
 		}
 
-		$requestParams = $this->input->getVar('jform', []);
+		$requestParams = $this->input->get('jform', [], 'array');
 		if (key_exists('start_date', $requestParams)) {
 			$this->form->setFieldAttribute('start_date', 'filter', null);
 			$this->form->setFieldAttribute('start_date', 'formated', true);

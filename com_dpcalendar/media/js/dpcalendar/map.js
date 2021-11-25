@@ -15,15 +15,15 @@
 			if (map.dpCachedMarkers == null) {
 				map.dpCachedMarkers = [];
 			}
-			map.dpCachedMarkers.push({data: data, dragCallback: dragCallback});
+			map.dpCachedMarkers.push({ data: data, dragCallback: dragCallback });
 			return;
 		}
 		if (!data.color) {
 			data.color = '000000';
 		}
-		const markerParams = {draggable: dragCallback != null};
+		const markerParams = { draggable: dragCallback != null };
 		markerParams.icon = L.divIcon({
-			className: 'dp-location-marker',
+			className: 'dp-location-marker' + (data.id ? ' dp-location-marker-' + data.id : ''),
 			html: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><path fill="#' + String(data.color).replace('#', '') + '" d="M172.268 501.67C26.97 291.031 0 269.413 0 192 0 85.961 85.961 0 192 0s192 85.961 192 192c0 77.413-26.97 99.031-172.268 309.67-9.535 13.774-29.93 13.773-39.464 0zM192 272c44.183 0 80-35.817 80-80s-35.817-80-80-80-80 35.817-80 80 35.817 80 80 80z"/></svg>',
 			iconSize: [25, 30],
 			iconAnchor: [10, 35]
@@ -100,10 +100,10 @@
 					type = google.maps.MapTypeId.TERRAIN;
 					break;
 			}
-			const tiles = L.gridLayer.googleMutant({type: type});
+			const tiles = L.gridLayer.googleMutant({ type: type });
 			tiles.addTo(map);
 			tiles.addEventListener('spawned', (e) => {
-				google.maps.event.addListenerOnce(e.mapObject, 'idle', () => {
+				google.maps.event.addListenerOnce(e.mapObject, 'tilesloaded', () => {
 					element.classList.remove('dp-map_loading');
 					element.classList.add('dp-map_loaded');
 				});

@@ -22,7 +22,7 @@ class DPCalendarControllerLocations extends JControllerAdmin
 	{
 		$return = parent::publish();
 
-		if (JFactory::getApplication()->input->getVar('ajax') != 0) {
+		if (JFactory::getApplication()->input->get('ajax') != 0) {
 			$text = JText::plural($this->text_prefix . '_N_ITEMS_TRASHED', count(JFactory::getApplication()->input->get('cid', [], 'array')));
 			if ($this->message == $text) {
 				DPCalendarHelper::sendMessage($this->message, false);

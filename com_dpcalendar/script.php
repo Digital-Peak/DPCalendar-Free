@@ -190,6 +190,15 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 		if (version_compare($version, '8.1.4') == -1 && file_exists(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates/mysql/6.0.0.sql')) {
 			unlink(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates/mysql/6.0.0.sql');
 		}
+		if (version_compare($version, '8.2.0')) {
+			$params = ComponentHelper::getParams('com_dpcalendar');
+			$params->set('calendar_filter_author', $params->get('show_my_only_calendar', '0') == '1' ? '-1' : '0');
+			$params->set('list_filter_author', $params->get('show_my_only_list', '0') == '1' ? '-1' : '0');
+			$params->set('map_filter_author', $params->get('map_view_show_my_only', '0') == '1' ? '-1' : '0');
+			$params->set('locations_filter_author', $params->get('locations_show_my_only', '0') == '1' ? '-1' : '0');
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
 	}
 
 	public function preflight($type, $parent)

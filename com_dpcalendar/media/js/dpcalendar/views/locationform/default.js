@@ -26,7 +26,11 @@
 		});
 	}
 	document.addEventListener('DOMContentLoaded', () => {
-		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js', '/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js'], () => {
+		loadDPAssets([
+			'/com_dpcalendar/js/dpcalendar/dpcalendar.js',
+			'/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js',
+			'/com_dpcalendar/js/dpcalendar/layouts/block/select.js'
+		], () => {
 			const geoComplete = document.getElementById('jform_geocomplete');
 			const map = document.querySelector('.dp-map');
 			const mapLoader = () => {
@@ -123,7 +127,7 @@
 			});
 			geoComplete.parentElement.querySelector('.dp-button').addEventListener('click', (e) => {
 				e.preventDefault();
-				geoComplete.dispatchEvent(new CustomEvent('dp-autocomplete-change', {value: geoComplete.value.trim()}));
+				geoComplete.dispatchEvent(new CustomEvent('dp-autocomplete-change', { value: geoComplete.value.trim() }));
 				return false;
 			});
 			[].slice.call(document.querySelectorAll('.com-dpcalendar-locationform__actions .dp-button')).forEach((button) => {
@@ -137,8 +141,7 @@
 			};
 		});
 	});
-	function getAddresString()
-	{
+	function getAddresString() {
 		const getValue = (name) => {
 			const tmp = document.getElementById('jform_' + name);
 			return tmp ? tmp.value + ', ' : '';
@@ -159,8 +162,7 @@
 		}
 		return street + city + getValue('province') + getValue('country');
 	}
-	function setGeoResult(result)
-	{
+	function setGeoResult(result) {
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-locationform__fields .dp-form-input')).forEach((input) => {
 			if (input.id == 'jform_title' || input.id == 'jform_geocomplete') {
 				return;

@@ -26,6 +26,8 @@ if (!empty($this->event->tickets)) {
 	$this->translator->translateJS('JNO');
 }
 
+$this->translator->translateJS('COM_DPCALENDAR_OPTIONS');
+
 $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id);
 ?>
 <div class="com-dpcalendar-eventform<?php echo $this->pageclass_sfx ? ' com-dpcalendar-eventform-' . $this->pageclass_sfx : ''; ?>">

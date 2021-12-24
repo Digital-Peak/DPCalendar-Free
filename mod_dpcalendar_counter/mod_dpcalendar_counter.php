@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
@@ -74,7 +75,7 @@ $model->setState('category.recursive', true);
 $model->setState('filter.search', $params->get('filter', ''));
 $model->setState('filter.expand', true);
 $model->setState('filter.state', 1);
-$model->setState('filter.language', $app->getLanguage());
+$model->setState('filter.language', $app->getLanguage()->getTag());
 $model->setState('filter.publish_date', true);
 $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
@@ -92,4 +93,4 @@ foreach ($events as $event) {
 	}
 }
 
-require JModuleHelper::getLayoutPath('mod_dpcalendar_counter', $params->get('layout', 'default'));
+require ModuleHelper::getLayoutPath('mod_dpcalendar_counter', $params->get('layout', 'default'));

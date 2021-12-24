@@ -2,16 +2,13 @@
 	width: 100%;
 	margin-bottom: 10px;
 }
-
-.com-dpcalendar-tools-import__filters div[class^="dp-filter__"] {
+.com-dpcalendar-tools-import__filters div[class^=dp-filter__] {
 	display: inline-block;
 	margin-right: 10px;
 }
-
 .com-dpcalendar-tools-import__plugins {
 	width: 100%;
 }
-
 .com-dpcalendar-tools-import__footer {
 	padding: 20px;
 	text-align: center;

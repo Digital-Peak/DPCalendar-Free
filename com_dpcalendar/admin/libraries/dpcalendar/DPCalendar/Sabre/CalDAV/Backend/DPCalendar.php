@@ -85,7 +85,7 @@ class DPCalendar extends PDO
 		$model->setState('list.limit', 10000);
 		$model->setState('filter.ongoing', true);
 		$model->setState('filter.state', 1);
-		$model->setState('filter.language', Factory::getLanguage());
+		$model->setState('filter.language', Factory::getLanguage()->getTag());
 		$model->setState('filter.publish_date', true);
 		$model->setState('list.start-date', '0');
 		$model->setState('list.end-date', DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));
@@ -142,7 +142,7 @@ class DPCalendar extends PDO
 		$model->setState('list.limit', 10000);
 		$model->setState('filter.ongoing', true);
 		$model->setState('filter.state', 1);
-		$model->setState('filter.language', Factory::getLanguage());
+		$model->setState('filter.language', Factory::getLanguage()->getTag());
 		$model->setState('filter.publish_date', true);
 		$model->setState('list.start-date', '0');
 		$model->setState('list.end-date', DPCalendarHelper::getDate(self::MAX_DATE)->format('U'));

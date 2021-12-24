@@ -278,7 +278,7 @@ class DPCalendarRouter extends RouterView
 			}
 		}
 
-		foreach ($calIds as $index => $calId) {
+		foreach ($calIds as $calId) {
 			// If the event belongs to the external calendar, return the segment as it is the id
 			if (!is_numeric($calId) && strpos($segment, $calId) === 0) {
 				return $segment;
@@ -289,7 +289,7 @@ class DPCalendarRouter extends RouterView
 		$dbquery = $db->getQuery(true);
 		$dbquery->select($dbquery->qn('id'))
 			->from($dbquery->qn('#__dpcalendar_events'))
-			->where('(alias = ' . $dbquery->q($segment) . ' or id = ' . (int)$segment . ')');
+			->where('(alias = ' . $dbquery->q($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : ''). ')');
 
 		if ($calIds && !in_array('-1', $calIds)) {
 			// Loop over the calids, they can be string as with DB cache of external events
@@ -320,7 +320,7 @@ class DPCalendarRouter extends RouterView
 		$dbquery = $db->getQuery(true);
 		$dbquery->select($dbquery->qn('id'))
 			->from($dbquery->qn('#__dpcalendar_locations'))
-			->where('(alias = ' . $dbquery->q($segment) . ' or id = ' . (int)$segment . ')');
+			->where('(alias = ' . $dbquery->q($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : '') . ')');
 		$db->setQuery($dbquery);
 
 		return (int)$db->loadResult();

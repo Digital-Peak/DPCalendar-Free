@@ -382,7 +382,7 @@
 		<field name="date_start" type="text"
 				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_DATE_START_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_LIST_DATE_START_DESC"/>
-		<field name="list_title_format" type="text" default="d.m.Y"
+		<field name="list_title_format" type="text" default="j.n.Y"
 				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_HEADER_DATE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_LIST_HEADER_DATE_DESC"/>
 		<field name="list_increment" type="text" default="1 month"

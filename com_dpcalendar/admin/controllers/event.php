@@ -22,11 +22,11 @@ class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormControlle
 
 	protected function allowAdd($data = [])
 	{
-		// Initialise variables
+		// Initialize variables
 		$categoryId = ArrayHelper::getValue($data, 'catid', $this->input->getInt('filter_category_id'), 'int');
 
 		if (!$categoryId) {
-			// In the absense of better information, revert to the component permissions
+			// In the absence of better information, revert to the component permissions
 			return parent::allowAdd($data);
 		}
 

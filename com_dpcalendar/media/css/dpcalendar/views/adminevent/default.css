@@ -2,21 +2,17 @@
 	display: flex;
 	flex-wrap: wrap;
 }
-
 .com-dpcalendar-eventform .dp-form__title .dp-field-title {
 	margin-right: 1rem;
 }
-
 .com-dpcalendar-eventform .dp-form__title .dp-field-title,
 .com-dpcalendar-eventform .dp-form__title .dp-field-alias {
 	flex: 1 1 200px;
 }
-
 .com-dpcalendar-eventform .dp-form__title .dp-field-title .control-label,
 .com-dpcalendar-eventform .dp-form__title .dp-field-alias .control-label {
 	flex: unset;
 }
-
 .com-dpcalendar-eventform .dp-form__title .form-text {
 	display: none;
 }

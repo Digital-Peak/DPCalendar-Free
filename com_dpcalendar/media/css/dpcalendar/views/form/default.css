@@ -1,7 +1,7 @@
+@charset "UTF-8";
 .com-dpcalendar-eventform {
 	clear: both;
 }
-
 .com-dpcalendar-eventform .dp-autocomplete {
 	border-right: 1px solid rgba(0, 0, 0, 0.2);
 	border-left: 1px solid rgba(0, 0, 0, 0.2);
@@ -13,25 +13,20 @@
 	overflow-y: auto !important;
 	display: none;
 }
-
 .com-dpcalendar-eventform .dp-autocomplete__result {
 	margin: 0;
 	padding: 5px 10px;
 	display: block;
 }
-
 .com-dpcalendar-eventform .dp-autocomplete__result:not(:last-child) {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
-
 .com-dpcalendar-eventform .dp-autocomplete__result_selected {
 	background-color: rgba(0, 0, 0, 0.1);
 }
-
 .com-dpcalendar-eventform .dp-button-bar {
 	margin-bottom: 10px;
 }
-
 .com-dpcalendar-eventform .dp-button {
 	display: inline-block;
 	font-weight: 400;
@@ -50,81 +45,71 @@
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
 .com-dpcalendar-eventform .dp-button:disabled,
 .com-dpcalendar-eventform .dp-button[disabled] {
 	background-color: #cccccc;
 	color: #666666;
 	cursor: not-allowed;
 }
-
 .com-dpcalendar-eventform .dp-datepicker {
 	display: inline-flex;
 }
-
 .com-dpcalendar-eventform .dp-datepicker__input {
 	margin-right: -3px;
 }
-
 .com-dpcalendar-eventform .dp-datepicker__button {
 	margin: 0;
 }
-
 .com-dpcalendar-eventform .dp-control, .com-dpcalendar-eventform .control-group {
 	display: flex;
 	margin-bottom: 5px;
 }
-
 .com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label,
 .com-dpcalendar-eventform .control-group .form-label {
 	flex: 0 0 20%;
 	padding-top: 5px;
 	text-align: left;
 }
-
 .com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls,
 .com-dpcalendar-eventform .control-group .form-control {
 	flex: 1 1 80%;
 }
-
 .com-dpcalendar-eventform .dp-control_hidden {
 	display: none;
 }
-
 @media screen and (max-width: 640px) {
 	.com-dpcalendar-eventform .dp-control:not(.dp-control_hidden), .com-dpcalendar-eventform .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-eventform .dp-control:not(.dp-control_hidden)__label, .com-dpcalendar-eventform .control-group:not(.dp-control_hidden)__label, .com-dpcalendar-eventform .dp-control:not(.dp-control_hidden)__input, .com-dpcalendar-eventform .control-group:not(.dp-control_hidden)__input {
+	.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label,
+.com-dpcalendar-eventform .control-group .form-label, .com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls,
+.com-dpcalendar-eventform .control-group .form-control {
 		width: 100%;
 		margin-left: 0;
 	}
 	.com-dpcalendar-eventform .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-eventform .control-group:not(.dp-control_hidden) control-label,
-	.com-dpcalendar-eventform .control-group:not(.dp-control_hidden) controls {
+	.com-dpcalendar-eventform .dp-control control-label, .com-dpcalendar-eventform .control-group control-label,
+.com-dpcalendar-eventform .dp-control controls,
+.com-dpcalendar-eventform .control-group controls {
 		width: 100%;
 		margin-left: 0;
 	}
 }
-
 .com-dpcalendar-eventform .dp-heading {
 	clear: both;
 	margin-bottom: 1rem;
 }
-
 .com-dpcalendar-eventform .dp-heading_small {
 	border-bottom: none;
 }
-
 .com-dpcalendar-eventform .dp-icon svg {
 	fill: currentColor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
 }
-
 .com-dpcalendar-eventform .dp-info-box {
 	padding: 8px 35px 8px 14px;
 	margin-bottom: 18px;
@@ -136,19 +121,16 @@
 	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
-
 .com-dpcalendar-eventform .dp-info-box_success {
 	color: #0f5132;
 	background-color: #d1e7dd;
 	border-color: #badbcc;
 }
-
 .com-dpcalendar-eventform .dp-info-box_error {
 	color: #842029;
 	background-color: #f8d7da;
 	border-color: #f5c2c7;
 }
-
 .com-dpcalendar-eventform .dp-form-input {
 	width: 100%;
 	min-height: 28px;
@@ -159,15 +141,13 @@
 	box-sizing: border-box;
 	/* Opera/IE 8+ */
 }
-
 .com-dpcalendar-eventform .dp-loader {
 	position: relative;
 	width: 100%;
 	height: 0;
 }
-
 .com-dpcalendar-eventform .dp-loader::before {
-	content: '';
+	content: "";
 	position: absolute;
 	right: 100%;
 	left: 0;
@@ -180,11 +160,9 @@
 	animation-timing-function: cubix-bezier(0, 1, 0, 1);
 	animation-iteration-count: infinite;
 }
-
 .com-dpcalendar-eventform .dp-loader_hidden::before {
 	display: none;
 }
-
 @keyframes calendarLoader {
 	0% {
 		right: 100%;
@@ -197,28 +175,23 @@
 		right: 1%;
 	}
 }
-
 .com-dpcalendar-eventform .dp-form-radio {
 	display: flex;
 	flex-wrap: wrap;
 	row-gap: 1rem;
 	margin-bottom: 0.2rem;
 }
-
 .com-dpcalendar-eventform .dp-form-radio.radio {
 	padding-left: 0;
 }
-
 .com-dpcalendar-eventform .dp-form-radio label {
 	padding-right: 1rem;
 	border-radius: 3px;
 	border: 1px solid #D1D3D4;
 }
-
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:empty {
 	display: none;
 }
-
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:empty + label {
 	position: relative;
 	float: left;
@@ -231,52 +204,43 @@
 	user-select: none;
 	margin-right: 0.5rem;
 }
-
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:empty + label:before {
 	position: absolute;
 	display: block;
 	top: 0;
 	bottom: 0;
 	left: 0;
-	content: '';
+	content: "";
 	width: 2.5em;
 	background: #D1D3D4;
 	border-radius: 3px 0 0 3px;
 }
-
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:hover:not(:checked) + label:before {
-	content: '\2714';
-	text-indent: .9em;
+	content: "✔";
+	text-indent: 0.9em;
 	color: #C2C2C2;
 }
-
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:hover:not(:checked) + label {
 	color: #888;
 }
-
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:checked + label:before {
-	content: '\2714';
-	text-indent: .9em;
+	content: "✔";
+	text-indent: 0.9em;
 	color: #cdeacd;
 	background-color: #46a546;
 }
-
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:checked + label {
 	color: #777;
 }
-
 .com-dpcalendar-eventform .dp-form-radio input[type=radio]:focus ~ label:before {
 	box-shadow: 0 0 0 3px #999;
 }
-
 .com-dpcalendar-eventform .dp-form-radio .form-check {
 	padding: 0;
 }
-
 .com-dpcalendar-eventform .dp-select {
 	width: 100%;
 }
-
 .com-dpcalendar-eventform .dp-select-element {
 	border: 0 !important;
 	clip: rect(0 0 0 0) !important;
@@ -288,13 +252,11 @@
 	white-space: nowrap !important;
 	width: 1px !important;
 }
-
 .com-dpcalendar-eventform .dp-select-container {
 	width: 100%;
 	min-width: 300px;
 	position: relative;
 }
-
 .com-dpcalendar-eventform .dp-select-container__options {
 	background: #ffffff;
 	border-radius: 4px;
@@ -309,62 +271,54 @@
 	width: 100%;
 	z-index: 10001;
 }
-
 .com-dpcalendar-eventform .dp-select-container__options.open {
 	opacity: 1;
 	pointer-events: all;
 }
-
 .com-dpcalendar-eventform .dp-select-container__options-selected {
 	display: inline-flex;
 	flex-wrap: wrap;
 	row-gap: 0.5rem;
 }
-
 .com-dpcalendar-eventform .dp-select-container__handler {
 	width: 100%;
 }
-
 .com-dpcalendar-eventform .dp-select-container_unstyled, .com-dpcalendar-eventform .dp-select-container__input_unstyled {
 	display: block;
 	width: 100%;
 	cursor: pointer;
 	border: 1px solid #ced4da;
 	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
-	padding: .2rem;
-	border-radius: .25rem;
-	transition: border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+	padding: 0.2rem;
+	border-radius: 0.25rem;
+	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
 	box-sizing: border-box;
 }
-
 .com-dpcalendar-eventform .dp-select-input {
-	display: inline-block;
-	margin: 0;
-	padding: 0;
-	outline: none;
-	border: 0;
-	box-shadow: none;
+	display: inline-block !important;
 	width: 1ch;
+	box-sizing: content-box !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	outline: none !important;
+	border: 0 !important;
+	box-shadow: none !important;
 }
-
 .com-dpcalendar-eventform .dp-select-input:disabled {
 	cursor: not-allowed;
 }
-
 .com-dpcalendar-eventform .dp-select-input:focus-visible {
 	color: inherit;
 	box-shadow: none;
 }
-
 .com-dpcalendar-eventform .dp-select-option {
 	position: relative;
 	padding: 0.2rem 1rem;
 	cursor: pointer;
 }
-
 .com-dpcalendar-eventform .dp-select-option-group__label {
 	display: block;
 	font-weight: bold;
@@ -372,45 +326,36 @@
 	padding: 0.2rem 0.5rem;
 	border-bottom: 1px solid #cecece;
 }
-
-.com-dpcalendar-eventform .dp-select-option[data-selected="true"], .com-dpcalendar-eventform .dp-select-option:hover {
+.com-dpcalendar-eventform .dp-select-option[data-selected=true], .com-dpcalendar-eventform .dp-select-option:hover {
 	background: #ddd;
 }
-
-.com-dpcalendar-eventform .dp-select-option[data-disabled="true"] {
+.com-dpcalendar-eventform .dp-select-option[data-disabled=true] {
 	background: #fff;
 	color: #999;
 	cursor: not-allowed;
 }
-
 .com-dpcalendar-eventform .dp-select-option-input {
 	cursor: pointer;
 }
-
-.com-dpcalendar-eventform .dp-select-option[data-selected="true"] {
+.com-dpcalendar-eventform .dp-select-option[data-selected=true] {
 	display: inline-flex;
 	align-items: center;
 	margin-right: 0.5rem;
 }
-
 .com-dpcalendar-eventform .dp-select-option__icon {
 	display: flex;
 	margin-left: 0.5rem;
 }
-
 .com-dpcalendar-eventform .dp-select-option__icon svg {
 	width: 1rem;
 	height: 1rem;
 }
-
 .com-dpcalendar-eventform .dp-select-option_selected {
 	background-color: rgba(0, 0, 0, 0.1);
 }
-
 .com-dpcalendar-eventform .dp-select_error {
 	border: 3px solid #f5515c;
 }
-
 .com-dpcalendar-eventform .dp-tabs {
 	display: -webkit-box;
 	display: -webkit-flex;
@@ -420,7 +365,6 @@
 	-ms-flex-wrap: wrap;
 	flex-wrap: wrap;
 }
-
 .com-dpcalendar-eventform .dp-tabs__label {
 	border: 1px solid #ccc;
 	-webkit-box-ordinal-group: 2;
@@ -436,7 +380,6 @@
 	-webkit-transition: background ease 0.2s;
 	transition: background ease 0.2s;
 }
-
 .com-dpcalendar-eventform .dp-tabs__tab {
 	-webkit-box-ordinal-group: 100;
 	-webkit-order: 99;
@@ -450,21 +393,17 @@
 	display: none;
 	padding: 1rem;
 }
-
 .com-dpcalendar-eventform .dp-tabs__input {
 	position: absolute;
 	opacity: 0;
 }
-
 .com-dpcalendar-eventform .dp-tabs__input:checked + .dp-tabs__label {
 	background: transparent;
 	border-bottom: none;
 }
-
-.com-dpcalendar-eventform .dp-tabs__input[type="radio"]:checked + .dp-tabs__label + .dp-tabs__tab {
+.com-dpcalendar-eventform .dp-tabs__input[type=radio]:checked + .dp-tabs__label + .dp-tabs__tab {
 	display: block;
 }
-
 @media (max-width: 45em) {
 	.com-dpcalendar-eventform .dp-tabs__tab, .com-dpcalendar-eventform .dp-tabs__label {
 		-webkit-box-ordinal-group: NaN;
@@ -478,17 +417,14 @@
 		margin-top: 0.2rem;
 	}
 }
-
 .com-dpcalendar-eventform .dp-timezone {
 	display: flex;
 	align-items: center;
 }
-
 .com-dpcalendar-eventform .dp-timezone__label {
 	font-weight: bold;
 	margin-right: 10px;
 }
-
 .com-dpcalendar-eventform .dp-map_consent {
 	display: flex;
 	justify-content: center;
@@ -498,11 +434,9 @@
 	background-color: #f2f2f2;
 	cursor: pointer;
 }
-
 .com-dpcalendar-eventform__overlapping {
 	display: none;
 }
-
 .com-dpcalendar-eventform .dp-event-template {
 	border-right: 1px solid rgba(0, 0, 0, 0.2);
 	border-left: 1px solid rgba(0, 0, 0, 0.2);
@@ -510,29 +444,24 @@
 	padding: 10px;
 	display: none;
 }
-
 .com-dpcalendar-eventform .dp-event-template__event:not(:last-child) {
 	display: block;
 	margin: 5px 0 10px 0;
 	padding-bottom: 5px;
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
-
 .com-dpcalendar-eventform .dp-free-information-text {
 	display: block;
 	color: red;
 }
-
 .com-dpcalendar-eventform .dp-input,
 .com-dpcalendar-eventform .dp-select {
 	margin-bottom: 0;
 }
-
 .com-dpcalendar-eventform .dp-datepicker .dp-input,
 .com-dpcalendar-eventform .dp-timepicker {
 	max-width: 100px;
 }
-
 .com-dpcalendar-eventform #jform_scheduling_end_date_time {
 	display: none;
 }
@@ -553,11 +482,9 @@
 .tingle-modal {
 	z-index: 1001 !important;
 }
-
 .tingle-modal .dp-button-bar {
 	margin-bottom: 10px;
 }
-
 .tingle-modal .dp-button {
 	display: inline-block;
 	font-weight: 400;
@@ -576,18 +503,15 @@
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
-
 .tingle-modal .dp-button:disabled,
 .tingle-modal .dp-button[disabled] {
 	background-color: #cccccc;
 	color: #666666;
 	cursor: not-allowed;
 }
-
 .tingle-modal-box__content {
 	padding: 1rem;
 }
-
 .tingle-modal-box__footer .dp-button {
 	margin-right: 10px;
 }

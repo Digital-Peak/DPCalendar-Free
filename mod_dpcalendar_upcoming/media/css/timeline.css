@@ -2,20 +2,17 @@
 	text-align: center;
 	margin: 0;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-figure__caption {
 	display: block;
 	width: 100%;
 	box-sizing: border-box;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-icon svg {
 	fill: currentColor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-map_consent {
 	display: flex;
 	justify-content: center;
@@ -25,78 +22,62 @@
 	background-color: #f2f2f2;
 	cursor: pointer;
 }
-
 .mod-dpcalendar-upcoming-timeline {
 	clear: both;
 }
-
 .mod-dpcalendar-upcoming-timeline__event {
 	display: block;
 	overflow: hidden;
 }
-
 .mod-dpcalendar-upcoming-timeline__event + div {
-	margin-top: .7rem;
+	margin-top: 0.7rem;
 }
-
 .mod-dpcalendar-upcoming-timeline__group {
 	margin-bottom: 1rem;
 }
-
 .mod-dpcalendar-upcoming-timeline__heading.dp-group-heading {
 	font-weight: bold;
 	background-color: rgba(0, 0, 0, 0.05);
-	padding: .5rem .7rem;
-	margin-bottom: .7rem;
+	padding: 0.5rem 0.7rem;
+	margin-bottom: 0.7rem;
 }
-
 .mod-dpcalendar-upcoming-timeline__heading.dp-group-heading ~ div {
-	margin-left: .7rem;
-	margin-right: .7rem;
+	margin-left: 0.7rem;
+	margin-right: 0.7rem;
 }
-
 .mod-dpcalendar-upcoming-timeline__date {
 	font-style: italic;
 	padding: 2px 0;
 }
-
 .mod-dpcalendar-upcoming-timeline__rrule, .mod-dpcalendar-upcoming-timeline__price {
 	font-style: italic;
 	padding: 2px 0;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-figure {
 	width: 100%;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-figure .dp-image {
 	width: 100%;
 	object-fit: cover;
 	height: 100px;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-figure__caption {
-	opacity: .7;
+	opacity: 0.7;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-location {
 	display: inline-block;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-location__description, .mod-dpcalendar-upcoming-timeline .dp-location_hidden {
 	display: none;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-link {
 	margin-bottom: 0.7rem;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-link_cta {
 	display: inline-block;
 	margin-top: 10px;
 	padding: 5px 15px;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-link_cta.dp-button {
 	background-color: #2D9EDE;
 	font-weight: bold;
@@ -104,28 +85,23 @@
 	color: #000000;
 	border: 0;
 }
-
 .mod-dpcalendar-upcoming-timeline__map {
 	margin-top: 5px;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-figure {
 	text-align: center;
 	margin: 0;
 }
-
 .mod-dpcalendar-upcoming-timeline .dp-figure__caption {
 	display: block;
 	width: 100%;
 	box-sizing: border-box;
 }
-
 .mod-dpcalendar-upcoming-timeline__events {
 	position: relative;
 	margin: 10px;
 	padding: 0px;
 }
-
 .mod-dpcalendar-upcoming-timeline::before {
 	content: "";
 	width: 3px;
@@ -135,14 +111,12 @@
 	top: 10px;
 	position: absolute;
 }
-
 .mod-dpcalendar-upcoming-timeline__event {
 	display: flex;
 	overflow: visible;
 	position: relative;
 	margin-bottom: 30px;
 }
-
 .mod-dpcalendar-upcoming-timeline__dot {
 	background: #e1e1e1;
 	width: 20px;
@@ -154,7 +128,6 @@
 	margin-left: -8px;
 	border-radius: 50%;
 }
-
 .mod-dpcalendar-upcoming-timeline__information {
 	position: relative;
 	background: #fff;
@@ -163,15 +136,13 @@
 	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
 	transition: all 0.3s ease;
 }
-
 .mod-dpcalendar-upcoming-timeline__title {
 	position: relative;
 	padding: 10px 15px;
 	margin: -15px -15px 10px;
 }
-
 .mod-dpcalendar-upcoming-timeline__title::before {
-	content: '';
+	content: "";
 	position: absolute;
 	top: 13px;
 	width: 14px;
@@ -181,7 +152,6 @@
 	background-color: inherit;
 	transform: rotate(45deg);
 }
-
 .mod-dpcalendar-upcoming-timeline__heading.dp-group-heading {
 	position: relative;
 	top: 10px;
@@ -189,7 +159,6 @@
 	margin-left: 3px;
 	text-align: right;
 }
-
 .mod-dpcalendar-upcoming-timeline__heading.dp-group-heading ~ div {
 	margin-left: 0;
 	margin-right: 0;

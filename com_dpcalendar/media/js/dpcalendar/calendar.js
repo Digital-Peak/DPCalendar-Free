@@ -420,9 +420,31 @@
 		}
 		if (options['headerToolbar'].left.indexOf('add') && options['event_create_url']) {
 			options['customButtons'].add = {
-				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'),
+				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD'),
 				icon: 'icon-add',
 				click: () => location.href = options['event_create_url']
+			};
+		}
+		if (options['headerToolbar'].left.indexOf('fullscreen')) {
+			options['customButtons'].fullscreen_open = {
+				icon: 'icon-fullscreen',
+				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_OPEN'),
+				click: () => {
+					document.querySelector('.com-dpcalendar-calendar').requestFullscreen();
+					document.querySelector('.fc-fullscreen_open-button').style.setProperty('display', 'none', 'important');
+					document.querySelector('.fc-fullscreen_close-button').style.setProperty('display', 'inherit', 'important');
+				}
+			};
+			options['customButtons'].fullscreen_close = {
+				icon: 'icon-fullscreen',
+				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_CLOSE'),
+				click: () => {
+					if (document.fullscreenElement) {
+						document.exitFullscreen();
+					}
+					document.querySelector('.fc-fullscreen_open-button').style.setProperty('display', 'inherit', 'important');
+					document.querySelector('.fc-fullscreen_close-button').style.setProperty('display', 'none', 'important');
+				}
 			};
 		}
 	}
@@ -438,6 +460,8 @@
 		iconHandler('angle-left', 'prev');
 		iconHandler('angle-right', 'next');
 		iconHandler('calendar-alt', 'datepicker');
+		iconHandler('expand-alt', 'fullscreen_open');
+		iconHandler('compress-alt', 'fullscreen_close');
 		iconHandler('print', 'print');
 		iconHandler('plus', 'add');
 	}

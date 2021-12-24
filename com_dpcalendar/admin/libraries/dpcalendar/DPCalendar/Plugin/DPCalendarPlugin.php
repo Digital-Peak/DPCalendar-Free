@@ -322,7 +322,13 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 
 		try {
-			$content = $this->fetchContent(str_replace('webcal://', 'https://', $calendar->params->get('uri')));
+			$content = $this->fetchContent(
+				str_replace('webcal://', 'https://', $calendar->params->get('uri')),
+				[
+					CURLOPT_SSL_VERIFYHOST => $calendar->params->get('ssl_verify') ? 2 : 0,
+					CURLOPT_SSL_VERIFYPEER => $calendar->params->get('ssl_verify') ? 1 : 0
+				]
+			);
 
 			if (strpos($content, 'BEGIN:') === false) {
 				throw new \Exception($content);
@@ -1093,7 +1099,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 	}
 
-	protected function fetchContent($uri)
+	protected function fetchContent($uri, $curlOptions = [])
 	{
 		if (empty($uri)) {
 			return '';
@@ -1125,7 +1131,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			'Accept-Language: ' . Factory::getUser()->getParam('language', Factory::getLanguage()->getTag()),
 			'Accept: */*'
 		];
-		$data = (new HTTP())->get($uri, null, null, $headers);
+		$data = (new HTTP())->get($uri, null, null, $headers, $curlOptions);
 		if (!empty($data->dp->headers['Content-Encoding']) && $data->dp->headers['Content-Encoding'] == 'gzip') {
 			return gzinflate(substr($data->dp->body, 10, -8));
 		}

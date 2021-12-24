@@ -9,6 +9,12 @@ namespace DPCalendar\Plugin;
 
 defined('_JEXEC') or die();
 
+use DPCalendarHelper;
+use Joomla\CMS\Date\Date;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Table\Table;
+use Joomla\Http\HttpFactory;
 use Joomla\Registry\Registry;
 
 /**
@@ -36,24 +42,22 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			$uri = JPATH_ROOT . '/' . $uri;
 		}
 
-		$syncToken = rand();
 		if ($internal) {
-			$timestamp = filemtime($uri);
-			if ($timestamp) {
-				$syncToken = $timestamp;
-			}
-		} else {
-			$http     = \JHttpFactory::getHttp();
-			$response = $http->head($uri);
-
-			if (key_exists('ETag', $response->headers)) {
-				$syncToken = $response->headers['ETag'];
-			} elseif (key_exists('Last-Modified', $response->headers)) {
-				$syncToken = $response->headers['Last-Modified'];
-			}
+			return filemtime($uri) ?: rand();
 		}
 
-		return $syncToken;
+		$http     = HttpFactory::getHttp();
+		$response = $http->head($uri);
+
+		if (key_exists('ETag', $response->headers)) {
+			return $response->headers['ETag'];
+		}
+
+		if (key_exists('Last-Modified', $response->headers)) {
+			return $response->headers['Last-Modified'];
+		}
+
+		return rand();
 	}
 
 	/**
@@ -66,12 +70,12 @@ abstract class SyncPlugin extends DPCalendarPlugin
 	private function sync($calendar, $force = false)
 	{
 		$calendarId = str_replace($this->identifier . '-', '', $calendar->id);
-		$db         = \JFactory::getDbo();
+		$db         = Factory::getDbo();
 
 		// Defining the last sync date
 		$syncDate = $calendar->sync_date;
 		if ($syncDate) {
-			$syncDate = \DPCalendarHelper::getDate($syncDate);
+			$syncDate = DPCalendarHelper::getDate($syncDate);
 		}
 
 		// If the last sync is younger than the maximum cache time, return
@@ -83,7 +87,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		@set_time_limit(0);
 
 		// Update the extcalendar table with the new sync information
-		$extCalendarTable = \JTable::getInstance('Extcalendar', 'DPCalendarTable');
+		$extCalendarTable = Table::getInstance('Extcalendar', 'DPCalendarTable');
 		$extCalendarTable->load(
 			[
 				'plugin' => str_replace('dpcalendar_', '', $this->_name),
@@ -91,14 +95,14 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			]
 		);
 
-		if ($extCalendarTable->id) {
-			$extCalendarTable->sync_date = \DPCalendarHelper::getDate()->toSql();
-			$extCalendarTable->store();
-
-			$this->extCalendarsCache = null;
-		} else {
+		if (!$extCalendarTable->id) {
 			return;
 		}
+
+		$extCalendarTable->sync_date = DPCalendarHelper::getDate()->toSql();
+		$extCalendarTable->store();
+
+		$this->extCalendarsCache = null;
 
 		$syncToken = 1;
 		if ($calendar->sync_token !== null) {
@@ -108,7 +112,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			}
 		}
 
-		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 		// Fetching the events to sync
 		$syncDateStart = \DPCalendarHelper::getDate();
@@ -146,7 +150,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 				$event->alias = null;
 
 				// Find an existing event with the same keys
-				$table = \JTable::getInstance('Event', 'DPCalendarTable');
+				$table = Table::getInstance('Event', 'DPCalendarTable');
 
 				$keys = ['catid' => $calendar->id, 'uid' => $event->uid];
 				if ($event->recurrence_id) {
@@ -180,7 +184,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 				}
 
 				// Save the event
-				$model = \JModelLegacy::getInstance('AdminEvent', 'DPCalendarModel');
+				$model = BaseDatabaseModel::getInstance('AdminEvent', 'DPCalendarModel');
 				$model->getState();
 				if (!$model->save((array)$event)) {
 					$this->log($model->getError());
@@ -212,7 +216,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		}
 	}
 
-	public function onEventsFetch($calendarId, \JDate $startDate = null, \JDate $endDate = null, Registry $options = null)
+	public function onEventsFetch($calendarId, Date $startDate = null, Date $endDate = null, Registry $options = null)
 	{
 		if ($this->params->get('cache', 1) == 2) {
 			return [];
@@ -252,12 +256,12 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		}
 
 		// Clean the Joomla cache
-		$cache = \JFactory::getCache('plg_dpcalendar_' . $calendar->plugin);
+		$cache = Factory::getCache('plg_dpcalendar_' . $calendar->plugin);
 		if (!$cache->clean()) {
 			return false;
 		}
 
-		$db = \JFactory::getDbo();
+		$db = Factory::getDbo();
 		$db->setQuery('delete from #__dpcalendar_events where catid = ' . $db->q($this->identifier . '-' . $calendar->id));
 		$db->execute();
 	}

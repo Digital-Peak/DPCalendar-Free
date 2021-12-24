@@ -18,22 +18,21 @@
 		};
 		const check = document.querySelector('.dp-input-check-all');
 		if (check) {
-			check.addEventListener('click', (e) => {
-				Joomla.checkAll(e.target);
-			});
+			check.addEventListener('click', (e) => Joomla.checkAll(e.target));
 		}
+		Joomla.submitbutton = (task) => {
+			const form = document.getElementsByName('adminForm')[0];
+			Joomla.submitform(task, form);
+			form.task.value = '';
+		};
 		const startInput = document.querySelector('input[name="filter[search_start]"]');
 		if (startInput) {
-			startInput.addEventListener('change', (e) => {
-				startInput.form.submit();
-			});
+			startInput.addEventListener('change', (e) => startInput.form.submit());
 			loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
 		}
 		const endInput = document.querySelector('input[name="filter[search_end]"]');
 		if (endInput) {
-			endInput.addEventListener('change', (e) => {
-				endInput.form.submit();
-			});
+			endInput.addEventListener('change', (e) => endInput.form.submit());
 		}
 		const closeButton = document.querySelector('.com-dpcalendar-events .dp-button-close');
 		if (closeButton) {
@@ -46,9 +45,7 @@
 		}
 		const submitButton = document.querySelector('.com-dpcalendar-events .dp-button-submit');
 		if (submitButton) {
-			submitButton.addEventListener('click', (e) => {
-				Joomla.submitbutton('event.batch');
-			});
+			submitButton.addEventListener('click', (e) => Joomla.submitbutton('event.batch'));
 		}
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-events .dp-event .dp-link-featured')).forEach((link) => {
 			link.addEventListener('click', (e) => Joomla.listItemTask('cb' + link.getAttribute('data-cb'), link.getAttribute('data-state')));

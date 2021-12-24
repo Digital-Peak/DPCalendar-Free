@@ -7,13 +7,13 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Registry\Registry;
 
 if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
 	return;
@@ -44,7 +44,6 @@ $displayData = [
 
 $app->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 $app->getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');
-JLoader::import('joomla.application.component.model');
 BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 $model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
@@ -67,7 +66,7 @@ if ($startDate == 'start of day') {
 	$startDate = $dateHelper->getDate($startDate);
 }
 
-// Round to the last quater
+// Round to the last quarter
 $startDate->sub(new DateInterval("PT" . $startDate->format("s") . "S"));
 $startDate->sub(new DateInterval("PT" . ($startDate->format("i") % 15) . "M"));
 
@@ -95,7 +94,7 @@ $model->setState('filter.search', $moduleParams->get('filter', ''));
 $model->setState('filter.ongoing', $moduleParams->get('ongoing', 0));
 $model->setState('filter.expand', $moduleParams->get('expand', 1));
 $model->setState('filter.state', [1, 3]);
-$model->setState('filter.language', Factory::getLanguage());
+$model->setState('filter.language', $app->getLanguage()->getTag());
 $model->setState('filter.publish_date', true);
 $model->setState('list.start-date', $startDate);
 $model->setState('list.end-date', $endDate);
@@ -167,19 +166,19 @@ foreach ($events as $event) {
 		$descTruncated = JHtmlString::truncateComplex($desc, $params->get('description_length', null));
 
 		// Move the dots inside the last tag
-		if (\DPCalendar\Helper\DPCalendarHelper::endsWith($descTruncated, '...') && $pos = strrpos($descTruncated, '</')) {
+		if (DPCalendarHelper::endsWith($descTruncated, '...') && $pos = strrpos($descTruncated, '</')) {
 			$descTruncated = trim(substr_replace($descTruncated, '...</', $pos, 2), '.');
 		}
 
 		if ($desc != $descTruncated) {
-			$event->alternative_readmore = Text::_('MOD_DPCALENDAR_UPCOMING_READ_MORE');
+			$event->alternative_readmore = $translator->translate('MOD_DPCALENDAR_UPCOMING_READ_MORE');
 
 			// Meta data is handled differently
 			$desc = str_replace('itemprop="url"', '', $layoutHelper->renderLayout(
 				'joomla.content.readmore',
 				[
 					'item'   => $event,
-					'params' => new \Joomla\Registry\Registry(['access-view' => true]),
+					'params' => new Registry(['access-view' => true]),
 					'link'   => $router->getEventRoute($event->id, $event->catid)
 				]
 			));

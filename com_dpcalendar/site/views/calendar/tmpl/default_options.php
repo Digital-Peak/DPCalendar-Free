@@ -30,6 +30,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD');
 
 $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
@@ -116,6 +117,10 @@ if ($params->get('header_show_print', 1)) {
 }
 if ($params->get('header_show_create', 1) && DPCalendarHelper::canCreateEvent()) {
 	$options['headerToolbar']['left'][] = 'add';
+}
+if ($params->get('header_show_fullscreen', 1)) {
+	$options['headerToolbar']['left'][] = 'fullscreen_open';
+	$options['headerToolbar']['left'][] = 'fullscreen_close';
 }
 if ($params->get('header_show_title', 1)) {
 	$options['headerToolbar']['center'][] = 'title';

@@ -355,13 +355,15 @@ class DPCalendarModelEvents extends ListModel
 		$query->where('(' . $dateCondition . ')');
 
 		// Filter by language
-		if ($this->getState('filter.language')) {
+		if ($language = $this->getState('filter.language')) {
+			$query->where('a.language = ' . $db->quote($language));
+		} else {
 			$query->where('a.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
 		}
 
 		// Filter for featured events
 		if ($this->getState('filter.featured')) {
-			$query->where("a.featured = 1");
+			$query->where('a.featured = 1');
 		}
 
 		// Filter by title

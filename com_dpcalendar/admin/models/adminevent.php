@@ -54,12 +54,12 @@ class DPCalendarModelAdminEvent extends AdminModel
 			if ($record->state != -2 && !Factory::getApplication()->isClient('api')) {
 				return false;
 			}
-			$user     = Factory::getUser();
-			$calendar = DPCalendarHelper::getCalendar($record->catid);
 
+			$calendar = DPCalendarHelper::getCalendar($record->catid);
 			if ($calendar->canDelete || ($calendar->canEditOwn && $record->created_by == Factory::getUser()->id)) {
 				return true;
 			}
+
 			return parent::canDelete($record);
 		}
 	}
@@ -71,6 +71,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		if (!empty($record->catid)) {
 			return $user->authorise('core.edit.state', 'com_dpcalendar.category.' . (int)$record->catid);
 		}
+
 		return parent::canEditState('com_dpcalendar');
 	}
 

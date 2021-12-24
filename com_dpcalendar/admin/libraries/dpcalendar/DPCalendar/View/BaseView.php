@@ -9,6 +9,10 @@ namespace DPCalendar\View;
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DateHelper;
+use DPCalendar\Helper\LayoutHelper;
+use DPCalendar\Helper\UserHelper;
+use DPCalendar\HTML\Document\HtmlDocument;
 use DPCalendar\Router\Router;
 use DPCalendar\Translator\Translator;
 use Joomla\CMS\Application\CMSApplication;
@@ -46,6 +50,9 @@ class BaseView extends HtmlView
 	/** @var Router */
 	protected $router = null;
 
+	/** @var DateHelper */
+	protected $dateHelper = null;
+
 	public function display($tpl = null)
 	{
 		$this->app   = Factory::getApplication();
@@ -62,12 +69,12 @@ class BaseView extends HtmlView
 		$this->state  = $state;
 		$this->params = $state->get('params', new Registry());
 
-		$this->dpdocument   = new \DPCalendar\HTML\Document\HtmlDocument();
-		$this->dateHelper   = new \DPCalendar\Helper\DateHelper();
-		$this->layoutHelper = new \DPCalendar\Helper\LayoutHelper();
-		$this->userHelper   = new \DPCalendar\Helper\UserHelper();
-		$this->router       = new \DPCalendar\Router\Router();
-		$this->translator   = new \DPCalendar\Translator\Translator();
+		$this->dpdocument   = new HtmlDocument();
+		$this->dateHelper   = new DateHelper();
+		$this->layoutHelper = new LayoutHelper();
+		$this->userHelper   = new UserHelper();
+		$this->router       = new Router();
+		$this->translator   = new Translator();
 		$this->input        = $this->app->input;
 
 		// The display data

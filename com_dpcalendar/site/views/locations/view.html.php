@@ -4,14 +4,19 @@
  * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPCalendarViewLocations extends \DPCalendar\View\BaseView
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+
+class DPCalendarViewLocations extends BaseView
 {
 	public function display($tpl = null)
 	{
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-		$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+		$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel');
 		$this->setModel($model, true);
 
 		return parent::display($tpl);
@@ -34,7 +39,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 		foreach ($this->get('Items') as $location) {
 			// Set the grouping id
 			$id = $this->params->get('locations_output_grouping', 0) ? $location->{$this->params->get('locations_output_grouping', 0)} : 0;
-			$id = \Joomla\CMS\Application\ApplicationHelper::stringURLSafe($id);
+			$id = ApplicationHelper::stringURLSafe($id);
 			if (!array_key_exists($id, $locationGroups)) {
 				$locationGroups[$id] = [];
 			}
@@ -65,7 +70,7 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 		$this->events = [];
 		$this->ids    = [];
 		if ($this->params->get('locations_show_upcoming_events', 1)) {
-			$model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
+			$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
 			$model->getState();
 			$model->setState('filter.parentIds', ['root']);
 
@@ -73,14 +78,14 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 				$this->ids[] = $calendar->id;
 			}
 
-			$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->setState('list.limit', 25);
 			$model->setState('list.start-date', DPCalendarHelper::getDate());
 			$model->setState('list.ordering', 'start_date');
 			$model->setState('filter.expand', $this->params->get('locations_expand_events', 1));
 			$model->setState('filter.ongoing', true);
 			$model->setState('filter.state', [1, 3]);
-			$model->setState('filter.language', JFactory::getLanguage());
+			$model->setState('filter.language', $this->app->getLanguage()->getTag());
 			$model->setState('filter.locations', $this->params->get('ids'));
 			$this->events = $model->getItems();
 		}

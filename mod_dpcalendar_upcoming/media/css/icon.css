@@ -2,20 +2,17 @@
 	text-align: center;
 	margin: 0;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-figure__caption {
 	display: block;
 	width: 100%;
 	box-sizing: border-box;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-icon svg {
 	fill: currentColor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-map_consent {
 	display: flex;
 	justify-content: center;
@@ -25,78 +22,62 @@
 	background-color: #f2f2f2;
 	cursor: pointer;
 }
-
 .mod-dpcalendar-upcoming-icon {
 	clear: both;
 }
-
 .mod-dpcalendar-upcoming-icon__event {
 	display: block;
 	overflow: hidden;
 }
-
 .mod-dpcalendar-upcoming-icon__event + div {
-	margin-top: .7rem;
+	margin-top: 0.7rem;
 }
-
 .mod-dpcalendar-upcoming-icon__group {
 	margin-bottom: 1rem;
 }
-
 .mod-dpcalendar-upcoming-icon__heading.dp-group-heading {
 	font-weight: bold;
 	background-color: rgba(0, 0, 0, 0.05);
-	padding: .5rem .7rem;
-	margin-bottom: .7rem;
+	padding: 0.5rem 0.7rem;
+	margin-bottom: 0.7rem;
 }
-
 .mod-dpcalendar-upcoming-icon__heading.dp-group-heading ~ div {
-	margin-left: .7rem;
-	margin-right: .7rem;
+	margin-left: 0.7rem;
+	margin-right: 0.7rem;
 }
-
 .mod-dpcalendar-upcoming-icon__date {
 	font-style: italic;
 	padding: 2px 0;
 }
-
 .mod-dpcalendar-upcoming-icon__rrule, .mod-dpcalendar-upcoming-icon__price {
 	font-style: italic;
 	padding: 2px 0;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-figure {
 	width: 100%;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-figure .dp-image {
 	width: 100%;
 	object-fit: cover;
 	height: 100px;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-figure__caption {
-	opacity: .7;
+	opacity: 0.7;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-location {
 	display: inline-block;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-location__description, .mod-dpcalendar-upcoming-icon .dp-location_hidden {
 	display: none;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-link {
 	margin-bottom: 0.7rem;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-link_cta {
 	display: inline-block;
 	margin-top: 10px;
 	padding: 5px 15px;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-link_cta.dp-button {
 	background-color: #2D9EDE;
 	font-weight: bold;
@@ -104,11 +85,9 @@
 	color: #000000;
 	border: 0;
 }
-
 .mod-dpcalendar-upcoming-icon__map {
 	margin-top: 5px;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-flatcalendar {
 	float: left;
 	font-size: 0.7em;
@@ -126,7 +105,6 @@
 	-webkit-transform-origin: 50% 10%;
 	transform-origin: 50% 10%;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-flatcalendar * {
 	display: block;
 	width: 100%;
@@ -135,7 +113,6 @@
 	font-style: normal;
 	text-align: center;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-flatcalendar__month {
 	position: absolute;
 	top: 0;
@@ -143,38 +120,32 @@
 	color: #fff;
 	line-height: 2em;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-flatcalendar__day {
 	width: 100%;
 	font-size: 1.5em;
 	padding-top: 1.5em;
 	color: #2f2f2f;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-icon svg {
 	fill: currentColor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-figure {
 	text-align: center;
 	margin: 0;
 }
-
 .mod-dpcalendar-upcoming-icon .dp-figure__caption {
 	display: block;
 	width: 100%;
 	box-sizing: border-box;
 }
-
 .mod-dpcalendar-upcoming-icon__information {
 	min-height: 3.7em;
 }
-
 .mod-dpcalendar-upcoming-icon__information__date::after {
-	content: "\A";
+	content: "\a";
 	white-space: pre;
 }
 

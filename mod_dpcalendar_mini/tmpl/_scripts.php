@@ -26,6 +26,7 @@ $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
+$translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD');
 
 $translator->translateJS('JCANCEL');
 $translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');

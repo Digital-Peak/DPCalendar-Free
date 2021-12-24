@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
@@ -21,7 +22,7 @@ class Ical
 		$eventsModel->setState('list.limit', 100000);
 		$eventsModel->setState('filter.ongoing', true);
 		$eventsModel->setState('filter.state', 1);
-		$eventsModel->setState('filter.language', \JFactory::getLanguage());
+		$eventsModel->setState('filter.language', \JFactory::getLanguage()->getTag());
 		$eventsModel->setState('filter.publish_date', true);
 		$eventsModel->setState('list.start-date', '0');
 		$eventsModel->setState('list.ordering', 'start_date');
@@ -166,7 +167,7 @@ class Ical
 				$eventsModel->setState('list.limit', 100000);
 				$eventsModel->setState('filter.ongoing', true);
 				$eventsModel->setState('filter.state', 1);
-				$eventsModel->setState('filter.language', \JFactory::getLanguage());
+				$eventsModel->setState('filter.language', \JFactory::getLanguage()->getTag());
 				$eventsModel->setState('filter.publish_date', true);
 				$eventsModel->setState('list.start-date', $start);
 				$eventsModel->setState('list.ordering', 'start_date');
@@ -246,9 +247,9 @@ class Ical
 
 		if (isset($event->uid)) {
 			$text[] = 'UID:' . str_replace('.ics', '', $event->uid);
-		} else if (!empty($event->original_id) && $event->original_id != -1) {
+		} elseif (!empty($event->original_id) && $event->original_id != -1) {
 			$text[] = 'UID:' . md5($event->original_id . '_DPCalendar');
-		} else if (!empty($event->id)) {
+		} elseif (!empty($event->id)) {
 			$text[] = 'UID:' . md5($event->id . '_DPCalendar');
 		} else {
 			$text[] = 'UID:' . md5(uniqid() . '_DPCalendar');

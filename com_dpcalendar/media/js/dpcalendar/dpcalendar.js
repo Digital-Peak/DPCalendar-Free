@@ -108,7 +108,7 @@
 				(json) => callback(json.data.formated)
 			);
 		}, (error) => {
-			Joomla.renderMessages({error: [error.message]});
+			Joomla.renderMessages({ error: [error.message] });
 		});
 		return true;
 	};
@@ -141,26 +141,29 @@
 					}
 				} catch (e) {
 					if (document.getElementById('system-message-container')) {
-						Joomla.renderMessages({error: [url + '<br>' + e.message]});
+						Joomla.renderMessages({ error: [url + '<br>' + e.message] });
 					}
 					if (window.console) {
 						console.log(e);
 					}
 				}
 			},
-			onError: (response) => {
+			onError: (xhr) => {
 				DPCalendar.requestCounter--;
 				if (loader) {
 					loader.classList.add('dp-loader_hidden');
 				}
+				if (!xhr.responseText) {
+					return;
+				}
 				try {
-					const json = JSON.parse(response);
+					const json = JSON.parse(xhr.responseText);
 					if (json.messages != null && json.messages.length !== 0 && document.getElementById('system-message-container')) {
 						Joomla.renderMessages(json.messages);
 					}
 				} catch (e) {
 					if (document.getElementById('system-message-container')) {
-						Joomla.renderMessages({error: [url + '<br>' + e.message]});
+						Joomla.renderMessages({ error: [url + '<br>' + e.message] });
 					}
 				}
 			}

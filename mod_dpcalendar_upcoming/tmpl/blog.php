@@ -4,26 +4,32 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\Booking;
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\HTML\Block\Icon;
+use Joomla\CMS\Helper\ModuleHelper;
+
 if (!$events) {
-	echo JText::_('MOD_DPCALENDAR_UPCOMING_NO_EVENT_TEXT');
+	echo $translator->translate('MOD_DPCALENDAR_UPCOMING_NO_EVENT_TEXT');
 
 	return;
 }
 
-require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
+require ModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 ?>
 <div class="mod-dpcalendar-upcoming mod-dpcalendar-upcoming-blog mod-dpcalendar-upcoming-<?php echo $module->id; ?> dp-locations"
 	 data-popup="<?php echo $params->get('show_as_popup', 0); ?>">
 	<div class="mod-dpcalendar-upcoming-blog__events">
 		<?php foreach ($groupedEvents as $groupHeading => $events) { ?>
-			<?php $calendar = DPCalendarHelper::getCalendar($event->catid); ?>
 			<?php if ($groupHeading) { ?>
 				<div class="mod-dpcalendar-upcoming-blog__group">
-				<p class="mod-dpcalendar-upcoming-blog__heading dp-group-heading"><?php echo $groupHeading; ?></p>
-			<?php } ?>
-			<?php foreach ($events as $index => $event) { ?>
+					<p class="mod-dpcalendar-upcoming-blog__heading dp-group-heading"><?php echo $groupHeading; ?></p>
+				<?php } ?>
+				<?php foreach ($events as $index => $event) { ?>
+					<?php $calendar = DPCalendarHelper::getCalendar($event->catid); ?>
 				<?php $displayData['event'] = $event; ?>
 				<div class="mod-dpcalendar-upcoming-blog__event dp-event dp-event_<?php echo $event->ongoing_start_date ? ($event->ongoing_end_date ? 'started' : 'finished') : 'future'; ?>">
 					<h3 class="mod-dpcalendar-upcoming-blog__heading">
@@ -43,7 +49,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 								<a href="<?php echo $router->getEventFormRoute($event->id, $return); ?>" class="dp-link">
 									<?php echo $layoutHelper->renderLayout(
 										'block.icon',
-										['icon' => \DPCalendar\HTML\Block\Icon::EDIT, 'title' => $translator->translate('JACTION_EDIT')]
+										['icon' => Icon::EDIT, 'title' => $translator->translate('JACTION_EDIT')]
 									); ?>
 								</a>
 							<?php } ?>
@@ -51,7 +57,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 								<a href="<?php echo $router->getEventDeleteRoute($event->id, $return); ?>" class="dp-link">
 									<?php echo $layoutHelper->renderLayout(
 										'block.icon',
-										['icon' => \DPCalendar\HTML\Block\Icon::DELETE, 'title' => $translator->translate('JACTION_DELETE')]
+										['icon' => Icon::DELETE, 'title' => $translator->translate('JACTION_DELETE')]
 									); ?>
 								</a>
 							<?php } ?>
@@ -71,7 +77,7 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 							<?php if (($params->get('show_location') || $params->get('show_map')) && !empty($event->locations)) { ?>
 								<div class="mod-dpcalendar-upcoming-blog__location">
 									<?php if ($params->get('show_location')) { ?>
-										<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
+										<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
 									<?php } ?>
 									<?php foreach ($event->locations as $location) { ?>
 										<div class="dp-location<?php echo !$params->get('show_location') ? ' dp-location_hidden' : ''; ?>">
@@ -107,9 +113,9 @@ require JModuleHelper::getLayoutPath('mod_dpcalendar_upcoming', '_scripts');
 									<?php echo $translator->translate($event->price ? 'MOD_DPCALENDAR_UPCOMING_BLOG_PAID_EVENT' : 'MOD_DPCALENDAR_UPCOMING_BLOG_FREE_EVENT'); ?>
 								</div>
 							<?php } ?>
-							<?php if ($params->get('show_booking', 1) && \DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+							<?php if ($params->get('show_booking', 1) && Booking::openForBooking($event)) { ?>
 								<a href="<?php echo $router->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-link dp-link_cta dp-button">
-									<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PLUS]); ?>
+									<?php echo $layoutHelper->renderLayout('block.icon', ['icon' => Icon::PLUS]); ?>
 									<?php echo $translator->translate('MOD_DPCALENDAR_UPCOMING_BOOK'); ?>
 								</a>
 							<?php } ?>

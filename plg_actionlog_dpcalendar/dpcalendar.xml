@@ -2,12 +2,12 @@
 <extension version="3.9" type="plugin" group="actionlog" method="upgrade">
 	<name>plg_actionlog_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>24 Dec 2021</creationDate>
+	<creationDate>30 Dec 2021</creationDate>
 	<copyright>(C) 2018 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.2.1</version>
+	<version>8.2.2</version>
 	<description>PLG_ACTIONLOG_DPCALENDAR_XML_DESCRIPTION</description>
 	<files>
 		<filename plugin="dpcalendar">dpcalendar.php</filename>

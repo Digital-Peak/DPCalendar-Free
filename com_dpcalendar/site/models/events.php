@@ -355,9 +355,7 @@ class DPCalendarModelEvents extends ListModel
 		$query->where('(' . $dateCondition . ')');
 
 		// Filter by language
-		if ($language = $this->getState('filter.language')) {
-			$query->where('a.language = ' . $db->quote($language));
-		} else {
+		if ($this->getState('filter.language')) {
 			$query->where('a.language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . ')');
 		}
 

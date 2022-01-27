@@ -571,7 +571,9 @@ class DPCalendarModelAdminEvent extends AdminModel
 				$mailer->setBody($body);
 				$mailer->IsHTML(true);
 				$mailer->addRecipient($ticket->email);
+				$app->triggerEvent('onDPCalendarBeforeSendMail', ['com_dpcalendar.event.save.notify.tickets', $mailer, $ticket]);
 				$mailer->Send();
+				$app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.event.save.notify.tickets', $mailer, $ticket]);
 			}
 		}
 
@@ -886,6 +888,8 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$extraVars
 		);
 
+		$app = Factory::getApplication();
+
 		// Loop over the authors to send the notification
 		foreach ($authors as $author) {
 			$u = User::getTable();
@@ -901,7 +905,9 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$mailer->setBody($body);
 			$mailer->IsHTML(true);
 			$mailer->addRecipient($u->email);
+			$app->triggerEvent('onDPCalendarBeforeSendMail', ['com_dpcalendar.event.save.author', $mailer, $events]);
 			$mailer->Send();
+			$app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.event.save.author', $mailer, $events]);
 		}
 	}
 }

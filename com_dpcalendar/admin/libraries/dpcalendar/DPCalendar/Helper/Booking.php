@@ -11,13 +11,20 @@ defined('_JEXEC') or die();
 
 use DPCalendar\TCPDF\DPCalendar;
 use DPCalendar\Translator\Translator;
+use DPCalendarHelperRoute;
+use Exception;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
 \JLoader::import('joomla.application.component.helper');
-\JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
+Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
 
 class Booking
 {
@@ -44,7 +51,7 @@ class Booking
 					$language = Factory::getLanguage();
 				}
 				$language->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-				$details = \DPCalendarHelper::renderLayout(
+				$details = DPCalendarHelper::renderLayout(
 					'booking.invoice',
 					[
 						'booking'    => $booking,
@@ -84,14 +91,16 @@ class Booking
 			$fileName = $booking->uid . '.pdf';
 			if ($toFile) {
 				$fileName = JPATH_ROOT . '/tmp/' . $fileName;
-				\JFile::delete($fileName);
+				if (file_exists($fileName)) {
+					unlink($fileName);
+				}
 			}
 			ob_end_clean();
 			$pdf->Output($fileName, $toFile ? 'F' : 'D');
 
 			return $fileName;
-		} catch (\Exception $e) {
-			\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		} catch (Exception $e) {
+			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
 			return null;
 		}
@@ -111,12 +120,12 @@ class Booking
 	public static function createTicket($ticket, $params, $toFile = false)
 	{
 		try {
-			\JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+			Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
-			\DPCalendarHelper::increaseMemoryLimit(130 * 1024 * 1024);
+			DPCalendarHelper::increaseMemoryLimit(130 * 1024 * 1024);
 
-			\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-			$model = \JModelLegacy::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+			$model = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
 			$event = $model->getItem($ticket->event_id);
 
 			$details = \DPCalendarHelper::renderLayout(
@@ -166,19 +175,21 @@ class Booking
 					'module_width'  => 1,
 					'module_height' => 1
 				];
-				$pdf->write2DBarcode(\DPCalendarHelperRoute::getTicketCheckinRoute($ticket, true), 'QRCODE,L', 20, 200, 50, 50, $style, 'N');
+				$pdf->write2DBarcode(DPCalendarHelperRoute::getTicketCheckinRoute($ticket, true), 'QRCODE,L', 20, 200, 50, 50, $style, 'N');
 			}
 
 			$fileName = $ticket->uid . '.pdf';
 			if ($toFile) {
 				$fileName = JPATH_ROOT . '/tmp/' . $fileName;
-				\JFile::delete($fileName);
+				if (file_exists($fileName)) {
+					unlink($fileName);
+				}
 			}
 			$pdf->Output($fileName, $toFile ? 'F' : 'D');
 
 			return $fileName;
-		} catch (\Exception $e) {
-			\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		} catch (Exception $e) {
+			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
 			return null;
 		}
@@ -202,9 +213,9 @@ class Booking
 
 		$events = [$event->id => $event];
 		if ($event->original_id != '0') {
-			$model = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 			if (!$model) {
-				$model = \JModelLegacy::getInstance('AdminEvents', 'DPCalendarModel', ['ignore_request' => true]);
+				$model = BaseDatabaseModel::getInstance('AdminEvents', 'DPCalendarModel', ['ignore_request' => true]);
 			}
 
 			$model->getState();
@@ -215,7 +226,7 @@ class Booking
 			$model->setState('filter.expand', true);
 
 			if ($model->getTotal() > $limit) {
-				throw new \Exception('Too many series events!', 1);
+				throw new Exception('Too many series events!', 1);
 			}
 
 			$series = $model->getItems();
@@ -241,7 +252,7 @@ class Booking
 
 	public static function openForBooking($event)
 	{
-		if (!$event || $event->state == 3 || \DPCalendarHelper::isFree()) {
+		if (!$event || $event->state == 3 || DPCalendarHelper::isFree()) {
 			return false;
 		}
 
@@ -249,13 +260,18 @@ class Booking
 			return false;
 		}
 
-		$now                = \DPCalendarHelper::getDate();
+		$now                = DPCalendarHelper::getDate();
 		$regstrationEndDate = self::getRegistrationEndDate($event);
 		if ($regstrationEndDate->format('U') < $now->format('U')) {
 			return false;
 		}
 
-		$calendar = \DPCalendarHelper::getCalendar($event->catid);
+		$regstrationStartDate = self::getRegistrationStartDate($event);
+		if ($regstrationStartDate->format('U') > $now->format('U')) {
+			return false;
+		}
+
+		$calendar = DPCalendarHelper::getCalendar($event->catid);
 		if (!$calendar) {
 			return false;
 		}
@@ -263,7 +279,7 @@ class Booking
 		return $calendar->canBook;
 	}
 
-    /**
+	/**
 	 * Return the opening start date for the event registration.
 	 *
 	 * @param \stdClass $event
@@ -274,19 +290,19 @@ class Booking
 	{
 		// When no opening date, use the event published date
 		if (empty($event->booking_opening_date)) {
-			return \DPCalendarHelper::getDate($event->created);
+			return DPCalendarHelper::getDate($event->created);
 		}
 
 		// Check if it is a relative date
 		if (strpos($event->booking_opening_date, '-') === 0 || strpos($event->booking_opening_date, '+') === 0) {
-			$date = \DPCalendarHelper::getDate($event->start_date);
+			$date = DPCalendarHelper::getDate($event->start_date);
 			$date->modify($event->booking_opening_date);
 
 			return $date;
 		}
 
 		// Absolute date
-		return \DPCalendarHelper::getDate($event->booking_opening_date);
+		return DPCalendarHelper::getDate($event->booking_opening_date);
 	}
 
 	/**
@@ -300,19 +316,19 @@ class Booking
 	{
 		// When no closing date, use the start date
 		if (empty($event->booking_closing_date)) {
-			return \DPCalendarHelper::getDate($event->start_date);
+			return DPCalendarHelper::getDate($event->start_date);
 		}
 
 		// Check if it is a relative date
 		if (strpos($event->booking_closing_date, '-') === 0 || strpos($event->booking_closing_date, '+') === 0) {
-			$date = \DPCalendarHelper::getDate($event->start_date);
+			$date = DPCalendarHelper::getDate($event->start_date);
 			$date->modify($event->booking_closing_date);
 
 			return $date;
 		}
 
 		// Absolute date
-		return \DPCalendarHelper::getDate($event->booking_closing_date);
+		return DPCalendarHelper::getDate($event->booking_closing_date);
 	}
 
 	/**
@@ -326,10 +342,10 @@ class Booking
 	 */
 	public static function getPaymentStatementFromPlugin($booking, $params = null, $language = null)
 	{
-		\JPluginHelper::importPlugin('dpcalendarpay');
+		PluginHelper::importPlugin('dpcalendarpay');
 
 		$plugin    = substr($booking->processor, 0, strpos($booking->processor, '-'));
-		$providers = \JFactory::getApplication()->triggerEvent('onDPPaymentProviders', [$plugin]);
+		$providers = Factory::getApplication()->triggerEvent('onDPPaymentProviders', [$plugin]);
 
 		$provider = null;
 		foreach ($providers as $pluginProviders) {
@@ -346,15 +362,15 @@ class Booking
 		}
 
 		if (!$params) {
-			$params = \JComponentHelper::getParams('com_dpcalendar');
+			$params = ComponentHelper::getParams('com_dpcalendar');
 		}
 
 		$vars                               = (array)$booking;
-		$vars['currency']                   = \DPCalendarHelper::getComponentParameter('currency', 'USD');
-		$vars['currencySymbol']             = \DPCalendarHelper::getComponentParameter('currency_symbol', '$');
-		$vars['currencySeparator']          = \DPCalendarHelper::getComponentParameter('currency_separator', '.');
-		$vars['currencyThousandsSeparator'] = \DPCalendarHelper::getComponentParameter('currency_thousands_separator', "'");
-		$vars['price_formatted']            = \DPCalendarHelper::renderPrice(
+		$vars['currency']                   = DPCalendarHelper::getComponentParameter('currency', 'USD');
+		$vars['currencySymbol']             = DPCalendarHelper::getComponentParameter('currency_symbol', '$');
+		$vars['currencySeparator']          = DPCalendarHelper::getComponentParameter('currency_separator', '.');
+		$vars['currencyThousandsSeparator'] = DPCalendarHelper::getComponentParameter('currency_thousands_separator', "'");
+		$vars['price_formatted']            = DPCalendarHelper::renderPrice(
 			$vars['price'],
 			$vars['currencySymbol'],
 			$vars['currencySeparator'],
@@ -374,7 +390,7 @@ class Booking
 		$text = trim(strip_tags($provider->payment_statement));
 		$text = $language->hasKey($text) ? $language->_($text) : $provider->payment_statement;
 
-		return \DPCalendarHelper::renderEvents([], $text, $params, $vars);
+		return DPCalendarHelper::renderEvents([], $text, $params, $vars);
 	}
 
 	/**
@@ -385,10 +401,10 @@ class Booking
 	 * index is
 	 * used.
 	 *
-	 * @param decimal  $price
-	 * @param stdclass $event
-	 * @param integer  $earlyBirdIndex
-	 * @param integer  $userGroupIndex
+	 * @param float     $price
+	 * @param \stdclass $event
+	 * @param integer   $earlyBirdIndex
+	 * @param integer   $userGroupIndex
 	 *
 	 * @return float
 	 */
@@ -399,7 +415,7 @@ class Booking
 		}
 		$newPrice = $price;
 
-		$now = \DPCalendarHelper::getDate();
+		$now = DPCalendarHelper::getDate();
 
 		if (is_object($event->earlybird) && isset($event->earlybird->value) && is_array($event->earlybird->value)) {
 			foreach ($event->earlybird->value as $index => $value) {
@@ -407,13 +423,13 @@ class Booking
 					continue;
 				}
 				$limit = $event->earlybird->date[$index];
-				$date  = \DPCalendarHelper::getDate($event->start_date);
+				$date  = DPCalendarHelper::getDate($event->start_date);
 				if (strpos($limit, '-') === 0 || strpos($limit, '+') === 0) {
 					// Relative date
 					$date->modify(str_replace('+', '-', $limit));
 				} else {
 					// Absolute date
-					$date = \DPCalendarHelper::getDate($limit);
+					$date = DPCalendarHelper::getDate($limit);
 					if ($date->format('H:i') == '00:00') {
 						$date->setTime(23, 59, 59);
 					}
@@ -435,7 +451,7 @@ class Booking
 				break;
 			}
 		}
-		$userGroups = \JAccess::getGroupsByUser(\JFactory::getUser()->id);
+		$userGroups = Access::getGroupsByUser(Factory::getUser()->id);
 		if (is_object($event->user_discount) && isset($event->user_discount->value) && is_array($event->user_discount->value)) {
 			foreach ($event->user_discount->value as $index => $value) {
 				if (!$value || $userGroupIndex == -2 || ($userGroupIndex >= 0 && $userGroupIndex != $index)) {

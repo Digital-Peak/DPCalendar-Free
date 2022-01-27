@@ -217,6 +217,13 @@ class DPCalendarHelper
 		$dimensions                        = $event->images->image_full_width ? ' width="' . $event->images->image_full_width . '"' : '';
 		$dimensions .= $event->images->image_full_height ? ' height="' . $event->images->image_full_height . '"' : '';
 		$event->images->image_full_dimensions = trim($dimensions);
+
+		if (!empty($event->images->image_intro) && $pos = strpos($event->images->image_intro, '#')) {
+			$event->images->image_intro = substr($event->images->image_intro, 0, $pos);
+		}
+		if (!empty($event->images->image_full) && $pos = strpos($event->images->image_full, '#')) {
+			$event->images->image_full = substr($event->images->image_full, 0, $pos);
+		}
 	}
 
 	public static function dayToString($day, $abbr = false)

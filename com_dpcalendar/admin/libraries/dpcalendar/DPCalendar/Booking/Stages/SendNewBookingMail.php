@@ -12,6 +12,7 @@ defined('_JEXEC') or die();
 use DPCalendar\Helper\Booking;
 use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\Ical;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
 use Joomla\CMS\Mail\Mail;
 use League\Pipeline\StageInterface;
@@ -23,9 +24,15 @@ class SendNewBookingMail implements StageInterface
 	 */
 	private $mailer;
 
-	public function __construct(Mail $mailer)
+	/**
+	 * @var CMSApplication
+	 */
+	private $app;
+
+	public function __construct(Mail $mailer, CMSApplication $app)
 	{
 		$this->mailer = $mailer;
+		$this->app    = $app;
 	}
 
 	public function __invoke($payload)
@@ -107,7 +114,9 @@ class SendNewBookingMail implements StageInterface
 				}
 			}
 			try {
+				$this->app->triggerEvent('onDPCalendarBeforeSendMail', ['com_dpcalendar.booking.new', $this->mailer, $payload->item]);
 				$this->mailer->Send();
+				$this->app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.booking.new', $this->mailer, $payload->item]);
 				foreach ($files as $file) {
 					\JFile::delete($file);
 				}

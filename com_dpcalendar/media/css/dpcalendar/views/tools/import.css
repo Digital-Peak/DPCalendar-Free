@@ -1,16 +1,28 @@
 .com-dpcalendar-tools-import__filters {
 	width: 100%;
-	margin-bottom: 10px;
+	margin-bottom: 1rem;
 }
 .com-dpcalendar-tools-import__filters div[class^=dp-filter__] {
 	display: inline-block;
-	margin-right: 10px;
+	margin-right: 1rem;
 }
 .com-dpcalendar-tools-import__plugins {
 	width: 100%;
 }
+.com-dpcalendar-tools-import .dp-plugin {
+	margin-bottom: 1rem;
+}
+.com-dpcalendar-tools-import .dp-plugin legend {
+	margin: 0.5rem 0;
+}
+.com-dpcalendar-tools-import .dp-plugin label {
+	margin-right: 1rem;
+}
+.com-dpcalendar-tools-import .dp-plugin input {
+	margin-right: 0.5rem;
+}
 .com-dpcalendar-tools-import__footer {
-	padding: 20px;
+	padding: 2rem;
 	text-align: center;
 }
 

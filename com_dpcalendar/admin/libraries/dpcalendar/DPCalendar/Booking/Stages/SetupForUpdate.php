@@ -9,17 +9,19 @@ namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\User\User;
 use League\Pipeline\StageInterface;
 
 class SetupForUpdate implements StageInterface
 {
 	/**
-	 * @var \JApplicationCms
+	 * @var CMSApplication
 	 */
 	private $application = null;
 
 	/**
-	 * @var \JUser
+	 * @var User
 	 */
 	private $user = null;
 
@@ -28,7 +30,7 @@ class SetupForUpdate implements StageInterface
 	 */
 	private $couponModel = null;
 
-	public function __construct(\JApplicationCms $application, \JUser $user, \DPCalendarModelCoupon $couponModel)
+	public function __construct(CMSApplication $application, User $user, \DPCalendarModelCoupon $couponModel)
 	{
 		$this->application = $application;
 		$this->user        = $user;

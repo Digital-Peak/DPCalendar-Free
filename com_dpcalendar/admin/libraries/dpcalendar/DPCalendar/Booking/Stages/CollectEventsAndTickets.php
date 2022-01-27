@@ -11,6 +11,7 @@ defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Booking;
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Application\CMSApplication;
 use League\Pipeline\StageInterface;
 
 class CollectEventsAndTickets implements StageInterface
@@ -21,11 +22,11 @@ class CollectEventsAndTickets implements StageInterface
 	private $model;
 
 	/**
-	 * @var \JApplicationCms
+	 * @var CMSApplication
 	 */
 	private $application = null;
 
-	public function __construct(\JApplicationCms $application, \DPCalendarModelBooking $model)
+	public function __construct(CMSApplication $application, \DPCalendarModelBooking $model)
 	{
 		$this->application = $application;
 		$this->model       = $model;

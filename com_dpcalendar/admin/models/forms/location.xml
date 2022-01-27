@@ -59,7 +59,7 @@
 			<option value="-2">JTRASHED</option>
 		</field>
 
-		<field name="tags" type="tag" multiple="true" label="JTAG" description="JTAG_DESC"/>
+		<field name="tags" type="tag" multiple="true" label="JTAG"/>
 		<field name="language" type="contentlanguage"
 		       label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
 			<option value="*">JALL</option>

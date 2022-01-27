@@ -10,9 +10,14 @@ namespace DPCalendar\Helper;
 defined('_JEXEC') or die();
 
 use DigitalPeak\ThinHTTP as HTTP;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
+use stdClass;
 
-\JTable::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
+Table::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
 
 class Location
 {
@@ -109,10 +114,10 @@ class Location
 			return '';
 		}
 
-		$format = \DPCalendarHelper::getComponentParameter('location_format', 'format_us');
+		$format = DPCalendarHelper::getComponentParameter('location_format', 'format_us');
 		$format = str_replace('.php', '', $format);
 
-		return \DPCalendarHelper::renderLayout('location.' . $format, ['locations' => $locations]);
+		return DPCalendarHelper::renderLayout('location.' . $format, ['locations' => $locations]);
 	}
 
 	/**
@@ -128,8 +133,8 @@ class Location
 	{
 		if (self::$locationCache == null) {
 			\JLoader::import('joomla.application.component.model');
-			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			self::$locationCache = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			self::$locationCache = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 		}
 
 		if ($fill) {
@@ -139,7 +144,7 @@ class Location
 					self::$locationCache->setState('filter.latitude', $coordinates[0]);
 					self::$locationCache->setState('filter.longitude', $coordinates[1]);
 				} else {
-					self::$locationCache->setState('filter.search', \JApplicationHelper::stringURLSafe($location));
+					self::$locationCache->setState('filter.search', ApplicationHelper::stringURLSafe($location));
 				}
 				$locations = self::$locationCache->getItems();
 				if ($locations) {
@@ -149,7 +154,7 @@ class Location
 					}
 				}
 			} catch (\Exception $e) {
-				\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 			}
 		}
 
@@ -161,7 +166,7 @@ class Location
 			$locObject              = new \stdClass();
 			$locObject->id          = 0;
 			$locObject->title       = $title;
-			$locObject->alias       = \JApplicationHelper::stringURLSafe($title);
+			$locObject->alias       = ApplicationHelper::stringURLSafe($title);
 			$locObject->state       = 1;
 			$locObject->language    = '*';
 			$locObject->country     = 0;
@@ -198,16 +203,16 @@ class Location
 
 		if ($fill) {
 			try {
-				$table = \JTable::getInstance('Location', 'DPCalendarTable');
+				$table = Table::getInstance('Location', 'DPCalendarTable');
 				if (!$table->save((array)$locObject)) {
-					\JFactory::getApplication()->enqueueMessage($table->getError(), 'warning');
+					Factory::getApplication()->enqueueMessage($table->getError(), 'warning');
 				}
 				$locObject->id = $table->id;
 			} catch (\Exception $e) {
-				\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 			}
 
-			self::$locationCache = \JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+			self::$locationCache = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 		}
 
 		return $locObject;
@@ -232,9 +237,9 @@ class Location
 			return [];
 		}
 		\JLoader::import('joomla.application.component.model');
-		\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-		$model = \JModelLegacy::getInstance('Locations', 'DPCalendarModel');
+		$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel');
 		$model->getState();
 		$model->setState('filter.search', 'ids:' . implode(',', $locationIds));
 
@@ -269,7 +274,7 @@ class Location
 
 	public static function getCountryForIp()
 	{
-		$geoDBDirectory = \JFactory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
+		$geoDBDirectory = Factory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
 		$files          = is_dir($geoDBDirectory) ? scandir($geoDBDirectory) : [];
 
 		// Check if the data is available
@@ -308,8 +313,8 @@ class Location
 			}
 
 			// Get the country by short code
-			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
 
 			return $model->getItem(['short_code' => $range[2]]);
 		}
@@ -332,7 +337,7 @@ class Location
 
 		$tmp = (new HTTP())->get($url . 'input=' . urlencode($address));
 		if (!empty($tmp->error_message)) {
-			\JFactory::getApplication()->enqueueMessage($tmp->error_message, 'warning');
+			Factory::getApplication()->enqueueMessage($tmp->error_message, 'warning');
 
 			return [];
 		}
@@ -343,7 +348,7 @@ class Location
 
 		$data = [];
 		foreach ($tmp->predictions as $prediction) {
-			$item          = new \stdClass();
+			$item          = new stdClass();
 			$item->title   = $prediction->description;
 			$item->value   = $prediction->description;
 			$item->details = '';
@@ -358,7 +363,7 @@ class Location
 	{
 		$url = 'https://photon.komoot.io/api/?limit=5&';
 
-		$lang = \DPCalendarHelper::getFrLanguage();
+		$lang = DPCalendarHelper::getFrLanguage();
 		if (!in_array($lang, self::$nomatimLanguages)) {
 			$lang = substr($lang, 0, strpos($lang, '-'));
 		}
@@ -426,9 +431,9 @@ class Location
 
 	private static function fillObjectFromGoogle($location, $locObject)
 	{
-		$url = 'https://maps.google.com/maps/api/geocode/json?key=' . trim(\DPCalendarHelper::getComponentParameter('map_api_google_key')) . '&';
+		$url = 'https://maps.google.com/maps/api/geocode/json?key=' . trim(DPCalendarHelper::getComponentParameter('map_api_google_key')) . '&';
 
-		$lang = \DPCalendarHelper::getFrLanguage();
+		$lang = DPCalendarHelper::getFrLanguage();
 		if (!in_array($lang, self::$googleLanguages)) {
 			$lang = substr($lang, 0, strpos($lang, '-'));
 		}
@@ -439,7 +444,7 @@ class Location
 
 		$tmp = (new HTTP())->get($url . 'address=' . urlencode($location));
 		if (!empty($tmp->error_message)) {
-			\JFactory::getApplication()->enqueueMessage($tmp->error_message, 'warning');
+			Factory::getApplication()->enqueueMessage($tmp->error_message, 'warning');
 
 			return;
 		}
@@ -455,8 +460,8 @@ class Location
 			switch ($part->types[0]) {
 				case 'country':
 					// Get the country by short code
-					\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-					$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+					BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+					$model = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
 
 					$loc = $model->getItem(['short_code' => strtoupper($part->short_name)]);
 					if ($loc && $loc->id) {
@@ -518,8 +523,8 @@ class Location
 
 		if (!empty($tmp->address->country_code)) {
 			// Get the country by short code
-			\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
 
 			$loc = $model->getItem(['short_code' => strtoupper($tmp->address->country_code)]);
 			if ($loc && $loc->id) {
@@ -572,7 +577,7 @@ class Location
 			'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
 		);
 
-		$lang = \DPCalendarHelper::getFrLanguage();
+		$lang = DPCalendarHelper::getFrLanguage();
 		$lang = substr($lang, 0, strpos($lang, '-'));
 		$url .= '&language=' . $lang;
 
@@ -592,8 +597,8 @@ class Location
 		foreach ($addr->context as $c) {
 			if (strpos($c->id, 'country') === 0 && !empty($c->short_code)) {
 				// Get the country by short code
-				\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-				$model = \JModelLegacy::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
+				BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+				$model = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true]);
 
 				$loc = $model->getItem(['short_code' => strtoupper($c->short_code)]);
 				if ($loc && $loc->id) {

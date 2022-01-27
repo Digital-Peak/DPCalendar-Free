@@ -198,7 +198,7 @@ class DPCalendarTableEvent extends Table
 		}
 
 		if (!empty($this->images) && $this->images != '{}') {
-			$images = json_decode($this->images);
+			$images = is_object($this->images) ? $this->images : json_decode($this->images);
 			if (!empty($images->image_intro)) {
 				$path = JPATH_ROOT . '/' . $images->image_intro;
 				if ($hashPos = strpos($images->image_intro, '#')) {

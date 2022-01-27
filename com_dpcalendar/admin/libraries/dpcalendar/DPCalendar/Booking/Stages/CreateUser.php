@@ -8,6 +8,7 @@ namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\User\UserHelper;
 use League\Pipeline\StageInterface;
@@ -15,7 +16,7 @@ use League\Pipeline\StageInterface;
 class CreateUser implements StageInterface
 {
 	/**
-	 * @var \JApplicationCms
+	 * @var CMSApplication
 	 */
 	private $application = null;
 
@@ -29,7 +30,7 @@ class CreateUser implements StageInterface
 	 */
 	private $model = null;
 
-	public function __construct(\JApplicationCms $application, \JDatabaseDriver $db, \UsersModelRegistration $model)
+	public function __construct(CMSApplication $application, \JDatabaseDriver $db, \UsersModelRegistration $model)
 	{
 		$this->application = $application;
 		$this->db          = $db;

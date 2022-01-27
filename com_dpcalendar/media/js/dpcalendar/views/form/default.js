@@ -316,6 +316,12 @@
 						return;
 					}
 					select.add(new Option(json.data.display, json.data.id ? json.data.id : json.data.display, false, true));
+					if (rooms && rooms.querySelectorAll('option').length == 0) {
+						rooms.style.display = 'none';
+					}
+					select.dpInternalTrigger = true;
+					select.dispatchEvent(new Event('change'));
+					select.dpInternalTrigger = false;
 					updateLocationFrame();
 				},
 				'lookup=' + e.detail.value + '&lookup_title=' + e.detail.title
@@ -330,6 +336,23 @@
 				'task=' + task + '&loc=' + encodeURIComponent(e.target.value.trim()),
 				(json) => DPCalendar.autocomplete.setItems(geoComplete, json.data)
 			);
+		});
+		const locationIds = document.getElementById('jform_location_ids');
+		if (!locationIds) {
+			return;
+		}
+		locationIds.addEventListener('change', (e) => {
+			if (e.target.dpInternalTrigger === true || !document.getElementById('jform_rooms')) {
+				return true;
+			}
+			if (isNaN(e.target.value)) {
+				return;
+			}
+			const loader = document.querySelector('.dp-loader');
+			if (loader) {
+				loader.classList.remove('dp-loader_hidden');
+			}
+			Joomla.submitbutton('event.reload');
 		});
 	}
 	function updateLocationFrame() {
@@ -393,22 +416,6 @@
 						return true;
 					}
 				}
-			});
-		}
-		const locationIds = document.getElementById('jform_location_ids');
-		if (locationIds) {
-			locationIds.addEventListener('change', (e) => {
-				if (!document.getElementById('jform_rooms')) {
-					return true;
-				}
-				if (isNaN(e.target.value)) {
-					return;
-				}
-				const loader = document.querySelector('.dp-loader');
-				if (loader) {
-					loader.classList.remove('dp-loader_hidden');
-				}
-				Joomla.submitbutton('event.reload');
 			});
 		}
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform__actions .dp-button')).forEach((button) => {

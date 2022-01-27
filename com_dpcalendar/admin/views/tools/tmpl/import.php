@@ -4,13 +4,17 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Router\Route;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/tools/import.css');
 
 $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_IMPORT_WARNING'), 'warning');
 ?>
-<form action="<?php echo JRoute::_('index.php?option=com_dpcalendar&task=import.add'); ?>" method="post" name="adminForm" id="adminForm"
+<form action="<?php echo Route::_('index.php?option=com_dpcalendar&task=import.add'); ?>" method="post" name="adminForm" id="adminForm"
 	  class="com-dpcalendar-tools-import">
 	<?php if ($this->sidebar) { ?>
 		<div id="j-sidebar-container"><?php echo $this->sidebar; ?></div>
@@ -28,7 +32,7 @@ $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_IMPORT_WA
 					   for="filter_search_start">
 					<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_START_DATE_AFTER_LABEL'); ?>:
 				</label>
-				<?php echo JHtml::_(
+				<?php echo HTMLHelper::_(
 					'calendar',
 					$this->escape($this->dateHelper->getDate()->format('Y-m-d')),
 					'filter_search_start',
@@ -43,7 +47,7 @@ $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_IMPORT_WA
 				</label>
 				<?php $end = $this->dateHelper->getDate(); ?>
 				<?php $end->modify('+2 month'); ?>
-				<?php echo JHtml::_(
+				<?php echo HTMLHelper::_(
 					'calendar',
 					$this->escape($end),
 					'filter_search_end',
@@ -53,23 +57,25 @@ $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_IMPORT_WA
 				); ?>
 			</div>
 		</div>
-		<fieldset class="com-dpcalendar-tools-import__plugins">
+		<div class="com-dpcalendar-tools-import__plugins">
 			<?php foreach ($this->plugins as $plugin) { ?>
-				<legend><?php echo $this->translate('PLG_DPCALENDAR_' . $plugin->name) ?></legend>
-				<?php foreach ($this->calendars as $cal) { ?>
-					<?php if ($cal->plugin_name != $plugin->name) { ?>
-						<?php continue; ?>
+				<fieldset class="dp-plugin">
+					<legend><?php echo $this->translate('PLG_DPCALENDAR_' . $plugin->name) ?></legend>
+					<?php foreach ($this->calendars as $cal) { ?>
+						<?php if ($cal->plugin_name != $plugin->name) { ?>
+							<?php continue; ?>
+						<?php } ?>
+						<label class="checkbox">
+							<input type="checkbox" name="calendar[]" value="<?php echo $cal->id; ?>"><?php echo $cal->title; ?>
+						</label>
 					<?php } ?>
-					<label class="checkbox">
-						<input type="checkbox" name="calendar[]" value="<?php echo $cal->id; ?>"><?php echo $cal->title; ?>
-					</label>
-				<?php } ?>
+				</fieldset>
 			<?php } ?>
-		</fieldset>
+		</div>
 		<div class="com-dpcalendar-tools-import__footer">
 			<?php echo sprintf($this->translate('COM_DPCALENDAR_FOOTER'), $this->input->getString('DPCALENDAR_VERSION')); ?>
 		</div>
 	</div>
 	<input type="hidden" name="task" value=""/>
-	<?php echo JHtml::_('form.token'); ?>
+	<?php echo HTMLHelper::_('form.token'); ?>
 </form>

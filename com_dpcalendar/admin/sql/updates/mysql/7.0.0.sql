@@ -1,4 +1,4 @@
-ALTER TABLE `#__dpcalendar_events` ADD `terms` VARCHAR(255) NULL AFTER `cancelurl`;
+ALTER TABLE `#__dpcalendar_events` ADD `terms` VARCHAR(255) NULL;
 ALTER TABLE `#__dpcalendar_events` ADD `booking_options` TEXT NULL AFTER `booking_information`;
 ALTER TABLE `#__dpcalendar_bookings` ADD `options` VARCHAR(255) NULL AFTER `price`;
 

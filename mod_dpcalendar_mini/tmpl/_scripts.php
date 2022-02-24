@@ -4,7 +4,11 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Router\Router;
 
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_MONTH');
@@ -29,7 +33,7 @@ $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 $translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD');
 
 $translator->translateJS('JCANCEL');
-$translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
+$translator->translateJS('COM_DPCALENDAR_CLOSE');
 $translator->translateJS('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 
 $document->addScriptOptions('calendar.names', $dateHelper->getNames());
@@ -99,7 +103,7 @@ if ($params->get('header_show_navigation', 1)) {
 	$options['headerToolbar']['left'][] = 'prev';
 	$options['headerToolbar']['left'][] = 'next';
 }
-if ($params->get('header_show_create', 1) && \DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+if ($params->get('header_show_create', 1) && DPCalendarHelper::canCreateEvent()) {
 	$options['headerToolbar']['left'][] = 'add';
 }
 if ($params->get('header_show_title', 1)) {
@@ -126,7 +130,7 @@ $options['headerToolbar']['right']  = implode(',', $options['headerToolbar']['ri
 
 $resourceViews = $params->get('calendar_resource_views');
 
-if (!\DPCalendar\Helper\DPCalendarHelper::isFree() && $resourceViews && $resources) {
+if (!DPCalendarHelper::isFree() && $resourceViews && $resources) {
 	$options['resources'] = $resources;
 }
 
@@ -170,11 +174,11 @@ $options['views']['list']  = [
 $options['show_event_as_popup']   = $params->get('show_event_as_popup');
 $options['show_map']              = $params->get('show_map', 1);
 $options['event_create_form']     = 0;
-$options['screen_size_list_view'] = 0;
+$options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);
 $options['use_hash']              = false;
-if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
-	$router                      = new \DPCalendar\Router\Router();
-	$input                       = JFactory::getApplication()->input;
+if (DPCalendarHelper::canCreateEvent()) {
+	$router                      = new Router();
+	$input                       = $app->input;
 	$returnPage                  = $input->getInt('Itemid', null) ? 'index.php?Itemid=' . $input->getInt('Itemid', null) : null;
 	$options['event_create_url'] = $router->getEventFormRoute(0, $returnPage, null, false);
 }

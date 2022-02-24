@@ -22,7 +22,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD');
 
 $this->translator->translateJS('JCANCEL');
-$this->translator->translateJS('JLIB_HTML_BEHAVIOR_CLOSE');
+$this->translator->translateJS('COM_DPCALENDAR_CLOSE');
 $this->translator->translateJS('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 
 $this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());

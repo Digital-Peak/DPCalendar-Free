@@ -14,7 +14,6 @@
 }
 .dp-select-container {
 	width: 100%;
-	min-width: 300px;
 	position: relative;
 }
 .dp-select-container__options {

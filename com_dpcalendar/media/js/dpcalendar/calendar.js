@@ -289,8 +289,7 @@
 			window.location.hash = newHash;
 		}
 	}
-	function setup$2(calendar, options)
-	{
+	function setup$2(calendar, options) {
 		const viewMapping = getMappings(options);
 		options['eventClick'] = (info) => {
 			info.jsEvent.preventDefault();
@@ -302,6 +301,9 @@
 			}
 			if (options['show_event_as_popup'] == 1) {
 				DPCalendar.modal(info.event.url, calendar.dataset.popupwidth, calendar.dataset.popupheight, (frame) => {
+					if (frame.contentWindow.location.href.indexOf('view=form') > 0) {
+						DPCalendar.request('index.php?option=com_dpcalendar&task=event.checkin&e_id=' + info.event.id + '&' + Joomla.getOptions('csrf.token') + '=1');
+					}
 					const innerDoc = frame.contentDocument || frame.contentWindow.document;
 					if (!innerDoc.getElementById('system-message-container') || innerDoc.getElementById('system-message-container').children.length < 1) {
 						return;
@@ -465,8 +467,7 @@
 		iconHandler('print', 'print');
 		iconHandler('plus', 'add');
 	}
-	function setup(calendar, options)
-	{
+	function setup(calendar, options) {
 		calendar.dpEventMarkerSet = [];
 		options['viewClassNames'] = (info) => {
 			const map = calendar.parentElement.querySelector('.dp-map');
@@ -492,7 +493,7 @@
 			if (info.view.type == 'list') {
 				content = '<a href="' + info.event.url + '">' + content + '</a>';
 			}
-			return {html: content};
+			return { html: content };
 		};
 		options['eventDidMount'] = (info) => {
 			if (info.event.view_class) {
@@ -518,6 +519,7 @@
 							ignoreAttributes: true,
 							appendTo: document.body,
 							theme: 'light',
+							touch: false,
 							onShow: (instance) => instance.popper.querySelector('div[role="tooltip"]').classList.add('show'),
 							popperOptions: {
 								modifiers: [

@@ -12,6 +12,7 @@
 		}
 		loadDPAssets(['/com_dpcalendar/js/dayjs/dayjs.js'], () => {
 			rrule.addEventListener('change', updateFormFromRule);
+			updateFormFromRule();
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling,#jform_scheduling_monthly_options,#jform_scheduling_daily_weekdays')).forEach((el) => {
 				el.addEventListener('click', () => {
 					changeVisiblity();
@@ -21,7 +22,6 @@
 			[].slice.call(document.querySelectorAll('#jform_scheduling_end_date, #jform_scheduling_interval, #jform_scheduling_repeat_count,#jform_scheduling_weekly_days, #jform_scheduling_monthly_days, #jform_scheduling_monthly_week_days, #jform_scheduling_monthly_week')).forEach((el) => {
 				el.addEventListener('change', updateRuleFromForm);
 			});
-			updateFormFromRule();
 		});
 	}
 	function updateFormFromRule() {

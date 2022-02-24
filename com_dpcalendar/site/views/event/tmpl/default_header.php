@@ -48,8 +48,15 @@ $checkinUrl .= '&' . Session::getFormToken() . '=1';
 $return = Uri::getInstance(!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'layout=edit') === false ?
 	$_SERVER['HTTP_REFERER'] : 'index.php?ItemId=' . $this->input->getInt('Itemid', 0));
 
-$deleteUrl = 'index.php?option=com_dpcalendar&task=event.delete&tmpl=';
-$deleteUrl .= $this->input->getWord('tmpl') . '&return=' . base64_encode($return) . '&e_id=';
+$deleteUrl = 'index.php?option=com_dpcalendar&task=event.delete';
+if ($tmpl = $this->input->getWord('tmpl')) {
+	$deleteUrl .= '&tmpl=' . $tmpl;
+	$return->setVar('option', 'com_dpcalendar');
+	$return->setVar('view', 'event');
+	$return->setVar('layout', 'empty');
+	$return->setVar('tmpl', $tmpl);
+}
+$deleteUrl .= '&return=' . base64_encode($return) . '&e_id=';
 $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 ?>
 <div class="com-dpcalendar-event__actions dp-button-bar dp-print-hide">
@@ -124,14 +131,14 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 			</button>
 		<?php } ?>
 	<?php } ?>
-	<?php if ($event->params->get('access-delete')) { ?>
+	<?php if ($event->params->get('access-delete') && (!$event->checked_out || $this->user->id == $event->checked_out)) { ?>
 		<button type="button" class="dp-button dp-button-action dp-button-delete dp-action-delete"
 				data-href="<?php echo $this->router->route($deleteUrl . $event->id); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::DELETE]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_DELETE'); ?>
 		</button>
 	<?php } ?>
-	<?php if ($event->original_id > 0 && $event->params->get('access-delete')) { ?>
+	<?php if ($event->original_id > 0 && $event->params->get('access-delete') && (!$event->checked_out || $this->user->id == $event->checked_out)) { ?>
 		<button type="button" class="dp-button dp-button-action dp-button-delete-series dp-action-delete"
 				data-href="<?php echo $this->router->route($deleteUrl . $event->original_id); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::DELETE]); ?>

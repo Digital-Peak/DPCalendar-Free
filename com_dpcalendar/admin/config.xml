@@ -242,7 +242,7 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-		<field name="hidden_days" type="list" multiple="true"
+		<field name="hidden_days" type="list" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HIDDEN_DAYS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HIDDEN_DAYS_DESC">
 			<option value="1">MONDAY</option>
@@ -259,7 +259,7 @@
 		<field name="business_hours_end" type="text"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_END_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_END_DESC"/>
-		<field name="business_hours_days" type="list" multiple="true"
+		<field name="business_hours_days" type="list" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_DAYS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_BUSINESS_HOURS_DAYS_DESC">
 			<option value="1">MONDAY</option>
@@ -279,10 +279,10 @@
 			<option value="-1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_MY</option>
 			<option value="0">JNONE</option>
 		</field>
-		<field name="calendar_filter_locations" type="location" multiple="true"
+		<field name="calendar_filter_locations" type="location" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_DESC"/>
-		<field name="calendar_resource_views" type="list" multiple="true" showon="calendar_filter_locations!:"
+		<field name="calendar_resource_views" type="list" multiple="true" layout="joomla.form.field.list-fancy-select" showon="calendar_filter_locations!:"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_DESC">
 			<option value=""></option>
@@ -475,11 +475,11 @@
 			<option value="-1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_MY</option>
 			<option value="0">JNONE</option>
 		</field>
-		<field name="list_filter_locations" type="location" multiple="true"
+		<field name="list_filter_locations" type="location" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_DESC">
 		</field>
-		<field name="list_filter_tags" type="tag" multiple="true" mode="nested"
+		<field name="list_filter_tags" type="tag" multiple="true" layout="joomla.form.field.list-fancy-select" mode="nested"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC">
 		</field>
@@ -694,7 +694,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 
-		<field name="event_form_hidden_tabs" type="list" multiple="true"
+		<field name="event_form_hidden_tabs" type="list" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_DESC">
 			<option value="location">COM_DPCALENDAR_LOCATION</option>
 			<option value="booking">COM_DPCALENDAR_BOOKING</option>
@@ -703,7 +703,7 @@
 			<option value="params:jbasic">COM_DPCALENDAR_FIELDSET_OPTIONS</option>
 			<option value="metadata:jmetadata">JGLOBAL_FIELDSET_METADATA_OPTIONS</option>
 		</field>
-		<field name="event_form_hidden_fields" type="list" multiple="true"
+		<field name="event_form_hidden_fields" type="list" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_DESC">
 			<option value="catid">COM_DPCALENDAR_CALENDAR</option>
 			<option value="color">COM_DPCALENDAR_FIELD_COLOR_LABEL</option>
@@ -807,7 +807,7 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_form_location_ids" type="sql" multiple="true"
+		<field name="event_form_location_ids" type="sql" multiple="true" layout="joomla.form.field.list-fancy-select"
 				key_field="id" value_field="title"
 				query="SELECT id, concat(title,' [',IFNULL(latitude, '0'),':',IFNULL(longitude, '0'),']') as title FROM #__dpcalendar_locations where state = 1 order by title"
 				label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC"/>
@@ -819,7 +819,7 @@
 
 		<field name="event_form_capacity" type="text" default="0"
 				label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
-		<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true"
+		<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL"
 				description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 		<field name="event_form_terms" type="modal_article" select="true" new="true" edit="true" clear="true"
@@ -1656,19 +1656,19 @@
 		<field name="downloadid" type="text"
 				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_DESC"/>
-		<field name="notification_groups_create" type="usergrouplist" multiple="true"
+		<field name="notification_groups_create" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_DESC"/>
-		<field name="notification_groups_edit" type="usergrouplist" multiple="true"
+		<field name="notification_groups_edit" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_DESC"/>
-		<field name="notification_groups_delete" type="usergrouplist" multiple="true"
+		<field name="notification_groups_delete" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_DESC"/>
-		<field name="notification_groups_book" type="usergrouplist" multiple="true"
+		<field name="notification_groups_book" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_DESC"/>
-		<field name="notification_groups_location_create" type="usergrouplist" multiple="true"
+		<field name="notification_groups_location_create" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
 				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_DESC"/>
 		<field name="notification_author" type="radio" class="btn-group" default="0"
@@ -1677,7 +1677,7 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="captcha_groups" type="usergrouplist" multiple="true"
+		<field name="captcha_groups" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
 				default="1" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_DESC"/>
 		<field name="enable_tz_switcher" type="radio" class="btn-group"

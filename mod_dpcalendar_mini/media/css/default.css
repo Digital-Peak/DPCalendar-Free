@@ -255,7 +255,7 @@
 	cursor: not-allowed;
 }
 .tingle-modal-box__content {
-	padding: 1rem;
+	padding: 1rem !important;
 }
 .tingle-modal-box__footer .dp-button {
 	margin-right: 10px;

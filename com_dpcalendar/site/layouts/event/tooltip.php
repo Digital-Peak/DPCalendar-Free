@@ -88,7 +88,7 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUs
 				</a>
 			<?php } ?>
 		<?php } ?>
-		<?php if ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
+		<?php if (($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) && (!$event->checked_out || $user->id == $event->checked_out)) { ?>
 			<a href="<?php echo $displayData['router']->getEventDeleteRoute($event->id, $return); ?>"
 				class="dp-event-tooltip__action dp-event-tooltip__action-delete dp-link">
 				<?php echo $displayData['layoutHelper']->renderLayout(

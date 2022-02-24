@@ -1202,10 +1202,6 @@ class PlgSampledataDPCalendar extends CMSPlugin
 
 			$data = $this->convertCustomFields($data, $code, $language);
 
-			// Defaults
-			$data['orderurl']  = '';
-			$data['cancelurl'] = '';
-
 			$model = BaseDatabaseModel::getInstance('AdminEvent', 'DPCalendarModel', ['ignore_request' => true]);
 			if (!$model->save($data)) {
 				throw new Exception(Text::_($model->getError()));

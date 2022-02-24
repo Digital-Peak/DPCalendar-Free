@@ -5,8 +5,6 @@ alter table `#__dpcalendar_events` CHANGE `earlybird` `earlybird` text;
 alter table `#__dpcalendar_events` CHANGE `user_discount` `user_discount` text;
 alter table `#__dpcalendar_events` CHANGE `booking_information` `booking_information` text;
 alter table `#__dpcalendar_events` CHANGE `booking_options` `booking_options` text;
-alter table `#__dpcalendar_events` CHANGE `ordertext` `ordertext` text;
-alter table `#__dpcalendar_events` CHANGE `canceltext` `canceltext` text;
 alter table `#__dpcalendar_events` CHANGE `rooms` `rooms` text;
 alter table `#__dpcalendar_events` CHANGE `params` `params` text;
 alter table `#__dpcalendar_events` CHANGE `metakey` `metakey` text;

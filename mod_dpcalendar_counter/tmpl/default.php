@@ -24,6 +24,7 @@ $translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_DAY');
 $translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_HOUR');
 $translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_MINUTE');
 $translator->translateJS('MOD_DPCALENDAR_COUNTER_LABEL_SECOND');
+$translator->translateJS('COM_DPCALENDAR_CLOSE');
 
 $document->loadStyleFile('default.css', 'mod_dpcalendar_counter');
 $document->loadScriptFile('default.js', 'mod_dpcalendar_counter');

@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 // Load the required modal JS libraries
 if ($params->get('show_as_popup') || $params->get('show_map')) {
 	$document->loadScriptFile('default.js', 'mod_dpcalendar_upcoming');
+	$translator->translateJS('COM_DPCALENDAR_CLOSE');
 }
 
 if ($params->get('show_map')) {

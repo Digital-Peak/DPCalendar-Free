@@ -115,7 +115,6 @@
 }
 .com-dpcalendar-map .dp-select-container {
 	width: 100%;
-	min-width: 300px;
 	position: relative;
 }
 .com-dpcalendar-map .dp-select-container__options {
@@ -343,7 +342,7 @@
 	cursor: not-allowed;
 }
 .tingle-modal-box__content {
-	padding: 1rem;
+	padding: 1rem !important;
 }
 .tingle-modal-box__footer .dp-button {
 	margin-right: 10px;

@@ -43,9 +43,9 @@ class DPCalendarHelperRoute
 
 			if ($defaultItemId) {
 				$link .= '&Itemid=' . $defaultItemId;
-			} else if ($item = self::findItem($needles)) {
+			} elseif ($item = self::findItem($needles)) {
 				$link .= '&Itemid=' . $item;
-			} else if ($item = self::findItem()) {
+			} elseif ($item = self::findItem()) {
 				$link .= '&Itemid=' . $item;
 			}
 		}
@@ -100,7 +100,7 @@ class DPCalendarHelperRoute
 			$needles = ['location' => [(int)$location->id], 'locations' => [(int)$location->id]];
 			if ($item = self::findItem($needles)) {
 				$link .= '&Itemid=' . $item;
-			} else if ($item = self::findItem()) {
+			} elseif ($item = self::findItem()) {
 				$link .= '&Itemid=' . $item;
 			}
 		}
@@ -210,7 +210,7 @@ class DPCalendarHelperRoute
 		return self::getUrl($args, true);
 	}
 
-	public static function getBookingFormRouteFromEvent($event, $return = null)
+	public static function getBookingFormRouteFromEvent($event, $return = null, $autoRoute = true)
 	{
 		$args         = [];
 		$args['task'] = 'bookingform.add';
@@ -220,12 +220,12 @@ class DPCalendarHelperRoute
 		}
 		$args['return'] = base64_encode($return);
 
-		$needles             = $needles = ['event' => [$event->id]];
+		$needles             = ['event' => [$event->id]];
 		$needles['calendar'] = [$event->catid];
 		$needles['list']     = [$event->catid];
 		$needles['map']      = [$event->catid];
 
-		return self::getUrl($args, true, $needles);
+		return self::getUrl($args, $autoRoute, $needles);
 	}
 
 	public static function getTicketRoute($ticket, $full = false)
@@ -334,10 +334,10 @@ class DPCalendarHelperRoute
 				'calendar' => [
 					$id
 				],
-				'list'     => [
+				'list' => [
 					$id
 				],
-				'map'      => [
+				'map' => [
 					$id
 				]
 			];
@@ -364,7 +364,7 @@ class DPCalendarHelperRoute
 
 					if ($item = self::findItem($needles)) {
 						$link .= '&Itemid=' . $item;
-					} else if ($item = self::findItem()) {
+					} elseif ($item = self::findItem()) {
 						$link .= '&Itemid=' . $item;
 					}
 				}

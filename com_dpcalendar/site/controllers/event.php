@@ -127,7 +127,7 @@ class DPCalendarControllerEvent extends FormController
 			]);
 		}
 		if (is_numeric($event->id)) {
-			$this->getModel()->getTable('Event', 'DPCalendarTable')->publish([$recordId], -2);
+			$this->getModel()->getTable('Event', 'DPCalendarTable')->publish([$recordId], -2, Factory::getUser()->id);
 			if (!$this->getModel()->delete($recordId)) {
 				$this->setMessage(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
 
@@ -147,6 +147,10 @@ class DPCalendarControllerEvent extends FormController
 		// J4 router redirects to the delete task again
 		if ($return = $this->input->get('return', null, 'default', 'base64')) {
 			$redirect = base64_decode($return);
+
+			if ($hash = $this->input->getString('urlhash')) {
+				$redirect .= '#' . trim($hash, '#');
+			}
 		}
 		$this->setRedirect($redirect, Text::_('COM_DPCALENDAR_DELETE_SUCCESS'));
 
@@ -731,6 +735,10 @@ class DPCalendarControllerEvent extends FormController
 			// Checkin failed
 			$message = Text::sprintf('JLIB_APPLICATION_ERROR_CHECKIN_FAILED', $model->getError());
 			$type    = 'error';
+		}
+
+		if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
+			return DPCalendarHelper::sendMessage($message, $type !== null);
 		}
 
 		$this->setRedirect(DPCalendarHelperRoute::getEventRoute($event->id, $event->catid), $message, $type);

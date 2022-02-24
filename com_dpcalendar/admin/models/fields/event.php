@@ -177,7 +177,7 @@ class JFormFieldEvent extends FormField
 					'bodyHeight' => 70,
 					'modalWidth' => 80,
 					'footer'     => '<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">'
-						. Text::_('JLIB_HTML_BEHAVIOR_CLOSE') . '</button>',
+						. Text::_('COM_DPCALENDAR_CLOSE') . '</button>',
 				]
 			);
 		}
@@ -199,7 +199,7 @@ class JFormFieldEvent extends FormField
 					'modalWidth'  => 80,
 					'footer'      => '<button type="button" class="btn btn-secondary"'
 						. ' onclick="window.processModalEdit(this, \'' . $this->id . '\', \'add\', \'event\', \'cancel\', \'item-form\'); return false;">'
-						. Text::_('JLIB_HTML_BEHAVIOR_CLOSE') . '</button>'
+						. Text::_('COM_DPCALENDAR_CLOSE') . '</button>'
 						. '<button type="button" class="btn btn-primary"'
 						. ' onclick="window.processModalEdit(this, \'' . $this->id . '\', \'add\', \'event\', \'save\', \'item-form\'); return false;">'
 						. Text::_('JSAVE') . '</button>'
@@ -227,7 +227,7 @@ class JFormFieldEvent extends FormField
 					'modalWidth'  => 80,
 					'footer'      => '<button type="button" class="btn btn-secondary"'
 						. ' onclick="window.processModalEdit(this, \'' . $this->id . '\', \'edit\', \'event\', \'cancel\', \'item-form\'); return false;">'
-						. Text::_('JLIB_HTML_BEHAVIOR_CLOSE') . '</button>'
+						. Text::_('COM_DPCALENDAR_CLOSE') . '</button>'
 						. '<button type="button" class="btn btn-primary"'
 						. ' onclick="window.processModalEdit(this, \'' . $this->id . '\', \'edit\', \'event\', \'save\', \'item-form\'); return false;">'
 						. Text::_('JSAVE') . '</button>'

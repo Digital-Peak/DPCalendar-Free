@@ -64,7 +64,7 @@ class Booking
 			}
 
 			// Disable notices (TCPDF is causing many of these)
-			error_reporting(E_ALL ^ E_NOTICE);
+			error_reporting(E_ALL ^ (E_NOTICE | E_DEPRECATED));
 
 			$pdf = new DPCalendar($params);
 
@@ -95,6 +95,7 @@ class Booking
 					unlink($fileName);
 				}
 			}
+
 			ob_end_clean();
 			$pdf->Output($fileName, $toFile ? 'F' : 'D');
 
@@ -140,7 +141,7 @@ class Booking
 			);
 
 			// Disable notices (TCPDF is causing many of these)
-			error_reporting(E_ALL ^ E_NOTICE);
+			error_reporting(E_ALL ^ (E_NOTICE | E_DEPRECATED));
 
 			$pdf = new DPCalendar($params);
 
@@ -185,6 +186,8 @@ class Booking
 					unlink($fileName);
 				}
 			}
+
+			ob_end_clean();
 			$pdf->Output($fileName, $toFile ? 'F' : 'D');
 
 			return $fileName;

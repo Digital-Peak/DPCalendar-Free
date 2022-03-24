@@ -126,7 +126,7 @@ class CreateOrUpdateTickets implements StageInterface
 
 					$payload->tickets[] = $t;
 
-					if ($ticket->state == 1) {
+					if ($ticket->state == 1 || $ticket->state == 4) {
 						$event->book(true);
 					}
 				}

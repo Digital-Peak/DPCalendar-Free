@@ -15,7 +15,7 @@ class DPCalendarHelperRoute
 	public static function getEventRoute($id, $calId, $full = false, $autoRoute = true, $defaultItemId = 0)
 	{
 		// Check if we come from com_tags where the link is generated id:alias
-		$parts = explode(':', $id);
+		$parts = $id ? explode(':', $id) : [];
 		if (count($parts) == 2 && is_numeric($parts[0])) {
 			$id = (int)$id;
 		}

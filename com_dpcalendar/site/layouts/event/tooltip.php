@@ -58,7 +58,7 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUs
 	<?php } ?>
 	<?php if ($params->get('tooltip_show_description', 1) && $params->get('description_length', 100)) { ?>
 		<div class="dp-event-tooltip__description">
-			<?php echo HTMLHelper::_('string.truncateComplex', $event->description, $params->get('description_length', 100)); ?>
+			<?php echo HTMLHelper::_('string.truncateComplex', $event->description ?: '', $params->get('description_length', 100)); ?>
 		</div>
 	<?php } ?>
 	<div class="dp-event-tooltip__actions dp-button-bar">

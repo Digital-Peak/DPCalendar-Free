@@ -117,8 +117,8 @@ if ($moduleParams->get('sort', 'start_date') == 'start_date') {
 
 		if ($moduleParams->get('order', 'asc') !== 'asc') {
 			$tmp = $d1;
-			$d1 = $d2;
-			$d2 = $tmp;
+			$d1  = $d2;
+			$d2  = $tmp;
 		}
 
 		return strcmp($d1->format('c', true), $d2->format('c', true));
@@ -151,7 +151,7 @@ foreach ($events as $event) {
 
 	$groupedEvents[$lastHeading][] = $event;
 
-	$event->text = $event->description;
+	$event->text = $event->description ?: '';
 	$app->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$event->params, 0]);
 	$event->description = $event->text;
 

@@ -4,13 +4,24 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\Location;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
-class DPCalendarModelLocation extends JModelAdmin
+class DPCalendarModelLocation extends AdminModel
 {
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
@@ -39,10 +50,10 @@ class DPCalendarModelLocation extends JModelAdmin
 		$item->rooms = $item->rooms && $item->rooms != '{}' ? json_decode($item->rooms) : [];
 
 		if (empty($item->color)) {
-			$item->color = \DPCalendar\Helper\Location::getColor($item);
+			$item->color = Location::getColor($item);
 		}
 
-		$item->tags = new JHelperTags();
+		$item->tags = new TagsHelper();
 		$item->tags->getTagIds($item->id, 'com_dpcalendar.location');
 
 		// Convert the params field to an array.
@@ -52,7 +63,7 @@ class DPCalendarModelLocation extends JModelAdmin
 		}
 		$item->metadata = $registry;
 
-		$user         = JFactory::getUser();
+		$user         = Factory::getUser();
 		$item->params = new Registry($item->params);
 		$item->params->set(
 			'access-edit',
@@ -66,9 +77,9 @@ class DPCalendarModelLocation extends JModelAdmin
 		);
 
 		if ($item->country) {
-			$country = JModelLegacy::getInstance('Country', 'DPCalendarModel')->getItem($item->country);
+			$country = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel')->getItem($item->country);
 			if ($country) {
-				JFactory::getApplication()->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+				Factory::getApplication()->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 				$item->country_code       = $country->short_code;
 				$item->country_code_value = JText::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
 			}
@@ -79,7 +90,7 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	public function getTable($type = 'Location', $prefix = 'DPCalendarTable', $config = [])
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return parent::getTable($type, $prefix, $config);
 	}
 
 	public function getForm($data = [], $loadData = true, $controlName = 'jform')
@@ -109,7 +120,7 @@ class DPCalendarModelLocation extends JModelAdmin
 			$form->removeField('captcha');
 		}
 
-		if (JFactory::getApplication()->isClient('site')) {
+		if (Factory::getApplication()->isClient('site')) {
 			$form->setFieldAttribute('id', 'type', 'hidden');
 		}
 
@@ -130,10 +141,10 @@ class DPCalendarModelLocation extends JModelAdmin
 
 		if ($success && $this->getState('location.new') === true) {
 			$data['id'] = $this->getState('location.id');
-			JFactory::getApplication()->setUserState('dpcalendar.location.id', $data['id']);
+			Factory::getApplication()->setUserState('dpcalendar.location.id', $data['id']);
 
 			// Load the language
-			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+			Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
 			// Create the subject
 			$subject = DPCalendarHelper::renderEvents(
@@ -151,9 +162,9 @@ class DPCalendarModelLocation extends JModelAdmin
 				[
 					'location'         => $data,
 					'backLinkFull'     => DPCalendarHelperRoute::getLocationRoute((object)$data, true),
-					'formattedAddress' => \DPCalendar\Helper\Location::format([(object)$data]),
-					'sitename'         => JFactory::getApplication()->get('sitename'),
-					'user'             => JFactory::getUser()->name
+					'formattedAddress' => Location::format([(object)$data]),
+					'sitename'         => Factory::getApplication()->get('sitename'),
+					'user'             => Factory::getUser()->name
 				]
 			);
 
@@ -164,14 +175,14 @@ class DPCalendarModelLocation extends JModelAdmin
 		return $success;
 	}
 
-	private function modifyField(JForm $form, $name)
+	private function modifyField(Form $form, $name)
 	{
 		$params = $this->getState('params');
 		if (!$params) {
-			$params = JComponentHelper::getParams('com_dpcalendar');
+			$params = ComponentHelper::getParams('com_dpcalendar');
 
-			if (JFactory::getApplication()->isClient('site')) {
-				$params = JFactory::getApplication()->getParams();
+			if (Factory::getApplication()->isClient('site')) {
+				$params = Factory::getApplication()->getParams();
 			}
 		}
 
@@ -188,13 +199,13 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.location.data', []);
+		$data = Factory::getApplication()->getUserState('com_dpcalendar.edit.location.data', []);
 		if (empty($data)) {
 			$data = $this->getItem();
 		}
 
 		if (is_array($data)) {
-			$data = new \Joomla\CMS\Object\CMSObject($data);
+			$data = new CMSObject($data);
 		}
 
 		// Forms can't handle registry objects on load
@@ -209,7 +220,7 @@ class DPCalendarModelLocation extends JModelAdmin
 		return $data;
 	}
 
-	private function getDefaultValues(JObject $item)
+	private function getDefaultValues(CMSObject $item)
 	{
 		$params = $this->getParams();
 		$data   = [];
@@ -224,14 +235,14 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	protected function prepareTable($table)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		$date = Factory::getDate();
+		$user = Factory::getUser();
 
 		$table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
-		$table->alias = JApplicationHelper::stringURLSafe($table->alias);
+		$table->alias = $table->alias ? ApplicationHelper::stringURLSafe($table->alias) : '';
 
 		if (empty($table->alias)) {
-			$table->alias = JApplicationHelper::stringURLSafe($table->title);
+			$table->alias = ApplicationHelper::stringURLSafe($table->title);
 		}
 
 		if (empty($table->latitude) && empty($table->longitude)) {
@@ -264,27 +275,25 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	protected function populateState()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		$pk = $app->input->getInt('l_id');
 		$this->setState('location.id', $pk);
 		$this->setState('form.id', $pk);
 
 		$return = $app->input->get('return', null, 'default', 'base64');
-
-		if (!JUri::isInternal(base64_decode($return))) {
+		if ($return && !Uri::isInternal(base64_decode($return ?: ''))) {
 			$return = null;
 		}
 
-		$this->setState('return_page', base64_decode($return));
+		$this->setState('return_page', $return ? base64_decode($return ?: '') : null);
 
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	public function delete(&$pks)
 	{
 		$success = parent::delete($pks);
-
 		if ($success) {
 			// Delete associations
 			$pks = (array)$pks;
@@ -298,13 +307,13 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	public function getReturnPage()
 	{
-		return base64_encode($this->getState('return_page'));
+		return base64_encode($this->getState('return_page', ''));
 	}
 
 	protected function batchCountry($value, $pks, $contexts)
 	{
 		if (!$this->user->authorise('core.edit', 'com_dpcalendar')) {
-			$this->setError(\JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
+			$this->setError(Text::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
 
 			return false;
 		}
@@ -321,16 +330,14 @@ class DPCalendarModelLocation extends JModelAdmin
 
 	private function getParams()
 	{
-		$params = $this->getState('params');
-
-		if (!$params) {
-			if (JFactory::getApplication()->isClient('site')) {
-				$params = JFactory::getApplication()->getParams();
-			} else {
-				$params = JComponentHelper::getParams('com_dpcalendar');
-			}
+		if ($params = $this->getState('params')) {
+			return $params;
 		}
 
-		return $params;
+		if (Factory::getApplication()->isClient('site')) {
+			return Factory::getApplication()->getParams();
+		}
+
+		return  ComponentHelper::getParams('com_dpcalendar');
 	}
 }

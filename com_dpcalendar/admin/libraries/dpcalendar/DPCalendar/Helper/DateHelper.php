@@ -59,7 +59,7 @@ class DateHelper
 		if ($date instanceof Date) {
 			$dateObj = clone $date;
 		} else {
-			$dateObj = Factory::getDate($date, $tz);
+			$dateObj = Factory::getDate($date ?: '', $tz);
 		}
 
 		$timezone = Factory::getApplication()->get('offset');

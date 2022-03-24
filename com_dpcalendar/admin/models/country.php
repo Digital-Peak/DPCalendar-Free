@@ -4,9 +4,15 @@
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPCalendarModelCountry extends JModelAdmin
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Uri\Uri;
+
+class DPCalendarModelCountry extends AdminModel
 {
 	protected $text_prefix = 'COM_DPCALENDAR_COUNTRY';
 
@@ -23,7 +29,7 @@ class DPCalendarModelCountry extends JModelAdmin
 
 	public function getTable($type = 'Country', $prefix = 'DPCalendarTable', $config = [])
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return parent::getTable($type, $prefix, $config);
 	}
 
 	public function getForm($data = [], $loadData = true, $controlName = 'jform')
@@ -54,8 +60,7 @@ class DPCalendarModelCountry extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.country.data', []);
-
+		$data = Factory::getApplication()->getUserState('com_dpcalendar.edit.country.data', []);
 		if (empty($data)) {
 			$data = $this->getItem();
 		}
@@ -67,25 +72,24 @@ class DPCalendarModelCountry extends JModelAdmin
 
 	protected function populateState()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		$pk = $app->input->getInt('c_id');
 		$this->setState('country.id', $pk);
 		$this->setState('form.id', $pk);
 
-		$return = $app->input->get('return', null, 'default', 'base64');
-
-		if (!JUri::isInternal(base64_decode($return))) {
-			$return = null;
+		$return = $app->input->get('return', '', 'default', 'base64');
+		if (!Uri::isInternal(base64_decode($return))) {
+			$return = '';
 		}
 
 		$this->setState('return_page', base64_decode($return));
 
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	public function getReturnPage()
 	{
-		return base64_encode($this->getState('return_page'));
+		return base64_encode($this->getState('return_page', ''));
 	}
 }

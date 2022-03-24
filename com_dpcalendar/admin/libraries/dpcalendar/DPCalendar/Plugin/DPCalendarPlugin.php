@@ -200,7 +200,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$data = $tmp;
 
 		$events      = [];
-		$filter      = strtolower($options->get('filter', null));
+		$filter      = strtolower($options->get('filter', ''));
 		$limit       = $options->get('limit', null);
 		$publishDate = $options->get('publish_date') ? DPCalendarHelper::getDate()->toSql() : null;
 		$order       = strtolower($options->get('order', 'asc'));
@@ -243,10 +243,10 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		usort(
 			$events,
 			function ($event1, $event2) use ($order) {
-				$first = $event1;
+				$first  = $event1;
 				$second = $event2;
 				if (strtolower($order) == 'desc') {
-					$first = $event2;
+					$first  = $event2;
 					$second = $event1;
 				}
 
@@ -419,13 +419,13 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 	public function onEventsFetch($calendarId, Date $startDate = null, Date $endDate = null, Registry $options = null)
 	{
-		if (strpos($calendarId, $this->identifier) !== 0) {
+		if ($calendarId && strpos($calendarId, $this->identifier) !== 0) {
 			return [];
 		}
 
 		$params = $this->params;
 
-		$id = str_replace($this->identifier . '-', '', $calendarId);
+		$id = str_replace($this->identifier . '-', '', $calendarId ?: '');
 
 		$cache = Factory::getCache('plg_' . $this->_type . '_' . $this->_name, 'callback');
 		$cache->setCaching($params->get('cache', 1) == '1' && $this->cachingEnabled);

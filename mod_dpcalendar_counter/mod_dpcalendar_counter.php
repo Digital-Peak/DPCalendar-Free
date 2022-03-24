@@ -87,7 +87,7 @@ $events = $model->getItems();
 foreach ($events as $event) {
 	$event->truncatedDescription = $event->introText ?: '';
 	if (!$event->introText && ($params->get('description_length') > 0 || $params->get('description_length') === null)) {
-		$event->truncatedDescription = HTMLHelper::_('string.truncate', $event->description, $params->get('description_length'));
+		$event->truncatedDescription = HTMLHelper::_('string.truncate', $event->description ?: '', $params->get('description_length'));
 		$event->truncatedDescription = HTMLHelper::_('content.prepare', $event->truncatedDescription);
 		$event->truncatedDescription = DPCalendarHelper::fixImageLinks($event->truncatedDescription);
 	}

@@ -31,7 +31,7 @@ if (!empty($this->event->tickets)) {
 		<h4 class="dp-info-box">
 			<?php echo JText::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_GOTO_ORIGINAL',
-				$this->router->getEventFormRoute($this->event->original_id, base64_decode($this->returnPage))
+				$this->router->getEventFormRoute($this->event->original_id, $this->returnPage ? base64_decode($this->returnPage) : '')
 			); ?>
 		</h4>
 	<?php } ?>

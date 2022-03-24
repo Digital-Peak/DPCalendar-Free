@@ -4,17 +4,21 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Helper\Location;
+
 // Set the mime encoding
-JFactory::getDocument()->setMimeEncoding('application/json');
+$this->document->setMimeEncoding('application/json');
 
 $data = [];
 foreach ($this->items as $event) {
 	$displayData          = $this->displayData;
 	$displayData['event'] = $event;
 	$description          = trim($this->layoutHelper->renderLayout('event.tooltip', $displayData));
-	$description          = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
+	$description          = DPCalendarHelper::fixImageLinks($description);
 
 	// Set up the locations
 	$locations   = [];
@@ -22,7 +26,7 @@ foreach ($this->items as $event) {
 	if (!empty($event->locations)) {
 		foreach ($event->locations as $location) {
 			$locations[] = [
-				'location'  => \DPCalendar\Helper\Location::format($location),
+				'location'  => Location::format($location),
 				'latitude'  => $location->latitude,
 				'longitude' => $location->longitude
 			];
@@ -56,7 +60,7 @@ foreach ($this->items as $event) {
 
 	// Black or white computation
 	if ($this->params->get('adjust_fg_color', '2') == '2') {
-		$fgcolor = '#' . \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($event->color);
+		$fgcolor = '#' . DPCalendarHelper::getOppositeBWColor($event->color);
 	}
 
 	// Format the dates depending on the all day flag
@@ -107,7 +111,7 @@ foreach ($this->items as $event) {
 	$data[] = $eventData;
 }
 
-$messages = JFactory::getApplication()->getMessageQueue();
+$messages = $this->app->getMessageQueue();
 
 // Build the sorted messages list
 $lists = [];
@@ -121,7 +125,7 @@ if (is_array($messages) && count($messages)) {
 
 // Echo the data
 ob_clean();
-\DPCalendar\Helper\DPCalendarHelper::sendMessage(null, false, $data);
+DPCalendarHelper::sendMessage(null, false, $data);
 
 // Close the request
-JFactory::getApplication()->close();
+$this->app->close();

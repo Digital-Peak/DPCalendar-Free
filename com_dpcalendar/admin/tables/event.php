@@ -388,19 +388,19 @@ class DPCalendarTableEvent extends Table
 
 	public function check()
 	{
-		if (InputFilter::checkAttribute(['start_date', $this->start_date])) {
+		if (!$this->start_date || InputFilter::checkAttribute(['start_date', $this->start_date])) {
 			$this->setError(Text::_('COM_DPCALENDAR_ERR_TABLES_PROVIDE_START_DATE'));
 
 			return false;
 		}
-		if (InputFilter::checkAttribute(['end_date', $this->end_date])) {
+		if (!$this->end_date || InputFilter::checkAttribute(['end_date', $this->end_date])) {
 			$this->setError(Text::_('COM_DPCALENDAR_ERR_TABLES_PROVIDE_END_DATE'));
 
 			return false;
 		}
 
 		// Check for valid name
-		if (trim($this->title) == '') {
+		if (!$this->title || trim($this->title) == '') {
 			$this->setError(Text::_('COM_DPCALENDAR_ERR_TABLES_TITLE') . ' [' . $this->catid . ']');
 
 			return false;

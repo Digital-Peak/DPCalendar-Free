@@ -9,20 +9,27 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\Path;
+use Joomla\CMS\Filter\InputFilter;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Uri\Uri;
+use Sabre\VObject\Component\VCalendar;
+use Sabre\VObject\Reader;
+use Sabre\VObject\TimeZoneUtil;
 
 class Ical
 {
 	public static function createIcalFromCalendar($calendarId, $asDownload = false)
 	{
-		\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-		$eventsModel = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+		$eventsModel = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$eventsModel->setState('category.id', $calendarId);
 		$eventsModel->setState('category.recursive', false);
 		$eventsModel->setState('list.limit', 100000);
 		$eventsModel->setState('filter.ongoing', true);
 		$eventsModel->setState('filter.state', 1);
-		$eventsModel->setState('filter.language', \JFactory::getLanguage()->getTag());
+		$eventsModel->setState('filter.language', Factory::getLanguage()->getTag());
 		$eventsModel->setState('filter.publish_date', true);
 		$eventsModel->setState('list.start-date', '0');
 		$eventsModel->setState('list.ordering', 'start_date');
@@ -66,7 +73,7 @@ class Ical
 		$text[] = 'PRODID:DPCALENDAR';
 		$text[] = 'CALSCALE:GREGORIAN';
 
-		$userTz = \DPCalendarHelper::getDate()->getTimezone()->getName();
+		$userTz = DPCalendarHelper::getDate()->getTimezone()->getName();
 		if (empty($userTz)) {
 			$userTz = 'UTC';
 		}
@@ -88,7 +95,7 @@ class Ical
 			if (!empty($event->category_title)) {
 				$calendars[$event->catid] = $event->category_title;
 			} else {
-				$calendars[$event->catid] = \DPCalendarHelper::getCalendar($event->catid)->title;
+				$calendars[$event->catid] = DPCalendarHelper::getCalendar($event->catid)->title;
 			}
 		}
 		// $text[] = 'X-WR-CALNAME:'.implode('; ', $calendars);
@@ -100,10 +107,10 @@ class Ical
 
 		if ($asDownload) {
 			header('Content-Type: text/calendar; charset=utf-8');
-			header('Content-disposition: attachment; filename="' . \JPath::clean(implode(',', $calendars)) . '.ics"');
+			header('Content-disposition: attachment; filename="' . Path::clean(implode(',', $calendars)) . '.ics"');
 
 			echo implode(PHP_EOL, $text);
-			\JFactory::getApplication()->close();
+			Factory::getApplication()->close();
 		} else {
 			return implode(PHP_EOL, $text);
 		}
@@ -134,8 +141,8 @@ class Ical
 		$text[]      = 'BEGIN:VEVENT';
 
 		// Creating date objects of the dates
-		$start = \DPCalendarHelper::getDate($event->start_date, $event->all_day);
-		$end   = \DPCalendarHelper::getDate($event->end_date, $event->all_day);
+		$start = DPCalendarHelper::getDate($event->start_date, $event->all_day);
+		$end   = DPCalendarHelper::getDate($event->end_date, $event->all_day);
 
 		// Defining the user tz
 		$userTz = $start->getTimezone()->getName();
@@ -145,7 +152,7 @@ class Ical
 
 		if ($event->all_day == 1) {
 			$text[] = 'DTSTART;VALUE=DATE:' . $start->format('Ymd', true);
-			$tmp    = \DPCalendarHelper::getDate($event->end_date, $event->all_day);
+			$tmp    = DPCalendarHelper::getDate($event->end_date, $event->all_day);
 			$tmp->modify('+1 day');
 			$text[] = 'DTEND;VALUE=DATE:' . $tmp->format('Ymd', true);
 		} else {
@@ -159,15 +166,15 @@ class Ical
 			if ($event->id && is_numeric($event->catid)) {
 				// Find deleted events and add them as EXDATE
 				if ($eventsModel == null) {
-					\JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-					$eventsModel = \JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+					BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+					$eventsModel = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 				}
 				$eventsModel->setState('category.id', $event->catid);
 				$eventsModel->setState('category.recursive', false);
 				$eventsModel->setState('list.limit', 100000);
 				$eventsModel->setState('filter.ongoing', true);
 				$eventsModel->setState('filter.state', 1);
-				$eventsModel->setState('filter.language', \JFactory::getLanguage()->getTag());
+				$eventsModel->setState('filter.language', Factory::getLanguage()->getTag());
 				$eventsModel->setState('filter.publish_date', true);
 				$eventsModel->setState('list.start-date', $start);
 				$eventsModel->setState('list.ordering', 'start_date');
@@ -209,7 +216,7 @@ class Ical
 				$rruleText[] = 'END:VCALENDAR';
 
 				// Getting the instances from the rrule
-				$cal = \Sabre\VObject\Reader::read(implode(PHP_EOL, $rruleText));
+				$cal = Reader::read(implode(PHP_EOL, $rruleText));
 				$cal = $cal->expand($start, new \DateTime('2038-01-01'));
 
 				// Find deleted events
@@ -217,7 +224,7 @@ class Ical
 				if ($cal->VEVENT) {
 					foreach ($cal->VEVENT as $vevent) {
 						$found = false;
-						$date  = \DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
+						$date  = DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $event->all_day);
 
 						$dateFormatted = $event->all_day ? $date->format('Ymd') : $date->format('Ymd\THis\Z');
 
@@ -263,12 +270,15 @@ class Ical
 			}
 		}
 
-		$created = \DPCalendarHelper::getDate($event->created);
+		$created = DPCalendarHelper::getDate($event->created);
 		$text[]  = 'SUMMARY:' . $event->title;
 		$text[]  = 'CREATED:' . $created->format('Ymd\THis\Z');
 		$text[]  = 'DTSTAMP:' . $created->format('Ymd\THis\Z');
-		$text[]  = 'DESCRIPTION:' . \JFilterInput::getInstance()->clean(preg_replace('/\r\n|\r|\n/', "\N", $event->description));
-		$text[]  = 'X-ALT-DESC;FMTTYPE=text/html:' . preg_replace('/\r\n|\r|\n/', "", $event->description);
+
+		if ($event->description) {
+			$text[] = 'DESCRIPTION:' . InputFilter::getInstance()->clean(preg_replace('/\r\n|\r|\n/', "\N", $event->description));
+			$text[] = 'X-ALT-DESC;FMTTYPE=text/html:' . preg_replace('/\r\n|\r|\n/', "", $event->description);
+		}
 
 		if (isset($event->locations) && !empty($event->locations)) {
 			$text[] = 'LOCATION:' . self::icalEncode(\DPCalendar\Helper\Location::format($event->locations));
@@ -277,9 +287,9 @@ class Ical
 			}
 		}
 
-		$nullDate = \JFactory::getDbo()->getNullDate();
+		$nullDate = Factory::getDbo()->getNullDate();
 		if ($event->modified && $event->modified != $nullDate) {
-			$modified = \DPCalendarHelper::getDate($event->modified);
+			$modified = DPCalendarHelper::getDate($event->modified);
 			$text[]   = 'LAST-MODIFIED:' . $modified->format('Ymd\THis\Z');
 			$text[]   = 'SEQUENCE:' . ($modified->format('U') - $created->format('U'));
 		}
@@ -362,12 +372,13 @@ class Ical
 			return;
 		}
 
-		$vcalendar = new \Sabre\VObject\Component\VCalendar();
+		$vcalendar = new VCalendar();
 		$vt        = $vcalendar->createComponent('VTIMEZONE');
 		$vt->TZID  = $tz->getName();
 
-		$std = null;
-		$dst = null;
+		$std    = null;
+		$dst    = null;
+		$tzfrom = 0;
 		foreach ($transitions as $i => $trans) {
 			$cmp = null;
 
@@ -414,7 +425,7 @@ class Ical
 		}
 
 		// add X-MICROSOFT-CDO-TZID if available
-		$microsoftExchangeMap = array_flip(\Sabre\VObject\TimeZoneUtil::$microsoftExchangeMap);
+		$microsoftExchangeMap = array_flip(TimeZoneUtil::$microsoftExchangeMap);
 		if (array_key_exists($tz->getName(), $microsoftExchangeMap)) {
 			$vt->add('X-MICROSOFT-CDO-TZID', $microsoftExchangeMap[$tz->getName()]);
 		}

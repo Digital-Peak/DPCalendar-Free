@@ -175,7 +175,7 @@ class DPCalendarModelEvent extends ItemModel
 
 					// Convert parameter fields to objects.
 					$registry = new Registry();
-					$registry->loadString($data->params);
+					$registry->loadString($data->params ?: '');
 					if ($this->getState('params')) {
 						$data->params = clone $this->getState('params');
 						$data->params->merge($registry);
@@ -184,12 +184,12 @@ class DPCalendarModelEvent extends ItemModel
 					}
 
 					$registry = new Registry();
-					$registry->loadString($data->metadata);
+					$registry->loadString($data->metadata ?: '');
 					$data->metadata = $registry;
 
-					$data->price            = json_decode($data->price);
-					$data->earlybird        = json_decode($data->earlybird);
-					$data->user_discount    = json_decode($data->user_discount);
+					$data->price            = $data->price ? json_decode($data->price) : [];
+					$data->earlybird        = $data->earlybird ? json_decode($data->earlybird) : [];
+					$data->user_discount    = $data->user_discount ? json_decode($data->user_discount) : [];
 					$data->booking_options  = $data->booking_options ? json_decode($data->booking_options) : [];
 					$data->schedule         = $data->schedule ? json_decode($data->schedule) : [];
 					$data->rooms            = $data->rooms ? explode(',', $data->rooms) : [];

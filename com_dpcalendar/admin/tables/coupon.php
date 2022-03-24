@@ -94,7 +94,7 @@ class DPCalendarTableCoupon extends JTable
 			$this->modified = $this->getDbo()->getNullDate();
 		}
 
-		$this->emails = trim($this->emails);
+		$this->emails = $this->emails ? trim($this->emails) : null;
 
 		return true;
 	}

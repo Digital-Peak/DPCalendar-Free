@@ -4,7 +4,11 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 
 if (!$this->params->get('locations_expand', 1)) {
 	return;
@@ -68,12 +72,12 @@ if (!$this->params->get('locations_expand', 1)) {
 			</dl>
 		<?php } ?>
 		<?php if ($this->location->url) { ?>
-			<?php $u = JUri::getInstance($this->location->url); ?>
+			<?php $u = Uri::getInstance($this->location->url); ?>
 			<dl class="dp-description">
 				<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_FIELD_URL_LABEL'); ?></dt>
 				<dd class="dp-description__description dp-location__url">
 					<a href="<?php echo $this->location->url; ?>" class="dp-link"
-					   target="<?php echo $u->getHost() && JUri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
+					   target="<?php echo $u->getHost() && Uri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
 						<?php echo $this->location->url; ?>
 					</a>
 				</dd>
@@ -85,6 +89,6 @@ if (!$this->params->get('locations_expand', 1)) {
 			"\n",
 			$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$this->location, &$params, 0])
 		)); ?>
-		<?php echo JHTML::_('content.prepare', $this->location->description); ?>
+		<?php echo HTMLHelper::_('content.prepare', $this->location->description ?: ''); ?>
 	</div>
 </div>

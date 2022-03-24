@@ -176,7 +176,7 @@ class BaseView extends HtmlView
 		}
 
 		// Escape strings for HTML output
-		$this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx'));
+		$this->pageclass_sfx = htmlspecialchars($this->params->get('pageclass_sfx', ''));
 	}
 
 	/**
@@ -228,6 +228,15 @@ class BaseView extends HtmlView
 	protected function translate($key)
 	{
 		return $this->translator->translate($key);
+	}
+
+	public function escape($var)
+	{
+		if ($var === null) {
+			return '';
+		}
+
+		return htmlspecialchars($var, ENT_QUOTES, $this->_charset);
 	}
 
 	/**

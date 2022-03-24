@@ -78,9 +78,9 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 
 		$this->document->setTitle($title);
 
-		$metadesc = trim($this->location->metadata->get('metadesc'));
+		$metadesc = trim($this->location->metadata->get('metadesc', ''));
 		if (!$metadesc) {
-			$metadesc = JHtmlString::truncate($this->location->description, 100, true, false);
+			$metadesc = JHtmlString::truncate($this->location->description ?: '', 100, true, false);
 		}
 		if ($metadesc) {
 			$this->document->setDescription($metadesc);

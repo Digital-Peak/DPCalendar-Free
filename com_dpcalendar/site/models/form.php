@@ -126,7 +126,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 
 	public function getReturnPage()
 	{
-		return base64_encode($this->getState('return_page'));
+		return base64_encode($this->getState('return_page', ''));
 	}
 
 	protected function populateState()
@@ -144,12 +144,11 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		$this->setState('event.catid', $categoryId);
 
 		$return = Factory::getApplication()->input->get('return', null, 'default', 'base64');
-
-		if (!Uri::isInternal(base64_decode($return))) {
+		if (!$return || !Uri::isInternal(base64_decode($return))) {
 			$return = null;
 		}
 
-		$this->setState('return_page', base64_decode($return));
+		$this->setState('return_page', $return ? base64_decode($return) : null);
 
 		$params = method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
 		if (!$params->get('event_form_fields_order_')) {
@@ -195,7 +194,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$form->setFieldAttribute(
 				'created_by',
 				'query',
-				'select id as value, name as text from #__users union all select null, null order by text'
+				"select id as value, name as text from #__users union all select '', '' order by text"
 			);
 			$form->setFieldAttribute('modified_by', 'type', 'sql');
 			$form->setFieldAttribute('modified_by', 'key_field', 'value');
@@ -203,7 +202,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			$form->setFieldAttribute(
 				'modified_by',
 				'query',
-				'select id as value, name as text from #__users union all select null, null order by text'
+				"select id as value, name as text from #__users union all select '', '' order by text"
 			);
 		}
 

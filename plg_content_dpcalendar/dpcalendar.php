@@ -4,11 +4,17 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
 use Joomla\Utilities\ArrayHelper;
 
-class PlgContentDPCalendar extends JPlugin
+class PlgContentDPCalendar extends CMSPlugin
 {
 	/** @var \Joomla\CMS\Application\CMSApplication */
 	protected $app;
@@ -17,6 +23,10 @@ class PlgContentDPCalendar extends JPlugin
 
 	public function onContentPrepare($context, $item, $articleParams)
 	{
+		if (!$item->text) {
+			return;
+		}
+
 		// Count how many times we need to process events
 		$count = substr_count($item->text, '{{#events');
 		if (!$count) {
@@ -28,8 +38,8 @@ class PlgContentDPCalendar extends JPlugin
 			return true;
 		}
 
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
-		JPluginHelper::importPlugin('content');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		PluginHelper::importPlugin('content');
 
 		for ($i = 0; $i < $count; $i++) {
 			// Check for parameters
@@ -42,7 +52,7 @@ class PlgContentDPCalendar extends JPlugin
 			$params = explode(' ', str_replace(['{{#events', '}}'], '', $starts[0][0]));
 
 			// Load the module
-			$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+			$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 
 			// Set some default variables
 			$model->getState();
@@ -126,7 +136,7 @@ class PlgContentDPCalendar extends JPlugin
 					continue;
 				}
 
-				$event->text = $event->description;
+				$event->text = $event->description ?: '';
 				$this->app->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$event->params, 0]);
 				$event->description = $event->text;
 			}
@@ -156,14 +166,14 @@ class PlgContentDPCalendar extends JPlugin
 		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 		// Add the required table and module path
-		JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
 
 		// Load the model
-		$model = JModelLegacy::getInstance('Form', 'DPCalendarModel', ['ignore_request' => true]);
+		$model = BaseDatabaseModel::getInstance('Form', 'DPCalendarModel', ['ignore_request' => true]);
 
 		// Select all events which do belong to the category
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 		$query->select('id')->from('#__dpcalendar_events')->where('original_id in (0, -1) and catid=' . (int)$item->id);
 		$db->setQuery($query);

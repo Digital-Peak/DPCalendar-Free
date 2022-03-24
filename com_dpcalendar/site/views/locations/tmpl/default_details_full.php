@@ -4,8 +4,13 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\Location;
+use DPCalendar\HTML\Block\Icon;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Uri\Uri;
 ?>
 <div class="com-dpcalendar-locations__details com-dpcalendar-locations-full__details">
 	<?php foreach ($this->locationGroups as $id => $locations) { ?>
@@ -21,35 +26,32 @@ defined('_JEXEC') or die();
 					<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<h<?php echo $id ? 3 : 2; ?> class="dp-heading">
 							<span class="dp-heading__icon" style="color: #<?php echo $location->color; ?>">
-								<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
+								<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
 							</span>
-							<a href="<?php echo $this->router->getLocationRoute($location, JUri::getInstance()); ?>" class="dp-link">
+							<a href="<?php echo $this->router->getLocationRoute($location, Uri::getInstance()); ?>" class="dp-link">
 								<?php echo $location->title; ?>
 							</a>
 						</h<?php echo $id ? 3 : 2; ?>>
 						<div class="dp-location__buttons dp-button-bar">
 							<?php if ($location->params->get('access-edit')) { ?>
 								<button type="button" class="dp-button dp-button-action dp-button-edit"
-										data-href="<?php echo $this->router->getLocationFormRoute($location->id, JUri::getInstance()); ?>">
-									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EDIT]); ?>
+										data-href="<?php echo $this->router->getLocationFormRoute($location->id, Uri::getInstance()); ?>">
+									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EDIT]); ?>
 									<?php echo $this->translate('JACTION_EDIT'); ?>
 								</button>
 							<?php } ?>
 							<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 								<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
-										data-href="<?php echo \DPCalendar\Helper\Location::getMapLink($location); ?>">
-									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::MAP]); ?>
+										data-href="<?php echo Location::getMapLink($location); ?>">
+									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::MAP]); ?>
 									<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_SITE_LINK'); ?>
-									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
+									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EXTERNAL]); ?>
 								</button>
 								<button type="button" class="dp-button dp-button-action dp-button-map-directions" data-target="new"
-										data-href="<?php echo \DPCalendar\Helper\Location::getDirectionsLink($location); ?>">
-									<?php echo $this->layoutHelper->renderLayout(
-										'block.icon',
-										['icon' => \DPCalendar\HTML\Block\Icon::DIRECTIONS]
-									); ?>
+										data-href="<?php echo Location::getDirectionsLink($location); ?>">
+									<?php echo $this->layoutHelper->renderLayout('block.icon',['icon' => Icon::DIRECTIONS]); ?>
 									<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
-									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::EXTERNAL]); ?>
+									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EXTERNAL]); ?>
 								</button>
 							<?php } ?>
 						</div>
@@ -112,12 +114,12 @@ defined('_JEXEC') or die();
 								</dl>
 							<?php } ?>
 							<?php if ($location->url) { ?>
-								<?php $u = JUri::getInstance($location->url); ?>
+								<?php $u = Uri::getInstance($location->url); ?>
 								<dl class="dp-description">
 									<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_FIELD_URL_LABEL'); ?></dt>
 									<dd class="dp-description__description dp-location__url">
 										<a href="<?php echo $location->url; ?>" class="dp-link"
-										   target="<?php echo $u->getHost() && JUri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
+										   target="<?php echo $u->getHost() && Uri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
 											<?php echo $location->url; ?>
 										</a>
 									</dd>
@@ -129,7 +131,7 @@ defined('_JEXEC') or die();
 								"\n",
 								$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$params, 0])
 							)); ?>
-							<?php echo JHTML::_('content.prepare', $location->description); ?>
+							<?php echo HTMLHelper::_('content.prepare', $location->description ?: ''); ?>
 						</div>
 					</div>
 				<?php } ?>

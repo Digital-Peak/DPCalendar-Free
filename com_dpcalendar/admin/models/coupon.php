@@ -4,9 +4,16 @@
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPCalendarModelCoupon extends \Joomla\CMS\MVC\Model\AdminModel
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Uri\Uri;
+
+class DPCalendarModelCoupon extends AdminModel
 {
 	protected $text_prefix = 'COM_DPCALENDAR_COUPON';
 
@@ -50,7 +57,7 @@ class DPCalendarModelCoupon extends \Joomla\CMS\MVC\Model\AdminModel
 			return null;
 		}
 
-		$now = \DPCalendar\Helper\DPCalendarHelper::getDate();
+		$now = DPCalendarHelper::getDate();
 		if ($item->publish_up != $this->getDbo()->getNullDate() && $now->toSql() < $item->publish_up) {
 			return null;
 		}
@@ -82,7 +89,7 @@ class DPCalendarModelCoupon extends \Joomla\CMS\MVC\Model\AdminModel
 
 	public function getTable($type = 'Coupon', $prefix = 'DPCalendarTable', $config = [])
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return parent::getTable($type, $prefix, $config);
 	}
 
 	public function getForm($data = [], $loadData = true, $controlName = 'jform')
@@ -98,8 +105,7 @@ class DPCalendarModelCoupon extends \Joomla\CMS\MVC\Model\AdminModel
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.coupon.data', []);
-
+		$data = Factory::getApplication()->getUserState('com_dpcalendar.edit.coupon.data', []);
 		if (empty($data)) {
 			$data = $this->getItem();
 		}
@@ -111,25 +117,24 @@ class DPCalendarModelCoupon extends \Joomla\CMS\MVC\Model\AdminModel
 
 	protected function populateState()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		$pk = $app->input->getInt('co_id');
 		$this->setState('coupon.id', $pk);
 		$this->setState('form.id', $pk);
 
-		$return = $app->input->get('return', null, 'default', 'base64');
-
-		if (!JUri::isInternal(base64_decode($return))) {
-			$return = null;
+		$return = $app->input->get('return', '', 'default', 'base64');
+		if (!Uri::isInternal(base64_decode($return))) {
+			$return = '';
 		}
 
 		$this->setState('return_page', base64_decode($return));
 
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	public function getReturnPage()
 	{
-		return base64_encode($this->getState('return_page'));
+		return base64_encode($this->getState('return_page', ''));
 	}
 }

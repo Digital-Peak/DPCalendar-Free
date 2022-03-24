@@ -36,7 +36,7 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 	public function getForm($data = [], $loadData = true)
 	{
 		// Get the form.
-		$form = $this->loadForm('com_dpcalendar.extcalendar', 'extcalendar', ['control'   => 'jform', 'load_data' => $loadData]);
+		$form = $this->loadForm('com_dpcalendar.extcalendar', 'extcalendar', ['control' => 'jform', 'load_data' => $loadData]);
 		if (empty($form)) {
 			return false;
 		}
@@ -90,7 +90,7 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 		$user = JFactory::getUser();
 
 		$table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
-		$table->alias = JApplicationHelper::stringURLSafe($table->alias);
+		$table->alias = $table->alias ? JApplicationHelper::stringURLSafe($table->alias) : null;
 
 		if (empty($table->alias)) {
 			$table->alias = JApplicationHelper::stringURLSafe($table->title);

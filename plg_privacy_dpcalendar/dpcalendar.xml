@@ -2,12 +2,12 @@
 <extension version="3.9" type="plugin" group="privacy" method="upgrade">
 	<name>plg_privacy_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>24 Feb 2022</creationDate>
+	<creationDate>24 Mar 2022</creationDate>
 	<copyright>(C) 2018 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.2.4</version>
+	<version>8.2.5</version>
 	<description>PLG_PRIVACY_DPCALENDAR_XML_DESCRIPTION</description>
 	<files>
 		<filename plugin="dpcalendar">dpcalendar.php</filename>

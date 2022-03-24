@@ -183,10 +183,11 @@ class DPCalendarHelper
 	{
 		$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
 
-		if (!preg_match($pattern, $event->description)) {
+		if (!$event->description || !preg_match($pattern, $event->description)) {
 			$event->introText = '';
 			return;
 		}
+
 		list($event->introText, $event->description) = preg_split($pattern, $event->description, 2);
 	}
 
@@ -242,7 +243,7 @@ class DPCalendarHelper
 
 	public static function getDate($date = null, $allDay = null, $tz = null): Date
 	{
-		$dateObj = $date instanceof Date ? clone $date : Factory::getDate($date, $tz);
+		$dateObj = $date instanceof Date ? clone $date : Factory::getDate($date === null ? '' : $date, $tz);
 		if ($allDay) {
 			return $dateObj;
 		}
@@ -417,7 +418,7 @@ class DPCalendarHelper
 			$variables['editLink']   = \DPCalendarHelperRoute::getFormRoute($event->id, $return);
 			$variables['canDelete']  = $calendar && ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id));
 			$variables['deleteLink'] = Route::_(
-				'index.php?option=com_dpcalendar&task=event.delete&e_id=' . $event->id . '&return=' . base64_encode($return)
+				'index.php?option=com_dpcalendar&task=event.delete&e_id=' . $event->id . ($return ? '&return=' . base64_encode($return) : '')
 			);
 
 			$variables['canBook']  = \DPCalendar\Helper\Booking::openForBooking($event);
@@ -533,7 +534,11 @@ class DPCalendarHelper
 			$variables['copyGoogleUrl'] .= '&dates=' . self::getDate($event->start_date, $event->all_day)->format($copyDateTimeFormat, true) . '%2F' .
 				$end->format($copyDateTimeFormat, true);
 			$variables['copyGoogleUrl'] .= '&location=' . urlencode($location);
-			$variables['copyGoogleUrl'] .= '&details=' . urlencode(HTMLHelper::_('string.truncate', $event->description, 200));
+
+			if ($event->description) {
+				$variables['copyGoogleUrl'] .= '&details=' . urlencode(HTMLHelper::_('string.truncate', $event->description, 200));
+			}
+
 			$variables['copyGoogleUrl'] .= '&hl=' . self::getFrLanguage() . '&ctz=' .
 				self::getDate($event->start_date, $event->all_day)->getTimezone()->getName();
 			$variables['copyGoogleUrl'] .= '&sf=true&output=xml';
@@ -1022,8 +1027,8 @@ class DPCalendarHelper
 			$fields,
 			function ($f1, $f2) use ($order, $keys) {
 				$fieldName = property_exists($f1, 'fieldname') ? 'fieldname' : 'name';
-				$k1 = in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order) : -1;
-				$k2 = in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order) : -1;
+				$k1        = in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order) : -1;
+				$k2        = in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order) : -1;
 
 				if ($k1 >= 0 && $k2 < 0) {
 					return -1;

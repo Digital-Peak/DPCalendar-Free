@@ -119,7 +119,7 @@ class DPCalendarModelLocations extends ListModel
 				Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables', 'DPCalendarTable');
 				$country = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel')->getItem($location->country);
 				if ($country) {
-					Factory::getApplication()->getLanguage()->load(
+					Factory::getLanguage()->load(
 						'com_dpcalendar.countries',
 						JPATH_ADMINISTRATOR . '/components/com_dpcalendar'
 					);
@@ -199,8 +199,8 @@ class DPCalendarModelLocations extends ListModel
 			$query->where('a.language = ' . $db->quote($language));
 		}
 
-		$latitude  = trim($this->getState('filter.latitude'));
-		$longitude = trim($this->getState('filter.longitude'));
+		$latitude  = trim($this->getState('filter.latitude', ''));
+		$longitude = trim($this->getState('filter.longitude', ''));
 		if ($latitude && $longitude) {
 			$latitude  = round(str_replace('+', '', $latitude), 8);
 			$longitude = round(str_replace('+', '', $longitude), 8);

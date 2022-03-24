@@ -8,7 +8,6 @@ defined('_JEXEC') or die();
 
 class DPCalendarTableDavcalendar extends JTable
 {
-
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_caldav_calendarinstances', 'id', $db);
@@ -37,7 +36,7 @@ class DPCalendarTableDavcalendar extends JTable
 		}
 
 		// Check for existing name
-		$query = 'SELECT id FROM #__dpcalendar_caldav_calendarinstances WHERE uri = ' . $this->_db->Quote($this->uri) .
+		$query = 'SELECT id FROM #__dpcalendar_caldav_calendarinstances WHERE uri = ' . $this->_db->Quote($this->uri ?: '') .
 			" and principaluri = 'principals/" . JFactory::getUser()->username . "'";
 		$this->_db->setQuery($query);
 

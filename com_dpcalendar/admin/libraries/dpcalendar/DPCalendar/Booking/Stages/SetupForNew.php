@@ -102,8 +102,9 @@ class SetupForNew implements StageInterface
 				$payload->data['state'] = 2;
 			}
 
-			// When tickets are reviewed and confirmation step should be skipped, set state to active
+			// When tickets are reviewed, capacity is not full and confirmation step should be skipped, set state to active
 			if (!$payload->data['price']
+				&& ($event->capacity === null || $event->capacity_used < $event->capacity)
 				&& $payload->data['state'] == 2
 				&& !\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_confirm_step', 1)) {
 				$payload->data['state'] = 1;

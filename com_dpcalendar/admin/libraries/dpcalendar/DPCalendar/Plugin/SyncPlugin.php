@@ -14,7 +14,6 @@ use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
-use Joomla\Http\HttpFactory;
 use Joomla\Registry\Registry;
 
 /**
@@ -46,7 +45,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			return filemtime($uri) ?: rand();
 		}
 
-		$http     = HttpFactory::getHttp();
+		$http     = \JHttpFactory::getHttp();
 		$response = $http->head($uri);
 
 		if (key_exists('ETag', $response->headers)) {

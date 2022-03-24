@@ -4,10 +4,17 @@
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DateHelper;
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-JFormHelper::loadFieldClass('list');
+FormHelper::loadFieldClass('list');
 
 class JFormFieldDpevent extends JFormFieldList
 {
@@ -15,19 +22,19 @@ class JFormFieldDpevent extends JFormFieldList
 
 	public function getOptions()
 	{
-		JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-		$model = JModelLegacy::getInstance('Calendar', 'DPCalendarModel');
+		$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
 		$model->getState();
-		$model->setState('filter.parentIds', explode(',', $this->element->attributes()->calendar_ids));
+		$model->setState('filter.parentIds', explode(',', $this->element->attributes()->calendar_ids ?: ''));
 		$ids = [];
 		foreach ($model->getItems() as $calendar) {
 			$ids[] = $calendar->id;
 		}
 
-		$dateHelper = new \DPCalendar\Helper\DateHelper();
+		$dateHelper = new DateHelper();
 
-		$startDate = trim($this->element->attributes()->start_date);
+		$startDate = trim($this->element->attributes()->start_date ?: '');
 		if ($startDate == 'start of day') {
 			$startDate = $dateHelper->getDate(null, true, 'UTC');
 			$startDate->setTime(0, 0, 0);
@@ -39,11 +46,11 @@ class JFormFieldDpevent extends JFormFieldList
 		$startDate->sub(new DateInterval("PT" . $startDate->format("s") . "S"));
 		$startDate->sub(new DateInterval("PT" . ($startDate->format("i") % 15) . "M"));
 
-		$endDate = trim($this->element->attributes()->end_date);
+		$endDate = trim($this->element->attributes()->end_date ?: '');
 		if ($endDate == 'same day') {
 			$endDate = clone $startDate;
 			$endDate->setTime(23, 59, 59);
-		} else if ($endDate) {
+		} elseif ($endDate) {
 			$tmp = $dateHelper->getDate($endDate);
 			$tmp->sub(new DateInterval("PT" . $tmp->format("s") . "S"));
 			$tmp->sub(new DateInterval("PT" . ($tmp->format("i") % 15) . "M"));
@@ -52,7 +59,7 @@ class JFormFieldDpevent extends JFormFieldList
 			$endDate = null;
 		}
 
-		$model = JModelLegacy::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('list.limit', 100);
 		$model->setState('category.id', $ids);
@@ -65,7 +72,7 @@ class JFormFieldDpevent extends JFormFieldList
 
 		$options = parent::getOptions();
 		foreach ($model->getItems() as $event) {
-			$options[] = JHtml::_(
+			$options[] = HTMLHelper::_(
 				'select.option',
 				$event->id,
 				$event->title . ' [' . strip_tags(DPCalendarHelper::getDateStringFromEvent($event)) . ']'

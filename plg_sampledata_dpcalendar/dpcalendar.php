@@ -16,6 +16,7 @@ use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 
 if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
@@ -294,7 +295,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 				]);
 
 				$configFile = JPATH_ROOT . '/DPCalendarGoogleConfig.json';
-				if (file_exists($configFile) && \Joomla\CMS\Plugin\PluginHelper::getPlugin('dpcalendar', 'google')) {
+				if (file_exists($configFile) && PluginHelper::getPlugin('dpcalendar', 'google')) {
 					$config = json_decode(file_get_contents($configFile));
 					foreach ($config->calendars as $cal) {
 						$this->createExternalCalendar([
@@ -352,7 +353,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			]);
 
 			// Two days
-			$start = \DPCalendar\Helper\DPCalendarHelper::getDate();
+			$start = DPCalendarHelper::getDate();
 			if (!DPCalendarHelper::isFree()) {
 				$start->modify('-1 month');
 			}
@@ -510,7 +511,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 
 			$locationIds = $this->app->getUserState('sampledata.dpcalendar.locations');
 
-			$start = \DPCalendar\Helper\DPCalendarHelper::getDate();
+			$start = DPCalendarHelper::getDate();
 			$start->setTime(8, 0, 0);
 			$end = clone $start;
 			$end->modify('+4 hours');
@@ -950,7 +951,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$data['description']   = '';
 			$data['params']        = '{}';
 			$data['state']         = 1;
-			$data['default_value'] = null;
+			$data['default_value'] = '';
 			$data['access']        = (int)$this->app->get('access', 1);
 
 			$model = BaseDatabaseModel::getInstance('Field', 'FieldsModel');
@@ -999,6 +1000,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$data['title']      = $language->_($data['title']);
 			$data['asset_id']   = 0;
 			$data['language']   = count($this->languageCache) > 1 ? $code : '*';
+			$data['content']    = '';
 			$data['note']       = '';
 			$data['published']  = 1;
 			$data['assignment'] = 0;
@@ -1072,6 +1074,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$data['menutype']        = count($this->languageCache) > 1 ? 'dpcalendar-' . $code : 'mainmenu';
 			$data['component_id']    = $componentId;
 			$data['language']        = count($this->languageCache) > 1 ? $code : '*';
+			$data['params']          = !empty($data['params']) ? $data['params'] : '';
 
 			// Set unicodeslugs if alias is empty
 			if (trim(str_replace('-', '', $data['alias']) == '')) {
@@ -1083,6 +1086,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$data['published']         = 1;
 			$data['note']              = '';
 			$data['img']               = '';
+			$data['path']              = '';
 			$data['associations']      = [];
 			$data['client_id']         = 0;
 			$data['level']             = 1;
@@ -1129,7 +1133,6 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$data['payer_email']  = '';
 
 			$model = BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
-
 			if (!$model->save($data)) {
 				throw new Exception(Text::_($model->getError()));
 			}
@@ -1173,7 +1176,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 		}
 
 		if (empty($originalData['start_date'])) {
-			$start = \DPCalendar\Helper\DPCalendarHelper::getDate();
+			$start = DPCalendarHelper::getDate();
 			if (!DPCalendarHelper::isFree()) {
 				$start->modify('-1 month');
 			} else {
@@ -1330,7 +1333,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 
 	private function getEvent($id)
 	{
-		$start = \DPCalendar\Helper\DPCalendarHelper::getDate('+1 day');
+		$start = DPCalendarHelper::getDate('+1 day');
 		$model = BaseDatabaseModel::getInstance('Adminevents', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('filter.children', $id);
 		$model->setState('filter.search_start', $start->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')));

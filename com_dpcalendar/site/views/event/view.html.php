@@ -63,7 +63,7 @@ class DPCalendarViewEvent extends BaseView
 		PluginHelper::importPlugin('dpcalendar');
 		PluginHelper::importPlugin('content');
 
-		$event->text = $event->description;
+		$event->text = $event->description ?: '';
 		$this->app->triggerEvent(
 			'onContentPrepare',
 			[
@@ -277,6 +277,13 @@ class DPCalendarViewEvent extends BaseView
 		// Set the ticket count
 		$ticketCount = $event->max_tickets ?: 1;
 
+		// Remove the already booked tickets from the ticket count
+		foreach ($event->tickets as $ticket) {
+			if ($ticket->email == $this->user->email || ($ticket->user_id && $ticket->user_id == $this->user->id)) {
+				$ticketCount--;
+			}
+		}
+
 		// If ticket count is higher than available space, reduce it
 		if ($event->capacity !== null && $ticketCount > ($event->capacity - $event->capacity_used)) {
 			$ticketCount = $event->capacity - $event->capacity_used;
@@ -284,13 +291,6 @@ class DPCalendarViewEvent extends BaseView
 
 		if (!$ticketCount && $event->booking_waiting_list) {
 			return null;
-		}
-
-		// Remove the already booked tickets from the ticket count
-		foreach ($event->tickets as $ticket) {
-			if ($ticket->email == $this->user->email || ($ticket->user_id && $ticket->user_id == $this->user->id)) {
-				$ticketCount--;
-			}
 		}
 
 		if (!$ticketCount) {
@@ -322,7 +322,7 @@ class DPCalendarViewEvent extends BaseView
 			$pathway->addItem($this->event->title, '');
 		}
 
-		$metadesc = trim($this->event->metadata->get('metadesc'));
+		$metadesc = trim($this->event->metadata->get('metadesc', ''));
 		if (!$metadesc) {
 			$metadesc = JHtmlString::truncate($this->event->description, 100, true, false);
 		}

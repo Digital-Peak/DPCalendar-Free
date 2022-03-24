@@ -88,6 +88,10 @@ class DPCalendarModelEvents extends ListModel
 			if (!empty($tmp)) {
 				$containsExternalEvents = true;
 				foreach ($tmp as $events) {
+					if (!$events) {
+						continue;
+					}
+
 					foreach ($events as $event) {
 						$items[] = $event;
 					}
@@ -125,7 +129,7 @@ class DPCalendarModelEvents extends ListModel
 			// Initialize the parameters
 			if (!isset($this->_params)) {
 				$params = new Registry();
-				$params->loadString($item->params);
+				$params->loadString($item->params ?: '');
 				$item->params = $params;
 			}
 
@@ -608,7 +612,7 @@ class DPCalendarModelEvents extends ListModel
 		$this->setState('list.direction', $listOrder);
 
 		$id = $app->input->getString('ids', null);
-		if (!is_array($id)) {
+		if ($id && !is_array($id)) {
 			$id = explode(',', $id);
 		}
 		if (empty($id)) {

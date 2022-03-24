@@ -4,43 +4,39 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-if (!JFactory::getUser()->authorise('core.manage', 'com_dpcalendar')) {
-	return JFactory::getApplication()->enqueueMessage(JText::_('JERROR_ALERTNOAUTHOR'), 'warning');
+if (!Factory::getUser()->authorise('core.manage', 'com_dpcalendar')) {
+	return Factory::getApplication()->enqueueMessage(Text::_('JERROR_ALERTNOAUTHOR'), 'warning');
 }
 
-if (version_compare(PHP_VERSION, '5.5.9') < 0) {
-	JFactory::getApplication()->enqueueMessage(
-		'You have PHP version ' . PHP_VERSION . ' installed. Please upgrade your PHP version to at least 5.5.9. DPCalendar can not run on this version.',
-		'warning'
-	);
-
-	return;
-}
-
-$input = JFactory::getApplication()->input;
+$input = Factory::getApplication()->input;
 
 JLoader::import('joomla.application.component.controller');
 
 // Load the model
-JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_installer/models', 'InstallerModel');
-$model = JModelLegacy::getInstance('Updatesites', 'InstallerModel', ['ignore_request' => true]);
+BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_installer/models', 'InstallerModel');
+$model = BaseDatabaseModel::getInstance('Updatesites', 'InstallerModel', ['ignore_request' => true]);
 
 // Determine the type
 $type = '';
 if ($model) {
+	$model->setState('filter.search', '');
 	$model->setState('list.ordering', 'update_site_id');
 	foreach ($model->getItems() as $updateSite) {
 		if (strpos($updateSite->update_site_name, 'DPCalendar') === false) {
 			continue;
 		}
-		$type .= str_replace([
-			'DPCalendar',
-			'Update Site'
-		], '', $updateSite->update_site_name);
+		$type .= str_replace(['DPCalendar', 'Update Site'], '', $updateSite->update_site_name);
 	}
 }
 
@@ -58,10 +54,10 @@ if ($input->get('task') == 'locationform.save') {
 	$input->set('task', 'location.save');
 }
 
-\Joomla\CMS\Plugin\PluginHelper::importPlugin('dpcalendar');
-\Joomla\CMS\Factory::getApplication()->triggerEvent('onDPCalendarBeforeExecute', [\Joomla\CMS\Factory::getApplication()->input]);
+PluginHelper::importPlugin('dpcalendar');
+Factory::getApplication()->triggerEvent('onDPCalendarBeforeExecute', [$input]);
 
 // Execute the task
-$controller = JControllerLegacy::getInstance('DPCalendar');
+$controller = BaseController::getInstance('DPCalendar');
 $controller->execute($input->get('task'));
 $controller->redirect();

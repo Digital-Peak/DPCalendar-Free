@@ -4,21 +4,25 @@
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPCalendarModelTaxrate extends JModelAdmin
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Uri\Uri;
+
+class DPCalendarModelTaxrate extends AdminModel
 {
 	protected $text_prefix = 'COM_DPCALENDAR_TAXRATE';
 
 	protected function canDelete($record)
 	{
-		if (!empty($record->id)) {
-			if ($record->state != -2) {
-				return;
-			}
-
-			return parent::canDelete($record);
+		if (!empty($record->id) && $record->state != -2) {
+			return false;
 		}
+
+		return parent::canDelete($record);
 	}
 
 	public function getItemByCountry($countryId)
@@ -43,7 +47,7 @@ class DPCalendarModelTaxrate extends JModelAdmin
 		$item = parent::getItem($pk);
 
 		if ($item->countries) {
-			$item->countries = json_decode($item->countries);
+			$item->countries = json_decode($item->countries ?: '');
 		}
 
 		$item->rate = sprintf('%g', $item->rate);
@@ -53,7 +57,7 @@ class DPCalendarModelTaxrate extends JModelAdmin
 
 	public function getTable($type = 'Taxrate', $prefix = 'DPCalendarTable', $config = [])
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return parent::getTable($type, $prefix, $config);
 	}
 
 	public function getForm($data = [], $loadData = true, $controlName = 'jform')
@@ -84,8 +88,7 @@ class DPCalendarModelTaxrate extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.taxrate.data', []);
-
+		$data = Factory::getApplication()->getUserState('com_dpcalendar.edit.taxrate.data', []);
 		if (empty($data)) {
 			$data = $this->getItem();
 		}
@@ -97,24 +100,24 @@ class DPCalendarModelTaxrate extends JModelAdmin
 
 	protected function populateState()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		$pk = $app->input->getInt('r_id');
 		$this->setState('taxrate.id', $pk);
 		$this->setState('form.id', $pk);
 
-		$return = $app->input->get('return', null, 'default', 'base64');
-		if (!JUri::isInternal(base64_decode($return))) {
-			$return = null;
+		$return = $app->input->get('return', '', 'default', 'base64');
+		if (!Uri::isInternal(base64_decode($return))) {
+			$return = '';
 		}
 
 		$this->setState('return_page', base64_decode($return));
 
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 	}
 
 	public function getReturnPage()
 	{
-		return base64_encode($this->getState('return_page'));
+		return base64_encode($this->getState('return_page', ''));
 	}
 }

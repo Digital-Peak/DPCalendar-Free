@@ -521,18 +521,7 @@
 							theme: 'light',
 							touch: false,
 							onShow: (instance) => instance.popper.querySelector('div[role="tooltip"]').classList.add('show'),
-							popperOptions: {
-								modifiers: [
-									{
-										name: 'preventOverflow',
-										enabled: false
-									},
-									{
-										name: 'hide',
-										enabled: false
-									}
-								]
-							}
+							popperOptions: { modifiers: [{ name: 'preventOverflow', enabled: false }, { name: 'hide', enabled: false }] }
 						});
 					});
 				}

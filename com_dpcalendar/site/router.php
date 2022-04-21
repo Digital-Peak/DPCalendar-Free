@@ -68,7 +68,7 @@ class DPCalendarRouter extends RouterView
 
 		parent::__construct($app, $menu);
 
-		if ($params->get('sef_advanced', 1)) {
+		if ($params->get('sef_advanced', 1) || version_compare(4, JVERSION, '<')) {
 			JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 			$this->attachRule(new DPCalendarRules($this));

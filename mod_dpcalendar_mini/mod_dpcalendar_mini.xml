@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>24 Mar 2022</creationDate>
+	<creationDate>21 Apr 2022</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.2.5</version>
+	<version>8.2.6</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -243,7 +243,7 @@
 				<field name="layout" type="modulelayout"
 					label="JFIELD_ALT_LAYOUT_LABEL" description="JFIELD_ALT_MODULE_LAYOUT_DESC"/>
 				<field name="moduleclass_sfx" type="text"
-					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL" description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC"/>
+					label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"/>
 				<field name="custom_css" type="textarea" filter="JComponentHelper::filterText"
 					label="MOD_DPCALENDAR_MINI_FIELD_CUSTOM_CSS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_CUSTOM_CSS_DESC"/>
 			</fieldset>

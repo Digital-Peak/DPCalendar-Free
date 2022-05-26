@@ -60,6 +60,12 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_show_hosts" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_HOSTS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_HOSTS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 			<field name="event_show_booking_form" type="list" useglobal="true"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_LABEL"
 			       description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_DESC">
@@ -165,7 +171,7 @@
 			       layout="joomla.form.field.subform.repeatable-table" showon="event_form_flat_mode:1"
 			       label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
-					<field name="field" type="dpcfields" section="event" hide="id,scheduling*,notify_changes,checked_out*,options"
+					<field name="field" type="dpcfields" section="event" hide="id,scheduling*,notify_changes,update_modified,checked_out*,options"
 					       label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -262,6 +268,7 @@
 				<option value="created">JGLOBAL_FIELD_CREATED_LABEL</option>
 				<option value="created_by">COM_DPCALENDAR_FIELD_AUTHOR_LABEL</option>
 				<option value="created_by_alias">JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL</option>
+				<option value="hosts">COM_DPCALENDAR_FIELD_HOSTS_LABEL</option>
 				<option value="modified">JGLOBAL_FIELD_MODIFIED_LABEL</option>
 				<option value="modified_by">JGLOBAL_FIELD_MODIFIED_BY_LABEL</option>
 				<option value="publish_up">JGLOBAL_FIELD_PUBLISH_UP_LABEL</option>
@@ -279,6 +286,9 @@
 				<option value="metadata:robots">JFIELD_METADATA_ROBOTS_LABEL</option>
 				<option value="metadata:rights">JFIELD_META_RIGHTS_LABEL</option>
 			</field>
+			<field name="event_form_redirect" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
+				addfieldpath="/administrator/components/com_content/models/fields" addfieldprefix="Joomla\Component\Content\Administrator\Field"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_DESC"/>
 
 			<field type="spacer" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DEFAULT_VALUES_LABEL"/>
 			<field name="event_form_show_end_time" type="list" useglobal="true"

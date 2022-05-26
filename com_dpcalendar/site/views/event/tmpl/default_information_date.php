@@ -16,7 +16,7 @@ $dateString = $this->dateHelper->getDateStringFromEvent(
 	$this->params->get('event_time_format', 'H:i')
 );
 ?>
-<dl class="dp-description">
+<dl class="dp-description dp-information__date">
 	<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_DATE'); ?></dt>
 	<dd class="dp-description__description">
 		<?php echo $dateString; ?>

@@ -4,18 +4,47 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPCalendarViewEvent extends \DPCalendar\View\BaseView
+use DPCalendar\View\BaseView;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
+class DPCalendarViewEvent extends BaseView
 {
 	public function init()
 	{
 		// Set the default model
-		$this->setModel(JModelLegacy::getInstance('AdminEvent', 'DPCalendarModel'), true);
+		$this->setModel(BaseDatabaseModel::getInstance('AdminEvent', 'DPCalendarModel'), true);
+		$this->setModel(BaseDatabaseModel::getInstance('AdminEvents', 'DPCalendarModel'));
 
-		$this->event      = $this->get('Item');
-		$this->form       = $this->get('Form');
-		$this->returnPage = $this->get('ReturnPage');
+		$this->event        = $this->get('Item');
+		$this->form         = $this->get('Form');
+		$this->returnPage   = $this->get('ReturnPage');
+		$this->seriesEvents = [];
+
+		if ($this->event->original_id == -1) {
+			$model = $this->getModel('Adminevents');
+			$model->getState();
+			$model->setState('filter.children', $this->event->id);
+			$model->setState('filter.modified', $this->event->modified);
+			$model->setState('filter.state', null);
+			$model->setState('filter.search_start', null);
+
+			foreach ($model->getItems() as $event) {
+				$e                 = new stdClass();
+				$e->title          = $event->title;
+				$e->formatted_date = $this->dateHelper->getDateStringFromEvent(
+					$event,
+					$this->params->get('event_form_date_format', 'd.m.Y'),
+					$this->params->get('event_form_time_format', 'H:i')
+				);
+				$e->edit_link = $this->router->route('index.php?option=com_dpcalendar&view=event&e_id=' . $event->id);
+
+				$this->seriesEvents[] = $e;
+			}
+		}
 
 		$this->form->setFieldAttribute('user_id', 'type', 'hidden');
 		$this->form->setFieldAttribute('start_date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
@@ -23,7 +52,6 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$this->form->setFieldAttribute('end_date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
 		$this->form->setFieldAttribute('end_date', 'formatTime', DPCalendarHelper::getComponentParameter('event_form_time_format', 'H:i'));
 		$this->form->setFieldAttribute('scheduling_end_date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
-
 
 		if ($this->event->original_id > '0') {
 			// Hide the scheduling fields
@@ -44,7 +72,7 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$this->freeInformationText = '';
 		if (DPCalendarHelper::isFree()) {
 			$this->freeInformationText = '<br/><small class="text-warning" style="float:left">' .
-				JText::_('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS') .
+				$this->translate('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS') .
 				'</small>';
 		}
 	}
@@ -58,22 +86,22 @@ class DPCalendarViewEvent extends \DPCalendar\View\BaseView
 		$canDo      = DPCalendarHelper::getActions($this->event->catid, 0);
 
 		if (!$checkedOut && ($canDo->get('core.edit') || (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create'))))) {
-			JToolbarHelper::apply('event.apply');
-			JToolbarHelper::save('event.save');
+			ToolbarHelper::apply('event.apply');
+			ToolbarHelper::save('event.save');
 		}
 		if (!$checkedOut && (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')))) {
-			JToolbarHelper::save2new('event.save2new');
+			ToolbarHelper::save2new('event.save2new');
 		}
 		if (!$isNew && (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) > 0)) {
-			JToolbarHelper::save2copy('event.save2copy');
+			ToolbarHelper::save2copy('event.save2copy');
 		}
 		if ($this->state->params->get('save_history', 1) && $this->user->authorise('core.edit')) {
-			JToolbarHelper::versions('com_dpcalendar.event', $this->event->id);
+			ToolbarHelper::versions('com_dpcalendar.event', $this->event->id);
 		}
 		if (empty($this->event->id)) {
-			JToolbarHelper::cancel('event.cancel');
+			ToolbarHelper::cancel('event.cancel');
 		} else {
-			JToolbarHelper::cancel('event.cancel', 'JTOOLBAR_CLOSE');
+			ToolbarHelper::cancel('event.cancel', 'JTOOLBAR_CLOSE');
 		}
 		parent::addToolbar();
 	}

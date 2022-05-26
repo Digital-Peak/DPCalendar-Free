@@ -60,6 +60,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 				$this->clearTable('locations');
 				$this->clearTable('events');
 				$this->clearTable('events_location');
+				$this->clearTable('events_hosts');
 				$this->clearTable('bookings');
 				$this->clearTable('tickets');
 				$this->clearTable('taxrates');
@@ -419,7 +420,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 				'catid'                => 1,
 				'title'                => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_TITLE',
 				'rrule'                => 'FREQ=WEEKLY;BYDAY=SA',
-				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":480,"image_full_width":800,"image_full_height":480}',
+				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_intro_alt":"Festival","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/festival.jpg","image_full_alt":"Festival","image_full_caption":"","image_intro_width":800,"image_intro_height":480,"image_full_width":800,"image_full_height":480}',
 				'description'          => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_6_DESC',
 				'color'                => 'ebb31a',
 				'capacity'             => '80',
@@ -436,7 +437,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 				'catid'                => 1,
 				'title'                => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_7_TITLE',
 				'rrule'                => 'FREQ=WEEKLY;BYDAY=TH',
-				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":457,"image_full_width":800,"image_full_height":457}',
+				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_intro_alt":"Hike","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/hike.jpg","image_full_alt":"Hike","image_full_caption":"","image_intro_width":800,"image_intro_height":457,"image_full_width":800,"image_full_height":457}',
 				'description'          => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_7_DESC',
 				'color'                => '127a0f',
 				'capacity'             => null,
@@ -450,7 +451,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 				'catid'        => 1,
 				'title'        => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_8_TITLE',
 				'rrule'        => 'FREQ=WEEKLY;BYDAY=SA',
-				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":535,"image_full_width":800,"image_full_height":535}',
+				'images'       => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_intro_alt":"Swimming","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/swimming.jpg","image_full_alt":"Swimming","image_full_caption":"","image_intro_width":800,"image_intro_height":535,"image_full_width":800,"image_full_height":535}',
 				'description'  => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_8_DESC',
 				'schedule'     => '{"schedule0":{"title":"Intro","duration":"10","description":"Welcome the attendees."},"schedule1":{"title":"Warmup","duration":"20","description":"Making yourself ready."},"schedule2":{"title":"Exercise","duration":"60","description":"Training the different styles."},"schedule3":{"title":"Feedback","duration":"10","description":"Discussion round amongst the attendees."}}',
 				'capacity'     => null,
@@ -461,7 +462,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 				'catid'                => 1,
 				'title'                => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_TITLE',
 				'rrule'                => 'FREQ=WEEKLY;BYDAY=SU',
-				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":351,"image_full_width":800,"image_full_height":351}',
+				'images'               => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_intro_alt":"Basketball","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/basketball.jpg","image_full_alt":"Basketball","image_full_caption":"","image_intro_width":800,"image_intro_height":351,"image_full_width":800,"image_full_height":351}',
 				'description'          => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_9_DESC',
 				'color'                => 'c42323',
 				'capacity'             => '15',
@@ -477,7 +478,7 @@ class PlgSampledataDPCalendar extends CMSPlugin
 				'catid'               => 1,
 				'title'               => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_TITLE',
 				'rrule'               => 'FREQ=WEEKLY;BYDAY=SA',
-				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_intro_alt":"","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_full_alt":"","image_full_caption":"","image_intro_width":800,"image_intro_height":533,"image_full_width":800,"image_full_height":533}',
+				'images'              => '{"image_intro":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_intro_alt":"Rock concert","image_intro_caption":"","image_full":"media\\/plg_sampledata_dpcalendar\\/images\\/rock-concert.jpg","image_full_alt":"Rock concert","image_full_caption":"","image_intro_width":800,"image_intro_height":533,"image_full_width":800,"image_full_height":533}',
 				'description'         => 'PLG_SAMPLEDATA_DPCALENDAR_EVENT_10_DESC',
 				'color'               => '3c3d3c',
 				'capacity'            => '80',
@@ -1198,9 +1199,9 @@ class PlgSampledataDPCalendar extends CMSPlugin
 			$data                = $originalData;
 			$data['catid']       = $calendarIds[$originalData['catid']][$code];
 			$data['title']       = $language->_($data['title']);
+			$data['host_ids']    = [43, 44];
 			$data['description'] = '<p>' . $language->_($data['description']) . '</p>';
 			$data['description'] .= self::$lorem;
-
 			$data['language'] = count($this->languageCache) > 1 ? $code : '*';
 
 			$data = $this->convertCustomFields($data, $code, $language);

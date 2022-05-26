@@ -12,6 +12,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
@@ -129,7 +130,7 @@ class DPCalendarViewEvent extends BaseView
 		if ($author) {
 			$this->authorName = $event->created_by_alias ? $event->created_by_alias : $author->name;
 
-			if (JFile::exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php')) {
+			if (file_exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php')) {
 				// Set the community builder username as content
 				include_once(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php');
 				$cbUser = CBuser::getInstance($event->created_by);
@@ -141,13 +142,36 @@ class DPCalendarViewEvent extends BaseView
 			$this->avatar = DPCalendarHelper::getAvatar($author->id, $author->email, $this->params);
 		}
 
+		JLoader::register('ContactHelperRoute', JPATH_SITE . '/components/com_contact/helpers/route.php');
 		$this->event->contact_link = '';
 		if (!empty($event->contactid)) {
-			JLoader::register('ContactHelperRoute', JPATH_SITE . '/components/com_contact/helpers/route.php');
 			$this->event->contact_link = Route::_(
 				ContactHelperRoute::getContactRoute($event->contactid . ':' . $event->contactalias, $event->contactcatid)
 			);
 		}
+
+		$hosts = [];
+		foreach (array_unique(explode(',', $this->event->host_ids ?: '')) as $host) {
+			if (!$host) {
+				continue;
+			}
+
+			$user = Factory::getUser($host);
+
+			foreach ($this->event->hostContacts as $hostContact) {
+				if ($hostContact->user_id != $user->id) {
+					continue;
+				}
+
+				$user->link = Route::_(
+					ContactHelperRoute::getContactRoute($hostContact->id . ':' . $hostContact->alias, $hostContact->catid)
+				);
+			}
+
+			$hosts[] = $user;
+		}
+		$this->event->hosts = $hosts;
+
 		$this->displayData['event'] = $this->event;
 
 		$this->seriesEvents      = [];
@@ -250,7 +274,7 @@ class DPCalendarViewEvent extends BaseView
 		$now                   = \DPCalendarHelper::getDate();
 		$registrationStartDate = \DPCalendar\Helper\Booking::getRegistrationStartDate($event);
 		if ($registrationStartDate->format('U') > $now->format('U')) {
-			return JText::sprintf(
+			return Text::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_START',
 				$registrationStartDate->format($this->params->get('event_date_format', 'd.m.Y'), true),
 				$registrationStartDate->format('H:i') != '00:00' ? $registrationStartDate->format(
@@ -264,7 +288,7 @@ class DPCalendarViewEvent extends BaseView
 		$now                = \DPCalendarHelper::getDate();
 		$regstrationEndDate = \DPCalendar\Helper\Booking::getRegistrationEndDate($event);
 		if ($regstrationEndDate->format('U') < $now->format('U')) {
-			return JText::sprintf(
+			return Text::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_END',
 				$regstrationEndDate->format($this->params->get('event_date_format', 'd.m.Y'), true),
 				$regstrationEndDate->format('H:i') != '00:00' ? $regstrationEndDate->format(
@@ -324,7 +348,7 @@ class DPCalendarViewEvent extends BaseView
 
 		$metadesc = trim($this->event->metadata->get('metadesc', ''));
 		if (!$metadesc) {
-			$metadesc = JHtmlString::truncate($this->event->description, 100, true, false);
+			$metadesc = HTMLHelper::_('string.truncate', $this->event->description, 100, true, false);
 		}
 		if ($metadesc) {
 			$this->document->setDescription($this->event->title . ' '

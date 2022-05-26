@@ -4,7 +4,15 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 define('_JEXEC', 1);
+
+use Joomla\CMS\Application\CliApplication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Router;
+use Joomla\Registry\Registry;
 
 $path = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
 if (isset($_SERVER["SCRIPT_FILENAME"])) {
@@ -14,79 +22,79 @@ if (isset($_SERVER["SCRIPT_FILENAME"])) {
 define('JPATH_BASE', $path);
 require_once JPATH_BASE . '/includes/defines.php';
 require_once JPATH_BASE . '/includes/framework.php';
+
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-
-JLog::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.errors.php'], JLog::ERROR, 'com_dpcalendar');
-
-JLog::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.php'], JLog::NOTICE, 'com_dpcalendar');
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-set_error_handler("DPErrorHandler");
-
-function DPErrorHandler($error_level, $error_message, $error_file, $error_line, $error_context)
-{
-	JLog::add(
-		'Fatal Error during event sync! Exception is in file ' . $error_file . ' on line ' . $error_line . ': ' . PHP_EOL . $error_message,
-		JLog::ERROR,
-		'com_dpcalendar'
-	);
-}
-
-JLog::add('Starting with the DPCalendar event sync', JLog::DEBUG, 'com_dpcalendar');
-
-class DPCalendarEventSync extends JApplicationCli
+class DPCalendarEventSync extends CliApplication
 {
 	public function doExecute()
 	{
+		Log::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.errors.php'], Log::ERROR, 'com_dpcalendar');
+		Log::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.php'], Log::NOTICE, 'com_dpcalendar');
+
+		set_error_handler(function ($errorLevel, $errorMessage, $errorFile, $errorLine) {
+			// Ignore deprecated messages
+			if ($errorLevel == E_DEPRECATED || $errorLevel === E_USER_DEPRECATED) {
+				return;
+			}
+
+			Log::add(
+				'Fatal Error during event sync! Exception is in file ' . $errorFile . ' on line ' . $errorLine . ': ' . PHP_EOL . $errorMessage,
+				Log::ERROR,
+				'com_dpcalendar'
+			);
+		});
+
+		Log::add('Starting with the DPCalendar event sync', Log::DEBUG, 'com_dpcalendar');
+
 		// Disabling session handling otherwise it will result in an error
-		JFactory::getApplication()->set('session_handler', 'none');
+		Factory::getApplication()->set('session_handler', 'none');
 
 		// Setting HOST
 		if (empty($_SERVER['HTTP_HOST'])) {
-			$_SERVER['HTTP_HOST'] = JFactory::getApplication()->get('live_site');
+			$_SERVER['HTTP_HOST'] = Factory::getApplication()->get('live_site');
 		}
 
 		// Run as super admin
-		$user        = JFactory::getUser();
+		$user        = Factory::getUser();
 		$user->guest = false;
 		$reflection  = new ReflectionClass($user);
 		$property    = $reflection->getProperty('isRoot');
 		$property->setAccessible(true);
 		$property->setValue($user, true);
-		JFactory::getSession()->set('user', $user);
+		Factory::getSession()->set('user', $user);
 
 		if ($ids = $this->input->getString('calids', [])) {
 			$ids = explode(',', $ids);
 		}
 
 		try {
-			JPluginHelper::importPlugin('dpcalendar');
-			JFactory::getApplication()->triggerEvent('onEventsSync', [null, $ids]);
+			PluginHelper::importPlugin('dpcalendar');
+			Factory::getApplication()->triggerEvent('onEventsSync', [null, $ids]);
 
-			JLog::add('Finished with the DPCalendar event sync', JLog::DEBUG, 'com_dpcalendar');
+			Log::add('Finished with the DPCalendar event sync', Log::DEBUG, 'com_dpcalendar');
 		} catch (Exception $e) {
-			JLog::add('Error during event sync! Exception is: ' . PHP_EOL . $e, JLog::ERROR, 'com_dpcalendar');
+			Log::add('Error during event sync! Exception is: ' . PHP_EOL . $e, Log::ERROR, 'com_dpcalendar');
 		}
 	}
 
 	public function enqueueMessage($msg, $type = 'message')
 	{
-		JLog::add($msg, JLog::ERROR, 'com_dpcalendar');
+		Log::add($msg, Log::ERROR, 'com_dpcalendar');
 	}
 
 	public function getCfg($varname, $default = null)
 	{
-		return JFactory::getApplication()->get('' . $varname, $default);
+		return Factory::getApplication()->get('' . $varname, $default);
 	}
 
 	public static function getRouter($name = '', array $options = [])
 	{
-		JLoader::import('joomla.application.router');
-
 		try {
-			return new JRouter($options);
+			return new Router($options);
 		} catch (Exception $e) {
 			return null;
 		}
@@ -128,14 +136,12 @@ class DPCalendarEventSync extends JApplicationCli
 
 	public function getParams()
 	{
-		return new JRegistry();
+		return new Registry();
 	}
 
 	public function getUserState($key, $default = null)
 	{
-		$session  = JFactory::getSession();
-		$registry = $session->get('registry');
-
+		$registry = Factory::getSession()->get('registry');
 		if (!is_null($registry)) {
 			return $registry->get($key, $default);
 		}
@@ -160,9 +166,7 @@ class DPCalendarEventSync extends JApplicationCli
 
 	public function setUserState($key, $value)
 	{
-		$session  = JFactory::getSession();
-		$registry = $session->get('registry');
-
+		$registry = Factory::getSession()->get('registry');
 		if (!is_null($registry)) {
 			return $registry->set($key, $value);
 		}
@@ -176,6 +180,6 @@ class DPCalendarEventSync extends JApplicationCli
 	}
 }
 
-$app                   = JApplicationCli::getInstance('DPCalendarEventSync');
-JFactory::$application = $app;
+$app                  = CliApplication::getInstance('DPCalendarEventSync');
+Factory::$application = $app;
 $app->execute();

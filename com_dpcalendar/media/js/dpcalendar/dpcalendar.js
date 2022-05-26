@@ -112,7 +112,7 @@
 		});
 		return true;
 	};
-	DPCalendar.request = (url, callback, data, updateLoader) => {
+	DPCalendar.request = (url, callback, data, updateLoader, method) => {
 		const loader = updateLoader !== false ? document.querySelector('.dp-loader') : null;
 		if (loader) {
 			loader.classList.remove('dp-loader_hidden');
@@ -124,7 +124,7 @@
 		DPCalendar.requestCounter++;
 		Joomla.request({
 			url: Joomla.getOptions('system.paths').base + '/index.php?option=com_dpcalendar&' + url,
-			method: 'POST',
+			method: method == null ? 'POST' : method,
 			data: data,
 			onSuccess: (res) => {
 				DPCalendar.requestCounter--;

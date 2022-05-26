@@ -13,7 +13,7 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 class Pkg_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScript
 {
 	protected $minimumPhp      = '7.4.0';
-	protected $minimumJoomla   = '3.9.0';
+	protected $minimumJoomla   = '3.10.5';
 	protected $allowDowngrades = true;
 
 	public function preflight($type, $parent)

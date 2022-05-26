@@ -4,7 +4,17 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 define('_JEXEC', 1);
+
+use Joomla\CMS\Application\CliApplication;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Router\Router;
+use Joomla\Registry\Registry;
 
 $path = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
 if (isset($_SERVER["SCRIPT_FILENAME"])) {
@@ -16,38 +26,34 @@ require_once JPATH_BASE . '/includes/defines.php';
 require_once JPATH_BASE . '/includes/framework.php';
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-JLog::addLogger([
-	'text_file' => 'com_dpcalendars.cli.notify.errors.php'
-], JLog::ERROR, 'com_dpcalendar');
-
-JLog::addLogger([
-	'text_file' => 'com_dpcalendars.cli.notify.php'
-], JLog::NOTICE, 'com_dpcalendar');
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-set_error_handler("DPErrorHandler");
-
-function DPErrorHandler($error_level, $error_message, $error_file, $error_line, $error_context)
+class DPCalendarEventNotifier extends CliApplication
 {
-	JLog::add(
-		'Fatal Error during fetch! Exception is in file ' . $error_file . ' on line ' . $error_line . ': ' . PHP_EOL . $error_message,
-		JLog::ERROR,
-		'com_dpcalendar'
-	);
-}
-
-JLog::add('Starting with the DPCalendar notification', JLog::DEBUG, 'com_dpcalendar');
-
-class DPCalendarEventNotifier extends JApplicationCli
-{
-
 	public function doExecute()
 	{
+		Log::addLogger(['text_file' => 'com_dpcalendars.cli.notify.errors.php'], Log::ERROR, 'com_dpcalendar');
+		Log::addLogger(['text_file' => 'com_dpcalendars.cli.notify.php'], Log::NOTICE, 'com_dpcalendar');
+
+		set_error_handler(function ($errorLevel, $errorMessage, $errorFile, $errorLine) {
+			// Ignore deprecated messages
+			if ($errorLevel == E_DEPRECATED || $errorLevel === E_USER_DEPRECATED) {
+				return;
+			}
+
+			Log::add(
+				'Fatal Error during event sync! Exception is in file ' . $errorFile . ' on line ' . $errorLine . ': ' . PHP_EOL . $errorMessage,
+				Log::ERROR,
+				'com_dpcalendar'
+			);
+		});
+
+		Log::add('Starting with the DPCalendar notification', Log::DEBUG, 'com_dpcalendar');
+
 		try {
-			JLog::add('Loading the database configuration', JLog::DEBUG, 'com_dpcalendar');
-			$config = JFactory::getApplication();
+			Log::add('Loading the database configuration', Log::DEBUG, 'com_dpcalendar');
+			$config = Factory::getApplication();
 
 			// Disabling session handling otherwise it will result in an error
 			$config->set('session_handler', 'none');
@@ -55,10 +61,10 @@ class DPCalendarEventNotifier extends JApplicationCli
 			// Setting HOST
 			$_SERVER['HTTP_HOST'] = $config->get('live_site');
 
-			$db  = JFactory::getDbo();
+			$db  = Factory::getDbo();
 			$now = $db->quote(DPCalendarHelper::getDate()->format('Y-m-d H:i:00'));
 
-			// $now = "'2014-07-17 06:00:00'";
+			//$now = "'2022-04-09 19:00:00'";
 
 			$query = $db->getQuery(true)
 				->select('a.*')
@@ -88,95 +94,91 @@ class DPCalendarEventNotifier extends JApplicationCli
 			);
 			$db->setQuery($query);
 
-			JLog::add('Loading the events to notify which should be notified for ' . $now, JLog::DEBUG, 'com_dpcalendar');
+			Log::add('Loading the events to notify which should be notified for ' . $now, Log::DEBUG, 'com_dpcalendar');
 
 			$result = $db->loadObjectList();
 
-			JLog::add('Found ' . count($result) . ' bookings to notify', JLog::DEBUG, 'com_dpcalendar');
+			Log::add('Found ' . count($result) . ' bookings to notify', Log::DEBUG, 'com_dpcalendar');
 
 			foreach ($result as $ticket) {
 				$this->send($ticket);
 			}
 
-			JLog::add('Finished to send out the notification for ' . count($result) . ' bookings', JLog::DEBUG, 'com_dpcalendar');
+			Log::add('Finished to send out the notification for ' . count($result) . ' bookings', Log::DEBUG, 'com_dpcalendar');
 		} catch (Exception $e) {
-			JLog::add('Error checking notifications! Exception is: ' . PHP_EOL . $e, JLog::ERROR, 'com_dpcalendar');
+			Log::add('Error checking notifications! Exception is: ' . PHP_EOL . $e, Log::ERROR, 'com_dpcalendar');
 		}
 	}
 
 	private function send($ticket)
 	{
 		try {
-			JLog::add('Starting to send out the notificaton for the booking with the id: ' . $ticket->id, JLog::DEBUG, 'com_dpcalendar');
-			JLog::add('Loading the event with the id: ' . $ticket->event_id, JLog::DEBUG, 'com_dpcalendar');
+			Log::add('Starting to send out the notificaton for the booking with the id: ' . $ticket->id, Log::DEBUG, 'com_dpcalendar');
+			Log::add('Loading the event with the id: ' . $ticket->event_id, Log::DEBUG, 'com_dpcalendar');
 
 			JLoader::register('DPCalendarTableEvent', JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables/event.php');
-			JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-			$model = JModelLegacy::getInstance('Event', 'DPCalendarModel');
+			BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+			$model = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel');
 			$event = $model->getItem($ticket->event_id);
 			if (empty($event)) {
 				return;
 			}
-			$events = [
-				$event
-			];
+			$events = [$event];
 
-			JLog::add('Settig up the texts', JLog::DEBUG, 'com_dpcalendar');
+			Log::add('Settig up the texts', Log::DEBUG, 'com_dpcalendar');
 
-			$siteLanguage = JComponentHelper::getParams('com_languages')->get('site', $this->get('language', 'en-GB'));
-			JFactory::getApplication()->set('language', JUser::getInstance($ticket->user_id)->getParam('language', $siteLanguage));
-			JFactory::$language = null;
-			JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR .  '/components/com_dpcalendar');
+			$siteLanguage = ComponentHelper::getParams('com_languages')->get('site', $this->get('language', 'en-GB'));
+			Factory::getApplication()->set('language', Factory::getUser($ticket->user_id)->getParam('language', $siteLanguage));
+			Factory::$language = null;
+			Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR .  '/components/com_dpcalendar');
 
-			$subject = DPCalendarHelper::renderEvents($events, JText::_('COM_DPCALENDAR_BOOK_NOTIFICATION_EVENT_SUBJECT'), null);
+			$subject = DPCalendarHelper::renderEvents($events, Text::_('COM_DPCALENDAR_BOOK_NOTIFICATION_EVENT_SUBJECT'), null);
 
-			$variables                = [
-				'sitename' => JFactory::getApplication()->get('sitename'),
-				'user'     => JFactory::getUser()->name
+			$variables = [
+				'sitename' => Factory::getApplication()->get('sitename'),
+				'user'     => Factory::getUser()->name
 			];
 			$variables['hasLocation'] = !empty($events[0]->locations);
 			$body                     = DPCalendarHelper::renderEvents(
 				$events,
-				JText::_('COM_DPCALENDAR_BOOK_NOTIFICATION_EVENT_BODY'),
+				Text::_('COM_DPCALENDAR_BOOK_NOTIFICATION_EVENT_BODY'),
 				null,
 				$variables
 			);
 
-			JLog::add('Sending the mail to ' . $ticket->email, JLog::DEBUG, 'com_dpcalendar');
-			$mailer = JFactory::getMailer();
+			Log::add('Sending the mail to ' . $ticket->email, Log::DEBUG, 'com_dpcalendar');
+			$mailer = clone Factory::getMailer();
 			$mailer->setSubject($subject);
 			$mailer->setBody($body);
 			$mailer->IsHTML(true);
 			$mailer->AddAddress($ticket->email);
 			$mailer->Send();
 
-			$db = JFactory::getDbo();
+			$db = Factory::getDbo();
 
-			JLog::add('Setting the reminder send date to now', JLog::DEBUG, 'com_dpcalendar');
+			Log::add('Setting the reminder send date to now', Log::DEBUG, 'com_dpcalendar');
 			$query = $db->getQuery(true)->update('#__dpcalendar_tickets');
 			$query->set('reminder_sent_date=' . $db->quote(DPCalendarHelper::getDate()->toSql()));
 			$query->where('id=' . (int)$ticket->id);
 			$db->setQuery($query);
 			$db->execute();
 		} catch (Exception $e) {
-			JLog::add('Error sending mail! Exception is: ' . PHP_EOL . $e, JLog::ERROR, 'com_dpcalendar');
+			Log::add('Error sending mail! Exception is: ' . PHP_EOL . $e, Log::ERROR, 'com_dpcalendar');
 		}
-		JLog::add('Finished to send out the notificaton for the booking with the id: ' . $ticket->id, JLog::DEBUG, 'com_dpcalendar');
+		Log::add('Finished to send out the notificaton for the booking with the id: ' . $ticket->id, Log::DEBUG, 'com_dpcalendar');
 	}
 
 	public function getCfg($varname, $default = null)
 	{
-		$config = JFactory::getApplication();
+		$config = Factory::getApplication();
 
 		return $config->get('' . $varname, $default);
 	}
 
 	public static function getRouter($name = '', array $options = [])
 	{
-		JLoader::import('joomla.application.router');
-
 		try {
-			return new JRouter($options);
+			return new Router($options);
 		} catch (Exception $e) {
 			return null;
 		}
@@ -213,12 +215,12 @@ class DPCalendarEventNotifier extends JApplicationCli
 
 	public function getParams()
 	{
-		return new JRegistry();
+		return new Registry();
 	}
 
 	public function getUserState($key, $default = null)
 	{
-		$session  = JFactory::getSession();
+		$session  = Factory::getSession();
 		$registry = $session->get('registry');
 
 		if (!is_null($registry)) {
@@ -245,7 +247,7 @@ class DPCalendarEventNotifier extends JApplicationCli
 
 	public function setUserState($key, $value)
 	{
-		$session  = JFactory::getSession();
+		$session  = Factory::getSession();
 		$registry = $session->get('registry');
 
 		if (!is_null($registry)) {
@@ -264,8 +266,13 @@ class DPCalendarEventNotifier extends JApplicationCli
 	{
 		return 10000;
 	}
+
+	public function getName()
+	{
+		return 'DPCalendarEventNotifier';
+	}
 }
 
-$app                   = JApplicationCli::getInstance('DPCalendarEventNotifier');
-JFactory::$application = $app;
+$app                  = CliApplication::getInstance('DPCalendarEventNotifier');
+Factory::$application = $app;
 $app->execute();

@@ -81,7 +81,7 @@ class DPCalendarModelLocation extends AdminModel
 			if ($country) {
 				Factory::getApplication()->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 				$item->country_code       = $country->short_code;
-				$item->country_code_value = JText::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
+				$item->country_code_value = Text::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
 			}
 		}
 
@@ -157,7 +157,7 @@ class DPCalendarModelLocation extends AdminModel
 			// Create the body
 			$body = DPCalendarHelper::renderEvents(
 				[],
-				JText::_('COM_DPCALENDAR_NOTIFICATION_LOCATION_CREATE_BODY'),
+				Text::_('COM_DPCALENDAR_NOTIFICATION_LOCATION_CREATE_BODY'),
 				null,
 				[
 					'location'         => $data,
@@ -230,6 +230,14 @@ class DPCalendarModelLocation extends AdminModel
 			$data['country'] = $params->get('location_form_default_country');
 		}
 
+		if (!$item->get('latitude')) {
+			$data['latitude'] = $params->get('location_form_map_latitude', 47);
+		}
+
+		if (!$item->get('longitude')) {
+			$data['longitude'] = $params->get('location_form_map_longitude', 4);
+		}
+
 		return $data;
 	}
 
@@ -246,7 +254,7 @@ class DPCalendarModelLocation extends AdminModel
 		}
 
 		if (empty($table->latitude) && empty($table->longitude)) {
-			$latLong          = \DPCalendar\Helper\Location::get(\DPCalendar\Helper\Location::format($table), false);
+			$latLong          = Location::get(Location::format($table), false);
 			$table->latitude  = $latLong->latitude;
 			$table->longitude = $latLong->longitude;
 		}

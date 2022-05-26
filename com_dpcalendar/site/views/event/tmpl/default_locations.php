@@ -43,7 +43,7 @@ if (!$this->event->locations || !$this->params->get('event_show_location', '2'))
 					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
 					<?php if ($location->params->get('access-edit')) { ?>
 						<a href="<?php echo $this->router->getLocationFormRoute($location->id, Uri::getInstance()); ?>"
-						   class="dp-link dp-location__edit-link">
+						   class="dp-link dp-location__edit-link" aria-label="<?php echo $this->translate('JACTION_EDIT'); ?>">
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EDIT]); ?>
 						</a>
 					<?php } ?>

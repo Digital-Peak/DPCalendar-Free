@@ -20,7 +20,9 @@ use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarControllerEvent extends FormController
@@ -98,11 +100,24 @@ class DPCalendarControllerEvent extends FormController
 		$return   = true;
 		$recordId = $this->input->getString($key);
 		if (!$recordId || is_numeric($recordId)) {
-			$return = parent::cancel($key);
+			$success = parent::cancel($key);
 		}
-		$this->setRedirect($this->getReturnPage());
 
-		return $return;
+		$return = $this->getReturnPage();
+
+		$params = $this->getModel('Adminevent', 'DPCalendarModel', ['ignore_request' => false])->getState('params', new Registry());
+		if ($return === Uri::base() && $redirect = $params->get('event_form_redirect')) {
+			$article = Table::getInstance('Content');
+			$article->load($redirect);
+
+			if ($article->id) {
+				$return = Route::_('index.php?option=com_content&view=article&id=' . $article->id . '&catid=' . $article->catid);
+			}
+		}
+
+		$this->setRedirect($return);
+
+		return $success;
 	}
 
 	public function delete($key = 'e_id')
@@ -255,7 +270,13 @@ class DPCalendarControllerEvent extends FormController
 			$model->setError(Text::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'));
 		} else {
 			$event = $model->getItem($data['id']);
-			$data  = ArrayHelper::fromObject($event);
+
+			// Unset tags helper as it gets converted to array
+			if (isset($event->tagsHelper)) {
+				unset($event->tagsHelper);
+			}
+
+			$data = ArrayHelper::fromObject($event);
 
 			if (!empty($data['tags']) && array_key_exists('tags', $data['tags'])) {
 				$data['tags'] = explode(',', $data['tags']['tags']);
@@ -505,35 +526,39 @@ class DPCalendarControllerEvent extends FormController
 		} else {
 			$result = parent::save($key, $urlVar);
 		}
+
 		// If ok, redirect to the return page.
 		if ($result) {
-			$canChangeState = $calendar->external
-				|| Factory::getUser()->authorise('core.edit.state', 'com_dpcalendar.category.' . $data['catid']);
-			if ($this->getTask() == 'save') {
+			$canChangeState = $calendar->external || Factory::getUser()->authorise('core.edit.state', 'com_dpcalendar.category.' . $data['catid']);
+			if ($this->getTask() === 'save') {
 				$app->setUserState('com_dpcalendar.edit.event.data', null);
 				$return = $this->getReturnPage();
-				if ($return == Uri::base() && $canChangeState) {
-					$return = DPCalendarHelperRoute::getEventRoute(
-						$app->getUserState('dpcalendar.event.id'),
-						$data['catid']
-					);
+
+				$params = $this->getModel('Adminevent', 'DPCalendarModel', ['ignore_request' => false])->getState('params', new Registry());
+				if ($return === Uri::base() && $redirect = $params->get('event_form_redirect')) {
+					$article = Table::getInstance('Content');
+					$article->load($redirect);
+
+					if ($article->id) {
+						$return = Route::_('index.php?option=com_content&view=article&id=' . $article->id . '&catid=' . $article->catid);
+					}
+				}
+
+				if ($return === Uri::base() && $canChangeState) {
+					$return = DPCalendarHelperRoute::getEventRoute($app->getUserState('dpcalendar.event.id'), $data['catid']);
 				}
 				$this->setRedirect($return);
 			}
 			if ($this->getTask() == 'apply' || $this->getTask() == 'save2copy') {
 				$return = $this->getReturnPage();
 				if ($canChangeState) {
-					$return = DPCalendarHelperRoute::getFormRoute(
-						$app->getUserState('dpcalendar.event.id'),
-						$this->getReturnPage()
-					);
+					$return = DPCalendarHelperRoute::getFormRoute($app->getUserState('dpcalendar.event.id'), $this->getReturnPage());
 				}
 				$this->setRedirect($return);
 			}
 			if ($this->getTask() == 'save2new') {
 				$app->setUserState('com_dpcalendar.edit.event.data', null);
-				$return = DPCalendarHelperRoute::getFormRoute(0, $this->getReturnPage());
-				$this->setRedirect($return);
+				$this->setRedirect(DPCalendarHelperRoute::getFormRoute(0, $this->getReturnPage()));
 			}
 		} elseif (!$this->redirect) {
 			$this->setRedirect(
@@ -811,9 +836,9 @@ class DPCalendarControllerEvent extends FormController
 		$data = [];
 		if ($location->title) {
 			$data = [
-					'id'      => $location->id,
-					'display' => $location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
-				];
+				'id'      => $location->id,
+				'display' => $location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
+			];
 		}
 		DPCalendarHelper::sendMessage(null, empty($data), $data);
 	}

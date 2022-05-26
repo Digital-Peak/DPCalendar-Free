@@ -16,14 +16,20 @@ use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Image\Image;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Tag\TaggableTableInterface;
+use Joomla\CMS\Tag\TaggableTableTrait;
+use Joomla\CMS\Versioning\VersionableTableInterface;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
 use Sabre\VObject\Component\VCalendar;
 use Sabre\VObject\Reader;
+use Sabre\VObject\UUIDUtil;
 
-class DPCalendarTableEvent extends Table
+class DPCalendarTableEvent extends Table implements TaggableTableInterface, VersionableTableInterface
 {
+	use TaggableTableTrait;
+
 	public function __construct(&$db = null)
 	{
 		if (!class_exists('DPCalendar\\Helper\\DPCalendarHelper')) {
@@ -38,6 +44,8 @@ class DPCalendarTableEvent extends Table
 				'DPCalendarTableEvent',
 				['typeAlias' => 'com_dpcalendar.event']
 			);
+		} else {
+			$this->typeAlias = 'com_dpcalendar.event';
 		}
 
 		if ($db == null) {
@@ -138,14 +146,14 @@ class DPCalendarTableEvent extends Table
 			$this->rrule .= ';UNTIL=' . $until->format('Y') . '0101T000000Z';
 		}
 
-		$table       = Table::getInstance('Event', 'DPCalendarTable');
+		$oldEvent    = Table::getInstance('Event', 'DPCalendarTable');
 		$hardReset   = false;
 		$tagsChanged = isset($this->newTags) && !$this->newTags;
 		if ($this->id > 0) {
-			$table->load($this->id);
+			$oldEvent->load($this->id);
 
 			// If there is a new rrule or date configuration do a hard reset
-			$hardReset = $this->all_day != $table->all_day || $this->start_date != $table->start_date || $this->end_date != $table->end_date || $this->rrule != $table->rrule;
+			$hardReset = $this->all_day != $oldEvent->all_day || $this->start_date != $oldEvent->start_date || $this->end_date != $oldEvent->end_date || $this->rrule != $oldEvent->rrule;
 			$oldTags   = new TagsHelper();
 			$oldTags   = $oldTags->getItemTags('com_dpcalendar.event', $this->id);
 			$oldTags   = array_map(function ($t) {
@@ -154,7 +162,7 @@ class DPCalendarTableEvent extends Table
 
 			$tagsChanged = !isset($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
-			if ($this->price != $table->price || $this->booking_options != $table->booking_options || ($hardReset && $this->rrule && $this->booking_series != 1)) {
+			if ($this->price != $oldEvent->price || $this->booking_options != $oldEvent->booking_options || ($hardReset && $this->rrule && $this->booking_series != 1)) {
 				// Check for tickets
 				$query = $this->getDbo()->getQuery(true);
 				$query->select('t.id')
@@ -164,12 +172,12 @@ class DPCalendarTableEvent extends Table
 					->where('t.state >= 0');
 				$this->getDbo()->setQuery($query);
 				if ($this->getDbo()->loadResult()) {
-					$this->all_day         = $table->all_day;
-					$this->start_date      = $table->start_date;
-					$this->end_date        = $table->end_date;
-					$this->rrule           = $table->rrule;
-					$this->price           = $table->price;
-					$this->booking_options = $table->booking_options;
+					$this->all_day         = $oldEvent->all_day;
+					$this->start_date      = $oldEvent->start_date;
+					$this->end_date        = $oldEvent->end_date;
+					$this->rrule           = $oldEvent->rrule;
+					$this->price           = $oldEvent->price;
+					$this->booking_options = $oldEvent->booking_options;
 					$hardReset             = false;
 
 					Factory::getApplication()->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
@@ -194,7 +202,7 @@ class DPCalendarTableEvent extends Table
 		// Create the UID
 		JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 		if (!$this->uid) {
-			$this->uid = strtoupper(Sabre\VObject\UUIDUtil::getUUID());
+			$this->uid = strtoupper(UUIDUtil::getUUID());
 		}
 
 		if (!empty($this->images) && $this->images != '{}') {
@@ -311,7 +319,6 @@ class DPCalendarTableEvent extends Table
 			return;
 		}
 
-
 		$query = $this->_db->getQuery(true);
 		$query->update('#__dpcalendar_events');
 
@@ -349,13 +356,13 @@ class DPCalendarTableEvent extends Table
 			$this->_db->qn('access') . ' = ' . $this->_db->q($this->access),
 			$this->_db->qn('access_content') . ' = ' . $this->_db->q($this->access_content),
 			$this->_db->qn('params') . ' = ' . $this->_db->q($this->params),
-			$this->_db->qn('rooms') . ' = ' . $this->_db->q($this->rooms),
+			$this->_db->qn('rooms') . ' = ' . $this->_db->q($this->rooms ?: ''),
 			$this->_db->qn('language') . ' = ' . $this->_db->q($this->language),
 			$this->_db->qn('modified') . ' = ' . $this->_db->q($this->modified),
 			$this->_db->qn('modified_by') . ' = ' . $this->_db->q($user->id),
 			$this->_db->qn('created_by') . ' = ' . $this->_db->q($this->created_by),
-			$this->_db->qn('metakey') . ' = ' . $this->_db->q($this->metakey),
-			$this->_db->qn('metadesc') . ' = ' . $this->_db->q($this->metadesc),
+			$this->_db->qn('metakey') . ' = ' . $this->_db->q($this->metakey ?: ''),
+			$this->_db->qn('metadesc') . ' = ' . $this->_db->q($this->metadesc ?: ''),
 			$this->_db->qn('metadata') . ' = ' . $this->_db->q($this->metadata),
 			$this->_db->qn('featured') . ' = ' . $this->_db->q($this->featured),
 			$this->_db->qn('publish_up') . ' = ' . $this->_db->q($this->publish_up),
@@ -379,6 +386,11 @@ class DPCalendarTableEvent extends Table
 
 		$query->set($files);
 		$query->where($this->_db->qn('original_id') . ' = ' . $this->_db->q($this->id));
+
+		if ($oldEvent->modified && isset($this->_update_modified) && $this->_update_modified == 0) {
+			$query->where('(' . $this->_db->qn('modified') . ' = ' . $this->_db->q($oldEvent->modified)
+				. ' or modified = ' . $this->_db->quote($this->_db->getNullDate()) . ')');
+		}
 
 		$this->_db->setQuery($query);
 		$this->_db->execute();
@@ -455,6 +467,16 @@ class DPCalendarTableEvent extends Table
 		}
 		if (empty($this->publish_down)) {
 			$this->publish_down = $this->getDbo()->getNullDate();
+		}
+		if (empty($this->checked_out_time)) {
+			$this->checked_out_time = $this->getDbo()->getNullDate();
+		}
+
+		if (empty($this->hits)) {
+			$this->hits = 0;
+		}
+		if (empty($this->checked_out)) {
+			$this->checked_out = 0;
 		}
 
 		if ($this->color) {
@@ -617,5 +639,10 @@ class DPCalendarTableEvent extends Table
 		}
 
 		return $str;
+	}
+
+	public function getTypeAlias()
+	{
+		return $this->typeAlias;
 	}
 }

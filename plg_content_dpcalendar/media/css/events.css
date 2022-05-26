@@ -1,0 +1,21 @@
+.plg-content-dpcalendar-contact-events .dp-list {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+.plg-content-dpcalendar-contact-events .dp-list > li {
+	border-bottom: 1px solid #dddddd;
+	padding: 1em 1em;
+}
+.plg-content-dpcalendar-contact-events .dp-list > li:first-child {
+	border-top: 1px solid #dddddd;
+}
+.plg-content-dpcalendar-contact-events .dp-list > li:nth-of-type(odd) {
+	background-color: #f2f2f2;
+}
+.plg-content-dpcalendar-contact-events .dp-event__link {
+	display: block;
+	margin-bottom: 0.5rem;
+}
+
+/*# sourceMappingURL=events.css.map */

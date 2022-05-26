@@ -328,6 +328,15 @@ class DPCalendarModelAdminEvent extends AdminModel
 						}
 					}
 
+					$this->_db->setQuery('select user_id from #__dpcalendar_events_hosts where event_id = ' . (int)$item->id);
+					$hosts = $this->_db->loadObjectList();
+					if (!empty($hosts)) {
+						$item->host_ids = [];
+						foreach ($hosts as $host) {
+							$item->host_ids[] = $host->user_id;
+						}
+					}
+
 					$item->tags = new TagsHelper();
 					$item->tags->getTagIds($item->id, 'com_dpcalendar.event');
 				}
@@ -346,8 +355,13 @@ class DPCalendarModelAdminEvent extends AdminModel
 	{
 		$locationIds = [];
 		if (isset($data['location_ids'])) {
-			$locationIds = array_unique($data['location_ids']);
+			$locationIds = array_unique($data['location_ids'] ?: []);
 			unset($data['location_ids']);
+		}
+		$hostIds = [];
+		if (isset($data['host_ids'])) {
+			$hostIds = array_unique($data['host_ids'] ?: []);
+			unset($data['host_ids']);
 		}
 
 		$oldEventIds = [];
@@ -462,7 +476,6 @@ class DPCalendarModelAdminEvent extends AdminModel
 		}
 
 		$success = parent::save($data);
-
 		if (!$success) {
 			return $success;
 		}
@@ -471,21 +484,27 @@ class DPCalendarModelAdminEvent extends AdminModel
 		$event = $this->getItem($id);
 		$app->setUserState('dpcalendar.event.id', $id);
 
-		$this->getDbo()->setQuery('select id from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
-		$rows   = $this->getDbo()->loadObjectList();
-		$values = '';
+		$this->getDbo()->setQuery('select id, modified from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
+		$rows = $this->getDbo()->loadObjectList();
 
 		$fieldModel = BaseDatabaseModel::getInstance('Field', 'FieldsModel', ['ignore_request' => true]);
 
 		// Loading the fields
 		$fields = FieldsHelper::getFields('com_dpcalendar.event', $event);
 
-		$allIds = $oldEventIds;
+		$locationValues = '';
+		$hostsValues    = '';
+		$allIds         = $oldEventIds;
 		foreach ($rows as $tmp) {
 			$allIds[(int)$tmp->id] = (int)$tmp->id;
 			if ($locationIds) {
 				foreach ($locationIds as $location) {
-					$values .= '(' . (int)$tmp->id . ',' . (int)$location . '),';
+					$locationValues .= '(' . (int)$tmp->id . ',' . (int)$location . '),';
+				}
+			}
+			if ($hostIds) {
+				foreach ($hostIds as $host) {
+					$hostsValues .= '(' . (int)$tmp->id . ',' . (int)$host . '),';
 				}
 			}
 
@@ -493,18 +512,28 @@ class DPCalendarModelAdminEvent extends AdminModel
 				unset($oldEventIds[$tmp->id]);
 			}
 
+			// Check if the event is the main event
+			if (!$fieldModel || !$fields || $tmp->id == $event->id) {
+				continue;
+			}
+
+			// When modified events should not be updated and the modified date is different than the original event, ignore it
+			if (array_key_exists('update_modified', $data) && !(int)$data['update_modified'] && $tmp->modified !== $event->modified) {
+				continue;
+			}
+
 			// Save the values on the child events
-			if ($fieldModel && $fields && $tmp->id != $event->id) {
-				foreach ($fields as $field) {
-					$value = $field->value;
-					if (isset($data['com_fields']) && key_exists($field->name, $data['com_fields'])) {
-						$value = $data['com_fields'][$field->name];
-					}
-					$fieldModel->setFieldValue($field->id, $tmp->id, $value);
+			foreach ($fields as $field) {
+				$value = $field->value;
+				if (isset($data['com_fields']) && key_exists($field->name, $data['com_fields'])) {
+					$value = $data['com_fields'][$field->name];
 				}
+				$fieldModel->setFieldValue($field->id, $tmp->id, $value);
 			}
 		}
-		$values = trim($values, ',');
+
+		$locationValues = trim($locationValues, ',');
+		$hostsValues    = trim($hostsValues, ',');
 
 		if ($fieldModel && $fields) {
 			// Clear the custom fields for deleted child events
@@ -522,8 +551,20 @@ class DPCalendarModelAdminEvent extends AdminModel
 		}
 
 		// Insert the new associations
-		if (!empty($values)) {
-			$this->getDbo()->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $values);
+		if (!empty($locationValues)) {
+			$this->getDbo()->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $locationValues);
+			$this->getDbo()->execute();
+		}
+
+		// Delete the hosts associations for the events which do not exist anymore
+		if (!$this->getState($this->getName() . '.new')) {
+			$this->getDbo()->setQuery('delete from #__dpcalendar_events_hosts where event_id in (' . implode(',', $allIds) . ')');
+			$this->getDbo()->execute();
+		}
+
+		// Insert the new associations
+		if (!empty($hostsValues)) {
+			$this->getDbo()->setQuery('insert into #__dpcalendar_events_hosts (event_id, user_id) values ' . $hostsValues);
 			$this->getDbo()->execute();
 		}
 
@@ -584,6 +625,11 @@ class DPCalendarModelAdminEvent extends AdminModel
 	{
 		if (!isset($table->state) && $this->canEditState($table)) {
 			$table->state = 1;
+		}
+
+		$data = Factory::getApplication()->input->post->get('jform', [], 'array');
+		if (array_key_exists('update_modified', $data)) {
+			$table->_update_modified = $data['update_modified'];
 		}
 	}
 
@@ -652,7 +698,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 					return false;
 				}
 			} else {
-				$this->setError(\JText::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
+				$this->setError(Text::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
 
 				return false;
 			}
@@ -671,7 +717,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		ArrayHelper::toInteger($pks);
 
 		if (empty($pks)) {
-			$this->setError(JText::_('COM_DPCALENDAR_NO_ITEM_SELECTED'));
+			$this->setError(Text::_('COM_DPCALENDAR_NO_ITEM_SELECTED'));
 
 			return false;
 		}
@@ -704,7 +750,6 @@ class DPCalendarModelAdminEvent extends AdminModel
 
 		return $success;
 	}
-
 
 	public function delete(&$pks)
 	{

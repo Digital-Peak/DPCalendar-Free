@@ -158,6 +158,15 @@ class DPCalendarModelEvents extends ListModel
 
 			if (is_string($item->booking_options)) {
 				$item->booking_options = json_decode($item->booking_options);
+
+				// Ensure min amount is properly set
+				if (is_object($item->booking_options)) {
+					foreach ($item->booking_options as $option) {
+						if (empty($option->min_amount)) {
+							$option->min_amount = 0;
+						}
+					}
+				}
 			}
 			$item->booking_options = $item->booking_options ?: null;
 
@@ -214,7 +223,7 @@ class DPCalendarModelEvents extends ListModel
 			$query->where('a.original_id in (-1, 0)');
 		}
 
-		// Join over the categories.
+		// Join over the categories
 		$query->join('LEFT', '#__categories AS c ON c.id = a.catid');
 
 		if ($user->id > 0 && !DPCalendarHelper::isFree()) {
@@ -240,7 +249,12 @@ class DPCalendarModelEvents extends ListModel
 		$query->join('LEFT', '#__dpcalendar_locations AS v ON rel.location_id = v.id');
 		$query->group('a.id');
 
-		// Filter by category.
+		// Join hosts
+		$query->select("GROUP_CONCAT(uh.id SEPARATOR ',') host_ids");
+		$query->join('LEFT', '#__dpcalendar_events_hosts AS relh ON a.id = relh.event_id');
+		$query->join('LEFT', '#__users AS uh ON relh.user_id = uh.id');
+
+		// Filter by category
 		if ($categoryIds = $this->getState('category.id', 0)) {
 			if (!is_array($categoryIds)) {
 				$categoryIds = [$categoryIds];
@@ -497,14 +511,22 @@ class DPCalendarModelEvents extends ListModel
 			}
 			$query->where('(' . $cond . ')');
 		}
+
+		if ($hosts = $this->getState('filter.hosts')) {
+			$hosts = is_array($hosts) ? $hosts : [$hosts];
+			$query->where('relh.user_id in (' . implode(',', ArrayHelper::toInteger($hosts)) . ')');
+		}
+
 		if ($this->getState('filter.children', 0) > 0) {
 			$query->where('a.original_id = ' . (int)$this->getState('filter.children', 0));
 		}
+
 		$search = $this->getState('filter.search_start');
 		if (!empty($search)) {
 			$search = $db->quote($db->escape($search, true));
 			$query->where('a.start_date >= ' . $search);
 		}
+
 		$search = $this->getState('filter.search_end');
 		if (!empty($search)) {
 			$search = $db->quote($db->escape($search, true));

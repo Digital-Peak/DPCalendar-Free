@@ -131,6 +131,8 @@ class Location
 	 */
 	public static function get($location, $fill = true, $title = null)
 	{
+		$location = trim($location);
+
 		if (self::$locationCache == null) {
 			\JLoader::import('joomla.application.component.model');
 			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
@@ -144,8 +146,9 @@ class Location
 					self::$locationCache->setState('filter.latitude', $coordinates[0]);
 					self::$locationCache->setState('filter.longitude', $coordinates[1]);
 				} else {
-					self::$locationCache->setState('filter.search', ApplicationHelper::stringURLSafe($location));
+					self::$locationCache->setState('filter.xreference', $location);
 				}
+
 				$locations = self::$locationCache->getItems();
 				if ($locations) {
 					$locObject = $locations[0];
@@ -181,6 +184,7 @@ class Location
 			$locObject->longitude   = 0;
 			$locObject->color       = self::getColor($locObject);
 			$locObject->params      = new Registry();
+			$locObject->xreference  = $location;
 		}
 
 		$provider = DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap');

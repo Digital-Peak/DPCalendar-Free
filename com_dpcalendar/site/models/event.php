@@ -101,9 +101,14 @@ class DPCalendarModelEvent extends ItemModel
 					$query->join('LEFT', '#__categories AS c on c.id = a.catid');
 
 					// Join locations
-					$query->select("GROUP_CONCAT(v.id SEPARATOR ', ') location_ids");
+					$query->select("GROUP_CONCAT(v.id SEPARATOR ',') location_ids");
 					$query->join('LEFT', '#__dpcalendar_events_location AS rel ON a.id = rel.event_id');
 					$query->join('LEFT', '#__dpcalendar_locations AS v ON rel.location_id = v.id');
+
+					// Join hosts
+					$query->select("GROUP_CONCAT(uh.id SEPARATOR ',') host_ids");
+					$query->join('LEFT', '#__dpcalendar_events_hosts AS relu ON a.id = relu.event_id');
+					$query->join('LEFT', '#__users AS uh ON relu.user_id = uh.id');
 
 					// Join on series max/min
 					$query->select('min(ser.start_date) AS series_min_start_date, max(ser.end_date) AS series_max_end_date');
@@ -147,7 +152,6 @@ class DPCalendarModelEvent extends ItemModel
 					$db->setQuery($query);
 
 					$data = $db->loadObject();
-
 					if (empty($data)) {
 						throw new Exception(Text::_('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 					}
@@ -173,6 +177,18 @@ class DPCalendarModelEvent extends ItemModel
 						$data->locations = $model->getItems();
 					}
 
+					$data->hostContacts = [];
+					if ($data->host_ids) {
+						$query = $this->getDbo()->getQuery(true);
+						$query->select('id, catid, alias, name, user_id')->from('#__contact_details')
+						->where('(published = 1 or published is null)')
+						->where('(language in (' . $db->quote(Factory::getLanguage()->getTag()) . ',' . $db->quote('*') . ') OR language IS NULL)')
+						->where('user_id in (' . $data->host_ids . ')');
+						$this->getDbo()->setQuery($query);
+
+						$data->hostContacts = $db->loadObjectList();
+					}
+
 					// Convert parameter fields to objects.
 					$registry = new Registry();
 					$registry->loadString($data->params ?: '');
@@ -194,6 +210,15 @@ class DPCalendarModelEvent extends ItemModel
 					$data->schedule         = $data->schedule ? json_decode($data->schedule) : [];
 					$data->rooms            = $data->rooms ? explode(',', $data->rooms) : [];
 					$data->payment_provider = $data->payment_provider ? explode(',', $data->payment_provider) : [];
+
+					// Ensure min amount is properly set
+					if (is_object($data->booking_options)) {
+						foreach ($data->booking_options as $option) {
+							if (empty($option->min_amount)) {
+								$option->min_amount = 0;
+							}
+						}
+					}
 
 					$this->_item[$pk] = $data;
 				} catch (Exception $e) {

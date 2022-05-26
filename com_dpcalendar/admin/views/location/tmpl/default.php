@@ -4,7 +4,10 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\HTML\HTMLHelper;
 
 $this->layoutHelper->renderLayout('block.map', $this->displayData);
 $this->dpdocument->loadStyleFile('dpcalendar/views/locationform/default.css');
@@ -15,9 +18,9 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 <div class="com-dpcalendar-locationform">
 	<form class="com-dpcalendar-locationform__form dp-form form-validate" method="post" name="adminForm" id="adminForm"
 		  action="<?php echo $action; ?>">
-		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
+		<?php echo HTMLHelper::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
-			<?php echo JHtml::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
+			<?php echo HTMLHelper::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<div class="com-dpcalendar-locationform__content dp-grid">
 				<div class="com-dpcalendar-locationform__fields">
 					<?php foreach ($this->form->getFieldset($name) as $field) { ?>
@@ -26,13 +29,16 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 				</div>
 				<?php if ($name == 'general' && $this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 					<div class="com-dpcalendar-locationform__map dp-map"
-						 data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
+						data-zoom="<?php echo $this->params->get('location_form_map_zoom', 10); ?>"
+						data-latitude="<?php echo $this->params->get('location_form_map_latitude', 47); ?>"
+						data-longitude="<?php echo $this->params->get('location_form_map_longitude', 4); ?>"
+						data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
 				<?php } ?>
 			</div>
-			<?php echo JHtml::_('bootstrap.endTab'); ?>
+			<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
 		<?php } ?>
-		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
+		<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 </div>

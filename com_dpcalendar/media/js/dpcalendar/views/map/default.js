@@ -38,7 +38,7 @@
 					return;
 				}
 				DPCalendar.request(
-					'view=map&layout=events&format=raw',
+					'view=map&layout=events&format=raw&' + DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)')),
 					(json) => {
 						DPCalendar.Map.clearMarkers(mapObject);
 						json.data.events.forEach((event) => {
@@ -59,7 +59,9 @@
 							);
 						}
 					},
-					DPCalendar.formToQueryString(root.querySelector('.dp-form:not(.dp-timezone)'))
+					null,
+					true,
+					'GET'
 				);
 			};
 			[].slice.call(document.querySelectorAll('.dp-search-map')).forEach((map) => {

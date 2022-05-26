@@ -150,6 +150,8 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 				// Delete the location associations
 				$this->getDbo()->setQuery('delete from #__dpcalendar_events_location where event_id not in (select id from #__dpcalendar_events)');
 				$this->getDbo()->execute();
+				$this->getDbo()->setQuery('delete from #__dpcalendar_events_hosts where event_id not in (select id from #__dpcalendar_events)');
+				$this->getDbo()->execute();
 
 				// Clearing the sync token
 				$this->getDbo()->setQuery("update #__dpcalendar_extcalendars set sync_date = null, sync_token = null where plugin = '" . $plugin . "'");

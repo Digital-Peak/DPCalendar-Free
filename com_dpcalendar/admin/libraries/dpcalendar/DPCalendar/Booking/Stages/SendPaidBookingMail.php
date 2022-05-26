@@ -4,12 +4,14 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Booking;
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Mail\Mail;
 use League\Pipeline\StageInterface;
 
@@ -49,7 +51,7 @@ class SendPaidBookingMail implements StageInterface
 			null,
 			$payload->mailVariables
 		);
-		$body    = DPCalendarHelper::renderEvents(
+		$body = DPCalendarHelper::renderEvents(
 			$payload->eventsWithTickets,
 			DPCalendarHelper::getStringFromParams(
 				'bookingsys_paid_booking_mail',
@@ -60,6 +62,12 @@ class SendPaidBookingMail implements StageInterface
 			null,
 			$payload->mailVariables
 		);
+
+		if ($payload->mailParams->get('bookingsys_author_as_mail_from')) {
+			foreach ($payload->eventsWithTickets as $event) {
+				$this->mailer->setSender(Factory::getUser($event->created_by)->email);
+			}
+		}
 
 		$this->mailer->setSubject($subject);
 		$this->mailer->setBody($body);
@@ -90,11 +98,15 @@ class SendPaidBookingMail implements StageInterface
 		try {
 			$this->mailer->Send();
 			foreach ($files as $file) {
-				\JFile::delete($file);
+				if (file_exists($file)) {
+					unlink($file);
+				}
 			}
 		} catch (\Exception $e) {
 			foreach ($files as $file) {
-				\JFile::delete($file);
+				if (file_exists($file)) {
+					unlink($file);
+				}
 			}
 
 			throw $e;

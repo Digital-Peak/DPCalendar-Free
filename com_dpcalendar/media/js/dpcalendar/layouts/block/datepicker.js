@@ -17,12 +17,16 @@
 			});
 			[].slice.call(document.querySelectorAll('.dp-datepicker')).forEach(picker => {
 				const element = picker.querySelector('.dp-datepicker__input');
-				const options = {trigger: picker.querySelector('.dp-datepicker__button')};
+				const options = { trigger: picker.querySelector('.dp-datepicker__button'), setDefaultDate: true };
 				options.format = element.getAttribute('data-format');
 				options.field = element;
 				if (element.getAttribute('data-date')) {
-					options.defaultDate = new Date(element.getAttribute('data-date'));
-					element.value = dayjs(element.getAttribute('data-date')).format(options.format);
+					let date = dayjs(element.getAttribute('data-date'));
+					if (date.utcOffset() < 0) {
+						date = date.add(Math.abs(date.utcOffset()), 'minute');
+					}
+					options.defaultDate = date.toDate();
+					element.value = date.format(options.format);
 				}
 				if (element.getAttribute('data-first-day')) {
 					options.firstDay = parseInt(element.getAttribute('data-first-day'));
@@ -33,9 +37,14 @@
 						return;
 					}
 					const diff = dayjs.utc(element.value, options.format).diff(dayjs.utc(element.actualDate, options.format));
-					let date = dayjs.utc(end.value, options.format);
+					let date = dayjs(end.value, options.format);
+					if (date.utcOffset() < 0) {
+						date = date.add(Math.abs(date.utcOffset()), 'minute');
+					}
 					date = date.add(diff, 'ms');
 					end.value = date.format(options.format);
+					end.setAttribute('data-date', date.format('YYYY-MM-DD'));
+					end.dpPikaday.setDate(date.format('YYYY-MM-DD HH:mm'));
 					element.actualDate = element.value;
 					element.focus();
 				};
@@ -45,7 +54,7 @@
 					weekdays: names['dayNames'],
 					weekdaysShort: names['dayNamesShort']
 				};
-				new Pikaday(options);
+				element.dpPikaday = new Pikaday(options);
 			});
 		});
 	});

@@ -101,11 +101,13 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
   `publish_up` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `publish_down` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `metadata` text,
+  `xreference` varchar(255) NULL,
   PRIMARY KEY (`id`),
   KEY `idx_checkout` (`checked_out`),
   KEY `idx_state` (`state`),
   KEY `idx_createdby` (`created_by`),
-  KEY `idx_language` (`language`)
+  KEY `idx_language` (`language`),
+  KEY `idx_xreference` (`xreference`)
 ) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `rules`, `field_mappings`, `router`, `content_history_options`) VALUES
@@ -115,6 +117,12 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events_location` (
   `event_id` int NOT NULL DEFAULT '0',
   `location_id` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`event_id`,`location_id`)
+) DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `#__dpcalendar_events_hosts` (
+  `event_id` int NOT NULL DEFAULT '0',
+  `user_id` int NOT NULL DEFAULT '0',
+  PRIMARY KEY (`event_id`,`user_id`)
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_bookings` (
@@ -154,6 +162,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_bookings` (
   `payer_id` VARCHAR(255) DEFAULT NULL,
   `payer_email` VARCHAR(255) DEFAULT NULL,
   `raw_data` text,
+  `token` VARCHAR(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
   KEY `user_id` (`user_id`),

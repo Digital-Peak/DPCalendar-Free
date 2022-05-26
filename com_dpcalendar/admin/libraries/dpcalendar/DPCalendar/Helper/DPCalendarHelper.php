@@ -257,7 +257,10 @@ class DPCalendarHelper
 			}
 		}
 
-		$dateObj->setTimezone(new \DateTimeZone(Factory::getSession()->get('user-timezone', $timezone, 'DPCalendar')));
+		if ($timezone) {
+			$dateObj->setTimezone(new \DateTimeZone(Factory::getSession()->get('user-timezone', $timezone, 'DPCalendar')));
+		}
+
 		return $dateObj;
 	}
 
@@ -862,7 +865,7 @@ class DPCalendarHelper
 	 *
 	 * @return array
 	 */
-	public static function sendMail($subject, $message, $parameter, $additionalGroups = [])
+	public static function sendMail($subject, $message, $parameter, $additionalGroups = [], string $fromMail = null)
 	{
 		$groups = self::getComponentParameter($parameter);
 
@@ -890,6 +893,11 @@ class DPCalendarHelper
 			}
 
 			$mailer = Factory::getMailer();
+
+			if ($fromMail) {
+				$mailer->setFrom($fromMail);
+			}
+
 			$mailer->setSubject($subject);
 			$mailer->setBody($message);
 			$mailer->IsHTML(true);

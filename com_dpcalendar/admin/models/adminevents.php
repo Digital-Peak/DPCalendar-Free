@@ -9,6 +9,7 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Utilities\ArrayHelper;
@@ -100,7 +101,7 @@ class DPCalendarModelAdminEvents extends ListModel
 		$this->setState('filter.tag', $tag);
 
 		// Load the parameters.
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
 		// List state information.
@@ -145,7 +146,7 @@ class DPCalendarModelAdminEvents extends ListModel
 				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 				$search = '';
 
-				JFactory::getApplication()->setUserState($this->context . '.filter.search_end', $search);
+				Factory::getApplication()->setUserState($this->context . '.filter.search_end', $search);
 			}
 		}
 		$this->setState('filter.search_end', $search);
@@ -218,7 +219,7 @@ class DPCalendarModelAdminEvents extends ListModel
 			$query->where('a.access IN (' . $groups . ')');
 
 			$query->select(
-				'CASE WHEN a.access_content IN (' . $groups . ") THEN a.title ELSE '" . JText::_('COM_DPCALENDAR_EVENT_BUSY') . "' END as title"
+				'CASE WHEN a.access_content IN (' . $groups . ") THEN a.title ELSE '" . Text::_('COM_DPCALENDAR_EVENT_BUSY') . "' END as title"
 			);
 		} else {
 			$query->select('a.title');
@@ -303,6 +304,11 @@ class DPCalendarModelAdminEvents extends ListModel
 
 		if ($this->getState('filter.children', 0) > 0) {
 			$query->where('a.original_id = ' . (int)$this->getState('filter.children', 0));
+		}
+
+		$modified = $this->getState('filter.modified');
+		if ($modified) {
+			$query->where('a.modified != ' . $db->quote($modified));
 		}
 
 		// Filter on the language.

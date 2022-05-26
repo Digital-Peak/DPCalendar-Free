@@ -178,9 +178,13 @@ class DPCalendarModelLocations extends ListModel
 			$query->where('(a.state IN (0, 1))');
 		}
 
+		// Filter by reference
+		if ($reference = $this->getState('filter.xreference')) {
+			$query->where('xreference = ' . $db->quote($reference));
+		}
+
 		// Filter by search in title
-		$search = $this->getState('filter.search');
-		if (!empty($search)) {
+		if ($search = $this->getState('filter.search')) {
 			if (stripos($search, 'ids:') === 0) {
 				$ids = explode(',', substr($search, 4));
 				ArrayHelper::toInteger($ids);

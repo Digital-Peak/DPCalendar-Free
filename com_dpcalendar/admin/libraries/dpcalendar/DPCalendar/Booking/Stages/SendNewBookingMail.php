@@ -13,6 +13,7 @@ use DPCalendar\Helper\Booking;
 use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\Ical;
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
 use Joomla\CMS\Mail\Mail;
 use League\Pipeline\StageInterface;
@@ -86,6 +87,12 @@ class SendNewBookingMail implements StageInterface
 		);
 
 		if (!empty($body)) {
+			if ($payload->mailParams->get('bookingsys_author_as_mail_from')) {
+				foreach ($payload->eventsWithTickets as $event) {
+					$this->mailer->setSender(Factory::getUser($event->created_by)->email);
+				}
+			}
+
 			$this->mailer->setSubject($subject);
 			$this->mailer->setBody($body);
 			$this->mailer->IsHTML(true);
@@ -118,11 +125,15 @@ class SendNewBookingMail implements StageInterface
 				$this->mailer->Send();
 				$this->app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.booking.new', $this->mailer, $payload->item]);
 				foreach ($files as $file) {
-					\JFile::delete($file);
+					if (file_exists($file)) {
+						unlink($file);
+					}
 				}
 			} catch (\Exception $e) {
 				foreach ($files as $file) {
-					\JFile::delete($file);
+					if (file_exists($file)) {
+						unlink($file);
+					}
 				}
 
 				if (!$e instanceof MailDisabledException) {

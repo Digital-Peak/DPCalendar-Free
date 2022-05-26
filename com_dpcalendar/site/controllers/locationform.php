@@ -4,9 +4,19 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JLoader::import('controllers.location', JPATH_COMPONENT_ADMINISTRATOR);
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
+use Joomla\Registry\Registry;
+
+JLoader::import('controllers.location', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
 class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 {
@@ -14,9 +24,9 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 
 	public function __construct($config = [])
 	{
-		JModelLegacy::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/models');
-		JTable::addIncludePath(JPATH_COMPONENT_ADMINISTRATOR . '/tables');
-		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
+		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 
 		parent::__construct();
 	}
@@ -35,7 +45,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 		}
 
 		// Since there is no asset tracking, revert to the component permissions
-		return JFactory::getUser()->authorise('core.delete', $this->option);
+		return Factory::getUser()->authorise('core.delete', $this->option);
 	}
 
 	protected function allowEdit($data = [], $key = 'l_id')
@@ -59,27 +69,59 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 	{
 		$result = parent::save($key, $urlVar);
 
-		if ($return = $this->input->get('return', null, 'base64')) {
+		$return = $this->getReturnPage();
+		if ($return !== Uri::base()) {
 			$this->setRedirect(base64_decode($return));
-		} else if ($result) {
-			$this->setRedirect(
-				DPCalendarHelperRoute::getLocationRoute($this->getModel()->getItem(JFactory::getApplication()->getUserState('dpcalendar.location.id')))
-			);
-		} else {
-			$this->setRedirect(JUri::base());
+
+			return $result;
 		}
+
+		if (!$result) {
+			$this->setRedirect(Uri::base());
+
+			return $result;
+		}
+
+		$params = $this->getModel('Location', 'DPCalendarModel', ['ignore_request' => false])->getState('params', new Registry());
+		if ($redirect = $params->get('location_form_redirect')) {
+			$article = Table::getInstance('Content');
+			$article->load($redirect);
+
+			if ($article->id) {
+				$this->setRedirect(Route::_('index.php?option=com_content&view=article&id=' . $article->id . '&catid=' . $article->catid));
+
+				return $result;
+			}
+		}
+
+		$this->setRedirect(
+			DPCalendarHelperRoute::getLocationRoute($this->getModel()->getItem(Factory::getApplication()->getUserState('dpcalendar.location.id')))
+		);
 
 		return $result;
 	}
 
 	public function cancel($key = 'l_id')
 	{
-		$return = parent::cancel($key);
+		$success = parent::cancel($key);
+		$return  = $this->getReturnPage();
 
-		// Redirect to the return page.
-		$this->setRedirect($this->getReturnPage());
+		$params = $this->getModel('Location', 'DPCalendarModel', ['ignore_request' => false])->getState('params', new Registry());
+		if ($return === Uri::base() && $redirect = $params->get('location_form_redirect')) {
+			$article = Table::getInstance('Content');
+			$article->load($redirect);
 
-		return $return;
+			if ($article->id) {
+				$this->setRedirect(Route::_('index.php?option=com_content&view=article&id=' . $article->id . '&catid=' . $article->catid));
+
+				return $success;
+			}
+		}
+
+		// Redirect to the return page
+		$this->setRedirect($return);
+
+		return $success;
 	}
 
 	public function delete($key = 'l_id')
@@ -89,7 +131,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 		if (!$this->allowDelete([
 			$key => $recordId
 		], $key)) {
-			$this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
+			$this->setError(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
 			$this->setMessage($this->getError(), 'error');
 
 			$this->setRedirect($this->getReturnPage());
@@ -99,7 +141,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 
 		$this->getModel()->publish($recordId, -2);
 		if (!$this->getModel()->delete($recordId)) {
-			$this->setError(JText::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
+			$this->setError(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
 			$this->setMessage($this->getModel()
 				->getError(), 'error');
 
@@ -109,7 +151,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 		}
 
 		// Redirect to the return page.
-		$this->setRedirect($this->getReturnPage(), JText::_('COM_DPCALENDAR_DELETE_SUCCESS'), 'success');
+		$this->setRedirect($this->getReturnPage(), Text::_('COM_DPCALENDAR_DELETE_SUCCESS'), 'success');
 
 		return true;
 	}
@@ -144,10 +186,10 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 	{
 		$return = $this->input->getBase64('return');
 
-		if (empty($return) || !JUri::isInternal(base64_decode($return))) {
-			return JURI::base();
-		} else {
-			return base64_decode($return);
+		if (empty($return) || !Uri::isInternal(base64_decode($return))) {
+			return Uri::base();
 		}
+
+		return base64_decode($return);
 	}
 }

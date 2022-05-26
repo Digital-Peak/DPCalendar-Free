@@ -10,6 +10,7 @@ namespace DPCalendar\View;
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DateHelper;
+use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\LayoutHelper;
 use DPCalendar\Helper\UserHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
@@ -18,6 +19,7 @@ use DPCalendar\Translator\Translator;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\FormModel;
 use Joomla\CMS\MVC\View\HtmlView;
@@ -108,11 +110,11 @@ class BaseView extends HtmlView
 			HTMLHelper::_('behavior.keepalive');
 			HTMLHelper::_('behavior.formvalidator');
 
-			if ($this->params->get('save_history') && \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
+			if ($this->params->get('save_history') && DPCalendarHelper::isJoomlaVersion('4', '<')) {
 				HTMLHelper::_('behavior.modal', 'a.modal_jform_contenthistory');
 			}
 
-			if ($this->app->isClient('administrator') && \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
+			if ($this->app->isClient('administrator') && DPCalendarHelper::isJoomlaVersion('4', '<')) {
 				HTMLHelper::_('behavior.tabstate');
 			}
 		}
@@ -125,7 +127,7 @@ class BaseView extends HtmlView
 			// Only render the sidebar when we are not editing a form, modal or Joomla 4
 			if (!($this->getModel() instanceof AdminModel)
 				&& $this->input->get('tmpl') != 'component'
-				&& \DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<')) {
+				&& DPCalendarHelper::isJoomlaVersion('4', '<')) {
 				$this->sidebar = \JHtmlSidebar::render();
 			} else {
 				$this->sidebar = null;
@@ -155,10 +157,10 @@ class BaseView extends HtmlView
 		// Check for empty title and add site name if param is set
 		$title = $this->getDocumentTitle();
 		if ($this->app->get('sitename_pagetitles', 0) == 1) {
-			$title = \JText::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
+			$title = Text::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
 		}
 		if ($this->app->get('sitename_pagetitles', 0) == 2) {
-			$title = \JText::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
+			$title = Text::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
 		}
 
 		$this->document->setTitle($title);

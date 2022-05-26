@@ -26,6 +26,13 @@ if (!empty($this->event->tickets)) {
 	$this->translator->translateJS('JNO');
 }
 
+if (!empty($this->seriesEvents)) {
+	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_MODIFIED');
+	$this->translator->translateJS('JYES');
+	$this->translator->translateJS('JNO');
+	$this->dpdocument->addScriptOptions('event.form.seriesevents',$this->seriesEvents);
+}
+
 $this->translator->translateJS('COM_DPCALENDAR_OPTIONS');
 
 $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id);

@@ -10,17 +10,19 @@ namespace DPCalendar\Booking\Stages;
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Mail\Mail;
 use League\Pipeline\StageInterface;
 
 class SendNotificationMail implements StageInterface
 {
 	/**
-	 * @var \JMail
+	 * @var Mail
 	 */
 	private $mailer = null;
 
-	public function __construct(\JMail $mailer)
+	public function __construct(Mail $mailer)
 	{
 		$this->mailer = $mailer;
 	}
@@ -39,7 +41,7 @@ class SendNotificationMail implements StageInterface
 			null,
 			$payload->mailVariables
 		);
-		$body    = DPCalendarHelper::renderEvents(
+		$body = DPCalendarHelper::renderEvents(
 			$payload->eventsWithTickets,
 			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_BODY'),
 			null,
@@ -48,31 +50,35 @@ class SendNotificationMail implements StageInterface
 
 		$calendarGroups = [];
 		foreach ($payload->eventsWithTickets as $e) {
-			$calendarGroups = array_merge($calendarGroups, \DPCalendarHelper::getCalendar($e->catid)->params->get('notification_groups_book', []));
+			$calendarGroups = array_merge($calendarGroups, DPCalendarHelper::getCalendar($e->catid)->params->get('notification_groups_book', []));
 		}
-		$emails = DPCalendarHelper::sendMail($subject, $body, 'notification_groups_book', $calendarGroups);
+		$emails = DPCalendarHelper::sendMail($subject, $body, 'notification_groups_book', $calendarGroups, $payload->item->email);
 
-		if ($payload->mailParams->get('booking_send_mail_author', 1)) {
-			// Send to the authors of the events
-			$authors = [];
-			foreach ($payload->eventsWithTickets as $e) {
-				// Ignore already sent out mails
-				if (array_key_exists($e->created_by, $emails)) {
-					continue;
-				}
+		if (!$payload->mailParams->get('booking_send_mail_author', 1)) {
+			return $payload;
+		}
 
-				$authors[$e->created_by] = $e->created_by;
+		// Send to the authors of the events
+		$authors = [];
+		foreach ($payload->eventsWithTickets as $e) {
+			// Ignore already sent out mails
+			if (array_key_exists($e->created_by, $emails)) {
+				continue;
 			}
-			foreach ($authors as $authorId) {
-				$mailer = clone $this->mailer;
-				$mailer->setSubject($subject);
-				$mailer->setBody($body);
-				$mailer->IsHTML(true);
-				$mailer->addRecipient(\JFactory::getUser($authorId)->email);
-				try {
-					$mailer->Send();
-				} catch (\Exception $e) {
-				}
+
+			$authors[$e->created_by] = $e->created_by;
+		}
+
+		foreach ($authors as $authorId) {
+			$mailer = clone $this->mailer;
+			$mailer->setFrom($payload->item->email);
+			$mailer->setSubject($subject);
+			$mailer->setBody($body);
+			$mailer->IsHTML(true);
+			$mailer->addRecipient(Factory::getUser($authorId)->email);
+			try {
+				$mailer->Send();
+			} catch (\Exception $e) {
 			}
 		}
 

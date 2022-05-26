@@ -27,12 +27,23 @@
 		};
 		const startInput = document.querySelector('input[name="filter[search_start]"]');
 		if (startInput) {
-			startInput.addEventListener('change', (e) => startInput.form.submit());
+			startInput.addEventListener('change', (e) => {
+				if (startInput.classList.contains('dp-datepicker__input') && !startInput.dpPikaday) {
+					return;
+				}
+				endInput.form.submit();
+			});
 			loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
 		}
+		Array.from(document.querySelectorAll('.dp-event__state div[role="tooltip"]')).forEach((state) => state.remove());
 		const endInput = document.querySelector('input[name="filter[search_end]"]');
 		if (endInput) {
-			endInput.addEventListener('change', (e) => endInput.form.submit());
+			endInput.addEventListener('change', (e) => {
+				if (endInput.classList.contains('dp-datepicker__input') && !endInput.dpPikaday) {
+					return;
+				}
+				endInput.form.submit();
+			});
 		}
 		const closeButton = document.querySelector('.com-dpcalendar-events .dp-button-close');
 		if (closeButton) {

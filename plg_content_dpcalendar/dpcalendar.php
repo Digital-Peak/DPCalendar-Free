@@ -7,7 +7,11 @@
 
 defined('_JEXEC') or die();
 
-use Joomla\CMS\Factory;
+use DPCalendar\Helper\DateHelper;
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\HTML\Document\HtmlDocument;
+use DPCalendar\Router\Router;
+use DPCalendar\Translator\Translator;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -18,6 +22,9 @@ class PlgContentDPCalendar extends CMSPlugin
 {
 	/** @var \Joomla\CMS\Application\CMSApplication */
 	protected $app;
+
+	/** @var JDatabaseDriver */
+	protected $db;
 
 	protected $autoloadLanguage = true;
 
@@ -151,6 +158,35 @@ class PlgContentDPCalendar extends CMSPlugin
 		return true;
 	}
 
+	public function onContentAfterDisplay($context, $item)
+	{
+		if ($context !== 'com_contact.contact' || !$item->user_id) {
+			return;
+		}
+
+		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+
+		// Load the model
+		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model->setState('list.start-date', 0);
+		$model->setState('filter.author', $item->user_id);
+		$authoredEvents = $model->getItems();
+
+		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
+		$model->setState('list.start-date', 0);
+		$model->setState('filter.hosts', $item->user_id);
+		$hostEvents = $model->getItems();
+
+		$router     = new Router();
+		$dateHelper = new DateHelper();
+		$document   = new HtmlDocument();
+		$translator = new Translator();
+
+		ob_start();
+		include PluginHelper::getLayoutPath('content', 'dpcalendar', 'contact/events');
+		return ob_get_clean();
+	}
+
 	public function onContentAfterDelete($context, $item)
 	{
 		// Check if it is a category to delete
@@ -173,13 +209,12 @@ class PlgContentDPCalendar extends CMSPlugin
 		$model = BaseDatabaseModel::getInstance('Form', 'DPCalendarModel', ['ignore_request' => true]);
 
 		// Select all events which do belong to the category
-		$db    = Factory::getDbo();
-		$query = $db->getQuery(true);
+		$query = $this->db->getQuery(true);
 		$query->select('id')->from('#__dpcalendar_events')->where('original_id in (0, -1) and catid=' . (int)$item->id);
-		$db->setQuery($query);
+		$this->db->setQuery($query);
 
 		// Loop over the events
-		foreach ($db->loadAssocList() as $eventId) {
+		foreach ($this->db->loadAssocList() as $eventId) {
 			// We are using here the model to properly trigger the events
 
 			// Unpublish it first

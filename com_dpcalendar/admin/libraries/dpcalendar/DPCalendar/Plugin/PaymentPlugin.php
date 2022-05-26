@@ -4,23 +4,30 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Plugin;
 
 defined('_JEXEC') or die();
 
 use DigitalPeak\ThinHTTP as HTTP;
+use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\LayoutHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
 use DPCalendar\Translator\Translator;
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Layout\LayoutHelper as LayoutLayoutHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Router\Route;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
 
-\JLoader::import('joomla.plugin.plugin');
-\JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
 
 /**
  * Base plugin for all payment gateway plugins of DPCalendar.
  */
-abstract class PaymentPlugin extends \JPlugin
+abstract class PaymentPlugin extends CMSPlugin
 {
 	/**
 	 * Should a notification being sent after the callback.
@@ -66,7 +73,7 @@ abstract class PaymentPlugin extends \JPlugin
 		$purchaseParameters = $this->getPurchaseParameters($booking);
 
 		// Render the form of the plugin
-		return \JLayoutHelper::render(
+		return LayoutLayoutHelper::render(
 			'purchase.form',
 			[
 				'booking'         => $booking,
@@ -92,8 +99,8 @@ abstract class PaymentPlugin extends \JPlugin
 	protected function getPurchaseParameters($booking)
 	{
 		// Compile the root url for the callback
-		$rootURL    = rtrim(\JURI::base(), '/');
-		$subpathURL = \JURI::base(true);
+		$rootURL    = rtrim(Uri::base(), '/');
+		$subpathURL = Uri::base(true);
 		if (!empty($subpathURL) && ($subpathURL != '/')) {
 			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
@@ -102,6 +109,9 @@ abstract class PaymentPlugin extends \JPlugin
 		if ($t = $this->app->input->get('tmpl')) {
 			$tmpl = '&tmpl=' . $t;
 		}
+		if ($t = $this->app->input->get('token')) {
+			$tmpl = '&token=' . $t;
+		}
 		if ($t = $this->app->input->getInt('Itemid')) {
 			$tmpl .= '&Itemid=' . $t;
 		}
@@ -109,12 +119,12 @@ abstract class PaymentPlugin extends \JPlugin
 		// The payment parameters
 		$purchaseParameters             = [];
 		$purchaseParameters['amount']   = $booking->price;
-		$purchaseParameters['currency'] = strtoupper(\DPCalendarHelper::getComponentParameter('currency', 'USD'));
+		$purchaseParameters['currency'] = strtoupper(DPCalendarHelper::getComponentParameter('currency', 'USD'));
 
 		// The urls for call back actions
-		$purchaseParameters['returnUrl'] = \JRoute::_('index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . $tmpl, false);
+		$purchaseParameters['returnUrl'] = Route::_('index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . $tmpl, false);
 		$purchaseParameters['returnUrl'] = $rootURL . $purchaseParameters['returnUrl'];
-		$purchaseParameters['cancelUrl'] = \JRoute::_('index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . $tmpl, false);
+		$purchaseParameters['cancelUrl'] = Route::_('index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $booking->id . $tmpl, false);
 		$purchaseParameters['cancelUrl'] = $rootURL . $purchaseParameters['cancelUrl'];
 
 		return $purchaseParameters;
@@ -185,8 +195,8 @@ abstract class PaymentPlugin extends \JPlugin
 		$data['id'] = $booking->id;
 
 		// Get the booking table
-		\JTable::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
-		$booking = \JTable::getInstance('Booking', 'DPCalendarTable');
+		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
+		$booking = Table::getInstance('Booking', 'DPCalendarTable');
 
 		// Load the booking so we can update only the values from the data array
 		$booking->load($data['id']);
@@ -195,7 +205,7 @@ abstract class PaymentPlugin extends \JPlugin
 		$data = array_merge($booking ? $booking->getProperties() : [], $data);
 
 		// Save the data and make sure no valid event is triggered
-		\JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['event_after_save' => 'dontusethisevent'])->save($data);
+		BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['event_after_save' => 'dontusethisevent'])->save($data);
 
 		return true;
 	}
@@ -255,7 +265,7 @@ abstract class PaymentPlugin extends \JPlugin
 		}
 
 		// Redirect to pay.cancel task
-		$this->app->redirect(\JRoute::_('index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $data['b_id'], false));
+		$this->app->redirect(Route::_('index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $data['b_id'], false));
 	}
 
 	/**

@@ -7,17 +7,30 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\Location;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+use Joomla\CMS\Tag\TaggableTableInterface;
+use Joomla\CMS\Tag\TaggableTableTrait;
+use Joomla\CMS\Versioning\VersionableTableInterface;
 use Joomla\Registry\Registry;
+use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
 
-class DPCalendarTableLocation extends JTable
+class DPCalendarTableLocation extends Table implements TaggableTableInterface, VersionableTableInterface
 {
+	use TaggableTableTrait;
+
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_locations', 'id', $db);
 
 		if (DPCalendarHelper::isJoomlaVersion('4', '<')) {
 			JObserverMapper::addObserverClassToClass('JTableObserverTags', 'DPCalendarTableLocation', ['typeAlias' => 'com_dpcalendar.location']);
+		} else {
+			$this->typeAlias = 'com_dpcalendar.location';
 		}
 
 		$this->setColumnAlias('published', 'state');
@@ -54,8 +67,8 @@ class DPCalendarTableLocation extends JTable
 
 	public function store($updateNulls = false)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		$date = DPCalendarHelper::getDate();
+		$user = Factory::getUser();
 		if ($this->id) {
 			// Existing item
 			$this->modified    = $date->toSql();
@@ -80,9 +93,9 @@ class DPCalendarTableLocation extends JTable
 		}
 
 		// Verify that the alias is unique
-		$table = JTable::getInstance('Location', 'DPCalendarTable');
+		$table = Table::getInstance('Location', 'DPCalendarTable');
 		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id == 0)) {
-			$this->setError(JText::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_LOCATION') . ': ' . $table->alias);
+			$this->setError(Text::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_LOCATION') . ': ' . $table->alias);
 
 			return false;
 		}
@@ -95,7 +108,7 @@ class DPCalendarTableLocation extends JTable
 	{
 		// Check for valid name
 		if (trim($this->title) == '') {
-			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
+			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
 
 			return false;
 		}
@@ -106,7 +119,7 @@ class DPCalendarTableLocation extends JTable
 
 		$xid = (int)$this->_db->loadResult();
 		if ($xid && $xid != (int)$this->id) {
-			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
+			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 
 			return false;
 		}
@@ -114,14 +127,14 @@ class DPCalendarTableLocation extends JTable
 		if (empty($this->alias)) {
 			$this->alias = $this->title;
 		}
-		$this->alias = JApplicationHelper::stringURLSafe($this->alias);
+		$this->alias = ApplicationHelper::stringURLSafe($this->alias);
 		if (trim(str_replace('-', '', $this->alias)) == '') {
-			$this->alias = JFactory::getDate()->format("Y-m-d-H-i-s");
+			$this->alias = DPCalendarHelper::getDate()->format("Y-m-d-H-i-s");
 		}
 
 		// Check the publish down date is not earlier than publish up.
 		if ($this->publish_down > $this->_db->getNullDate() && $this->publish_down < $this->publish_up) {
-			$this->setError(JText::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
+			$this->setError(Text::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
 
 			return false;
 		}
@@ -131,7 +144,7 @@ class DPCalendarTableLocation extends JTable
 		if (!empty($this->metakey)) {
 			$bad_characters = ["\n", "\r", "\"", "<", ">"];
 
-			$after_clean = \Joomla\String\StringHelper::str_ireplace($bad_characters, "", $this->metakey);
+			$after_clean = StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys        = explode(',', $after_clean);
 			$clean_keys  = [];
 			foreach ($keys as $key) {
@@ -147,7 +160,7 @@ class DPCalendarTableLocation extends JTable
 		}
 
 		if (empty($this->color)) {
-			$this->color = \DPCalendar\Helper\Location::getColor($this);
+			$this->color = Location::getColor($this);
 		}
 		$this->color = str_replace('#', '', $this->color);
 
@@ -169,7 +182,7 @@ class DPCalendarTableLocation extends JTable
 			if ($this->$k) {
 				$pks = [$this->$k];
 			} else {
-				$this->setError(JText::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
+				$this->setError(Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 
 				return false;
 			}
@@ -199,16 +212,15 @@ class DPCalendarTableLocation extends JTable
 			return false;
 		}
 
-		// If checkin is supported and all rows were adjusted, check them in.
+		// If checkin is supported and all rows were adjusted, check them in
 		if ($checkin && (count($pks) == $this->_db->getAffectedRows())) {
-			// Checkin the rows.
+			// Checkin the rows
 			foreach ($pks as $pk) {
 				$this->checkin($pk);
 			}
 		}
 
-		// If the JTable instance value is in the list of primary keys that were
-		// set, set the instance.
+		// If the JTable instance value is in the list of primary keys that were set, set the instance.
 		if (in_array($this->$k, $pks)) {
 			$this->state = $state;
 		}
@@ -216,5 +228,10 @@ class DPCalendarTableLocation extends JTable
 		$this->setError('');
 
 		return true;
+	}
+
+	public function getTypeAlias()
+	{
+		return $this->typeAlias;
 	}
 }

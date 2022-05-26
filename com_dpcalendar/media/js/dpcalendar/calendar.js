@@ -326,6 +326,8 @@
 				let start = form.querySelector('#jform_start_date');
 				start.value = date.format(start.getAttribute('data-format'));
 				start.actualDate = start.value;
+				start.setAttribute('data-date', date.format('YYYY-MM-DD'));
+				start.dpPikaday.setDate(date.format('YYYY-MM-DD'));
 				start = form.querySelector('#jform_start_date_time');
 				start.value = date.format(start.getAttribute('data-format'));
 				start.actualDate = start.value;
@@ -333,6 +335,8 @@
 				let end = form.querySelector('#jform_end_date');
 				end.value = date.format(end.getAttribute('data-format'));
 				end.actualDate = end.value;
+				end.setAttribute('data-date', date.format('YYYY-MM-DD'));
+				end.dpPikaday.setDate(date.format('YYYY-MM-DD'));
 				end = form.querySelector('#jform_end_date_time');
 				end.value = date.format(end.getAttribute('data-format'));
 				end.actualDate = end.value;
@@ -569,7 +573,8 @@
 						options['requestUrlRoot'] + '&ids=' + calId + '&date-start=' + fetchInfo.startStr + '&date-end=' + fetchInfo.endStr,
 						(json) => successCallback(json.data),
 						null,
-						false
+						false,
+						'GET'
 					);
 				}
 			};

@@ -14,7 +14,9 @@ use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\User;
+use Joomla\Registry\Registry;
 use League\Pipeline\StageInterface;
+use Sabre\VObject\UUIDUtil;
 
 class SetupForNew implements StageInterface
 {
@@ -39,6 +41,11 @@ class SetupForNew implements StageInterface
 	private $couponModel = null;
 
 	/**
+	 * @var Registry
+	 */
+	private $params;
+
+	/**
 	 * @var bool
 	 */
 	private $autoAssignUser = false;
@@ -48,12 +55,14 @@ class SetupForNew implements StageInterface
 		User $user,
 		\DPCalendarModelTaxrate $taxRateModel,
 		\DPCalendarModelCoupon $couponModel,
+		Registry $params,
 		$autoAssignUser
 	) {
 		$this->application    = $application;
 		$this->user           = $user;
 		$this->taxRateModel   = $taxRateModel;
 		$this->couponModel    = $couponModel;
+		$this->params         = $params;
 		$this->autoAssignUser = $autoAssignUser;
 	}
 
@@ -138,6 +147,10 @@ class SetupForNew implements StageInterface
 			$payload->data['tax']      = ($payload->data['price'] / 100) * $taxRate->rate;
 			$payload->data['price']    = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);
 			$payload->data['tax_rate'] = $taxRate->rate;
+		}
+
+		if ($this->params->get('bookingsys_enable_token')) {
+			$payload->data['token'] = bin2hex(random_bytes(16));
 		}
 
 		return $payload;

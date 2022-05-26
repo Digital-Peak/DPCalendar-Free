@@ -4,6 +4,7 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
@@ -46,7 +47,8 @@ class SetupForMail implements StageInterface
 			'bookingLink'       => \DPCalendarHelperRoute::getBookingRoute($payload->item, true),
 			'bookingCancelLink' => Route::link(
 				'site',
-				'index.php?option=com_dpcalendar&task=booking.cancel&b_id=' . $payload->item->id,
+				'index.php?option=com_dpcalendar&task=booking.cancel&b_id=' . $payload->item->id
+					. ($payload->item->token ? '&token=' . $payload->item->token : ''),
 				false,
 				Route::TLS_IGNORE,
 				true

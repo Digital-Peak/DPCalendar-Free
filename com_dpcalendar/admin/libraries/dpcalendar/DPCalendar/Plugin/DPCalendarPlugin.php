@@ -730,6 +730,8 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$event->created              = '';
 		$event->created_by           = 0;
 		$event->created_by_alias     = '';
+		$event->host_ids             = '';
+		$event->hostContacts         = [];
 		$event->modified             = '';
 		$event->modified_by          = 0;
 		$event->params               = '';

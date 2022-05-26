@@ -4,13 +4,14 @@
  * @copyright Copyright (C) 2021 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 if (!$this->event->locations || !$this->params->get('event_show_location', '2')) {
 	return;
 }
 ?>
-<dl class="dp-description">
+<dl class="dp-description dp-information__locations">
 	<dt class="dp-description__label">
 		<?php echo $this->translate('COM_DPCALENDAR_LOCATION' . (count($this->event->locations) > 1 ? 'S' : '')); ?>
 	</dt>

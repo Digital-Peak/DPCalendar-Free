@@ -4,7 +4,11 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
 
 $this->layoutHelper->renderLayout('block.map', $this->displayData);
 $this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
@@ -20,6 +24,13 @@ if (!empty($this->event->tickets)) {
 	$this->translator->translateJS('JYES');
 	$this->translator->translateJS('JNO');
 }
+
+if (!empty($this->seriesEvents)) {
+	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_MODIFIED');
+	$this->translator->translateJS('JYES');
+	$this->translator->translateJS('JNO');
+	$this->dpdocument->addScriptOptions('event.form.seriesevents',$this->seriesEvents);
+}
 ?>
 <div class="com-dpcalendar-eventform">
 	<div class="com-dpcalendar-eventform__loader">
@@ -29,7 +40,7 @@ if (!empty($this->event->tickets)) {
 		<h4 class="dp-info-box"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_ORIGINAL_WARNING'); ?></h4>
 	<?php } else if (!empty($this->event->original_id)) { ?>
 		<h4 class="dp-info-box">
-			<?php echo JText::sprintf(
+			<?php echo Text::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_GOTO_ORIGINAL',
 				$this->router->getEventFormRoute($this->event->original_id, $this->returnPage ? base64_decode($this->returnPage) : '')
 			); ?>
@@ -47,9 +58,9 @@ if (!empty($this->event->tickets)) {
 				<?php echo $this->form->getField('alias')->renderField(['class' => 'dp-field-alias']); ?>
 			<?php } ?>
 		</div>
-		<?php echo JHtml::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
+		<?php echo HTMLHelper::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
-			<?php echo JHtml::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
+			<?php echo HTMLHelper::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<?php foreach ($this->form->getFieldset($name) as $field) { ?>
 				<?php if ($field->fieldname == 'title' || $field->fieldname == 'alias') { ?>
 					<?php continue; ?>
@@ -59,11 +70,11 @@ if (!empty($this->event->tickets)) {
 			<?php if ($name == 'location') { ?>
 				<?php echo $this->loadTemplate('map'); ?>
 			<?php } ?>
-			<?php echo JHtml::_('bootstrap.endTab'); ?>
+			<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
 		<?php } ?>
-		<?php echo JHtml::_('bootstrap.endTabSet'); ?>
+		<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<input type="hidden" name="template_event_id" class="dp-input dp-input-hidden">
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 </div>

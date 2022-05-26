@@ -19,10 +19,10 @@
 			<option value="-2">JTRASHED</option>
 		</field>
 
-		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
 		       label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
 
-		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
 		       label="JGLOBAL_FIELD_MODIFIED_LABEL"/>
 
 		<field name="checked_out" type="hidden" filter="unset"/>

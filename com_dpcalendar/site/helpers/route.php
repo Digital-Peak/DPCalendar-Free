@@ -4,9 +4,15 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Categories\CategoryNode;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
+use Joomla\CMS\Uri\Uri;
 
 class DPCalendarHelperRoute
 {
@@ -22,13 +28,13 @@ class DPCalendarHelperRoute
 
 		// Create the link
 		$link = 'index.php?option=com_dpcalendar&view=event&id=' . $id;
-		if ($tmpl = JFactory::getApplication()->input->getWord('tmpl')) {
+		if ($tmpl = Factory::getApplication()->input->getWord('tmpl')) {
 			$link .= '&tmpl=' . $tmpl;
 		}
 
 		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-		if (\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+		if (DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
 			$link .= '&calid=' . $calId;
 			if ($defaultItemId) {
 				$link .= '&force_item_id=' . $defaultItemId;
@@ -51,7 +57,7 @@ class DPCalendarHelperRoute
 		}
 
 		if (!$autoRoute) {
-			return ($full ? JUri::root() : '') . $link;
+			return ($full ? Uri::root() : '') . $link;
 		}
 
 		return Route::_($link, false, Route::TLS_IGNORE, $full);
@@ -62,14 +68,14 @@ class DPCalendarHelperRoute
 		if ($id) {
 			$link = 'index.php?option=com_dpcalendar&task=event.edit&e_id=' . $id;
 		} else {
-			if (JFactory::getApplication()->isClient('administrator')) {
+			if (Factory::getApplication()->isClient('administrator')) {
 				$link = 'index.php?option=com_dpcalendar&task=event.add&e_id=0';
 			} else {
 				$link = 'index.php?option=com_dpcalendar&view=form&e_id=0';
 			}
 		}
 
-		$itemId = JFactory::getApplication()->input->get('Itemid', null);
+		$itemId = Factory::getApplication()->input->get('Itemid', null);
 		if (!empty($itemId)) {
 			$link .= '&Itemid=' . $itemId;
 		}
@@ -77,8 +83,8 @@ class DPCalendarHelperRoute
 		if (!empty($append)) {
 			$link .= '&' . $append;
 		}
-		if (JFactory::getApplication()->input->getWord('tmpl')) {
-			$link .= '&tmpl=' . JFactory::getApplication()->input->getWord('tmpl');
+		if (Factory::getApplication()->input->getWord('tmpl')) {
+			$link .= '&tmpl=' . Factory::getApplication()->input->getWord('tmpl');
 		}
 		if ($return) {
 			$link .= '&return=' . base64_encode($return);
@@ -90,13 +96,13 @@ class DPCalendarHelperRoute
 	public static function getLocationRoute($location, $full = false)
 	{
 		// Create the link
-		$link = ($full ? JUri::root() : '') . 'index.php?option=com_dpcalendar&view=location&id=' . $location->id;
+		$link = ($full ? Uri::root() : '') . 'index.php?option=com_dpcalendar&view=location&id=' . $location->id;
 
-		if ($tmpl = JFactory::getApplication()->input->getWord('tmpl')) {
+		if ($tmpl = Factory::getApplication()->input->getWord('tmpl')) {
 			$link .= '&tmpl=' . $tmpl;
 		}
 
-		if (!\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+		if (!DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
 			$needles = ['location' => [(int)$location->id], 'locations' => [(int)$location->id]];
 			if ($item = self::findItem($needles)) {
 				$link .= '&Itemid=' . $item;
@@ -105,7 +111,7 @@ class DPCalendarHelperRoute
 			}
 		}
 
-		return JRoute::_($link, false);
+		return Route::_($link, false);
 	}
 
 	public static function getLocationFormRoute($id, $return = null)
@@ -116,15 +122,15 @@ class DPCalendarHelperRoute
 			$link = 'index.php?option=com_dpcalendar&view=locationform&l_id=0';
 		}
 
-		if (!\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
-			$itemId = JFactory::getApplication()->input->get('Itemid', null);
+		if (!DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+			$itemId = Factory::getApplication()->input->get('Itemid', null);
 			if (!empty($itemId)) {
 				$link .= '&Itemid=' . $itemId;
 			}
 		}
 
-		if (JFactory::getApplication()->input->getWord('tmpl')) {
-			$link .= '&tmpl=' . JFactory::getApplication()->input->getWord('tmpl');
+		if (Factory::getApplication()->input->getWord('tmpl')) {
+			$link .= '&tmpl=' . Factory::getApplication()->input->getWord('tmpl');
 		}
 		if ($return) {
 			$link .= '&return=' . base64_encode($return);
@@ -139,12 +145,16 @@ class DPCalendarHelperRoute
 		$args['view'] = 'booking';
 		$args['uid']  = $booking->uid;
 
+		if ($booking->token) {
+			$args['token'] = $booking->token;
+		}
+
 		$uri = self::getUrl($args, false);
 
-		$url = JRoute::_($uri->toString(['path', 'query', 'fragment']), false);
+		$url = Route::_($uri->toString(['path', 'query', 'fragment']), false);
 		if ($full) {
-			$url = ($full ? JUri::getInstance()->toString(['host', 'port', 'scheme']) : '') .
-				JRoute::_('index.php' . $uri->toString(['query', 'fragment']), false);
+			$url = ($full ? Uri::getInstance()->toString(['host', 'port', 'scheme']) : '') .
+				Route::_('index.php' . $uri->toString(['query', 'fragment']), false);
 		}
 
 		// When a booking is created on the back end it contains the administrator part
@@ -154,7 +164,7 @@ class DPCalendarHelperRoute
 	public static function getBookingsRoute($eventId)
 	{
 		$url  = 'index.php?option=com_dpcalendar&view=bookings';
-		$tmpl = JFactory::getApplication()->input->getWord('tmpl');
+		$tmpl = Factory::getApplication()->input->getWord('tmpl');
 		if ($tmpl) {
 			$url .= '&tmpl=' . $tmpl;
 		}
@@ -162,7 +172,7 @@ class DPCalendarHelperRoute
 			$url .= '&e_id=' . $eventId;
 		}
 
-		return JRoute::_($url);
+		return Route::_($url);
 	}
 
 	public static function getInviteRoute($event, $return = null)
@@ -171,7 +181,7 @@ class DPCalendarHelperRoute
 		$args['view'] = 'invite';
 		$args['id']   = $event->id;
 		if (empty($return)) {
-			$return = JUri::getInstance()->toString();
+			$return = Uri::getInstance()->toString();
 		}
 		$args['return'] = base64_encode($return);
 
@@ -185,12 +195,16 @@ class DPCalendarHelperRoute
 		$args['uid']    = $booking->uid;
 		$args['accept'] = $accept ? '1' : '0';
 
+		if ($booking->token) {
+			$args['token'] = $booking->token;
+		}
+
 		$uri = self::getUrl($args, false);
 
-		$url = JRoute::_($uri->toString(['path', 'query', 'fragment']), false);
+		$url = Route::_($uri->toString(['path', 'query', 'fragment']), false);
 		if ($full) {
-			$url = ($full ? JUri::getInstance()->toString(['host', 'port', 'scheme']) : '') .
-				JRoute::_('index.php' . $uri->toString(['query', 'fragment']), false);
+			$url = ($full ? Uri::getInstance()->toString(['host', 'port', 'scheme']) : '') .
+				Route::_('index.php' . $uri->toString(['query', 'fragment']), false);
 		}
 
 		// When a booking is created on the back end it contains the administrator part
@@ -201,9 +215,14 @@ class DPCalendarHelperRoute
 	{
 		$args         = [];
 		$args['task'] = 'bookingform.edit';
-		$args['b_id'] = $bookingId;
+		$args['b_id'] = is_object($bookingId) ? $bookingId->id : $bookingId;
+
+		if (is_object($bookingId) && $bookingId->token) {
+			$args['token'] = $bookingId->token;
+		}
+
 		if (empty($return)) {
-			$return = JUri::getInstance()->toString();
+			$return = Uri::getInstance()->toString();
 		}
 		$args['return'] = base64_encode($return);
 
@@ -235,7 +254,7 @@ class DPCalendarHelperRoute
 		$args['uid']  = $ticket->uid;
 
 		$uri = self::getUrl($args, false);
-		$uri = $full ? $uri->toString() : JRoute::_($uri->toString(['path', 'query', 'fragment']));
+		$uri = $full ? $uri->toString() : Route::_($uri->toString(['path', 'query', 'fragment']));
 		$uri = str_replace('/administrator/', '/', $uri);
 
 		return $uri;
@@ -249,10 +268,10 @@ class DPCalendarHelperRoute
 
 		$uri = self::getUrl($args, false);
 
-		$url = JRoute::_($uri->toString(['path', 'query', 'fragment']), false);
+		$url = Route::_($uri->toString(['path', 'query', 'fragment']), false);
 		if ($full) {
-			$url = ($full ? JUri::getInstance()->toString(['host', 'port', 'scheme']) : '')
-				. JRoute::_('index.php' . $uri->toString(['query', 'fragment']), false);
+			$url = ($full ? Uri::getInstance()->toString(['host', 'port', 'scheme']) : '')
+				. Route::_('index.php' . $uri->toString(['query', 'fragment']), false);
 		}
 
 		// When a Ticket urls is created on the back end it contains the administrator part
@@ -284,7 +303,7 @@ class DPCalendarHelperRoute
 		$args['t_id'] = $ticketId;
 
 		if (empty($return)) {
-			$return = JUri::getInstance()->toString();
+			$return = Uri::getInstance()->toString();
 		}
 		$args['return'] = base64_encode($return);
 
@@ -298,7 +317,7 @@ class DPCalendarHelperRoute
 		$args['t_id'] = $ticketId;
 
 		if (empty($return)) {
-			$return = JUri::getInstance()->toString();
+			$return = Uri::getInstance()->toString();
 		}
 		$args['return'] = base64_encode($return);
 
@@ -307,7 +326,7 @@ class DPCalendarHelperRoute
 
 	public static function getCalendarIcalRoute($calId, $token = '')
 	{
-		$url = JUri::base();
+		$url = Uri::base();
 		$url .= 'index.php?option=com_dpcalendar&task=ical.download&id=' . $calId;
 
 		if ($token) {
@@ -319,7 +338,7 @@ class DPCalendarHelperRoute
 
 	public static function getCalendarRoute($calId)
 	{
-		if ($calId instanceof JCategoryNode) {
+		if ($calId instanceof CategoryNode) {
 			$id       = $calId->id;
 			$calendar = $calId;
 		} else {
@@ -350,7 +369,7 @@ class DPCalendarHelperRoute
 
 				if ($calendar) {
 					$calIds = [];
-					if ($calId instanceof JCategoryNode) {
+					if ($calId instanceof CategoryNode) {
 						$calIds = array_reverse($calendar->getPath());
 					} else {
 						$calIds[] = $calendar->id;
@@ -384,14 +403,14 @@ class DPCalendarHelperRoute
 
 	public static function findItem($needles = null)
 	{
-		$app   = JFactory::getApplication();
+		$app   = Factory::getApplication();
 		$menus = $app->getMenu('site');
 
 		// Prepare the reverse lookup array.
 		if (self::$lookup === null) {
 			self::$lookup = [];
 
-			$component = JComponentHelper::getComponent('com_dpcalendar');
+			$component = ComponentHelper::getComponent('com_dpcalendar');
 			$items     = $menus->getItems('component_id', $component->id);
 
 			if ($items) {
@@ -476,12 +495,12 @@ class DPCalendarHelperRoute
 
 	private static function getUrl($arguments = [], $route = true, $needles = [])
 	{
-		$uri = clone JUri::getInstance();
-		if (JFactory::getDocument()->getType() != 'html' || JFactory::getApplication()->isClient('site')) {
-			$uri = JUri::getInstance('index.php');
+		$uri = clone Uri::getInstance();
+		if (Factory::getDocument()->getType() != 'html' || Factory::getApplication()->isClient('site')) {
+			$uri = Uri::getInstance('index.php');
 		}
 		$uri->setQuery('');
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
 		if ($input->get('option') != 'com_dpcalendar' || strpos($uri->getPath(), 'index.php') !== false) {
 			$arguments['option'] = 'com_dpcalendar';
@@ -501,11 +520,7 @@ class DPCalendarHelperRoute
 		}
 
 		if ($route) {
-			return JRoute::_($uri->toString([
-				'path',
-				'query',
-				'fragment'
-			]));
+			return Route::_($uri->toString(['path', 'query', 'fragment']));
 		}
 
 		return $uri;

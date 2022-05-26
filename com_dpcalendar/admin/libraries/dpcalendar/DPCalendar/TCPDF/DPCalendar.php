@@ -4,6 +4,7 @@
  * @copyright  Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license    http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\TCPDF;
 
 use Joomla\Registry\Registry;
@@ -34,7 +35,8 @@ class DPCalendar extends \TCPDF
 	public function Footer()
 	{
 		$date = \DPCalendarHelper::getDate()->format(
-			$this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params->get('event_time_format', 'H:i')
+			$this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params->get('event_time_format', 'H:i'),
+			true
 		);
 		$this->Cell(45, 0, $date, 'T', 0, 'L', 0, '', 0, false, 'T', 'M');
 		$this->Cell(125, 0, $this->params->get('invoice_footer'), 'T', 0, 'C', 0, '', 0, false, 'T', 'M');

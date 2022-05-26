@@ -4,15 +4,21 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPCalendarViewForm extends \DPCalendar\View\BaseView
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\View\BaseView;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
+
+class DPCalendarViewForm extends BaseView
 {
 	public function init()
 	{
 		$user = $this->user;
 
-		JPluginHelper::importPlugin('dpcalendar');
+		PluginHelper::importPlugin('dpcalendar');
 
 		$this->app->getLanguage()->load('', JPATH_ADMINISTRATOR);
 
@@ -28,6 +34,28 @@ class DPCalendarViewForm extends \DPCalendar\View\BaseView
 
 		if (!$authorised && count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) < 1) {
 			return $this->handleNoAccess();
+		}
+
+		$this->seriesEvents = [];
+		if ($this->event->original_id == -1) {
+			$model = BaseDatabaseModel::getInstance('Adminevents', 'DPCalendarModel');
+			$model->getState();
+			$model->setState('filter.children', $this->event->id);
+			$model->setState('filter.modified', $this->event->modified);
+			$model->setState('filter.state', null);
+			$model->setState('filter.search_start', null);
+
+			foreach ($model->getItems() as $event) {
+				$e                 = new stdClass();
+				$e->title          = $event->title;
+				$e->formatted_date = $this->dateHelper->getDateStringFromEvent(
+					$event,
+					$this->params->get('event_form_date_format', 'd.m.Y'),
+					$this->params->get('event_form_time_format', 'H:i')
+				);
+				$e->edit_link         = $this->router->getEventRoute($event->id, $event->catid);
+				$this->seriesEvents[] = $e;
+			}
 		}
 
 		$requestParams = $this->input->get('jform', [], 'array');

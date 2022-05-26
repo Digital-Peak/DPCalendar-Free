@@ -10,13 +10,14 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\FormController;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\Utilities\ArrayHelper;
 
-class DPCalendarControllerEvent extends \Joomla\CMS\MVC\Controller\FormController
+class DPCalendarControllerEvent extends FormController
 {
 	protected $urlVar = 'e_id';
 

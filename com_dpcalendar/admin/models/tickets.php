@@ -155,7 +155,7 @@ class DPCalendarModelTickets extends ListModel
 			$query->where('a.user_id ' . $type . (int)$authorId);
 		} elseif ($this->getState('filter.public')) {
 			$query->where('public = 1');
-		} elseif (!$user->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
+		} elseif ($authorId !== false && !$user->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
 			if ($user->guest) {
 				$query->where('public = 1');
 			}

@@ -4,11 +4,11 @@
 	padding: 0;
 }
 .plg-content-dpcalendar-contact-events .dp-list > li {
-	border-bottom: 1px solid #dddddd;
+	border-bottom: 1px solid rgb(221, 221, 221);
 	padding: 1em 1em;
 }
 .plg-content-dpcalendar-contact-events .dp-list > li:first-child {
-	border-top: 1px solid #dddddd;
+	border-top: 1px solid rgb(221, 221, 221);
 }
 .plg-content-dpcalendar-contact-events .dp-list > li:nth-of-type(odd) {
 	background-color: #f2f2f2;

@@ -190,6 +190,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 		if (version_compare($version, '8.1.4') == -1 && file_exists(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates/mysql/6.0.0.sql')) {
 			unlink(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates/mysql/6.0.0.sql');
 		}
+
 		if (version_compare($version, '8.2.0')) {
 			$params = ComponentHelper::getParams('com_dpcalendar');
 			$params->set('calendar_filter_author', $params->get('show_my_only_calendar', '0') == '1' ? '-1' : '0');
@@ -198,6 +199,19 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			$params->set('locations_filter_author', $params->get('locations_show_my_only', '0') == '1' ? '-1' : '0');
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
+		if (version_compare($version, '8.3.0')) {
+			$db = Factory::getDBO();
+
+			if (!array_key_exists('xreference', $db->getTableColumns('#__dpcalendar_locations'))) {
+				$this->run('ALTER TABLE `#__dpcalendar_locations` ADD `xreference` VARCHAR(255) NULL');
+				$this->run('ALTER TABLE `#__dpcalendar_locations` ADD INDEX `idx_xreference` (`xreference`)');
+				$this->run('UPDATE `#__dpcalendar_locations` SET `xreference`= `title` WHERE id NOT IN (SELECT location_id FROM #__dpcalendar_events_location)');
+			}
+
+			if (!array_key_exists('token', $db->getTableColumns('#__dpcalendar_bookings'))) {
+				$this->run('ALTER TABLE `#__dpcalendar_bookings` ADD `token` VARCHAR(255) NULL DEFAULT NULL AFTER `raw_data`');
+			}
 		}
 	}
 

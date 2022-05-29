@@ -200,7 +200,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
-		if (version_compare($version, '8.3.0')) {
+		if (version_compare($version, '8.3.1')) {
 			$db = Factory::getDBO();
 
 			if (!array_key_exists('xreference', $db->getTableColumns('#__dpcalendar_locations'))) {

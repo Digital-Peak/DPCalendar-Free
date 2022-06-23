@@ -42,7 +42,7 @@ $actualTimezone = Factory::getSession()->get('user-timezone', $displayData['date
 ?>
 <form action="<?php echo Uri::base(); ?>" method="get" class="dp-timezone dp-form">
 	<span class="dp-timezone__label">
-		<?php echo $displayData['translator']->translate('COM_DPCALENDAR_CHOOSE_TIMEZONE'); ?>:
+		<?php echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_CHOOSE_TIMEZONE'); ?>:
 	</span>
 	<select name="tz" class="dp-select dp-timezone__select dp-select-container_unstyled">
 		<option value="UTC"<?php $actualTimezone == 'UTC' ? ' selected' : ''; ?>>
@@ -58,6 +58,11 @@ $actualTimezone = Factory::getSession()->get('user-timezone', $displayData['date
 			</optgroup>
 		<?php } ?>
 	</select>
+	<span class="dp-timezone__info dp-timezone__info_hidden">
+		<?php echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_DIFFERENT_TIMEZONE'); ?>
+		<a href="#" class="dp-link dp-link_confirm"><?php echo $displayData['translator']->translate('JYES'); ?></a>
+		<a href="#" class="dp-link dp-link_close"><?php echo $displayData['translator']->translate('JCLOSE'); ?></a>
+	</span>
 	<input type="hidden" name="task" value="profile.tz" class="dp-input dp-input-hidden">
 	<input type="hidden" name="option" value="com_dpcalendar" class="dp-input dp-input-hidden">
 	<input type="hidden" name="view" value="profile" class="dp-input dp-input-hidden">

@@ -21,8 +21,7 @@
 					selected.click();
 				}
 				if ((c === 27 || c === 9) && auto) {
-					DPCalendar.slideToggle(auto);
-					auto.parentElement.removeChild(auto);
+					DPCalendar.autocomplete.destroy(input);
 				}
 				if (c === 40 && selected && selected.nextElementSibling) {
 					selected.classList.remove('dp-autocomplete__result_selected');
@@ -50,20 +49,54 @@
 				if (!dropdown) {
 					return true;
 				}
-				DPCalendar.slideToggle(dropdown);
-				dropdown.parentElement.removeChild(dropdown);
+				DPCalendar.autocomplete.destroy(input);
 			});
 		});
 	};
-	DPCalendar.autocomplete.setItems = (input, items) => {
+	DPCalendar.autocomplete.show = (input) => {
 		let root = input.parentElement.querySelector('.dp-autocomplete');
-		if (root && root.items == items) {
+		if (!root || root.items < 1) {
+			return;
+		}
+		const results = Array.from(root.children);
+		let match = results.find((result) => result.dpItem.title == input.value);
+		if (!match) {
+			match = results.find((result) => result.dpItem.title.indexOf(input.value) > -1);
+		}
+		if (!match) {
+			match = results[0];
+		}
+		if (match) {
+			results.forEach((result) => result.classList.remove('dp-autocomplete__result_selected'));
+			match.classList.add('dp-autocomplete__result_selected');
+			root.scrollTop = match.offsetTop;
+		}
+		if (window.getComputedStyle(root).display !== 'none') {
+			return;
+		}
+		DPCalendar.slideToggle(root, () => match ? root.scrollTop = match.offsetTop : null);
+	};
+	DPCalendar.autocomplete.destroy = (input) => {
+		let root = input.parentElement.querySelector('.dp-autocomplete');
+		if (!root) {
+			return;
+		}
+		DPCalendar.slideToggle(root);
+		root.parentElement.removeChild(root);
+	};
+	DPCalendar.autocomplete.setItems = (input, items) => {
+		if (document.activeElement !== input) {
+			return;
+		}
+		let root = input.parentElement.querySelector('.dp-autocomplete');
+		if (root && root.items === items) {
+			DPCalendar.autocomplete.show(input);
 			return;
 		}
 		if (root) {
 			root.parentElement.removeChild(root);
 		}
-		if (items.length == 0) {
+		if (items.length === 0) {
 			return;
 		}
 		loadDPAssets(['/com_dpcalendar/js/popper/popper.js', '/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
@@ -76,9 +109,7 @@
 				e.href = '#';
 				e.innerHTML = '<strong class="dp-autocomplete__item-title">' + item.title + '</strong> <span class="dp-autocomplete__item-details">' + item.details + '</span>';
 				e.classList.add('dp-autocomplete__result');
-				if (item.title == input.value) {
-					e.classList.add('dp-autocomplete__result_selected');
-				}
+				e.dpItem = item;
 				e.addEventListener('click', (ev) => {
 					ev.preventDefault();
 					input.value = item.title;
@@ -89,10 +120,6 @@
 				e.addEventListener('mousedown', (ev) => ev.preventDefault());
 				root.appendChild(e);
 			});
-			if (items && !root.querySelector('.dp-autocomplete__result_selected')) {
-				root.querySelector('.dp-autocomplete__result').classList.add('dp-autocomplete__result_selected');
-			}
-			DPCalendar.slideToggle(root, () => root.scrollTop = root.querySelector('.dp-autocomplete__result_selected').offsetTop);
 			Popper.createPopper(input, root, {
 				placement: 'bottom-start',
 				modifiers: [{
@@ -108,6 +135,7 @@
 					requires: ['computeStyles']
 				}]
 			});
+			DPCalendar.autocomplete.show(input);
 		});
 	};
 })();

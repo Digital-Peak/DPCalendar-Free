@@ -32,15 +32,11 @@
 			}
 			const options = [];
 			while (minDate.isBefore(maxDate)) {
-				options.push({title: minDate.format(format), details: ''});
+				options.push({ title: minDate.format(format), details: '' });
 				minDate = minDate.add(element.getAttribute('data-step'), 'minute');
 			}
 			element.addEventListener('dp-autocomplete-change', () => DPCalendar.autocomplete.setItems(element, options));
-			element.addEventListener('dp-autocomplete-select', () => {
-				const event = document.createEvent('HTMLEvents');
-				event.initEvent('change');
-				element.dispatchEvent(event);
-			});
+			element.addEventListener('dp-autocomplete-select', () => element.dispatchEvent(new Event('change')));
 			element.addEventListener('change', (e) => {
 				const end = document.getElementById('jform_' + e.target.getAttribute('data-pair'));
 				if (!end || !e.target.actualDate || !e.target.value) {
@@ -53,13 +49,8 @@
 				e.target.actualDate = e.target.value;
 			});
 			element.actualDate = element.value;
-			element.addEventListener('mousedown', () => {
-				if (element.nextElementSibling) {
-					return;
-				}
-				DPCalendar.autocomplete.setItems(element, options);
-				DPCalendar.slideToggle(element.nextElementSibling);
-			});
+			element.addEventListener('mousedown', () => DPCalendar.autocomplete.setItems(element, options));
+			element.addEventListener('focus', () => DPCalendar.autocomplete.setItems(element, options));
 		});
 	});
 })();

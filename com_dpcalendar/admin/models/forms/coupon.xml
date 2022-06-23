@@ -18,7 +18,7 @@
 		</field>
 		<field name="limit" type="text" pattern="\d*" class="dp-form-input"
 		       label="COM_DPCALENDAR_FIELD_COUPON_LIMIT_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_LIMIT_DESC"/>
-		<field name="calendars" type="dpcalendar" extension="com_dpcalendar" multiple="true" class="dp-select" internal="true"
+		<field name="calendars" type="dpcalendar" multiple="true" class="dp-select" internal="true"
 		       label="COM_DPCALENDAR_FIELD_COUPON_CALENDARS_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_CALENDARS_DESC"/>
 		<field name="emails" type="textarea"
 		       label="COM_DPCALENDAR_FIELD_COUPON_EMAILS_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_EMAILS_DESC"/>

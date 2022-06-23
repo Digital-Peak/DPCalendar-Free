@@ -2,12 +2,12 @@
 <extension type="module" version="3.9" method="upgrade" client="site">
 	<name>mod_dpcalendar_mini</name>
 	<author>Digital Peak</author>
-	<creationDate>29 May 2022</creationDate>
+	<creationDate>23 Jun 2022</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.3.2</version>
+	<version>8.4.0</version>
 	<description>MOD_DPCALENDAR_MINI_XML_DESCRIPTION</description>
 	<files>
 		<filename module="mod_dpcalendar_mini">mod_dpcalendar_mini.php</filename>
@@ -22,7 +22,7 @@
 			 addfieldpath="/administrator/components/com_dpcalendar/models/fields"
 			 addrulepath="/administrator/components/com_dpcalendar/models/rules">
 			<fieldset name="basic">
-				<field name="ids" type="dpcalendar" multiple="true" class="dp-select" extension="com_dpcalendar" required="true"
+				<field name="ids" type="dpcalendar" multiple="true" class="dp-select" required="true"
 					label="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_SELECT_CALENDARS_DESC"/>
 				<field name="compact_events" type="list" default="2"
 					label="MOD_DPCALENDAR_MINI_FIELD_COMPACT_LABEL" description="MOD_DPCALENDAR_MINI_FIELD_COMPACT_DESC">

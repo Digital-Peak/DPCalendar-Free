@@ -195,11 +195,26 @@
 }
 .com-dpcalendar-calendar .dp-timezone {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 }
+.com-dpcalendar-calendar .dp-timezone > * {
+	flex: 1;
+}
 .com-dpcalendar-calendar .dp-timezone__label {
+	flex: 0;
 	font-weight: bold;
 	margin-right: 10px;
+	white-space: nowrap;
+}
+.com-dpcalendar-calendar .dp-timezone__info {
+	flex: 0 0 100%;
+	background-color: #c8ccd0;
+	padding: 1rem;
+	margin: 0.2rem 0;
+}
+.com-dpcalendar-calendar .dp-timezone__info_hidden {
+	display: none;
 }
 .com-dpcalendar-calendar .dp-map_consent {
 	display: flex;

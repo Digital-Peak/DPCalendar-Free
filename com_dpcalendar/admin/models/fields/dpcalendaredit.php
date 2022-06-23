@@ -4,7 +4,13 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Plugin\PluginHelper;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
@@ -14,12 +20,14 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategory
 
 	protected function getOptions()
 	{
-		$app = JFactory::getApplication();
+		$this->element['extension'] = 'com_dpcalendar';
+
+		$app = Factory::getApplication();
 
 		$calendar = null;
 		$id       = $app->isClient('administrator') ? 0 : $app->input->get('id');
 		if (!empty($id) && $this->value) {
-			$calendar = \DPCalendar\Helper\DPCalendarHelper::getCalendar($this->value);
+			$calendar = DPCalendarHelper::getCalendar($this->value);
 		}
 
 		$options = [];
@@ -28,7 +36,7 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategory
 		}
 
 		if (empty($calendar) || $calendar->external) {
-			JPluginHelper::importPlugin('dpcalendar');
+			PluginHelper::importPlugin('dpcalendar');
 			$tmp = $app->triggerEvent('onCalendarsFetch', [null, !empty($calendar->system) ? $calendar->system : null]);
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
@@ -36,7 +44,7 @@ class JFormFieldDPCalendarEdit extends JFormFieldCategory
 						if (!$externalCalendar->canCreate && !$externalCalendar->canEdit) {
 							continue;
 						}
-						$options[] = JHtml::_('select.option', $externalCalendar->id, $externalCalendar->title);
+						$options[] = HTMLHelper::_('select.option', $externalCalendar->id, $externalCalendar->title);
 					}
 				}
 			}

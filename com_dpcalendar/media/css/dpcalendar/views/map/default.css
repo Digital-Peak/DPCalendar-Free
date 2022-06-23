@@ -218,11 +218,26 @@
 }
 .com-dpcalendar-map .dp-timezone {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 }
+.com-dpcalendar-map .dp-timezone > * {
+	flex: 1;
+}
 .com-dpcalendar-map .dp-timezone__label {
+	flex: 0;
 	font-weight: bold;
 	margin-right: 10px;
+	white-space: nowrap;
+}
+.com-dpcalendar-map .dp-timezone__info {
+	flex: 0 0 100%;
+	background-color: #c8ccd0;
+	padding: 1rem;
+	margin: 0.2rem 0;
+}
+.com-dpcalendar-map .dp-timezone__info_hidden {
+	display: none;
 }
 .com-dpcalendar-map .dp-event-tooltip {
 	text-align: left;

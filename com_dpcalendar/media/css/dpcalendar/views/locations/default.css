@@ -209,11 +209,26 @@
 }
 .com-dpcalendar-locations .dp-timezone {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 }
+.com-dpcalendar-locations .dp-timezone > * {
+	flex: 1;
+}
 .com-dpcalendar-locations .dp-timezone__label {
+	flex: 0;
 	font-weight: bold;
 	margin-right: 10px;
+	white-space: nowrap;
+}
+.com-dpcalendar-locations .dp-timezone__info {
+	flex: 0 0 100%;
+	background-color: #c8ccd0;
+	padding: 1rem;
+	margin: 0.2rem 0;
+}
+.com-dpcalendar-locations .dp-timezone__info_hidden {
+	display: none;
 }
 .com-dpcalendar-locations {
 	--fc-button-text-color: #000000;

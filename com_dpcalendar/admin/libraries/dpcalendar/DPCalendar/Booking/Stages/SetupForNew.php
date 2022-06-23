@@ -144,7 +144,7 @@ class SetupForNew implements StageInterface
 
 		$taxRate = !empty($payload->data['country']) ? $this->taxRateModel->getItemByCountry($payload->data['country']) : null;
 		if ($taxRate) {
-			$payload->data['tax']      = ($payload->data['price'] / 100) * $taxRate->rate;
+			$payload->data['tax']      = $taxRate->inclusive ? $payload->data['price'] - ($payload->data['price'] / (1 + ($taxRate->rate / 100))) : ($payload->data['price'] / 100) * $taxRate->rate;
 			$payload->data['price']    = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);
 			$payload->data['tax_rate'] = $taxRate->rate;
 		}

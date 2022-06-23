@@ -22,6 +22,8 @@ class JFormFieldDPCalendar extends JFormFieldCategory
 
 	protected function getOptions()
 	{
+		$this->element['extension'] = 'com_dpcalendar';
+
 		$doc = new HtmlDocument();
 		$doc->loadScriptFile('dpcalendar/fields/dpcalendar.js');
 		$doc->loadStyleFile('dpcalendar/fields/dpcalendar.css');

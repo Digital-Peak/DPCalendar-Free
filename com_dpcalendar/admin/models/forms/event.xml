@@ -4,7 +4,7 @@
 		<field name="title" type="text" required="true" class="dp-form-input" autocomplete="0"
 			label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_TITLE_DESC"/>
 
-		<field name="catid" type="dpcalendaredit" extension="com_dpcalendar" class="dp-select"
+		<field name="catid" type="dpcalendaredit" class="dp-select"
 			label="COM_DPCALENDAR_CALENDAR" description="COM_DPCALENDAR_FIELD_CALENDAR_DESC"/>
 
 		<field name="color" type="color" maxlength="6" size="6"
@@ -139,7 +139,7 @@
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
 		<field name="location_ids" type="sql" multiple="true" class="dp-select" key_field="id" value_field="title"
-			query="SELECT id, concat(title,' [',IFNULL(latitude, '0'),':',IFNULL(longitude, '0'),']') as title FROM #__dpcalendar_locations where state = 1 order by title"
+			query="SELECT id, title FROM #__dpcalendar_locations where state = 1 order by title"
 			label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC">
 			<option></option>
 		</field>

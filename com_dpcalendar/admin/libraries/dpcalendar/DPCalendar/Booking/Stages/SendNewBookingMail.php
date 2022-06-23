@@ -89,7 +89,7 @@ class SendNewBookingMail implements StageInterface
 		if (!empty($body)) {
 			if ($payload->mailParams->get('bookingsys_author_as_mail_from')) {
 				foreach ($payload->eventsWithTickets as $event) {
-					$this->mailer->setSender(Factory::getUser($event->created_by)->email);
+					$this->mailer->setFrom(Factory::getUser($event->created_by)->email);
 				}
 			}
 

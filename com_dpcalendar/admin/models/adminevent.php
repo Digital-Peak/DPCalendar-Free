@@ -101,7 +101,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$form->setFieldAttribute('catid', 'action', 'core.create');
 		}
 
-		$item = $this->getItem();
+		$item = $this->getItem($data['id'] ?? null);
 
 		// Modify the form based on access controls.
 		if (!$this->canEditState($item)) {

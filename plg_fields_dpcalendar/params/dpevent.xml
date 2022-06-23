@@ -2,7 +2,7 @@
 <form>
 	<fields name="fieldparams">
 		<fieldset name="fieldparams" addfieldpath="/administrator/components/com_dpcalendar/models/fields">
-			<field name="calendar_ids" type="dpcalendar" multiple="true" class="dp-select" extension="com_dpcalendar" default="root"
+			<field name="calendar_ids" type="dpcalendar" multiple="true" class="dp-select" default="root"
 					label="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_CALENDARS_LABEL"
 					description="PLG_FIELDS_DPCALENDAR_PARAMS_EVENT_CALENDARS_DESC">
 				<option value="root">JALL</option>

@@ -52,7 +52,13 @@ class SendNotificationMail implements StageInterface
 		foreach ($payload->eventsWithTickets as $e) {
 			$calendarGroups = array_merge($calendarGroups, DPCalendarHelper::getCalendar($e->catid)->params->get('notification_groups_book', []));
 		}
-		$emails = DPCalendarHelper::sendMail($subject, $body, 'notification_groups_book', $calendarGroups, $payload->item->email);
+		$emails = DPCalendarHelper::sendMail(
+			$subject,
+			$body,
+			'notification_groups_book',
+			$calendarGroups,
+			$payload->mailParams->get('bookingsys_attendee_as_mail_from') ? $payload->item->email : null
+		);
 
 		if (!$payload->mailParams->get('booking_send_mail_author', 1)) {
 			return $payload;
@@ -71,7 +77,11 @@ class SendNotificationMail implements StageInterface
 
 		foreach ($authors as $authorId) {
 			$mailer = clone $this->mailer;
-			$mailer->setFrom($payload->item->email);
+
+			if ($payload->mailParams->get('bookingsys_attendee_as_mail_from')) {
+				$mailer->setFrom($payload->item->email);
+			}
+
 			$mailer->setSubject($subject);
 			$mailer->setBody($body);
 			$mailer->IsHTML(true);

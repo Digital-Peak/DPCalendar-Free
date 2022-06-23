@@ -4,7 +4,11 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Toolbar\Toolbar;
 
 $this->dpdocument->loadScriptFile('dpcalendar/views/extcalendars/default.js');
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminlist/default.css');
@@ -12,11 +16,11 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/adminlist/default.js');
 $this->dpdocument->addScriptOptions('adminlist', ['listOrder' => $this->state->get('list.ordering')]);
 
 if ($this->input->getCmd('tmpl') == 'component') {
-	echo JToolbar::getInstance('toolbar')->render();
+	echo Toolbar::getInstance('toolbar')->render();
 }
 
 if ($this->pluginParams->get('cache', 1) == '2') {
-	$this->app->enqueueMessage(JText::_('COM_DPCALENDAR_VIEW_EXTCALENDARS_SYNC_STARTED'), 'notice');
+	$this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_EXTCALENDARS_SYNC_STARTED'), 'notice');
 }
 ?>
 <div class="com-dpcalendar-extcalendars com-dpcalendar-adminlist"
@@ -31,6 +35,6 @@ if ($this->pluginParams->get('cache', 1) == '2') {
 		<input type="hidden" name="boxchecked" value="0"/>
 		<input type="hidden" name="filter_order" value="<?php echo $this->escape($this->state->get('list.ordering')); ?>"/>
 		<input type="hidden" name="filter_order_Dir" value="<?php echo $this->escape($this->state->get('list.direction')); ?>"/>
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 </div>

@@ -60,7 +60,7 @@ class DPCalendarHelperRoute
 			return ($full ? Uri::root() : '') . $link;
 		}
 
-		return Route::_($link, false, Route::TLS_IGNORE, $full);
+		return Route::link('site', $link, false, Route::TLS_IGNORE, $full);
 	}
 
 	public static function getFormRoute($id, $return = null, $append = null)

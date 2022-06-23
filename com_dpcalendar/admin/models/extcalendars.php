@@ -5,16 +5,17 @@
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
+defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
-defined('_JEXEC') or die();
-
-JLoader::import('joomla.application.component.modellist');
-
-class DPCalendarModelExtcalendars extends JModelList
+class DPCalendarModelExtcalendars extends ListModel
 {
-
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
@@ -47,7 +48,7 @@ class DPCalendarModelExtcalendars extends JModelList
 
 	protected function populateState($ordering = null, $direction = null)
 	{
-		$app = JFactory::getApplication('administrator');
+		$app = Factory::getApplication();
 
 		// Load the filter state.
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
@@ -59,10 +60,10 @@ class DPCalendarModelExtcalendars extends JModelList
 		$language = $this->getUserStateFromRequest($this->context . '.filter.language', 'filter_language', '');
 		$this->setState('filter.language', $language);
 
-		$plugin = $this->getUserStateFromRequest($this->context . '.filter.plugin', 'dpplugin', '');
+		$plugin = $app->input->get('dpplugin', '');
 		$this->setState('filter.plugin', $plugin);
 
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
 		// List state information.
 		parent::populateState('a.ordering', 'asc');
@@ -89,7 +90,7 @@ class DPCalendarModelExtcalendars extends JModelList
 			$calendar->params = new Registry($calendar->params);
 
 			if ($pw = $calendar->params->get('password')) {
-				$calendar->params->set('password', \DPCalendar\Helper\DPCalendarHelper::deobfuscate($pw));
+				$calendar->params->set('password', DPCalendarHelper::deobfuscate($pw));
 			}
 		}
 
@@ -101,7 +102,7 @@ class DPCalendarModelExtcalendars extends JModelList
 		// Create a new query object.
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user  = JFactory::getUser();
+		$user  = Factory::getUser();
 
 		// Select the required fields from the table.
 		$query->select($this->getState('list.select', 'a.*'));
@@ -119,7 +120,7 @@ class DPCalendarModelExtcalendars extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} else if ($published === '') {
+		} elseif ($published === '') {
 			$query->where('(a.state IN (0, 1))');
 		}
 
@@ -130,7 +131,7 @@ class DPCalendarModelExtcalendars extends JModelList
 				$ids = explode(',', substr($search, 4));
 				ArrayHelper::toInteger($ids);
 				$query->where('a.id in (' . implode(',', $ids) . ')');
-			} else if (stripos($search, 'id:') === 0) {
+			} elseif (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
 			} else {
 				$search = $db->quote('%' . $db->escape($search, true) . '%');

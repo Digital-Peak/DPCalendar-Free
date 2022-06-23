@@ -58,17 +58,6 @@
 			<option value="0">JNO</option>
 		</field>
 
-		<field name="remind_time" type="text" default="15"
-		       label="COM_DPCALENDAR_TICKET_FIELD_REMIND_TIME_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_REMIND_TIME_DESC"/>
-		<field name="remind_type" type="list"
-		       label="COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_DESC"
-		       default="1">
-			<option value="1">COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_MINUTES</option>
-			<option value="2">COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_HOURS</option>
-			<option value="3">COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_DAYS</option>
-			<option value="4">COM_DPCALENDAR_TICKET_FIELD_REMIND_TYPE_WEEKS</option>
-		</field>
-
 		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
 	</fieldset>
 </form>

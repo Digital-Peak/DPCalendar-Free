@@ -747,7 +747,7 @@
 			<option value="created">JGLOBAL_FIELD_CREATED_LABEL</option>
 			<option value="created_by">COM_DPCALENDAR_FIELD_AUTHOR_LABEL</option>
 			<option value="created_by_alias">JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL</option>
-			<option value="hosts">COM_DPCALENDAR_FIELD_HOSTS_LABEL</option>
+			<option value="host_ids">COM_DPCALENDAR_FIELD_HOSTS_LABEL</option>
 			<option value="modified">JGLOBAL_FIELD_MODIFIED_LABEL</option>
 			<option value="modified_by">JGLOBAL_FIELD_MODIFIED_BY_LABEL</option>
 			<option value="publish_up">JGLOBAL_FIELD_PUBLISH_UP_LABEL</option>
@@ -770,7 +770,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_DESC"/>
 
 		<field type="spacer" label=""/>
-		<field name="event_form_calid" type="dpcalendaredit" extension="com_dpcalendar"
+		<field name="event_form_calid" type="dpcalendaredit"
 			label="COM_DPCALENDAR_CALENDAR" description="COM_DPCALENDAR_FIELD_CALENDAR_DESC">
 			<option value=""></option>
 		</field>
@@ -992,7 +992,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="ticket"
-						hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude"
+						hide="id,event_id,series,user_id,price,state,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
@@ -1056,7 +1056,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="ticket"
-						hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude"
+						hide="id,event_id,series,user_id,price,state,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
@@ -1111,13 +1111,6 @@
 		</field>
 		<field name="ticket_form_public" type="list" default="1"
 				label="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
-			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
-			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
-			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
-		</field>
-		<field name="ticket_form_remind_time" type="list" default="1"
-				label="COM_DPCALENDAR_TICKET_FIELD_REMIND_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
 			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
@@ -1569,6 +1562,24 @@
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEND_MAIL_NEW_FREE</option>
 		</field>
+		<field name="booking_send_mail_paid" type="radio" class="btn-group" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEND_MAIL_PAID_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEND_MAIL_PAID_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="bookingsys_author_as_mail_from" type="radio" class="btn-group" default="0"
+			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_AUTHOR_AS_MAIL_FROM_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_AUTHOR_AS_MAIL_FROM_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="bookingsys_attendee_as_mail_from" type="radio" class="btn-group" default="0"
+			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ATTENDEE_AS_MAIL_FROM_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_ATENDEE_AS_MAIL_FROM_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="booking_include_ics" type="radio" class="btn-group" default="1" showon="booking_send_mail_new!:0"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_ICS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_ICS_DESC">
@@ -1581,21 +1592,9 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="booking_send_mail_paid" type="radio" class="btn-group" default="1"
-			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEND_MAIL_PAID_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEND_MAIL_PAID_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
 		<field name="booking_include_invoice" type="radio" class="btn-group" default="1" showon="booking_send_mail_paid:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_INVOICE_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_INVOICE_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-		<field name="bookingsys_author_as_mail_from" type="radio" class="btn-group" default="0"
-			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_AUTHOR_AS_MAIL_FROM_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_AUTHOR_AS_MAIL_FROM_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>

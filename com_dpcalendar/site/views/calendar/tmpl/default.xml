@@ -9,14 +9,14 @@
 			addfieldpath="/administrator/components/com_dpcalendar/models/fields"
 			addrulepath="/administrator/components/com_dpcalendar/models/rules">
 		<fieldset name="required" label="COM_DPCALENDAR_VIEW_REQUIRED_FIELDSET_LABEL">
-			<field name="ids" type="dpcalendar" multiple="true" size="10" extension="com_dpcalendar" required="true" class="dp-select"
+			<field name="ids" type="dpcalendar" multiple="true" size="10" required="true" class="dp-select"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SELECT_CALENDARS_DESC"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SELECT_CALENDARS_LABEL">
 				<option value="-1">JALL</option>
 			</field>
 		</fieldset>
 		<fieldset name="calendar" label="COM_DPCALENDAR_CALENDAR">
-			<field name="idsdnl" type="dpcalendar" multiple="true" size="10" extension="com_dpcalendar" class="dp-select"
+			<field name="idsdnl" type="dpcalendar" multiple="true" size="10" class="dp-select"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TOGGLE_CALENDARS_DESC"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TOGGLE_CALENDARS_LABEL"/>
 			<field name="show_selection" type="list" useglobal="true"
@@ -518,7 +518,7 @@
 					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 
-			<field name="event_form_hidden_tabs" type="list" multiple="true"
+			<field name="event_form_hidden_tabs" type="list" multiple="true" layout="joomla.form.field.list-fancy-select"
 					label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_TABS_DESC">
 				<option value="location">COM_DPCALENDAR_LOCATION</option>
@@ -528,7 +528,7 @@
 				<option value="params:jbasic">COM_DPCALENDAR_FIELDSET_OPTIONS</option>
 				<option value="metadata:jmetadata">JGLOBAL_FIELDSET_METADATA_OPTIONS</option>
 			</field>
-			<field name="event_form_hidden_fields" type="list" multiple="true"
+			<field name="event_form_hidden_fields" type="list" multiple="true" layout="joomla.form.field.list-fancy-select"
 					label="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_FORM_HIDDEN_FIELDS_DESC">
 				<option value="catid">COM_DPCALENDAR_CALENDAR</option>
@@ -567,7 +567,7 @@
 				<option value="created">JGLOBAL_FIELD_CREATED_LABEL</option>
 				<option value="created_by">COM_DPCALENDAR_FIELD_AUTHOR_LABEL</option>
 				<option value="created_by_alias">JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL</option>
-				<option value="hosts">COM_DPCALENDAR_FIELD_HOSTS_LABEL</option>
+				<option value="host_ids">COM_DPCALENDAR_FIELD_HOSTS_LABEL</option>
 				<option value="modified">JGLOBAL_FIELD_MODIFIED_LABEL</option>
 				<option value="modified_by">JGLOBAL_FIELD_MODIFIED_BY_LABEL</option>
 				<option value="publish_up">JGLOBAL_FIELD_PUBLISH_UP_LABEL</option>
@@ -759,7 +759,7 @@
 					label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="ticket"
-							hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude"
+							hide="id,event_id,series,user_id,price,state,latitude,longitude"
 							label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -822,7 +822,7 @@
 					label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="ticket"
-							hide="id,event_id,series,user_id,price,remind_time,remind_type,state,latitude,longitude"
+							hide="id,event_id,series,user_id,price,state,latitude,longitude"
 							label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -877,13 +877,6 @@
 			</field>
 			<field name="ticket_form_public" type="list" useglobal="true"
 					label="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
-				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
-				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
-			</field>
-			<field name="ticket_form_remind_time" type="list" useglobal="true"
-					label="COM_DPCALENDAR_TICKET_FIELD_REMIND_TIME_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_SHOW_FIELD_DESC">
 				<option value="1">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_OPTIONAL</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>

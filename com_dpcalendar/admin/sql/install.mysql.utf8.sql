@@ -186,9 +186,6 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_tickets` (
   `number` varchar(255) NOT NULL DEFAULT '',
   `latitude` DECIMAL(12, 8) DEFAULT NULL,
   `longitude` DECIMAL(12, 8) DEFAULT NULL,
-  `remind_time` int NOT NULL DEFAULT 0,
-  `remind_type` tinyint NOT NULL DEFAULT '1',
-  `reminder_sent_date` datetime DEFAULT NULL,
   `created` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `state` tinyint NOT NULL DEFAULT '0',
   `public` tinyint NOT NULL DEFAULT '1',
@@ -199,8 +196,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_tickets` (
   KEY `booking_id` (`booking_id`),
   KEY `event_id` (`event_id`),
   KEY `user_id` (`user_id`),
-  KEY `state` (`state`),
-  KEY `notify` (`reminder_sent_date`, `state`)
+  KEY `state` (`state`)
 ) DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_coupons` (

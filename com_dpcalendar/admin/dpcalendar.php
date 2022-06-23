@@ -21,8 +21,6 @@ if (!Factory::getUser()->authorise('core.manage', 'com_dpcalendar')) {
 
 $input = Factory::getApplication()->input;
 
-JLoader::import('joomla.application.component.controller');
-
 // Load the model
 BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_installer/models', 'InstallerModel');
 $model = BaseDatabaseModel::getInstance('Updatesites', 'InstallerModel', ['ignore_request' => true]);

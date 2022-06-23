@@ -85,6 +85,7 @@ class DPCalendarModelLocations extends ListModel
 		$id .= ':' . $this->getState('filter.language');
 		$id .= ':' . $this->getState('filter.latitude');
 		$id .= ':' . $this->getState('filter.longitude');
+		$id .= ':' . $this->getState('filter.xreference');
 
 		return parent::getStoreId($id);
 	}

@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Helper\LayoutHelper;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
@@ -188,21 +189,24 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 
 		// User field doesn't work on front
 		if (Factory::getApplication()->isClient('site')) {
+			$renderer = new LayoutHelper();
 			$form->setFieldAttribute('created_by', 'type', 'sql');
+			$form->setFieldAttribute('created_by', 'class', 'dp-select');
 			$form->setFieldAttribute('created_by', 'key_field', 'value');
 			$form->setFieldAttribute('created_by', 'value_field', 'text');
 			$form->setFieldAttribute(
 				'created_by',
 				'query',
-				"select id as value, name as text from #__users union all select '', '' order by text"
+				$renderer->renderLayout('form.author', ['field_name' => 'created_by', 'form' => $form])
 			);
 			$form->setFieldAttribute('modified_by', 'type', 'sql');
+			$form->setFieldAttribute('modified_by', 'class', 'dp-select');
 			$form->setFieldAttribute('modified_by', 'key_field', 'value');
 			$form->setFieldAttribute('modified_by', 'value_field', 'text');
 			$form->setFieldAttribute(
 				'modified_by',
 				'query',
-				"select id as value, name as text from #__users union all select '', '' order by text"
+				$renderer->renderLayout('form.author', ['field_name' => 'modified_by', 'form' => $form])
 			);
 		}
 

@@ -457,9 +457,6 @@
 .com-dpcalendar-event__actions .dp-button {
 	margin-bottom: 0.5em;
 }
-.com-dpcalendar-event__information, .com-dpcalendar-event__cta {
-	overflow: auto;
-}
 .com-dpcalendar-event__information .dp-link, .com-dpcalendar-event__cta .dp-link {
 	word-wrap: break-word;
 }
@@ -472,6 +469,9 @@
 }
 .com-dpcalendar-event__information .dp-location__separator, .com-dpcalendar-event__cta .dp-location__separator {
 	margin-right: 5px;
+}
+.com-dpcalendar-event__information {
+	overflow: auto;
 }
 .com-dpcalendar-event:not(.has-bookingform) .com-dpcalendar-event__actions, .com-dpcalendar-event:not(.has-bookingform) .com-dpcalendar-event__cta, .com-dpcalendar-event__booking-form {
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);

@@ -160,7 +160,13 @@ class PlgContentDPCalendar extends CMSPlugin
 
 	public function onContentAfterDisplay($context, $item)
 	{
+		// Render only for existing contacts
 		if ($context !== 'com_contact.contact' || !$item->user_id) {
+			return;
+		}
+
+		// Check if disabled in the plugin
+		if (!$this->params->get('events_contact', 1)) {
 			return;
 		}
 

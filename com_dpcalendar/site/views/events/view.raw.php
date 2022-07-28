@@ -4,11 +4,15 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\Registry\Registry;
 
-class DPCalendarViewEvents extends \DPCalendar\View\BaseView
+class DPCalendarViewEvents extends BaseView
 {
 	public function init()
 	{
@@ -23,8 +27,22 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 		$this->get('State')->set('filter.state', [1, 3]);
 		$this->get('State')->set('filter.state_owner', true);
 
+		// Convert the dates from the user timezone into normal
+		$tz    = DPCalendarHelper::getDate()->getTimezone()->getName();
+		$start = $this->app->input->get('date-start');
+		if ($start) {
+			$start = DPCalendarHelper::getDate($start, false, $tz);
+			$this->getModel()->setState('list.start-date', $start);
+		}
+
+		$end = $this->app->input->get('date-end');
+		if ($end) {
+			$end = DPCalendarHelper::getDate($end, false, $tz);
+			$this->getModel()->setState('list.end-date', $end);
+		}
+
 		if ($id = $this->input->getString('module-id')) {
-			$moduleParams = new Registry(JModuleHelper::getModuleById($id)->params);
+			$moduleParams = new Registry(ModuleHelper::getModuleById($id)->params);
 			$this->getModel()->setStateFromParams($moduleParams);
 			$this->params->merge($moduleParams);
 		}

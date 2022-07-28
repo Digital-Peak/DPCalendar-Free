@@ -4,11 +4,16 @@
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
-class DPCalendarTableCoupon extends JTable
+class DPCalendarTableCoupon extends Table
 {
 	public function __construct(&$db)
 	{
@@ -37,8 +42,8 @@ class DPCalendarTableCoupon extends JTable
 
 	public function store($updateNulls = false)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		$date = DPCalendarHelper::getDate();
+		$user = Factory::getUser();
 		if ($this->id) {
 			// Existing item
 			$this->modified    = $date->toSql();
@@ -63,9 +68,9 @@ class DPCalendarTableCoupon extends JTable
 		}
 
 		// Verify that the alias is unique
-		$table = JTable::getInstance('Coupon', 'DPCalendarTable');
+		$table = Table::getInstance('Coupon', 'DPCalendarTable');
 		if ($table->load(['code' => $this->code]) && ($table->id != $this->id || $this->id == 0)) {
-			$this->setError(JText::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_CODE') . ': ' . $table->code);
+			$this->setError(Text::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_CODE') . ': ' . $table->code);
 
 			return false;
 		}
@@ -78,20 +83,32 @@ class DPCalendarTableCoupon extends JTable
 	{
 		// Check for valid name
 		if (trim($this->title) == '') {
-			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
+			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
 
 			return false;
 		}
 
 		// Check the publish down date is not earlier than publish up.
 		if ($this->publish_down > $this->_db->getNullDate() && $this->publish_down < $this->publish_up) {
-			$this->setError(JText::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
+			$this->setError(Text::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
 
 			return false;
 		}
 
 		if (empty($this->modified)) {
 			$this->modified = $this->getDbo()->getNullDate();
+		}
+
+		if ($this->limit === '') {
+			$this->limit = null;
+		}
+
+		if ($this->checked_out === '') {
+			$this->checked_out = null;
+		}
+
+		if ($this->checked_out_time === '') {
+			$this->checked_out_time = null;
 		}
 
 		$this->emails = $this->emails ? trim($this->emails) : null;

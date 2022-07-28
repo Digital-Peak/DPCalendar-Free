@@ -327,7 +327,7 @@
 				start.value = date.format(start.getAttribute('data-format'));
 				start.actualDate = start.value;
 				start.setAttribute('data-date', date.format('YYYY-MM-DD'));
-				start.dpPikaday.setDate(date.format('YYYY-MM-DD'));
+				start.dpPikaday.setDate(date.format('YYYY-MM-DD HH:mm'));
 				start = form.querySelector('#jform_start_date_time');
 				start.value = date.format(start.getAttribute('data-format'));
 				start.actualDate = start.value;
@@ -336,7 +336,7 @@
 				end.value = date.format(end.getAttribute('data-format'));
 				end.actualDate = end.value;
 				end.setAttribute('data-date', date.format('YYYY-MM-DD'));
-				end.dpPikaday.setDate(date.format('YYYY-MM-DD'));
+				end.dpPikaday.setDate(date.format('YYYY-MM-DD HH:mm'));
 				end = form.querySelector('#jform_end_date_time');
 				end.value = date.format(end.getAttribute('data-format'));
 				end.actualDate = end.value;

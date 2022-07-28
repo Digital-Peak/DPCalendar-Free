@@ -199,7 +199,7 @@ if (DPCalendarHelper::canCreateEvent()) {
 }
 
 // Set the actual date
-$now              = DPCalendarHelper::getDate();
+$now              = DPCalendarHelper::getDate($params->get('calendar_start_date'));
 $options['year']  = $now->format('Y', true);
 $options['month'] = $now->format('m', true);
 $options['date']  = $now->format('d', true);

@@ -9,6 +9,7 @@ namespace DPCalendar\Plugin;
 
 defined('_JEXEC') or die();
 
+use DateTimeZone;
 use DigitalPeak\ThinHTTP as HTTP;
 use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\Ical;
@@ -94,14 +95,14 @@ abstract class DPCalendarPlugin extends CMSPlugin
 				// Set here the timezone when available so it can be converted back correctly
 				$calendar->params->get('timezone')
 			);
-			// Start date must be inclusive, @see VEvent::isInTimeRange
-			$start->modify('-1 second');
 		} else {
 			$start = DPCalendarHelper::getDate(
 				substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' ' . substr($s, 8, 2) . ':' . substr($s, 10, 2),
 				false
 			);
 		}
+		// Start date must be inclusive, @see VEvent::isInTimeRange
+		$start->modify('-1 second');
 
 		$end = clone $start;
 		$end->modify('+1 day');
@@ -193,6 +194,9 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		try {
 			if ($options->get('expand', true)) {
+				// Needs a timezone rest as e want to work always in UTC
+				$startDate->setTimezone(new DateTimeZone('UTC'));
+				$endDate->setTimezone(new DateTimeZone('UTC'));
 				$cal = $cal->expand($startDate, $endDate);
 			}
 		} catch (\Exception $e) {

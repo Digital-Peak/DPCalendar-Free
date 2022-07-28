@@ -134,7 +134,7 @@ class DPCalendarRules extends MenuRules
 		}
 
 		// Get the items for the calendar default item parameter
-		$items = $this->router->menu->getItems('id', $calendar->params->get('default_menu_item'));
+		$items = $this->router->menu->getItems('id', $calendar->params->get('default_menu_item', 0));
 
 		// When available set the item id of the default menu item
 		if ($items) {

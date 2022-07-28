@@ -249,6 +249,7 @@
 				<option value="booking_opening_date">COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_LABEL</option>
 				<option value="booking_closing_date">COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL</option>
 				<option value="booking_series">COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL</option>
+			    <option value="booking_waiting_list">COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_LABEL</option>
 				<option value="price">COM_DPCALENDAR_FIELD_PRICE_LABEL</option>
 				<option value="earlybird">COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL</option>
 				<option value="user_discount">COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL</option>

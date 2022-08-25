@@ -162,7 +162,7 @@ class DPCalendarModelEvent extends ItemModel
 						$ticketsModel->getState();
 						$ticketsModel->setState('filter.event_id', $data->id);
 						$ticketsModel->setState('filter.public', $this->getState('filter.public'));
-						$ticketsModel->setState('filter.state', [0, 1, 2, 3, 4, 5, 6, 7, 8]);
+						$ticketsModel->setState('filter.state', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
 						$ticketsModel->setState('list.limit', 10000);
 						$data->tickets = $ticketsModel->getItems();
 					}

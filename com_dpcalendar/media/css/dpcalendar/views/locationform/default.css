@@ -106,12 +106,9 @@
 .com-dpcalendar-locationform .dp-form-input {
 	width: 100%;
 	min-height: 28px;
-	-webkit-box-sizing: border-box;
-	/* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;
-	/* Firefox, other Gecko */
-	box-sizing: border-box;
-	/* Opera/IE 8+ */
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box; /* Firefox, other Gecko */
+	box-sizing: border-box; /* Opera/IE 8+ */
 }
 .com-dpcalendar-locationform .dp-form-radio {
 	display: flex;
@@ -370,7 +367,7 @@
 }
 .com-dpcalendar-locationform .dp-timezone__info {
 	flex: 0 0 100%;
-	background-color: #c8ccd0;
+	background-color: rgb(200, 204, 208);
 	padding: 1rem;
 	margin: 0.2rem 0;
 }

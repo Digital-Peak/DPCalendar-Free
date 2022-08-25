@@ -65,12 +65,9 @@
 .com-dpcalendar-adminform .dp-form-input {
 	width: 100%;
 	min-height: 28px;
-	-webkit-box-sizing: border-box;
-	/* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box;
-	/* Firefox, other Gecko */
-	box-sizing: border-box;
-	/* Opera/IE 8+ */
+	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box; /* Firefox, other Gecko */
+	box-sizing: border-box; /* Opera/IE 8+ */
 }
 .com-dpcalendar-adminform .dp-control, .com-dpcalendar-adminform .control-group {
 	display: flex;

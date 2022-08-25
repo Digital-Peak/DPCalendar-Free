@@ -37,7 +37,7 @@
 						return;
 					}
 					const diff = dayjs.utc(element.value, options.format).diff(dayjs.utc(element.actualDate, options.format));
-					let date = dayjs(end.value, options.format);
+					let date = dayjs.utc(end.value, options.format);
 					if (date.utcOffset() < 0) {
 						date = date.add(Math.abs(date.utcOffset()), 'minute');
 					}

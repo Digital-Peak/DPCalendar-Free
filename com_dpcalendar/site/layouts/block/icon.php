@@ -4,24 +4,34 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\HTML\Block\Icon;
+use Joomla\CMS\Factory;
+
 $icon = basename($displayData['icon']);
-$path = JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() . '/images/com_dpcalendar/icons/' . $icon . '.svg';
+$path = JPATH_ROOT . '/templates/' . Factory::getApplication()->getTemplate() . '/images/com_dpcalendar/icons/' . $icon . '.svg';
 if (!file_exists($path)) {
-	$path = JPATH_ROOT . '/templates/' . JFactory::getApplication()->getTemplate() . '/images/icons/' . $icon . '.svg';
+	$path = JPATH_ROOT . '/templates/' . Factory::getApplication()->getTemplate() . '/images/icons/' . $icon . '.svg';
 }
 if (!file_exists($path)) {
 	$path = JPATH_ROOT . '/media/com_dpcalendar/images/icons/' . $icon . '.svg';
 }
 if (!file_exists($path)) {
-	return '';
+	echo '';
+	return;
 }
 
-if (in_array($path, \DPCalendar\HTML\Block\Icon::$pathCache)) {
+if (!empty($displayData['raw'])) {
+	echo @file_get_contents($path);
+	return;
+}
+
+if (in_array($path, Icon::$pathCache)) {
 	$content = '<svg><use href="#dp-icon-' . $icon . '"/></svg>';
 } else {
-	\DPCalendar\HTML\Block\Icon::$pathCache[] = $path;
+	Icon::$pathCache[] = $path;
 
 	$content = @file_get_contents($path);
 	if (!empty($displayData['title'])) {

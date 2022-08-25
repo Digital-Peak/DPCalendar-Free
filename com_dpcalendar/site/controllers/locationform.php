@@ -68,16 +68,13 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 	public function save($key = null, $urlVar = 'l_id')
 	{
 		$result = parent::save($key, $urlVar);
-
-		$return = $this->getReturnPage();
-		if ($return !== Uri::base()) {
-			$this->setRedirect(base64_decode($return));
-
+		if (!$result) {
 			return $result;
 		}
 
-		if (!$result) {
-			$this->setRedirect(Uri::base());
+		$return = $this->getReturnPage();
+		if ($return !== Uri::base()) {
+			$this->setRedirect($return);
 
 			return $result;
 		}

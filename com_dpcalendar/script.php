@@ -22,8 +22,30 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 	protected $allowDowngrades = true;
 
 	protected $deleteFiles = [
+		// 7.0.0
+		'/administrator/components/com_dpcalendar/models/event.php',
+		// 7.0.6
+		'/components/com_dpcalendar/views/ticketform/tmpl/default.xml',
+		// 8.1.4
+		'/components/com_dpcalendar/sql/updates/mysql/6.0.0.sql',
+		// 8.4.0
 		'/administrator/components/com_dpcalendar/cli/notify.php',
 		'/administrator/components/com_dpcalendar/sql/updates/mysql/8.3.2.sql'
+	];
+	protected $deleteFolders = [
+		// 7.0.0
+		'/administrator/components/com_dpcalendar/libraries/vendor',
+		// 7.3.3
+		'/plugins/system/dpcalendar',
+		// 8.0.0
+		'/administrator/components/com_dpcalendar/vendor/guzzle',
+		'/administrator/components/com_dpcalendar/vendor/guzzlehttp',
+		'/administrator/components/com_dpcalendar/vendor/omnipay',
+		// 8.0.2
+		'/plugins/dpcalendarpay/2checkout',
+		// 8.5.0
+		'/administrator/components/com_dpcalendar/libraries/dpcalendar/DPCalendar/TCPDF',
+		'/administrator/components/com_dpcalendar/vendor/tecnickcom'
 	];
 
 	public function update($parent)
@@ -67,20 +89,12 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 
 			// Cleanup files
 			foreach (Folder::files(JPATH_ROOT, '.', true, true) as $path) {
-				if (strpos($path, 'dpcalendar') === false || !file_exists($path)) {
-					continue;
-				}
-
-				if (strpos($path, '/tmpl/edit') === false
-					&& strpos($path, '/administrator/components/com_dpcalendar/models/event.php') === false) {
+				if (strpos($path, 'dpcalendar') === false || !file_exists($path) || strpos($path, '/tmpl/edit') === false) {
 					continue;
 				}
 
 				File::delete($path);
 			}
-		}
-		if (version_compare($version, '7.0.6') == -1) {
-			File::delete(JPATH_ROOT . '/components/com_dpcalendar/views/ticketform/tmpl/default.xml');
 		}
 
 		if (version_compare($version, '7.2.7') == -1) {
@@ -97,10 +111,6 @@ class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScrip
 			// Map was never shown, so disable it
 			$this->run('update #__modules set params = replace(params, \'"show_map":"1"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
 			$this->run('update #__modules set params = replace(params, \'"show_map":"2"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
-		}
-
-		if (version_compare($version, '7.3.3') == -1) {
-			Folder::delete(JPATH_PLUGINS . '/system/dpcalendar');
 		}
 
 		if (version_compare($version, '7.3.4') == -1) {
@@ -188,14 +198,6 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 					'warning'
 				);
 			}
-		}
-		if (version_compare($version, '8.0.2') == -1) {
-			if (is_dir(JPATH_PLUGINS . '/dpcalendarpay/2checkout')) {
-				Folder::delete(JPATH_PLUGINS . '/dpcalendarpay/2checkout');
-			}
-		}
-		if (version_compare($version, '8.1.4') == -1 && file_exists(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates/mysql/6.0.0.sql')) {
-			unlink(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates/mysql/6.0.0.sql');
 		}
 
 		if (version_compare($version, '8.2.0')) {

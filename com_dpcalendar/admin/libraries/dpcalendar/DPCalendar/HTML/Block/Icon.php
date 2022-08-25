@@ -43,6 +43,13 @@ class Icon
 	public const CANCEL = 'ban';
 
 	/**
+	 * The certificate icon.
+	 *
+	 * @var string
+	 */
+	public const CERTIFICATE = 'certificate';
+
+	/**
 	 * The clock icon.
 	 *
 	 * @var string

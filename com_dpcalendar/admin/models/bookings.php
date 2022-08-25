@@ -116,7 +116,7 @@ class DPCalendarModelBookings extends JModelList
 		if (!empty($search)) {
 			if (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
-			} else if (stripos($search, 'author:') === 0) {
+			} elseif (stripos($search, 'author:') === 0) {
 				$search = $db->quote('%' . $db->escape(substr($search, 7), true) . '%');
 				$query->where('(a.name LIKE ' . $search . ' OR ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			} else {
@@ -129,8 +129,10 @@ class DPCalendarModelBookings extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} else if ($published === '') {
-			$query->where('(a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8))');
+		} elseif (is_array($published)) {
+			$query->where('a.state IN (' . implode(',', ArrayHelper::toInteger($published)) . ')');
+		} elseif ($published === '') {
+			$query->where('a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8)');
 		}
 
 		// Filter by author
@@ -166,6 +168,10 @@ class DPCalendarModelBookings extends JModelList
 
 		if ($this->getState('filter.my', 0) == 1) {
 			$query->where('a.user_id = ' . (int)$user->id);
+		}
+
+		if ($processor = $this->getState('filter.processor')) {
+			$query->where('a.processor like ' . $this->getDbo()->quote($processor . '%'));
 		}
 
 		// On front end if we are not an admin only bookings are visible where we are the author of the event

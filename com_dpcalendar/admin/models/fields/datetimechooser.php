@@ -51,7 +51,7 @@ class JFormFieldDatetimechooser extends JFormField
 			'date'        => $date,
 			'format'      => $dateFormat,
 			'localFormat' => !$allDay,
-			'firstDay'    => DPCalendarHelper::getComponentParameter('weekstart', '0'),
+			'firstDay'    => DPCalendarHelper::getComponentParameter('weekstart', '1'),
 			'pair'        => (string)$this->element['datepair'],
 			'document'    => new \DPCalendar\HTML\Document\HtmlDocument(),
 			'dateHelper'  => $dateHelper

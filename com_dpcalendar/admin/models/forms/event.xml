@@ -220,8 +220,8 @@
 			label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
 		<field name="created_by" type="user" label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL" description="COM_DPCALENDAR_FIELD_AUTHOR_DESC"/>
 		<field name="created_by_alias" type="text" label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
-		<field name="host_ids" type="sql" multiple="true" class="dp-select" key_field="id" value_field="name"
-			query="SELECT id, name FROM #__users where block = 0 order by name"
+		<field name="host_ids" type="sql" multiple="true" class="dp-select" key_field="value" value_field="text"
+			query="SELECT id as value, name as text FROM #__users where block = 0 order by text"
 			label="COM_DPCALENDAR_FIELD_HOSTS_LABEL" description="COM_DPCALENDAR_FIELD_HOSTS_DESC">
 		</field>
 		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"

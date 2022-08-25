@@ -9,7 +9,9 @@ namespace DPCalendar\Helper;
 
 defined('_JEXEC') or die();
 
-use DPCalendar\TCPDF\DPCalendar;
+use chillerlan\QRCode\QRCode;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use DPCalendar\Translator\Translator;
 use DPCalendarHelperRoute;
 use Exception;
@@ -43,6 +45,36 @@ class Booking
 	 */
 	public static function createInvoice($booking, $tickets, $params, $toFile = false, $language = null)
 	{
+		// Load the payment plugins
+		PluginHelper::importPlugin('dpcalendarpay');
+		$invoice = Factory::getApplication()->triggerEvent('onDPCalendarLoadInvoice', ['booking' => $booking]);
+
+		// Set the invoice to the first element when available
+		if ($invoice) {
+			$invoice = $invoice[0];
+		}
+
+		// Write the file
+		if ($invoice && $toFile) {
+			file_put_contents(JPATH_ROOT . '/tmp/' . $invoice['name'], $invoice['content']);
+
+			return JPATH_ROOT . '/tmp/' . $invoice['name'];
+		}
+
+		// Download the invoice
+		if ($invoice && !$toFile) {
+			header('Content-Type: ' . ($invoice['mime'] ?? 'application/pdf'));
+			header('Content-disposition: attachment; filename="' . $invoice['name'] . '"');
+
+			if (!empty($invoice['size'])) {
+				header('Content-Length: ' . $invoice['size']);
+			}
+
+			echo $invoice['content'];
+
+			return $invoice['name'];
+		}
+
 		try {
 			$details = $booking->invoice;
 
@@ -63,43 +95,7 @@ class Booking
 				);
 			}
 
-			// Disable notices (TCPDF is causing many of these)
-			error_reporting(E_ALL ^ (E_NOTICE | E_DEPRECATED));
-
-			$pdf = new DPCalendar($params);
-
-			// set document information
-			$pdf->SetCreator(PDF_CREATOR);
-			$pdf->SetAuthor('DPCalendar by joomla.digital-peak.com');
-			$pdf->SetTitle('');
-			$pdf->SetSubject('DPCalendar Invoice');
-			$pdf->SetKeywords('Invoice, DPCalendar, Digital Peak');
-
-			// remove default header/footer
-			$pdf->setPrintHeader(true);
-			$pdf->setPrintFooter(true);
-
-			// set margins
-			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-
-			// Adding the content
-			$pdf->AddPage();
-			$pdf->writeHTML($details, true, false, true, false, '');
-
-			$fileName = $booking->uid . '.pdf';
-			if ($toFile) {
-				$fileName = JPATH_ROOT . '/tmp/' . $fileName;
-				if (file_exists($fileName)) {
-					unlink($fileName);
-				}
-			}
-
-			ob_end_clean();
-			$pdf->Output($fileName, $toFile ? 'F' : 'D');
-
-			return $fileName;
+			return self::createPDF($details, $booking->uid, $toFile);
 		} catch (Exception $e) {
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
@@ -129,68 +125,79 @@ class Booking
 			$model = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
 			$event = $model->getItem($ticket->event_id);
 
+			$qrcode = '';
+			if ($params->get('ticket_show_barcode', 1)) {
+				$qrcode = (new QRCode())->render(DPCalendarHelperRoute::getTicketCheckinRoute($ticket, true));
+			}
+
 			$details = \DPCalendarHelper::renderLayout(
 				'ticket.details',
 				[
 					'ticket'     => $ticket,
 					'event'      => $event,
+					'qrcode'     => $qrcode,
 					'translator' => new Translator(),
 					'dateHelper' => new DateHelper(),
 					'params'     => $params
 				]
 			);
 
-			// Disable notices (TCPDF is causing many of these)
-			error_reporting(E_ALL ^ (E_NOTICE | E_DEPRECATED));
+			return self::createPDF($details, $ticket->uid, $toFile);
+		} catch (Exception $e) {
+			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
-			$pdf = new DPCalendar($params);
+			return null;
+		}
+	}
+	/**
+	 * Creates a PDF for the given ticket.
+	 * If to file is set, then the PDF will be written to a file and the file
+	 * name is returned. Otherwise it will be offered as download.
+	 *
+	 * @param stdClass $ticket
+	 * @param Registry $params
+	 * @param string   $toFile
+	 *
+	 * @return string
+	 */
+	public static function createCertificate($ticket, $params, $toFile = false)
+	{
+		try {
+			Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
-			// set document information
-			$pdf->SetCreator(PDF_CREATOR);
-			$pdf->SetAuthor('DPCalendar by joomla.digital-peak.com');
-			$pdf->SetTitle($event->title);
-			$pdf->SetSubject('DPCalendar Ticket');
-			$pdf->SetKeywords('Invoice, DPCalendar, Digital Peak');
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+			BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
 
-			// remove default header/footer
-			$pdf->setPrintHeader(true);
-			$pdf->setPrintFooter(true);
+			$model       = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
+			$event       = $model->getItem($ticket->event_id);
+			$event->text = $event->description;
+			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$params, 0]);
+			$event->description = $event->text;
 
-			// set margins
-			$pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
-			$pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-			$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+			$model         = BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
+			$booking       = $model->getItem($ticket->booking_id);
+			$booking->text = '';
+			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.booking', &$booking, &$params, 0]);
 
-			// Adding the content
-			$pdf->AddPage();
-			$pdf->writeHTML($details, true, false, true, false, '');
-
-			if ($params->get('ticket_show_barcode', 1)) {
-				$style = [
-					'border'        => 2,
-					'position'      => 'C',
-					'vpadding'      => 'auto',
-					'hpadding'      => 'auto',
-					'fgcolor'       => [0, 0, 0],
-					'bgcolor'       => false,
-					'module_width'  => 1,
-					'module_height' => 1
-				];
-				$pdf->write2DBarcode(DPCalendarHelperRoute::getTicketCheckinRoute($ticket, true), 'QRCODE,L', 20, 200, 50, 50, $style, 'N');
+			if (!isset($ticket->jcfields)) {
+				$ticket->text = '';
+				Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.ticket', &$ticket, &$params, 0]);
 			}
 
-			$fileName = $ticket->uid . '.pdf';
-			if ($toFile) {
-				$fileName = JPATH_ROOT . '/tmp/' . $fileName;
-				if (file_exists($fileName)) {
-					unlink($fileName);
-				}
-			}
+			$details = \DPCalendarHelper::renderLayout(
+				'ticket.certificate',
+				[
+					'booking'      => $booking,
+					'ticket'       => $ticket,
+					'event'        => $event,
+					'translator'   => new Translator(),
+					'dateHelper'   => new DateHelper(),
+					'layoutHelper' => new LayoutHelper(),
+					'params'       => $params
+				]
+			);
 
-			ob_end_clean();
-			$pdf->Output($fileName, $toFile ? 'F' : 'D');
-
-			return $fileName;
+			return self::createPDF($details, $ticket->uid, $toFile);
 		} catch (Exception $e) {
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
@@ -514,11 +521,47 @@ class Booking
 			case 8:
 				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING';
 				break;
+			case 9:
+				$status = 'COM_DPCALENDAR_TICKET_FIELD_STATE_CHECKIN';
+				break;
 			case -2:
 				$status = 'JTRASHED';
 				break;
 		}
 
 		return Text::_($status);
+	}
+
+	private static function createPDF(string $details, string $name, bool $toFile)
+	{
+		if (!file_exists(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json')) {
+			copy(
+				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/dpcalendar/DPCalendar/Dompdf/installed-fonts.dist.json',
+				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json'
+			);
+		}
+
+		$options = new Options();
+		$options->set('defaultFont', 'DejaVu Sans');
+		$options->set('isRemoteEnabled', true);
+		$dompdf = new Dompdf($options);
+		$dompdf->loadHtml($details);
+		$dompdf->render();
+
+		$fileName = $name . '.pdf';
+		if ($toFile) {
+			$fileName = JPATH_ROOT . '/tmp/' . $fileName;
+			if (file_exists($fileName)) {
+				unlink($fileName);
+			}
+		}
+
+		if ($toFile) {
+			file_put_contents($fileName, $dompdf->output());
+		} else {
+			$dompdf->stream($fileName);
+		}
+
+		return $fileName;
 	}
 }

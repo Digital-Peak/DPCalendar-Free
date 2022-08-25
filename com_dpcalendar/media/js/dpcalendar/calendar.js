@@ -392,6 +392,7 @@
 							input.dpPicker = new Pikaday({
 								field: input,
 								trigger: button,
+								firstDay: options['firstDay'],
 								i18n: {
 									months: names['monthNames'],
 									weekdays: names['dayNames'],

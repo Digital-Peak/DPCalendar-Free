@@ -12,6 +12,8 @@ use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
 use DPCalendar\Router\Router;
 use DPCalendar\Translator\Translator;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -160,14 +162,54 @@ class PlgContentDPCalendar extends CMSPlugin
 
 	public function onContentAfterDisplay($context, $item)
 	{
-		// Render only for existing contacts
-		if ($context !== 'com_contact.contact' || !$item->user_id) {
+		$buffer = '';
+		$layout = '';
+		$userId = 0;
+
+		// Check if we can render contacts
+		if ($context === 'com_contact.contact' && $this->params->get('events_contact', 1)) {
+			$layout = 'contact/events';
+			$userId = $item->user_id;
+		}
+
+		// Check if we can render users
+		if ($context === 'com_users.user' && $this->params->get('events_users', 1)) {
+			$layout = 'users/events';
+			$userId = $item->id;
+		}
+
+		if (!$userId) {
 			return;
 		}
 
-		// Check if disabled in the plugin
-		if (!$this->params->get('events_contact', 1)) {
+		// Load some classes
+		if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
 			return;
+		}
+
+		$router     = new Router();
+		$dateHelper = new DateHelper();
+		$document   = new HtmlDocument();
+		$translator = new Translator();
+
+		if ($userId && $this->params->get('show_bookings') && Factory::getUser()->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
+			Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+			$this->app->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+
+			$model = BaseDatabaseModel::getInstance('Bookings', 'DPCalendarModel', ['ignore_request' => true]);
+			$model->setState('filter.created_by', $userId);
+
+			$bookings = $model->getItems();
+			$params   = ComponentHelper::getParams('com_dpcalendar');
+
+			ob_start();
+			include PluginHelper::getLayoutPath('content', 'dpcalendar', 'bookings/list');
+			$buffer .= ob_get_clean();
+		}
+
+		if (!$layout) {
+			return $buffer;
 		}
 
 		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
@@ -175,22 +217,19 @@ class PlgContentDPCalendar extends CMSPlugin
 		// Load the model
 		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('list.start-date', 0);
-		$model->setState('filter.author', $item->user_id);
+		$model->setState('filter.expand', false);
+		$model->setState('filter.author', $userId);
 		$authoredEvents = $model->getItems();
 
 		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('list.start-date', 0);
-		$model->setState('filter.hosts', $item->user_id);
+		$model->setState('filter.expand', false);
+		$model->setState('filter.hosts', $userId);
 		$hostEvents = $model->getItems();
 
-		$router     = new Router();
-		$dateHelper = new DateHelper();
-		$document   = new HtmlDocument();
-		$translator = new Translator();
-
 		ob_start();
-		include PluginHelper::getLayoutPath('content', 'dpcalendar', 'contact/events');
-		return ob_get_clean();
+		include PluginHelper::getLayoutPath('content', 'dpcalendar', $layout);
+		return $buffer . ob_get_clean();
 	}
 
 	public function onContentAfterDelete($context, $item)

@@ -187,9 +187,15 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		$form->setFieldAttribute('scheduling_end_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
 		$form->setFieldAttribute('xreference', 'readonly', true);
 
+		$renderer = new LayoutHelper();
+		$form->setFieldAttribute(
+			'host_ids',
+			'query',
+			$renderer->renderLayout('form.hosts', ['field_name' => 'hosts', 'form' => $form])
+		);
+
 		// User field doesn't work on front
 		if (Factory::getApplication()->isClient('site')) {
-			$renderer = new LayoutHelper();
 			$form->setFieldAttribute('created_by', 'type', 'sql');
 			$form->setFieldAttribute('created_by', 'class', 'dp-select');
 			$form->setFieldAttribute('created_by', 'key_field', 'value');

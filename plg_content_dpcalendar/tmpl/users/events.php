@@ -15,12 +15,12 @@ if (!$authoredEvents && !$hostEvents) {
 
 $document->loadStyleFile('events.css', 'plg_content_dpcalendar');
 ?>
-<div class="plg-content-dpcalendar-contact-events">
+<div class="plg-content-dpcalendar-user-events">
 	<?php if ($authoredEvents) { ?>
-		<div class="plg-content-dpcalendar-contact-events__header">
-            <?php echo $translator->translate('PLG_CONTENT_DPCALENDAR_CONTACT_EVENTS_TITLE_AUTHORED'); ?>
+		<div class="plg-content-dpcalendar-user-events__header">
+            <?php echo $translator->translate('PLG_CONTENT_DPCALENDAR_USER_EVENTS_TITLE_AUTHORED'); ?>
         </div>
-		<ul class="plg-content-dpcalendar-contact-events__authors dp-events dp-list dp-list_unordered">
+		<ul class="plg-content-dpcalendar-user-events__authors dp-events dp-list dp-list_unordered">
 			<?php foreach ($authoredEvents as $event) { ?>
 				<li class="dp-event">
 					<a href="<?php echo $router->getEventRoute($event->id, $event->catid); ?>" class="dp-event__link dp-link">
@@ -38,10 +38,10 @@ $document->loadStyleFile('events.css', 'plg_content_dpcalendar');
 		</ul>
 	<?php } ?>
 	<?php if ($hostEvents) { ?>
-		<div class="plg-content-dpcalendar-contact-events__header">
-            <?php echo $translator->translate('PLG_CONTENT_DPCALENDAR_CONTACT_EVENTS_TITLE_HOSTS'); ?>
-    </div>
-		<ul class="plg-content-dpcalendar-contact-events__hosts dp-events dp-list dp-list_unordered">
+		<div class="plg-content-dpcalendar-user-events__header">
+            <?php echo $translator->translate('PLG_CONTENT_DPCALENDAR_USER_EVENTS_TITLE_HOSTS'); ?>
+        </div>
+		<ul class="plg-content-dpcalendar-user-events__hosts dp-events dp-list dp-list_unordered">
 			<?php foreach ($hostEvents as $event) { ?>
 				<li class="dp-event">
 					<a href="<?php echo $router->getEventRoute($event->id, $event->catid); ?>" class="dp-event__link dp-link">

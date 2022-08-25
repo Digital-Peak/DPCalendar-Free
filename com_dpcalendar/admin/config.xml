@@ -19,7 +19,7 @@
 			<option value="day">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
 			<option value="list">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LIST</option>
 		</field>
-		<field name="weekstart" type="list" default="0"
+		<field name="weekstart" type="list" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_DESC">
 			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_WEEK_START_SUNDAY</option>
@@ -830,15 +830,32 @@
 
 		<field name="event_form_capacity" type="text" default="0"
 			label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
+		<field name="event_form_max_tickets" type="text"
+			label="COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_MAX_TICKETS_DESC"/>
+		<field name="event_form_booking_opening_date" type="text"
+			label="COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_DESC"/>
+		<field name="event_form_booking_closing_date" type="text"
+			label="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_DESC"/>
+		<field name="event_form_booking_series" type="list"
+			label="COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_SERIES_DESC">
+			<option value=""></option>
+			<option value="0">JNO</option>
+			<option value="2">COM_DPCALENDAR_FIELD_BOOKING_SERIES_OPTION</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="event_form_booking_waiting_list" type="list"
+			label="COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_DESC">
+			<option value=""></option>
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true" layout="joomla.form.field.list-fancy-select"
-			label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL"
-			description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
+			label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 		<field name="event_form_terms" type="modal_article" select="true" new="true" edit="true" clear="true"
 			addfieldpath="/administrator/components/com_content/models/fields" addfieldprefix="Joomla\Component\Content\Administrator\Field"
 			label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
 		<field name="event_form_booking_information" type="editor" filter="JComponentHelper::filterText" buttons="true" hide="pagebreak,readmore"
-			label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL"
-			description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
+			label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
 
 		<field name="event_form_custom_css" type="textarea" filter="JComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
@@ -1678,50 +1695,49 @@
 	</fieldset>
 	<fieldset name="component" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_LABEL">
 		<field name="downloadid" type="text"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_DESC"/>
 		<field name="notification_groups_create" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_DESC"/>
 		<field name="notification_groups_edit" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_DESC"/>
 		<field name="notification_groups_delete" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_DESC"/>
 		<field name="notification_groups_book" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_DESC"/>
 		<field name="notification_groups_location_create" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_DESC"/>
 		<field name="notification_author" type="radio" class="btn-group" default="0"
-				label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="captcha_groups" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-				default="1" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_DESC"/>
-		<field name="enable_tz_switcher" type="radio" class="btn-group"
-				default="0" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_TZ_SWITCHER_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_TZ_SWITCHER_DESC">
+		<field name="captcha_groups" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_DESC"/>
+		<field name="enable_tz_switcher" type="radio" class="btn-group" default="0"
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_TZ_SWITCHER_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_TZ_SWITCHER_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
 		<field name="save_history" type="radio" class="btn-group" default="0"
-				label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
+			label="JGLOBAL_SAVE_HISTORY_OPTIONS_LABEL" description="JGLOBAL_SAVE_HISTORY_OPTIONS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="history_limit" type="text" filter="integer" default="5"
-				label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL" description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC"/>
+			label="JGLOBAL_HISTORY_LIMIT_OPTIONS_LABEL" description="JGLOBAL_HISTORY_LIMIT_OPTIONS_DESC"/>
 	</fieldset>
-	<fieldset name="permissions" description="JCONFIG_PERMISSIONS_DESC"
-			  label="JCONFIG_PERMISSIONS_LABEL">
-		<field name="rules" type="rules" component="com_dpcalendar"
-				filter="rules" validate="rules" label="JCONFIG_PERMISSIONS_LABEL"
-				section="component"/>
+	<fieldset name="permissions"
+		label="JCONFIG_PERMISSIONS_LABEL" description="JCONFIG_PERMISSIONS_DESC">
+		<field name="rules" type="rules" component="com_dpcalendar" section="component" filter="rules" validate="rules"
+			label="JCONFIG_PERMISSIONS_LABEL"/>
 	</fieldset>
 </config>

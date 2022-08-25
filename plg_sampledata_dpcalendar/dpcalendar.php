@@ -704,6 +704,13 @@ class PlgSampledataDPCalendar extends CMSPlugin
 				'state'     => 1
 			]);
 
+			foreach ($this->languageCache as $code => $language) {
+				$table = Table::getInstance('Ticket', 'DPCalendarTable');
+				$table->load(['email' => 'jean@example.com']);
+				$table->state = 9;
+				$table->store();
+			}
+
 			// Basketball
 			$this->createBooking([
 				'name'      => 'Bruce Lee',
@@ -1042,19 +1049,18 @@ class PlgSampledataDPCalendar extends CMSPlugin
 						$data['params']['timeformat_week']  = 'H:i';
 						$data['params']['timeformat_day']   = 'H:i';
 						$data['params']['timeformat_list']  = 'H:i';
-						$data['params']['weekstart']        = 1;
-					// Params for calendar
-					// no break
+						// Params for calendar
+						// no break
 					case 'view=list':
 					case 'view=list&layout=blog':
 					case 'view=list&layout=timeline':
 						$data['params']['list_title_format'] = 'd.m.Y';
-					// Params for list
-					// no break
+						// Params for list
+						// no break
 					case 'view=map':
 						$data['params']['map_date_format'] = 'H:i';
-					// Params for map
-					// no break
+						// Params for map
+						// no break
 					case 'view=event&id=':
 						$data['params']['event_date_format'] = 'd.m.Y';
 						$data['params']['event_time_format'] = 'H:i';

@@ -67,7 +67,7 @@ if ($bd && !(count($bd) == 1 && !$bd[0])) {
 	];
 }
 
-$options['firstDay']              = (int)$params->get('weekstart', 0);
+$options['firstDay']              = (int)$params->get('weekstart', 1);
 $options['scrollTime']            = $params->get('first_hour', 6) . ':00:00';
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;

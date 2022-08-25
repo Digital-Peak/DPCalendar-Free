@@ -545,7 +545,7 @@
 				<option value="booking_opening_date">COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_LABEL</option>
 				<option value="booking_closing_date">COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL</option>
 				<option value="booking_series">COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL</option>
-			    <option value="booking_waiting_list">COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_LABEL</option>
+				<option value="booking_waiting_list">COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_LABEL</option>
 				<option value="price">COM_DPCALENDAR_FIELD_PRICE_LABEL</option>
 				<option value="earlybird">COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL</option>
 				<option value="user_discount">COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL</option>
@@ -599,17 +599,32 @@
 				<option value="0">JNO</option>
 			</field>
 			<field name="event_form_color" type="color"
-				label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"
-					size="6"/>
+				label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"/>
 			<field name="event_form_url" type="url"
-				label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"
-					size="40"/>
+				label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"/>
 			<field name="event_form_access" type="accesslevel" useglobal="true"
 				label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>
 			<field name="event_form_access_content" type="accesslevel" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"/>
-			<field name="event_form_capacity" type="text" useglobal="true" size="6"
+			<field name="event_form_capacity" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
+			<field name="event_form_max_tickets" type="text" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_MAX_TICKETS_DESC"/>
+			<field name="event_form_booking_opening_date" type="text" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_DESC"/>
+			<field name="event_form_booking_closing_date" type="text" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_DESC"/>
+			<field name="event_form_booking_series" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_SERIES_DESC">
+				<option value="0">JNO</option>
+				<option value="2">COM_DPCALENDAR_FIELD_BOOKING_SERIES_OPTION</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_form_booking_waiting_list" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 			<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true"
 				label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 			<field name="event_form_featured" type="list" useglobal="true" label="JFEATURED"

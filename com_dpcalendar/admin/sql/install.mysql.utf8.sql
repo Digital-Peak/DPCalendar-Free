@@ -191,6 +191,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_tickets` (
   `public` tinyint NOT NULL DEFAULT '1',
   `price` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
   `type` int NOT NULL DEFAULT '0',
+  `certificate_send_date` DATETIME NULL DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
   KEY `booking_id` (`booking_id`),

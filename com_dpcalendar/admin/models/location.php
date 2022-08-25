@@ -199,7 +199,10 @@ class DPCalendarModelLocation extends AdminModel
 
 	protected function loadFormData()
 	{
-		$data = Factory::getApplication()->getUserState('com_dpcalendar.edit.location.data', []);
+		$data = Factory::getApplication()->getUserState(
+			'com_dpcalendar.edit.location.data',
+			Factory::getApplication()->getUserState('com_dpcalendar.edit.locationform.data', [])
+		);
 		if (empty($data)) {
 			$data = $this->getItem();
 		}

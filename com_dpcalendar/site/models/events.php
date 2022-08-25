@@ -69,6 +69,10 @@ class DPCalendarModelEvents extends ListModel
 			}
 		}
 		foreach ($categoryIds as $catId) {
+			if (!$catId) {
+				continue;
+			}
+
 			$calendar = DPCalendarHelper::getCalendar($catId);
 			if (!$calendar || $calendar->native || (is_numeric($catId) && $catId != 'root')) {
 				continue;

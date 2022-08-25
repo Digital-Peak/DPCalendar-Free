@@ -420,7 +420,8 @@ class DPCalendarHelper
 			$variables['canEdit']    = $calendar && ($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id));
 			$variables['editLink']   = \DPCalendarHelperRoute::getFormRoute($event->id, $return);
 			$variables['canDelete']  = $calendar && ($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id));
-			$variables['deleteLink'] = Route::_(
+			$variables['deleteLink'] = Route::link(
+				'site',
 				'index.php?option=com_dpcalendar&task=event.delete&e_id=' . $event->id . ($return ? '&return=' . base64_encode($return) : '')
 			);
 
@@ -546,7 +547,7 @@ class DPCalendarHelper
 				self::getDate($event->start_date, $event->all_day)->getTimezone()->getName();
 			$variables['copyGoogleUrl'] .= '&sf=true&output=xml';
 
-			$variables['copyOutlookUrl'] = Route::_("index.php?option=com_dpcalendar&view=event&format=raw&id=" . $event->id);
+			$variables['copyOutlookUrl'] = Route::link('site', 'index.php?option=com_dpcalendar&view=event&format=raw&id=' . $event->id);
 
 			$groupHeading = self::getDate($event->start_date, $event->all_day)->format($params->get('grouping', ''), true);
 			if ($groupHeading != $lastHeading) {
@@ -1177,10 +1178,10 @@ class DPCalendarHelper
 			switch ($last) {
 				case 'g':
 					$memMax = (int)$memMax * 1024;
-				// Gigabyte
+					// Gigabyte
 				case 'm':
 					$memMax = (int)$memMax * 1024;
-				// Megabyte
+					// Megabyte
 				case 'k':
 					$memMax = (int)$memMax * 1024;
 				// Kilobyte

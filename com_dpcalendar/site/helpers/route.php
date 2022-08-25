@@ -520,7 +520,7 @@ class DPCalendarHelperRoute
 		}
 
 		if ($route) {
-			return Route::_($uri->toString(['path', 'query', 'fragment']));
+			return Route::link('site', $uri->toString(['path', 'query', 'fragment']));
 		}
 
 		return $uri;

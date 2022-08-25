@@ -480,6 +480,15 @@ class DPCalendarControllerEvent extends FormController
 			$form      = $model->getForm($data, true);
 			$validData = $model->validate($form, $data);
 
+			if ($validData === false) {
+				foreach ($model->getErrors() as $error) {
+					$this->setMessage($error instanceof Exception ? $error->getMessage() : $error, 'error');
+				}
+				$this->setRedirect(DPCalendarHelperRoute::getFormRoute($app->getUserState('dpcalendar.event.id'), $this->getReturnPage()));
+
+				return false;
+			}
+
 			if (isset($validData['all_day']) && $validData['all_day'] == 1) {
 				$validData['start_date'] = DPCalendarHelper::getDate($validData['start_date'])->toSql(true);
 				$validData['end_date']   = DPCalendarHelper::getDate($validData['end_date'])->toSql(true);

@@ -225,15 +225,17 @@ trait ExportTrait
 			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $realName, &$item, &$item->params, 0]);
 			$line = [];
 			foreach ($fieldsToLabels as $fieldName => $fieldLabel) {
-				$line[] = $valueParser($fieldName, $item);
+				$line[] = html_entity_decode($valueParser($fieldName, $item));
 			}
 
 			if ($fields) {
 				foreach ($fields as $field) {
-					if (isset($item->jcfields) && key_exists($field->id, $item->jcfields)) {
-						$line[] = $this->params->get('export_strip_html')
-							? html_entity_decode(strip_tags($item->jcfields[$field->id]->value)) : $item->jcfields[$field->id]->value;
+					if (!isset($item->jcfields) || !key_exists($field->id, $item->jcfields)) {
+						continue;
 					}
+
+					$value  = $item->jcfields[$field->id]->value;
+					$line[] = html_entity_decode($this->params->get('export_strip_html') ? strip_tags($value) : $value);
 				}
 			}
 			$data[] = $line;

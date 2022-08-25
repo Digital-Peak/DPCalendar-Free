@@ -91,28 +91,30 @@
 					getMarker();
 				});
 				getMarker();
-				DPCalendar.autocomplete.create(geoComplete);
-				geoComplete.addEventListener('dp-autocomplete-select', (e) => {
-					let task = 'location.loc';
-					if (window.location.href.indexOf('administrator') == -1) {
-						task = 'locationform.loc';
-					}
-					DPCalendar.request(
-						'task=' + task + '&loc=' + encodeURIComponent(e.detail.value),
-						(json) => {
-							if (!json.data) {
-								return;
-							}
-							setGeoResult(json.data);
-							DPCalendar.Map.moveMarker(map, getMarker(), json.data.latitude, json.data.longitude);
-						}
-					);
-				});
 			};
 			if (map != null) {
 				map.addEventListener('dp-map-loaded', mapLoader);
 				watchElements([map]);
 			}
+			DPCalendar.autocomplete.create(geoComplete);
+			geoComplete.addEventListener('dp-autocomplete-select', (e) => {
+				let task = 'location.loc';
+				if (window.location.href.indexOf('administrator') == -1) {
+					task = 'locationform.loc';
+				}
+				DPCalendar.request(
+					'task=' + task + '&loc=' + encodeURIComponent(e.detail.value),
+					(json) => {
+						if (!json.data) {
+							return;
+						}
+						setGeoResult(json.data);
+						if (DPCalendar.Map) {
+							DPCalendar.Map.moveMarker(map, getMarker(), json.data.latitude, json.data.longitude);
+						}
+					}
+				);
+			});
 			geoComplete.addEventListener('dp-autocomplete-change', (e) => {
 				let task = 'location.searchloc';
 				if (window.location.href.indexOf('administrator') == -1) {

@@ -810,6 +810,21 @@ class DPCalendarModelAdminEvent extends AdminModel
 		if (!$item->get('capacity') && $params->get('event_form_capacity') > 0) {
 			$data['capacity'] = $params->get('event_form_capacity');
 		}
+		if (!$item->get('max_tickets')) {
+			$data['max_tickets'] = $params->get('event_form_max_tickets');
+		}
+		if (!$item->get('booking_opening_date')) {
+			$data['booking_opening_date'] = $params->get('event_form_booking_opening_date');
+		}
+		if (!$item->get('booking_closing_date')) {
+			$data['booking_closing_date'] = $params->get('event_form_booking_closing_date');
+		}
+		if (!$item->get('booking_series')) {
+			$data['booking_series'] = $params->get('event_form_booking_series');
+		}
+		if (!$item->get('booking_waiting_list')) {
+			$data['booking_waiting_list'] = $params->get('event_form_booking_waiting_list');
+		}
 		if (!$item->get('payment_provider')) {
 			$data['payment_provider'] = $params->get('event_form_payment_provider');
 		}

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" method="upgrade">
+	<name>com_dpcalendar</name>
+	<author>Digital Peak</author>
+	<creationDate>22 Sep 2022</creationDate>
+	<copyright>(C) 2014 Digital Peak GmbH</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>8.6.0</version>
+	<description>COM_DPCALENDAR_XML_DESCRIPTION</description>
+	<install>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+		</sql>
+	</install>
+	<update>
+		<schemas>
+			<schemapath type="mysql">sql/updates/mysql</schemapath>
+		</schemas>
+	</update>
+	<uninstall>
+		<sql>
+			<file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+		</sql>
+	</uninstall>
+	<scriptfile>script.php</scriptfile>
+	<files folder="site">
+		<filename>dpcalendar.php</filename>
+		<filename>controller.php</filename>
+		<filename>router.php</filename>
+		<folder>controllers</folder>
+		<folder>helpers</folder>
+		<folder>language</folder>
+		<folder>layouts</folder>
+		<folder>models</folder>
+		<folder>tables</folder>
+		<folder>views</folder>
+	</files>
+	<media destination="com_dpcalendar" folder="media">
+		<folder>css</folder>
+		<folder>images</folder>
+		<folder>js</folder>
+	</media>
+	<administration>
+		<menu view="cpanel">COM_DPCALENDAR</menu>
+		<submenu>
+			<menu view="cpanel">COM_DPCALENDAR_SUBMENU_CPANEL</menu>
+			<menu view="events">COM_DPCALENDAR_SUBMENU_EVENTS</menu>
+			<menu link="option=com_categories&amp;extension=com_dpcalendar" view="categories">COM_DPCALENDAR_SUBMENU_CALENDARS</menu>
+			<menu view="locations">COM_DPCALENDAR_SUBMENU_LOCATIONS</menu>
+			<menu link="option=com_fields&amp;context=com_dpcalendar.event">JGLOBAL_FIELDS</menu>
+			<menu link="option=com_fields&amp;view=groups&amp;context=com_dpcalendar.event">JGLOBAL_FIELD_GROUPS</menu>
+			<menu view="tools">COM_DPCALENDAR_SUBMENU_TOOLS</menu>
+		</submenu>
+		<files folder="admin">
+			<filename>access.xml</filename>
+			<filename>config.xml</filename>
+			<filename>controller.php</filename>
+			<filename>dpcalendar.php</filename>
+			<folder>controllers</folder>
+			<folder>helpers</folder>
+			<folder>language</folder>
+			<folder>libraries</folder>
+			<folder>models</folder>
+			<folder>sql</folder>
+			<folder>tables</folder>
+			<folder>vendor</folder>
+			<folder>views</folder>
+		</files>
+	</administration>
+</extension>

@@ -40,7 +40,7 @@ class DPCalendarModelTickets extends ListModel
 		parent::__construct($config);
 	}
 
-	protected function populateState($ordering = null, $direction = null)
+	protected function populateState($ordering = 'a.id', $direction = 'desc')
 	{
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
@@ -55,7 +55,7 @@ class DPCalendarModelTickets extends ListModel
 		$app = Factory::getApplication();
 		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
-		parent::populateState('e.start_date', 'asc');
+		parent::populateState($ordering, $direction);
 	}
 
 	protected function _getList($query, $limitstart = 0, $limit = 0)
@@ -109,6 +109,10 @@ class DPCalendarModelTickets extends ListModel
 		// Join over the events
 		$query->select('e.catid AS event_calid, e.title as event_title, e.start_date, e.end_date, e.all_day, e.show_end_time, e.price as event_prices, e.booking_options as event_options, e.payment_provider as event_payment_provider, e.terms as event_terms, e.created_by as event_author, e.original_id as event_original_id, e.rrule as event_rrule, e.booking_cancel_closing_date as event_booking_cancel_closing_date');
 		$query->join('LEFT', $db->quoteName('#__dpcalendar_events') . ' AS e ON e.id = a.event_id');
+		// Join over the hosts
+		$query->select('GROUP_CONCAT(h.user_id) as event_host_ids');
+		$query->join('LEFT', $db->quoteName('#__dpcalendar_events_hosts') . ' AS h ON h.event_id = a.event_id');
+		$query->group(['a.id']);
 
 		// Join over the users for the author.
 		$query->select('ua.name AS user_name');
@@ -161,7 +165,7 @@ class DPCalendarModelTickets extends ListModel
 			}
 
 			if (Factory::getApplication()->isClient('site')) {
-				$query->where('(e.created_by = ' . (int)$user->id . ' or a.user_id = ' . (int)$user->id . ')');
+				$query->where('(e.created_by = ' . (int)$user->id . ' or a.user_id = ' . (int)$user->id . ' or h.user_id = ' . (int)$user->id . ')');
 			}
 		}
 

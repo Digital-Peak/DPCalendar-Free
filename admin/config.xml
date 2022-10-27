@@ -993,14 +993,35 @@
 			description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 	</fieldset>
 	<fieldset name="tickets" label="COM_DPCALENDAR_TICKETS"
-			  description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="tickets_states" multiple="true" layout="joomla.form.field.list-fancy-select"
+			label="JSTATUS">
+			<option value="1">COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED</option>
+			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
+			<option value="2">COM_DPCALENDAR_BOOKING_FIELD_STATE_TICKET_REVIEW</option>
+			<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_CONFIRMATION</option>
+			<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
+			<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
+			<option value="6">COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED</option>
+			<option value="7">COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED</option>
+			<option value="8">COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING</option>
+			<option value="9">COM_DPCALENDAR_TICKET_FIELD_STATE_CHECKIN</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="tickets_order_dir" type="list" default="a.name ASC"
+			label="COM_DPCALENDAR_FIELD_CONFIG_TICKETS_ORDER_DIRECTION_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_TICKETS_ORDER_DIRECTION_DESC">
+			<option value="a.name ASC">COM_DPCALENDAR_VIEWS_FILTERS_NAME_ASC</option>
+			<option value="a.name DESC">COM_DPCALENDAR_VIEWS_FILTERS_NAME_DESC</option>
+			<option value="a.created ASC">JDATE_ASC</option>
+			<option value="a.created DESC">JDATE_DESC</option>
+		</field>
 		<field name="tickets_textbefore" type="textarea" filter="JComponentHelper::filterText"
-				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="tickets_textafter" type="textarea" filter="JComponentHelper::filterText"
-				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 		<field name="tickets_custom_css" type="textarea" filter="JComponentHelper::filterText"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 	</fieldset>
 	<fieldset name="ticket" label="COM_DPCALENDAR_TICKET"
 			  description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">

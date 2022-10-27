@@ -315,8 +315,6 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 		// If tags have changed we need to update each instance
 		if ($tagsChanged) {
 			$this->populateTags();
-
-			return;
 		}
 
 		$query = $this->_db->getQuery(true);
@@ -597,34 +595,18 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 	public function populateTags($newTags = null)
 	{
 		$this->_db->setQuery('select * from #__dpcalendar_events where ' . $this->_db->qn('original_id') . ' = ' . $this->_db->q($this->id));
-		$childs = $this->_db->loadObjectList(null, 'DPCalendarTableEvent');
-
-		foreach ($childs as $child) {
-			$child->bind(
-				(array)$this,
-				[
-					'id',
-					'original_id',
-					'start_date',
-					'end_date',
-					'all_day',
-					'alias',
-					'rrule',
-					'recurrence_id',
-					'checked_out',
-					'checked_out_time',
-					'xreference'
-				]
-			);
+		foreach ($this->_db->loadAssocList() as $child) {
+			$table = new self($this->getDbo());
+			$table->bind($child);
 
 			if ($newTags === null) {
 				$newTags = $this->newTags;
 			}
 
 			if (isset($newTags)) {
-				$child->newTags = $newTags;
+				$table->newTags = $newTags;
 			}
-			$child->store();
+			$table->store();
 		}
 	}
 

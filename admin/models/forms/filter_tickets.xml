@@ -19,7 +19,7 @@
 			<option value="-2">JTRASHED</option>
 		</field>
 		<field name="ticket_holder" type="dpauthor" label="COM_CONTENT_FILTER_AUTHOR"
-			table_name="dpcalendar_bookings" author_field="user_id" description="COM_CONTENT_FILTER_AUTHOR_DESC"
+			table_name="dpcalendar_tickets" author_field="user_id" description="COM_CONTENT_FILTER_AUTHOR_DESC"
 			onchange="this.form.submit();">
 			<option value="">JOPTION_SELECT_AUTHOR</option>
 		</field>

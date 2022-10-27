@@ -267,7 +267,9 @@ class DPCalendarModelEvent extends ItemModel
 		$item->params->set(
 			'send-tickets-mail',
 			is_numeric($item->catid) &&
-			((!$user->guest && $item->created_by == $user->id) || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
+			// Allow to send mails when user is author, host or global admin
+			((!$user->guest && ($item->created_by == $user->id || in_array($user->id, explode(',', $item->host_ids ?: ''))))
+				|| $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
 		);
 
 		$calendar = DPCalendarHelper::getCalendar($item->catid);

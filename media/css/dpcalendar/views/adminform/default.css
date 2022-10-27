@@ -108,6 +108,7 @@
 }
 .com-dpcalendar-adminform .dp-select {
 	width: 100%;
+	border: 1px solid #ccc;
 }
 .com-dpcalendar-adminform .dp-select-element {
 	border: 0 !important;

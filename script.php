@@ -12,6 +12,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Table\Table;
+use Joomla\Registry\Registry;
 
 JLoader::register('DPCalendarHelper', dirname(__FILE__) . '/admin/helpers/dpcalendar.php');
 
@@ -204,7 +205,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			}
 		}
 
-		if (version_compare($version, '8.2.0')) {
+		if (version_compare($version, '8.2.0') == -1) {
 			$params = ComponentHelper::getParams('com_dpcalendar');
 			$params->set('calendar_filter_author', $params->get('show_my_only_calendar', '0') == '1' ? '-1' : '0');
 			$params->set('list_filter_author', $params->get('show_my_only_list', '0') == '1' ? '-1' : '0');
@@ -214,7 +215,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
 
-		if (version_compare($version, '8.6.0')) {
+		if (version_compare($version, '8.6.0') == -1) {
 			$params = ComponentHelper::getParams('com_dpcalendar');
 			$params->set('booking_include_receipt', $params->get('booking_include_invoice', '1'));
 			$params->set('pdf_address', $params->get('invoice_address', ''));
@@ -232,6 +233,35 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 				if (strpos($file, '/com_dpcalendar/booking/invoice.php') !== false) {
 					rename($file, str_replace('invoice.php', 'details.php', $file));
 				}
+			}
+		}
+
+		if (version_compare($version, '8.7.0') == -1) {
+			foreach ($db->setQuery("select * from #__extensions where folder = 'dpcalendarpay';")->loadObjectList() as $plugin) {
+				if ($plugin->params === '[]') {
+					continue;
+				}
+
+				$params    = new Registry($plugin->params);
+				$providers = $params->get('providers');
+				if (!$providers) {
+					continue;
+				}
+
+				foreach ($providers as $provider) {
+					if (isset($provider->state) && !isset($provider->booking_state)) {
+						$provider->booking_state = $provider->state;
+						unset($provider->state);
+					}
+
+					if (!isset($provider->state)) {
+						$provider->state = 1;
+					}
+				}
+
+				$params->set('providers', $providers);
+
+				$this->run('update #__extensions set params = ' . $db->quote($params->toString()) . ' where extension_id = ' . $plugin->extension_id);
 			}
 		}
 	}
@@ -265,7 +295,6 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			return;
 		}
 
-		JLoader::import('joomla.filesystem.folder');
 		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_falang/contentelements')) {
 			File::copy(
 				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/falang/dpcalendar_events.xml',
@@ -294,8 +323,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			$category->store(true);
 			$category->rebuildPath($category->id);
 
-			\Joomla\CMS\Factory::getDbo()->setQuery('update #__extensions set params = \'{"providers":{"providers0":{"id":1,"title":"Default","description":"PLG_DPCALENDARPAY_MANUAL_PAY_BUTTON_DESC","state": 4,"payment_statement":"PLG_DPCALENDARPAY_MANUAL_PAYMENT_STATEMENT_TEXT"}}}\' where name like \'plg_dpcalendarpay_manual\'');
-			\Joomla\CMS\Factory::getDbo()->execute();
+			$this->run('update #__extensions set params = \'{"providers":{"providers0":{"id":1,"title":"Default","description":"PLG_DPCALENDARPAY_MANUAL_PAY_BUTTON_DESC","booking_state": 4,"payment_statement":"PLG_DPCALENDARPAY_MANUAL_PAYMENT_STATEMENT_TEXT"}}}\' where name like \'plg_dpcalendarpay_manual\'');
 		}
 	}
 

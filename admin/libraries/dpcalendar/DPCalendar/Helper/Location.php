@@ -150,6 +150,14 @@ class Location
 				}
 
 				$locations = self::$locationCache->getItems();
+
+				// When no items search in alias as it can be the same for different locations because of stripping out characters like double whitespaces
+				if (!$locations && self::$locationCache->getState('filter.xreference')) {
+					self::$locationCache->setState('filter.xreference', null);
+					self::$locationCache->setState('filter.search', ApplicationHelper::stringURLSafe($location));
+					$locations = self::$locationCache->getItems();
+				}
+
 				if ($locations) {
 					$locObject = $locations[0];
 					if ((int)$locObject->latitude) {

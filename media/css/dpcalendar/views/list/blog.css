@@ -205,6 +205,7 @@
 }
 .com-dpcalendar-blog .dp-select {
 	width: 100%;
+	border: 1px solid #ccc;
 }
 .com-dpcalendar-blog .dp-select-element {
 	border: 0 !important;

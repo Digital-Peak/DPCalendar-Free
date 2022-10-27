@@ -6,13 +6,17 @@
 (function () {
 	'use strict';
 	function getCalendarIds(calendar, options, util) {
+		let calendars;
 		if (localStorage.getItem(options['storageId']) == null) {
 			localStorage.setItem(options['storageId'], JSON.stringify(options['calendarIds']));
-			return options['calendarIds'];
+			calendars = options['calendarIds'];
 		}
-		return JSON.parse(localStorage.getItem(options['storageId'])).filter((calId) => {
-			return options['calendarIds'].findIndex((id) => String(id) === String(calId)) >= 0;
-		});
+		if (!calendars) {
+			calendars = JSON.parse(localStorage.getItem(options['storageId'])).filter((calId) => {
+				return options['calendarIds'].findIndex((id) => String(id) === String(calId)) >= 0;
+			});
+		}
+		return options['singleCalendarsFetch'] ? [calendars.join(',')] : calendars;
 	}
 	function attachStateListeners(calendar, options, util) {
 		const calendarIds = getCalendarIds(calendar, options);

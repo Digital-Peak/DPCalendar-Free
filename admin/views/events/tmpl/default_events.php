@@ -7,15 +7,18 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\HTML\Block\Icon;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Uri\Uri;
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 $archived  = $this->state->get('filter.state') == 2;
 $trashed   = $this->state->get('filter.state') == -2;
 $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category');
+$return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 ?>
 <div class="com-dpcalendar-events__events">
 	<table class="dp-table dp-events-table" id="eventList">
@@ -98,13 +101,17 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category'
 				</td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_COLOR_LABEL'); ?>">
 					<?php $color = $item->color ?: DPCalendarHelper::getCalendar($item->catid)->color; ?>
-					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($color); ?>"
+					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo DPCalendarHelper::getOppositeBWColor($color); ?>"
 						 class="dp-event__color">
 						<?php echo $this->escape($color); ?>
 					</div>
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ACCESS'); ?>"><?php echo $this->escape($item->access_level); ?></td>
-				<td data-column="<?php echo $this->translate('JAUTHOR'); ?>"><?php echo $this->escape($item->author_name); ?></td>
+				<td data-column="<?php echo $this->translate('JAUTHOR'); ?>">
+					<a href="<?php echo $this->router->route('index.php?option=com_users&task=user.edit&id=' . $item->created_by . $return); ?>">
+						<?php echo $this->escape($item->author_name); ?>
+					</a>
+				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_LANGUAGE'); ?>">
 					<?php if ($item->language == '*') { ?>
 						<?php echo Text::alt('JALL', 'language'); ?>

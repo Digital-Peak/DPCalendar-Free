@@ -15,6 +15,7 @@ use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\Ical;
 use DPCalendar\Helper\Location;
 use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\Folder;
@@ -48,6 +49,9 @@ abstract class DPCalendarPlugin extends CMSPlugin
 	protected $identifier       = null;
 	protected $cachingEnabled   = true;
 	protected $autoloadLanguage = true;
+
+	/** @var CMSApplication $app */
+	protected $app = true;
 
 	public function getIdentifier()
 	{

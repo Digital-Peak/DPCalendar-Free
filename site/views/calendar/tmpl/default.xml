@@ -15,7 +15,7 @@
 				<option value="-1">JALL</option>
 			</field>
 		</fieldset>
-		<fieldset name="calendar" label="COM_DPCALENDAR_CALENDAR">
+		<fieldset name="basic">
 			<field name="idsdnl" type="dpcalendar" multiple="true" size="10" class="dp-select"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TOGGLE_CALENDARS_DESC"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TOGGLE_CALENDARS_LABEL"/>

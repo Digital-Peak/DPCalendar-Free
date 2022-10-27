@@ -44,6 +44,12 @@ class DPCalendarRouter extends RouterView
 		$form = new RouterViewConfiguration('form');
 		$this->registerView($form);
 
+		$bookings = new RouterViewConfiguration('bookings');
+		$this->registerView($bookings);
+
+		$tickets = new RouterViewConfiguration('tickets');
+		$this->registerView($tickets);
+
 		$locations = new RouterViewConfiguration('locations');
 		$locations->setKey('ids');
 		$this->registerView($locations);
@@ -56,12 +62,6 @@ class DPCalendarRouter extends RouterView
 		$form = new RouterViewConfiguration('locationform');
 		$form->setKey('l_id');
 		$this->registerView($form);
-
-		$bookings = new RouterViewConfiguration('bookings');
-		$this->registerView($bookings);
-
-		$tickets = new RouterViewConfiguration('tickets');
-		$this->registerView($tickets);
 
 		$profile = new RouterViewConfiguration('profile');
 		$this->registerView($profile);

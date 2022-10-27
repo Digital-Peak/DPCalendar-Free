@@ -54,6 +54,10 @@ class SetupForUpdate implements StageInterface
 			unset($payload->data['price']);
 		}
 
+		if (!array_key_exists('coupon_id', $payload->data)) {
+			$payload->data['coupon_id'] = 0;
+		}
+
 		$couponId = is_numeric($payload->data['coupon_id']) ? $payload->data['coupon_id'] : ['code' => $payload->data['coupon_id']];
 		if (!empty($payload->data['coupon_id']) && $coupon = $this->couponModel->getItem($couponId)) {
 			$payload->data['coupon_id'] = $coupon->id;

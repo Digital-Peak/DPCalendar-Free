@@ -70,6 +70,7 @@
 }
 .com-dpcalendar-event-mailtickets .dp-select {
 	width: 100%;
+	border: 1px solid #ccc;
 }
 .com-dpcalendar-event-mailtickets .dp-select-element {
 	border: 0 !important;

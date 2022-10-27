@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\Booking;
 use Joomla\CMS\HTML\HTMLHelper;
 ?>
 <form class="com-dpcalendar-event-mailtickets__form dp-form form-validate" method="post" name="adminForm"
@@ -23,7 +24,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 			<div class="dp-control__input">
 				<input type="checkbox" class="dp-input dp-input-checkbox dp-form-input"
 					value="<?php echo $ticket->id; ?>" name="jform[tickets][]" id="ticket-<?php echo $ticket->id; ?>" checked>
-				<label for="ticket-<?php echo $ticket->id; ?>"><?php echo $ticket->name; ?></label>
+				<label for="ticket-<?php echo $ticket->id; ?>"><?php echo $ticket->name . ' [' . Booking::getStatusLabel($ticket) . ']'; ?></label>
 			</div>
 		</div>
 	<?php } ?>

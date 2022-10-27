@@ -46,9 +46,10 @@ $this->dpdocument->addScriptOptions('itemid', $this->input->getInt('Itemid', 0))
 $params = $this->params;
 
 // The options which will be passed to the js library
-$options                   = [];
-$options['requestUrlRoot'] = 'view=events&format=raw&limit=0&Itemid=' . $this->input->getInt('Itemid', 0);
-$options['calendarIds']    = $this->selectedCalendars;
+$options                         = [];
+$options['requestUrlRoot']       = 'view=events&format=raw&limit=0&Itemid=' . $this->input->getInt('Itemid', 0);
+$options['calendarIds']          = $this->selectedCalendars;
+$options['singleCalendarsFetch'] = $this->params->get('show_selection', 1) == 2;
 
 // Set the default view
 $options['initialView'] = $params->get('default_view', 'month');

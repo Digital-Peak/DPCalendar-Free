@@ -263,6 +263,10 @@ abstract class PaymentPlugin extends CMSPlugin
 
 		$providers = [];
 		foreach ($this->params->get('providers') as $index => $p) {
+			if (isset($p->state) && $p->state == '0') {
+				continue;
+			}
+
 			$provider     = clone $p;
 			$provider->id = $this->_name . '-' . $provider->id;
 

@@ -111,6 +111,7 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			}
 
 			$mailer = Factory::getMailer();
+			$mailer->addReplyTo(Factory::getUser()->email);
 			$mailer->setSubject(DPCalendarHelper::renderEvents([$event], $subject));
 			$mailer->setBody(DPCalendarHelper::renderEvents([$event], $body));
 			$mailer->IsHTML(true);

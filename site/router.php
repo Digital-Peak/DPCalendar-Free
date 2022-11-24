@@ -84,13 +84,22 @@ class DPCalendarRouter extends RouterView
 	{
 		$this->updateEventParentForQuery($query);
 
+		$active = $this->app->input->get('view');
+
+		// When active is event details view, it should act as parent of the tickets and bookings view
+		if ($active === 'event' && !empty($query['view']) && in_array($query['view'], ['tickets', 'bookings'])) {
+			$this->views[$query['view']]->setParent($this->views['event'], 'e_id');
+		}
+
 		return parent::build($query);
 	}
 
 	public function parse(&$segments)
 	{
 		$active = $this->menu->getActive();
-		if (count($segments) == 1 && !empty($active->query['view']) && in_array($active->query['view'], ['calendar', 'list', 'map'])) {
+
+		// Set the active as parent for the event view when it contains calendars
+		if (count($segments) === 1 && !empty($active->query['view']) && in_array($active->query['view'], ['calendar', 'list', 'map'])) {
 			$this->views['event']->setParent($this->views[$active->query['view']], 'calid');
 		}
 
@@ -106,7 +115,6 @@ class DPCalendarRouter extends RouterView
 
 		// It should have already a correct Itemid
 		$items = $this->menu->getItems('id', $query['Itemid']);
-
 		if (!$items) {
 			return;
 		}
@@ -168,7 +176,7 @@ class DPCalendarRouter extends RouterView
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
 				->from($dbquery->qn('#__dpcalendar_events'))
-				->where('id = ' . $dbquery->q($id));
+				->where('id = ' . $dbquery->quote($id));
 			$db->setQuery($dbquery);
 
 			$id .= ':' . $db->loadResult();
@@ -196,7 +204,7 @@ class DPCalendarRouter extends RouterView
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
 				->from($dbquery->qn('#__dpcalendar_locations'))
-				->where('id = ' . $dbquery->q($id));
+				->where('id = ' . $dbquery->quote($id));
 			$db->setQuery($dbquery);
 
 			$id .= ':' . $db->loadResult();
@@ -214,7 +222,7 @@ class DPCalendarRouter extends RouterView
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
 				->from($dbquery->qn('#__dpcalendar_locations'))
-				->where('id = ' . $dbquery->q($id));
+				->where('id = ' . $dbquery->quote($id));
 			$db->setQuery($dbquery);
 
 			$id .= ':' . $db->loadResult();
@@ -261,10 +269,12 @@ class DPCalendarRouter extends RouterView
 	{
 		$calIds = [];
 
+		// Get the active calendars
 		if ($active = $this->menu->getActive()) {
 			$calIds = $active->getParams()->get('ids');
 		}
 
+		// Load also the external calendars when all are fetched
 		if (count($calIds) === 1 && $calIds[0] == -1) {
 			// Fetch external calendars
 			PluginHelper::importPlugin('dpcalendar');
@@ -289,13 +299,13 @@ class DPCalendarRouter extends RouterView
 		$dbquery = $db->getQuery(true);
 		$dbquery->select($dbquery->qn('id'))
 			->from($dbquery->qn('#__dpcalendar_events'))
-			->where('(alias = ' . $dbquery->q($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : ''). ')');
+			->where('(alias = ' . $dbquery->quote($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : ''). ')');
 
 		if ($calIds && !in_array('-1', $calIds)) {
 			// Loop over the calids, they can be string as with DB cache of external events
 			$condition = 'catid in (';
 			foreach ($calIds as $calId) {
-				$condition .= $db->q($calId) . ',';
+				$condition .= $db->quote($calId) . ',';
 
 				$cal = DPCalendarHelper::getCalendar($calId);
 				if (!$cal || !method_exists($cal, 'getChildren')) {
@@ -303,15 +313,25 @@ class DPCalendarRouter extends RouterView
 				}
 
 				foreach ($cal->getChildren(true) as $child) {
-					$condition .= $db->q($child->id) . ',';
+					$condition .= $db->quote($child->id) . ',';
 				}
 			}
 			$dbquery->where(trim($condition, ',') . ')');
 		}
 
+		// Set the query on the database instance
 		$db->setQuery($dbquery);
 
-		return (int)$db->loadResult();
+		// Get the result
+		$result = (int)$db->loadResult();
+
+		// Can be an external event when there is no menu item for the calendar
+		if ($result === 0 && !$calIds) {
+			return $segment;
+		}
+
+		// Return the result
+		return $result;
 	}
 
 	public function getLocationId($segment, $query)
@@ -320,7 +340,7 @@ class DPCalendarRouter extends RouterView
 		$dbquery = $db->getQuery(true);
 		$dbquery->select($dbquery->qn('id'))
 			->from($dbquery->qn('#__dpcalendar_locations'))
-			->where('(alias = ' . $dbquery->q($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : '') . ')');
+			->where('(alias = ' . $dbquery->quote($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : '') . ')');
 		$db->setQuery($dbquery);
 
 		return (int)$db->loadResult();

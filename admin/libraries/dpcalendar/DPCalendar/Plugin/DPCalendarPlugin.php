@@ -51,7 +51,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 	protected $autoloadLanguage = true;
 
 	/** @var CMSApplication $app */
-	protected $app = true;
+	protected $app = null;
 
 	public function getIdentifier()
 	{

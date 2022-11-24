@@ -4,14 +4,19 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 use DigitalPeak\ThinHTTP as HTTP;
+use Joomla\CMS\Authentication\Authentication;
+use Joomla\CMS\Authentication\AuthenticationResponse;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filesystem\Path;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Registry\Registry;
 
-JLoader::import('joomla.application.component.controller');
-
-class DPCalendarControllerIcal extends JControllerLegacy
+class DPCalendarControllerIcal extends BaseController
 {
 	public function download()
 	{
@@ -19,7 +24,7 @@ class DPCalendarControllerIcal extends JControllerLegacy
 		@set_time_limit(0);
 
 		$loggedIn = false;
-		if (JFactory::getUser()->guest && $token = $this->input->get('token')) {
+		if (Factory::getUser()->guest && $token = $this->input->get('token')) {
 			$loggedIn = $this->login($token);
 		}
 
@@ -30,16 +35,24 @@ class DPCalendarControllerIcal extends JControllerLegacy
 		}
 
 		// Download the external url
+		if ($calendar->icalurl === 'plugin') {
+			header('Content-Type: text/calendar; charset=utf-8');
+			header('Content-disposition: attachment; filename="' . $calendar->title . '.ics"');
+
+			echo implode('', Factory::getApplication()->triggerEvent('onDPCalendarGetIcal', ['id' => $calendar->id]));
+			Factory::getApplication()->close();
+		}
+
 		if (!empty($calendar->icalurl)) {
 			header('Content-Type: text/calendar; charset=utf-8');
 			header('Content-disposition: attachment; filename="' . $calendar->title . '.ics"');
 
 			$headers = [
-				'Accept-Language: ' . \JFactory::getUser()->getParam('language', \JFactory::getLanguage()->getTag()),
+				'Accept-Language: ' . Factory::getUser()->getParam('language', Factory::getLanguage()->getTag()),
 				'Accept: */*'
 			];
 			echo (new HTTP())->get($calendar->icalurl, null, null, $headers)->dp->body;
-			JFactory::getApplication()->close();
+			Factory::getApplication()->close();
 		}
 
 		if (!is_numeric($calendar->id)) {
@@ -56,19 +69,19 @@ class DPCalendarControllerIcal extends JControllerLegacy
 
 		// Download the ical content
 		header('Content-Type: text/calendar; charset=utf-8');
-		header('Content-disposition: attachment; filename="' . \JPath::clean($calendar->title) . '.ics"');
+		header('Content-disposition: attachment; filename="' . Path::clean($calendar->title) . '.ics"');
 
 		echo \DPCalendar\Helper\Ical::createIcalFromCalendar($calendars, false);
 
 		if ($loggedIn) {
-			JFactory::getSession()->set('user', null);
+			Factory::getSession()->set('user', null);
 		}
-		\JFactory::getApplication()->close();
+		Factory::getApplication()->close();
 	}
 
 	private function login($token)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		$query = $db->getQuery(true);
 		$query->select('id, params')->from('#__users')->where($db->quoteName('params') . ' like ' . $db->q('%' . $token . '%'));
@@ -80,7 +93,7 @@ class DPCalendarControllerIcal extends JControllerLegacy
 			return false;
 		}
 
-		$user       = JFactory::getUser($user['id']);
+		$user       = Factory::getUser($user['id']);
 		$userParams = new Registry($user->params);
 
 		// Check if really the token is passed
@@ -91,19 +104,19 @@ class DPCalendarControllerIcal extends JControllerLegacy
 		// Get a fake login response
 		\JLoader::import('joomla.user.authentication');
 		$options            = ['remember' => false];
-		$response           = new JAuthenticationResponse;
-		$response->status   = JAuthentication::STATUS_SUCCESS;
+		$response           = new AuthenticationResponse();
+		$response->status   = Authentication::STATUS_SUCCESS;
 		$response->type     = 'icstoken';
 		$response->username = $user->username;
 		$response->email    = $user->email;
 		$response->fullname = $user->name;
 
 		// Run the login user events
-		JPluginHelper::importPlugin('user');
-		JFactory::getApplication()->triggerEvent('onLoginUser', [(array)$response, $options]);
+		PluginHelper::importPlugin('user');
+		Factory::getApplication()->triggerEvent('onLoginUser', [(array)$response, $options]);
 
 		// Set the user in the session, effectively logging in the user
-		JFactory::getSession()->set('user', JFactory::getUser($user->id));
+		Factory::getSession()->set('user', Factory::getUser($user->id));
 
 		return true;
 	}

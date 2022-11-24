@@ -114,8 +114,14 @@ class BaseView extends HtmlView
 				HTMLHelper::_('behavior.modal', 'a.modal_jform_contenthistory');
 			}
 
-			if ($this->app->isClient('administrator') && DPCalendarHelper::isJoomlaVersion('4', '<')) {
-				HTMLHelper::_('behavior.tabstate');
+			if ($this->app->isClient('administrator')) {
+				if (DPCalendarHelper::isJoomlaVersion('4', '<')) {
+					HTMLHelper::_('behavior.tabstate');
+				} else {
+					HTMLHelper::_('jquery.framework');
+					HTMLHelper::_('behavior.polyfill', ['filter', 'xpath']);
+					HTMLHelper::_('script', 'legacy/tabs-state.js', ['version' => 'auto', 'relative' => true]);
+				}
 			}
 		}
 

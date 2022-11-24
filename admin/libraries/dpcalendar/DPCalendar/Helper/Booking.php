@@ -542,8 +542,10 @@ class Booking
 		$options->set('defaultFont', 'DejaVu Sans');
 		$options->set('isRemoteEnabled', true);
 		$options->set('isPhpEnabled', true);
+		$options->setChroot(array_merge([JPATH_ROOT], $options->getChroot()));
 		$dompdf = new Dompdf($options);
 		$dompdf->loadHtml($details);
+		$dompdf->setBasePath(JPATH_ROOT);
 		$dompdf->render();
 
 		/** @deprecated when footer exists */

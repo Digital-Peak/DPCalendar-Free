@@ -163,16 +163,14 @@ class DPCalendarHelperRoute
 
 	public static function getBookingsRoute($eventId)
 	{
-		$url  = 'index.php?option=com_dpcalendar&view=bookings';
-		$tmpl = Factory::getApplication()->input->getWord('tmpl');
-		if ($tmpl) {
-			$url .= '&tmpl=' . $tmpl;
-		}
+		$args         = [];
+		$args['view'] = 'bookings';
+
 		if ($eventId) {
-			$url .= '&e_id=' . $eventId;
+			$args['e_id'] = $eventId;
 		}
 
-		return Route::_($url);
+		return self::getUrl($args, true);
 	}
 
 	public static function getInviteRoute($event, $return = null)

@@ -15,8 +15,25 @@ use Joomla\CMS\Component\Router\Rules\MenuRules;
 
 class DPCalendarRules extends MenuRules
 {
+	public function parse(&$segments, &$vars)
+	{
+		parent::parse($segments, $vars);
+
+		// When tickets or bookings should be shown as part of the event details view
+		if (count($segments) === 2 && in_array($segments[1], ['tickets', 'bookings'])) {
+			$vars['view'] = $segments[1];
+			$vars['e_id'] = $this->router->getEventId($segments[0], []);
+			unset($segments[0]);
+			unset($segments[1]);
+		}
+	}
+
 	public function preprocess(&$query)
 	{
+		if (!empty($query['view']) && in_array($query['view'], ['tickets', 'bookings']) && !empty($query['e_id'])) {
+			return;
+		}
+
 		parent::preprocess($query);
 
 		// Special treatment for events and locations

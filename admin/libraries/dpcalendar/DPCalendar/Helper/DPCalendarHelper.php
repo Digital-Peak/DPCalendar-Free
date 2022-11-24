@@ -496,7 +496,7 @@ class DPCalendarHelper
 			}
 
 			try {
-				$variables['description'] = HTMLHelper::_('content.prepare', $event->description ?: '');
+				$variables['description'] = HTMLHelper::_('content.prepare', $event->description ?: '', $params, 'com_dpcalendar.event');
 			} catch (\Exception $e) {
 				$variables['description'] = $event->description;
 			}

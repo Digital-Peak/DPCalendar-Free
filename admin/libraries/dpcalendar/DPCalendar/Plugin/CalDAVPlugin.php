@@ -4,7 +4,17 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 namespace DPCalendar\Plugin;
+
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Helper\Ical;
+use DPCalendar\Helper\Location;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Filter\InputFilter;
+use Joomla\CMS\Table\Table;
+use Sabre\VObject\Reader;
+use Sabre\VObject\Recur\NoInstancesException;
 
 defined('_JEXEC') or die();
 
@@ -31,8 +41,8 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 		\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
-		$calendar = \DPCalendarHelper::getCalendar($oldEvent->catid);
-		$c = \Sabre\VObject\Reader::read($this->getOriginalData($eventId, $calendarId));
+		$calendar = DPCalendarHelper::getCalendar($oldEvent->catid);
+		$c        = Reader::read($this->getOriginalData($eventId, $calendarId));
 
 		$original = null;
 		foreach ($c->children() as $index => $tmp) {
@@ -51,7 +61,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 		if ($exdate === null) {
 			$original->add('EXDATE', '');
 		}
-		$rec = \DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd' . ($oldEvent->all_day ? '' : '\THis\Z'));
+		$rec = DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd' . ($oldEvent->all_day ? '' : '\THis\Z'));
 
 		try {
 			$original->EXDATE = trim($exdate . ',' . $rec, ',');
@@ -59,7 +69,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 			// Echo '<pre>' . $c->serialize() . '</pre>'; die();
 			$this->updateCalDAVEvent($eventId, $c->serialize(), $calendarId);
-		} catch (\Sabre\VObject\Recur\NoInstancesException $e) {
+		} catch (NoInstancesException $e) {
 			$this->deleteCalDAVEvent($eventId, $calendarId);
 		}
 
@@ -69,23 +79,23 @@ abstract class CalDAVPlugin extends SyncPlugin
 	public function saveEvent($eventId, $calendarId, array $data)
 	{
 		try {
-			$calendar = \DPCalendarHelper::getCalendar($data['catid']);
+			$calendar = DPCalendarHelper::getCalendar($data['catid']);
 			$event    = null;
 			$oldEvent = null;
 			if (!empty($eventId)) {
-				$event = \JTable::getInstance('Event', 'DPCalendarTable');
+				$event = Table::getInstance('Event', 'DPCalendarTable');
 				$event->bind($this->fetchEvent($eventId, $calendarId));
 				$oldEvent = clone $event;
 			} else {
-				$event = \JTable::getInstance('Event', 'DPCalendarTable');
+				$event = Table::getInstance('Event', 'DPCalendarTable');
 			}
 			$event->bind($data);
 			$event->id             = $eventId;
 			$event->category_title = $calendar->title;
 			if (isset($data['location_ids'])) {
-				$event->locations = \DPCalendar\Helper\Location::getLocations((array)$data['location_ids']);
+				$event->locations = Location::getLocations((array)$data['location_ids']);
 			}
-			$ical = \DPCalendar\Helper\Ical::createIcalFromEvents([$event]);
+			$ical = Ical::createIcalFromEvents([$event]);
 
 			$start = strpos($ical, 'UID:') + 4;
 			$end   = strpos($ical, PHP_EOL, $start + 1);
@@ -99,7 +109,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 				\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
-				$c      = \Sabre\VObject\Reader::read($this->getOriginalData($eventId, $calendarId));
+				$c      = Reader::read($this->getOriginalData($eventId, $calendarId));
 				$vevent = null;
 				foreach ($c->VEVENT as $index => $tmp) {
 					if ((string)$tmp->UID != $eventId) {
@@ -108,7 +118,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 					if ($event->original_id == '0') {
 						$vevent = $tmp;
 						break;
-					} else if ((string)$tmp->{'RECURRENCE-ID'} == $event->recurrence_id) {
+					} elseif ((string)$tmp->{'RECURRENCE-ID'} == $event->recurrence_id) {
 						$vevent = $tmp;
 						break;
 					}
@@ -119,16 +129,16 @@ abstract class CalDAVPlugin extends SyncPlugin
 					$vevent->UID = $eventId;
 					if (!empty($event->original_id) && $event->original_id != '-1') {
 						if ($oldEvent->all_day) {
-							$rec                       = \DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd');
+							$rec                       = DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd');
 							$vevent->{'RECURRENCE-ID'} = $rec;
 							$vevent->{'RECURRENCE-ID'}->add('VALUE', 'DATE');
 						} else {
-							$rec                       = \DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd\THis\Z');
+							$rec                       = DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd\THis\Z');
 							$vevent->{'RECURRENCE-ID'} = $rec;
 							$vevent->{'RECURRENCE-ID'}->add('VALUE', 'DATE-TIME');
 						}
 					}
-				} else if ($event->original_id == '0' || $event->original_id == '-1') {
+				} elseif ($event->original_id == '0' || $event->original_id == '-1') {
 					unset($c->VEVENT);
 					unset($vevent->EXDATE);
 					$c->add($vevent);
@@ -136,7 +146,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 				$vevent->SUMMARY = $event->title;
 
-				$vevent->DESCRIPTION    = \JFilterInput::getInstance()->clean(preg_replace('/\r\n?/', "\n", $event->description));
+				$vevent->DESCRIPTION    = InputFilter::getInstance()->clean(preg_replace('/\r\n?/', "\n", $event->description));
 				$vevent->{'X-ALT-DESC'} = preg_replace('/\r\n?/', "", $event->description);
 				$vevent->{'X-ALT-DESC'}->add('FMTTYPE', 'text/html');
 
@@ -154,12 +164,12 @@ abstract class CalDAVPlugin extends SyncPlugin
 					$vevent->DTEND = $endDate->format('Ymd\THis\Z');
 					$vevent->DTEND->add('VALUE', 'DATE-TIME');
 				}
-				$vevent->{'LAST-MODIFIED'} = \DPCalendarHelper::getDate()->format('Ymd\THis\Z');
+				$vevent->{'LAST-MODIFIED'} = DPCalendarHelper::getDate()->format('Ymd\THis\Z');
 				$vevent->{'X-COLOR'}       = $event->color;
 				$vevent->{'X-URL'}         = $event->url;
 
 				if (isset($event->locations) && !empty($event->locations)) {
-					$vevent->LOCATION = \DPCalendar\Helper\Location::format($event->locations);
+					$vevent->LOCATION = Location::format($event->locations);
 					foreach ($event->locations as $loc) {
 						if (!empty($loc->latitude) && !empty($loc->longitude)) {
 							$vevent->GEO = $loc->latitude . ';' . $loc->longitude;
@@ -175,7 +185,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 				$this->updateCalDAVEvent($eventId, $c->serialize(), $calendarId);
 			}
 
-			$startDate = \DPCalendarHelper::getDate($event->start_date, $event->all_day);
+			$startDate = DPCalendarHelper::getDate($event->start_date, $event->all_day);
 
 			$id = $eventId . '_' . ($event->all_day ? $startDate->format('Ymd') : $startDate->format('YmdHi'));
 			if (!empty($event->rrule)) {
@@ -184,7 +194,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 			return $this->createEvent($id, $calendarId)->id;
 		} catch (\Exception $e) {
-			\JFactory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
 			return false;
 		}

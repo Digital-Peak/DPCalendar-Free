@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="plugin" group="content" method="upgrade">
+	<name>plg_content_dpcalendar</name>
+	<author>Digital Peak</author>
+	<creationDate>24 Nov 2022</creationDate>
+	<copyright>(C) 2015 Digital Peak GmbH</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>8.7.1</version>
+	<description>PLG_CONTENT_DPCALENDAR_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="dpcalendar">dpcalendar.php</filename>
+		<folder>forms</folder>
+		<folder>language</folder>
+		<folder>tmpl</folder>
+	</files>
+	<media destination="plg_content_dpcalendar" folder="media">
+		<folder>css</folder>
+	</media>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field name="show_contact_events" type="radio" default="1" class="btn-group"
+					label="PLG_CONTENT_DPCALENDAR_FIELD_CONTACT_SHOW_EVENTS_LABEL"
+					description="PLG_CONTENT_DPCALENDAR_FIELD_CONTACT_SHOW_EVENTS_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+				<field name="show_bookings" type="radio" default="0" class="btn-group"
+					label="PLG_CONTENT_DPCALENDAR_FIELD_BOOKINGS_SHOW_LABEL"
+					description="PLG_CONTENT_DPCALENDAR_FIELD_BOOKINGS_SHOW_DESC">
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

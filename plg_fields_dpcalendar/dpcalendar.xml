@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<extension type="plugin" group="fields" method="upgrade">
+	<name>plg_fields_dpcalendar</name>
+	<author>Digital Peak</author>
+	<creationDate>24 Nov 2022</creationDate>
+	<copyright>(C) 2017 Digital Peak GmbH</copyright>
+	<license>http://www.gnu.org/licenses/gpl-3.0.html</license>
+	<authorEmail>info@digital-peak.com</authorEmail>
+	<authorUrl>joomla.digital-peak.com</authorUrl>
+	<version>8.7.1</version>
+	<description>PLG_FIELDS_DPCALENDAR_XML_DESCRIPTION</description>
+	<files>
+		<filename plugin="dpcalendar">dpcalendar.php</filename>
+		<folder>fields</folder>
+		<folder>params</folder>
+		<folder>tmpl</folder>
+		<folder>language</folder>
+	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+						name="multiple"
+						type="radio"
+						class="btn-group btn-group-yesno"
+						default="0"
+						label="PLG_FIELDS_DPCALENDAR_PARAMS_MULTIPLE_LABEL"
+						description="PLG_FIELDS_DPCALENDAR_PARAMS_MULTIPLE_DESC"
+				>
+					<option value="1">JYES</option>
+					<option value="0">JNO</option>
+				</field>
+			</fieldset>
+		</fields>
+	</config>
+</extension>

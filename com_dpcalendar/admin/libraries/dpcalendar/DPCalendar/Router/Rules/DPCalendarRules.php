@@ -26,6 +26,17 @@ class DPCalendarRules extends MenuRules
 			unset($segments[0]);
 			unset($segments[1]);
 		}
+
+		// When tickets or bookings should be shown as part of the event details menu item view
+		if (count($segments) === 1 && in_array($segments[0], ['tickets', 'bookings'])) {
+			$vars['view'] = $segments[0];
+			unset($segments[0]);
+
+			$active = $this->router->menu->getActive();
+			if ($active && !empty($active->query['id'])) {
+				$vars['e_id'] = $active->query['id'];
+			}
+		}
 	}
 
 	public function preprocess(&$query)

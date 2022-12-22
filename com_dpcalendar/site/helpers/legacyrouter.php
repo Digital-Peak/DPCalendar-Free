@@ -166,7 +166,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 		}
 		$found = 0;
 
-		foreach ($segments as $segment) {
+		foreach ($segments as $index => $segment) {
 			foreach ($categories as $category) {
 				if (($category->slug == $segment) || ($advanced && $category->alias == str_replace(':', '-', $segment))) {
 					$vars['id']   = $category->id;
@@ -186,6 +186,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 					$id = $db->loadResult();
 				} else {
 					$id = $segment;
+					unset($segments[$index]);
 				}
 
 				$vars['id']   = $id;

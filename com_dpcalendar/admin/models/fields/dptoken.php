@@ -4,15 +4,15 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+use DPCalendar\HTML\Document\HtmlDocument;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\Language\Text;
 
-if (!class_exists('DPCalendarHelper')) {
-	return;
-}
-
-JFormHelper::loadFieldClass('text');
+FormHelper::loadFieldClass('text');
 
 class JFormFieldDptoken extends JFormFieldText
 {
@@ -20,15 +20,22 @@ class JFormFieldDptoken extends JFormFieldText
 
 	public function getInput()
 	{
-		(new \DPCalendar\HTML\Document\HtmlDocument())->loadScriptFile('dpcalendar/fields/dptoken.js');
+		if (!JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR)) {
+			return '';
+		}
+
+		$doc = new HtmlDocument();
+		$doc->loadScriptFile('dpcalendar/fields/dptoken.js');
+		$doc->loadStyleFile('dpcalendar/fields/dptoken.css');
 
 		// Load the language
-		JFactory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
-		$buffer = parent::getInput();
-
-		$buffer .= '<button class="btn dp-token-gen">' . htmlspecialchars(JText::_('COM_DPCALENDAR_GENERATE')) . '</button>';
-		$buffer .= '<button class="btn dp-token-clear">' . htmlspecialchars(JText::_('JCLEAR')) . '</button>';
+		$buffer = '<div class="dp-token-container">';
+		$buffer .= parent::getInput();
+		$buffer .= '<button class="dp-button dp-token-gen">' . htmlspecialchars(Text::_('COM_DPCALENDAR_GENERATE')) . '</button>';
+		$buffer .= '<button class="dp-button dp-token-clear">' . htmlspecialchars(Text::_('JCLEAR')) . '</button>';
+		$buffer .= '</div>';
 
 		return $buffer;
 	}

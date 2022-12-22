@@ -7,7 +7,9 @@
 
 defined('_JEXEC') or die();
 
-if (!$this->params->get('location_show_resource_view', 1) || \DPCalendar\Helper\DPCalendarHelper::isFree()) {
+use DPCalendar\Helper\DPCalendarHelper;
+
+if (!$this->params->get('location_show_resource_view', 1) || DPCalendarHelper::isFree()) {
 	return;
 }
 
@@ -48,7 +50,7 @@ if ($this->params->get('location_header_show_datepicker', 1)) {
 if ($this->params->get('location_header_show_print', 1)) {
 	$options['headerToolbar']['left'][] = 'print';
 }
-if ($this->params->get('location_header_show_create', 1) && \DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+if ($this->params->get('location_header_show_create', 1) && DPCalendarHelper::canCreateEvent()) {
 	$options['headerToolbar']['left'][] = 'add';
 }
 if ($this->params->get('location_header_show_title', 1)) {
@@ -114,11 +116,11 @@ $now              = $this->dateHelper->getDate();
 $options['year']  = $now->format('Y', true);
 $options['month'] = $now->format('m', true);
 $options['date']  = $now->format('d', true);
-if (\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+if (DPCalendarHelper::canCreateEvent()) {
 	$options['event_create_url'] = $this->router->getEventFormRoute(0, $this->returnPage);
 }
 
 $this->dpdocument->addScriptOptions('view.location.' . $this->input->getInt('Itemid', 0) . '.options', $options);
 ?>
 <div class="com-dpcalendar-location__resource dp-calendar"
-	 data-options="DPCalendar.view.location.<?php echo $this->input->getInt('Itemid', 0); ?>.options"></div>
+	data-options="DPCalendar.view.location.<?php echo $this->input->getInt('Itemid', 0); ?>.options"></div>

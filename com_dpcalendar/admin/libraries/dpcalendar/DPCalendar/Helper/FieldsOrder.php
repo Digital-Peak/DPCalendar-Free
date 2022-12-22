@@ -38,7 +38,7 @@ class FieldsOrder
 		$bookingFields[] = (object)['id' => 'street', 'name' => 'street', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL'];
 		$bookingFields[] = (object)['id' => 'number', 'name' => 'number', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL'];
 
-		$bookingFields = array_merge($bookingFields, $booking->jcfields);
+		$bookingFields = array_merge($bookingFields, $booking->jcfields ?? []);
 
 		// Adjust country when it is the value
 		$order = $params->get('booking_fields_order', new \stdClass());
@@ -110,7 +110,7 @@ class FieldsOrder
 		$ticketFields[] = (object)['id' => 'number', 'name' => 'number', 'label' => 'COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL'];
 		$ticketFields[] = (object)['id' => 'telephone', 'name' => 'telephone'];
 
-		$ticketFields = array_merge($ticketFields, $ticket->jcfields);
+		$ticketFields = array_merge($ticketFields, $ticket->jcfields ?? []);
 
 		// Adjust caountry when it it the value
 		$order = $params->get('ticket_fields_order', new \stdClass());

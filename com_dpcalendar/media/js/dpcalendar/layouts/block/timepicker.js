@@ -38,6 +38,8 @@
 			element.addEventListener('dp-autocomplete-change', () => DPCalendar.autocomplete.setItems(element, options));
 			element.addEventListener('dp-autocomplete-select', () => element.dispatchEvent(new Event('change')));
 			element.addEventListener('change', (e) => {
+				const style = window.getComputedStyle(element);
+				element.style.width = 'calc(' + element.value.length + 'ch + ' + style.paddingLeft + ' + ' + style.paddingRight + ')';
 				const end = document.getElementById('jform_' + e.target.getAttribute('data-pair'));
 				if (!end || !e.target.actualDate || !e.target.value) {
 					return true;
@@ -49,6 +51,8 @@
 				e.target.actualDate = e.target.value;
 			});
 			element.actualDate = element.value;
+			const style = window.getComputedStyle(element);
+			element.style.width = 'calc(' + element.value.length + 'ch + ' + style.paddingLeft + ' + ' + style.paddingRight + ')';
 			element.addEventListener('mousedown', () => DPCalendar.autocomplete.setItems(element, options));
 			element.addEventListener('focus', () => DPCalendar.autocomplete.setItems(element, options));
 		});

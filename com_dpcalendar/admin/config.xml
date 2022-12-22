@@ -141,6 +141,18 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field name="header_show_create" type="radio" class="btn-group" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_CREATE_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_CREATE_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="header_show_fullscreen" type="radio" class="btn-group" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_FULLSCREEN_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_FULLSCREEN_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="header_show_title" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_DESC">
@@ -875,7 +887,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="booking"
-					hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,payer_email,latitude,longitude"
+					hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
 					label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
@@ -933,7 +945,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="booking"
-					hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,payer_email,latitude,longitude,options"
+					hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
 					label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>

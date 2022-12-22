@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\Utilities\ArrayHelper;
 
 // Loading the strings for javascript
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
@@ -69,6 +70,7 @@ if ($bd && !(count($bd) == 1 && !$bd[0])) {
 }
 
 $options['firstDay']              = (int)$params->get('weekstart', 1);
+$options['hiddenDays']            = ArrayHelper::toInteger($this->params->get('hidden_days', []));
 $options['scrollTime']            = $params->get('first_hour', 6) . ':00:00';
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;
@@ -191,6 +193,8 @@ $options['views']['list']  = [
 
 // Some DPCalendar specific options
 $options['show_event_as_popup']   = $params->get('show_event_as_popup');
+$options['popupWidth']            = $params->get('popup_width');
+$options['popupHeight']           = $params->get('popup_height');
 $options['show_map']              = $params->get('show_map', 1);
 $options['event_create_form']     = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);

@@ -27,11 +27,15 @@
 					}
 					options.defaultDate = date.toDate();
 					element.value = date.format(options.format);
+					const style = window.getComputedStyle(element);
+					element.style.width = 'calc(' + element.value.length + 'ch + ' + style.paddingLeft + ' + ' + style.paddingRight + ')';
 				}
 				if (element.getAttribute('data-first-day')) {
 					options.firstDay = parseInt(element.getAttribute('data-first-day'));
 				}
 				options.onSelect = () => {
+					const style = window.getComputedStyle(element);
+					element.style.width = 'calc(' + element.value.length + 'ch + ' + style.paddingLeft + ' + ' + style.paddingRight + ')';
 					const end = document.getElementById('jform_' + element.getAttribute('data-pair'));
 					if (!end || !element.actualDate) {
 						return;

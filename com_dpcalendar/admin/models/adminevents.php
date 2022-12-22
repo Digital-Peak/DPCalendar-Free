@@ -307,7 +307,7 @@ class DPCalendarModelAdminEvents extends ListModel
 		}
 
 		if ($modified = $this->getState('filter.modified')) {
-			$query->where('a.modified != ' . $db->quote($modified));
+			$query->where('(a.modified != ' . $db->quote($modified) . " and a.modified != '0000-00-00 00:00:00')");
 		}
 
 		if ($reference = $this->getState('filter.xreference')) {

@@ -424,7 +424,7 @@
 				   label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-						   hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,payer_email,latitude,longitude"
+						   hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
 						   label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -481,7 +481,7 @@
 				   label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-						   hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,payer_email,latitude,longitude,options"
+						   hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
 						   label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>

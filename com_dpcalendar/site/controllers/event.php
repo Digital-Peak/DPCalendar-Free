@@ -139,12 +139,11 @@ class DPCalendarControllerEvent extends FormController
 
 		$event = $this->getModel()->getItem($recordId);
 
-		if (!is_numeric($event->catid)) {
-			Factory::getApplication()->triggerEvent('onEventDelete', [
-				is_numeric($event->id) ? $event->xreference : $event->id
-			]);
+		if ($event && !is_numeric($event->catid)) {
+			Factory::getApplication()->triggerEvent('onEventDelete', [is_numeric($event->id) ? $event->xreference : $event->id]);
 		}
-		if (is_numeric($event->id)) {
+
+		if ($event && is_numeric($event->id)) {
 			$this->getModel()->getTable('Event', 'DPCalendarTable')->publish([$recordId], -2, Factory::getUser()->id);
 			if (!$this->getModel()->delete($recordId)) {
 				$this->setMessage(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
@@ -159,6 +158,7 @@ class DPCalendarControllerEvent extends FormController
 				return false;
 			}
 		}
+
 		// Redirect to the return page
 		$redirect = $this->getReturnPage();
 

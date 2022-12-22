@@ -248,8 +248,7 @@
 			);
 		};
 	}
-	function setup$3(calendar, options)
-	{
+	function setup$3(calendar, options) {
 		if (!options['use_hash']) {
 			return;
 		}
@@ -286,8 +285,7 @@
 			}
 		});
 	}
-	function updateHash(d, view, options)
-	{
+	function updateHash(d, view, options) {
 		const newHash = 'year=' + d.getUTCFullYear() + '&month=' + (d.getUTCMonth() + 1) + '&day=' + d.getUTCDate() + '&view=' + view;
 		if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
 			window.location.hash = newHash;
@@ -304,7 +302,7 @@
 				return;
 			}
 			if (options['show_event_as_popup'] == 1) {
-				DPCalendar.modal(info.event.url, calendar.dataset.popupwidth, calendar.dataset.popupheight, (frame) => {
+				DPCalendar.modal(info.event.url, options.popupWidth, options.popupHeight, (frame) => {
 					if (frame.contentWindow.location.href.indexOf('view=form') > 0) {
 						DPCalendar.request('index.php?option=com_dpcalendar&task=event.checkin&e_id=' + info.event.id + '&' + Joomla.getOptions('csrf.token') + '=1');
 					}
@@ -745,10 +743,8 @@
 			assets.push('/com_dpcalendar/js/polyfill/intl.js');
 		}
 		if (options['resources']) {
-			assets.push('/com_dpcalendar/css/scheduler/scheduler.css');
 			assets.push('/com_dpcalendar/js/scheduler/scheduler.js');
 		} else {
-			assets.push('/com_dpcalendar/css/fullcalendar/fullcalendar.css');
 			assets.push('/com_dpcalendar/js/fullcalendar/fullcalendar.js');
 		}
 		loadDPAssets(assets, () => {
@@ -810,13 +806,8 @@
 		if (!el.getAttribute('data-options')) {
 			return;
 		}
-		loadDPAssets(['/com_dpcalendar/js/dayjs/dayjs.js', '/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
-			let options = Joomla.getOptions(el.getAttribute('data-options'));
-			options = Object.assign(options, el.dataset);
-			if (typeof options.hiddenDays == 'string') {
-				options.hiddenDays = JSON.parse(options.hiddenDays);
-			}
-			createCalendar(el, options);
-		});
+		loadDPAssets(['/com_dpcalendar/js/dayjs/dayjs.js', '/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () =>
+			createCalendar(el, Joomla.getOptions(el.getAttribute('data-options')))
+		);
 	});
 })();

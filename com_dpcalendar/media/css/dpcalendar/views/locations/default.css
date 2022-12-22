@@ -18,6 +18,7 @@
 	color: #212529;
 	background-color: #fefefe;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	cursor: pointer;
 }
 .com-dpcalendar-locations .dp-button:disabled,
 .com-dpcalendar-locations .dp-button[disabled] {
@@ -341,9 +342,6 @@
 	.com-dpcalendar-locations .fc-header-toolbar > * > * {
 		float: none;
 	}
-}
-.com-dpcalendar-locations .fc-timeline-event {
-	position: absolute;
 }
 .com-dpcalendar-locations .dp-map {
 	margin-top: 10px;

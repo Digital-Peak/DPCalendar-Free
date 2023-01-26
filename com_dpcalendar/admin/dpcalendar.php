@@ -24,7 +24,7 @@ $input = Factory::getApplication()->input;
 $path = JPATH_ADMINISTRATOR . '/components/com_dpcalendar/dpcalendar.xml';
 if (file_exists($path)) {
 	$manifest = simplexml_load_file($path);
-	$input->set('DPCALENDAR_VERSION', $manifest->version);
+	$input->set('DPCALENDAR_VERSION', (string)$manifest->version);
 }
 
 // Map the front location form controller

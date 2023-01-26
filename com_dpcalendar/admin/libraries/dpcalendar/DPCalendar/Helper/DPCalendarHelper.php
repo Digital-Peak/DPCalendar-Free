@@ -74,18 +74,14 @@ class DPCalendarHelper
 			$calendar->system   = 'joomla';
 			$calendar->native   = true;
 
-			$calendar->canCreate  = $user->authorise('core.create', 'com_dpcalendar.category.' . $calendar->id);
-			$calendar->canEdit    = $user->authorise('core.edit', 'com_dpcalendar.category.' . $calendar->id);
-			$calendar->canEditOwn = $user->authorise('core.edit.own', 'com_dpcalendar.category.' . $calendar->id);
-			$calendar->canDelete  = $user->authorise('core.delete', 'com_dpcalendar.category.' . $calendar->id);
-			$calendar->canBook    = $user->authorise('dpcalendar.book', 'com_dpcalendar.category.' . $calendar->id);
+			$calendar->canCreate  = $user->authorise('core.create', 'com_dpcalendar' . ($id !== 'root' ? '.category.' . $calendar->id : ''));
+			$calendar->canEdit    = $user->authorise('core.edit', 'com_dpcalendar' . ($id !== 'root' ? '.category.' . $calendar->id : ''));
+			$calendar->canEditOwn = $user->authorise('core.edit.own', 'com_dpcalendar' . ($id !== 'root' ? '.category.' . $calendar->id : ''));
+			$calendar->canDelete  = $user->authorise('core.delete', 'com_dpcalendar' . ($id !== 'root' ? '.category.' . $calendar->id : ''));
+			$calendar->canBook    = $user->authorise('dpcalendar.book', 'com_dpcalendar' . ($id !== 'root' ? '.category.' . $calendar->id : ''));
 
-			$userId = $user->get('id');
-
-			if (!empty($userId) && $user->authorise('core.edit.own', 'com_dpcalendar.category.' . $calendar->id)) {
-				if ($userId == $calendar->created_user_id) {
-					$calendar->canEdit = true;
-				}
+			if (!empty($user->id) && $calendar->canEditOwn && $user->id == $calendar->created_user_id) {
+				$calendar->canEdit = true;
 			}
 		} else {
 			PluginHelper::importPlugin('dpcalendar');
@@ -342,7 +338,7 @@ class DPCalendarHelper
 	{
 		$text = LayoutHelper::render(
 			'event.datestring',
-			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat],
+			['event'     => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat],
 			null,
 			['component' => 'com_dpcalendar', 'client' => 0]
 		);

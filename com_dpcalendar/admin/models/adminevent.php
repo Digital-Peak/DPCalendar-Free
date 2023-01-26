@@ -823,10 +823,10 @@ class DPCalendarModelAdminEvent extends AdminModel
 		if (!$item->get('booking_cancel_closing_date')) {
 			$data['booking_cancel_closing_date'] = $params->get('event_form_booking_cancel_closing_date');
 		}
-		if (!$item->get('booking_series')) {
+		if ($item->get('booking_series') == '' || $item->get('booking_series') === null) {
 			$data['booking_series'] = $params->get('event_form_booking_series');
 		}
-		if (!$item->get('booking_waiting_list')) {
+		if ($item->get('booking_waiting_list') == '' || $item->get('booking_waiting_list') === null) {
 			$data['booking_waiting_list'] = $params->get('event_form_booking_waiting_list');
 		}
 		if (!$item->get('payment_provider')) {

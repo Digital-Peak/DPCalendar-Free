@@ -33,6 +33,7 @@ class DPCalendarViewLocations extends BaseView
 		$this->getModel()->setState('filter.author', $this->params->get('locations_filter_author', 0));
 		$this->getModel()->setState('list.limit', 1000);
 		$this->getModel()->setState('filter.state', 1);
+		$this->getModel()->setState('list.ordering', 'a.ordering');
 
 		$this->resources = [];
 		$locationGroups  = [];

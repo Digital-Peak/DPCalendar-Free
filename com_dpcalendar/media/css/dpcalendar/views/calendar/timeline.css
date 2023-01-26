@@ -12,7 +12,7 @@
 }
 .com-dpcalendar-calendar-timeline .dp-autocomplete__result {
 	margin: 0;
-	padding: 5px 10px;
+	padding: 0.5rem 1rem;
 	display: block;
 }
 .com-dpcalendar-calendar-timeline .dp-autocomplete__result:not(:last-child) {
@@ -386,23 +386,16 @@
 .com-dpcalendar-calendar-timeline .dp-quickadd .controls + div {
 	width: 100%;
 }
-.com-dpcalendar-calendar-timeline .dp-quickadd .controls .dp-input, .com-dpcalendar-calendar-timeline .dp-quickadd .controls .dp-form-input, .com-dpcalendar-calendar-timeline .dp-quickadd .controls .dp-select {
+.com-dpcalendar-calendar-timeline .dp-quickadd .controls .dp-input,
+.com-dpcalendar-calendar-timeline .dp-quickadd .controls .dp-form-input,
+.com-dpcalendar-calendar-timeline .dp-quickadd .controls .dp-select {
 	height: inherit;
 	margin-bottom: 0;
 	padding: 5px;
 }
-.com-dpcalendar-calendar-timeline .dp-quickadd .dp-datepicker {
-	width: 58%;
-	box-sizing: border-box;
-	height: auto;
-}
-.com-dpcalendar-calendar-timeline .dp-quickadd .dp-timepicker {
-	width: 38%;
-	box-sizing: border-box;
-	height: auto;
-}
-.com-dpcalendar-calendar-timeline .dp-quickadd .dp-datepicker__input {
-	max-width: 60%;
+.com-dpcalendar-calendar-timeline .dp-quickadd .dp-datepicker .dp-input,
+.com-dpcalendar-calendar-timeline .dp-quickadd .dp-autocomplete {
+	min-width: 100px;
 }
 .com-dpcalendar-calendar-timeline .dp-quickadd select[name="jform[catid]"] {
 	width: 100%;

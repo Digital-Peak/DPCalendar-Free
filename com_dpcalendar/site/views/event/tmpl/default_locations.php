@@ -55,13 +55,13 @@ if (!$this->event->locations || !$this->params->get('event_show_location', '2'))
 				<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 					<div class="dp-button-bar">
 						<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
-								data-href="<?php echo Location::getMapLink($location); ?>">
+							data-href="<?php echo Location::getMapLink($location, $this->params->get('event_map_zoom', 4)); ?>">
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::MAP]); ?>
 							<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_SITE_LINK'); ?>
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EXTERNAL]); ?>
 						</button>
 						<button type="button" class="dp-button dp-button-action dp-button-map-directions" data-target="new"
-								data-href="<?php echo Location::getDirectionsLink($location); ?>">
+							data-href="<?php echo Location::getDirectionsLink($location, $this->params->get('event_map_zoom', 4)); ?>">
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::DIRECTIONS]); ?>
 							<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EXTERNAL]); ?>

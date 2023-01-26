@@ -63,6 +63,7 @@ class JFormFieldEvent extends FormField
 				Factory::getDocument()->addScriptDeclaration("
 				window.jSelectEvent_" . $this->id . " = function (id, title, catid, object, url, language) {
 					window.processModalSelect('Event', '" . $this->id . "', id, title, catid, object, url, language);
+					document.getElementById('" . $this->id . "_id').dispatchEvent(new Event('change'));
 				}");
 
 				Text::script('JGLOBAL_ASSOCIATIONS_PROPAGATE_FAILED');
@@ -155,7 +156,7 @@ class JFormFieldEvent extends FormField
 				. ' class="btn btn-secondary' . ($value ? '' : ' hidden') . '"'
 				. ' id="' . $this->id . '_clear"'
 				. ' type="button"'
-				. ' onclick="window.processModalParent(\'' . $this->id . '\'); return false;">'
+				. ' onclick="window.processModalParent(\'' . $this->id . '\'); document.getElementById(\'' . $this->id . '_id\').dispatchEvent(new Event(\'change\')); return false;">'
 				. '<span class="fas fa-times" aria-hidden="true"></span> ' . Text::_('JCLEAR')
 				. '</button>';
 		}

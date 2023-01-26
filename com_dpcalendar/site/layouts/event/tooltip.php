@@ -47,9 +47,13 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUs
 		); ?>
 	</div>
 	<div class="dp-event-tooltip__calendar">[<?php echo $calendar ? $calendar->title : $this->event->catid; ?>]</div>
-	<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
+	<?php if ($params->get('show_event_as_popup', '0') != '2') { ?>
+		<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
+			<?php echo $event->title; ?>
+		</a>
+	<?php } else { ?>
 		<?php echo $event->title; ?>
-	</a>
+	<?php } ?>
 	<?php if ($event->state == 3) { ?>
 		<span class="dp-event-tooltip_canceled"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?></span>
 	<?php } ?>
@@ -58,7 +62,7 @@ $user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUs
 	<?php } ?>
 	<?php if ($params->get('tooltip_show_description', 1) && $params->get('description_length', 100)) { ?>
 		<div class="dp-event-tooltip__description">
-			<?php echo HTMLHelper::_('string.truncateComplex', $event->description ?: '', $params->get('description_length', 100)); ?>
+			<?php echo HTMLHelper::_('string.truncateComplex', $event->introText ?: ($event->description ?: ''), $params->get('description_length', 100)); ?>
 		</div>
 	<?php } ?>
 	<div class="dp-event-tooltip__actions dp-button-bar">

@@ -194,7 +194,7 @@
 			localStorage.setItem('DPCalendar.map.load', true);
 			element.classList.remove('dp-map_consent');
 			element.textContent = '';
-			createMap(element);
+			create(element);
 		});
 	}
 	function drawCircle(map, location, radius, type) {

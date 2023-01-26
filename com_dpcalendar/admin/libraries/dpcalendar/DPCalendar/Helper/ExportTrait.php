@@ -137,6 +137,12 @@ trait ExportTrait
 					return implode(', ', array_unique($calendars));
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
+				case 'user_name':
+					if (!$booking->user_id) {
+						return '';
+					}
+
+					return $booking->user_name . ' [' . Factory::getUser($booking->user_id)->username . ']';
 				default:
 					return $booking->$name ?? '';
 			}
@@ -187,6 +193,12 @@ trait ExportTrait
 					return BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel')->getEvent($ticket->event_id)->price->label[$ticket->type];
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
+				case 'user_name':
+					if (!$ticket->user_id) {
+						return '';
+					}
+
+					return $ticket->user_name . ' [' . Factory::getUser($ticket->user_id)->username . ']';
 				default:
 					return $ticket->$name ?? '';
 			}

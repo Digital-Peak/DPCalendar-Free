@@ -33,7 +33,6 @@ use Sabre\VObject\Reader;
 \JLoader::import('joomla.plugin.plugin');
 
 \JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-\JLoader::import('components.com_dpcalendar.helpers.ical', JPATH_ADMINISTRATOR);
 
 \JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 \JLoader::import('components.com_dpcalendar.tables.location', JPATH_ADMINISTRATOR);
@@ -843,6 +842,11 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$tmpEvent->alias       = ApplicationHelper::stringURLSafe($tmpEvent->title);
 		$tmpEvent->description = Ical::icalDecode((string)$event->DESCRIPTION);
 
+		// When no tags exist, then convert new lines to br's
+		if (strip_tags($tmpEvent->description) === $tmpEvent->description) {
+			$tmpEvent->description = nl2br($tmpEvent->description);
+		}
+
 		$created = $event->CREATED;
 		if (!empty($created)) {
 			$tmpEvent->created = DPCalendarHelper::getDate($created->getDateTime()->format('U'))->toSql();
@@ -955,6 +959,20 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$showEndTime = $event->{'x-show-end-time'};
 		if ($showEndTime) {
 			$tmpEvent->show_end_time = (string)$showEndTime != '0';
+		}
+
+		if ($event->ATTACH) {
+			foreach ($event->ATTACH as $attachment) {
+				if (!$attachment->parameters || !array_key_exists('FMTTYPE', $attachment->parameters)) {
+					continue;
+				}
+
+				if (strpos($attachment->parameters['FMTTYPE']->getValue(), 'image/') !== 0) {
+					continue;
+				}
+
+				$tmpEvent->images = (object)['image_full' => $attachment->getValue(), 'image_intro' => $attachment->getValue()];
+			}
 		}
 
 		$location  = (string)$event->LOCATION;

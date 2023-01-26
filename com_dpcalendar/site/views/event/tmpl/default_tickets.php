@@ -4,9 +4,18 @@
  * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\Booking;
+use DPCalendar\Helper\Location;
+
 if (!$this->params->get('event_show_tickets', 0) || !isset($this->event->tickets) || !$this->event->tickets) {
+	return;
+}
+
+// Permissions
+if (!$this->user->authorise('core.admin', 'com_dpcalendar') && !in_array($this->event->access_content, $this->user->getAuthorisedViewLevels())) {
 	return;
 }
 
@@ -50,14 +59,14 @@ foreach ($this->event->tickets as $ticket) {
 						<?php echo JHtmlString::abridge($ticket->uid, 15, 5); ?>
 					</td>
 					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?>">
-						<?php echo \DPCalendar\Helper\Booking::getStatusLabel($ticket); ?>
+						<?php echo Booking::getStatusLabel($ticket); ?>
 					</td>
 				<?php } ?>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?>">
 					<?php echo $ticket->name; ?>
 				</td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?>">
-					<?php echo \DPCalendar\Helper\Location::format([$ticket]) ?: '&nbsp;'; ?>
+					<?php echo Location::format([$ticket]) ?: '&nbsp;'; ?>
 				</td>
 				<?php if (!$limited) { ?>
 					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?>">

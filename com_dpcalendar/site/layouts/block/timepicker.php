@@ -4,8 +4,8 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
 
+defined('_JEXEC') or die();
 ?>
 <input type="text"
 	   id="<?php echo $displayData['id']; ?>"
@@ -18,4 +18,4 @@ defined('_JEXEC') or die();
 	   data-min-time="<?php echo $displayData['min']; ?>"
 	   data-max-time="<?php echo $displayData['max']; ?>"
 	   data-step="<?php echo $displayData['step']; ?>"
->
+/>

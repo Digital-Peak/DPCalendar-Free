@@ -47,9 +47,11 @@
 	vertical-align: -2px;
 }
 .com-dpcalendar-adminlist .dp-table {
+	display: block;
+	width: 100%;
 	border-collapse: collapse;
 	empty-cells: show;
-	width: 100%;
+	overflow-x: auto;
 }
 .com-dpcalendar-adminlist .dp-table caption {
 	color: #000;

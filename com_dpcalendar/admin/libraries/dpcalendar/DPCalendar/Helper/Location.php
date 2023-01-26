@@ -84,28 +84,29 @@ class Location
 		'zh-TW'
 	];
 
-	public static function getDirectionsLink($location)
+	public static function getDirectionsLink($location, $zoom = 6)
 	{
 		if (DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'openstreetmap') {
-			return 'https://www.openstreetmap.org/directions?route=;' . $location->latitude . ',' . $location->longitude;
+			return 'https://www.openstreetmap.org/directions?route=;' . $location->latitude . ',' . $location->longitude
+				. '#map=' . (int)$zoom . '/' . $location->latitude . '/' . $location->longitude;
 		}
 
 		return 'https://www.google.com/maps/dir/?api=1&destination=' . self::format([$location]);
 	}
 
-	public static function getMapLink($locations)
+	public static function getMapLink($location, $zoom = 6)
 	{
-		if (!$locations || DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'none') {
+		if (!$location || DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'none') {
 			return '';
 		}
 
-		$location = urlencode(self::format($locations));
+		$locationString = urlencode(self::format($location));
 
 		if (DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'openstreetmap') {
-			return 'https://www.openstreetmap.org/search?query=' . $location;
+			return 'https://www.openstreetmap.org/search?query=' . $locationString . '#map=' . (int)$zoom . '/';
 		}
 
-		return 'http://maps.google.com/?q=' . $location;
+		return 'http://maps.google.com/?q=' . $locationString;
 	}
 
 	public static function format($locations)

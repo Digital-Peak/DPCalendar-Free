@@ -82,6 +82,10 @@ class SendNotificationMail implements StageInterface
 				continue;
 			}
 
+			if (!(int)$e->created_by) {
+				continue;
+			}
+
 			$authors[$e->created_by] = $e->created_by;
 		}
 

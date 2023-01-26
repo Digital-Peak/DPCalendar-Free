@@ -48,13 +48,13 @@ if ($saveOrder && DPCalendarHelper::isJoomlaVersion('4', '<')) {
 			<th><?php echo HTMLHelper::_('grid.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
 		</tr>
 		</thead>
-		<tbody>
+		<tbody <?php if ($saveOrder) { ?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($listDirn); ?>" data-nested="false"<?php  } ?>>
 		<?php foreach ($this->items as $i => $item) { ?>
 			<?php $ordering = $listOrder == 'a.ordering'; ?>
 			<?php $canCreate = $this->user->authorise('core.create', 'com_dpcalendar'); ?>
 			<?php $canEdit = $this->user->authorise('core.edit', 'com_dpcalendar'); ?>
 			<?php $canChange = $this->user->authorise('core.edit.state', 'com_dpcalendar'); ?>
-			<tr sortable-group-id="">
+			<tr sortable-group-id="" data-draggable-group="0">
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ORDERING'); ?>">
 					<?php if ($canChange) { ?>
 						<span class="sortable-handler <?php echo $saveOrder ? '' : 'inactive tip-top'; ?>"><i class="icon-menu"></i></span>

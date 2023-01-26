@@ -206,9 +206,11 @@
 	border: 3px solid #f5515c;
 }
 .com-dpcalendar-event .dp-table {
+	display: block;
+	width: 100%;
 	border-collapse: collapse;
 	empty-cells: show;
-	width: 100%;
+	overflow-x: auto;
 }
 .com-dpcalendar-event .dp-table caption {
 	color: #000;

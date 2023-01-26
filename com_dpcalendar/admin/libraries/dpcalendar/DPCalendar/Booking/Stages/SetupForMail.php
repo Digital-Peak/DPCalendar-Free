@@ -50,7 +50,7 @@ class SetupForMail implements StageInterface
 			'booking.details',
 			[
 				'booking'    => $payload->item,
-				'tickets'    => $payload->item->tickets,
+				'tickets'    => $payload->tickets,
 				'translator' => new Translator($this->application->getLanguage()),
 				'dateHelper' => new DateHelper(),
 				'params'     => $params
@@ -73,13 +73,13 @@ class SetupForMail implements StageInterface
 				Route::TLS_IGNORE,
 				true
 			),
-			'bookingUid'   => $payload->item->uid,
-			'sitename'     => $this->application->get('sitename'),
-			'user'         => $payload->item->name,
-			'tickets'      => $payload->tickets,
-			'countTickets' => $payload->tickets ? count($payload->tickets) : 0,
-			'acceptUrl'    => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, true, true),
-			'declineUrl'   => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, false, true)
+			'bookingUid'        => $payload->item->uid,
+			'sitename'          => $this->application->get('sitename'),
+			'user'              => $payload->item->name,
+			'tickets'           => $payload->tickets,
+			'countTickets'      => $payload->tickets ? count($payload->tickets) : 0,
+			'acceptUrl'         => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, true, true),
+			'declineUrl'        => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, false, true)
 		];
 
 		if (!empty($payload->item->jcfields)) {

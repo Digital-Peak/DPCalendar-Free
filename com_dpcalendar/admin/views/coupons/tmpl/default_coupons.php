@@ -50,7 +50,7 @@ $return = '&return=' . base64_encode(Uri::getInstance()->toString());
 		<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
 		</tr>
 		</thead>
-		<tbody>
+		<tbody <?php if ($saveOrder) { ?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($listDirn); ?>" data-nested="false"<?php  } ?>>
 		<?php foreach ($this->items as $i => $item) { ?>
 			<?php $ordering = $listOrder == 'a.ordering'; ?>
 			<?php $canCreate = $this->user->authorise('core.create', 'com_dpcalendar'); ?>
@@ -58,7 +58,7 @@ $return = '&return=' . base64_encode(Uri::getInstance()->toString());
 			<?php $canCheckin = $this->user->authorise('core.manage', 'com_checkin')
 				|| $item->checked_out == $this->user->get('id') || $item->checked_out == 0; ?>
 			<?php $canChange = $this->user->authorise('core.edit.state', 'com_dpcalendar') && $canCheckin; ?>
-			<tr sortable-group-id="" class="dp-coupon">
+			<tr sortable-group-id="" data-draggable-group="0" class="dp-coupon">
 				<td class="order" data-column="<?php echo $this->translate('JGRID_HEADING_ORDERING'); ?>">
 					<?php if ($canChange) { ?>
 						<span class="sortable-handler <?php echo $saveOrder ? '' : 'inactive tip-top'; ?>"><i class="icon-menu"></i></span>

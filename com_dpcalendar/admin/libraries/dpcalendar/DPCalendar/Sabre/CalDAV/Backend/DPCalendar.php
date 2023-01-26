@@ -25,7 +25,6 @@ use Sabre\DAV\Exception\Forbidden;
 use Sabre\VObject\Reader;
 
 \JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-\JLoader::import('components.com_dpcalendar.helpers.ical', JPATH_ADMINISTRATOR);
 
 BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
@@ -62,11 +61,11 @@ class DPCalendar extends PDO
 					'VEVENT',
 					'VTODO'
 				]),
-				'{DAV:}displayname'                                   => $calendar->title,
-				'{urn:ietf:params:xml:ns:caldav}calendar-description' => $calendar->description,
-				'{urn:ietf:params:xml:ns:caldav}calendar-timezone'    => '',
-				'{http://apple.com/ns/ical/}calendar-order'           => 1,
-				'{http://apple.com/ns/ical/}calendar-color'           => $params->get('color', '3366CC')
+				'{DAV:}displayname'                                           => $calendar->title,
+				'{urn:ietf:params:xml:ns:caldav}calendar-description'         => $calendar->description,
+				'{urn:ietf:params:xml:ns:caldav}calendar-timezone'            => '',
+				'{http://apple.com/ns/ical/}calendar-order'                   => 1,
+				'{http://apple.com/ns/ical/}calendar-color'                   => $params->get('color', '3366CC')
 			];
 		}
 

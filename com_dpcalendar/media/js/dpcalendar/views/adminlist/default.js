@@ -86,5 +86,9 @@
 				ticketsEventInput.value = '';
 			});
 		});
+		const eventFilter = document.getElementById('filter_event_id_id');
+		if (eventFilter) {
+			eventFilter.addEventListener('change', (e) => e.target.form.submit());
+		}
 	});
 })();

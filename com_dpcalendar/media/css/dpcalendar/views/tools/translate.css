@@ -61,9 +61,11 @@
 	}
 }
 .com-dpcalendar-tools-translate .dp-table {
+	display: block;
+	width: 100%;
 	border-collapse: collapse;
 	empty-cells: show;
-	width: 100%;
+	overflow-x: auto;
 }
 .com-dpcalendar-tools-translate .dp-table caption {
 	color: #000;

@@ -118,8 +118,7 @@
 		}
 		return viewMappingReverse
 	}
-	function setup$5(calendar, options)
-	{
+	function setup$5(calendar, options) {
 		const viewMapping = getMappings(options);
 		const viewMappingReverse = getReversMappings(options);
 		if (options['use_hash']) {
@@ -151,9 +150,9 @@
 		}
 		options['schedulerLicenseKey'] = 'GPL-My-Project-Is-Open-Source';
 		options['eventDisplay'] = 'block';
-		options['progressiveEventRendering'] = true;
+		options['progressiveEventRendering'] = false;
 		options['weekNumberTitle'] = '';
-		options['weekNumberFormat'] = {week: 'numeric'};
+		options['weekNumberFormat'] = { week: 'numeric' };
 		options['moreLinkContent'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
 		options['allDayContent'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
 		options['buttonText'] = {
@@ -350,10 +349,13 @@
 					}
 				}
 				if (options['event_create_form'] == 1 && window.innerWidth > 600) {
-					Popper.createPopper(info.jsEvent.target, form.parentElement, {
-						onFirstUpdate: (state) => state.elements.popper.querySelector('#jform_title').focus()
-					});
 					form.parentElement.style.display = 'block';
+					if (!info.jsEvent.target.dpPopper) {
+						info.jsEvent.target.dpPopper = Popper.createPopper(info.jsEvent.target, form.parentElement, {
+							onFirstUpdate: (state) => state.elements.popper.querySelector('#jform_title').focus()
+						});
+					}
+					info.jsEvent.target.dpPopper.forceUpdate();
 				} else {
 					form.querySelector('input[name=task]').value = '';
 					form.submit();

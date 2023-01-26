@@ -33,7 +33,8 @@ class DPCalendarModelTickets extends ListModel
 				'state',
 				'a.state',
 				'booking_name',
-				'event_title'
+				'event_title',
+				'event_id'
 			];
 		}
 
@@ -212,6 +213,18 @@ class DPCalendarModelTickets extends ListModel
 		$model = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel');
 
 		return $model->getItem($eventId);
+	}
+
+	public function getActiveFilters()
+	{
+		$activeFilters = parent::getActiveFilters();
+
+		// Reset default filters from view
+		if (!empty($activeFilters['state']) && $activeFilters['state'] === [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+			unset($activeFilters['state']);
+		}
+
+		return $activeFilters;
 	}
 
 	protected function getStoreId($id = '')

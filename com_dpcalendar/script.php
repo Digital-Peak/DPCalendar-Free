@@ -11,12 +11,13 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
 JLoader::register('DPCalendarHelper', dirname(__FILE__) . '/admin/helpers/dpcalendar.php');
 
-class Com_DPCalendarInstallerScript extends \Joomla\CMS\Installer\InstallerScript
+class Com_DPCalendarInstallerScript extends InstallerScript
 {
 	protected $minimumPhp      = '7.4.0';
 	protected $minimumJoomla   = '3.10.5';
@@ -262,6 +263,17 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 				$params->set('providers', $providers);
 
 				$this->run('update #__extensions set params = ' . $db->quote($params->toString()) . ' where extension_id = ' . $plugin->extension_id);
+			}
+		}
+
+		if (version_compare($version, '8.9.0') == -1) {
+			// Cleaning up old SQL files
+			if (is_dir(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates')) {
+				foreach (Folder::files(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates', '.', true, true) as $updateFile) {
+					if (version_compare(pathinfo($updateFile, PATHINFO_FILENAME), '7.0.0', '<')) {
+						unlink($updateFile);
+					}
+				}
 			}
 		}
 	}

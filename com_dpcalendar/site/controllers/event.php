@@ -374,32 +374,24 @@ class DPCalendarControllerEvent extends FormController
 			$data['all_day'] = '1';
 		}
 
-		if (!key_exists('all_day', $data)) {
+		if (!array_key_exists('all_day', $data)) {
 			$data['all_day'] = 0;
 		}
 
-		if (!key_exists('color', $data)) {
+		if (!array_key_exists('color', $data)) {
 			$data['color'] = '';
 		}
 
-		if (!key_exists('payment_provider', $data)) {
+		if (!array_key_exists('payment_provider', $data)) {
 			$data['payment_provider'] = '';
 		}
 
-		if (!key_exists('capacity', $data)) {
+		if (!array_key_exists('capacity', $data)) {
 			$data['capacity'] = $app->getParams()->get('event_form_capacity', '0');
-		}
-
-		foreach (['schedule', 'price', 'earlybird', 'user_discount', 'booking_options'] as $field) {
-			if (key_exists($field, $data)) {
-				continue;
-			}
-			$data[$field] = [];
 		}
 
 		$dateFormat = $app->getParams()->get('event_form_date_format', 'd.m.Y');
 		$timeFormat = $app->getParams()->get('event_form_time_format', 'H:i');
-
 		if ($data['start_date_time'] == '') {
 			$data['start_date_time'] = DPCalendarHelper::getDate()->format($timeFormat);
 		}
@@ -629,7 +621,7 @@ class DPCalendarControllerEvent extends FormController
 
 		$data = $this->input->get('jform', [], 'array');
 
-		if (!key_exists('all_day', $data)) {
+		if (!array_key_exists('all_day', $data)) {
 			$data['all_day'] = false;
 		}
 

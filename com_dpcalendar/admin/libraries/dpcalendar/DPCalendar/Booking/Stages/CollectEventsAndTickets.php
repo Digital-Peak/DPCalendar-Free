@@ -37,7 +37,11 @@ class CollectEventsAndTickets implements StageInterface
 		if ($payload->oldItem) {
 			$payload->tickets = $payload->oldItem->tickets;
 			foreach ($payload->tickets as $ticket) {
-				$payload->events[$ticket->event_id] = $this->model->getEvent($ticket->event_id);
+				$payload->events[$ticket->event_id]                     = $this->model->getEvent($ticket->event_id);
+				$payload->events[$ticket->event_id]->waiting_list_count = count(array_filter(
+					$payload->events[$ticket->event_id]->tickets,
+					fn ($t) => $t->state == 8
+				));
 			}
 			$payload->eventsWithTickets = $payload->events;
 
@@ -60,6 +64,8 @@ class CollectEventsAndTickets implements StageInterface
 				$payload->data['event_id'][$event->id] = $types;
 				unset($payload->data['event_id'][$eId]);
 			}
+
+			$event->waiting_list_count = count(array_filter($event->tickets, fn ($t) => $t->state == 8));
 
 			// If we can't book continue
 			if (!Booking::openForBooking($event)) {

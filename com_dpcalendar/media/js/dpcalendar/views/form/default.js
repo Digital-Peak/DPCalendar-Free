@@ -424,7 +424,7 @@
 				}
 			});
 		}
-		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform__actions .dp-button')).forEach((button) => {
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-eventform__actions .dp-button-action')).forEach((button) => {
 			button.addEventListener('click', () => Joomla.submitbutton('event.' + button.getAttribute('data-task')));
 		});
 		Joomla.submitbutton = (task) => {

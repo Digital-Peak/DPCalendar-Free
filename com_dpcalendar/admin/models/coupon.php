@@ -135,6 +135,6 @@ class DPCalendarModelCoupon extends AdminModel
 
 	public function getReturnPage()
 	{
-		return base64_encode($this->getState('return_page', ''));
+		return base64_encode($this->getState('return_page', '') ?: Uri::base(true));
 	}
 }

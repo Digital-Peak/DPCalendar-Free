@@ -268,7 +268,7 @@ class Booking
 		return $event->price != '0.00' && !empty($event->price) && !empty($event->price->value);
 	}
 
-	public static function openForCancel($booking, $states = [1])
+	public static function openForCancel($booking, $states = [1, 4, 8])
 	{
 		if (!$booking) {
 			return false;

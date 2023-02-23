@@ -127,12 +127,12 @@
 					}
 				);
 			});
-			geoComplete.parentElement.querySelector('.dp-button').addEventListener('click', (e) => {
+			geoComplete.parentElement.querySelector('.dp-button-action').addEventListener('click', (e) => {
 				e.preventDefault();
 				geoComplete.dispatchEvent(new CustomEvent('dp-autocomplete-change', { value: geoComplete.value.trim() }));
 				return false;
 			});
-			[].slice.call(document.querySelectorAll('.com-dpcalendar-locationform__actions .dp-button')).forEach((button) => {
+			[].slice.call(document.querySelectorAll('.com-dpcalendar-locationform__actions .dp-button-action')).forEach((button) => {
 				button.addEventListener('click', () => Joomla.submitbutton('locationform.' + button.getAttribute('data-task')));
 			});
 			Joomla.submitbutton = (task) => {

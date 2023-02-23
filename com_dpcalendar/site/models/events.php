@@ -145,7 +145,7 @@ class DPCalendarModelEvents extends ListModel
 
 			// Set up the rooms
 			if (!empty($item->rooms)) {
-				$item->rooms = explode(',', $item->rooms);
+				$item->rooms = is_array($item->rooms) ? $item->rooms : explode(',', $item->rooms);
 			} else {
 				$item->rooms = [];
 			}
@@ -221,9 +221,10 @@ class DPCalendarModelEvents extends ListModel
 		$query->where('a.access IN (' . $groups . ')');
 
 		// Don't show original events
-		if ($this->getState('filter.expand')) {
+		$expand = $this->getState('filter.expand');
+		if ($expand && $expand !== 'all') {
 			$query->where('a.original_id > -1');
-		} else {
+		} elseif (!$expand) {
 			$query->where('a.original_id in (-1, 0)');
 		}
 
@@ -235,6 +236,10 @@ class DPCalendarModelEvents extends ListModel
 			$query->select('t.id as booking');
 			$query->join('LEFT', '#__dpcalendar_tickets AS t ON (t.event_id = a.id or t.event_id = a.original_id) and t.user_id = ' . (int)$user->id);
 		}
+
+		// Join to tickets to check if the event has waiting list tickets
+		$query->select('count(DISTINCT wl.id) as waiting_list_count');
+		$query->join('LEFT', '#__dpcalendar_tickets AS wl ON (wl.event_id = a.id or wl.event_id = a.original_id) and wl.state = 8');
 
 		// Join on series max/min
 		$query->select('ser.min_date AS series_min_start_date, ser.max_date AS series_max_end_date');
@@ -248,13 +253,13 @@ class DPCalendarModelEvents extends ListModel
 		$query->join('LEFT', '#__dpcalendar_events AS o ON o.id = a.original_id');
 
 		// Join locations
-		$query->select("GROUP_CONCAT(v.id SEPARATOR ', ') location_ids");
+		$query->select("GROUP_CONCAT(DISTINCT v.id SEPARATOR ', ') location_ids");
 		$query->join('LEFT', '#__dpcalendar_events_location AS rel ON a.id = rel.event_id');
 		$query->join('LEFT', '#__dpcalendar_locations AS v ON rel.location_id = v.id');
 		$query->group('a.id');
 
 		// Join hosts
-		$query->select("GROUP_CONCAT(uh.id SEPARATOR ',') host_ids");
+		$query->select("GROUP_CONCAT(DISTINCT uh.id SEPARATOR ',') host_ids");
 		$query->join('LEFT', '#__dpcalendar_events_hosts AS relh ON a.id = relh.event_id');
 		$query->join('LEFT', '#__users AS uh ON relh.user_id = uh.id');
 

@@ -101,12 +101,12 @@ class DPCalendarModelEvent extends ItemModel
 					$query->join('LEFT', '#__categories AS c on c.id = a.catid');
 
 					// Join locations
-					$query->select("GROUP_CONCAT(v.id SEPARATOR ',') location_ids");
+					$query->select("GROUP_CONCAT(DISTINCT v.id SEPARATOR ',') location_ids");
 					$query->join('LEFT', '#__dpcalendar_events_location AS rel ON a.id = rel.event_id');
 					$query->join('LEFT', '#__dpcalendar_locations AS v ON rel.location_id = v.id');
 
 					// Join hosts
-					$query->select("GROUP_CONCAT(uh.id SEPARATOR ',') host_ids");
+					$query->select("GROUP_CONCAT(DISTINCT uh.id SEPARATOR ',') host_ids");
 					$query->join('LEFT', '#__dpcalendar_events_hosts AS relu ON a.id = relu.event_id');
 					$query->join('LEFT', '#__users AS uh ON relu.user_id = uh.id');
 
@@ -116,6 +116,10 @@ class DPCalendarModelEvent extends ItemModel
 						'LEFT',
 						'#__dpcalendar_events AS ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id'
 					);
+
+					// Join to tickets to check if the event has waiting list tickets
+					$query->select('count(DISTINCT wl.id) as waiting_list_count');
+					$query->join('LEFT', '#__dpcalendar_tickets AS wl ON (wl.event_id = a.id or wl.event_id = a.original_id) and wl.state = 8');
 
 					$query->select('u.name AS author');
 					$query->join('LEFT', '#__users AS u on u.id = a.created_by');

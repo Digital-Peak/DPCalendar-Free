@@ -21,6 +21,10 @@ $waiting = $this->event->capacity !== null && $this->event->capacity_used >= $th
 if ($this->originalEvent && $this->originalEvent->booking_series == 2) {
 	$waiting = false;
 }
+// Reset for waiting list
+if ((int)$this->event->waiting_list_count > 0) {
+	$waiting = true;
+}
 ?>
 <?php if ($this->noBookingMessage) { ?>
 	<div class="com-dpcalendar-event__cta com-dpcalendar-event__cta_disabled dp-print-hide">

@@ -14,7 +14,9 @@ $this->document->setMimeEncoding('application/json');
 $tmp = [];
 foreach ($this->items as $event) {
 	$start = DPCalendarHelper::getDate($event->start_date, $event->all_day == 1);
+	$start->setTime(0,0,0);
 	$end   = DPCalendarHelper::getDate($event->end_date, $event->all_day == 1);
+	$end->setTime(0,0,0);
 
 	do {
 		$date = $start->format('Y-m-d', true);
@@ -54,7 +56,7 @@ foreach ($tmp as $date => $events) {
 	);
 
 	$eventData = [];
-	$description = '<ul class="dp-events-list">';
+	$description = '<ul class="dp-events-list dp-list">';
 	foreach ($events as $event) {
 		$start  = DPCalendarHelper::getDate($event->start_date, $event->all_day == 1,);
 		$end    = DPCalendarHelper::getDate($event->end_date, $event->all_day == 1);

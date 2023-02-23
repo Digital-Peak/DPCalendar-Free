@@ -268,7 +268,23 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 				$text[] = 'DTEND;TZID=' . $userTz . ':' . $end->format('Ymd\THis', true);
 			}
 
-			$text[] = 'RRULE:' . $this->rrule;
+			// The rrule until field needs to be adapted to the user timezone
+			$rrule = '';
+			foreach (explode(';', strtoupper($this->rrule)) as $part) {
+				if (empty($part)) {
+					continue;
+				}
+				list($partName, $partValue) = explode('=', $part);
+
+				if ($partName === 'UNTIL') {
+					// Remove the timezone information, sabre assumes then the field is in user timezone
+					$partValue = str_replace('Z', '', $partValue);
+				}
+
+				$rrule .= $partName . '=' . $partValue . ';';
+			}
+
+			$text[] = 'RRULE:' . $rrule;
 			$text[] = 'END:VEVENT';
 			$text[] = 'END:VCALENDAR';
 

@@ -91,8 +91,8 @@
 		display: block;
 	}
 	.com-dpcalendar-adminform .dp-control__label, .com-dpcalendar-adminform .control-group .control-label,
-.com-dpcalendar-adminform .control-group .form-label, .com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls,
-.com-dpcalendar-adminform .control-group .form-control {
+	.com-dpcalendar-adminform .control-group .form-label, .com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls,
+	.com-dpcalendar-adminform .control-group .form-control {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -100,8 +100,8 @@
 		display: block;
 	}
 	.com-dpcalendar-adminform .dp-control control-label, .com-dpcalendar-adminform .control-group control-label,
-.com-dpcalendar-adminform .dp-control controls,
-.com-dpcalendar-adminform .control-group controls {
+	.com-dpcalendar-adminform .dp-control controls,
+	.com-dpcalendar-adminform .control-group controls {
 		width: 100%;
 		margin-left: 0;
 	}

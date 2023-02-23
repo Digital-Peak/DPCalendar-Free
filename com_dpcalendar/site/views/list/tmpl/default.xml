@@ -11,7 +11,9 @@
 		<fieldset name="required" label="COM_DPCALENDAR_VIEW_REQUIRED_FIELDSET_LABEL">
 			<field name="ids" type="dpcalendar" multiple="true" required="true" class="dp-select"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SELECT_CALENDARS_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SELECT_CALENDARS_DESC"/>
+					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SELECT_CALENDARS_DESC">
+				<option value="-1">JALL</option>
+			</field>
 		</fieldset>
 		<fieldset name="basic">
 			<field name="date_start" type="text" useglobal="true"

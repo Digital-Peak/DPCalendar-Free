@@ -6,7 +6,7 @@
 (function () {
 	'use strict';
 	document.addEventListener('DOMContentLoaded', () => {
-		[].slice.call(document.querySelectorAll('.com-dpcalendar-event-mailtickets__actions .dp-button')).forEach((button) => {
+		[].slice.call(document.querySelectorAll('.com-dpcalendar-event-mailtickets__actions .dp-button-action')).forEach((button) => {
 			button.addEventListener('click', (event) => {
 				event.preventDefault();
 				Joomla.submitbutton('event.' + button.getAttribute('data-task'));

@@ -227,7 +227,7 @@ class DPCalendarHelperRoute
 		return self::getUrl($args, true);
 	}
 
-	public static function getBookingFormRouteFromEvent($event, $return = null, $autoRoute = true)
+	public static function getBookingFormRouteFromEvent($event, $return = null, $autoRoute = true, $defaultItemId = 0)
 	{
 		$args         = [];
 		$args['task'] = 'bookingform.add';
@@ -242,7 +242,7 @@ class DPCalendarHelperRoute
 		$needles['list']     = [$event->catid];
 		$needles['map']      = [$event->catid];
 
-		return self::getUrl($args, $autoRoute, $needles);
+		return self::getUrl($args, $autoRoute, $needles, $defaultItemId);
 	}
 
 	public static function getTicketRoute($ticket, $full = false)
@@ -491,12 +491,13 @@ class DPCalendarHelperRoute
 		return null;
 	}
 
-	private static function getUrl($arguments = [], $route = true, $needles = [])
+	private static function getUrl($arguments = [], $route = true, $needles = [], $defaultItemId = 0)
 	{
 		$uri = clone Uri::getInstance();
 		if (Factory::getDocument()->getType() != 'html' || Factory::getApplication()->isClient('site')) {
 			$uri = Uri::getInstance('index.php');
 		}
+
 		$uri->setQuery('');
 		$input = Factory::getApplication()->input;
 
@@ -511,6 +512,10 @@ class DPCalendarHelperRoute
 		$tmpl = $input->getWord('tmpl');
 		if ($tmpl) {
 			$arguments['tmpl'] = $tmpl;
+		}
+
+		if ($defaultItemId) {
+			$arguments['Itemid'] = $defaultItemId;
 		}
 
 		foreach ($arguments as $key => $value) {

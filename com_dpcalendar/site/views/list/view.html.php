@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\Location;
 use DPCalendar\View\BaseView;
 use Joomla\CMS\Factory;
@@ -14,6 +15,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Registry\Registry;
 
 class DPCalendarViewList extends BaseView
 {
@@ -124,10 +126,15 @@ class DPCalendarViewList extends BaseView
 		$this->prevLink .= $this->input->getInt('Itemid') . '&date-start=' . $start->format('Y-m-d');
 		$this->prevLink = $this->router->route($this->prevLink);
 
+		$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel', ['ignore_request' => true]);
+		$model->getState();
+		$model->setState('filter.parentIds', $this->params->get('ids', '-1'));
+		$ids = array_column($model->getItems(), 'id');
+
 		$model = $this->getModel();
 
-		// Initialise variables
-		$model->setState('category.id', $this->app->getParams()->get('ids'));
+		// Initialize variables
+		$model->setState('category.id', $ids);
 		$model->setState('category.recursive', true);
 		$model->setState('filter.featured', $this->params->get('list_filter_featured', 0));
 		$model->setState('filter.author', $this->params->get('list_filter_author', 0));
@@ -155,7 +162,7 @@ class DPCalendarViewList extends BaseView
 		}
 
 		PluginHelper::importPlugin('dpcalendar');
-		$this->app->triggerEvent('onContentDisplayEventList', ['com_dpcalendar.calendar', $this->app->getParams()->get('ids'), $items]);
+		$this->app->triggerEvent('onContentDisplayEventList', ['com_dpcalendar.calendar', $ids, $items]);
 
 		$now = $this->dateHelper->getDate();
 		foreach ($items as $event) {
@@ -173,7 +180,7 @@ class DPCalendarViewList extends BaseView
 				$descTruncated = JHtmlString::truncateComplex($desc, $this->params->get('list_description_length', null));
 
 				// Move the dots inside the last tag
-				if (\DPCalendar\Helper\DPCalendarHelper::endsWith($descTruncated, '...') && $pos = strrpos($descTruncated, '</')) {
+				if (DPCalendarHelper::endsWith($descTruncated, '...') && $pos = strrpos($descTruncated, '</')) {
 					$descTruncated = trim(substr_replace($descTruncated, '...</', $pos, 2), '.');
 				}
 
@@ -185,7 +192,7 @@ class DPCalendarViewList extends BaseView
 						'joomla.content.readmore',
 						[
 							'item'   => $event,
-							'params' => new \Joomla\Registry\Registry(['access-view' => true]),
+							'params' => new Registry(['access-view' => true]),
 							'link'   => $this->router->getEventRoute($event->id, $event->catid)
 						]
 					));

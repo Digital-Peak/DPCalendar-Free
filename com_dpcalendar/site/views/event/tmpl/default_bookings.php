@@ -54,11 +54,12 @@ if ($tickets) {
 			<dd class="dp-description__description dp-event-capacity-used"><?php echo min($event->capacity, $event->capacity_used); ?></dd>
 		</dl>
 	<?php } ?>
-	<?php if ($this->params->get('event_show_capacity_used', '1') && $event->capacity !== null && $event->booking_waiting_list && $event->capacity_used >= $event->capacity) { ?>
+	<?php if ($this->params->get('event_show_capacity_used', '1') && $event->capacity !== null && $event->booking_waiting_list
+		&& ((int)$event->waiting_list_count > 0 || $event->capacity_used >= $event->capacity)) { ?>
 		<dl class="dp-description dp-booking-info__waiting">
 			<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_BOOKING_WAITING_LIST'); ?></dt>
 			<dd class="dp-description__description dp-event-waiting">
-				<?php echo count(array_filter($event->tickets, function ($t) { return $t->state == 8; })); ?>
+				<?php echo $event->waiting_list_count ?: count(array_filter($event->tickets, fn ($t) => $t->state == 8)); ?>
 			</dd>
 		</dl>
 	<?php } ?>

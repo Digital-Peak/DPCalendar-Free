@@ -1630,19 +1630,19 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="booking_include_ics" type="radio" class="btn-group" default="1" showon="booking_send_mail_new!:0"
+		<field name="booking_include_ics" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_ICS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_ICS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="booking_include_tickets" type="radio" class="btn-group" default="1" showon="booking_send_mail_new!:0"
+		<field name="booking_include_tickets" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_TICKETS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_TICKETS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="booking_include_receipt" type="radio" class="btn-group" default="1" showon="booking_send_mail_paid:1"
+		<field name="booking_include_receipt" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_RECEIPT_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_INCLUDE_RECEIPT_DESC">
 			<option value="0">JNO</option>

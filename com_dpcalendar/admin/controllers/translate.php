@@ -7,10 +7,14 @@
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Transifex;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\LanguageHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
 
 JLoader::import('joomla.filesystem.folder');
 
-class DPCalendarControllerTranslate extends JControllerLegacy
+class DPCalendarControllerTranslate extends BaseController
 {
 	public function fetch()
 	{
@@ -18,31 +22,30 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 		$resource = $this->input->getCmd('resource');
 		if (!$resource) {
 			echo json_encode([]);
-			JFactory::getApplication()->close();
+			Factory::getApplication()->close();
 		}
 
 		// The stats data
 		$data = ['resource' => $resource, 'languages' => []];
 
 		// Loop over the local languages
-		foreach (JLanguageHelper::getKnownLanguages() as $language) {
-			foreach (Transifex::getData('resource/' . $resource . '/stats') as $langCode => $tr) {
-				// Ignore DP related property
-				if ($langCode == 'dp') {
-					continue;
-				}
-				$code = Transifex::getLangCode($langCode);
+		foreach (LanguageHelper::getKnownLanguages() as $language) {
+			foreach (Transifex::getResourceStats($resource) as $tr) {
+				$code = Transifex::getLangCode($tr->relationships->language->data->id);
 				if ($code === false || $code != $language['tag']) {
 					continue;
 				}
 
-				$data['languages'][] = ['tag' => $code, 'percent' => (int)$tr->completed];
+				$data['languages'][] = [
+					'tag'     => $code,
+					'percent' => (int)((100 / $tr->attributes->total_strings) * $tr->attributes->translated_strings)
+				];
 			}
 		}
 
 		// Send the data
 		echo json_encode($data);
-		JFactory::getApplication()->close();
+		Factory::getApplication()->close();
 	}
 
 	public function update()
@@ -55,19 +58,24 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 
 		// Teh local languages
 		$localLanguages = [];
-		foreach (JLanguageHelper::getKnownLanguages() as $language) {
+		foreach (LanguageHelper::getKnownLanguages() as $language) {
 			$localLanguages[$language['tag']] = $language;
 		}
 
 		// The stats
-		foreach (Transifex::getData('resource/' . $resource . '/stats') as $langCode => $lang) {
+		foreach (Transifex::getResourceStats($resource) as $tr) {
 			// Ignore empty languages
-			if ((int)$lang->completed < 1) {
+			if ((int)$tr->attributes->translated_strings === 0) {
 				continue;
 			}
 
 			// Get the joomla language code
-			$code = Transifex::getLangCode($langCode);
+			$code = Transifex::getLangCode($tr->relationships->language->data->id);
+
+			// Ignore en-GB
+			if ($code === 'en-GB') {
+				continue;
+			}
 
 			// Check if the code is ok and if we have the language installed locally
 			if ($code === false || !array_key_exists($code, $localLanguages)) {
@@ -75,8 +83,8 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 			}
 
 			// Get the content of the language
-			$content = Transifex::getData('resource/' . $resource . '/translation/' . $code . '?file=1');
-			if (empty($content->dp->body) || $content->dp->info->http_code > 200) {
+			$content = Transifex::getResourceStrings($resource, $code);
+			if (!$content) {
 				continue;
 			}
 
@@ -95,7 +103,7 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 			}
 
 			if (strpos($resource, 'plg_') === 0) {
-				$db = JFactory::getDbo();
+				$db = Factory::getDbo();
 				$db->setQuery("SELECT *  FROM `#__extensions` WHERE  `name` LIKE  '" . str_replace('-sys', '', $resource) . "'");
 				$plugin = $db->loadObject();
 				if (!empty($plugin)) {
@@ -114,12 +122,12 @@ class DPCalendarControllerTranslate extends JControllerLegacy
 			}
 
 			// Write the content
-			file_put_contents($path, $content->dp->body);
+			file_put_contents($path, $content);
 		}
 
 		// Sent the conformation
 		DPCalendarHelper::sendMessage(
-			JText::sprintf('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_UPDATE_RESOURCE_SUCCESS', $resource),
+			Text::sprintf('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_UPDATE_RESOURCE_SUCCESS', $resource),
 			false,
 			['resource' => $resource]
 		);

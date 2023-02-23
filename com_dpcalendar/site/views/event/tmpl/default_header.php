@@ -62,13 +62,13 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 ?>
 <div class="com-dpcalendar-event__actions dp-button-bar dp-print-hide">
 	<?php if ($this->params->get('event_show_print', 1)) { ?>
-		<button type="button" class="dp-button dp-button-print" data-selector=".com-dpcalendar-event">
+		<button type="button" class="dp-button dp-button-action dp-button-print" data-selector=".com-dpcalendar-event">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::PRINTING]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'); ?>
 		</button>
 	<?php } ?>
 	<?php if ($mailtoUrl && $this->params->get('event_show_mail', 1)) { ?>
-		<button type="button" class="dp-button dp-button-mail" data-mailtohref="<?php echo $mailtoUrl; ?>">
+		<button type="button" class="dp-button dp-button-action dp-button-mail" data-mailtohref="<?php echo $mailtoUrl; ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::MAIL]); ?>
 			<?php echo $this->translate('JGLOBAL_EMAIL'); ?>
 		</button>

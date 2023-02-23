@@ -97,14 +97,14 @@
 }
 @media screen and (max-width: 767px) {
 	.com-dpcalendar-tools-translate .dp-table,
-.com-dpcalendar-tools-translate .dp-table tbody:not(.dp-table__thead),
-.com-dpcalendar-tools-translate .dp-table th,
-.com-dpcalendar-tools-translate .dp-table td,
-.com-dpcalendar-tools-translate .dp-table tr {
+	.com-dpcalendar-tools-translate .dp-table tbody:not(.dp-table__thead),
+	.com-dpcalendar-tools-translate .dp-table th,
+	.com-dpcalendar-tools-translate .dp-table td,
+	.com-dpcalendar-tools-translate .dp-table tr {
 		display: block;
 	}
 	.com-dpcalendar-tools-translate .dp-table__thead,
-.com-dpcalendar-tools-translate .dp-table thead {
+	.com-dpcalendar-tools-translate .dp-table thead {
 		display: none;
 	}
 	.com-dpcalendar-tools-translate .dp-table tr {
@@ -124,12 +124,12 @@
 		font-weight: bold;
 	}
 	.com-dpcalendar-tools-translate .dp-table td,
-.com-dpcalendar-tools-translate .dp-table th {
+	.com-dpcalendar-tools-translate .dp-table th {
 		box-sizing: border-box;
 		text-align: left !important;
 	}
 	.com-dpcalendar-tools-translate .dp-table td > div,
-.com-dpcalendar-tools-translate .dp-table th > div {
+	.com-dpcalendar-tools-translate .dp-table th > div {
 		text-align: left;
 	}
 }

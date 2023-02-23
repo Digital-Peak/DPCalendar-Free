@@ -83,8 +83,8 @@
 		display: block;
 	}
 	.com-dpcalendar-eventform .dp-control__label, .com-dpcalendar-eventform .control-group .control-label,
-.com-dpcalendar-eventform .control-group .form-label, .com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls,
-.com-dpcalendar-eventform .control-group .form-control {
+	.com-dpcalendar-eventform .control-group .form-label, .com-dpcalendar-eventform .dp-control__input, .com-dpcalendar-eventform .control-group .controls,
+	.com-dpcalendar-eventform .control-group .form-control {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -92,8 +92,8 @@
 		display: block;
 	}
 	.com-dpcalendar-eventform .dp-control control-label, .com-dpcalendar-eventform .control-group control-label,
-.com-dpcalendar-eventform .dp-control controls,
-.com-dpcalendar-eventform .control-group controls {
+	.com-dpcalendar-eventform .dp-control controls,
+	.com-dpcalendar-eventform .control-group controls {
 		width: 100%;
 		margin-left: 0;
 	}

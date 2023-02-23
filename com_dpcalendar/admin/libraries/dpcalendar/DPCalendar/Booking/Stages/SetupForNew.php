@@ -16,7 +16,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
 use League\Pipeline\StageInterface;
-use Sabre\VObject\UUIDUtil;
 
 class SetupForNew implements StageInterface
 {
@@ -100,13 +99,13 @@ class SetupForNew implements StageInterface
 
 			// When skipping the review step always, set state to tickets reviewed
 			if ($payload->data['state'] == 0
-				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 0) {
+				&& DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 0) {
 				$payload->data['state'] = 2;
 			}
 
 			// When skipping to review step on one ticket, set state to tickets reviewed
 			if ($payload->data['state'] == 0
-				&& \DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 2
+				&& DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 2
 				&& $amountTickets == 1) {
 				$payload->data['state'] = 2;
 			}
@@ -115,7 +114,7 @@ class SetupForNew implements StageInterface
 			if (!$payload->data['price']
 				&& ($event->capacity === null || $event->capacity_used < $event->capacity)
 				&& $payload->data['state'] == 2
-				&& !\DPCalendar\Helper\DPCalendarHelper::getComponentParameter('booking_confirm_step', 1)) {
+				&& !DPCalendarHelper::getComponentParameter('booking_confirm_step', 1)) {
 				$payload->data['state'] = 1;
 			}
 
@@ -123,6 +122,11 @@ class SetupForNew implements StageInterface
 			$event = reset($payload->events);
 			if ($payload->data['state'] == 2 && (count($payload->events) == 1 || $event->booking_series != 2)
 				&& $event->capacity != null && $event->capacity_used >= $event->capacity && $event->booking_waiting_list) {
+				$payload->data['state'] = 8;
+			}
+
+			// Ensure when tickets are on waiting list, that booking has the correct state
+			if ((int)$event->waiting_list_count > 0) {
 				$payload->data['state'] = 8;
 			}
 		}

@@ -15,18 +15,70 @@ class Transifex
 {
 	private static $languages = [];
 
-	public static function getData($path)
+	private static $key = '1/8c747f282bd8e1c117cf52c98989e604f9f17864';
+
+	public static function getResources(): array
 	{
-		return (new HTTP())->get('https://www.transifex.com/api/2/project/DPCalendar/' . $path, 'api', '1/8c747f282bd8e1c117cf52c98989e604f9f17864');
+		return (new HTTP())->get(
+			'https://rest.api.transifex.com/resources?filter[project]=' . urlencode('o:digital-peak:p:DPCalendar'),
+			self::$key
+		)->data;
+	}
+
+	public static function getResourceStats(string $resourceId): array
+	{
+		$path = '?filter[project]=' . urlencode('o:digital-peak:p:DPCalendar');
+		$path .= '&filter[resource]=' . urlencode('o:digital-peak:p:DPCalendar:r:' . $resourceId);
+		return (new HTTP())->get(
+			'https://rest.api.transifex.com/resource_language_stats' . $path,
+			self::$key
+		)->data;
+	}
+
+	public static function getResourceStrings(string $resourceId, string $language)
+	{
+		$http = new HTTP();
+		$data = [
+			'attributes'    => ['content_encoding' => 'text'],
+			'relationships' => [
+				'language' => ['data' => ['id' => 'l:' . str_replace('-', '_', $language), 'type' => 'languages']],
+				'resource' => ['data' => ['id' => 'o:digital-peak:p:DPCalendar:r:' . $resourceId, 'type' => 'resources']]
+			],
+			'type' => 'resource_translations_async_downloads'
+		];
+		$response = $http->post(
+			'https://rest.api.transifex.com/resource_translations_async_downloads',
+			json_encode(['data' => $data]),
+			self::$key,
+			null,
+			['Content-Type: application/vnd.api+json']
+		);
+
+		$file    = $http->get('https://rest.api.transifex.com/resource_translations_async_downloads/' . $response->data->id, self::$key);
+		$counter = 0;
+		while ($counter < 5 && $file) {
+			if ($file->dp->info->http_code === 404) {
+				$counter++;
+				sleep(1);
+				$file = $http->get('https://rest.api.transifex.com/resource_translations_async_downloads/' . $response->data->id, self::$key);
+				continue;
+			}
+
+			return $file->dp->body;
+		}
+
+		return '';
 	}
 
 	public static function getLangCode($lang, $inverse = false)
 	{
+		$lang      = str_replace('l:', '', $lang);
 		$languages = self::getLangmap();
 
 		if ($inverse) {
 			return array_search($lang, $languages);
 		}
+
 		if (isset($languages[$lang])) {
 			return $languages[$lang];
 		}

@@ -64,8 +64,16 @@ class DPCalendarViewMap extends BaseView
 			return false;
 		}
 
+		$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
+		$model->getState();
+		$model->setState('filter.parentIds', $this->params->get('ids', ['root']));
+		$ids = [];
+		foreach ($model->getItems() as $calendar) {
+			$ids[] = $calendar->id;
+		}
+
 		$this->getModel()->setState('list.limit', 1000);
-		$this->getModel()->setState('category.id', $this->params->get('ids'));
+		$this->getModel()->setState('category.id', $ids);
 		$this->getModel()->setState('filter.expand', $this->params->get('map_expand', 1));
 		$this->getModel()->setState('filter.ongoing', $this->params->get('map_include_ongoing', 0));
 		$this->getModel()->setState('filter.author', $this->params->get('map_filter_author', 0));

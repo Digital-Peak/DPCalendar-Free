@@ -26,6 +26,7 @@ class DPCalendarViewEvents extends BaseView
 		$this->input->set('list.limit', 1000);
 		$this->get('State')->set('filter.state', [1, 3]);
 		$this->get('State')->set('filter.state_owner', true);
+		$this->get('State')->set('filter.search', '');
 
 		// Convert the dates from the user timezone into normal
 		$tz    = DPCalendarHelper::getDate()->getTimezone()->getName();

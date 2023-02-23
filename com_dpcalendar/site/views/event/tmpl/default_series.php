@@ -14,7 +14,7 @@ if (!$this->seriesEvents || !$this->params->get('event_show_series', 1) || empty
 	<h<?php echo $this->heading + 2; ?> class="dp-heading">
 		<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_SERIES_LIST'); ?>
 	</h<?php echo $this->heading + 2; ?>>
-	<ul class="dp-event-list">
+	<ul class="dp-event-list dp-list">
 		<?php foreach ($this->seriesEvents as $event) { ?>
 			<li class="dp-events-list__event dp-event-<?php echo $event->id; ?>">
 				<a href="<?php echo $this->router->getEventRoute($event->id, $event->catid); ?>" class="dp-link">

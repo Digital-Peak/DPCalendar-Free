@@ -61,9 +61,9 @@ class Router
 		return \DPCalendarHelperRoute::getBookingFormRoute($bookingId, $return);
 	}
 
-	public function getBookingFormRouteFromEvent($event, $return = null, $autoRoute = true)
+	public function getBookingFormRouteFromEvent($event, $return = null, $autoRoute = true, $defaultItemId = 0)
 	{
-		return \DPCalendarHelperRoute::getBookingFormRouteFromEvent($event, $return, $autoRoute);
+		return \DPCalendarHelperRoute::getBookingFormRouteFromEvent($event, $return, $autoRoute, $defaultItemId);
 	}
 
 	public static function getTicketRoute($ticket, $full = false)

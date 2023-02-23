@@ -4,11 +4,19 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 use Joomla\Utilities\ArrayHelper;
 
-class DPCalendarViewEvents extends \DPCalendar\View\BaseView
+class DPCalendarViewEvents extends BaseView
 {
 	protected $items;
 	protected $pagination;
@@ -16,7 +24,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 
 	public function init()
 	{
-		$this->setModel(JModelLegacy::getInstance('AdminEvents', 'DPCalendarModel'), true);
+		$this->setModel(BaseDatabaseModel::getInstance('AdminEvents', 'DPCalendarModel'), true);
 		$this->items      = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->authors    = $this->get('Authors');
@@ -47,36 +55,36 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 	protected function addToolbar()
 	{
 		$state = $this->get('State');
-		$canDo = DPCalendarHelper::getActions($state->get('filter.category_id'));
-		$user  = JFactory::getUser();
+		$canDo = \DPCalendarHelper::getActions($state->get('filter.category_id'));
+		$user  = Factory::getUser();
 
-		$bar = JToolbar::getInstance('toolbar');
+		$bar = Toolbar::getInstance('toolbar');
 
 		if (count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) > 0) {
-			JToolbarHelper::addNew('event.add');
+			ToolbarHelper::addNew('event.add');
 		}
 		if ($canDo->get('core.edit')) {
-			JToolbarHelper::editList('event.edit');
+			ToolbarHelper::editList('event.edit');
 		}
 		if ($canDo->get('core.edit.state')) {
-			JToolbarHelper::divider();
-			JToolbarHelper::publish('events.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('events.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			ToolbarHelper::divider();
+			ToolbarHelper::publish('events.publish', 'JTOOLBAR_PUBLISH', true);
+			ToolbarHelper::unpublish('events.unpublish', 'JTOOLBAR_UNPUBLISH', true);
 
-			JToolbarHelper::divider();
-			JToolbarHelper::archiveList('events.archive');
-			JToolbarHelper::checkin('events.checkin');
+			ToolbarHelper::divider();
+			ToolbarHelper::archiveList('events.archive');
+			ToolbarHelper::checkin('events.checkin');
 		}
 		if ($state->get('filter.state') == -2 && $canDo->get('core.delete')) {
-			JToolbarHelper::deleteList('', 'events.delete', 'JTOOLBAR_EMPTY_TRASH');
-			JToolbarHelper::divider();
-		} else if ($canDo->get('core.edit.state')) {
-			JToolbarHelper::trash('events.trash');
-			JToolbarHelper::divider();
+			ToolbarHelper::deleteList('', 'events.delete', 'JTOOLBAR_EMPTY_TRASH');
+			ToolbarHelper::divider();
+		} elseif ($canDo->get('core.edit.state')) {
+			ToolbarHelper::trash('events.trash');
+			ToolbarHelper::divider();
 		}
 
 		if ($user->authorise('core.edit') && DPCalendarHelper::isJoomlaVersion('3')) {
-			$title = JText::_('JTOOLBAR_BATCH');
+			$title = Text::_('JTOOLBAR_BATCH');
 			$dhtml = "<button data-toggle=\"modal\" data-target=\"#collapseModal\" class=\"btn btn-small\">
 			<i class=\"icon-checkbox-partial\" title=\"$title\"></i>
 			$title</button>";
@@ -89,12 +97,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 	protected function getState($item)
 	{
 		$states = [
-			0 => [
-				'star-empty',
-				'events.featured',
-				'COM_DPCALENDAR_VIEW_EVENTS_UNFEATURED',
-				'COM_DPCALENDAR_VIEW_EVENTS_TOGGLE_TO_FEATURE'
-			],
+			0 => ['circle', 'events.featured', 'COM_DPCALENDAR_VIEW_EVENTS_UNFEATURED', 'COM_DPCALENDAR_VIEW_EVENTS_TOGGLE_TO_FEATURE'],
 			1 => ['star', 'events.unfeatured', 'COM_DPCALENDAR_FEATURED', 'COM_DPCALENDAR_VIEW_EVENTS_TOGGLE_TO_UNFEATURE'],
 		];
 

@@ -457,7 +457,7 @@
 		float: none;
 	}
 	.com-dpcalendar-blog .dp-event__image .dp-image,
-.com-dpcalendar-blog .dp-event .dp-figure {
+	.com-dpcalendar-blog .dp-event .dp-figure {
 		width: 100%;
 		max-height: 200px;
 		object-fit: cover;

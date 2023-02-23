@@ -724,6 +724,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$event->hits                              = 0;
 		$event->capacity                          = 0;
 		$event->capacity_used                     = 0;
+		$event->waiting_list_count                = 0;
 		$event->booking_options                   = null;
 		$event->booking_waiting_list              = 0;
 		$event->booking_series                    = 0;

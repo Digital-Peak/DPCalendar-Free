@@ -24,10 +24,7 @@ $return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 	<table class="dp-table dp-events-table" id="eventList">
 		<thead>
 		<tr>
-			<th class="dp-table__col-check">
-				<input type="checkbox" name="checkall-toggle" title="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"
-					   class="dp-input dp-input-checkbox dp-input-check-all"/>
-			</th>
+			<td class="dp-table__col-check"><?php echo HTMLHelper::_('grid.checkall'); ?></td>
 			<th class="dp-table__col-state"><?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?></th>
 			<th class="dp-table__col-state"><?php echo HTMLHelper::_('searchtools.sort', 'JFEATURED', 'a.featured', $listDirn, $listOrder); ?></th>
 			<th class="dp-table__col-expand"><?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?></th>

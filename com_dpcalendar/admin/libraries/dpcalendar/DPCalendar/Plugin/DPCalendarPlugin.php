@@ -720,7 +720,8 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$event->url                               = '';
 		$event->price                             = [];
 		$event->locations                         = [];
-		$event->rooms                             = null;
+		$event->rooms                             = [];
+		$event->roomTitles                        = [];
 		$event->hits                              = 0;
 		$event->capacity                          = 0;
 		$event->capacity_used                     = 0;

@@ -144,8 +144,29 @@ class DPCalendarModelEvents extends ListModel
 			}
 
 			// Set up the rooms
+			$item->roomTitles = [];
 			if (!empty($item->rooms)) {
 				$item->rooms = is_array($item->rooms) ? $item->rooms : explode(',', $item->rooms);
+
+				if ($item->locations) {
+					foreach ($item->locations as $location) {
+						if (empty($location->rooms)) {
+							continue;
+						}
+
+						foreach ($item->rooms as $room) {
+							list($locationId, $roomId) = explode('-', $room, 2);
+
+							foreach ($location->rooms as $lroom) {
+								if ($locationId != $location->id || $roomId != $lroom->id) {
+									continue;
+								}
+
+								$item->roomTitles[$locationId][$room] = $lroom->title;
+							}
+						}
+					}
+				}
 			} else {
 				$item->rooms = [];
 			}

@@ -136,8 +136,8 @@
 					previousEvent = eventElement;
 					return;
 				}
-				eventElement.querySelector('.dp-event__dot').style.marginTop = '-200px';
-				eventElement.querySelector('.dp-event__information').style.marginTop = '-200px';
+				eventElement.querySelector('.dp-event__dot').style.marginTop = '-15rem';
+				eventElement.querySelector('.dp-event__information').style.marginTop = '-15rem';
 				previousEvent = eventElement;
 			});
 		});

@@ -19,7 +19,18 @@ use Joomla\Registry\Registry;
 
 class DPCalendarViewList extends BaseView
 {
-	protected $items     = [];
+	/**
+	 * Events of the view
+	 *
+	 * @var array
+	 */
+	public $events = [];
+
+	/**
+	 * The increment property
+	 *
+	 * @var string
+	 */
 	protected $increment = null;
 
 	public function display($tpl = null)

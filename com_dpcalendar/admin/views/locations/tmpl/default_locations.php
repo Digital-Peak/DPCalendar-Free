@@ -4,7 +4,14 @@
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DPCalendarHelper;
+use DPCalendar\Helper\Location;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Router\Route;
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
@@ -12,14 +19,15 @@ $canOrder  = $this->user->authorise('core.edit.state', 'com_dpcalendar');
 $saveOrder = $listOrder == 'a.ordering';
 if ($saveOrder) {
 	$saveOrderingUrl = 'index.php?option=com_dpcalendar&task=locations.saveOrderAjax&tmpl=component';
-	JHtml::_('sortablelist.sortable', 'locationsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
+	HTMLHelper::_('sortablelist.sortable', 'locationsList', 'adminForm', strtolower($listDirn), $saveOrderingUrl);
 }
 ?>
 <div class="com-dpcalendar-locations__locations">
 	<table class="dp-table dp-locations-table" id="locationList">
 		<thead>
+		<td class="dp-table__col-check"><?php echo HTMLHelper::_('grid.checkall'); ?></td>
 		<th class="dp-table__col-order">
-			<?php echo JHtml::_(
+			<?php echo HTMLHelper::_(
 				'searchtools.sort',
 				'',
 				'a.ordering',
@@ -31,18 +39,14 @@ if ($saveOrder) {
 				'icon-menu-2'
 			); ?>
 		</th>
-		<th class="dp-table__col-check">
-			<input type="checkbox" name="checkall-toggle" value="" title="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"
-				   class="dp-input dp-input-checkbox dp-input-check-all"/>
-		</th>
-		<th class="dp-table__col-state"><?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?></th>
-		<th><?php echo JHtml::_('searchtools.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?></th>
+		<th class="dp-table__col-state"><?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?></th>
+		<th><?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?></th>
 		<th><?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_DETAILS'); ?></th>
 		<th class="dp-table__col-color">
-			<?php echo JHtml::_('searchtools.sort', 'COM_DPCALENDAR_FIELD_COLOR_LABEL', 'a.color', $listDirn, $listOrder); ?>
+			<?php echo HTMLHelper::_('searchtools.sort', 'COM_DPCALENDAR_FIELD_COLOR_LABEL', 'a.color', $listDirn, $listOrder); ?>
 		</th>
-		<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'a.language', $listDirn, $listOrder); ?></th>
-		<th><?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
+		<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'a.language', $listDirn, $listOrder); ?></th>
+		<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
 		</tr>
 		</thead>
 		<tbody <?php if ($saveOrder) { ?> class="js-draggable" data-url="<?php echo $saveOrderingUrl; ?>" data-direction="<?php echo strtolower($listDirn); ?>" data-nested="false"<?php  } ?>>
@@ -63,9 +67,9 @@ if ($saveOrder) {
 						<span class="sortable-handler inactive"><i class="icon-menu"></i></span>
 					<?php } ?>
 				</td>
-				<td data-column="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"><?php echo JHtml::_('grid.id', $i, $item->id); ?></td>
+				<td data-column="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"><?php echo HTMLHelper::_('grid.id', $i, $item->id); ?></td>
 				<td data-column="<?php echo $this->translate('JSTATUS'); ?>">
-					<?php echo JHtml::_(
+					<?php echo HTMLHelper::_(
 						'jgrid.published',
 						$item->state,
 						$i,
@@ -78,33 +82,33 @@ if ($saveOrder) {
 				</td>
 				<td class="dp-table__col-expand" data-column="<?php echo $this->translate('JGLOBAL_TITLE'); ?>">
 					<?php if ($item->checked_out) { ?>
-						<?php echo JHtml::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'locations.', $canCheckin); ?>
+						<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->editor, $item->checked_out_time, 'locations.', $canCheckin); ?>
 					<?php } ?>
 					<?php if ($canEdit) { ?>
-						<a href="<?php echo JRoute::_('index.php?option=com_dpcalendar&task=location.edit&l_id=' . (int)$item->id); ?>">
+						<a href="<?php echo Route::_('index.php?option=com_dpcalendar&task=location.edit&l_id=' . (int)$item->id); ?>">
 							<?php echo $this->escape($item->title); ?>
 						</a>
 					<?php } else { ?>
 						<?php echo $this->escape($item->title); ?>
 					<?php } ?>
-					<span><?php echo JText::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($item->alias)); ?></span>
+					<span><?php echo Text::sprintf('JGLOBAL_LIST_ALIAS', $this->escape($item->alias)); ?></span>
 					<div><a href="<?php echo $this->escape($item->url); ?>"><?php echo $this->escape($item->url); ?></a></div>
 				</td>
 				<td class="dp-table__col-expand" data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_DETAILS'); ?>">
-					<?php echo \DPCalendar\Helper\Location::format([$item]); ?>
+					<?php echo Location::format([$item]); ?>
 				</td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_COLOR_LABEL'); ?>">
 					<?php $color = $item->color ?: DPCalendarHelper::getCalendar($item->catid)->color; ?>
-					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($color); ?>"
+					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo DPCalendarHelper::getOppositeBWColor($color); ?>"
 						 class="dp-location__color">
 						<?php echo $this->escape($color); ?>
 					</div>
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_LANGUAGE'); ?>">
 					<?php if ($item->language == '*') { ?>
-						<?php echo JText::alt('JALL', 'language'); ?>
+						<?php echo Text::alt('JALL', 'language'); ?>
 					<?php } else { ?>
-						<?php echo $item->language_title ? $this->escape($item->language_title) : JText::_('JUNDEFINED'); ?>
+						<?php echo $item->language_title ? $this->escape($item->language_title) : $this->translate('JUNDEFINED'); ?>
 					<?php } ?>
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ID'); ?>"><?php echo (int)$item->id; ?></td>

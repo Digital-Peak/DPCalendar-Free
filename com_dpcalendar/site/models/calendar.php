@@ -97,7 +97,7 @@ class DPCalendarModelCalendar extends ListModel
 			PluginHelper::importPlugin('dpcalendar');
 			$tmp = Factory::getApplication()->triggerEvent(
 				'onCalendarsFetch',
-				[null, in_array('-1', $this->getState('filter.parentIds', ['root'])) ? null : 'cd']
+				[null, in_array('-1', (array)$this->getState('filter.parentIds', ['root'])) ? null : 'cd']
 			);
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {
@@ -123,8 +123,6 @@ class DPCalendarModelCalendar extends ListModel
 
 	public function getQuickAddForm(Registry $params)
 	{
-		JLoader::import('joomla.form.form');
-
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 		Form::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
 

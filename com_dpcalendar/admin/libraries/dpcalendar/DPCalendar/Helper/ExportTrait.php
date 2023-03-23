@@ -21,7 +21,7 @@ trait ExportTrait
 	/** @var Registry $params */
 	public $params;
 
-	public function getEventData()
+	public function getEventData($events = [])
 	{
 		$fields = [
 			(object)['id' => 'id', 'name' => 'id', 'label' => Text::_('JGRID_HEADING_ID')],
@@ -80,10 +80,10 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('adminevent', $fields, $parser);
+		return $this->getData('adminevent', $fields, $parser, $events);
 	}
 
-	public function getBookingsData()
+	public function getBookingsData($bookings = [])
 	{
 		$fields = [
 			(object)['id' => 'uid', 'name' => 'uid', 'label' => Text::_('JGRID_HEADING_ID')],
@@ -101,7 +101,7 @@ trait ExportTrait
 			(object)['id' => 'net_amount', 'name' => 'net_amount', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL')],
 			(object)['id' => 'processor', 'name' => 'processor', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PAYMENT_PROVIDER_LABEL')],
 			(object)['id' => 'user_name', 'name' => 'user_name', 'label' => Text::_('JGLOBAL_USERNAME')],
-			(object)['id' => 'book_date', 'name' => 'book_date', 'label' => Text::_('JGLOBAL_CREATED')],
+			(object)['id' => 'book_date', 'name' => 'book_date', 'label' => Text::_('COM_DPCALENDAR_CREATED_DATE')],
 			(object)['id' => 'event', 'name' => 'event', 'label' => Text::_('COM_DPCALENDAR_EVENT')],
 			(object)['id' => 'event_author', 'name' => 'event_author', 'label' => Text::_('COM_DPCALENDAR_FIELD_AUTHOR_LABEL')],
 			(object)['id' => 'event_calid', 'name' => 'event_calid', 'label' => Text::_('COM_DPCALENDAR_CALENDAR')],
@@ -148,10 +148,10 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('booking', $fields, $parser);
+		return $this->getData('booking', $fields, $parser, $bookings);
 	}
 
-	public function getTicketsData()
+	public function getTicketsData($tickets = [])
 	{
 		$fields = [
 			(object)['id' => 'uid', 'name' => 'uid', 'label' => Text::_('JGRID_HEADING_ID')],
@@ -170,7 +170,7 @@ trait ExportTrait
 			(object)['id' => 'number', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL')],
 			(object)['id' => 'price', 'name' => 'price', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL')],
 			(object)['id' => 'user_name', 'name' => 'user_name', 'label' => Text::_('JGLOBAL_USERNAME')],
-			(object)['id' => 'created', 'name' => 'created', 'label' => Text::_('JGLOBAL_CREATED')],
+			(object)['id' => 'created', 'name' => 'created', 'label' => Text::_('COM_DPCALENDAR_CREATED_DATE')],
 			(object)['id' => 'type', 'name' => 'type', 'label' => Text::_('COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL')],
 			(object)['id' => 'event_calid', 'name' => 'event_calid', 'label' => Text::_('COM_DPCALENDAR_CALENDAR')],
 			(object)['id' => 'timezone', 'name' => 'timezone', 'label' => Text::_('COM_DPCALENDAR_TIMEZONE')]
@@ -204,21 +204,24 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('ticket', $fields, $parser);
+		return $this->getData('ticket', $fields, $parser, $tickets);
 	}
 
-	private function getData($name, $fields, $valueParser)
+	private function getData($name, $fields, $valueParser, $items)
 	{
-		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
-
 		$name     = strtolower($name);
 		$realName = str_replace('admin', '', $name);
-		$model    = BaseDatabaseModel::getInstance(ucfirst($name) . 's', 'DPCalendarModel', ['ignore_request' => false]);
-		$model->setState('list.limit', 1000);
-		$items = $model->getItems();
+
 		if (!$items) {
-			return $items;
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+			BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models');
+
+			$model = BaseDatabaseModel::getInstance(ucfirst($name) . 's', 'DPCalendarModel', ['ignore_request' => false]);
+			$model->setState('list.limit', 1000);
+			$items = $model->getItems();
+			if (!$items) {
+				return $items;
+			}
 		}
 
 		$order = $this->params->get('export_' . $realName . 's_order', new \stdClass());
@@ -237,6 +240,10 @@ trait ExportTrait
 		}, $fields);
 
 		foreach ($items as $item) {
+			if (empty($item->text)) {
+				$item->text = $item->description ?? '';
+			}
+
 			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $realName, &$item, &$item->params, 0]);
 			$line = [];
 			foreach ($fields as $field) {

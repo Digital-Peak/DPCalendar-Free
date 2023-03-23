@@ -215,6 +215,27 @@ class DPCalendarModelEvent extends ItemModel
 					$data->rooms            = $data->rooms ? explode(',', $data->rooms) : [];
 					$data->payment_provider = $data->payment_provider ? explode(',', $data->payment_provider) : [];
 
+					$data->roomTitles = [];
+					if ($data->locations && $data->rooms) {
+						foreach ($data->locations as $location) {
+							if (empty($location->rooms)) {
+								continue;
+							}
+
+							foreach ($data->rooms as $room) {
+								list($locationId, $roomId) = explode('-', $room, 2);
+
+								foreach ($location->rooms as $lroom) {
+									if ($locationId != $location->id || $roomId != $lroom->id) {
+										continue;
+									}
+
+									$data->roomTitles[$locationId][$room] = $lroom->title;
+								}
+							}
+						}
+					}
+
 					// Ensure min amount is properly set
 					if (is_object($data->booking_options)) {
 						foreach ($data->booking_options as $option) {

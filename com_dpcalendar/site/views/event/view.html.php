@@ -103,27 +103,8 @@ class DPCalendarViewEvent extends BaseView
 			$model->hit();
 		}
 
-		$this->roomTitles = [];
-		if ($event->locations && !empty($this->event->rooms)) {
-			foreach ($event->locations as $location) {
-				if (empty($location->rooms)) {
-					continue;
-				}
-
-				foreach ($this->event->rooms as $room) {
-					list($locationId, $roomId) = explode('-', $room, 2);
-
-					foreach ($location->rooms as $lroom) {
-						if ($locationId != $location->id || $roomId != $lroom->id) {
-							continue;
-						}
-
-						$this->roomTitles[$locationId][$room] = $lroom->title;
-					}
-				}
-			}
-		}
-
+		/** @deprecated */
+		$this->roomTitles = $event->roomTitles;
 		$this->avatar     = '';
 		$this->authorName = '';
 		$author           = Factory::getUser($event->created_by);
@@ -340,18 +321,33 @@ class DPCalendarViewEvent extends BaseView
 			$this->app->getPathway()->addItem($this->event->title, '');
 		}
 
-		$metadesc = trim($this->event->metadata->get('metadesc', ''));
-		if (!$metadesc) {
-			$metadesc = HTMLHelper::_('string.truncate', $this->event->description, 100, true, false);
+		// The meta prefix
+		$metaPrefix = $this->event->title . ' '
+		. DPCalendarHelper::getDateStringFromEvent(
+			$this->event,
+			$this->params->get('event_date_format', 'd.m.Y'),
+			$this->params->get('event_time_format', 'H:i'),
+			true
+		) . ' ';
+
+		// Get the metadesc property
+		$metaDesc = trim($this->event->metadata->get('metadesc', ''));
+
+		// Build it from the description
+		if (!$metaDesc) {
+			// Add meta prefix only when it is set to empty
+			$metaDesc = ($this->params->get('event_prefix_meta_description', '1') == '2' ? $metaPrefix : '')
+				. HTMLHelper::_('string.truncate', $this->event->description, 100, true, false);
 		}
-		if ($metadesc) {
-			$this->document->setDescription($this->event->title . ' '
-				. DPCalendarHelper::getDateStringFromEvent(
-					$this->event,
-					$this->params->get('event_date_format', 'd.m.Y'),
-					$this->params->get('event_time_format', 'H:i'),
-					true
-				) . ' ' . $metadesc);
+
+		// Prefix it when forced
+		if ($this->params->get('event_prefix_meta_description', '1') == '1') {
+			$metaDesc = $metaPrefix . $metaDesc;
+		}
+
+		// Set the meta description when available
+		if ($metaDesc) {
+			$this->document->setDescription(trim($metaDesc));
 		}
 
 		if ($this->event->metakey) {

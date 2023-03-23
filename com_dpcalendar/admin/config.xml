@@ -487,153 +487,137 @@
 		<field name="list_custom_css" type="textarea" filter="JComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 	</fieldset>
-	<fieldset name="event" label="COM_DPCALENDAR_EVENT"
-			  description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+	<fieldset name="event" label="COM_DPCALENDAR_EVENT" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
 		<field name="event_date_format" type="text" default="d.m.Y"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_DESC"/>
 		<field name="event_time_format" type="text" default="H:i"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_DESC"/>
 		<field name="event_redirect_to_url" type="radio" class="btn-group" default="0"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_REDIRECT_URL_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_REDIRECT_URL_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_REDIRECT_URL_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_REDIRECT_URL_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_calendar" type="list" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LINK_MONTH</option>
 		</field>
 		<field name="event_show_date" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_location" type="list" class="btn-group" default="2"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
 		</field>
 		<field name="event_show_url" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_author" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_hosts" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_HOSTS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_HOSTS_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_HOSTS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_HOSTS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_booking_form" type="list" default="0"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_EXPAND</option>
 		</field>
 		<field name="event_show_bookings" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_price" type="radio" default="1" class="btn-group" showon="event_show_bookings:1"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_capacity" type="radio" default="1" class="btn-group" showon="event_show_bookings:1"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_capacity_used" type="radio" default="1" class="btn-group" showon="event_show_bookings:1"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_series" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_tickets" type="list" class="btn-group" default="0"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LIMITED</option>
 		</field>
 		<field name="event_show_print" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_mail" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_copy" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_map" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_map_zoom" type="text" default="4"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
 		<field name="event_map_lat" type="text" default="47" validate="decimal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
 		<field name="event_map_long" type="text" default="4" validate="decimal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="event_textbefore" type="textarea" filter="JComponentHelper::filterText"
-				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="event_textafter" type="textarea" filter="JComponentHelper::filterText"
-				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 		<field name="event_count_clicks" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
+			label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="event_show_page_heading" type="list" default="0"
-				label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
+			label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
 			<option value="2">JGLOBAL_INHERIT</option>
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field name="event_prefix_meta_description" type="list" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_EMPTY</option>
+		</field>
 		<field name="event_custom_css" type="textarea" filter="JComponentHelper::filterText"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 	</fieldset>
 	<fieldset name="form" label="COM_DPCALENDAR_FIELD_CONFIG_FORM_LABEL"
 		description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">

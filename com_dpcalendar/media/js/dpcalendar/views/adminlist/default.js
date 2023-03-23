@@ -16,10 +16,6 @@
 			}
 			Joomla.tableOrdering(order, dirn, '');
 		};
-		const check = document.querySelector('.dp-input-check-all');
-		if (check) {
-			check.addEventListener('click', (e) => Joomla.checkAll(e.target));
-		}
 		Joomla.submitbutton = (task) => {
 			const form = document.getElementsByName('adminForm')[0];
 			Joomla.submitform(task, form);

@@ -26,6 +26,7 @@ $return = '&return=' . base64_encode(Uri::getInstance()->toString());
 <div class="com-dpcalendar-coupons__coupons">
 	<table class="dp-table dp-coupons-table" id="couponList">
 		<thead>
+		<td class="dp-table__col-check"><?php echo HTMLHelper::_('grid.checkall'); ?></td>
 		<th class="dp-table__col-order">
 			<?php echo HTMLHelper::_(
 				'searchtools.sort',
@@ -39,14 +40,10 @@ $return = '&return=' . base64_encode(Uri::getInstance()->toString());
 				'icon-menu-2'
 			); ?>
 		</th>
-		<th class="dp-table__col-check">
-			<input type="checkbox" name="checkall-toggle" value="" title="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"
-				   class="dp-input dp-input-checkbox dp-input-check-all"/>
-		</th>
 		<th class="dp-table__col-state"><?php echo HTMLHelper::_('searchtools.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?></th>
 		<th><?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?></th>
 		<th><?php echo HTMLHelper::_('searchtools.sort', 'JAUTHOR', 'a.author_name', $listDirn, $listOrder); ?></th>
-		<th><?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_CREATED', 'a.created', $listDirn, $listOrder); ?></th>
+		<th><?php echo HTMLHelper::_('searchtools.sort', 'COM_DPCALENDAR_CREATED_DATE', 'a.created', $listDirn, $listOrder); ?></th>
 		<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
 		</tr>
 		</thead>
@@ -99,7 +96,7 @@ $return = '&return=' . base64_encode(Uri::getInstance()->toString());
 						<?php echo $this->escape($item->author_name); ?>
 					</a>
 				</td>
-				<td data-column="<?php echo $this->translate('JGLOBAL_CREATED'); ?>">
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?>">
 					<?php echo DPCalendarHelper::getDate($item->created)->format($format, true); ?>
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ID'); ?>"><?php echo (int)$item->id; ?></td>

@@ -129,6 +129,11 @@ class DPCalendarModelLocations extends ListModel
 				}
 			}
 
+			// When cached items, then this method is called again
+			if (is_array($location->rooms) || is_object($location->rooms)) {
+				continue;
+			}
+
 			if (!is_string($location->rooms) || $location->rooms == '{}') {
 				$location->rooms = [];
 				continue;

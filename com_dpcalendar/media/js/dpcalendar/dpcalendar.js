@@ -206,7 +206,8 @@
 		button.addEventListener('click', () => DPCalendar.print(button.getAttribute('data-selector')));
 	});
 	[].slice.call(document.querySelectorAll('.dp-button-action[data-href]')).forEach((el) => {
-		el.addEventListener('click', () => {
+		el.addEventListener('click', (event) => {
+			event.preventDefault();
 			let text = el.getAttribute('data-confirmtext');
 			if (!text) {
 				text = Joomla.JText._('COM_DPCALENDAR_CONFIRM_DELETE');

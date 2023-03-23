@@ -130,6 +130,11 @@ class BaseView extends HtmlView
 		} else {
 			$this->addToolbar();
 
+			// Add colum select scripts on Joomla 4 lists
+			if (DPCalendarHelper::isJoomlaVersion('4', '>')) {
+				$this->document->getWebAssetManager()->useScript('table.columns');
+			}
+
 			// Only render the sidebar when we are not editing a form, modal or Joomla 4
 			if (!($this->getModel() instanceof AdminModel)
 				&& $this->input->get('tmpl') != 'component'

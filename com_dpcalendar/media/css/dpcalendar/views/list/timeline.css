@@ -1,6 +1,6 @@
 .com-dpcalendar-timeline {
 	position: relative;
-	margin: 10px;
+	margin: 1rem;
 	padding: 0px;
 }
 .com-dpcalendar-timeline__form_hidden {
@@ -343,7 +343,7 @@
 }
 .com-dpcalendar-timeline .dp-timezone__info {
 	flex: 0 0 100%;
-	background-color: rgb(200, 204, 208);
+	background-color: #c8ccd0;
 	padding: 1rem;
 	margin: 0.2rem 0;
 }
@@ -436,13 +436,14 @@
 }
 .com-dpcalendar-timeline__events {
 	position: relative;
+	margin-top: 1rem;
 }
 .com-dpcalendar-timeline__container::before {
 	content: "";
 	width: 3px;
 	background: #e1e1e1;
 	top: 0;
-	left: 21px;
+	left: 2rem;
 	bottom: 0;
 	position: absolute;
 }
@@ -455,7 +456,7 @@
 	display: flex;
 	overflow: visible;
 	position: relative;
-	margin-bottom: 30px;
+	margin-bottom: 2rem;
 }
 .com-dpcalendar-timeline .dp-event__dot {
 	display: flex;
@@ -484,8 +485,7 @@
 .com-dpcalendar-timeline .dp-event__information {
 	position: relative;
 	background: #fff;
-	padding: 15px;
-	margin-top: 5px;
+	padding: 1.5rem;
 	margin-left: 64px;
 	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
 	transition: all 0.3s ease;
@@ -499,8 +499,8 @@
 }
 .com-dpcalendar-timeline .dp-event__title {
 	position: relative;
-	padding: 10px 15px;
-	margin: -15px -15px 10px;
+	padding: 1rem 1.5rem;
+	margin: -1.5rem -1.5rem 1rem;
 }
 .com-dpcalendar-timeline .dp-event__title::before {
 	content: "";
@@ -536,6 +536,11 @@
 		margin-right: 0;
 		left: 0;
 		margin-left: -6px;
+	}
+}
+@media print {
+	.com-dpcalendar-timeline .dp-event__dot, .com-dpcalendar-timeline .dp-event__information {
+		margin-top: 0 !important;
 	}
 }
 

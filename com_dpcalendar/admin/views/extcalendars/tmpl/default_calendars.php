@@ -24,6 +24,7 @@ if ($saveOrder) {
 	<table class="dp-table" id="extcalendarsList">
 		<thead>
 		<tr>
+			<td class="dp-table__col-check"><?php echo HTMLHelper::_('grid.checkall'); ?></td>
 			<th class="dp-table__col-order">
 				<?php echo HTMLHelper::_(
 					'searchtools.sort',
@@ -36,10 +37,6 @@ if ($saveOrder) {
 					'JGRID_HEADING_ORDERING',
 					'icon-menu-2'
 				); ?>
-			</th>
-			<th class="dp-table__col-check">
-				<input type="checkbox" name="checkall-toggle" value="" title="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"
-					   class="dp-input dp-input-checkbox dp-input-check-all"/>
 			</th>
 			<th class="dp-table__col-state"><?php echo HTMLHelper::_('grid.sort', 'JSTATUS', 'a.state', $listDirn, $listOrder); ?></th>
 			<th class="dp-table__col-expand"><?php echo HTMLHelper::_('grid.sort', 'JGLOBAL_TITLE', 'a.title', $listDirn, $listOrder); ?></th>

@@ -65,9 +65,12 @@
 .com-dpcalendar-adminform .dp-form-input {
 	width: 100%;
 	min-height: 28px;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box; /* Firefox, other Gecko */
-	box-sizing: border-box; /* Opera/IE 8+ */
+	-webkit-box-sizing: border-box;
+	/* Safari/Chrome, other WebKit */
+	-moz-box-sizing: border-box;
+	/* Firefox, other Gecko */
+	box-sizing: border-box;
+	/* Opera/IE 8+ */
 }
 .com-dpcalendar-adminform .dp-control, .com-dpcalendar-adminform .control-group {
 	display: flex;
@@ -91,8 +94,8 @@
 		display: block;
 	}
 	.com-dpcalendar-adminform .dp-control__label, .com-dpcalendar-adminform .control-group .control-label,
-	.com-dpcalendar-adminform .control-group .form-label, .com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls,
-	.com-dpcalendar-adminform .control-group .form-control {
+.com-dpcalendar-adminform .control-group .form-label, .com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls,
+.com-dpcalendar-adminform .control-group .form-control {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -100,8 +103,8 @@
 		display: block;
 	}
 	.com-dpcalendar-adminform .dp-control control-label, .com-dpcalendar-adminform .control-group control-label,
-	.com-dpcalendar-adminform .dp-control controls,
-	.com-dpcalendar-adminform .control-group controls {
+.com-dpcalendar-adminform .dp-control controls,
+.com-dpcalendar-adminform .control-group controls {
 		width: 100%;
 		margin-left: 0;
 	}

@@ -78,54 +78,8 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 							); ?>
 							<?php echo $calendar != null ? $calendar->title : $event->catid; ?>
 						</div>
-						<?php if (!empty($event->locations)) { ?>
-							<div class="dp-event__locations">
-								<?php echo $this->layoutHelper->renderLayout(
-									'block.icon',
-									['icon' => Icon::LOCATION, 'title' => $this->translate('COM_DPCALENDAR_LOCATION')]
-								); ?>
-								<?php foreach ($event->locations as $index => $location) { ?>
-									<div class="dp-location">
-										<span class="dp-location__details"
-											  data-latitude="<?php echo $location->latitude; ?>"
-											  data-longitude="<?php echo $location->longitude; ?>"
-											  data-title="<?php echo $location->title; ?>"
-											  data-color="<?php echo $event->color; ?>"></span>
-										<a href="<?php echo $this->router->getLocationRoute($location); ?>" class="dp-location__url dp-link">
-											<?php echo $location->title; ?>
-										</a>
-										<?php if ($index < count($event->locations) - 1) { ?>
-											<span class="dp-location__separator">,</span>
-										<?php } ?>
-										<div class="dp-location__description">
-											<?php echo $this->layoutHelper->renderLayout('event.tooltip', $this->displayData); ?>
-										</div>
-									</div>
-								<?php } ?>
-							</div>
-						<?php } ?>
-						<?php if ($event->capacity === null || $event->capacity > 0) { ?>
-							<?php if ($this->params->get('list_show_capacity', 1)) { ?>
-								<div class="dp-event__capacity">
-									<?php echo $this->layoutHelper->renderLayout(
-										'block.icon',
-										['icon'  => Icon::USERS, 'title' => $this->translate('COM_DPCALENDAR_FIELD_CAPACITY_LABEL')]
-									); ?>
-									<?php if ($event->capacity === null) { ?>
-										<?php echo $this->translate('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED'); ?>
-									<?php } else { ?>
-										<?php echo $event->capacity_used . '/' . (int)$event->capacity; ?>
-									<?php } ?>
-								</div>
-							<?php } ?>
-							<div class="dp-event__price">
-								<?php echo $this->layoutHelper->renderLayout(
-									'block.icon',
-									['icon' => Icon::MONEY, 'title' => $this->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL')]
-								); ?>
-								<?php echo $this->translate($event->price ? 'COM_DPCALENDAR_VIEW_BLOG_PAID_EVENT' : 'COM_DPCALENDAR_VIEW_BLOG_FREE_EVENT'); ?>
-							</div>
-						<?php } ?>
+						<?php echo $this->loadTemplate('events_locations'); ?>
+						<?php echo $this->loadTemplate('events_prices'); ?>
 						<?php if ($this->params->get('list_show_hits', 1)) { ?>
 							<div class="dp-event__hits">
 								<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::BULLSEYE,]); ?>

@@ -6,12 +6,12 @@
 }
 .plg-content-dpcalendar-contact-events .dp-list > li,
 .plg-content-dpcalendar-user-events .dp-list > li {
-	border-bottom: 1px solid rgb(221, 221, 221);
+	border-bottom: 1px solid #dddddd;
 	padding: 1em 1em;
 }
 .plg-content-dpcalendar-contact-events .dp-list > li:first-child,
 .plg-content-dpcalendar-user-events .dp-list > li:first-child {
-	border-top: 1px solid rgb(221, 221, 221);
+	border-top: 1px solid #dddddd;
 }
 .plg-content-dpcalendar-contact-events .dp-list > li:nth-of-type(odd),
 .plg-content-dpcalendar-user-events .dp-list > li:nth-of-type(odd) {

@@ -210,7 +210,7 @@
 }
 .com-dpcalendar-calendar-timeline .dp-timezone__info {
 	flex: 0 0 100%;
-	background-color: rgb(200, 204, 208);
+	background-color: #c8ccd0;
 	padding: 1rem;
 	margin: 0.2rem 0;
 }

@@ -395,6 +395,13 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_prefix_meta_description" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_EMPTY</option>
+			</field>
 		</fieldset>
 	</fields>
 	<fields name="metadata">

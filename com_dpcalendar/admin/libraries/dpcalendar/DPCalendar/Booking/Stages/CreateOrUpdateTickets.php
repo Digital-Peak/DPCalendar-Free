@@ -45,7 +45,7 @@ class CreateOrUpdateTickets implements StageInterface
 				}
 
 				if ($payload->oldItem && $payload->oldItem->state != $payload->item->state) {
-					$ticket->state = $payload->item->state;
+					$ticket->state = $ticket->state == 9 ? $ticket->state : $payload->item->state;
 					$saveTicket    = true;
 
 					if (!in_array($payload->item->state, [1, 4]) && in_array($payload->oldItem->state, [1, 4])) {

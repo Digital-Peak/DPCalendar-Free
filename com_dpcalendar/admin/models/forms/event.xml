@@ -155,11 +155,11 @@
 			label="COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_USED_DESC"/>
 		<field name="max_tickets" type="text" default="1"
 			label="COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_MAX_TICKETS_DESC"/>
-		<field name="booking_opening_date" type="text"
+		<field name="booking_opening_date" type="text" validate="calendar"
 			label="COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_DESC"/>
-		<field name="booking_closing_date" type="text"
+		<field name="booking_closing_date" type="text" validate="calendar"
 			label="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_DESC"/>
-		<field name="booking_cancel_closing_date" type="text"
+		<field name="booking_cancel_closing_date" type="text" validate="calendar"
 			label="COM_DPCALENDAR_FIELD_BOOKING_CANCEL_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CANCEL_CLOSING_DATE_DESC"/>
 		<field name="booking_series" type="list" default="2"
 			label="COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_SERIES_DESC">

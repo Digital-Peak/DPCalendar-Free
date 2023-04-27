@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
 	<fields name="params">
-		<fieldset name="basic">
+		<fieldset name="dpcalendar" label="PLG_CONTENT_DPCALENDAR_FIELDSET_DPCALENDAR_LABEL">
 			<field name="dpcalendar_cf_only_tickets" type="radio" default="0" class="btn-group"
-			       label="PLG_CONTENT_DPCALENDAR_FIELD_EVENT_ONLY_TICKETS_LABEL" description="PLG_CONTENT_DPCALENDAR_FIELD_EVENT_ONLY_TICKETS_DESC">
+			    label="PLG_CONTENT_DPCALENDAR_FIELD_EVENT_ONLY_TICKETS_LABEL" description="PLG_CONTENT_DPCALENDAR_FIELD_EVENT_ONLY_TICKETS_DESC">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>

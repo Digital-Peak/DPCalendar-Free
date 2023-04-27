@@ -175,7 +175,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 				}
 
 				$event->id           = $table->id;
-				$event->publish_down = $db->getNullDate();
+				$event->publish_down = null;
 
 				$event->location_ids = [];
 				foreach ($event->locations as $location) {
@@ -198,14 +198,14 @@ abstract class SyncPlugin extends DPCalendarPlugin
 
 		if ($foundEvents) {
 			$db->setQuery(
-				'update #__dpcalendar_events set publish_down = ' . $db->q($db->getNullDate()) .
+				'update #__dpcalendar_events set publish_down = null' .
 				' where id in (' . implode(',', $foundEvents) . ') or original_id in (' . implode(',', $foundEvents) . ')'
 			);
 			$db->execute();
 		}
 
 		// Delete the events which are externally deleted
-		$db->setQuery('delete from #__dpcalendar_events where catid = ' . $db->q($calendar->id) . ' and publish_down != ' . $db->q($db->getNullDate()));
+		$db->setQuery('delete from #__dpcalendar_events where catid = ' . $db->q($calendar->id) . ' and publish_down is not null');
 		$db->execute();
 
 		if ($extCalendarTable->id) {

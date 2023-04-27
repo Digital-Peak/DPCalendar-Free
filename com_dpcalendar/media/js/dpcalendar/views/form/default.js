@@ -19,7 +19,7 @@
 				updateRuleFromForm();
 			});
 			updateFormFromRule();
-			[].slice.call(document.querySelectorAll('.dp-field-scheduling,#jform_scheduling_monthly_options,#jform_scheduling_daily_weekdays')).forEach((el) => {
+			[].slice.call(document.querySelectorAll('.dp-field-scheduling, #jform_scheduling_monthly_options, #jform_scheduling_daily_weekdays')).forEach((el) => {
 				el.addEventListener('click', () => {
 					changeVisiblity();
 					updateRuleFromForm();
@@ -102,8 +102,9 @@
 					break;
 				case 'UNTIL':
 					const untilField = document.getElementById('jform_scheduling_end_date');
-					untilField.value = dayjs.utc(parts[1]).format(untilField.getAttribute('data-format'));
-					untilField.setAttribute('data-date', parts[1].substr(0, 8));
+					const date = dayjs.utc(parts[1].replace('Z', ''), 'YYYYMMDD\Thhmmss');
+					untilField.value = date.format(untilField.getAttribute('data-format'));
+					untilField.setAttribute('data-date', date.format('YYYY-MM-DD'));
 					break;
 			}
 		});
@@ -177,7 +178,11 @@
 				rule += ';UNTIL=' + until.format('YYYYMMDD') + 'T235900Z';
 			}
 		}
+		const oldValue = document.getElementById('jform_rrule').value;
 		document.getElementById('jform_rrule').value = rule;
+		if (oldValue != rule) {
+			document.getElementById('jform_rrule').dispatchEvent(new Event('change'));
+		}
 	}
 	function changeVisiblity() {
 		document.querySelector('.dp-field-scheduling-end-date').classList.add('dp-control_hidden');
@@ -446,29 +451,44 @@
 					updateString += '<p><a href="' + event.edit_link + '" target="_blank">' + event.title + ' ' + event.formatted_date + '</a></p>';
 				});
 			}
-			ask(Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION', ''))
+			if (document.querySelectorAll('.com-dpcalendar-eventform .dp-field_reset').length > 0) {
+				updateString = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET', '');
+			}
+			ask(Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION', ''), true)
 				.then((yes) => document.getElementById('jform_notify_changes').value = yes)
-				.then(() => ask(updateString))
+				.then(() => ask(updateString, updateString !== Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET', '')))
 				.then((yes) => document.getElementById('jform_update_modified').value = yes)
-				.then(() => Joomla.submitform(task, form));
+				.then(() => Joomla.submitform(task, form))
+				.catch(() => {
+					const loader = document.querySelector('.dp-loader');
+					if (loader) {
+						loader.classList.add('dp-loader_hidden');
+					}
+				});
 		};
 	}
-	function ask(question) {
+	function ask(question, hasNo) {
 		return new Promise(function (resolve, reject) {
 			if (question === '') {
 				resolve(0);
 				return;
 			}
 			loadDPAssets(['/com_dpcalendar/js/tingle/tingle.js', '/com_dpcalendar/css/tingle/tingle.css'], () => {
-				const modal = new tingle.modal({ footer: true, closeMethods: [] });
+				const modal = new tingle.modal({ footer: true, closeMethods: [], cssClass: ['dpcalendar-modal'] });
 				modal.setContent(question);
 				modal.addFooterBtn(Joomla.JText._('JYES'), 'dp-button', () => {
 					modal.close();
 					resolve(1);
 				});
-				modal.addFooterBtn(Joomla.JText._('JNO'), 'dp-button', () => {
+				if (hasNo) {
+					modal.addFooterBtn(Joomla.JText._('JNO'), 'dp-button', () => {
+						modal.close();
+						resolve(0);
+					});
+				}
+				modal.addFooterBtn(Joomla.JText._('JCANCEL'), 'dp-button', () => {
 					modal.close();
-					resolve(0);
+					reject();
 				});
 				modal.open();
 			});
@@ -482,6 +502,39 @@
 			setup$2();
 			setup$1();
 			setup();
+			[].slice.call(document.querySelectorAll('.dp-field-start-date, .dp-field-end-date, .dp-field-rrule input')).forEach((input) => {
+				input.addEventListener('change', (e) => {
+					if ((input.closest('dp-field-start-date') || input.closest('dp-field-end-date')) && !input.dpPikaday) {
+						return;
+					}
+					const parent = document.querySelector('.com-dpcalendar-eventform__original-warning');
+					if (!parent) {
+						return;
+					}
+					parent.classList.remove('com-dpcalendar-eventform__original-warning_reset');
+					e.target.classList.remove('dp-field_reset');
+					if (e.target.value == e.target.defaultValue) {
+						return;
+					}
+					parent.classList.add('com-dpcalendar-eventform__original-warning_reset');
+					e.target.classList.add('dp-field_reset');
+				});
+			});
+			[].slice.call(document.querySelectorAll('.dp-field-all-day input')).forEach((input) => {
+				input.addEventListener('click', (e) => {
+					const parent = document.querySelector('.com-dpcalendar-eventform__original-warning');
+					if (!parent) {
+						return;
+					}
+					parent.classList.remove('com-dpcalendar-eventform__original-warning_reset');
+					e.target.classList.remove('dp-field_reset');
+					if (e.target.checked && e.target.getAttribute('checked') === 'checked') {
+						return;
+					}
+					parent.classList.add('com-dpcalendar-eventform__original-warning_reset');
+					e.target.classList.add('dp-field_reset');
+				});
+			});
 		});
 		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS', '')) {
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls, #com-dpcalendar-form-Content #booking .controls')).forEach((el) => {

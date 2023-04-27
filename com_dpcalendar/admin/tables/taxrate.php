@@ -4,12 +4,16 @@
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
-use Joomla\Utilities\ArrayHelper;
 
-class DPCalendarTableTaxrate extends JTable
+class DPCalendarTableTaxrate extends Table
 {
 	public function __construct(&$db)
 	{
@@ -31,8 +35,8 @@ class DPCalendarTableTaxrate extends JTable
 
 	public function store($updateNulls = false)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		$date = DPCalendarHelper::getDate();
+		$user = Factory::getUser();
 		if ($this->id) {
 			// Existing item
 			$this->modified    = $date->toSql();
@@ -46,16 +50,6 @@ class DPCalendarTableTaxrate extends JTable
 			}
 		}
 
-		// Set publish_up to null date if not set
-		if (!$this->publish_up) {
-			$this->publish_up = $this->_db->getNullDate();
-		}
-
-		// Set publish_down to null date if not set
-		if (!$this->publish_down) {
-			$this->publish_down = $this->_db->getNullDate();
-		}
-
 		// Attempt to store the user data.
 		return parent::store($updateNulls);
 	}
@@ -64,7 +58,7 @@ class DPCalendarTableTaxrate extends JTable
 	{
 		// Check for valid name
 		if (trim($this->title) == '') {
-			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
+			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
 
 			return false;
 		}
@@ -75,20 +69,32 @@ class DPCalendarTableTaxrate extends JTable
 
 		$xid = (int)$this->_db->loadResult();
 		if ($xid && $xid != (int)$this->id) {
-			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
+			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 
 			return false;
 		}
 
 		// Check the publish down date is not earlier than publish up.
-		if ($this->publish_down > $this->_db->getNullDate() && $this->publish_down < $this->publish_up) {
-			$this->setError(JText::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
+		if ($this->publish_down && $this->publish_down < $this->publish_up) {
+			$this->setError(Text::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
 
 			return false;
 		}
 
-		if (empty($this->modified)) {
-			$this->modified = $this->getDbo()->getNullDate();
+		if (empty($this->created) || $this->created === $this->getDbo()->getNullDate()) {
+			$this->created = null;
+		}
+		if (empty($this->modified) || $this->modified === $this->getDbo()->getNullDate()) {
+			$this->modified = null;
+		}
+		if (empty($this->publish_up) || $this->publish_up === $this->getDbo()->getNullDate()) {
+			$this->publish_up = null;
+		}
+		if (empty($this->publish_down) || $this->publish_down === $this->getDbo()->getNullDate()) {
+			$this->publish_down = null;
+		}
+		if (empty($this->checked_out_time) || $this->checked_out_time === $this->getDbo()->getNullDate()) {
+			$this->checked_out_time = null;
 		}
 
 		return true;

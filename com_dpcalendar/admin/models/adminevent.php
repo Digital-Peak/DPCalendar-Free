@@ -172,8 +172,9 @@ class DPCalendarModelAdminEvent extends AdminModel
 	{
 		$app = Factory::getApplication();
 
-		// Check the session for previously entered form data.
-		$data = $app->getUserState('com_dpcalendar.edit.event.data', []);
+		// Check the session for previously entered form data
+		// Ignore the data when ignore_request variable is set
+		$data = $app->input->getInt('ignore_request') === 1 ? [] : $app->getUserState('com_dpcalendar.edit.event.data', []);
 
 		if (empty($data)) {
 			$data    = $this->getItem();

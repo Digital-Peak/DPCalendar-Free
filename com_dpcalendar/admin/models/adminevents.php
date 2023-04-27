@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Utilities\ArrayHelper;
@@ -165,6 +166,28 @@ class DPCalendarModelAdminEvents extends ListModel
 		return parent::getStoreId($id);
 	}
 
+	public function getItems()
+	{
+		$items = parent::getItems();
+
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+		$model->getState();
+		$model->setState('list.ordering', 'ordering');
+		$model->setState('list.direction', 'asc');
+
+		foreach ($items as $item) {
+			// Add the locations
+			$item->locations = [];
+			if (!empty($item->location_ids) && empty($item->locations)) {
+				$model->setState('filter.search', 'ids:' . $item->location_ids);
+				$item->locations = $model->getItems();
+			}
+		}
+
+		return $items;
+	}
+
 	protected function getListQuery()
 	{
 		// Create a new query object.
@@ -199,6 +222,12 @@ class DPCalendarModelAdminEvents extends ListModel
 		// Join over the original
 		$query->select('o.title as original_title, o.rrule as original_rrule');
 		$query->join('LEFT', '#__dpcalendar_events AS o ON o.id = a.original_id');
+
+		// Join locations
+		$query->select("GROUP_CONCAT(DISTINCT v.id SEPARATOR ', ') location_ids");
+		$query->join('LEFT', '#__dpcalendar_events_location AS rel ON a.id = rel.event_id');
+		$query->join('LEFT', '#__dpcalendar_locations AS v ON rel.location_id = v.id');
+		$query->group('a.id');
 
 		// Don't show original events
 		$eventType = $this->getState('filter.event_type');
@@ -307,7 +336,7 @@ class DPCalendarModelAdminEvents extends ListModel
 		}
 
 		if ($modified = $this->getState('filter.modified')) {
-			$query->where('(a.modified != ' . $db->quote($modified) . " and a.modified != '0000-00-00 00:00:00')");
+			$query->where('(a.modified != ' . $db->quote($modified) . " and a.modified is not null)");
 		}
 
 		if ($reference = $this->getState('filter.xreference')) {

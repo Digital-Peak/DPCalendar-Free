@@ -24,12 +24,15 @@ if (!empty($this->event->tickets)) {
 	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
 	$this->translator->translateJS('JYES');
 	$this->translator->translateJS('JNO');
+	$this->translator->translateJS('JCANCEL');
 }
 
 if (!empty($this->seriesEvents)) {
 	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_MODIFIED');
+	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET');
 	$this->translator->translateJS('JYES');
 	$this->translator->translateJS('JNO');
+	$this->translator->translateJS('JCANCEL');
 	$this->dpdocument->addScriptOptions('event.form.seriesevents',$this->seriesEvents);
 }
 

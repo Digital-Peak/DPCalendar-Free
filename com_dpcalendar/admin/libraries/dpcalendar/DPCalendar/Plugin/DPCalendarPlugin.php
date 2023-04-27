@@ -314,7 +314,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$cal->icalurl        = $this->getIcalUrl($cal);
 
 			// Null the sync date
-			if (!$cal->sync_date || $cal->sync_date == Factory::getDbo()->getNullDate()) {
+			if (!$cal->sync_date) {
 				$cal->sync_date = null;
 			}
 

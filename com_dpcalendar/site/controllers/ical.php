@@ -35,7 +35,7 @@ class DPCalendarControllerIcal extends BaseController
 		}
 
 		// Download the external url
-		if ($calendar->icalurl === 'plugin') {
+		if (!empty($calendar->icalurl) && $calendar->icalurl === 'plugin') {
 			header('Content-Type: text/calendar; charset=utf-8');
 			header('Content-disposition: attachment; filename="' . $calendar->title . '.ics"');
 

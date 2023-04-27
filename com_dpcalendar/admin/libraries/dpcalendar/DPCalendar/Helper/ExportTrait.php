@@ -66,7 +66,7 @@ trait ExportTrait
 					return DPCalendarHelper::getDate($event->$name)->format($event->all_day ? 'Y-m-d' : 'Y-m-d H:i:s', true);
 				case 'created':
 				case 'modified':
-					if ($event->$name == '0000-00-00 00:00:00') {
+					if (!$event->$name) {
 						return '';
 					}
 
@@ -207,6 +207,56 @@ trait ExportTrait
 		return $this->getData('ticket', $fields, $parser, $tickets);
 	}
 
+	public function getLocationData($locations = [])
+	{
+		$fields = [
+			(object)['id' => 'id', 'name' => 'id', 'label' => Text::_('JGRID_HEADING_ID')],
+			(object)['id' => 'title', 'name' => 'title', 'label' => Text::_('JGLOBAL_TITLE')],
+			(object)['id' => 'alias', 'name' => 'alias', 'label' => Text::_('JFIELD_ALIAS_LABEL')],
+			(object)['id' => 'country', 'name' => 'country_code_value', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL')],
+			(object)['id' => 'province', 'name' => 'province', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL')],
+			(object)['id' => 'city', 'name' => 'city', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL')],
+			(object)['id' => 'zip', 'name' => 'zip', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL')],
+			(object)['id' => 'street', 'name' => 'street', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL')],
+			(object)['id' => 'number', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL')],
+			(object)['id' => 'rooms', 'name' => 'rooms', 'label' => Text::_('COM_DPCALENDAR_ROOMS')],
+			(object)['id' => 'latitude', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_LABEL')],
+			(object)['id' => 'longitude', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_LABEL')],
+			(object)['id' => 'url', 'name' => 'url', 'label' => Text::_('COM_DPCALENDAR_FIELD_URL_LABEL')],
+			(object)['id' => 'description', 'name' => 'description', 'label' => Text::_('JGLOBAL_DESCRIPTION')],
+			(object)['id' => 'color', 'name' => 'color', 'label' => Text::_('COM_DPCALENDAR_FIELD_COLOR_LABEL')],
+			(object)['id' => 'state', 'name' => 'status', 'label' => Text::_('JSTATUS')],
+			(object)['id' => 'language', 'name' => 'language', 'label' => Text::_('JFIELD_LANGUAGE_LABEL')],
+			(object)['id' => 'created', 'name' => 'created', 'label' => Text::_('JGLOBAL_FIELD_CREATED_LABEL')],
+			(object)['id' => 'created_by', 'name' => 'created_by', 'label' => Text::_('JGLOBAL_FIELD_CREATED_BY_LABEL')],
+			(object)['id' => 'modified', 'name' => 'modified', 'label' => Text::_('JGLOBAL_FIELD_MODIFIED_LABEL')],
+			(object)['id' => 'modified_by', 'name' => 'modified_by', 'label' => Text::_('JGLOBAL_FIELD_MODIFIED_BY_LABEL')],
+			(object)['id' => 'xreference', 'name' => 'xreference', 'label' => Text::_('COM_DPCALENDAR_FIELD_XREFERENCE_LABEL')]
+		];
+
+		$parser = function ($name, $location) {
+			switch ($name) {
+				case 'rooms':
+					return implode(', ', array_map(fn ($room) => $room->title, (array)$location->rooms));
+				case 'status':
+					return Booking::getStatusLabel($location);
+				case 'created':
+				case 'modified':
+					if ($location->$name == '0000-00-00 00:00:00') {
+						return '';
+					}
+
+					return DPCalendarHelper::getDate($location->$name)->format('Y-m-d H:i:s', true);
+				case 'description':
+					return $this->params->get('export_strip_html') ? strip_tags($location->description) : $location->description;
+				default:
+					return $location->$name ?? '';
+			}
+		};
+
+		return $this->getData('location', $fields, $parser, $locations);
+	}
+
 	private function getData($name, $fields, $valueParser, $items)
 	{
 		$name     = strtolower($name);
@@ -248,7 +298,7 @@ trait ExportTrait
 			$line = [];
 			foreach ($fields as $field) {
 				if (!isset($item->jcfields) || !key_exists($field->id, $item->jcfields)) {
-					$line[] = html_entity_decode($valueParser($field->name, $item));
+					$line[] = html_entity_decode($valueParser($field->name, $item) ?? '');
 					continue;
 				}
 

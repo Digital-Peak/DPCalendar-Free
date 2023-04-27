@@ -28,7 +28,7 @@ class DPCalendarViewEvent extends BaseView
 			$model = $this->getModel('Adminevents');
 			$model->getState();
 			$model->setState('filter.children', $this->event->id);
-			$model->setState('filter.modified', $this->event->modified);
+			$model->setState('filter.modified', $this->event->modified ?: '0000-00-00');
 			$model->setState('filter.state', null);
 			$model->setState('filter.search_start', null);
 
@@ -68,13 +68,6 @@ class DPCalendarViewEvent extends BaseView
 			$this->form->removeField('scheduling_monthly_days');
 		}
 		$this->canDo = DPCalendarHelper::getActions($this->state->get('filter.category_id'));
-
-		$this->freeInformationText = '';
-		if (DPCalendarHelper::isFree()) {
-			$this->freeInformationText = '<br/><small class="text-warning" style="float:left">' .
-				$this->translate('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS') .
-				'</small>';
-		}
 	}
 
 	protected function addToolbar()

@@ -8,7 +8,6 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
-use Joomla\CMS\Language\Text;
 
 $this->layoutHelper->renderLayout('block.map', $this->displayData);
 $this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
@@ -23,12 +22,15 @@ if (!empty($this->event->tickets)) {
 	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION');
 	$this->translator->translateJS('JYES');
 	$this->translator->translateJS('JNO');
+	$this->translator->translateJS('JCANCEL');
 }
 
 if (!empty($this->seriesEvents)) {
 	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_MODIFIED');
+	$this->translator->translateJS('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET');
 	$this->translator->translateJS('JYES');
 	$this->translator->translateJS('JNO');
+	$this->translator->translateJS('JCANCEL');
 	$this->dpdocument->addScriptOptions('event.form.seriesevents',$this->seriesEvents);
 }
 ?>
@@ -37,11 +39,13 @@ if (!empty($this->seriesEvents)) {
 		<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 	</div>
 	<?php if ($this->event->original_id == '-1') { ?>
-		<h4 class="dp-info-box"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_ORIGINAL_WARNING'); ?></h4>
+		<h4 class="com-dpcalendar-eventform__original-warning dp-info-box">
+			<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_ORIGINAL_WARNING'); ?>
+		</h4>
 	<?php } else if (!empty($this->event->original_id)) { ?>
 		<h4 class="dp-info-box">
-			<?php echo Text::sprintf(
-				'COM_DPCALENDAR_VIEW_EVENT_GOTO_ORIGINAL',
+			<?php echo sprintf(
+				$this->translate('COM_DPCALENDAR_VIEW_EVENT_GOTO_ORIGINAL'),
 				$this->router->getEventFormRoute($this->event->original_id, $this->returnPage ? base64_decode($this->returnPage) : '')
 			); ?>
 		</h4>

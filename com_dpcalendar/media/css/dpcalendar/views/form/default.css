@@ -454,11 +454,11 @@
 	display: none;
 }
 .com-dpcalendar-eventform .dp-event-template {
+	display: none;
 	border-right: 1px solid rgba(0, 0, 0, 0.2);
 	border-left: 1px solid rgba(0, 0, 0, 0.2);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 	padding: 10px;
-	display: none;
 }
 .com-dpcalendar-eventform .dp-event-template__event:not(:last-child) {
 	display: block;
@@ -480,6 +480,26 @@
 }
 .com-dpcalendar-eventform #jform_scheduling_end_date_time {
 	display: none;
+}
+.com-dpcalendar-eventform__original-warning_reset {
+	animation: horizontal-shaking 0.25s linear 5;
+}
+@keyframes horizontal-shaking {
+	0% {
+		transform: translateX(0);
+	}
+	25% {
+		transform: translateX(5px);
+	}
+	50% {
+		transform: translateX(-5px);
+	}
+	75% {
+		transform: translateX(5px);
+	}
+	100% {
+		transform: translateX(0);
+	}
 }
 
 .pika-single th,

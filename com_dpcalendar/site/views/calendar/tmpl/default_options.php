@@ -151,6 +151,7 @@ $options['headerToolbar']['right']  = implode(',', $options['headerToolbar']['ri
 $resourceViews = $params->get('calendar_resource_views');
 if (!DPCalendarHelper::isFree() && $resourceViews && $this->resources) {
 	$options['resources']           = $this->resources;
+	$options['resourceViews']       = $resourceViews;
 	$options['datesAboveResources'] = true;
 }
 
@@ -160,8 +161,7 @@ $options['views']['month'] = [
 	'titleFormat'            => $this->dateHelper->convertPHPDateToJS($params->get('titleformat_month', 'F Y')),
 	'eventTimeFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('timeformat_month', 'H:i')),
 	'dayHeaderFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('columnformat_month', 'D')),
-	'slotLabelFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('axisformat_month', 'l j')),
-	'groupByDateAndResource' => !empty($options['resources']) && in_array('month', $resourceViews)
+	'slotLabelFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('axisformat_month', 'l j'))
 ];
 $options['views']['week']  = [
 	'titleFormat'            => $this->dateHelper->convertPHPDateToJS($params->get('titleformat_week', 'M j Y')),
@@ -169,8 +169,7 @@ $options['views']['week']  = [
 	'dayHeaderFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('columnformat_week', 'D n/j')),
 	'slotDuration'           => $this->dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
 	'slotLabelInterval'      => $this->dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
-	'slotLabelFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('axisformat_week', 'H:i')),
-	'groupByDateAndResource' => !empty($options['resources']) && in_array('week', $resourceViews)
+	'slotLabelFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('axisformat_week', 'H:i'))
 ];
 $options['views']['day']   = [
 	'titleFormat'            => $this->dateHelper->convertPHPDateToJS($params->get('titleformat_day', 'F j Y')),
@@ -178,8 +177,7 @@ $options['views']['day']   = [
 	'dayHeaderFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('columnformat_day', 'l')),
 	'slotDuration'           => $this->dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
 	'slotLabelInterval'      => $this->dateHelper->minutesToDuration($params->get('agenda_slot_minutes', 30)),
-	'slotLabelFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('axisformat_day', 'H:i')),
-	'groupByDateAndResource' => !empty($options['resources']) && in_array('day', $resourceViews)
+	'slotLabelFormat'        => $this->dateHelper->convertPHPDateToJS($params->get('axisformat_day', 'H:i'))
 ];
 $options['views']['list']  = [
 	'titleFormat'       => $this->dateHelper->convertPHPDateToJS($params->get('titleformat_list', 'M j Y')),

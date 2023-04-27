@@ -138,6 +138,7 @@ class DPCalendarModelEvents extends ListModel
 			}
 
 			// Add the locations
+			$item->locations = [];
 			if (!empty($item->location_ids) && empty($item->locations)) {
 				$model->setState('filter.search', 'ids:' . $item->location_ids);
 				$item->locations = $model->getItems();
@@ -350,14 +351,13 @@ class DPCalendarModelEvents extends ListModel
 		// Do not show trashed events on the front-end
 		$query->where('a.state != -2');
 
-		// Filter by start and end dates.
-		$nullDate = $db->quote($db->getNullDate());
-		$date     = Factory::getDate();
-		$nowDate  = $db->quote($date->toSql());
+		// Filter by start and end dates
+		$date    = Factory::getDate();
+		$nowDate = $db->quote($date->toSql());
 
 		if ($this->getState('filter.publish_date')) {
-			$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
-			$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
+			$query->where('(a.publish_up is null OR a.publish_up <= ' . $nowDate . ')');
+			$query->where('(a.publish_down is null OR a.publish_down >= ' . $nowDate . ')');
 		}
 
 		$startDate     = $db->quote(DPCalendarHelper::getDate($this->getState('list.start-date'))->toSql());
@@ -507,7 +507,11 @@ class DPCalendarModelEvents extends ListModel
 
 		// If we have a location filter apply it
 		if ($locationsFilter) {
-			$query->where('v.id in (' . implode(',', ArrayHelper::toInteger($locationsFilter)) . ')');
+			$query->where(
+				$locationsFilter != '-1' && (!is_array($locationsFilter) || !in_array('-1', $locationsFilter))
+				? 'v.id in (' . implode(',', ArrayHelper::toInteger($locationsFilter)) . ')'
+				: 'v.id is not null'
+			);
 		}
 
 		// Filter rooms

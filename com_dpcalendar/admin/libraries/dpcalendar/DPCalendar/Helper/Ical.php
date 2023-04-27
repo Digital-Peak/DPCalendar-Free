@@ -274,27 +274,37 @@ class Ical
 		$text[]  = 'SUMMARY:' . $event->title;
 		$text[]  = 'CREATED:' . $created->format('Ymd\THis\Z');
 		$text[]  = 'DTSTAMP:' . $created->format('Ymd\THis\Z');
+		$text[]  = 'URL:' . ($event->url ?: \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
 
 		if ($event->description) {
 			$text[] = 'DESCRIPTION:' . InputFilter::getInstance()->clean(preg_replace('/\r\n|\r|\n/', "\N", $event->description));
 			$text[] = 'X-ALT-DESC;FMTTYPE=text/html:' . preg_replace('/\r\n|\r|\n/', "", $event->description);
 		}
 
-		if (isset($event->locations) && !empty($event->locations)) {
-			$text[] = 'LOCATION:' . self::icalEncode(\DPCalendar\Helper\Location::format($event->locations));
-			if (!empty($event->locations[0]->latitude) && !empty($event->locations[0]->longitude)) {
-				$text[] = 'GEO:' . $event->locations[0]->latitude . ';' . $event->locations[0]->longitude;
-			}
-		}
-
-		$nullDate = Factory::getDbo()->getNullDate();
-		if ($event->modified && $event->modified != $nullDate) {
+		if ($event->modified) {
 			$modified = DPCalendarHelper::getDate($event->modified);
 			$text[]   = 'LAST-MODIFIED:' . $modified->format('Ymd\THis\Z');
 			$text[]   = 'SEQUENCE:' . ($modified->format('U') - $created->format('U'));
 		}
 
-		$text[] = 'URL:' . ($event->url ?: \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid, true, true));
+		$customLocation = '';
+		if (isset($event->locations) && !empty($event->locations)) {
+			$customLocation = implode(', ', array_map(fn ($l) => $l->title, $event->locations));
+			$text[]         = 'LOCATION:' . self::icalEncode(Location::format($event->locations));
+			if (!empty($event->locations[0]->latitude) && !empty($event->locations[0]->longitude)) {
+				$text[] = 'GEO:' . $event->locations[0]->latitude . ';' . $event->locations[0]->longitude;
+			}
+		}
+
+		if (!empty($event->roomTitles)) {
+			$customLocation .= ' [' . implode(', ', array_merge(...array_values($event->roomTitles))) . ']';
+			$text[] = 'X-ROOMS:' . implode(', ', array_merge(...array_values($event->roomTitles)));
+		}
+
+		if ($customLocation) {
+			$text[] = 'X-LOCATION-DISPLAYNAME:' . $customLocation;
+		}
+
 		$text[] = 'X-ACCESS:' . $event->access;
 		$text[] = 'X-HITS:' . $event->hits;
 		$text[] = 'X-COLOR:' . $event->color;
@@ -321,11 +331,11 @@ class Ical
 		}
 		$text[] = 'X-SHOW-END-TIME:' . $event->show_end_time;
 
-		if ($event->publish_up != $nullDate) {
+		if ($event->publish_up) {
 			$text[] = 'X-PUBLISH-UP:' . $event->publish_up;
 		}
 
-		if ($event->publish_down != $nullDate) {
+		if ($event->publish_down) {
 			$text[] = 'X-PUBLISH-DOWN:' . $event->publish_down;
 		}
 

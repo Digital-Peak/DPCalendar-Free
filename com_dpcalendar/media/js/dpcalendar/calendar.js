@@ -84,8 +84,7 @@
 			});
 		}
 	}
-	function getMappings(options)
-	{
+	function getMappings(options) {
 		const viewMapping = [];
 		viewMapping['month'] = 'dayGridMonth';
 		viewMapping['week'] = 'timeGridWeek';
@@ -95,14 +94,15 @@
 		viewMapping['resmonth'] = 'resourceTimelineMonth';
 		viewMapping['resweek'] = 'resourceTimelineWeek';
 		viewMapping['resday'] = 'resourceTimelineDay';
-		if (options['resources'] != null) {
+		if (options['resources'] != null && options['resourceViews'] && options['resourceViews'].find((name) => name === 'week')) {
 			viewMapping['week'] = 'resourceTimeGridWeek';
+		}
+		if (options['resources'] != null && options['resourceViews'] && options['resourceViews'].find((name) => name === 'day')) {
 			viewMapping['day'] = 'resourceTimeGridDay';
 		}
 		return viewMapping;
 	}
-	function getReversMappings(options)
-	{
+	function getReversMappings(options) {
 		const viewMappingReverse = [];
 		viewMappingReverse['dayGridMonth'] = 'month';
 		viewMappingReverse['timeGridWeek'] = 'week';

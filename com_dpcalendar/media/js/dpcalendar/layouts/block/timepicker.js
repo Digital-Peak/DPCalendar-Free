@@ -9,6 +9,7 @@
 		[].slice.call(document.querySelectorAll('.dp-timepicker')).forEach((element) => {
 			const format = element.getAttribute('data-format');
 			const date = dayjs(element.getAttribute('data-time'), 'HH:mm');
+			const size = date.format(format).length + 1;
 			element.value = date.format(format);
 			element.setAttribute('data-max-length', 0);
 			DPCalendar.autocomplete.create(element);
@@ -38,8 +39,6 @@
 			element.addEventListener('dp-autocomplete-change', () => DPCalendar.autocomplete.setItems(element, options));
 			element.addEventListener('dp-autocomplete-select', () => element.dispatchEvent(new Event('change')));
 			element.addEventListener('change', (e) => {
-				const style = window.getComputedStyle(element);
-				element.style.width = 'calc(' + element.value.length + 'ch + ' + style.paddingLeft + ' + ' + style.paddingRight + ')';
 				const end = document.getElementById('jform_' + e.target.getAttribute('data-pair'));
 				if (!end || !e.target.actualDate || !e.target.value) {
 					return true;
@@ -52,7 +51,7 @@
 			});
 			element.actualDate = element.value;
 			const style = window.getComputedStyle(element);
-			element.style.width = 'calc(' + element.value.length + 'ch + ' + style.paddingLeft + ' + ' + style.paddingRight + ')';
+			element.style.width = 'calc(' + size + 'ch + ' + style.paddingLeft + ' + ' + style.paddingRight + ')';
 			element.addEventListener('mousedown', () => DPCalendar.autocomplete.setItems(element, options));
 			element.addEventListener('focus', () => DPCalendar.autocomplete.setItems(element, options));
 		});

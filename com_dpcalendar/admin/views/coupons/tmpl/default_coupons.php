@@ -56,6 +56,7 @@ $return = '&return=' . base64_encode(Uri::getInstance()->toString());
 				|| $item->checked_out == $this->user->get('id') || $item->checked_out == 0; ?>
 			<?php $canChange = $this->user->authorise('core.edit.state', 'com_dpcalendar') && $canCheckin; ?>
 			<tr sortable-group-id="" data-draggable-group="0" class="dp-coupon">
+				<td data-column="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"><?php echo HTMLHelper::_('grid.id', $i, $item->id); ?></td>
 				<td class="order" data-column="<?php echo $this->translate('JGRID_HEADING_ORDERING'); ?>">
 					<?php if ($canChange) { ?>
 						<span class="sortable-handler <?php echo $saveOrder ? '' : 'inactive tip-top'; ?>"><i class="icon-menu"></i></span>
@@ -65,7 +66,6 @@ $return = '&return=' . base64_encode(Uri::getInstance()->toString());
 						<span class="sortable-handler inactive"><i class="icon-menu"></i></span>
 					<?php } ?>
 				</td>
-				<td data-column="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"><?php echo HTMLHelper::_('grid.id', $i, $item->id); ?></td>
 				<td data-column="<?php echo $this->translate('JSTATUS'); ?>">
 					<?php echo HTMLHelper::_(
 						'jgrid.published',

@@ -8,15 +8,15 @@
 	<fields name="params"
 			addfieldpath="/administrator/components/com_dpcalendar/models/fields">
 		<fieldset name="request">
-			<field name="ids" type="location" multiple="true" size="10"
-					description="COM_DPCALENDAR_FIELD_LOCATION_LABEL" label="COM_DPCALENDAR_FIELD_LOCATION_LABEL">
+			<field name="ids" type="location" multiple="true" layout="joomla.form.field.list-fancy-select"
+				label="COM_DPCALENDAR_FIELD_LOCATION_LABEL">
 				<option value="-1">JALL</option>
 			</field>
 		</fieldset>
 		<fieldset name="basic" addrulepath="/administrator/components/com_dpcalendar/models/rules">
 			<field name="locations_output_grouping" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_OUTPUT_GROUPING_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_OUTPUT_GROUPING_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_OUTPUT_GROUPING_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_OUTPUT_GROUPING_DESC">
 				<option value="0">JNONE</option>
 				<option value="title">JGLOBAL_TITLE</option>
 				<option value="country">COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL</option>
@@ -27,266 +27,257 @@
 				<option value="color">COM_DPCALENDAR_FIELD_COLOR_LABEL</option>
 			</field>
 			<field name="locations_show_map" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
-			<field name="locations_map_zoom" type="text"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL" useglobal="true"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
-			<field name="locations_map_width" type="text"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL" useglobal="true"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
-			<field name="locations_map_height" type="text"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL" useglobal="true"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
-			<field name="locations_map_latitude" type="text" validate="decimal"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL" useglobal="true"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+			<field name="locations_map_zoom" type="text" useglobal="true"
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
+			<field name="locations_map_width" type="text" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
+			<field name="locations_map_height" type="text" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
+			<field name="locations_map_latitude" type="text" validate="decimal" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
 			<field name="locations_map_longitude" type="text" validate="decimal" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 			<field name="locations_expand" type="list" class="btn-group" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
 			</field>
 			<field name="locations_show_upcoming_events" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="locations_expand_events" type="list" useglobal="true" showon="locations_show_upcoming_events:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 			<field name="locations_show_resource_view" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="locations_default_view" type="list" showon="locations_show_resource_view:1" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
 				<option value="resmonth">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
 				<option value="resweek">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
 				<option value="resday">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
 				<option value="resyear">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_YEAR</option>
 			</field>
 			<field name="locations_header_show_datepicker" type="list" showon="locations_show_resource_view:1" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="locations_header_show_today" type="list" showon="locations_show_resource_view:1" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="locations_header_show_title" type="list" showon="locations_show_resource_view:1" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="locations_column_width" type="text" showon="locations_show_resource_view:1" validate="decimal" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_DESC"/>
 			<field name="locations_column_width" type="text" showon="locations_show_resource_view:1" validate="decimal" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_DESC"/>
 
 			<field name="locations_titleformat_year" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_YEAR_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_YEAR_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_YEAR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_YEAR_DESC"/>
 			<field name="locations_titleformat_month" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_DESC"/>
 			<field name="locations_titleformat_week" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_DESC"/>
 			<field name="locations_titleformat_day" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_DESC"/>
 			<field name="locations_timeformat_year" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_DESC"/>
 			<field name="locations_timeformat_month" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_DESC"/>
 			<field name="locations_timeformat_week" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_DESC"/>
 			<field name="locations_timeformat_day" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_DESC"/>
 			<field name="locations_axisformat_year" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_YEAR_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_YEAR_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_YEAR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_YEAR_DESC"/>
 			<field name="locations_axisformat_month" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_MONTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_MONTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_MONTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_MONTH_DESC"/>
 			<field name="locations_axisformat_week" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_WEEK_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_WEEK_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_WEEK_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_WEEK_DESC"/>
 			<field name="locations_axisformat_day" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_DESC"/>
 			<field name="locations_min_time" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
 			<field name="locations_max_time" type="text" useglobal="true" showon="locations_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 			<field name="locations_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 			<field name="locations_filter_author" type="dpauthor" useglobal="true" table_name="dpcalendar_locations"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_FILTER_AUTHOR_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATIONS_FILTER_AUTHOR_DESC">
 				<option value="-1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_MY</option>
 				<option value="0">JNONE</option>
 			</field>
 			<field name="locations_filter_tags" type="tag" multiple="true" mode="nested"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC"/>
 		</fieldset>
 		<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
 			<field name="location_expand_events" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 			<field name="location_show_map" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
 			<field name="location_map_zoom" type="text" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
 			<field name="location_map_width" type="text" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
 			<field name="location_map_height" type="text" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
 			<field name="location_map_latitude" type="text" validate="decimal" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
 			<field name="location_map_longitude" type="text" validate="decimal" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 			<field name="location_expand" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="location_show_upcoming_events" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="location_show_resource_view" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_RESOURCE_VIEW_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="location_default_view" type="list" showon="location_show_resource_view:1" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
 				<option value="resmonth">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_MONTH</option>
 				<option value="resweek">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
 				<option value="resday">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
 				<option value="resyear">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_YEAR</option>
 			</field>
 			<field name="location_header_show_datepicker" type="list" showon="location_show_resource_view:1" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_DATEPICKER_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="location_header_show_today" type="list" showon="location_show_resource_view:1" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TODAY_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="location_header_show_title" type="list" showon="location_show_resource_view:1" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_DESC">
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_TITLE_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="location_column_width" type="text" showon="location_show_resource_view:1" validate="decimal" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_COLUMN_WIDTH_DESC"/>
 
 			<field name="location_titleformat_year" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_YEAR_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_YEAR_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_YEAR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_YEAR_DESC"/>
 			<field name="location_titleformat_month" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_MONTH_DESC"/>
 			<field name="location_titleformat_week" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_WEEK_DESC"/>
 			<field name="location_titleformat_day" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TITLE_FORMAT_DAY_DESC"/>
 			<field name="location_timeformat_year" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_YEAR_DESC"/>
 			<field name="location_timeformat_month" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_MONTH_DESC"/>
 			<field name="location_timeformat_week" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_WEEK_DESC"/>
 			<field name="location_timeformat_day" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_TIME_FORMAT_DAY_DESC"/>
 			<field name="location_axisformat_year" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_YEAR_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_YEAR_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_YEAR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_YEAR_DESC"/>
 			<field name="location_axisformat_month" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_MONTH_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_MONTH_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_MONTH_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_MONTH_DESC"/>
 			<field name="location_axisformat_week" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_WEEK_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_WEEK_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_WEEK_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_WEEK_DESC"/>
 			<field name="location_axisformat_day" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_DESC"/>
 			<field name="location_min_time" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
 			<field name="location_max_time" type="text" useglobal="true" showon="location_show_resource_view:1"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 			<field name="location_show_page_heading" type="list" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
+				label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
 				<option value="2">JGLOBAL_INHERIT</option>
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
 			<field name="location_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
-					label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
-					description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 	</fields>
 </metadata>

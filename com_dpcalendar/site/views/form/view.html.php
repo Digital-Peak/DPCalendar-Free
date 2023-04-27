@@ -41,7 +41,7 @@ class DPCalendarViewForm extends BaseView
 			$model = BaseDatabaseModel::getInstance('Adminevents', 'DPCalendarModel');
 			$model->getState();
 			$model->setState('filter.children', $this->event->id);
-			$model->setState('filter.modified', $this->event->modified);
+			$model->setState('filter.modified', $this->event->modified ?: '0000-00-00');
 			$model->setState('filter.state', null);
 			$model->setState('filter.search_start', null);
 

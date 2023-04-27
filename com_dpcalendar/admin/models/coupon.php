@@ -58,10 +58,10 @@ class DPCalendarModelCoupon extends AdminModel
 		}
 
 		$now = DPCalendarHelper::getDate();
-		if ($item->publish_up != $this->getDbo()->getNullDate() && $now->toSql() < $item->publish_up) {
+		if ($item->publish_up && $now->toSql() < $item->publish_up) {
 			return null;
 		}
-		if ($item->publish_down != $this->getDbo()->getNullDate() && $now->toSql() > $item->publish_down) {
+		if ($item->publish_down && $now->toSql() > $item->publish_down) {
 			return null;
 		}
 

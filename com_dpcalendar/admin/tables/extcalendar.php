@@ -7,10 +7,15 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
-use Joomla\Utilities\ArrayHelper;
 
-class DPCalendarTableExtcalendar extends JTable
+class DPCalendarTableExtcalendar extends Table
 {
 	public function __construct(&$db)
 	{
@@ -24,8 +29,8 @@ class DPCalendarTableExtcalendar extends JTable
 		$success = parent::delete($pk);
 		if ($success) {
 			// Load the DPCalendar plugins to delete cached events
-			JPluginHelper::importPlugin('dpcalendar');
-			JFactory::getApplication()->triggerEvent('onCalendarAfterDelete', [$this]);
+			PluginHelper::importPlugin('dpcalendar');
+			Factory::getApplication()->triggerEvent('onCalendarAfterDelete', [$this]);
 		}
 
 		return $success;
@@ -56,7 +61,7 @@ class DPCalendarTableExtcalendar extends JTable
 		if ($this->params) {
 			$params = new Registry($this->params);
 			if ($pw = $params->get('password')) {
-				$params->set('password', \DPCalendar\Helper\DPCalendarHelper::deobfuscate($pw));
+				$params->set('password', DPCalendarHelper::deobfuscate($pw));
 			}
 			$this->params = $params->toString();
 		}
@@ -66,8 +71,8 @@ class DPCalendarTableExtcalendar extends JTable
 
 	public function store($updateNulls = false)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		$date = DPCalendarHelper::getDate();
+		$user = Factory::getUser();
 		if ($this->id) {
 			// Existing item
 			$this->modified    = $date->toSql();
@@ -81,18 +86,8 @@ class DPCalendarTableExtcalendar extends JTable
 			}
 		}
 
-		// Set publish_up to null date if not set
-		if (!$this->publish_up) {
-			$this->publish_up = $this->_db->getNullDate();
-		}
-
-		// Set publish_down to null date if not set
-		if (!$this->publish_down) {
-			$this->publish_down = $this->_db->getNullDate();
-		}
-
 		// Verify that the alias is unique
-		$table = JTable::getInstance('Extcalendar', 'DPCalendarTable');
+		$table = Table::getInstance('Extcalendar', 'DPCalendarTable');
 		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id == 0)) {
 			$this->alias = \Joomla\String\StringHelper::increment($this->alias);
 		}
@@ -133,9 +128,9 @@ class DPCalendarTableExtcalendar extends JTable
 		return 'com_dpcalendar.extcalendar.' . (int)$this->$k;
 	}
 
-	protected function _getAssetParentId(JTable $table = null, $id = null)
+	protected function _getAssetParentId(Table $table = null, $id = null)
 	{
-		$asset = JTable::getInstance('Asset');
+		$asset = Table::getInstance('Asset');
 		$asset->loadByName('com_dpcalendar');
 
 		return $asset->id;
@@ -145,7 +140,7 @@ class DPCalendarTableExtcalendar extends JTable
 	{
 		// Check for valid name
 		if (trim($this->title) == '') {
-			$this->setError(JText::sprintf('COM_DPCALENDAR_EXTCALENDAR_ERR_TABLES_NAME', ''));
+			$this->setError(Text::sprintf('COM_DPCALENDAR_EXTCALENDAR_ERR_TABLES_NAME', ''));
 
 			return false;
 		}
@@ -156,7 +151,7 @@ class DPCalendarTableExtcalendar extends JTable
 
 		$xid = (int)$this->_db->loadResult();
 		if ($xid && $xid != (int)$this->id) {
-			$this->setError(JText::sprintf('COM_DPCALENDAR_EXTCALENDAR_ERR_TABLES_NAME', htmlspecialchars($this->title)));
+			$this->setError(Text::sprintf('COM_DPCALENDAR_EXTCALENDAR_ERR_TABLES_NAME', htmlspecialchars($this->title)));
 
 			return false;
 		}
@@ -164,9 +159,9 @@ class DPCalendarTableExtcalendar extends JTable
 		if (empty($this->alias)) {
 			$this->alias = $this->title;
 		}
-		$this->alias = JApplicationHelper::stringURLSafe($this->alias);
+		$this->alias = ApplicationHelper::stringURLSafe($this->alias);
 		if (trim(str_replace('-', '', $this->alias)) == '') {
-			$this->alias = JFactory::getDate()->format("Y-m-d-H-i-s");
+			$this->alias = DPCalendarHelper::getDate()->format("Y-m-d-H-i-s");
 		}
 
 		if (empty($this->language)) {
@@ -174,10 +169,26 @@ class DPCalendarTableExtcalendar extends JTable
 		}
 
 		// Check the publish down date is not earlier than publish up.
-		if ($this->publish_down > $this->_db->getNullDate() && $this->publish_down < $this->publish_up) {
-			$this->setError(JText::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
+		if ($this->publish_down && $this->publish_down < $this->publish_up) {
+			$this->setError(Text::_('JGLOBAL_START_PUBLISH_AFTER_FINISH'));
 
 			return false;
+		}
+
+		if (empty($this->created) || $this->created === $this->getDbo()->getNullDate()) {
+			$this->created = null;
+		}
+		if (empty($this->modified) || $this->modified === $this->getDbo()->getNullDate()) {
+			$this->modified = null;
+		}
+		if (empty($this->publish_up) || $this->publish_up === $this->getDbo()->getNullDate()) {
+			$this->publish_up = null;
+		}
+		if (empty($this->publish_down) || $this->publish_down === $this->getDbo()->getNullDate()) {
+			$this->publish_down = null;
+		}
+		if (empty($this->sync_date) || $this->sync_date === $this->getDbo()->getNullDate()) {
+			$this->sync_date = null;
 		}
 
 		// Clean up keywords -- eliminate extra spaces between phrases

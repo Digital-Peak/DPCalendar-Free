@@ -131,9 +131,8 @@ class DPCalendarModelEvent extends ItemModel
 
 					$query->where('a.id = ' . (int)$pk);
 
-					// Filter by start and end dates.
-					$nullDate = $db->quote($db->getNullDate());
-					$nowDate  = $db->quote(Factory::getDate()->toSql());
+					// Filter by start and end dates
+					$nowDate = $db->quote(Factory::getDate()->toSql());
 
 					// Filter by published state.
 					$state      = $this->getState('filter.state', []);
@@ -145,8 +144,8 @@ class DPCalendarModelEvent extends ItemModel
 					if ($state) {
 						ArrayHelper::toInteger($state);
 						$query->where('(a.state in (' . implode(',', $state) . ')' . $stateOwner . ')');
-						$query->where('(a.publish_up = ' . $nullDate . ' OR a.publish_up <= ' . $nowDate . ')');
-						$query->where('(a.publish_down = ' . $nullDate . ' OR a.publish_down >= ' . $nowDate . ')');
+						$query->where('(a.publish_up is null OR a.publish_up <= ' . $nowDate . ')');
+						$query->where('(a.publish_down is null OR a.publish_down >= ' . $nowDate . ')');
 					}
 
 					// Implement View Level Access

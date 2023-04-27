@@ -4,32 +4,37 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
 use DigitalPeak\ThinHTTP as HTTP;
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
-JLoader::import('joomla.application.component.modellist');
-
-class DPCalendarModelImport extends JModelLegacy
+class DPCalendarModelImport extends BaseDatabaseModel
 {
 	public function import()
 	{
-		JPluginHelper::importPlugin('dpcalendar');
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
-		JModelLegacy::addTablePath(JPATH_ADMINISTRATOR . '/components/com_categories/tables');
+		PluginHelper::importPlugin('dpcalendar');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_categories/models');
+		BaseDatabaseModel::addTablePath(JPATH_ADMINISTRATOR . '/components/com_categories/tables');
 
-		$input = JFactory::getApplication()->input;
+		$input = Factory::getApplication()->input;
 
-		$input->set('extension', 'com_dpcalendar');
-		$input->post->set('extension', 'com_dpcalendar');
-
-		$tmp       = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+		$tmp       = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 		$calendars = call_user_func_array('array_merge', (array)$tmp);
 
+		$categoriesModel = BaseDatabaseModel::getInstance('Categories', 'CategoriesModel', ['ignore_request' => true]);
+		$categoriesModel->setState('filter.extension', 'com_dpcalendar');
+		$categoriesModel->setState('filter.published', 'all');
+		$existingCalendars = $categoriesModel->getItems();
 		$calendarsToimport = $input->get('calendar', []);
-		$existingCalendars = JModelLegacy::getInstance('Categories', 'CategoriesModel')->getItems();
 		$start             = DPCalendarHelper::getDate($input->getCmd('filter_search_start', null));
 		$end               = DPCalendarHelper::getDate($input->getCmd('filter_search_end', null));
 
@@ -39,18 +44,13 @@ class DPCalendarModelImport extends JModelLegacy
 				continue;
 			}
 
-			$category = array_filter(
-				$existingCalendars,
-				function ($e) use ($cal) {
-					return $e->title == $cal->title;
-				}
-			);
+			$category = array_filter($existingCalendars, fn ($e) => $e->title == $cal->title);
 
 			if (is_array($category)) {
 				$category = reset($category);
 			}
 
-			if ($category == null) {
+			if (!$category) {
 				$data                = [];
 				$data['id']          = 0;
 				$data['title']       = $cal->title;
@@ -60,12 +60,12 @@ class DPCalendarModelImport extends JModelLegacy
 				$data['published']   = 1;
 				$data['language']    = '*';
 
-				$model = JModelLegacy::getInstance('Category', 'CategoriesModel');
+				$model = BaseDatabaseModel::getInstance('Category', 'CategoriesModel');
 				$model->save($data);
 				$category = $model->getItem($model->getState('category.id'));
 			}
 
-			$events = JFactory::getApplication()->triggerEvent('onEventsFetch', [$cal->id, $start, $end, new Registry(['expand' => false])]);
+			$events = Factory::getApplication()->triggerEvent('onEventsFetch', [$cal->id, $start, $end, new Registry(['expand' => false])]);
 			$events = call_user_func_array('array_merge', (array)$events);
 
 			$startDateAsSQL = $start->toSql();
@@ -91,9 +91,7 @@ class DPCalendarModelImport extends JModelLegacy
 					$event->locations = [];
 				}
 
-				$eventData['location_ids'] = array_map(function ($l) {
-					return $l->id;
-				}, $event->locations);
+				$eventData['location_ids'] = array_map(fn ($l) => $l->id, $event->locations);
 
 				// Setting the reference to the old event
 				$xreference              = $eventData['id'];
@@ -101,30 +99,30 @@ class DPCalendarModelImport extends JModelLegacy
 
 				unset($eventData['id']);
 				unset($eventData['locations']);
-				$eventData['alias'] = !empty($event->alias) ? $event->alias : JApplicationHelper::stringURLSafe($event->title);
+				$eventData['alias'] = !empty($event->alias) ? $event->alias : ApplicationHelper::stringURLSafe($event->title);
 				$eventData['catid'] = $category->id;
 
 				// Find an existing event with the same xreference
-				$table = JTable::getInstance('Event', 'DPCalendarTable');
+				$table = Table::getInstance('Event', 'DPCalendarTable');
 				$table->load(['xreference' => $xreference]);
 				if ($table->id) {
 					$eventData['id']          = $table->id;
 					$eventData['original_id'] = $table->original_id;
 				}
 
-				JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
-				$model = JModelLegacy::getInstance('Form', 'DPCalendarModel');
+				BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+				$model = BaseDatabaseModel::getInstance('Form', 'DPCalendarModel');
 				$model->getState();
 
 				if (!$model->save($eventData)) {
-					JFactory::getApplication()->enqueueMessage($model->getError(), 'warning');
+					Factory::getApplication()->enqueueMessage($model->getError(), 'warning');
 					continue;
 				}
 
 				!empty($eventData['id']) ? $counterUpdated++ : $counter++;
 			}
-			$msgs[] = sprintf(JText::_('COM_DPCALENDAR_N_ITEMS_CREATED'), $counter, $cal->title);
-			$msgs[] = sprintf(JText::_('COM_DPCALENDAR_N_ITEMS_UPDATED'), $counterUpdated, $cal->title);
+			$msgs[] = sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_CREATED'), $counter, $cal->title);
+			$msgs[] = sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_UPDATED'), $counterUpdated, $cal->title);
 		}
 		$this->set('messages', $msgs);
 	}
@@ -132,7 +130,7 @@ class DPCalendarModelImport extends JModelLegacy
 	public function importGeoDB()
 	{
 		// The folder with the data
-		$geoDBDirectory = \JFactory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
+		$geoDBDirectory = Factory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
 
 		// Only update when we are not in free mode
 		if (DPCalendarHelper::isFree()) {

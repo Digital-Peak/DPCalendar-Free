@@ -156,9 +156,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$hardReset = $this->all_day != $oldEvent->all_day || $this->start_date != $oldEvent->start_date || $this->end_date != $oldEvent->end_date || $this->rrule != $oldEvent->rrule;
 			$oldTags   = new TagsHelper();
 			$oldTags   = $oldTags->getItemTags('com_dpcalendar.event', $this->id);
-			$oldTags   = array_map(function ($t) {
-				return $t->id;
-			}, $oldTags);
+			$oldTags   = array_map(fn ($t) => $t->id, $oldTags);
 
 			$tagsChanged = !isset($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
@@ -305,7 +303,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 				$table->original_id   = $this->id;
 				$table->rrule         = '';
 				$table->checked_out   = 0;
-				$table->modified      = $this->getDbo()->getNullDate();
+				$table->modified      = null;
 				$table->modified_by   = 0;
 
 				// If the xreference does exist, then we need to create it with the proper scheme
@@ -367,21 +365,21 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$this->_db->qn('terms') . ' = ' . $this->_db->q($this->terms),
 			$this->_db->qn('state') . ' = ' . $this->_db->q($this->state),
 			$this->_db->qn('checked_out') . ' = ' . $this->_db->q(0),
-			$this->_db->qn('checked_out_time') . ' = ' . $this->_db->q($this->_db->getNullDate()),
+			$this->_db->qn('checked_out_time') . ' = null',
 			$this->_db->qn('access') . ' = ' . $this->_db->q($this->access),
 			$this->_db->qn('access_content') . ' = ' . $this->_db->q($this->access_content),
 			$this->_db->qn('params') . ' = ' . $this->_db->q($this->params),
 			$this->_db->qn('rooms') . ' = ' . $this->_db->q($this->rooms ?: ''),
 			$this->_db->qn('language') . ' = ' . $this->_db->q($this->language),
-			$this->_db->qn('modified') . ' = ' . $this->_db->q($this->modified),
+			$this->_db->qn('modified') . ' = ' . ($this->modified ? $this->_db->q($this->modified) : 'null'),
 			$this->_db->qn('modified_by') . ' = ' . $this->_db->q($user->id),
 			$this->_db->qn('created_by') . ' = ' . $this->_db->q($this->created_by),
 			$this->_db->qn('metakey') . ' = ' . $this->_db->q($this->metakey ?: ''),
 			$this->_db->qn('metadesc') . ' = ' . $this->_db->q($this->metadesc ?: ''),
 			$this->_db->qn('metadata') . ' = ' . $this->_db->q($this->metadata),
 			$this->_db->qn('featured') . ' = ' . $this->_db->q($this->featured),
-			$this->_db->qn('publish_up') . ' = ' . $this->_db->q($this->publish_up),
-			$this->_db->qn('publish_down') . ' = ' . $this->_db->q($this->publish_down),
+			$this->_db->qn('publish_up') . ' = ' . ($this->publish_up ? $this->_db->q($this->publish_up) : 'null'),
+			$this->_db->qn('publish_down') . ' = ' . ($this->publish_down ? $this->_db->q($this->publish_down) : 'null'),
 			$this->_db->qn('payment_provider') . ' = ' . $this->_db->q($this->payment_provider)
 		];
 
@@ -404,7 +402,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 		if ($oldEvent->modified && isset($this->_update_modified) && $this->_update_modified == 0) {
 			$query->where('(' . $this->_db->qn('modified') . ' = ' . $this->_db->q($oldEvent->modified)
-				. ' or modified = ' . $this->_db->quote($this->_db->getNullDate()) . ')');
+				. ' or modified is null)');
 		}
 
 		$this->_db->setQuery($query);
@@ -442,7 +440,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 		}
 
 		// Check the publish down date is not earlier than publish up.
-		if ($this->publish_down > $this->_db->getNullDate() && $this->publish_down < $this->publish_up) {
+		if ($this->publish_down && $this->publish_down < $this->publish_up) {
 			// Swap the dates.
 			$temp               = $this->publish_up;
 			$this->publish_up   = $this->publish_down;
@@ -474,17 +472,20 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$this->capacity_used = 0;
 		}
 
-		if (empty($this->modified)) {
-			$this->modified = $this->getDbo()->getNullDate();
+		if (empty($this->created) || $this->created === $this->getDbo()->getNullDate()) {
+			$this->created = null;
 		}
-		if (empty($this->publish_up)) {
-			$this->publish_up = $this->getDbo()->getNullDate();
+		if (empty($this->modified) || $this->modified === $this->getDbo()->getNullDate()) {
+			$this->modified = null;
 		}
-		if (empty($this->publish_down)) {
-			$this->publish_down = $this->getDbo()->getNullDate();
+		if (empty($this->publish_up) || $this->publish_up === $this->getDbo()->getNullDate()) {
+			$this->publish_up = null;
 		}
-		if (empty($this->checked_out_time)) {
-			$this->checked_out_time = $this->getDbo()->getNullDate();
+		if (empty($this->publish_down) || $this->publish_down === $this->getDbo()->getNullDate()) {
+			$this->publish_down = null;
+		}
+		if (empty($this->checked_out_time) || $this->checked_out_time === $this->getDbo()->getNullDate()) {
+			$this->checked_out_time = null;
 		}
 
 		if (empty($this->hits)) {

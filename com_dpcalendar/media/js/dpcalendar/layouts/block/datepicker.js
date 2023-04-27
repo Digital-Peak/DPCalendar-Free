@@ -27,6 +27,7 @@
 					}
 					options.defaultDate = date.toDate();
 					element.value = date.format(options.format);
+					element.defaultValue = element.value;
 					const style = window.getComputedStyle(element);
 					element.style.width = 'calc(' + element.value.length + 'ch + ' + style.paddingLeft + ' + ' + style.paddingRight + ')';
 				}

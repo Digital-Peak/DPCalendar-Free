@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 namespace DPCalendar\Booking\Stages;
@@ -73,13 +73,13 @@ class SetupForMail implements StageInterface
 				Route::TLS_IGNORE,
 				true
 			),
-			'bookingUid'        => $payload->item->uid,
-			'sitename'          => $this->application->get('sitename'),
-			'user'              => $payload->item->name,
-			'tickets'           => $payload->tickets,
-			'countTickets'      => $payload->tickets ? count($payload->tickets) : 0,
-			'acceptUrl'         => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, true, true),
-			'declineUrl'        => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, false, true)
+			'bookingUid'   => $payload->item->uid,
+			'sitename'     => $this->application->get('sitename'),
+			'user'         => $payload->item->name,
+			'tickets'      => $payload->tickets,
+			'countTickets' => $payload->tickets ? count($payload->tickets) : 0,
+			'acceptUrl'    => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, true, true),
+			'declineUrl'   => \DPCalendarHelperRoute::getInviteChangeRoute($payload->item, false, true)
 		];
 
 		if (!empty($payload->item->jcfields)) {

@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -13,7 +13,6 @@ JLoader::import('joomla.application.component.controlleradmin');
 
 class DPCalendarControllerEvents extends JControllerAdmin
 {
-
 	public function __construct($config = [])
 	{
 		parent::__construct($config);
@@ -38,8 +37,8 @@ class DPCalendarControllerEvents extends JControllerAdmin
 			'featured'   => 1,
 			'unfeatured' => 0
 		];
-		$task   = $this->getTask();
-		$value  = ArrayHelper::getValue($values, $task, 0, 'int');
+		$task  = $this->getTask();
+		$value = ArrayHelper::getValue($values, $task, 0, 'int');
 		ArrayHelper::toInteger($ids);
 
 		$this->getModel()

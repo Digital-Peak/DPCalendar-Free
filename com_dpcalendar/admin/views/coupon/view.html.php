@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -11,7 +11,7 @@ class DPCalendarViewCoupon extends \DPCalendar\View\BaseView
 	public function init()
 	{
 		$this->coupon = $this->get('Item');
-		$this->form     = $this->get('Form');
+		$this->form   = $this->get('Form');
 	}
 
 	protected function addToolbar()

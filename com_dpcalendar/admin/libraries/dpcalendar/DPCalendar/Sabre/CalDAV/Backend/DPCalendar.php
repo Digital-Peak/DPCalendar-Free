@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 namespace DPCalendar\Sabre\CalDAV\Backend;
@@ -61,11 +61,11 @@ class DPCalendar extends PDO
 					'VEVENT',
 					'VTODO'
 				]),
-				'{DAV:}displayname'                                           => $calendar->title,
-				'{urn:ietf:params:xml:ns:caldav}calendar-description'         => $calendar->description,
-				'{urn:ietf:params:xml:ns:caldav}calendar-timezone'            => '',
-				'{http://apple.com/ns/ical/}calendar-order'                   => 1,
-				'{http://apple.com/ns/ical/}calendar-color'                   => $params->get('color', '3366CC')
+				'{DAV:}displayname'                                   => $calendar->title,
+				'{urn:ietf:params:xml:ns:caldav}calendar-description' => $calendar->description,
+				'{urn:ietf:params:xml:ns:caldav}calendar-timezone'    => '',
+				'{http://apple.com/ns/ical/}calendar-order'           => 1,
+				'{http://apple.com/ns/ical/}calendar-color'           => $params->get('color', '3366CC')
 			];
 		}
 

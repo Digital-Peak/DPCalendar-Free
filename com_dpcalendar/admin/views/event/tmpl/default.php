@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -13,6 +13,7 @@ $this->layoutHelper->renderLayout('block.map', $this->displayData);
 $this->dpdocument->loadStyleFile('dpcalendar/views/form/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/form/default.js');
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminevent/default.css');
+$this->dpdocument->addStyle($this->params->get('event_form_custom_css'));
 
 if (DPCalendarHelper::isFree()) {
 	$this->translator->translateJS('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');

@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -250,6 +250,10 @@ class DPCalendarHelperRoute
 		$args         = [];
 		$args['view'] = 'ticket';
 		$args['uid']  = $ticket->uid;
+
+		if(!empty($ticket->booking_token)) {
+			$args['token'] = $ticket->booking_token;
+		}
 
 		$uri = self::getUrl($args, false);
 		$uri = $full ? $uri->toString() : Route::_($uri->toString(['path', 'query', 'fragment']));

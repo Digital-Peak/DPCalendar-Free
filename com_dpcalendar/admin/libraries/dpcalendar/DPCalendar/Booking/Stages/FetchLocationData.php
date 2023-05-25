@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 namespace DPCalendar\Booking\Stages;
@@ -39,7 +39,7 @@ class FetchLocationData implements StageInterface
 			$payload->data['latitude']  = null;
 			$payload->data['longitude'] = null;
 
-			$location                   = Location::get($location, false);
+			$location = Location::get($location, false);
 			if ($location->latitude) {
 				$payload->data['latitude']  = $location->latitude;
 				$payload->data['longitude'] = $location->longitude;

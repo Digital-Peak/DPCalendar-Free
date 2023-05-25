@@ -242,14 +242,14 @@
 }
 @media screen and (max-width: 767px) {
 	.com-dpcalendar-event .dp-table,
-.com-dpcalendar-event .dp-table tbody:not(.dp-table__thead),
-.com-dpcalendar-event .dp-table th,
-.com-dpcalendar-event .dp-table td,
-.com-dpcalendar-event .dp-table tr {
+	.com-dpcalendar-event .dp-table tbody:not(.dp-table__thead),
+	.com-dpcalendar-event .dp-table th,
+	.com-dpcalendar-event .dp-table td,
+	.com-dpcalendar-event .dp-table tr {
 		display: block;
 	}
 	.com-dpcalendar-event .dp-table__thead,
-.com-dpcalendar-event .dp-table thead {
+	.com-dpcalendar-event .dp-table thead {
 		display: none;
 	}
 	.com-dpcalendar-event .dp-table tr {
@@ -269,12 +269,12 @@
 		font-weight: bold;
 	}
 	.com-dpcalendar-event .dp-table td,
-.com-dpcalendar-event .dp-table th {
+	.com-dpcalendar-event .dp-table th {
 		box-sizing: border-box;
 		text-align: left !important;
 	}
 	.com-dpcalendar-event .dp-table td > div,
-.com-dpcalendar-event .dp-table th > div {
+	.com-dpcalendar-event .dp-table th > div {
 		text-align: left;
 	}
 }
@@ -294,7 +294,7 @@
 }
 .com-dpcalendar-event .dp-timezone__info {
 	flex: 0 0 100%;
-	background-color: #c8ccd0;
+	background-color: rgb(200, 204, 208);
 	padding: 1rem;
 	margin: 0.2rem 0;
 }
@@ -590,7 +590,7 @@
 		display: block;
 	}
 	.com-dpcalendar-event > div:not(.com-dpcalendar-event__image),
-.com-dpcalendar-event .dp-figure__caption {
+	.com-dpcalendar-event .dp-figure__caption {
 		padding-left: 1rem;
 		padding-right: 1rem;
 	}

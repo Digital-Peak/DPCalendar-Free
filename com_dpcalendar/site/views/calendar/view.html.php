@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -87,26 +87,26 @@ class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 			return;
 		}
 
-		$calendar->event = new \stdClass;
+		$calendar->event = new \stdClass();
 
 		// For some plugins
 		!empty($calendar->description) ? $calendar->text = $calendar->description : $calendar->text = null;
 
 		$this->app->triggerEvent('onContentPrepare', ['com_dpcalendar.categories', &$calendar, &$calendar->params, 0]);
 
-		$results                            = $this->app->triggerEvent(
+		$results = $this->app->triggerEvent(
 			'onContentAfterTitle',
 			['com_dpcalendar.categories', &$calendar, &$this->params, 0]
 		);
 		$calendar->event->afterDisplayTitle = trim(implode("\n", $results));
 
-		$results                               = $this->app->triggerEvent(
+		$results = $this->app->triggerEvent(
 			'onContentBeforeDisplay',
 			['com_dpcalendar.categories', &$calendar, &$this->params, 0]
 		);
 		$calendar->event->beforeDisplayContent = trim(implode("\n", $results));
 
-		$results                              = $this->app->triggerEvent(
+		$results = $this->app->triggerEvent(
 			'onContentAfterDisplay',
 			['com_dpcalendar.categories', &$calendar, &$this->params, 0]
 		);

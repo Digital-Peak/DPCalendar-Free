@@ -1,7 +1,7 @@
 /**
  * @package   DPCalendar
  * @copyright Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 (function () {
 	'use strict';
@@ -176,8 +176,7 @@
 			week: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_WEEK')
 		};
 	}
-	function setup$4(calendar, options)
-	{
+	function setup$4(calendar, options) {
 		options['eventDragStart'] = (info) => {
 			if (info.el._tippy) {
 				info.el._tippy.destroy();

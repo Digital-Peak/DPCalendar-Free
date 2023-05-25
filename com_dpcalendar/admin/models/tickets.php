@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 defined('_JEXEC') or die();
@@ -104,7 +104,7 @@ class DPCalendarModelTickets extends ListModel
 		$query->from($db->quoteName('#__dpcalendar_tickets') . ' AS a');
 
 		// Join over the bookings
-		$query->select('b.name as booking_name, b.price as booking_price');
+		$query->select('b.name as booking_name, b.price as booking_price, b.token as booking_token');
 		$query->join('LEFT', $db->quoteName('#__dpcalendar_bookings') . ' AS b ON b.id = a.booking_id');
 
 		// Join over the events

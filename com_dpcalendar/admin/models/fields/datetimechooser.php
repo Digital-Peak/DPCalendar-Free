@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -34,13 +34,13 @@ class JFormFieldDatetimechooser extends JFormField
 		if (strtoupper($this->value) == 'NOW') {
 			$date = $dateHelper->getDate();
 			$date->setTime($date->format('H', true), 0, 0);
-		} else if (strtoupper($this->value) == '+1 HOUR' || strtoupper($this->value) == '+2 MONTH') {
+		} elseif (strtoupper($this->value) == '+1 HOUR' || strtoupper($this->value) == '+2 MONTH') {
 			$date = $dateHelper->getDate();
 			$date->setTime($date->format('H', true), 0, 0);
 			$date->modify($this->value);
-		} else if ($this->value && $formated) {
+		} elseif ($this->value && $formated) {
 			$date = DPCalendarHelper::getDateFromString($this->value, null, $allDay, $dateFormat, $timeFormat);
-		} else if ($this->value) {
+		} elseif ($this->value) {
 			$date = $dateHelper->getDate($this->value, $allDay);
 		}
 

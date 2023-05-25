@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -23,10 +23,10 @@ class JFormFieldExtcalendar extends JFormField
 		(new \DPCalendar\HTML\Document\HtmlDocument())->loadScriptFile('dpcalendar/fields/extcalendar.js');
 		JFactory::getDocument()->addStyleDeclaration('#general .controls {margin-left: 0} #general .control-label {width: 0}');
 
-		$url    = 'index.php?option=com_dpcalendar&view=extcalendars';
-		$url    .= '&dpplugin=' . $this->element['plugin'];
-		$url    .= '&import=' . $this->element['import'];
-		$url    .= '&tmpl=component';
+		$url = 'index.php?option=com_dpcalendar&view=extcalendars';
+		$url .= '&dpplugin=' . $this->element['plugin'];
+		$url .= '&import=' . $this->element['import'];
+		$url .= '&tmpl=component';
 		$buffer = '<iframe src="' . JRoute::_($url) . '" style="width:100%; border:0"m id="' . $this->id . '" name="' . $this->id . '"></iframe>';
 
 		return $buffer;

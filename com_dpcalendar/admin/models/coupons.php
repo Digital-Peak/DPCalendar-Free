@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -86,7 +86,7 @@ class DPCalendarModelCoupons extends JModelList
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} else if ($published === '') {
+		} elseif ($published === '') {
 			$query->where('(a.state IN (0, 1))');
 		}
 
@@ -104,7 +104,7 @@ class DPCalendarModelCoupons extends JModelList
 				$ids = explode(',', substr($search, 4));
 				ArrayHelper::toInteger($ids);
 				$query->where('a.id in (' . implode(',', $ids) . ')');
-			} else if (stripos($search, 'id:') === 0) {
+			} elseif (stripos($search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr($search, 3));
 			} else {
 				$search = $db->quote('%' . $db->escape($search, true) . '%');

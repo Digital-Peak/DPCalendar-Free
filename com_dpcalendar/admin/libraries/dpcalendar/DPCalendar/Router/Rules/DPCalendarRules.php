@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
 namespace DPCalendar\Router\Rules;
@@ -151,6 +151,9 @@ class DPCalendarRules extends MenuRules
 		foreach ($this->lookup as $languageName => $items) {
 			// If there is menu item for the event use it
 			if (!empty($items['event']) && array_key_exists($query['id'], $items['event'])) {
+				// Ensure the correct item ID is set, can happen when a single event menu item exists and a calendar menu item
+				// which has a different calendar selected
+				$query['Itemid'] = $items['event'][$query['id']];
 				return;
 			}
 		}

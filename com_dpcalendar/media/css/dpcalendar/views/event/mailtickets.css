@@ -54,8 +54,8 @@
 		display: block;
 	}
 	.com-dpcalendar-event-mailtickets .dp-control__label, .com-dpcalendar-event-mailtickets .control-group .control-label,
-.com-dpcalendar-event-mailtickets .control-group .form-label, .com-dpcalendar-event-mailtickets .dp-control__input, .com-dpcalendar-event-mailtickets .control-group .controls,
-.com-dpcalendar-event-mailtickets .control-group .form-control {
+	.com-dpcalendar-event-mailtickets .control-group .form-label, .com-dpcalendar-event-mailtickets .dp-control__input, .com-dpcalendar-event-mailtickets .control-group .controls,
+	.com-dpcalendar-event-mailtickets .control-group .form-control {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -63,8 +63,8 @@
 		display: block;
 	}
 	.com-dpcalendar-event-mailtickets .dp-control control-label, .com-dpcalendar-event-mailtickets .control-group control-label,
-.com-dpcalendar-event-mailtickets .dp-control controls,
-.com-dpcalendar-event-mailtickets .control-group controls {
+	.com-dpcalendar-event-mailtickets .dp-control controls,
+	.com-dpcalendar-event-mailtickets .control-group controls {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -203,7 +203,7 @@
 }
 .com-dpcalendar-event-mailtickets .dp-timezone__info {
 	flex: 0 0 100%;
-	background-color: #c8ccd0;
+	background-color: rgb(200, 204, 208);
 	padding: 1rem;
 	margin: 0.2rem 0;
 }

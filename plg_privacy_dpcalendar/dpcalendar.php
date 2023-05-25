@@ -2,7 +2,7 @@
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
- * @license   http://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
+ * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 defined('_JEXEC') or die();
 
@@ -20,7 +20,7 @@ class PlgPrivacyDPCalendar extends PrivacyPlugin
 			return [];
 		}
 
-		$domains   = [];
+		$domains = [];
 
 		// Event data
 		$domain    = $this->createDomain('user_dpcalendar_event', 'joomla_user_dpcalendar_event_data');

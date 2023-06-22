@@ -178,6 +178,10 @@ class DPCalendarHelper
 
 	public static function parseReadMore($event)
 	{
+		if (!empty($event->introText)) {
+			return;
+		}
+
 		$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
 
 		if (!$event->description || !preg_match($pattern, $event->description)) {

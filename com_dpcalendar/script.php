@@ -23,37 +23,6 @@ class Com_DPCalendarInstallerScript extends InstallerScript
 	protected $minimumJoomla   = '3.10.5';
 	protected $allowDowngrades = true;
 
-	protected $deleteFiles = [
-		// 7.0.0
-		'/administrator/components/com_dpcalendar/models/event.php',
-		// 7.0.6
-		'/components/com_dpcalendar/views/ticketform/tmpl/default.xml',
-		// 8.1.4
-		'/components/com_dpcalendar/sql/updates/mysql/6.0.0.sql',
-		// 8.4.0
-		'/administrator/components/com_dpcalendar/cli/notify.php',
-		'/administrator/components/com_dpcalendar/sql/updates/mysql/8.3.2.sql',
-		// 8.6.0
-		'/administrator/components/com_dpcalendar/libraries/dpcalendar/DPCalendar/Booking/Stages/CreateInvoice.php',
-		'/components/com_dpcalendar/layouts/booking/invoice.php',
-		'/components/com_dpcalendar/views/booking/tmpl/invoice.php'
-	];
-	protected $deleteFolders = [
-		// 7.0.0
-		'/administrator/components/com_dpcalendar/libraries/vendor',
-		// 7.3.3
-		'/plugins/system/dpcalendar',
-		// 8.0.0
-		'/administrator/components/com_dpcalendar/vendor/guzzle',
-		'/administrator/components/com_dpcalendar/vendor/guzzlehttp',
-		'/administrator/components/com_dpcalendar/vendor/omnipay',
-		// 8.0.2
-		'/plugins/dpcalendarpay/2checkout',
-		// 8.5.0
-		'/administrator/components/com_dpcalendar/libraries/dpcalendar/DPCalendar/TCPDF',
-		'/administrator/components/com_dpcalendar/vendor/tecnickcom'
-	];
-
 	public function update($parent)
 	{
 		$path    = JPATH_ADMINISTRATOR . '/components/com_dpcalendar/dpcalendar.xml';
@@ -67,8 +36,6 @@ class Com_DPCalendarInstallerScript extends InstallerScript
 		if (empty($version) || $version == 'DP_DEPLOY_VERSION') {
 			return;
 		}
-
-		$this->removeFiles();
 
 		$db = Factory::getDbo();
 
@@ -91,15 +58,6 @@ class Com_DPCalendarInstallerScript extends InstallerScript
 					'We have disabled the template overrides in ' . $path . '. They do not work with version 7 anymore!',
 					'warning'
 				);
-			}
-
-			// Cleanup files
-			foreach (Folder::files(JPATH_ROOT, '.', true, true) as $path) {
-				if (strpos($path, 'dpcalendar') === false || !file_exists($path) || strpos($path, '/tmpl/edit') === false) {
-					continue;
-				}
-
-				File::delete($path);
 			}
 		}
 
@@ -227,14 +185,6 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			$params->set('receipt_include_tickets', $params->get('invoice_include_tickets', ''));
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
-
-			$files = Folder::files(JPATH_ADMINISTRATOR . '/templates', 'invoice.php', true, true);
-			$files = array_merge($files, Folder::files(JPATH_SITE . '/templates', 'invoice.php', true, true));
-			foreach ($files as $file) {
-				if (strpos($file, '/com_dpcalendar/booking/invoice.php') !== false) {
-					rename($file, str_replace('invoice.php', 'details.php', $file));
-				}
-			}
 		}
 
 		if (version_compare($version, '8.7.0') == -1) {
@@ -263,17 +213,6 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 				$params->set('providers', $providers);
 
 				$this->run('update #__extensions set params = ' . $db->quote($params->toString()) . ' where extension_id = ' . $plugin->extension_id);
-			}
-		}
-
-		if (version_compare($version, '8.9.0') == -1) {
-			// Cleaning up old SQL files
-			if (is_dir(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates')) {
-				foreach (Folder::files(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/sql/updates', '.', true, true) as $updateFile) {
-					if (version_compare(pathinfo($updateFile, PATHINFO_FILENAME), '7.0.0', '<')) {
-						unlink($updateFile);
-					}
-				}
 			}
 		}
 	}

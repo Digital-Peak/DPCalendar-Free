@@ -189,14 +189,14 @@
 	}
 	function ask(element) {
 		element.classList.add('dp-map_consent');
-		element.textContent = Joomla.JText._('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_CONSENT_INFO_TEXT');
+		element.innerHTML = Joomla.JText._('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_CONSENT_INFO_TEXT');
 		element.addEventListener('click', () => {
 			if (!element.classList.contains('dp-map_consent')) {
 				return;
 			}
 			localStorage.setItem('DPCalendar.map.load', true);
 			element.classList.remove('dp-map_consent');
-			element.textContent = '';
+			element.innerHTML = '';
 			create(element);
 		});
 	}

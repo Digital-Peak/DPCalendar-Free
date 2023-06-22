@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form addfieldpath="/administrator/components/com_dpcalendar/models/fields" addrulepath="/administrator/components/com_dpcalendar/models/rules">
+	<config><inlinehelp button="show"/></config>
 	<fieldset name="general" label="COM_DPCALENDAR_CONTENT">
-		<field name="title" type="text" required="true" class="dp-form-input" autocomplete="0"
+		<field name="title" type="text" required="true" class="dp-form-input" autocomplete="0" filter="JComponentHelper::filterText"
 			label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_TITLE_DESC"/>
 
 		<field name="catid" type="dpcalendaredit" class="dp-select"

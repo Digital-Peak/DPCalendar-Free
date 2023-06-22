@@ -210,8 +210,23 @@ class DPCalendarViewEvent extends BaseView
 			Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 			Form::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
 			$this->mailTicketsForm = Form::getInstance('com_dpcalendar.mailtickets', 'mailtickets', ['control' => 'jform']);
-			$this->mailTicketsForm->setValue('subject', null, $this->translate('COM_DPCALENDAR_FIELD_MAILTICKETS_SUBJECT_DEFAULT'));
-			$this->mailTicketsForm->setValue('body', null, $this->translate('COM_DPCALENDAR_FIELD_MAILTICKETS_MESSAGE_DEFAULT'));
+
+			$this->mailTicketsForm->setValue(
+				'subject',
+				null,
+				$this->app->getUserState(
+					'com_dpcalendar.form.event.mailticketsdata.subject',
+					$this->translate('COM_DPCALENDAR_FIELD_MAILTICKETS_SUBJECT_DEFAULT')
+				)
+			);
+			$this->mailTicketsForm->setValue(
+				'body',
+				null,
+				$this->app->getUserState(
+					'com_dpcalendar.form.event.mailticketsdata.message',
+					$this->translate('COM_DPCALENDAR_FIELD_MAILTICKETS_MESSAGE_DEFAULT')
+				)
+			);
 			$this->mailTicketsForm->setValue('event_id', null, $event->id);
 			HTMLHelper::_('behavior.formvalidator');
 		}
@@ -318,11 +333,11 @@ class DPCalendarViewEvent extends BaseView
 
 		$id = $menu && array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
 		if ($menu && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] != 'event' || $id != $this->event->id)) {
-			$this->app->getPathway()->addItem($this->event->title, '');
+			$this->app->getPathway()->addItem(strip_tags($this->event->title), '');
 		}
 
 		// The meta prefix
-		$metaPrefix = $this->event->title . ' '
+		$metaPrefix = strip_tags($this->event->title) . ' '
 		. DPCalendarHelper::getDateStringFromEvent(
 			$this->event,
 			$this->params->get('event_date_format', 'd.m.Y'),
@@ -379,7 +394,7 @@ class DPCalendarViewEvent extends BaseView
 
 		// If this is not a single event menu item, set the page title to the event title
 		if ($menu && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] != 'event' || $id != $this->event->id)) {
-			return $this->event->title;
+			return strip_tags($this->event->title);
 		}
 
 		return parent::getDocumentTitle();

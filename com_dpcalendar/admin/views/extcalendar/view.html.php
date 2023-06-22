@@ -4,9 +4,13 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class DPCalendarViewExtcalendar extends \DPCalendar\View\BaseView
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
+class DPCalendarViewExtcalendar extends BaseView
 {
 	protected $state;
 	protected $item;
@@ -35,28 +39,29 @@ class DPCalendarViewExtcalendar extends \DPCalendar\View\BaseView
 
 	protected function addToolbar()
 	{
-		JFactory::getApplication()->input->set('hidemainmenu', true);
+		$this->app->input->set('hidemainmenu', true);
 
-		$user  = JFactory::getUser();
 		$isNew = ($this->item->id == 0);
 		$canDo = DPCalendarHelper::getActions();
 
 		if ($canDo->get('core.edit')) {
-			JToolbarHelper::apply('extcalendar.apply');
-			JToolbarHelper::save('extcalendar.save');
+			ToolbarHelper::apply('extcalendar.apply');
+			ToolbarHelper::save('extcalendar.save');
 		}
 		if ($canDo->get('core.create')) {
-			JToolbarHelper::save2new('extcalendar.save2new');
+			ToolbarHelper::save2new('extcalendar.save2new');
 		}
 		if (!$isNew && $canDo->get('core.create')) {
-			JToolbarHelper::save2copy('extcalendar.save2copy');
+			ToolbarHelper::save2copy('extcalendar.save2copy');
 		}
 		if (empty($this->item->id)) {
-			JToolbarHelper::cancel('extcalendar.cancel');
+			ToolbarHelper::cancel('extcalendar.cancel');
 		} else {
-			JToolbarHelper::cancel('extcalendar.cancel', 'JTOOLBAR_CLOSE');
+			ToolbarHelper::cancel('extcalendar.cancel', 'JTOOLBAR_CLOSE');
 		}
 
-		JToolbarHelper::divider();
+		ToolbarHelper::divider();
+
+		parent::addToolbar();
 	}
 }

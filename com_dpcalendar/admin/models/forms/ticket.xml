@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
+	<config><inlinehelp button="show"/></config>
 	<fieldset name="general" label="COM_DPCALENDAR_CONTENT"
-	          addfieldpath="/administrator/components/com_dpcalendar/models/fields"
-	          addrulepath="/administrator/components/com_dpcalendar/models/rules">>
+		addfieldpath="/administrator/components/com_dpcalendar/models/fields"
+		addrulepath="/administrator/components/com_dpcalendar/models/rules">>
 		<field name="id" type="text" default="0" readonly="true"
-		       label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
+			label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
 		<field name="name" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NAME_DESC"/>
+			label="COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NAME_DESC"/>
 		<field name="email" type="email" class="dp-form-input" required="true"
-		       label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
+			label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
 		<field name="user_id" type="user"
-		       label="COM_DPCALENDAR_BOOKING_FIELD_USER_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_USER_DESC"/>
+			label="COM_DPCALENDAR_BOOKING_FIELD_USER_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_USER_DESC"/>
 		<field name="price" type="text"
-		       label="COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_PRICE_DESC"/>
+			label="COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_PRICE_DESC"/>
 		<field name="state" type="list" default="1"
-		       label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
+			label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
 			<option value="1">COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED</option>
 			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
 			<option value="2">COM_DPCALENDAR_BOOKING_FIELD_STATE_TICKET_REVIEW</option>
@@ -30,31 +31,30 @@
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
 		<field name="country" type="dpcountries" class="dp-form-input dp-select"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>
+			label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>
 		<field name="province" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL" description=""/>
+			label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL" description=""/>
 		<field name="city" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL" description=""/>
+			label="COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL" description=""/>
 		<field name="zip" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL" description=""/>
+			label="COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL" description=""/>
 		<field name="street" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL" description=""/>
+			label="COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL" description=""/>
 		<field name="number" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL" description=""/>
+			label="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL" description=""/>
 		<field name="telephone" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_DESC"/>
+			label="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_DESC"/>
 		<field name="latitude" type="text" validate="decimal" class="dp-form-input"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_LABEL" description=""/>
+			label="COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_LABEL" description=""/>
 		<field name="longitude" type="text" validate="decimal" class="dp-form-input"
-		       label="COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_LABEL" description=""/>
+			label="COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_LABEL" description=""/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
 		<field name="type" type="text" class="dp-form-input"
-		       label="COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_TYPE_DESC"/>
+			label="COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_TYPE_DESC"/>
 
-		<field name="public" type="dpradio" class="dp-form-radio"
-		       label="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_DESC"
-		       default="1">
+		<field name="public" type="dpradio" class="dp-form-radio" default="1"
+			label="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_PUBLIC_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>

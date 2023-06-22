@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\Adapter\PackageAdapter;
 use Joomla\CMS\Installer\InstallerScript;
 
 class Pkg_DPCalendarInstallerScript extends InstallerScript
@@ -43,6 +44,16 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 		}
 
 		return true;
+	}
+
+	public function update(PackageAdapter $parent)
+	{
+		$file = $parent->getParent()->getPath('source') . '/deleted.php';
+		if (!file_exists($file)) {
+			return;
+		}
+
+		require $file;
 	}
 
 	public function postflight($type, $parent)

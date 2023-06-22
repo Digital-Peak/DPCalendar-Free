@@ -199,6 +199,10 @@ class BaseView extends HtmlView
 	 */
 	protected function addToolbar()
 	{
+		if (DPCalendarHelper::isJoomlaVersion('4', '>') && $this->getModel() instanceof AdminModel) {
+			Toolbar::getInstance()->inlinehelp();
+		}
+
 		$canDo = \DPCalendarHelper::getActions();
 
 		if (empty($this->title)) {

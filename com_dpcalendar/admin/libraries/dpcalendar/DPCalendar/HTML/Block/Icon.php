@@ -33,7 +33,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const CALENDAR = 'calendar-alt';
+	public const CALENDAR = 'calendar-days';
 
 	/**
 	 * The cancel icon.
@@ -110,7 +110,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const EDIT = 'pencil-alt';
+	public const EDIT = 'pencil';
 
 	/**
 	 * The exclamation icon.
@@ -124,7 +124,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const EXTERNAL = 'external-link-square-alt';
+	public const EXTERNAL = 'square-up-right';
 
 	/**
 	 * The expand icon.
@@ -152,7 +152,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const INFO = 'info-circle';
+	public const INFO = 'circle-info';
 
 	/**
 	 * The users icon.
@@ -173,7 +173,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const LOCATION = 'map-marker-alt';
+	public const LOCATION = 'location-dot';
 
 	/**
 	 * The lock icon.
@@ -194,14 +194,14 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const MAP = 'map-marked-alt';
+	public const MAP = 'map-location-dot';
 
 	/**
 	 * The money icon.
 	 *
 	 * @var string
 	 */
-	public const MONEY = 'money-bill-alt';
+	public const MONEY = 'money-bill-1';
 
 	/**
 	 * The multiple item icon.
@@ -250,21 +250,21 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const RECURRING = 'redo';
+	public const RECURRING = 'arrow-rotate-right';
 
 	/**
 	 * The search icon.
 	 *
 	 * @var string
 	 */
-	public const SEARCH = 'search';
+	public const SEARCH = 'magnifying-glass';
 
 	/**
 	 * The signup icon.
 	 *
 	 * @var string
 	 */
-	public const SIGNUP = 'sign-in-alt';
+	public const SIGNUP = 'right-to-bracket';
 
 	/**
 	 * The single item icon.
@@ -278,7 +278,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const SYNC = 'sync';
+	public const SYNC = 'arrows-rotate';
 
 	/**
 	 * The up icon.

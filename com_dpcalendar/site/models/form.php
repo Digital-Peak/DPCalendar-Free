@@ -100,10 +100,18 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 			throw new Exception('COM_DPCALENDAR_ALERT_NO_AUTH');
 		}
 
+		$app = Factory::getApplication();
+
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
 
 		// Flag if only the author should get a mail
 		$onlyAuthor = $ticketIds === [-1];
+
+		$subject = DPCalendarHelper::renderEvents([$event], $subject);
+		$body    = DPCalendarHelper::renderEvents([$event], $body);
+
+		$app->setUserState('com_dpcalendar.form.event.mailticketsdata.subject', $subject);
+		$app->setUserState('com_dpcalendar.form.event.mailticketsdata.message', $body);
 
 		foreach ($event->tickets as $ticket) {
 			if ($ticketIds && !in_array($ticket->id, $ticketIds) && !$onlyAuthor) {
@@ -112,8 +120,8 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 
 			$mailer = Factory::getMailer();
 			$mailer->addReplyTo(Factory::getUser()->email);
-			$mailer->setSubject(DPCalendarHelper::renderEvents([$event], $subject));
-			$mailer->setBody(DPCalendarHelper::renderEvents([$event], $body));
+			$mailer->setSubject($subject);
+			$mailer->setBody($body);
 			$mailer->IsHTML(true);
 			$mailer->AddAddress($onlyAuthor ? Factory::getUser()->email : $ticket->email);
 			$mailer->Send();

@@ -520,7 +520,10 @@ class DPCalendarModelAdminEvent extends AdminModel
 			}
 
 			// When modified events should not be updated and the modified date is different than the original event, ignore it
-			if (array_key_exists('update_modified', $data) && !(int)$data['update_modified'] && $tmp->modified !== $event->modified) {
+			if (array_key_exists('update_modified', $data)
+				&& !(int)$data['update_modified']
+				&& $tmp->modified
+				&& $tmp->modified !== $event->modified) {
 				continue;
 			}
 

@@ -46,7 +46,7 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 		return true;
 	}
 
-	public function update(PackageAdapter $parent)
+	public function update($parent)
 	{
 		$file = $parent->getParent()->getPath('source') . '/deleted.php';
 		if (!file_exists($file)) {

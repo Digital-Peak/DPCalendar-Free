@@ -543,6 +543,7 @@ class Booking
 		$options->set('isRemoteEnabled', true);
 		$options->set('isPhpEnabled', true);
 		$options->setChroot(array_merge([JPATH_ROOT], $options->getChroot()));
+		$options->setTempDir(Factory::getApplication()->get('tmp_path', JPATH_ROOT . '/tmp'));
 		$dompdf = new Dompdf($options);
 		$dompdf->loadHtml($details);
 		$dompdf->setBasePath(JPATH_ROOT);
@@ -567,7 +568,7 @@ class Booking
 
 		$fileName = $name . '.pdf';
 		if ($toFile) {
-			$fileName = JPATH_ROOT . '/tmp/' . $fileName;
+			$fileName = $options->getTempDir() . '/' . $fileName;
 			if (file_exists($fileName)) {
 				unlink($fileName);
 			}

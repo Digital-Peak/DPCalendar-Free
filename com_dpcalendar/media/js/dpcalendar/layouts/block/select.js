@@ -92,19 +92,19 @@
 			});
 			this.input.addEventListener('input', () => {
 				this.updateInputWidth();
-				const options = this.getOptions().map(option => {
-					if ('options' in option) {
-						option.options = option.options.filter(opt => {
-							return opt.label.toLowerCase().trim().includes(this.input.value.toLowerCase().trim());
-						});
-					}
-					return option;
-				}).filter(option => {
-					if ('options' in option) {
-						return option.options.length > 0;
-					}
-					return option.label.toLowerCase().trim().includes(this.input.value.toLowerCase().trim());
-				});
+				const options = this.getOptions()
+					.map(option => {
+						if ('options' in option) {
+							option.options = option.options.filter(opt => opt.label.toLowerCase().trim().includes(this.input.value.toLowerCase().trim()));
+						}
+						return option;
+					})
+					.filter(option => {
+						if ('options' in option) {
+							return option.options.length > 0;
+						}
+						return option.label.toLowerCase().trim().includes(this.input.value.toLowerCase().trim());
+					});
 				this.optionsElement.innerHTML = this.getOptionsHTML(options);
 				this.optionsListener();
 			});
@@ -121,10 +121,18 @@
 		}
 		optionsListener() {
 			Array.from(this.optionsElement.querySelectorAll('.dp-select-option:not([data-disabled="true"])')).forEach((option) => {
-				option.addEventListener('click', () => this.selectValue(option.dataset.value));
+				option.addEventListener('click', () => {
+					if (!document.body.contains(option)) {
+						return;
+					}
+					this.selectValue(option.dataset.value);
+				});
 			});
 			Array.from(this.optionsSelectedElement.querySelectorAll('.dp-select-option:not([data-disabled="true"])')).forEach((option) => {
 				option.addEventListener('click', () => {
+					if (!document.body.contains(option)) {
+						return;
+					}
 					this.selectValue(option.dataset.value);
 				});
 			});

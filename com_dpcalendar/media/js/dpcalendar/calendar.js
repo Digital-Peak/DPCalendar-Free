@@ -469,9 +469,9 @@
 		};
 		iconHandler('angle-left', 'prev');
 		iconHandler('angle-right', 'next');
-		iconHandler('calendar-alt', 'datepicker');
-		iconHandler('expand-alt', 'fullscreen_open');
-		iconHandler('compress-alt', 'fullscreen_close');
+		iconHandler('calendar-days', 'datepicker');
+		iconHandler('up-right-and-down-left-from-center', 'fullscreen_open');
+		iconHandler('down-left-and-up-right-to-center', 'fullscreen_close');
 		iconHandler('print', 'print');
 		iconHandler('plus', 'add');
 	}

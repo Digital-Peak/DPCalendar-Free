@@ -61,14 +61,14 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const COG = 'cog';
+	public const COG = 'gear';
 
 	/**
 	 * The compress icon.
 	 *
 	 * @var string
 	 */
-	public const COMPRESS = 'compress-alt';
+	public const COMPRESS = 'down-left-and-up-right-to-center';
 
 	/**
 	 * The directions icon.
@@ -131,7 +131,7 @@ class Icon
 	 *
 	 * @var string
 	 */
-	public const EXPAND = 'expand-alt';
+	public const EXPAND = 'up-right-and-down-left-from-center';
 
 	/**
 	 * The file icon.

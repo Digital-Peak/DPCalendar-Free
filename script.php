@@ -8,7 +8,6 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
-use Joomla\CMS\Installer\Adapter\PackageAdapter;
 use Joomla\CMS\Installer\InstallerScript;
 
 class Pkg_DPCalendarInstallerScript extends InstallerScript

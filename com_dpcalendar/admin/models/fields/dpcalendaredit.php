@@ -9,12 +9,18 @@ defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\CategoryField;
+use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Plugin\PluginHelper;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Field\\CategoryField', false)) {
+	FormHelper::loadFieldClass('category');
+	class_alias('JFormFieldCategory', '\\Joomla\\CMS\\Form\\Field\\CategoryField');
+}
 
-class JFormFieldDPCalendarEdit extends JFormFieldCategory
+class JFormFieldDPCalendarEdit extends CategoryField
 {
 	public $type = 'DPCalendarEdit';
 

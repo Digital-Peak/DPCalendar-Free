@@ -99,7 +99,7 @@ class DPCalendarViewLocations extends BaseApiView
 		$item->description = $item->text;
 
 		foreach (FieldsHelper::getFields('com_dpcalendar.location', $item, true) as $field) {
-			$item->{$field->name} = isset($field->apivalue) ? $field->apivalue : $field->rawvalue;
+			$item->{$field->name} = $field->apivalue ?? $field->rawvalue;
 		}
 
 		return parent::prepareItem($item);

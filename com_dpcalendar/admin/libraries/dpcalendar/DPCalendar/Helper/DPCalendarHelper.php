@@ -30,7 +30,11 @@ use Joomla\Registry\Registry;
 
 if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 	\JLoader::registerAlias('UsersModelRegistration', '\\Joomla\\Component\\Users\\Site\\Model\\RegistrationModel');
+} else {
+	class_alias('JHtmlSidebar', '\\Joomla\\CMS\\HTML\\Helpers\\Sidebar');
+	class_alias('JHtmlString', '\\Joomla\\CMS\\HTML\\Helpers\\StringHelper');
 }
+
 \JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
 
 class DPCalendarHelper
@@ -189,7 +193,7 @@ class DPCalendarHelper
 			return;
 		}
 
-		list($event->introText, $event->description) = preg_split($pattern, $event->description, 2);
+		[$event->introText, $event->description] = preg_split($pattern, $event->description, 2);
 	}
 
 	public static function parseImages($event)
@@ -202,20 +206,20 @@ class DPCalendarHelper
 		$event->images = new \stdClass();
 
 
-		$event->images->image_intro         = isset($images->image_intro) ? $images->image_intro : null;
-		$event->images->image_intro_width   = isset($images->image_intro_width) ? $images->image_intro_width : null;
-		$event->images->image_intro_height  = isset($images->image_intro_height) ? $images->image_intro_height : null;
-		$event->images->image_intro_alt     = isset($images->image_intro_alt) ? $images->image_intro_alt : null;
-		$event->images->image_intro_caption = isset($images->image_intro_caption) ? $images->image_intro_caption : null;
+		$event->images->image_intro         = $images->image_intro ?? null;
+		$event->images->image_intro_width   = $images->image_intro_width ?? null;
+		$event->images->image_intro_height  = $images->image_intro_height ?? null;
+		$event->images->image_intro_alt     = $images->image_intro_alt ?? null;
+		$event->images->image_intro_caption = $images->image_intro_caption ?? null;
 		$dimensions                         = $event->images->image_intro_width ? ' width="' . $event->images->image_intro_width . '"' : '';
 		$dimensions .= $event->images->image_intro_height ? ' height="' . $event->images->image_intro_height . '"' : '';
 		$event->images->image_intro_dimensions = trim($dimensions);
 
-		$event->images->image_full         = isset($images->image_full) ? $images->image_full : null;
-		$event->images->image_full_width   = isset($images->image_full_width) ? $images->image_full_width : null;
-		$event->images->image_full_height  = isset($images->image_full_height) ? $images->image_full_height : null;
-		$event->images->image_full_alt     = isset($images->image_full_alt) ? $images->image_full_alt : null;
-		$event->images->image_full_caption = isset($images->image_full_caption) ? $images->image_full_caption : null;
+		$event->images->image_full         = $images->image_full ?? null;
+		$event->images->image_full_width   = $images->image_full_width ?? null;
+		$event->images->image_full_height  = $images->image_full_height ?? null;
+		$event->images->image_full_alt     = $images->image_full_alt ?? null;
+		$event->images->image_full_caption = $images->image_full_caption ?? null;
 		$dimensions                        = $event->images->image_full_width ? ' width="' . $event->images->image_full_width . '"' : '';
 		$dimensions .= $event->images->image_full_height ? ' height="' . $event->images->image_full_height . '"' : '';
 		$event->images->image_full_dimensions = trim($dimensions);
@@ -244,7 +248,7 @@ class DPCalendarHelper
 
 	public static function getDate($date = null, $allDay = null, $tz = null): Date
 	{
-		$dateObj = $date instanceof Date ? clone $date : Factory::getDate($date === null ? '' : $date, $tz);
+		$dateObj = $date instanceof Date ? clone $date : Factory::getDate($date ?? '', $tz);
 		if ($allDay) {
 			return $dateObj;
 		}
@@ -426,7 +430,7 @@ class DPCalendarHelper
 				'index.php?option=com_dpcalendar&task=event.delete&e_id=' . $event->id . ($return ? '&return=' . base64_encode($return) : '')
 			);
 
-			$variables['canBook']  = \DPCalendar\Helper\Booking::openForBooking($event);
+			$variables['canBook']  = Booking::openForBooking($event);
 			$variables['bookLink'] = \DPCalendarHelperRoute::getBookingFormRouteFromEvent($event, $return);
 			$variables['booking']  = isset($event->booking) ? (bool)$event->booking : false;
 
@@ -487,7 +491,7 @@ class DPCalendarHelper
 					if (key_exists($location->id, $locationCache)) {
 						$location = $locationCache[$location->id];
 					} else {
-						$tmp                          = \DPCalendar\Helper\Location::format($location);
+						$tmp                          = Location::format($location);
 						$location->full               = $tmp;
 						$locationCache[$location->id] = $tmp;
 						$location                     = $tmp;
@@ -808,7 +812,7 @@ class DPCalendarHelper
 	public static function canCreateEvent()
 	{
 		$user   = Factory::getUser();
-		$canAdd = $user->authorise('core.create', 'com_dpcalendar') || count($user->getAuthorisedCategories('com_dpcalendar', 'core.create'));
+		$canAdd = $user->authorise('core.create', 'com_dpcalendar') || (is_countable($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) ? count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) : 0);
 
 		if (!$canAdd) {
 			PluginHelper::importPlugin('dpcalendar');
@@ -976,11 +980,11 @@ class DPCalendarHelper
 				continue;
 			}
 			if (self::startsWith($q, '-')) {
-				if (strpos($text, substr($q, 1)) !== false) {
+				if (strpos($text, (string) substr($q, 1)) !== false) {
 					return false;
 				}
 			} elseif (self::startsWith($q, '+')) {
-				if (strpos($text, substr($q, 1)) === false) {
+				if (strpos($text, (string) substr($q, 1)) === false) {
 					return false;
 				}
 			} elseif (strpos($text, $q) === false) {
@@ -1020,9 +1024,7 @@ class DPCalendarHelper
 		}
 
 		// Get the field names out of the object
-		$order = array_values(array_map(function ($f) {
-			return isset($f->field) ? $f->field : $f['field'];
-		}, $order));
+		$order = array_values(array_map(fn ($f) => $f->field ?? $f['field'], $order));
 
 		// Sort the fields array when needed
 		if (!$order) {

@@ -94,7 +94,7 @@
 				if (geoComplete && geoComplete.dataset.dpAutocomplete == 1) {
 					loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js'], () => {
 						DPCalendar.autocomplete.create(geoComplete);
-						geoComplete.addEventListener('dp-autocomplete-select', (e) => update(map));
+						geoComplete.addEventListener('dp-autocomplete-select', () => update(map));
 						geoComplete.addEventListener('dp-autocomplete-change', (e) => {
 							let task = 'location.searchloc';
 							if (window.location.href.indexOf('administrator') == -1) {
@@ -141,7 +141,7 @@
 						});
 						return false;
 					});
-					if (!'geolocation' in navigator) {
+					if (!('geolocation' in navigator)) {
 						button.style.display = 'none';
 					}
 				}

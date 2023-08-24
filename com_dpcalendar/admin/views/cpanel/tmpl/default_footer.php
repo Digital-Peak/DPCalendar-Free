@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -10,7 +11,7 @@ $url = 'http://extensions.joomla.org/extensions/extension/calendars-a-events/eve
 ?>
 <div class="com-dpcalendar-cpanel__footer dp-footer">
 	<div class="dp-footer__version">
-		<?php echo JText::sprintf('COM_DPCALENDAR_FOOTER', $this->input->getString('DPCALENDAR_VERSION')); ?>
+		<?php echo Text::sprintf('COM_DPCALENDAR_FOOTER', $this->input->getString('DPCALENDAR_VERSION')); ?>
 	</div>
 	<div class="dp-footer__jed">
 		<span class="small">If you like DPCalendar, please post a positive review at the</span>

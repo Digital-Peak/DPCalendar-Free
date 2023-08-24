@@ -25,7 +25,7 @@ class PlgContentDPCalendar extends CMSPlugin
 	/** @var \Joomla\CMS\Application\CMSApplication */
 	protected $app;
 
-	/** @var JDatabaseDriver */
+	/** @var \Joomla\Database\DatabaseDriver */
 	protected $db;
 
 	protected $autoloadLanguage = true;

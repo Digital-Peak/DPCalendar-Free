@@ -1,4 +1,7 @@
 <?php
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,14 +9,14 @@
  */
 defined('_JEXEC') or die();
 
-if (!\DPCalendar\Helper\DPCalendarHelper::canCreateEvent()) {
+if (!DPCalendarHelper::canCreateEvent()) {
 	return;
 }
 
 $this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
 ?>
 <div class="com-dpcalendar-calendar__quickadd dp-quickadd">
-	<form action="<?php echo $this->router->getEventFormRoute(0, JUri::getInstance()->toString()); ?>" method="post"
+	<form action="<?php echo $this->router->getEventFormRoute(0, Uri::getInstance()->toString()); ?>" method="post"
 		  class="dp-form form-validate">
 		<?php echo $this->quickaddForm->renderField('start_date'); ?>
 		<?php echo $this->quickaddForm->renderField('end_date'); ?>
@@ -26,7 +29,7 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
 		<input type="hidden" name="layout" value="edit" class="dp-input dp-input-hidden">
 		<input type="hidden" name="jform[location_ids][]" class="dp-input dp-input-hidden">
 		<input type="hidden" name="jform[rooms][]" class="dp-input dp-input-hidden">
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 		<div class="dp-quickadd__buttons">
 			<button type="button" class="dp-button dp-quickadd__button-submit">
 				<?php echo $this->translate('JSAVE'); ?>

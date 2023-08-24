@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\HTML\Helpers\StringHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -56,7 +57,7 @@ foreach ($this->event->tickets as $ticket) {
 			<tr>
 				<?php if (!$limited) { ?>
 					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?>">
-						<?php echo JHtmlString::abridge($ticket->uid, 15, 5); ?>
+						<?php echo StringHelper::abridge($ticket->uid, 15, 5); ?>
 					</td>
 					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?>">
 						<?php echo Booking::getStatusLabel($ticket); ?>

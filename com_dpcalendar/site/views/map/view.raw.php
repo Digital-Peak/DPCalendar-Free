@@ -97,7 +97,7 @@ class DPCalendarViewMap extends BaseView
 		$items = $this->get('Items');
 
 		// Check for errors
-		if (count($errors = $this->get('Errors'))) {
+		if (is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) {
 			throw new Exception(implode("\n", $errors));
 		}
 

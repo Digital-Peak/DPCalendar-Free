@@ -15,7 +15,7 @@ use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
 
-JLoader::register('DPCalendarHelper', dirname(__FILE__) . '/admin/helpers/dpcalendar.php');
+JLoader::register('DPCalendarHelper', __DIR__ . '/admin/helpers/dpcalendar.php');
 
 class Com_DPCalendarInstallerScript extends InstallerScript
 {
@@ -185,6 +185,16 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			$params->set('receipt_include_tickets', $params->get('invoice_include_tickets', ''));
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
+
+		if (version_compare($version, '8.14.0') == -1) {
+			if (version_compare(4, JVERSION, '>')) {
+				// Force standard routing on Joomla 4
+				$params = ComponentHelper::getParams('com_dpcalendar');
+				$params->set('sef_advanced', 1);
+
+				$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+			}
 		}
 
 		if (version_compare($version, '8.7.0') == -1) {

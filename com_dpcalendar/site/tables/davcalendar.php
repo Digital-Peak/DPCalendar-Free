@@ -1,4 +1,10 @@
 <?php
+
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +12,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarTableDavcalendar extends JTable
+class DPCalendarTableDavcalendar extends Table
 {
 	public function __construct(&$db)
 	{
@@ -30,19 +36,19 @@ class DPCalendarTableDavcalendar extends JTable
 	{
 		// Check for valid name
 		if (trim($this->displayname) == '') {
-			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
+			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
 
 			return false;
 		}
 
 		// Check for existing name
 		$query = 'SELECT id FROM #__dpcalendar_caldav_calendarinstances WHERE uri = ' . $this->_db->Quote($this->uri ?: '') .
-			" and principaluri = 'principals/" . JFactory::getUser()->username . "'";
+			" and principaluri = 'principals/" . Factory::getUser()->username . "'";
 		$this->_db->setQuery($query);
 
 		$xid = (int)$this->_db->loadResult();
 		if ($xid && $xid != (int)$this->id) {
-			$this->setError(JText::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
+			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 
 			return false;
 		}
@@ -50,12 +56,12 @@ class DPCalendarTableDavcalendar extends JTable
 		if (empty($this->uri)) {
 			$this->uri = $this->displayname;
 		}
-		$this->uri = JApplicationHelper::stringURLSafe($this->uri);
+		$this->uri = ApplicationHelper::stringURLSafe($this->uri);
 		if (trim(str_replace('-', '', $this->uri)) == '') {
-			$this->uri = JFactory::getDate()->format("Y-m-d-H-i-s");
+			$this->uri = Factory::getDate()->format("Y-m-d-H-i-s");
 		}
 
-		$this->principaluri = 'principals/' . JFactory::getUser()->username;
+		$this->principaluri = 'principals/' . Factory::getUser()->username;
 
 		return true;
 	}

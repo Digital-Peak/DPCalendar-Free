@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -24,7 +25,7 @@ foreach ($event->tickets as $t) {
 
 if ($tickets) {
 	$this->app->enqueueMessage(
-		JText::plural('COM_DPCALENDAR_VIEW_EVENT_BOOKED_TEXT', count($tickets), DPCalendarHelperRoute::getTicketsRoute(null, $event->id, true))
+		Text::plural('COM_DPCALENDAR_VIEW_EVENT_BOOKED_TEXT', count($tickets), DPCalendarHelperRoute::getTicketsRoute(null, $event->id, true))
 	);
 }
 ?>

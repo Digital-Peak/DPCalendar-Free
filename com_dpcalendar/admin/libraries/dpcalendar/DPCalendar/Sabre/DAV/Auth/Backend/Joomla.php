@@ -7,20 +7,24 @@
 
 namespace DPCalendar\Sabre\DAV\Auth\Backend;
 
-use Sabre\DAV\Auth\Backend;
+use Joomla\CMS\Authentication\Authentication;
+use Joomla\CMS\Factory;
+use Joomla\CMS\User\User;
+use Joomla\CMS\User\UserHelper;
+use Sabre\DAV\Auth\Backend\AbstractBasic;
 
-class Joomla extends Backend\AbstractBasic
+class Joomla extends AbstractBasic
 {
 	protected function validateUserPass($username, $password)
 	{
-		$authenticate = \JAuthentication::getInstance();
+		$authenticate = Authentication::getInstance();
 		$response     = $authenticate->authenticate(['username' => $username, 'password' => $password]);
 
-		if ($response->status === \JAuthentication::STATUS_SUCCESS) {
-			$user = \JUser::getInstance((\JUserHelper::getUserId($username)));
-			\JFactory::getSession()->set('user', $user);
+		if ($response->status === Authentication::STATUS_SUCCESS) {
+			$user = User::getInstance((UserHelper::getUserId($username)));
+			Factory::getSession()->set('user', $user);
 		}
 
-		return $response->status === \JAuthentication::STATUS_SUCCESS;
+		return $response->status === Authentication::STATUS_SUCCESS;
 	}
 }

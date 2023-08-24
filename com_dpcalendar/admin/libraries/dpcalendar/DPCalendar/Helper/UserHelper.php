@@ -7,12 +7,14 @@
 
 namespace DPCalendar\Helper;
 
+use Joomla\CMS\Factory;
+
 defined('_JEXEC') or die();
 
 class UserHelper
 {
 	public function getUser($id = null)
 	{
-		return \JFactory::getUser($id);
+		return Factory::getUser($id);
 	}
 }

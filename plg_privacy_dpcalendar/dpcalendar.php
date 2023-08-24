@@ -1,4 +1,7 @@
 <?php
+
+use Joomla\CMS\User\User;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -14,7 +17,7 @@ JLoader::register('PrivacyPlugin', JPATH_ADMINISTRATOR . '/components/com_privac
 
 class PlgPrivacyDPCalendar extends PrivacyPlugin
 {
-	public function onPrivacyExportRequest(PrivacyTableRequest $request, JUser $user = null)
+	public function onPrivacyExportRequest(PrivacyTableRequest $request, User $user = null)
 	{
 		if (!$user) {
 			return [];

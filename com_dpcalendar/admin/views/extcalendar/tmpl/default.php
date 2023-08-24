@@ -1,4 +1,6 @@
 <?php
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -10,7 +12,7 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/adminform/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/extcalendar/default.js');
 
 if ($this->input->getCmd('tmpl') == 'component') {
-	$bar = JToolbar::getInstance('toolbar');
+	$bar = Toolbar::getInstance('toolbar');
 	echo $bar->render();
 }
 
@@ -29,6 +31,6 @@ $fieldSets = ['general' => $fieldSets['general']] + $fieldSets;
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<input type="hidden" name="dpplugin" value="<?php echo $this->input->get('dpplugin') ?>" class="dp-input dp-input-hidden"/>
 		<input type="hidden" name="tmpl" value="<?php echo $this->input->get('tmpl') ?>" class="dp-input dp-input-hidden"/>
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 </div>

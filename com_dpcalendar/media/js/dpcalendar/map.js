@@ -60,7 +60,7 @@
 		}
 		marker.setLatLng([latitude, longitude]);
 		map.dpmap.dpBounds = new L.latLngBounds();
-		map.dpmap.dpMarkers.forEach((m) => map.dpmap.dpBounds.extend(marker.getLatLng()));
+		map.dpmap.dpMarkers.forEach((m) => map.dpmap.dpBounds.extend(m.getLatLng()));
 		map.dpmap.panTo(map.dpmap.dpBounds.getCenter());
 	}
 	function createMap(element) {
@@ -90,15 +90,15 @@
 		if (Joomla.getOptions('DPCalendar.map.tiles.url') == 'google') {
 			let type = google.maps.MapTypeId.ROADMAP;
 			switch (options.type) {
-				case 2:
-					type = google.maps.MapTypeId.SATELLITE;
-					break;
-				case 3:
-					type = google.maps.MapTypeId.HYBRID;
-					break;
-				case 4:
-					type = google.maps.MapTypeId.TERRAIN;
-					break;
+			case 2:
+				type = google.maps.MapTypeId.SATELLITE;
+				break;
+			case 3:
+				type = google.maps.MapTypeId.HYBRID;
+				break;
+			case 4:
+				type = google.maps.MapTypeId.TERRAIN;
+				break;
 			}
 			const tiles = L.gridLayer.googleMutant({ type: type });
 			tiles.addTo(map);

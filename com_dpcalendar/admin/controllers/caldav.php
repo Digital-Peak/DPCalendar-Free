@@ -1,4 +1,10 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,11 +12,11 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarControllerCaldav extends JControllerLegacy
+class DPCalendarControllerCaldav extends BaseController
 {
 	public function sync()
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		// Sync users
 		$db->setQuery('delete from #__dpcalendar_caldav_principals where external_id not in (select id from #__users)');
@@ -46,9 +52,9 @@ class DPCalendarControllerCaldav extends JControllerLegacy
 		$db->execute();
 
 		$db->setQuery('select count(id) from #__users');
-		$msg = sprintf(JText::_('COM_DPCALENDAR_CONTROLLER_CALDAV_SYNC_SUCCESS'), $db->loadResult());
+		$msg = sprintf(Text::_('COM_DPCALENDAR_CONTROLLER_CALDAV_SYNC_SUCCESS'), $db->loadResult());
 
-		$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=tools', false), $msg);
+		$this->setRedirect(Route::_('index.php?option=com_dpcalendar&view=tools', false), $msg);
 
 		return true;
 	}

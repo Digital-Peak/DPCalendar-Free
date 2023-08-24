@@ -7,8 +7,8 @@
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\DPCalendarHelper;
 use DigitalPeak\ThinHTTP as HTTP;
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;

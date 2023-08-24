@@ -7,9 +7,6 @@
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
@@ -22,12 +19,12 @@
 }
 .com-dpcalendar-event-mailtickets .dp-button:disabled,
 .com-dpcalendar-event-mailtickets .dp-button[disabled] {
-	background-color: #cccccc;
-	color: #666666;
+	background-color: #ccc;
+	color: #666;
 	cursor: not-allowed;
 }
 .com-dpcalendar-event-mailtickets .dp-icon svg {
-	fill: currentColor;
+	fill: currentcolor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
@@ -49,9 +46,10 @@
 .com-dpcalendar-event-mailtickets .dp-control_hidden {
 	display: none;
 }
-@media screen and (max-width: 640px) {
-	.com-dpcalendar-event-mailtickets .dp-control:not(.dp-control_hidden), .com-dpcalendar-event-mailtickets .control-group:not(.dp-control_hidden) {
-		display: block;
+@media screen and (width <= 640px) {
+	.com-dpcalendar-event-mailtickets .dp-control, .com-dpcalendar-event-mailtickets .control-group {
+		/* stylelint-disable-next-line selector-class-pattern */
+		/* stylelint-disable-next-line selector-class-pattern */
 	}
 	.com-dpcalendar-event-mailtickets .dp-control__label, .com-dpcalendar-event-mailtickets .control-group .control-label,
 	.com-dpcalendar-event-mailtickets .control-group .form-label, .com-dpcalendar-event-mailtickets .dp-control__input, .com-dpcalendar-event-mailtickets .control-group .controls,
@@ -59,12 +57,15 @@
 		width: 100%;
 		margin-left: 0;
 	}
-	.com-dpcalendar-event-mailtickets .control-group:not(.dp-control_hidden) {
+	.com-dpcalendar-event-mailtickets .dp-control:not(.dp-control_hidden), .com-dpcalendar-event-mailtickets .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-event-mailtickets .dp-control control-label, .com-dpcalendar-event-mailtickets .control-group control-label,
-	.com-dpcalendar-event-mailtickets .dp-control controls,
-	.com-dpcalendar-event-mailtickets .control-group controls {
+	.com-dpcalendar-event-mailtickets .dp-control .control-group:not(.dp-control_hidden), .com-dpcalendar-event-mailtickets .control-group .control-group:not(.dp-control_hidden) {
+		display: block;
+	}
+	.com-dpcalendar-event-mailtickets .dp-control .control-label, .com-dpcalendar-event-mailtickets .control-group .control-label,
+	.com-dpcalendar-event-mailtickets .dp-control .controls,
+	.com-dpcalendar-event-mailtickets .control-group .controls {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -89,7 +90,7 @@
 	position: relative;
 }
 .com-dpcalendar-event-mailtickets .dp-select-container__options {
-	background: #ffffff;
+	background: #fff;
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
 	max-height: 300px;
@@ -123,8 +124,6 @@
 	padding: 0.2rem;
 	border-radius: 0.25rem;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 	box-sizing: border-box;
 }

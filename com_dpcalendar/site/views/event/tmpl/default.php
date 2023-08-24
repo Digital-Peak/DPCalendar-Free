@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -60,7 +61,7 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 		<?php echo $this->loadTemplate('title'); ?>
 		<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
 		<div class="com-dpcalendar-event__custom-text com-dpcalendar-event__custom-text-before">
-			<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('event_textbefore'))); ?>
+			<?php echo HTMLHelper::_('content.prepare', $this->translate($this->params->get('event_textbefore'))); ?>
 		</div>
 	</div>
 	<?php echo $taxesContent; ?>
@@ -76,7 +77,7 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 	<?php echo $locationsContent; ?>
 	<?php echo $ticketsContent; ?>
 	<div class="com-dpcalendar-event__custom-text com-dpcalendar-event__custom-text-after">
-		<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('event_textafter'))); ?>
+		<?php echo HTMLHelper::_('content.prepare', $this->translate($this->params->get('event_textafter'))); ?>
 	</div>
 	<?php echo $this->layoutHelper->renderLayout('schema.event', $this->displayData); ?>
 </div>

@@ -18,6 +18,7 @@ use DPCalendar\Router\Router;
 use DPCalendar\Translator\Translator;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\Helpers\Sidebar;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
@@ -139,7 +140,7 @@ class BaseView extends HtmlView
 			if (!($this->getModel() instanceof AdminModel)
 				&& $this->input->get('tmpl') != 'component'
 				&& DPCalendarHelper::isJoomlaVersion('4', '<')) {
-				$this->sidebar = \JHtmlSidebar::render();
+				$this->sidebar = Sidebar::render();
 			} else {
 				$this->sidebar = null;
 			}

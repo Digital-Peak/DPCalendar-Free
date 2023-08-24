@@ -7,9 +7,11 @@
 
 namespace DPCalendar\Plugin;
 
+use Sabre\VObject\Component\VEvent;
+use Sabre\VObject\DateTimeParser;
+
 defined('_JEXEC') or die();
 
-use DateTimeZone;
 use DigitalPeak\ThinHTTP as HTTP;
 use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\Helper\Ical;
@@ -199,8 +201,8 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		try {
 			if ($options->get('expand', true)) {
 				// Needs a timezone rest as e want to work always in UTC
-				$startDate->setTimezone(new DateTimeZone('UTC'));
-				$endDate->setTimezone(new DateTimeZone('UTC'));
+				$startDate->setTimezone(new \DateTimeZone('UTC'));
+				$endDate->setTimezone(new \DateTimeZone('UTC'));
 				$cal = $cal->expand($startDate, $endDate);
 			}
 		} catch (\Exception $e) {
@@ -285,7 +287,6 @@ abstract class DPCalendarPlugin extends CMSPlugin
 	protected function fetchCalendars($calendarIds = null)
 	{
 		if ($this->extCalendarsCache === null) {
-			\JLoader::import('joomla.application.component.model');
 			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 			$model = BaseDatabaseModel::getInstance('Extcalendars', 'DPCalendarModel', ['ignore_request' => true]);
@@ -408,7 +409,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 	public function onEventFetch($eventId)
 	{
-		if (strpos($eventId, $this->identifier) !== 0) {
+		if (strpos($eventId, (string) $this->identifier) !== 0) {
 			return;
 		}
 
@@ -440,7 +441,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 	public function onEventsFetch($calendarId, Date $startDate = null, Date $endDate = null, Registry $options = null)
 	{
-		if ($calendarId && strpos($calendarId, $this->identifier) !== 0) {
+		if ($calendarId && strpos($calendarId, (string) $this->identifier) !== 0) {
 			return [];
 		}
 
@@ -486,7 +487,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 				$calendarIds = [$calendarIds];
 			}
 			foreach ($calendarIds as $calendarId) {
-				if (strpos($calendarId, $this->identifier) === 0) {
+				if (strpos($calendarId, (string) $this->identifier) === 0) {
 					$ids[] = (int)str_replace($this->identifier . '-', '', $calendarId);
 				}
 			}
@@ -649,7 +650,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			libxml_use_internal_errors($oldErrorHandling);
 		}
 
-		if (!$catId || strpos($catId, $this->identifier) !== 0) {
+		if (!$catId || strpos($catId, (string) $this->identifier) !== 0) {
 			return true;
 		}
 
@@ -763,7 +764,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 	 *
 	 * @return \stdClass
 	 */
-	private function createEventFromIcal(\Sabre\VObject\Component\VEvent $event, $calendarId, array $originals)
+	private function createEventFromIcal(VEvent $event, $calendarId, array $originals)
 	{
 		$allDay = !$event->DTSTART->hasTime();
 		// Microsoft has a special property to flag all day events
@@ -776,7 +777,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$endDate = null;
 		if ($event->DURATION != null) {
 			$endDate  = clone $startDate;
-			$duration = \Sabre\VObject\DateTimeParser::parseDuration($event->DURATION, true);
+			$duration = DateTimeParser::parseDuration($event->DURATION, true);
 			$endDate->modify($duration);
 
 			if ($allDay) {
@@ -989,7 +990,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 					$locationModel->getState();
 					$locationModel->setState('list.limit', 1);
 				}
-				list($latitude, $longitude) = explode(';', $geo);
+				[$latitude, $longitude] = explode(';', $geo);
 				$locationModel->setState('filter.latitude', $latitude);
 				$locationModel->setState('filter.longitude', $longitude);
 
@@ -1005,7 +1006,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 						$tmpEvent->location_ids[] = $dpLocation->id;
 					}
 				} else {
-					list($latitude, $longitude) = explode(';', $geo);
+					[$latitude, $longitude] = explode(';', $geo);
 
 					$locations[] = Location::get($latitude . ',' . $longitude, true, $location);
 				}
@@ -1013,10 +1014,8 @@ abstract class DPCalendarPlugin extends CMSPlugin
 				$locations[] = Location::get(Ical::icalDecode($location));
 			}
 		}
-		$tmpEvent->locations = array_filter($locations, function ($location) {
-			return (int)$location->state === 1;
-		});
-		$tmpEvent->all_day = $allDay ? 1 : 0;
+		$tmpEvent->locations = array_filter($locations, fn ($location) => (int)$location->state === 1);
+		$tmpEvent->all_day   = $allDay ? 1 : 0;
 
 		if ($original !== null && $recId !== null) {
 			$tmpEvent->original_id = $this->identifier . '-' . $calendarId . '-' . $event->UID . '_0';
@@ -1065,7 +1064,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			return true;
 		}
 
-		$locationFilterData            = new  \stdClass();
+		$locationFilterData            = new \stdClass();
 		$locationFilterData->latitude  = null;
 		$locationFilterData->longitude = null;
 
@@ -1075,7 +1074,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 
 		if (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
-			list($latitude, $longitude)    = explode(';', $location);
+			[$latitude, $longitude]        = explode(';', $location);
 			$locationFilterData->latitude  = str_replace('latitude=', '', $latitude);
 			$locationFilterData->longitude = str_replace('longitude=', '', $longitude);
 		} else {
@@ -1100,6 +1099,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 	protected function cleanupFormForEdit($ccalendarId, Form $form, $data)
 	{
+		$hideFieldsets             = [];
 		$hideFieldsets['params']   = 'jbasic';
 		$hideFieldsets[]           = 'booking';
 		$hideFieldsets[]           = 'publishing';

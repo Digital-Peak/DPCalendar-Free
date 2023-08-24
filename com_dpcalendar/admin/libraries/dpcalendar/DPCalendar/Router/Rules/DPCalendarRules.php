@@ -20,7 +20,7 @@ class DPCalendarRules extends MenuRules
 		parent::parse($segments, $vars);
 
 		// When tickets or bookings should be shown as part of the event details view
-		if (count($segments) === 2 && in_array($segments[1], ['tickets', 'bookings'])) {
+		if ((is_countable($segments) ? count($segments) : 0) === 2 && in_array($segments[1], ['tickets', 'bookings'])) {
 			$vars['view'] = $segments[1];
 			$vars['e_id'] = $this->router->getEventId($segments[0], []);
 			unset($segments[0]);
@@ -28,7 +28,7 @@ class DPCalendarRules extends MenuRules
 		}
 
 		// When tickets or bookings should be shown as part of the event details menu item view
-		if (count($segments) === 1 && in_array($segments[0], ['tickets', 'bookings'])) {
+		if ((is_countable($segments) ? count($segments) : 0) === 1 && in_array($segments[0], ['tickets', 'bookings'])) {
 			$vars['view'] = $segments[0];
 			unset($segments[0]);
 

@@ -13,7 +13,7 @@
 		</field>
 	</fieldset>
 	<fieldset name="options">
-		<field name="description" type="editor" buttons="true" hide="pagebreak,readmore" filter="JComponentHelper::filterText"
+		<field name="description" type="editor" buttons="true" hide="pagebreak,readmore" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_EXTCALENDAR_FIELD_DESCRIPTION_DESC"/>
 		<field name="access" type="accesslevel" default="1"
 			label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>

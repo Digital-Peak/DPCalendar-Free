@@ -1,4 +1,6 @@
 <?php
+use DPCalendar\HTML\Block\Icon;
+use Joomla\CMS\Uri\Uri;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -21,9 +23,9 @@ defined('_JEXEC') or die();
 					<div class=dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<h<?php echo $id ? 3 : 2; ?> class="dp-heading">
 							<span class="dp-heading__icon" style="color: #<?php echo $location->color; ?>">
-								<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
+								<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
 							</span>
-							<a href="<?php echo $this->router->getLocationRoute($location, JUri::getInstance()); ?>" class="dp-link">
+							<a href="<?php echo $this->router->getLocationRoute($location, Uri::getInstance()); ?>" class="dp-link">
 								<?php echo $location->title; ?>
 							</a>
 						</h<?php echo $id ? 3 : 2; ?>>

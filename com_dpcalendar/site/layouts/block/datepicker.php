@@ -25,7 +25,7 @@ $displayData['localFormat'] = !empty($displayData['localFormat']) ? $displayData
 		data-date="<?php echo !empty($displayData['date']) ? $displayData['date']->format('Y-m-d', $displayData['localFormat']) : ''; ?>"
 		data-first-day="<?php echo !empty($displayData['firstDay']) ? $displayData['firstDay'] : ''; ?>"
 		data-pair="<?php echo !empty($displayData['pair']) ? $displayData['pair'] : ''; ?>">
-	<button type="button" class="dp-datepicker__button dp-button">
+	<button type="button" class="dp-datepicker__button dp-button" aria-label="<?php echo !empty($displayData['title']) ? $displayData['title'] : ''; ?>">
 		<?php echo $displayData['layoutHelper']->renderLayout('block.icon', ['icon' => Icon::CALENDAR]); ?>
 	</button>
 </div>

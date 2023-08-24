@@ -1,4 +1,9 @@
 <?php
+
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Model\ListModel;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,7 +13,7 @@ defined('_JEXEC') or die();
 
 use Joomla\Utilities\ArrayHelper;
 
-class DPCalendarModelTaxrates extends JModelList
+class DPCalendarModelTaxrates extends ListModel
 {
 	public function __construct($config = [])
 	{
@@ -45,8 +50,8 @@ class DPCalendarModelTaxrates extends JModelList
 		$authorId = $this->getUserStateFromRequest($this->context . '.filter.author_id', 'filter_author_id');
 		$this->setState('filter.author_id', $authorId);
 
-		$app = JFactory::getApplication();
-		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : JComponentHelper::getParams('com_dpcalendar'));
+		$app = Factory::getApplication();
+		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
 		// List state information.
 		parent::populateState('a.title', 'asc');
@@ -83,7 +88,7 @@ class DPCalendarModelTaxrates extends JModelList
 		// Create a new query object
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user  = JFactory::getUser();
+		$user  = Factory::getUser();
 
 		// Select the required fields from the table
 		$query->select($this->getState('list.select', 'a.*'));

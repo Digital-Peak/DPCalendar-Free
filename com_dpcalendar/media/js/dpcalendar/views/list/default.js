@@ -114,7 +114,7 @@
 					});
 					return false;
 				});
-				if (!'geolocation' in navigator) {
+				if (!('geolocation' in navigator)) {
 					button.style.display = 'none';
 				}
 			}

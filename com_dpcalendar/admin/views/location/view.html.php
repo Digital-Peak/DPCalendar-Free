@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +10,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewLocation extends \DPCalendar\View\BaseView
+class DPCalendarViewLocation extends BaseView
 {
 	public function init()
 	{
@@ -23,22 +27,22 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		$canDo      = DPCalendarHelper::getActions();
 
 		if (!$checkedOut && $canDo->get('core.edit')) {
-			JToolbarHelper::apply('location.apply');
-			JToolbarHelper::save('location.save');
+			ToolbarHelper::apply('location.apply');
+			ToolbarHelper::save('location.save');
 		}
 		if (!$checkedOut && $canDo->get('core.create')) {
-			JToolbarHelper::save2new('location.save2new');
+			ToolbarHelper::save2new('location.save2new');
 		}
 		if (!$isNew && $canDo->get('core.create')) {
-			JToolbarHelper::save2copy('location.save2copy');
+			ToolbarHelper::save2copy('location.save2copy');
 		}
 		if (empty($this->location->id)) {
-			JToolbarHelper::cancel('location.cancel');
+			ToolbarHelper::cancel('location.cancel');
 		} else {
-			JToolbarHelper::cancel('location.cancel', 'JTOOLBAR_CLOSE');
+			ToolbarHelper::cancel('location.cancel', 'JTOOLBAR_CLOSE');
 		}
 
-		JToolbarHelper::divider();
+		ToolbarHelper::divider();
 		parent::addToolbar();
 	}
 }

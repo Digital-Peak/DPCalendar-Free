@@ -1,4 +1,9 @@
 <?php
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\Router\Route;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +11,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarController extends JControllerLegacy
+class DPCalendarController extends BaseController
 {
 	public function display($cachable = false, $urlparams = false)
 	{
@@ -28,9 +33,9 @@ class DPCalendarController extends JControllerLegacy
 		// Check for edit form.
 		if ($view == 'event' && $layout == 'edit' && !$this->checkEditId('com_dpcalendar.edit.event', $id)) {
 			// Somehow the person just went to the form - we don't allow that.
-			$this->setError(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
+			$this->setError(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id));
 			$this->setMessage($this->getError(), 'error');
-			$this->setRedirect(JRoute::_('index.php?option=com_dpcalendar&view=events', false));
+			$this->setRedirect(Route::_('index.php?option=com_dpcalendar&view=events', false));
 
 			return false;
 		}

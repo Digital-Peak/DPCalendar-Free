@@ -43,7 +43,7 @@
 	};
 	DPCalendar.print = (selector) => {
 		document.body.outerHTML = document.querySelector(selector).outerHTML;
-		window.addEventListener('afterprint', (event) => {
+		window.addEventListener('afterprint', () => {
 			setTimeout(() => window.location.reload(true), 2000);
 		});
 		window.print();
@@ -82,7 +82,7 @@
 		const str = [];
 		let p;
 		for (p in array) {
-			if (array.hasOwnProperty(p)) {
+			if (Object.prototype.hasOwnProperty.call(array, p)) {
 				const k = prefix ? prefix + '[' + p + ']' : p,
 					v = array[p];
 				str.push(
@@ -272,7 +272,7 @@
 		target.style.marginBottom = 0;
 		target.offsetHeight;
 		target.style.boxSizing = 'border-box';
-		target.style.transitionProperty = "height, margin, padding";
+		target.style.transitionProperty = 'height, margin, padding';
 		target.style.transitionDuration = '700ms';
 		target.style.height = height + 'px';
 		target.style.removeProperty('padding-top');

@@ -32,7 +32,7 @@ class DPCalendarViewForm extends BaseView
 			$authorised = DPCalendarHelper::canCreateEvent() || !empty(array_filter($tmp));
 		}
 
-		if (!$authorised && count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) < 1) {
+		if (!$authorised && (is_countable($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) ? count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) : 0) < 1) {
 			return $this->handleNoAccess();
 		}
 

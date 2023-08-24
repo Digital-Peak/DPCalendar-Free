@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\Helper\Booking;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -18,7 +19,7 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 			<?php $this->displayData['event'] = $event; ?>
 			<?php $calendar = DPCalendarHelper::getCalendar($event->catid); ?>
 			<li class="dp-list-unordered__item dp-event dp-event_<?php echo $event->ongoing_start_date ? ($event->ongoing_end_date ? 'started' : 'finished') : 'future'; ?>"
-				data-calid="<?php echo $calendar->id; ?>">
+				data-id="<?php echo $event->id; ?>" data-calid="<?php echo $calendar->id; ?>">
 				<?php echo $this->loadTemplate('events_title'); ?>
 				<?php if ($this->params->get('list_show_display_events') && $event->displayEvent->afterDisplayTitle) { ?>
 					<div class="dp-event__display-after-title"><?php echo $event->displayEvent->afterDisplayTitle; ?></div>
@@ -81,7 +82,7 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 						</div>
 					<?php } ?>
 				</div>
-				<?php if ($this->params->get('list_show_booking', 1) && \DPCalendar\Helper\Booking::openForBooking($event)) { ?>
+				<?php if ($this->params->get('list_show_booking', 1) && Booking::openForBooking($event)) { ?>
 					<a href="<?php echo $this->router->getBookingFormRouteFromEvent($event, $this->returnPage); ?>"
 					   class="dp-link dp-link_cta dp-button">
 						<?php echo $this->layoutHelper->renderLayout(

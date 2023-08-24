@@ -17,6 +17,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
@@ -149,9 +150,9 @@ class DPCalendarModelLocation extends AdminModel
 			$data['alias'] = $origTable->title === $data['title'] ? $origTable->alias : '';
 
 			if ($data['title'] == $origTable->title) {
-				list($title, $alias) = $this->findNewTitle($data['alias'], $data['title']);
-				$data['title']       = $title;
-				$data['alias']       = $alias;
+				[$title, $alias] = $this->findNewTitle($data['alias'], $data['title']);
+				$data['title']   = $title;
+				$data['alias']   = $alias;
 			} elseif ($data['alias'] == $origTable->alias) {
 				$data['alias'] = '';
 			}
@@ -169,7 +170,7 @@ class DPCalendarModelLocation extends AdminModel
 			// Create the subject
 			$subject = DPCalendarHelper::renderEvents(
 				[],
-				JText::_('COM_DPCALENDAR_NOTIFICATION_LOCATION_SUBJECT_CREATE'),
+				Text::_('COM_DPCALENDAR_NOTIFICATION_LOCATION_SUBJECT_CREATE'),
 				null,
 				['location' => $data]
 			);
@@ -240,7 +241,7 @@ class DPCalendarModelLocation extends AdminModel
 
 		$this->preprocessData('com_dpcalendar.location', $data);
 
-		return $data;
+		return $data instanceof Table ? $data->getProperties() : $data;
 	}
 
 	private function getDefaultValues(CMSObject $item)
@@ -369,7 +370,7 @@ class DPCalendarModelLocation extends AdminModel
 			return Factory::getApplication()->getParams();
 		}
 
-		return  ComponentHelper::getParams('com_dpcalendar');
+		return ComponentHelper::getParams('com_dpcalendar');
 	}
 
 	private function findNewTitle($alias, $title)

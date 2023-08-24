@@ -4,22 +4,33 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-JFormHelper::loadFieldClass('list');
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\ListField;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Registry\Registry;
 
-class JFormFieldDPMenuItems extends JFormFieldList
+JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
+if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Field\\ListField', false)) {
+	FormHelper::loadFieldClass('list');
+	class_alias('JFormFieldList', '\\Joomla\\CMS\\Form\\Field\\ListField');
+}
+
+class JFormFieldDPMenuItems extends ListField
 {
 	public $type = 'DPMenuItems';
 
 	public function getOptions()
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 		$id  = $app->input->getInt('id');
 
 		if ($app->input->get('view') == 'extcalendar') {
-			\JPluginHelper::importPlugin('dpcalendar');
+			PluginHelper::importPlugin('dpcalendar');
 			$tmp = $app->triggerEvent('onCalendarsFetch');
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
@@ -38,7 +49,7 @@ class JFormFieldDPMenuItems extends JFormFieldList
 			return [];
 		}
 
-		$db    = JFactory::getDbo();
+		$db    = Factory::getDbo();
 		$query = $db->getQuery(true);
 
 		// Prepare the query.
@@ -65,7 +76,7 @@ class JFormFieldDPMenuItems extends JFormFieldList
 				continue;
 			}
 
-			$params = new \Joomla\Registry\Registry($item->params);
+			$params = new Registry($item->params);
 
 			$ids = [];
 			foreach ($params->get('ids', []) as $calendarId) {
@@ -85,7 +96,7 @@ class JFormFieldDPMenuItems extends JFormFieldList
 				continue;
 			}
 
-			$options[] = \JHtml::_('select.option', $item->id, $item->title);
+			$options[] = HTMLHelper::_('select.option', $item->id, $item->title);
 		}
 
 		return $options;

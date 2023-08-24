@@ -1,3 +1,8 @@
+.com-dpcalendar-event {
+	/* stylelint-disable-next-line selector-class-pattern */
+	/* stylelint-disable-next-line selector-class-pattern */
+	/* stylelint-disable-next-line selector-class-pattern */
+}
 .com-dpcalendar-event .dp-button-bar {
 	margin-bottom: 10px;
 }
@@ -7,9 +12,6 @@
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
@@ -22,8 +24,8 @@
 }
 .com-dpcalendar-event .dp-button:disabled,
 .com-dpcalendar-event .dp-button[disabled] {
-	background-color: #cccccc;
-	color: #666666;
+	background-color: #ccc;
+	color: #666;
 	cursor: not-allowed;
 }
 .com-dpcalendar-event .dp-description {
@@ -56,7 +58,7 @@
 	border-bottom: none;
 }
 .com-dpcalendar-event .dp-icon svg {
-	fill: currentColor;
+	fill: currentcolor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
@@ -68,8 +70,6 @@
 	color: #664d03;
 	background-color: #fff3cd;
 	border: 1px solid #ffecb5;
-	-webkit-border-radius: 4px;
-	-moz-border-radius: 4px;
 	border-radius: 4px;
 }
 .com-dpcalendar-event .dp-info-box_success {
@@ -82,9 +82,11 @@
 	background-color: #f8d7da;
 	border-color: #f5c2c7;
 }
-.com-dpcalendar-event .dp-button-map-site, .com-dpcalendar-event .dp-button-map-directions {
+.com-dpcalendar-event .dp-button-map-site,
+.com-dpcalendar-event .dp-button-map-directions {
 	background-color: #4258FF;
-	color: #ffffff;
+	color: #fff;
+	/* stylelint-disable-next-line scss/no-global-function-names */
 	border: 1px solid #0f2bff;
 }
 .com-dpcalendar-event .dp-select {
@@ -107,7 +109,7 @@
 	position: relative;
 }
 .com-dpcalendar-event .dp-select-container__options {
-	background: #ffffff;
+	background: #fff;
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
 	max-height: 300px;
@@ -141,8 +143,6 @@
 	padding: 0.2rem;
 	border-radius: 0.25rem;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 	box-sizing: border-box;
 }
@@ -240,7 +240,7 @@
 .com-dpcalendar-event .dp-table tr:nth-child(2n-1) td {
 	background-color: #f2f2f2;
 }
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
 	.com-dpcalendar-event .dp-table,
 	.com-dpcalendar-event .dp-table tbody:not(.dp-table__thead),
 	.com-dpcalendar-event .dp-table th,
@@ -261,7 +261,7 @@
 		padding-left: 50%;
 		text-align: left;
 	}
-	.com-dpcalendar-event .dp-table td:before {
+	.com-dpcalendar-event .dp-table td::before {
 		content: attr(data-column);
 		position: absolute;
 		left: 10px;
@@ -314,7 +314,7 @@
 	.com-dpcalendar-event .dp-print-hide {
 		display: none !important;
 	}
-	.com-dpcalendar-event a:link:after, .com-dpcalendar-event a:visited:after {
+	.com-dpcalendar-event a:link::after, .com-dpcalendar-event a:visited::after {
 		display: none;
 		content: "";
 	}
@@ -382,7 +382,7 @@
 	grid-column: 1/3;
 	grid-row: 7/11;
 }
-.com-dpcalendar-event:not(.has-bookings):not(.has-series):not(.has-locations):not(.has-schedule) .com-dpcalendar-event__description {
+.com-dpcalendar-event:not(.has-bookings, .has-series, .has-locations, .has-schedule) .com-dpcalendar-event__description {
 	grid-column: 1/4;
 }
 .com-dpcalendar-event_small {
@@ -447,6 +447,12 @@
 	background-color: rgba(0, 0, 0, 0.05);
 	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
 }
+.com-dpcalendar-event .dp-figure {
+	width: 100%;
+}
+.com-dpcalendar-event .dp-figure__caption {
+	padding: 3px 1rem;
+}
 .com-dpcalendar-event__image {
 	display: flex;
 	justify-content: center;
@@ -460,9 +466,6 @@
 	object-fit: cover;
 	height: 100%;
 	width: 100%;
-}
-.com-dpcalendar-event__actions .dp-button {
-	margin-bottom: 0.5em;
 }
 .com-dpcalendar-event__information .dp-link, .com-dpcalendar-event__cta .dp-link {
 	word-wrap: break-word;
@@ -480,10 +483,6 @@
 .com-dpcalendar-event__information {
 	overflow: auto;
 }
-.com-dpcalendar-event:not(.has-bookingform) .com-dpcalendar-event__actions, .com-dpcalendar-event:not(.has-bookingform) .com-dpcalendar-event__cta, .com-dpcalendar-event__booking-form {
-	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-	box-sizing: border-box;
-}
 .com-dpcalendar-event__cta_disabled {
 	font-style: italic;
 }
@@ -494,6 +493,10 @@
 }
 .com-dpcalendar-event__information, .com-dpcalendar-event__actions, .com-dpcalendar-event__cta, .com-dpcalendar-event__description, .com-dpcalendar-event_small {
 	padding: 1rem;
+}
+.com-dpcalendar-event:not(.has-bookingform) .com-dpcalendar-event__actions, .com-dpcalendar-event:not(.has-bookingform) .com-dpcalendar-event__cta, .com-dpcalendar-event__booking-form {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+	box-sizing: border-box;
 }
 .com-dpcalendar-event_small + .com-dpcalendar-event_small {
 	padding-top: 0;
@@ -534,20 +537,17 @@
 	font-weight: bold;
 	text-transform: uppercase;
 	letter-spacing: 2px;
-	color: #000000;
+	color: #000;
 	border: 0;
 	box-shadow: none;
 	box-sizing: border-box;
 	white-space: normal;
 }
-.com-dpcalendar-event .dp-button_cta *:before {
+.com-dpcalendar-event .dp-button_cta *::before {
 	color: #fff;
 }
-.com-dpcalendar-event .dp-figure {
-	width: 100%;
-}
-.com-dpcalendar-event .dp-figure__caption {
-	padding: 3px 1rem;
+.com-dpcalendar-event__actions .dp-button {
+	margin-bottom: 0.5em;
 }
 .com-dpcalendar-event .dp-event-cta__end-date {
 	padding: 0 1rem;
@@ -564,6 +564,7 @@
 .com-dpcalendar-event .dp-schedule-list__item {
 	padding: 0.9em 1.2em;
 	position: relative;
+	/* stylelint-disable-next-line color-function-notation */
 	color: rgba(0, 0, 0, 0.7);
 	border-left: 2px solid #c0c0c0;
 }
@@ -577,7 +578,7 @@
 	border-radius: 10px;
 	content: "";
 	border: 2px solid #c0c0c0;
-	background: #ffffff;
+	background: #fff;
 }
 .com-dpcalendar-event .dp-schedule-list__item:last-child {
 	border-image: linear-gradient(to bottom, #c0c0c0 60%, rgba(192, 192, 192, 0)) 1 100%;
@@ -585,7 +586,7 @@
 .com-dpcalendar-event .dp-schedule-list__item .dp-schedule__duration {
 	font-style: italic;
 }
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
 	.com-dpcalendar-event {
 		display: block;
 	}

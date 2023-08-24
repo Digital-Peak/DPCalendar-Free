@@ -10,9 +10,6 @@ namespace DPCalendar\Booking\Stages;
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Booking;
-use DPCalendarModelBooking;
-use DPCalendarModelCoupon;
-use Exception;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\User\User;
 use League\Pipeline\StageInterface;
@@ -29,17 +26,11 @@ class SetupForUpdate implements StageInterface
 	 */
 	private $user = null;
 
-	/**
-	 * @var \DPCalendarModelBooking
-	 */
-	private $bookingModel = null;
+	private ?\DPCalendarModelBooking $bookingModel = null;
 
-	/**
-	 * @var \DPCalendarModelCoupon
-	 */
-	private $couponModel = null;
+	private ?\DPCalendarModelCoupon $couponModel = null;
 
-	public function __construct(CMSApplication $application, User $user, DPCalendarModelBooking $bookingModel, DPCalendarModelCoupon $couponModel)
+	public function __construct(CMSApplication $application, User $user, \DPCalendarModelBooking $bookingModel, \DPCalendarModelCoupon $couponModel)
 	{
 		$this->application  = $application;
 		$this->user         = $user;
@@ -68,7 +59,7 @@ class SetupForUpdate implements StageInterface
 		if ($payload->data['state'] == 6 && $payload->data['id']) {
 			$booking = $this->bookingModel->getItem($payload->data['id']);
 			if (!Booking::openForCancel($booking)) {
-				throw new Exception('Booking can not be cancelled');
+				throw new \Exception('Booking can not be cancelled');
 			}
 		}
 		return $payload;

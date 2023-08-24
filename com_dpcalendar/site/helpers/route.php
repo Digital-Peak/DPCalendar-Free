@@ -34,7 +34,7 @@ class DPCalendarHelperRoute
 
 		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-		if (DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+		if (DPCalendarHelper::getComponentParameter('sef_advanced', 1) || version_compare(4, JVERSION, '<')) {
 			$link .= '&calid=' . $calId;
 			if ($defaultItemId) {
 				$link .= '&force_item_id=' . $defaultItemId;
@@ -102,7 +102,7 @@ class DPCalendarHelperRoute
 			$link .= '&tmpl=' . $tmpl;
 		}
 
-		if (!DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+		if (!DPCalendarHelper::getComponentParameter('sef_advanced', 1) && version_compare(4, JVERSION, '>')) {
 			$needles = ['location' => [(int)$location->id], 'locations' => [(int)$location->id]];
 			if ($item = self::findItem($needles)) {
 				$link .= '&Itemid=' . $item;
@@ -122,7 +122,7 @@ class DPCalendarHelperRoute
 			$link = 'index.php?option=com_dpcalendar&view=locationform&l_id=0';
 		}
 
-		if (!DPCalendarHelper::getComponentParameter('sef_advanced', 1)) {
+		if (!DPCalendarHelper::getComponentParameter('sef_advanced', 1) && version_compare(4, JVERSION, '>')) {
 			$itemId = Factory::getApplication()->input->get('Itemid', null);
 			if (!empty($itemId)) {
 				$link .= '&Itemid=' . $itemId;
@@ -251,15 +251,16 @@ class DPCalendarHelperRoute
 		$args['view'] = 'ticket';
 		$args['uid']  = $ticket->uid;
 
-		if(!empty($ticket->booking_token)) {
+		if (!empty($ticket->booking_token)) {
 			$args['token'] = $ticket->booking_token;
 		}
 
-		$uri = self::getUrl($args, false);
-		$uri = $full ? $uri->toString() : Route::_($uri->toString(['path', 'query', 'fragment']));
-		$uri = str_replace('/administrator/', '/', $uri);
+		$url = Route::link('site', 'index.php' . self::getUrl($args, false)->toString(['query', 'fragment']), false);
+		if ($full) {
+			$url = Uri::getInstance()->toString(['host', 'port', 'scheme']) . $url;
+		}
 
-		return $uri;
+		return $url;
 	}
 
 	public static function getTicketCheckinRoute($ticket, $full = false)

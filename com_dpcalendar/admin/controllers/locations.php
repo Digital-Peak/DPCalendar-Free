@@ -1,4 +1,9 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\AdminController;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,7 +13,7 @@ defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.component.controlleradmin');
 
-class DPCalendarControllerLocations extends JControllerAdmin
+class DPCalendarControllerLocations extends AdminController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
@@ -22,8 +27,8 @@ class DPCalendarControllerLocations extends JControllerAdmin
 	{
 		$return = parent::publish();
 
-		if (JFactory::getApplication()->input->get('ajax') != 0) {
-			$text = JText::plural($this->text_prefix . '_N_ITEMS_TRASHED', count(JFactory::getApplication()->input->get('cid', [], 'array')));
+		if (Factory::getApplication()->input->get('ajax') != 0) {
+			$text = Text::plural($this->text_prefix . '_N_ITEMS_TRASHED', is_countable(Factory::getApplication()->input->get('cid', [], 'array')) ? count(Factory::getApplication()->input->get('cid', [], 'array')) : 0);
 			if ($this->message == $text) {
 				DPCalendarHelper::sendMessage($this->message, false);
 			} else {

@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\HTML\Block\Icon;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -11,11 +12,11 @@ defined('_JEXEC') or die();
 	<div class="dp-button-bar__navigation">
 		<button type="button" class="dp-button dp-button-action dp-button-prev" data-href="<?php echo $this->prevLink; ?>"
 				aria-label="<?php echo $this->translate('COM_DPCALENDAR_PREVIOUS'); ?>">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::BACK]); ?>
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::BACK]); ?>
 		</button>
 		<button type="button" class="dp-button dp-button-action dp-button-next" data-href="<?php echo $this->nextLink; ?>"
 				aria-label="<?php echo $this->translate('COM_DPCALENDAR_NEXT'); ?>">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::NEXT]); ?>
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::NEXT]); ?>
 		</button>
 	</div>
 	<div class="dp-button-bar__title dp-title">
@@ -27,19 +28,19 @@ defined('_JEXEC') or die();
 		<?php if (DPCalendarHelper::canCreateEvent()) { ?>
 			<button type="button" class="dp-button dp-button-action dp-button-create"
 					data-href="<?php echo $this->router->getEventFormRoute(0, $this->returnPage); ?>">
-				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PLUS]); ?>
+				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::PLUS]); ?>
 				<?php echo $this->translate('JACTION_CREATE'); ?>
 			</button>
 		<?php } ?>
 		<?php if ($this->params->get('list_show_print', 1)) { ?>
 			<button type="button" class="dp-button dp-button-print" data-selector=".com-dpcalendar-blog">
-				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::PRINTING]); ?>
+				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::PRINTING]); ?>
 				<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'); ?>
 			</button>
 		<?php } ?>
 		<?php if ($this->params->get('list_manage_search_form', 1)) { ?>
 			<button type="button" class="dp-button dp-button-search">
-				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::SEARCH]); ?>
+				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::SEARCH]); ?>
 				<?php echo $this->translate('JSEARCH_FILTER'); ?>
 			</button>
 		<?php } ?>

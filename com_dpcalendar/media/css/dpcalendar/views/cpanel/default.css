@@ -4,7 +4,7 @@
 	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 .com-dpcalendar-cpanel .dp-icon svg {
-	fill: currentColor;
+	fill: currentcolor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
@@ -34,7 +34,7 @@
 	padding: 0 5px;
 }
 .com-dpcalendar-cpanel .dp-quick-icon .dp-icon-overlay svg {
-	fill: #ffffff;
+	fill: #fff;
 	width: 10px;
 	height: 10px;
 	min-height: unset;
@@ -55,6 +55,7 @@
 	text-transform: uppercase;
 	font-size: 0.75rem;
 	font-weight: bold;
+	/* stylelint-disable-next-line declaration-block-no-shorthand-property-overrides */
 	transition: all 0.3s ease;
 	position: relative;
 }
@@ -65,7 +66,7 @@
 .com-dpcalendar-cpanel .dp-quick-icon__link:hover .dp-icon svg, .com-dpcalendar-cpanel .dp-quick-icon__link:focus .dp-icon svg, .com-dpcalendar-cpanel .dp-quick-icon__link:active .dp-icon svg {
 	fill: #fff;
 }
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
 	.com-dpcalendar-cpanel .dp-quick-icon {
 		max-width: none;
 	}
@@ -89,7 +90,7 @@
 	background: #2D9EDE;
 	margin: 0;
 	padding: 13px 16px;
-	color: #000000;
+	color: #000;
 	font-size: 18px;
 }
 .com-dpcalendar-cpanel__icons {
@@ -118,6 +119,7 @@
 	text-align: center;
 }
 .com-dpcalendar-cpanel .dp-information-container {
+	/* stylelint-disable-next-line no-duplicate-at-import-rules */
 	padding: 8px 16px;
 }
 .com-dpcalendar-cpanel .dp-information-container .dp-grid {

@@ -1,4 +1,9 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,14 +11,14 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
+class DPCalendarViewCalendar extends BaseView
 {
 	public function init()
 	{
 		$items = $this->get('AllItems');
 
 		if ($items === false) {
-			return $this->setError(JText::_('JGLOBAL_CATEGORY_NOT_FOUND'));
+			return $this->setError(Text::_('JGLOBAL_CATEGORY_NOT_FOUND'));
 		}
 
 		$this->items = $items;
@@ -56,8 +61,8 @@ class DPCalendarViewCalendar extends \DPCalendar\View\BaseView
 			&& $this->getLayout() == 'default'
 			&& !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
 			// Load the model
-			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
-			$model = JModelLegacy::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+			$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->getState();
 			$model->setState('list.limit', 10000);
 			$model->setState('filter.search', 'ids:' . implode(',', $this->params->get('calendar_filter_locations')));

@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,5 +9,5 @@ defined('_JEXEC') or die();
 
 ?>
 <div class="com-dpcalendar-adminlist__footer dp-footer">
-	<?php echo JText::sprintf('COM_DPCALENDAR_FOOTER', $this->input->getString('DPCALENDAR_VERSION')); ?>
+	<?php echo Text::sprintf('COM_DPCALENDAR_FOOTER', $this->input->getString('DPCALENDAR_VERSION')); ?>
 </div>

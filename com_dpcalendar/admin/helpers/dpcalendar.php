@@ -4,7 +4,15 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\Helpers\Sidebar;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Object\CMSObject;
+use Joomla\CMS\Toolbar\ToolbarHelper;
 
 JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');
 
@@ -14,59 +22,59 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 {
 	public static function addSubmenu($vName = 'cpanel')
 	{
-		JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_CPANEL'), 'index.php?option=com_dpcalendar&view=cpanel', $vName == 'cpanel');
-		JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_EVENTS'), 'index.php?option=com_dpcalendar&view=events', $vName == 'events');
-		JHtmlSidebar::addEntry(
-			JText::_('COM_DPCALENDAR_SUBMENU_CALENDARS'),
+		Sidebar::addEntry(Text::_('COM_DPCALENDAR_SUBMENU_CPANEL'), 'index.php?option=com_dpcalendar&view=cpanel', $vName == 'cpanel');
+		Sidebar::addEntry(Text::_('COM_DPCALENDAR_SUBMENU_EVENTS'), 'index.php?option=com_dpcalendar&view=events', $vName == 'events');
+		Sidebar::addEntry(
+			Text::_('COM_DPCALENDAR_SUBMENU_CALENDARS'),
 			'index.php?option=com_categories&extension=com_dpcalendar',
 			$vName == 'categories'
 		);
-		JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_LOCATIONS'), 'index.php?option=com_dpcalendar&view=locations', $vName == 'locations');
+		Sidebar::addEntry(Text::_('COM_DPCALENDAR_SUBMENU_LOCATIONS'), 'index.php?option=com_dpcalendar&view=locations', $vName == 'locations');
 
 		if (!self::isFree()) {
-			JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_TICKETS'), 'index.php?option=com_dpcalendar&view=tickets', $vName == 'tickets');
-			JHtmlSidebar::addEntry(
-				JText::_('COM_DPCALENDAR_SUBMENU_BOOKINGS'),
+			Sidebar::addEntry(Text::_('COM_DPCALENDAR_SUBMENU_TICKETS'), 'index.php?option=com_dpcalendar&view=tickets', $vName == 'tickets');
+			Sidebar::addEntry(
+				Text::_('COM_DPCALENDAR_SUBMENU_BOOKINGS'),
 				'index.php?option=com_dpcalendar&view=bookings',
 				$vName == 'bookings'
 			);
-			JHtmlSidebar::addEntry(
-				JText::_('COM_DPCALENDAR_SUBMENU_COUPONS'),
+			Sidebar::addEntry(
+				Text::_('COM_DPCALENDAR_SUBMENU_COUPONS'),
 				'index.php?option=com_dpcalendar&view=coupons',
 				$vName == 'coupons'
 			);
-			JHtmlSidebar::addEntry(
-				JText::_('COM_DPCALENDAR_SUBMENU_TAXRATES'),
+			Sidebar::addEntry(
+				Text::_('COM_DPCALENDAR_SUBMENU_TAXRATES'),
 				'index.php?option=com_dpcalendar&view=taxrates',
 				$vName == 'taxrates'
 			);
-			JHtmlSidebar::addEntry(
-				JText::_('COM_DPCALENDAR_SUBMENU_COUNTRIES'),
+			Sidebar::addEntry(
+				Text::_('COM_DPCALENDAR_SUBMENU_COUNTRIES'),
 				'index.php?option=com_dpcalendar&view=countries',
 				$vName == 'countries'
 			);
 		}
-		JHtmlSidebar::addEntry(
-			JText::_('JGLOBAL_FIELDS'),
+		Sidebar::addEntry(
+			Text::_('JGLOBAL_FIELDS'),
 			'index.php?option=com_fields&context=com_dpcalendar.event',
 			$vName == 'fields.fields'
 		);
-		JHtmlSidebar::addEntry(
-			JText::_('JGLOBAL_FIELD_GROUPS'),
+		Sidebar::addEntry(
+			Text::_('JGLOBAL_FIELD_GROUPS'),
 			'index.php?option=com_fields&view=groups&context=com_dpcalendar.event',
 			$vName == 'fields.groups'
 		);
 
-		JHtmlSidebar::addEntry(JText::_('COM_DPCALENDAR_SUBMENU_TOOLS'), 'index.php?option=com_dpcalendar&view=tools', $vName == 'tools');
+		Sidebar::addEntry(Text::_('COM_DPCALENDAR_SUBMENU_TOOLS'), 'index.php?option=com_dpcalendar&view=tools', $vName == 'tools');
 		if ($vName == 'categories') {
-			JToolbarHelper::title(JText::sprintf('COM_CATEGORIES_CATEGORIES_TITLE', JText::_('com_dpcalendar')), 'dpcalendar-categories');
+			ToolbarHelper::title(Text::sprintf('COM_CATEGORIES_CATEGORIES_TITLE', Text::_('com_dpcalendar')), 'dpcalendar-categories');
 		}
 	}
 
 	public static function getActions($categoryId = 0)
 	{
-		$user   = JFactory::getUser();
-		$result = new JObject();
+		$user   = Factory::getUser();
+		$result = new CMSObject();
 
 		if (empty($categoryId)) {
 			$assetName = 'com_dpcalendar';
@@ -76,7 +84,7 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 			$level     = 'category';
 		}
 
-		$actions = JAccess::getActionsFromFile(
+		$actions = Access::getActionsFromFile(
 			JPATH_ADMINISTRATOR . '/components/com_dpcalendar/access.xml',
 			"/access/section[@name='" . $level . "']/"
 		);
@@ -90,7 +98,7 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 
 	public static function validateSection($section)
 	{
-		if (JFactory::getApplication()->isClient('site')) {
+		if (Factory::getApplication()->isClient('site')) {
 			// On the front end we need to map some sections
 			switch ($section) {
 				// Editing an article
@@ -112,14 +120,14 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 
 	public static function getContexts()
 	{
-		JFactory::getLanguage()->load('com_content', JPATH_ADMINISTRATOR);
+		Factory::getLanguage()->load('com_content', JPATH_ADMINISTRATOR);
 
 		$contexts = [
-			'com_dpcalendar.event'      => JText::_('COM_DPCALENDAR_FIELDS_SECTION_EVENT'),
-			'com_dpcalendar.location'   => JText::_('COM_DPCALENDAR_FIELDS_SECTION_LOCATION'),
-			'com_dpcalendar.ticket'     => JText::_('COM_DPCALENDAR_FIELDS_SECTION_TICKET'),
-			'com_dpcalendar.booking'    => JText::_('COM_DPCALENDAR_FIELDS_SECTION_BOOKING'),
-			'com_dpcalendar.categories' => JText::_('COM_DPCALENDAR_FIELDS_SECTION_CALENDAR')
+			'com_dpcalendar.event'      => Text::_('COM_DPCALENDAR_FIELDS_SECTION_EVENT'),
+			'com_dpcalendar.location'   => Text::_('COM_DPCALENDAR_FIELDS_SECTION_LOCATION'),
+			'com_dpcalendar.ticket'     => Text::_('COM_DPCALENDAR_FIELDS_SECTION_TICKET'),
+			'com_dpcalendar.booking'    => Text::_('COM_DPCALENDAR_FIELDS_SECTION_BOOKING'),
+			'com_dpcalendar.categories' => Text::_('COM_DPCALENDAR_FIELDS_SECTION_CALENDAR')
 		];
 
 		return $contexts;
@@ -132,7 +140,7 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 
 	public static function countItems(&$items)
 	{
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		foreach ($items as $item) {
 			$item->count_trashed     = 0;
 			$item->count_archived    = 0;

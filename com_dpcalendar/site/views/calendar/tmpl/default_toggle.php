@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\HTML\Block\Icon;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -13,10 +14,10 @@ if ($this->params->get('show_selection', 1) == 2) {
 <div class="com-dpcalendar-calendar__toggle dp-toggle">
 	<div class="dp-toggle__up <?php echo $this->params->get('show_selection', 1) == 3 ? '' : 'dp-toggle_hidden'; ?>"
 		 data-direction="up">
-		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::UP]); ?>
+		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::UP]); ?>
 	</div>
 	<div class="dp-toggle__down <?php echo $this->params->get('show_selection', 1) == 3 ? 'dp-toggle_hidden' : ''; ?>"
 		 data-direction="down">
-		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::DOWN]); ?>
+		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::DOWN]); ?>
 	</div>
 </div>

@@ -37,7 +37,7 @@
 	</fieldset>
 	<fieldset addfieldpath="/administrator/components/com_dpcalendar/models/fields" name="description"
 		label="COM_DPCALENDAR_DESCRIPTION">
-		<field name="description" type="editor" buttons="true" hide="pagebreak,readmore" filter="JComponentHelper::filterText"
+		<field name="description" type="editor" buttons="true" hide="pagebreak,readmore" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
 	</fieldset>
 	<fieldset name="rooms" label="COM_DPCALENDAR_ROOMS">

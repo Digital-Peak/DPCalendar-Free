@@ -1,4 +1,6 @@
 <?php
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -18,7 +20,7 @@ if ($provider == 'none') {
 
 $key = DPCalendarHelper::getComponentParameter('map_api_google_jskey', '');
 if ($provider == 'google' && !$key) {
-	\JFactory::getApplication()->enqueueMessage(
+	Factory::getApplication()->enqueueMessage(
 		"Can't load Google maps without an API key. More information can be found in our documentation at <a href='https://joomla.digital-peak.com' target='_blank'>joomla.digital-peak.com</a>.",
 		'warning'
 	);
@@ -102,9 +104,9 @@ switch ($provider) {
 		$document->addScriptOptions(
 			'map.tiles.attribution',
 			'<a href="https://www.mapbox.com/">&copy; '
-			. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX')
+			. Text::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX')
 			. '</a> | <a href="https://www.openstreetmap.org/">&copy; '
-			. \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
+			. Text::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
 		);
 
 		$document->addScriptOptions('map.mapbox.token', DPCalendarHelper::getComponentParameter(
@@ -116,7 +118,7 @@ switch ($provider) {
 	default:
 		$document->addScriptOptions(
 			'map.tiles.attribution',
-			'<a href="https://www.openstreetmap.org/">&copy; ' . \JText::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
+			'<a href="https://www.openstreetmap.org/">&copy; ' . Text::_('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP') . '</a>'
 		);
 
 		$document->addScriptOptions(

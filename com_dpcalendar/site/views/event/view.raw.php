@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\Helper\Ical;
+use Joomla\CMS\MVC\View\HtmlView;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,7 +12,7 @@ defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.component.view');
 
-class DPCalendarViewEvent extends JViewLegacy
+class DPCalendarViewEvent extends HtmlView
 {
 	public function display($tpl = null)
 	{
@@ -22,6 +26,6 @@ class DPCalendarViewEvent extends JViewLegacy
 			$event = $this->getModel()->getItem($event->original_id);
 		}
 
-		\DPCalendar\Helper\Ical::createIcalFromEvents([$event], true);
+		Ical::createIcalFromEvents([$event], true);
 	}
 }

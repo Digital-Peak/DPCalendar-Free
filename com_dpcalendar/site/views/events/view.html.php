@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Helper\ModuleHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -9,7 +13,7 @@ defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
 
-class DPCalendarViewEvents extends \DPCalendar\View\BaseView
+class DPCalendarViewEvents extends BaseView
 {
 	public function init()
 	{
@@ -24,7 +28,7 @@ class DPCalendarViewEvents extends \DPCalendar\View\BaseView
 		$this->get('State')->set('filter.state', [1, 3]);
 
 		if ($id = $this->input->getInt('module-id')) {
-			foreach (JModuleHelper::getModuleList() as $module) {
+			foreach (ModuleHelper::getModuleList() as $module) {
 				if ($id != $module->id) {
 					continue;
 				}

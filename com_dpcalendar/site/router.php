@@ -50,6 +50,11 @@ class DPCalendarRouter extends RouterView
 		$tickets = new RouterViewConfiguration('tickets');
 		$this->registerView($tickets);
 
+		$ticket = new RouterViewConfiguration('ticket');
+		$ticket->setKey('uid');
+		$ticket->setParent($tickets, 'id');
+		$this->registerView($ticket);
+
 		$locations = new RouterViewConfiguration('locations');
 		$locations->setKey('ids');
 		$this->registerView($locations);
@@ -99,7 +104,7 @@ class DPCalendarRouter extends RouterView
 		$active = $this->menu->getActive();
 
 		// Set the active as parent for the event view when it contains calendars
-		if (count($segments) === 1 && !empty($active->query['view']) && in_array($active->query['view'], ['calendar', 'list', 'map'])) {
+		if ((is_countable($segments) ? count($segments) : 0) === 1 && !empty($active->query['view']) && in_array($active->query['view'], ['calendar', 'list', 'map'])) {
 			$this->views['event']->setParent($this->views[$active->query['view']], 'calid');
 		}
 
@@ -143,7 +148,7 @@ class DPCalendarRouter extends RouterView
 		$path[0] = '1:root';
 
 		foreach ($path as &$segment) {
-			list($id, $segment) = explode(':', $segment, 2);
+			[$id, $segment] = explode(':', $segment, 2);
 		}
 
 		return $path;
@@ -182,7 +187,7 @@ class DPCalendarRouter extends RouterView
 			$id .= ':' . $db->loadResult();
 		}
 
-		list($void, $segment) = explode(':', $id, 2);
+		[$void, $segment] = explode(':', $id, 2);
 
 		return [$void => $segment];
 	}
@@ -190,6 +195,21 @@ class DPCalendarRouter extends RouterView
 	public function getFormSegment($id, $query)
 	{
 		return $this->getEventSegment($id, $query);
+	}
+
+	public function getTicketSegment($uid, $query)
+	{
+		if (is_numeric($uid)) {
+			$db      = Factory::getDbo();
+			$dbquery = $db->getQuery(true);
+			$dbquery->select($dbquery->qn('uid'))
+				->from($dbquery->qn('#__dpcalendar_tickets'))
+				->where('id = ' . (int)$uid);
+			$db->setQuery($dbquery);
+			$uid = $db->loadResult();
+		}
+
+		return [$uid => $uid];
 	}
 
 	public function getLocationSegment($id, $query)
@@ -210,7 +230,7 @@ class DPCalendarRouter extends RouterView
 			$id .= ':' . $db->loadResult();
 		}
 
-		list($void, $segment) = explode(':', $id, 2);
+		[$void, $segment] = explode(':', $id, 2);
 
 		return [$void => $segment];
 	}
@@ -228,7 +248,7 @@ class DPCalendarRouter extends RouterView
 			$id .= ':' . $db->loadResult();
 		}
 
-		list($void, $segment) = explode(':', $id, 2);
+		[$void, $segment] = explode(':', $id, 2);
 
 		return [$void => $segment];
 	}
@@ -275,7 +295,7 @@ class DPCalendarRouter extends RouterView
 		}
 
 		// Load also the external calendars when all are fetched
-		if (count($calIds) === 1 && $calIds[0] == -1) {
+		if ((is_countable($calIds) ? count($calIds) : 0) === 1 && $calIds[0] == -1) {
 			// Fetch external calendars
 			PluginHelper::importPlugin('dpcalendar');
 			$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
@@ -290,7 +310,7 @@ class DPCalendarRouter extends RouterView
 
 		foreach ($calIds as $calId) {
 			// If the event belongs to the external calendar, return the segment as it is the id
-			if (!is_numeric($calId) && strpos($segment, $calId) === 0) {
+			if (!is_numeric($calId) && strpos($segment, (string) $calId) === 0) {
 				return $segment;
 			}
 		}
@@ -332,6 +352,23 @@ class DPCalendarRouter extends RouterView
 
 		// Return the result
 		return $result;
+	}
+
+	public function getTicketId($segment, $query)
+	{
+		// An uid
+		if (!is_numeric($segment)) {
+			return $segment;
+		}
+
+		$db      = Factory::getDbo();
+		$dbquery = $db->getQuery(true);
+		$dbquery->select($dbquery->qn('uid'))
+			->from($dbquery->qn('#__dpcalendar_tickets'))
+			->where('id = ' . (int)$segment);
+		$db->setQuery($dbquery);
+
+		return $db->loadResult();
 	}
 
 	public function getLocationId($segment, $query)

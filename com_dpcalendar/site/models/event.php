@@ -222,7 +222,7 @@ class DPCalendarModelEvent extends ItemModel
 							}
 
 							foreach ($data->rooms as $room) {
-								list($locationId, $roomId) = explode('-', $room, 2);
+								[$locationId, $roomId] = explode('-', $room, 2);
 
 								foreach ($location->rooms as $lroom) {
 									if ($locationId != $location->id || $roomId != $lroom->id) {

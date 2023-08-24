@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\Factory;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -27,7 +28,7 @@ defined('_JEXEC') or die();
 				</div>
 				<div class="dp-information dp-grid">
 					<span class="dp-information__label"><?php echo $this->translate('JGLOBAL_FIELD_MODIFIED_BY_LABEL'); ?>: </span>
-					<span class="dp-information__content"><?php echo JFactory::getUser($event->modified_by)->name; ?></span>
+					<span class="dp-information__content"><?php echo Factory::getUser($event->modified_by)->name; ?></span>
 				</div>
 			</div>
 		<?php } ?>

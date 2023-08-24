@@ -1,4 +1,7 @@
 <?php
+
+use DPCalendar\Helper\Location;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -81,9 +84,9 @@ class DPCalendarControllerEvent extends FormController
 					continue;
 				}
 
-				list($title, $coordinates) = explode(' [', $locationId);
+				[$title, $coordinates] = explode(' [', $locationId);
 
-				$location = \DPCalendar\Helper\Location::get(trim($coordinates, ']'), true, $title);
+				$location = Location::get(trim($coordinates, ']'), true, $title);
 				if (!$location->id) {
 					unset($data['location_ids'][$index]);
 					continue;
@@ -316,7 +319,7 @@ class DPCalendarControllerEvent extends FormController
 		DPCalendarHelper::sendMessage(
 			null,
 			false,
-			['message' => $message, 'count' => count($events)]
+			['message' => $message, 'count' => is_countable($events) ? count($events) : 0]
 		);
 	}
 
@@ -353,7 +356,7 @@ class DPCalendarControllerEvent extends FormController
 		// Check for request forgeries
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		$location = \DPCalendar\Helper\Location::get($this->input->getString('lookup'), false, $this->input->getString('lookup_title'));
+		$location = Location::get($this->input->getString('lookup'), false, $this->input->getString('lookup_title'));
 
 		$data = [];
 		if ($location->title) {

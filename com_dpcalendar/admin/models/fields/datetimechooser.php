@@ -4,17 +4,23 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DateHelper;
+use DPCalendar\Helper\LayoutHelper;
+use DPCalendar\HTML\Document\HtmlDocument;
+use Joomla\CMS\Form\FormField;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-class JFormFieldDatetimechooser extends JFormField
+class JFormFieldDatetimechooser extends FormField
 {
 	protected $type = 'Datetimechooser';
 
 	public function getInput()
 	{
-		$dateHelper = new \DPCalendar\Helper\DateHelper();
+		$dateHelper = new DateHelper();
 
 		$dateFormat = (string)$this->element['format'];
 		if (empty($dateFormat)) {
@@ -44,7 +50,7 @@ class JFormFieldDatetimechooser extends JFormField
 			$date = $dateHelper->getDate($this->value, $allDay);
 		}
 
-		$layoutHelper = new \DPCalendar\Helper\LayoutHelper();
+		$layoutHelper = new LayoutHelper();
 		$buffer       = $layoutHelper->renderLayout('block.datepicker', [
 			'id'          => $this->id,
 			'name'        => $this->name,
@@ -53,7 +59,7 @@ class JFormFieldDatetimechooser extends JFormField
 			'localFormat' => !$allDay,
 			'firstDay'    => DPCalendarHelper::getComponentParameter('weekstart', '1'),
 			'pair'        => (string)$this->element['datepair'],
-			'document'    => new \DPCalendar\HTML\Document\HtmlDocument(),
+			'document'    => new HtmlDocument(),
 			'dateHelper'  => $dateHelper
 		]);
 
@@ -66,7 +72,7 @@ class JFormFieldDatetimechooser extends JFormField
 			'max'        => (string)$this->element['max_time'],
 			'step'       => DPCalendarHelper::getComponentParameter('event_form_time_step', 30),
 			'pair'       => (string)$this->element['datepair'] . '_time',
-			'document'   => new \DPCalendar\HTML\Document\HtmlDocument(),
+			'document'   => new HtmlDocument(),
 			'dateHelper' => $dateHelper
 		]);
 

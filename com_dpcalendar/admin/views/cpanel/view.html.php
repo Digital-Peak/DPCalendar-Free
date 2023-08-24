@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Factory;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +10,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
+class DPCalendarViewCpanel extends BaseView
 {
 	protected $title = 'COM_DPCALENDAR_VIEW_CPANEL';
 
@@ -32,11 +36,11 @@ class DPCalendarViewCpanel extends \DPCalendar\View\BaseView
 			}
 		}
 
-		$geoDBDirectory = \JFactory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
+		$geoDBDirectory = Factory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
 
 		// Don't update when the file was fetched 10 days ago
 		$files                  = is_dir($geoDBDirectory) ? scandir($geoDBDirectory) : [];
-		$this->needsGeoDBUpdate = (count($files) <= 2 || (time() - filemtime($geoDBDirectory . '/' . $files[2]) > (60 * 60 * 24 * 10))) && !DPCalendarHelper::isFree();
+		$this->needsGeoDBUpdate = ((is_countable($files) ? count($files) : 0) <= 2 || (time() - filemtime($geoDBDirectory . '/' . $files[2]) > (60 * 60 * 24 * 10))) && !DPCalendarHelper::isFree();
 
 		// If no taxes are available no geo DB update is needed
 		if (!$model->getTotalTaxRates()) {

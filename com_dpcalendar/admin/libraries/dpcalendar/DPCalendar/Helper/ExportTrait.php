@@ -285,9 +285,7 @@ trait ExportTrait
 		DPCalendarHelper::sortFields($fields, $order);
 
 		$data   = [];
-		$data[] = array_map(function ($field) {
-			return $field->label;
-		}, $fields);
+		$data[] = array_map(fn ($field) => $field->label, $fields);
 
 		foreach ($items as $item) {
 			if (empty($item->text)) {

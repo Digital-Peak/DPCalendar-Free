@@ -22,7 +22,7 @@ defined('_JEXEC') or die();
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_EXTERNAL_CALENDARS'); ?>: </span>
 			<span class="dp-information__content">
 				<a href="index.php?option=com_plugins&view=plugins&filter[folder]=dpcalendar&filter[enabled]=1" class="dp-link">
-					<?php echo count($this->calendarsExternal); ?>
+					<?php echo is_countable($this->calendarsExternal) ? count($this->calendarsExternal) : 0; ?>
 				</a>
 			</span>
 		</div>
@@ -30,7 +30,7 @@ defined('_JEXEC') or die();
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_INTERNAL_CALENDARS'); ?>: </span>
 			<span class="dp-information__content">
 				<a href="index.php?option=com_categories&extension=com_dpcalendar" class="dp-link">
-					<?php echo count($this->calendarsInternal); ?>
+					<?php echo is_countable($this->calendarsInternal) ? count($this->calendarsInternal) : 0; ?>
 				</a>
 			</span>
 		</div>

@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\Translator\Translator;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -11,7 +12,7 @@ $event = $displayData['event'];
 $dateFormat = !empty($displayData['dateFormat']) ? $displayData['dateFormat'] : DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y');
 $timeFormat = !empty($displayData['timeFormat']) ? $displayData['timeFormat'] : DPCalendarHelper::getComponentParameter('event_time_format', 'H:i');
 
-$translator = !empty($displayData['translator']) ? $displayData['translator'] : new \DPCalendar\Translator\Translator();
+$translator = !empty($displayData['translator']) ? $displayData['translator'] : new Translator();
 $dateFormat = $translator->translate($dateFormat);
 $timeFormat = $translator->translate($timeFormat);
 

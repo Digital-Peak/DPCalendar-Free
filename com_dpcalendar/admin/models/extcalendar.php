@@ -1,4 +1,13 @@
 <?php
+
+use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Table\Table;
+use Joomla\String\StringHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,18 +17,18 @@ defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.component.modeladmin');
 
-class DPCalendarModelExtcalendar extends JModelAdmin
+class DPCalendarModelExtcalendar extends AdminModel
 {
 	protected $text_prefix = 'COM_DPCALENDAR_EXTCALENDAR';
 
 	public function save($data)
 	{
-		$app = JFactory::getApplication();
+		$app = Factory::getApplication();
 
 		// Alter the title for save as copy
 		if ($app->input->get('task') == 'save2copy') {
-			$title         = \Joomla\String\StringHelper::increment($data['title']);
-			$alias         = \Joomla\String\StringHelper::increment($data['alias']);
+			$title         = StringHelper::increment($data['title']);
+			$alias         = StringHelper::increment($data['alias']);
 			$data['title'] = $title;
 			$data['alias'] = $alias;
 			$data['state'] = 0;
@@ -30,7 +39,7 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 
 	public function getTable($type = 'Extcalendar', $prefix = 'DPCalendarTable', $config = [])
 	{
-		return JTable::getInstance($type, $prefix, $config);
+		return Table::getInstance($type, $prefix, $config);
 	}
 
 	public function getForm($data = [], $loadData = true)
@@ -63,11 +72,11 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 		return $form;
 	}
 
-	protected function preprocessForm(JForm $form, $data, $group = 'content')
+	protected function preprocessForm(Form $form, $data, $group = 'content')
 	{
-		$plugin = JFactory::getApplication()->input->getWord('dpplugin');
+		$plugin = Factory::getApplication()->input->getWord('dpplugin');
 
-		JFactory::getLanguage()->load('plg_dpcalendar_' . $plugin, JPATH_PLUGINS . '/dpcalendar/' . $plugin);
+		Factory::getLanguage()->load('plg_dpcalendar_' . $plugin, JPATH_PLUGINS . '/dpcalendar/' . $plugin);
 		$form->loadFile(JPATH_PLUGINS . '/dpcalendar/' . $plugin . '/forms/params.xml', false);
 
 		return parent::preprocessForm($form, $data, $group);
@@ -75,28 +84,28 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 
 	protected function loadFormData()
 	{
-		$data = JFactory::getApplication()->getUserState('com_dpcalendar.edit.extcalendar.data', []);
+		$data = Factory::getApplication()->getUserState('com_dpcalendar.edit.extcalendar.data', []);
 
 		if (empty($data)) {
 			$data = $this->getItem();
 		}
 
-		return $data;
+		return $data instanceof Table ? $data->getProperties() : $data;
 	}
 
 	protected function prepareTable($table)
 	{
-		$date = JFactory::getDate();
-		$user = JFactory::getUser();
+		$date = Factory::getDate();
+		$user = Factory::getUser();
 
 		$table->title = htmlspecialchars_decode($table->title, ENT_QUOTES);
-		$table->alias = $table->alias ? JApplicationHelper::stringURLSafe($table->alias) : null;
+		$table->alias = $table->alias ? ApplicationHelper::stringURLSafe($table->alias) : null;
 
 		if (empty($table->alias)) {
-			$table->alias = JApplicationHelper::stringURLSafe($table->title);
+			$table->alias = ApplicationHelper::stringURLSafe($table->title);
 		}
 		if (empty($table->plugin)) {
-			$table->plugin = JFactory::getApplication()->input->getWord('dpplugin');
+			$table->plugin = Factory::getApplication()->input->getWord('dpplugin');
 		}
 
 		if (empty($table->id)) {
@@ -124,14 +133,14 @@ class DPCalendarModelExtcalendar extends JModelAdmin
 	public function cleanEventCache($plugin)
 	{
 		// Clean the Joomla cache
-		$cache = JFactory::getCache('plg_dpcalendar_' . $plugin);
+		$cache = Factory::getCache('plg_dpcalendar_' . $plugin);
 		if (!$cache->clean()) {
 			return false;
 		}
 
 		// Clean the DB cache entries from the database
-		JPluginHelper::importPlugin('dpcalendar');
-		$tmp = JFactory::getApplication()->triggerEvent('onCalendarsFetch');
+		PluginHelper::importPlugin('dpcalendar');
+		$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 		if (!empty($tmp)) {
 			$ids = [];
 			foreach ($tmp as $calendars) {

@@ -8,6 +8,7 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -15,9 +16,13 @@ use Joomla\CMS\Language\Text;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
-FormHelper::loadFieldClass('list');
 
-class JFormFieldDPCFields extends JFormFieldList
+if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Field\\ListField', false)) {
+	FormHelper::loadFieldClass('list');
+	class_alias('JFormFieldList', '\\Joomla\\CMS\\Form\\Field\\ListField');
+}
+
+class JFormFieldDPCFields extends ListField
 {
 	public $type = 'DPCFields';
 

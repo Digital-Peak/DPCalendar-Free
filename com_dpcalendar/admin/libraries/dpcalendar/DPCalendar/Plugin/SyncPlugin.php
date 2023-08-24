@@ -7,9 +7,10 @@
 
 namespace DPCalendar\Plugin;
 
+use Joomla\CMS\Http\HttpFactory;
+
 defined('_JEXEC') or die();
 
-use DPCalendarHelper;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -33,7 +34,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		$uri = str_replace('webcal://', 'https://', $calendar->params->get('uri'));
 
 		if (!$uri) {
-			return rand();
+			return random_int(0, mt_getrandmax());
 		}
 
 		$internal = !filter_var($uri, FILTER_VALIDATE_URL);
@@ -42,10 +43,10 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		}
 
 		if ($internal) {
-			return filemtime($uri) ?: rand();
+			return filemtime($uri) ?: random_int(0, mt_getrandmax());
 		}
 
-		$http     = \JHttpFactory::getHttp();
+		$http     = HttpFactory::getHttp();
 		$response = $http->head($uri);
 
 		if (key_exists('ETag', $response->headers)) {
@@ -56,7 +57,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			return $response->headers['Last-Modified'];
 		}
 
-		return rand();
+		return random_int(0, mt_getrandmax());
 	}
 
 	/**
@@ -74,7 +75,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		// Defining the last sync date
 		$syncDate = $calendar->sync_date;
 		if ($syncDate) {
-			$syncDate = DPCalendarHelper::getDate($syncDate);
+			$syncDate = \DPCalendarHelper::getDate($syncDate);
 		}
 
 		// If the last sync is younger than the maximum cache time, return
@@ -98,7 +99,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			return;
 		}
 
-		$extCalendarTable->sync_date = DPCalendarHelper::getDate()->toSql();
+		$extCalendarTable->sync_date = \DPCalendarHelper::getDate()->toSql();
 		$extCalendarTable->store();
 
 		$this->extCalendarsCache = null;

@@ -15,10 +15,7 @@ use League\Pipeline\StageInterface;
 
 class FetchLocationData implements StageInterface
 {
-	/**
-	 * @var \DPCalendarModelCountry
-	 */
-	private $model;
+	private \DPCalendarModelCountry $model;
 
 	public function __construct(\DPCalendarModelCountry $model)
 	{

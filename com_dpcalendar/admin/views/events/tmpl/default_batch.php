@@ -1,4 +1,7 @@
 <?php
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +9,7 @@
  */
 defined('_JEXEC') or die();
 
-if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
+if (DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 	return false;
 }
 ?>
@@ -20,7 +23,7 @@ if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 		<div class=" dp-grid">
 			<div class="dp-grid__col-6">
 				<div class="control-group">
-					<div class="controls"><?php echo JLayoutHelper::render('joomla.html.batch.access', []); ?></div>
+					<div class="controls"><?php echo LayoutHelper::render('joomla.html.batch.access', []); ?></div>
 				</div>
 				<div class="control-group">
 					<div class="controls">
@@ -28,7 +31,7 @@ if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 							   class="hasTooltip" for="batch-access-content" id="batch-access-content-lbl">
 							<?php echo $this->translate('COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL'); ?>
 						</label>
-						<?php echo JHtml::_(
+						<?php echo HTMLHelper::_(
 							'access.assetgrouplist',
 							'batch[access_content_id]',
 							'',
@@ -60,15 +63,15 @@ if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 					</div>
 				</div>
 				<div class="control-group">
-					<div class="controls"><?php echo JLayoutHelper::render('joomla.html.batch.tag', []); ?></div>
+					<div class="controls"><?php echo LayoutHelper::render('joomla.html.batch.tag', []); ?></div>
 				</div>
 				<div class="control-group">
-					<div class="controls"><?php echo JLayoutHelper::render('joomla.html.batch.language', ['extension' => 'com_dpcalendar']); ?></div>
+					<div class="controls"><?php echo LayoutHelper::render('joomla.html.batch.language', ['extension' => 'com_dpcalendar']); ?></div>
 				</div>
 			</div>
 		</div>
 		<div class="control-group dp-batch-calendar">
-			<?php echo JHtml::_('batch.item', 'com_dpcalendar'); ?>
+			<?php echo HTMLHelper::_('batch.item', 'com_dpcalendar'); ?>
 		</div>
 	</div>
 	<div class="modal-footer">

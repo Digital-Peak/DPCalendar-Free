@@ -20,7 +20,7 @@ if (!$this->event->hosts || !$this->params->get('event_show_hosts', '1')) {
 			<?php } else { ?>
 				<?php echo $host->name; ?>
 			<?php } ?>
-			<?php if ($index < count($this->event->hosts) - 1) { ?>
+			<?php if ($index < (is_countable($this->event->hosts) ? count($this->event->hosts) : 0) - 1) { ?>
 				|
 			<?php } ?>
 		<?php } ?>

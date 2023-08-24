@@ -59,7 +59,7 @@
 			};
 			const mapLoader = () => {
 				[].slice.call(document.querySelectorAll('#jform_street,#jform_number,#jform_zip,#jform_city,#jform_country,#jform_province')).forEach((input) => {
-					input.addEventListener('change', (e) => {
+					input.addEventListener('change', () => {
 						geoComplete.value = '';
 						let task = 'location.loc';
 						if (window.location.href.indexOf('administrator') == -1) {
@@ -81,12 +81,12 @@
 					});
 				});
 				if (window.jQuery) {
-					jQuery('#jform_color').change((e) => {
+					jQuery('#jform_color').change(() => {
 						DPCalendar.Map.clearMarkers(map);
 						getMarker();
 					});
 				}
-				document.getElementById('jform_color').addEventListener('change', (e) => {
+				document.getElementById('jform_color').addEventListener('change', () => {
 					DPCalendar.Map.clearMarkers(map);
 					getMarker();
 				});

@@ -22,13 +22,10 @@
 	line-height: 2em;
 	text-indent: 3em;
 	cursor: pointer;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 	margin-right: 0.5rem;
 }
-.com-dpcalendar-adminform .dp-form-radio input[type=radio]:empty + label:before {
+.com-dpcalendar-adminform .dp-form-radio input[type=radio]:empty + label::before {
 	position: absolute;
 	display: block;
 	top: 0;
@@ -39,34 +36,33 @@
 	background: #D1D3D4;
 	border-radius: 3px 0 0 3px;
 }
-.com-dpcalendar-adminform .dp-form-radio input[type=radio]:hover:not(:checked) + label:before {
+.com-dpcalendar-adminform .dp-form-radio input[type=radio]:checked + label::before {
+	content: "✔";
+	text-indent: 0.9em;
+	/* stylelint-disable-next-line scss/no-global-function-names */
+	color: #cdeacd;
+	background-color: #46a546;
+}
+.com-dpcalendar-adminform .dp-form-radio input[type=radio]:focus ~ label::before {
+	box-shadow: 0 0 0 3px #999;
+}
+.com-dpcalendar-adminform .dp-form-radio input[type=radio]:hover:not(:checked) + label::before {
 	content: "✔";
 	text-indent: 0.9em;
 	color: #C2C2C2;
 }
-.com-dpcalendar-adminform .dp-form-radio input[type=radio]:hover:not(:checked) + label {
-	color: #888;
-}
-.com-dpcalendar-adminform .dp-form-radio input[type=radio]:checked + label:before {
-	content: "✔";
-	text-indent: 0.9em;
-	color: #cdeacd;
-	background-color: #46a546;
-}
 .com-dpcalendar-adminform .dp-form-radio input[type=radio]:checked + label {
 	color: #777;
 }
-.com-dpcalendar-adminform .dp-form-radio input[type=radio]:focus ~ label:before {
-	box-shadow: 0 0 0 3px #999;
+.com-dpcalendar-adminform .dp-form-radio input[type=radio]:hover:not(:checked) + label {
+	color: #888;
 }
 .com-dpcalendar-adminform .dp-form-radio .form-check {
 	padding: 0;
 }
 .com-dpcalendar-adminform .dp-form-input {
 	width: 100%;
-	min-height: 28px;
-	-webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
-	-moz-box-sizing: border-box; /* Firefox, other Gecko */
+	min-height: 28px; /* Safari/Chrome, other WebKit */ /* Firefox, other Gecko */
 	box-sizing: border-box; /* Opera/IE 8+ */
 }
 .com-dpcalendar-adminform .dp-control, .com-dpcalendar-adminform .control-group {
@@ -86,9 +82,10 @@
 .com-dpcalendar-adminform .dp-control_hidden {
 	display: none;
 }
-@media screen and (max-width: 640px) {
-	.com-dpcalendar-adminform .dp-control:not(.dp-control_hidden), .com-dpcalendar-adminform .control-group:not(.dp-control_hidden) {
-		display: block;
+@media screen and (width <= 640px) {
+	.com-dpcalendar-adminform .dp-control, .com-dpcalendar-adminform .control-group {
+		/* stylelint-disable-next-line selector-class-pattern */
+		/* stylelint-disable-next-line selector-class-pattern */
 	}
 	.com-dpcalendar-adminform .dp-control__label, .com-dpcalendar-adminform .control-group .control-label,
 	.com-dpcalendar-adminform .control-group .form-label, .com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls,
@@ -96,12 +93,15 @@
 		width: 100%;
 		margin-left: 0;
 	}
-	.com-dpcalendar-adminform .control-group:not(.dp-control_hidden) {
+	.com-dpcalendar-adminform .dp-control:not(.dp-control_hidden), .com-dpcalendar-adminform .control-group:not(.dp-control_hidden) {
 		display: block;
 	}
-	.com-dpcalendar-adminform .dp-control control-label, .com-dpcalendar-adminform .control-group control-label,
-	.com-dpcalendar-adminform .dp-control controls,
-	.com-dpcalendar-adminform .control-group controls {
+	.com-dpcalendar-adminform .dp-control .control-group:not(.dp-control_hidden), .com-dpcalendar-adminform .control-group .control-group:not(.dp-control_hidden) {
+		display: block;
+	}
+	.com-dpcalendar-adminform .dp-control .control-label, .com-dpcalendar-adminform .control-group .control-label,
+	.com-dpcalendar-adminform .dp-control .controls,
+	.com-dpcalendar-adminform .control-group .controls {
 		width: 100%;
 		margin-left: 0;
 	}
@@ -126,7 +126,7 @@
 	position: relative;
 }
 .com-dpcalendar-adminform .dp-select-container__options {
-	background: #ffffff;
+	background: #fff;
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
 	max-height: 300px;
@@ -160,8 +160,6 @@
 	padding: 0.2rem;
 	border-radius: 0.25rem;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 	box-sizing: border-box;
 }

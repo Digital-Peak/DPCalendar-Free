@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -18,13 +19,13 @@ $this->dpdocument->addStyle($this->params->get('list_custom_css'));
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
 	<?php echo $this->loadTemplate('heading'); ?>
 	<div class="com-dpcalendar-timeline__custom-text">
-		<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('list_textbefore'))); ?>
+		<?php echo HTMLHelper::_('content.prepare', $this->translate($this->params->get('list_textbefore'))); ?>
 	</div>
 	<?php echo $this->loadTemplate('map'); ?>
 	<?php echo $this->loadTemplate('header'); ?>
 	<?php echo $this->loadTemplate('form'); ?>
 	<?php echo $this->loadTemplate('events'); ?>
 	<div class="com-dpcalendar-timeline__custom-text">
-		<?php echo JHtml::_('content.prepare', $this->translate($this->params->get('list_textafter'))); ?>
+		<?php echo HTMLHelper::_('content.prepare', $this->translate($this->params->get('list_textafter'))); ?>
 	</div>
 </div>

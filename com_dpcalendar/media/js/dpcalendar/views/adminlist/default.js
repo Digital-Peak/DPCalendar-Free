@@ -23,7 +23,7 @@
 		};
 		const startInput = document.querySelector('input[name="filter[search_start]"]');
 		if (startInput) {
-			startInput.addEventListener('change', (e) => {
+			startInput.addEventListener('change', () => {
 				if (startInput.classList.contains('dp-datepicker__input') && !startInput.dpPikaday) {
 					return;
 				}
@@ -34,7 +34,7 @@
 		Array.from(document.querySelectorAll('.dp-event__state div[role="tooltip"]')).forEach((state) => state.remove());
 		const endInput = document.querySelector('input[name="filter[search_end]"]');
 		if (endInput) {
-			endInput.addEventListener('change', (e) => {
+			endInput.addEventListener('change', () => {
 				if (endInput.classList.contains('dp-datepicker__input') && !endInput.dpPikaday) {
 					return;
 				}
@@ -43,7 +43,7 @@
 		}
 		const closeButton = document.querySelector('.com-dpcalendar-events .dp-button-close');
 		if (closeButton) {
-			closeButton.addEventListener('click', (e) => {
+			closeButton.addEventListener('click', () => {
 				document.getElementById('batch-category-id').value = '';
 				document.getElementById('batch-access').value = '';
 				document.getElementById('batch-language-id').value = '';
@@ -52,10 +52,10 @@
 		}
 		const submitButton = document.querySelector('.com-dpcalendar-events .dp-button-submit');
 		if (submitButton) {
-			submitButton.addEventListener('click', (e) => Joomla.submitbutton('event.batch'));
+			submitButton.addEventListener('click', () => Joomla.submitbutton('event.batch'));
 		}
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-events .dp-event .dp-link-featured')).forEach((link) => {
-			link.addEventListener('click', (e) => Joomla.listItemTask('cb' + link.getAttribute('data-cb'), link.getAttribute('data-state')));
+			link.addEventListener('click', () => Joomla.listItemTask('cb' + link.getAttribute('data-cb'), link.getAttribute('data-state')));
 		});
 		[].slice.call(document.querySelectorAll('.com-dpcalendar-events-modal .dp-link')).forEach((link) => {
 			link.addEventListener('click', (e) => {
@@ -74,10 +74,10 @@
 			});
 		});
 		[].slice.call(document.querySelectorAll('.js-stools-btn-clear')).forEach((button) => {
-			button.addEventListener('click', (e) => {
+			button.addEventListener('click', () => {
 				const ticketsEventInput = document.getElementById('filter_event_id_id');
 				if (!ticketsEventInput) {
-					return
+					return;
 				}
 				ticketsEventInput.value = '';
 			});

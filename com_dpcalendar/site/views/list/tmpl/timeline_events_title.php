@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\Helper\DPCalendarHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -10,7 +11,7 @@ $event = $this->displayData['event'];
 ?>
 <h2 class="dp-event__title" style="background-color: #<?php echo $event->color; ?>;">
 	<a href="<?php echo $this->router->getEventRoute($event->id, $event->catid); ?>" class="dp-event__link dp-link"
-	   style="color: #<?php echo \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($event->color); ?>">
+	   style="color: #<?php echo DPCalendarHelper::getOppositeBWColor($event->color); ?>">
 		<?php echo $event->title; ?>
 	</a>
 	<?php if ($event->state == 3) { ?>

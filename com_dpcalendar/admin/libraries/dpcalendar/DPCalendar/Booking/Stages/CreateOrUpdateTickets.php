@@ -7,6 +7,9 @@
 
 namespace DPCalendar\Booking\Stages;
 
+use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Object\CMSObject;
+
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Booking;
@@ -15,17 +18,11 @@ use League\Pipeline\StageInterface;
 
 class CreateOrUpdateTickets implements StageInterface
 {
-	/**
-	 * @var \JApplicationCms
-	 */
-	private $application = null;
+	private ?CMSApplication $application = null;
 
-	/**
-	 * @var \DPCalendarModelTicket
-	 */
-	private $model;
+	private \DPCalendarModelTicket $model;
 
-	public function __construct(\DPCalendarModelTicket $model, \JApplicationCms $application)
+	public function __construct(\DPCalendarModelTicket $model, CMSApplication $application)
 	{
 		$this->model       = $model;
 		$this->application = $application;
@@ -83,7 +80,7 @@ class CreateOrUpdateTickets implements StageInterface
 
 			if (!$prices) {
 				// Free event
-				$prices = new \JObject(['value' => [0 => 0]]);
+				$prices = new CMSObject(['value' => [0 => 0]]);
 			}
 
 			foreach ($prices->value as $index => $value) {

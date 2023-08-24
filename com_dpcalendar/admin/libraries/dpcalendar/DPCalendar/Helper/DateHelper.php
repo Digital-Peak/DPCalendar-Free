@@ -7,6 +7,9 @@
 
 namespace DPCalendar\Helper;
 
+use Recurr\Rule;
+use Recurr\Transformer\Translator;
+
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Date\Date;
@@ -24,7 +27,7 @@ class DateHelper
 		}
 
 		$start = $this->getDate($startDate);
-		$rule  = new \Recurr\Rule('', $start, null, $start->getTimezone()->getName());
+		$rule  = new Rule('', $start, null, $start->getTimezone()->getName());
 		$parts = $rule->parseString($rrule);
 
 		// Parser can't handle both
@@ -38,7 +41,7 @@ class DateHelper
 		}
 
 
-		$translator = new \Recurr\Transformer\Translator();
+		$translator = new Translator();
 		try {
 			$translator->loadLocale(substr(DPCalendarHelper::getFrLanguage(), 0, 2));
 		} catch (\InvalidArgumentException $e) {

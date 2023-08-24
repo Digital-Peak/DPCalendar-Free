@@ -29,15 +29,9 @@ class SetupForNew implements StageInterface
 	 */
 	private $user = null;
 
-	/**
-	 * @var \DPCalendarModelTaxrate
-	 */
-	private $taxRateModel = null;
+	private ?\DPCalendarModelTaxrate $taxRateModel = null;
 
-	/**
-	 * @var \DPCalendarModelCoupon
-	 */
-	private $couponModel = null;
+	private ?\DPCalendarModelCoupon $couponModel = null;
 
 	/**
 	 * @var Registry
@@ -67,6 +61,7 @@ class SetupForNew implements StageInterface
 
 	public function __invoke($payload)
 	{
+		$event = null;
 		// Default some data
 		$payload->data['price']    = 0;
 		$payload->data['tax']      = 0.00;
@@ -120,7 +115,7 @@ class SetupForNew implements StageInterface
 
 			// When tickets are reviewed and capacity is full and waiting list is active, put it on the waiting list
 			$event = reset($payload->events);
-			if ($payload->data['state'] == 2 && (count($payload->events) == 1 || $event->booking_series != 2)
+			if ($payload->data['state'] == 2 && ((is_countable($payload->events) ? count($payload->events) : 0) == 1 || $event->booking_series != 2)
 				&& $event->capacity != null && $event->capacity_used >= $event->capacity && $event->booking_waiting_list) {
 				$payload->data['state'] = 8;
 			}

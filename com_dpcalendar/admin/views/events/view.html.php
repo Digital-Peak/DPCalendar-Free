@@ -60,7 +60,7 @@ class DPCalendarViewEvents extends BaseView
 
 		$bar = Toolbar::getInstance('toolbar');
 
-		if (count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) > 0) {
+		if ((is_countable($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) ? count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) : 0) > 0) {
 			ToolbarHelper::addNew('event.add');
 		}
 		if ($canDo->get('core.edit')) {

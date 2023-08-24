@@ -1,4 +1,8 @@
 <?php
+
+use Joomla\CMS\Access\Rules;
+use Joomla\String\StringHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -46,7 +50,7 @@ class DPCalendarTableExtcalendar extends Table
 
 		// Bind the rules.
 		if (isset($array['rules']) && is_array($array['rules'])) {
-			$rules = new JRules($array['rules']);
+			$rules = new Rules($array['rules']);
 			$this->setRules($rules);
 		}
 
@@ -89,11 +93,11 @@ class DPCalendarTableExtcalendar extends Table
 		// Verify that the alias is unique
 		$table = Table::getInstance('Extcalendar', 'DPCalendarTable');
 		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id == 0)) {
-			$this->alias = \Joomla\String\StringHelper::increment($this->alias);
+			$this->alias = StringHelper::increment($this->alias);
 		}
 
 		if (empty($this->_rules)) {
-			$this->_rules = new JRules(['core.edit' => [], 'core.create' => [], 'core.delete' => []]);
+			$this->_rules = new Rules(['core.edit' => [], 'core.create' => [], 'core.delete' => []]);
 		}
 
 		// Obfuscate the password
@@ -101,7 +105,7 @@ class DPCalendarTableExtcalendar extends Table
 			$params = new Registry($this->params);
 
 			if ($pw = $params->get('password')) {
-				$params->set('password', \DPCalendar\Helper\DPCalendarHelper::obfuscate($pw));
+				$params->set('password', DPCalendarHelper::obfuscate($pw));
 			}
 			$this->params = $params->toString();
 		}
@@ -113,7 +117,7 @@ class DPCalendarTableExtcalendar extends Table
 			// Restore the params
 			$params = new Registry($this->params);
 			if ($pw = $params->get('password')) {
-				$params->set('password', \DPCalendar\Helper\DPCalendarHelper::deobfuscate($pw));
+				$params->set('password', DPCalendarHelper::deobfuscate($pw));
 			}
 			$this->params = $params->toString();
 		}
@@ -196,7 +200,7 @@ class DPCalendarTableExtcalendar extends Table
 		if (!empty($this->metakey)) {
 			$bad_characters = ["\n", "\r", "\"", "<", ">"];
 
-			$after_clean = \Joomla\String\StringHelper::str_ireplace($bad_characters, "", $this->metakey);
+			$after_clean = StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys        = explode(',', $after_clean);
 			$clean_keys  = [];
 			foreach ($keys as $key) {

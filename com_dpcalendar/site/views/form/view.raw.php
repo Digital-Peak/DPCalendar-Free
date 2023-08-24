@@ -1,4 +1,8 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\View\HtmlView;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,7 +12,7 @@ defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.component.view');
 
-class DPCalendarViewForm extends JViewLegacy
+class DPCalendarViewForm extends HtmlView
 {
 	protected $form;
 	protected $item;
@@ -18,8 +22,8 @@ class DPCalendarViewForm extends JViewLegacy
 	public function display($tpl = null)
 	{
 		// Initialise variables.
-		$app  = JFactory::getApplication();
-		$user = JFactory::getUser();
+		$app  = Factory::getApplication();
+		$user = Factory::getUser();
 
 		// Get model data.
 		$this->state      = $this->get('State');
@@ -42,8 +46,8 @@ class DPCalendarViewForm extends JViewLegacy
 		}
 
 		// Check for errors.
-		if (count($errors = $this->get('Errors'))) {
-			JFactory::getApplication()->enqueueMessage(implode("\n", $errors), 500);
+		if (is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) {
+			Factory::getApplication()->enqueueMessage(implode("\n", $errors), 500);
 
 			return false;
 		}

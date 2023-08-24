@@ -1,4 +1,11 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\Router\Route;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +13,7 @@
  */
 defined('_JEXEC') or die();
 
-class PlgUserDPCalendar extends JPlugin
+class PlgUserDPCalendar extends CMSPlugin
 {
 	protected $app;
 	protected $autoloadLanguage = true;
@@ -17,7 +24,7 @@ class PlgUserDPCalendar extends JPlugin
 			return;
 		}
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		if ($isNew) {
 			$query = $db->getQuery(true);
 			$query->insert('#__dpcalendar_caldav_principals');
@@ -82,13 +89,13 @@ class PlgUserDPCalendar extends JPlugin
 		if ($isNew) {
 			JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-			JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-			$model = JModelLegacy::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
+			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+			$model = BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
 			if ($model && $booking = $model->assign($user)) {
-				$loginUrl = JRoute::_(
+				$loginUrl = Route::_(
 					'index.php?option=com_users&view=login&return=' . base64_encode(DPCalendarHelperRoute::getBookingRoute($booking))
 				);
-				$this->app->enqueueMessage(JText::sprintf('PLG_USER_DPCALENDAR_BOOKING_ASSIGNED', $booking->uid, $loginUrl));
+				$this->app->enqueueMessage(Text::sprintf('PLG_USER_DPCALENDAR_BOOKING_ASSIGNED', $booking->uid, $loginUrl));
 			}
 		}
 	}
@@ -99,7 +106,7 @@ class PlgUserDPCalendar extends JPlugin
 			return;
 		}
 
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 
 		// Delete membership
 		$query = $db->getQuery(true);
@@ -155,7 +162,7 @@ class PlgUserDPCalendar extends JPlugin
 		}
 
 		if ($form->getName() != 'com_users.profile' && $form->getName() != 'com_admin.profile'
-			&& !(JFactory::getApplication()->isClient('administrator') && $form->getName() == 'com_users.user')) {
+			&& !(Factory::getApplication()->isClient('administrator') && $form->getName() == 'com_users.user')) {
 			return true;
 		}
 

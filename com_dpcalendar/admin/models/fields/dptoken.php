@@ -9,12 +9,16 @@ defined('_JEXEC') or die();
 
 use DPCalendar\HTML\Document\HtmlDocument;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\TextField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
 
-FormHelper::loadFieldClass('text');
+if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Field\\TextField', false)) {
+	FormHelper::loadFieldClass('text');
+	class_alias('JFormFieldText', '\\Joomla\\CMS\\Form\\Field\\TextField');
+}
 
-class JFormFieldDptoken extends JFormFieldText
+class JFormFieldDptoken extends TextField
 {
 	protected $type = 'Dptoken';
 

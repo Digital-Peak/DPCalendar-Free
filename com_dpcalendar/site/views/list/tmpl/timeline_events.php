@@ -18,7 +18,8 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 			<?php $startDate = $this->dateHelper->getDate($event->start_date, $event->all_day); ?>
 			<?php $this->displayData['event'] = $event; ?>
 			<?php $calendar = DPCalendarHelper::getCalendar($event->catid); ?>
-			<div class="dp-event dp-event_<?php echo $event->ongoing_start_date ? ($event->ongoing_end_date ? 'started' : 'finished') : 'future'; ?>">
+			<div class="dp-event dp-event_<?php echo $event->ongoing_start_date ? ($event->ongoing_end_date ? 'started' : 'finished') : 'future'; ?>"
+				data-id="<?php echo $event->id; ?>" data-calid="<?php echo $calendar->id; ?>">
 				<div class="dp-event__dot">
 					<span class="dp-event__dot-date"><?php echo $startDate->format('j M', true); ?></span>
 				</div>

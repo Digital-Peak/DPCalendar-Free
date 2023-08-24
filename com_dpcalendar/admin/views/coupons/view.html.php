@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +10,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewCoupons extends \DPCalendar\View\BaseView
+class DPCalendarViewCoupons extends BaseView
 {
 	protected $items;
 	protected $pagination;
@@ -25,22 +29,22 @@ class DPCalendarViewCoupons extends \DPCalendar\View\BaseView
 		$canDo = DPCalendarHelper::getActions();
 
 		if ($canDo->get('core.create')) {
-			JToolbarHelper::addNew('coupon.add');
+			ToolbarHelper::addNew('coupon.add');
 		}
 		if ($canDo->get('core.edit')) {
-			JToolbarHelper::editList('coupon.edit');
+			ToolbarHelper::editList('coupon.edit');
 		}
 		if ($canDo->get('core.edit.state')) {
-			JToolbarHelper::publish('coupons.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('coupons.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			ToolbarHelper::publish('coupons.publish', 'JTOOLBAR_PUBLISH', true);
+			ToolbarHelper::unpublish('coupons.unpublish', 'JTOOLBAR_UNPUBLISH', true);
 
-			JToolbarHelper::archiveList('coupons.archive');
-			JToolbarHelper::checkin('coupons.checkin');
+			ToolbarHelper::archiveList('coupons.archive');
+			ToolbarHelper::checkin('coupons.checkin');
 		}
 		if ($state->get('filter.state') == - 2 && $canDo->get('core.delete')) {
-			JToolbarHelper::deleteList('', 'coupons.delete', 'JTOOLBAR_EMPTY_TRASH');
+			ToolbarHelper::deleteList('', 'coupons.delete', 'JTOOLBAR_EMPTY_TRASH');
 		} elseif ($canDo->get('core.edit.state')) {
-			JToolbarHelper::trash('coupons.trash');
+			ToolbarHelper::trash('coupons.trash');
 		}
 		parent::addToolbar();
 	}

@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +10,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewCoupon extends \DPCalendar\View\BaseView
+class DPCalendarViewCoupon extends BaseView
 {
 	public function init()
 	{
@@ -23,22 +27,22 @@ class DPCalendarViewCoupon extends \DPCalendar\View\BaseView
 		$canDo      = DPCalendarHelper::getActions();
 
 		if (!$checkedOut && $canDo->get('core.edit')) {
-			JToolbarHelper::apply('coupon.apply');
-			JToolbarHelper::save('coupon.save');
+			ToolbarHelper::apply('coupon.apply');
+			ToolbarHelper::save('coupon.save');
 		}
 		if (!$checkedOut && $canDo->get('core.create')) {
-			JToolbarHelper::save2new('coupon.save2new');
+			ToolbarHelper::save2new('coupon.save2new');
 		}
 		if (!$isNew && $canDo->get('core.create')) {
-			JToolbarHelper::save2copy('coupon.save2copy');
+			ToolbarHelper::save2copy('coupon.save2copy');
 		}
 		if (empty($this->coupon->id)) {
-			JToolbarHelper::cancel('coupon.cancel');
+			ToolbarHelper::cancel('coupon.cancel');
 		} else {
-			JToolbarHelper::cancel('coupon.cancel', 'JTOOLBAR_CLOSE');
+			ToolbarHelper::cancel('coupon.cancel', 'JTOOLBAR_CLOSE');
 		}
 
-		JToolbarHelper::divider();
+		ToolbarHelper::divider();
 		parent::addToolbar();
 	}
 }

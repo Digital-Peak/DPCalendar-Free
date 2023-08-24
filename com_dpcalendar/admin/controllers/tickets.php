@@ -1,4 +1,7 @@
 <?php
+
+use Joomla\CMS\MVC\Controller\AdminController;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,7 +11,7 @@ defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.component.controlleradmin');
 
-class DPCalendarControllerTickets extends JControllerAdmin
+class DPCalendarControllerTickets extends AdminController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_TICKET';
 

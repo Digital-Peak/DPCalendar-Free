@@ -4,9 +4,14 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class JFormFieldDPRadio extends JFormField
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+
+class JFormFieldDPRadio extends FormField
 {
 	protected $type = 'DPRadio';
 
@@ -38,7 +43,7 @@ class JFormFieldDPRadio extends JFormField
 				htmlspecialchars($option->value, ENT_COMPAT, 'UTF-8') . '"' . $checked . $onclick . $disabled . '/>';
 
 			$html[] = '<label for="' . $this->id . $i . '"' . $class . '>' .
-				JText::alt($option->text, preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)) . '</label>';
+				Text::alt($option->text, preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname)) . '</label>';
 		}
 
 		// End the radio field output.
@@ -59,7 +64,7 @@ class JFormFieldDPRadio extends JFormField
 			}
 
 			// Create a new option object based on the <option /> element.
-			$tmp = JHtml::_(
+			$tmp = HTMLHelper::_(
 				'select.option',
 				(string)$option['value'],
 				trim((string)$option),

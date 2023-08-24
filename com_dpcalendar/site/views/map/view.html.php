@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,12 +10,12 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewMap extends \DPCalendar\View\BaseView
+class DPCalendarViewMap extends BaseView
 {
 	public function display($tpl = null)
 	{
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-		$this->setModel(JModelLegacy::getInstance('Events', 'DPCalendarModel'), true);
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+		$this->setModel(BaseDatabaseModel::getInstance('Events', 'DPCalendarModel'), true);
 
 		return parent::display($tpl);
 	}

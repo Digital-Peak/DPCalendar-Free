@@ -38,12 +38,18 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
-			<field name="list_textbefore" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="list_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
-			<field name="list_textafter" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="list_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 			<field name="list_description_length" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DESC_COUNT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DESC_COUNT_DESC"/>
+			<field name="list_ordering" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_DESC">
+				<option value="asc">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_ASC</option>
+				<option value="desc">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_DESC</option>
+				<option value="adaptive">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_ADAPTIVE</option>
+			</field>
 			<field name="list_manage_search_form" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_DESC">
 				<option value="1">JSHOW</option>
@@ -109,7 +115,7 @@
 			<field name="list_filter_tags" type="tag" multiple="true" mode="nested"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC">
 			</field>
-			<field name="list_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="list_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="event" label="COM_DPCALENDAR_EVENT">
@@ -227,9 +233,9 @@
 			<field name="event_map_long" type="text" useglobal="true" validate="decimal"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-			<field name="event_textbefore" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="event_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
-			<field name="event_textafter" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="event_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 			<field name="event_count_clicks" type="list" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
@@ -249,7 +255,7 @@
 				<option value="1">JYES</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_EMPTY</option>
 			</field>
-			<field name="event_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="event_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -439,7 +445,7 @@
 				<option value="*">JALL</option>
 			</field>
 			<field name="event_form_description" type="editor" buttons="true"
-					class="input-xlarge" filter="JComponentHelper::filterText"
+					class="input-xlarge" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 					label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
 			<field name="event_form_show_map" type="list" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL"
@@ -447,7 +453,7 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
-			<field name="event_form_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="event_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -503,7 +509,7 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="booking_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="booking_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -569,7 +575,7 @@
 			</field>
 			<field name="booking_form_default_country" type="dpcountries" class="dp-form-input dp-select"
 					label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"/>
-			<field name="booking_form_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="booking_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -632,7 +638,7 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="ticket_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="ticket_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
@@ -703,7 +709,7 @@
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_REQUIRED</option>
 				<option value="0">COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_HIDDEN</option>
 			</field>
-			<field name="ticket_form_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="ticket_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 					label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 					description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>

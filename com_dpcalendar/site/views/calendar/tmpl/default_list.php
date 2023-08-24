@@ -1,4 +1,6 @@
 <?php
+use Joomla\Registry\Registry;
+use Joomla\CMS\Uri\Uri;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -11,9 +13,9 @@ if ($this->params->get('show_selection', 1) == 2) {
 }
 ?>
 <div class="com-dpcalendar-calendar__list com-dpcalendar-calendar__list_<?php echo $this->params->get('show_selection', 1) == 3 ? '' : 'hidden'; ?>">
-	<?php if (count($this->doNotListCalendars) >= 10) { ?>
+	<?php if ((is_countable($this->doNotListCalendars) ? count($this->doNotListCalendars) : 0) >= 10) { ?>
 		<div class="com-dpcalendar-calendar__list-toggle">
-			<input type="checkbox" id="calendars-toggle" class="dp-input dp-input-checkbox" checked>
+			<input type="checkbox" id="calendars-toggle" class="dp-input dp-input-checkbox com-dpcalendar-calendar__list-toggle-input" checked>
 			<label for="calendars-toggle" class="dp-input-label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOGGLE'); ?></label>
 		</div>
 	<?php } ?>
@@ -41,14 +43,14 @@ if ($this->params->get('show_selection', 1) == 2) {
 						<a href="<?php echo $icalRoute; ?>" class="dp-link">
 							[<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ICAL'); ?>]
 						</a>
-						<?php if (!$this->user->guest && $token = (new \Joomla\Registry\Registry($this->user->params))->get('token')) { ?>
+						<?php if (!$this->user->guest && $token = (new Registry($this->user->params))->get('token')) { ?>
 							<a href="<?php echo $this->router->getCalendarIcalRoute($calendar->id, $token); ?>" class="dp-link dp-link-ical">
 								[<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRIVATE_ICAL'); ?>]
 							</a>
 						<?php } ?>
 						<?php if (!$calendar->external && !DPCalendarHelper::isFree() && !$this->user->guest) { ?>
 							<?php $url = '/components/com_dpcalendar/caldav.php/calendars/' . $this->user->username . '/dp-' . $calendar->id; ?>
-							<a href="<?php echo trim(JUri::base(), '/') . $url; ?>" class="dp-link dp-link-caldav">
+							<a href="<?php echo trim(Uri::base(), '/') . $url; ?>" class="dp-link dp-link-caldav">
 								[<?php echo $this->translate('COM_DPCALENDAR_VIEW_PROFILE_TABLE_CALDAV_URL_LABEL'); ?>]
 							</a>
 						<?php } ?>

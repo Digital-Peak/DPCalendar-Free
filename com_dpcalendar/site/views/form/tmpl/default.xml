@@ -186,14 +186,14 @@
 				label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
 				<option value="*">JALL</option>
 			</field>
-			<field name="event_form_description" type="editor" useglobal="true" buttons="true" filter="JComponentHelper::filterText"
+			<field name="event_form_description" type="editor" useglobal="true" buttons="true" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 				label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
 			<field name="event_form_show_map" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_MAP_DESC">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
-			<field name="event_form_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="event_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 	</fields>

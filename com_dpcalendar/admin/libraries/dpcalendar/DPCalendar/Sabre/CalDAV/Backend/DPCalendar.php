@@ -22,6 +22,7 @@ use Sabre\CalDAV\Plugin;
 use Sabre\CalDAV\Xml\Property\SupportedCalendarComponentSet;
 use Sabre\DAV\Exception\BadRequest;
 use Sabre\DAV\Exception\Forbidden;
+use Sabre\DAV\PropPatch;
 use Sabre\VObject\Reader;
 
 \JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
@@ -174,7 +175,7 @@ class DPCalendar extends PDO
 		$model->setState('filter.ongoing', 1);
 		$model->setState('filter.state', 1);
 
-		if (count($filters['comp-filters']) > 0 && !$filters['comp-filters'][0]['is-not-defined']) {
+		if ((is_countable($filters['comp-filters']) ? count($filters['comp-filters']) : 0) > 0 && !$filters['comp-filters'][0]['is-not-defined']) {
 			$componentType = $filters['comp-filters'][0]['name'];
 
 			if ($componentType == 'VEVENT' && !empty($filters['comp-filters'][0]['time-range'])) {
@@ -331,7 +332,7 @@ class DPCalendar extends PDO
 		return parent::deleteCalendarObject($calendarId, $objectUri);
 	}
 
-	public function updateCalendar($calendarId, \Sabre\DAV\PropPatch $propPatch)
+	public function updateCalendar($calendarId, PropPatch $propPatch)
 	{
 		if (is_string($calendarId) && strpos($calendarId, 'dp-') !== false) {
 			Log::add('Update calendar ' . $calendarId . 'with propatch', Log::INFO, 'com_dpcalendar-caldav-backend');
@@ -431,7 +432,7 @@ class DPCalendar extends PDO
 
 				$locations = $model->getItems();
 				foreach ($locations as $l) {
-					if ($l->title == $locationString || $l->alias == $locationString || \DPCalendar\Helper\Location::format($l) == $locationString) {
+					if ($l->title == $locationString || $l->alias == $locationString || Location::format($l) == $locationString) {
 						$location = $l;
 						break;
 					}

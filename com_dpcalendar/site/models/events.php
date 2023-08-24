@@ -1,4 +1,7 @@
 <?php
+
+use Joomla\String\StringHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -156,7 +159,7 @@ class DPCalendarModelEvents extends ListModel
 						}
 
 						foreach ($item->rooms as $room) {
-							list($locationId, $roomId) = explode('-', $room, 2);
+							[$locationId, $roomId] = explode('-', $room, 2);
 
 							foreach ($location->rooms as $lroom) {
 								if ($locationId != $location->id || $roomId != $lroom->id) {
@@ -445,7 +448,7 @@ class DPCalendarModelEvents extends ListModel
 				}
 
 				// Creating the search terms
-				$searchTerms = explode(' ', \Joomla\String\StringHelper::strtolower($searchString));
+				$searchTerms = explode(' ', StringHelper::strtolower($searchString));
 				natsort($searchTerms);
 
 				// Filtering the terms based on + - or none operators
@@ -612,7 +615,7 @@ class DPCalendarModelEvents extends ListModel
 			}
 			$searchQuery .= ')';
 
-			if ($termsKey < count($terms) - 1) {
+			if ($termsKey < (is_countable($terms) ? count($terms) : 0) - 1) {
 				$searchQuery .= ' ' . $termOperator . ' ';
 			}
 			$searchQuery .= PHP_EOL;

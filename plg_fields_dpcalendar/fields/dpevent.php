@@ -9,14 +9,18 @@ defined('_JEXEC') or die();
 
 use DPCalendar\Helper\DateHelper;
 use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-FormHelper::loadFieldClass('list');
+if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Field\\ListField', false)) {
+	FormHelper::loadFieldClass('list');
+	class_alias('JFormFieldList', '\\Joomla\\CMS\\Form\\Field\\ListField');
+}
 
-class JFormFieldDpevent extends JFormFieldList
+class JFormFieldDpevent extends ListField
 {
 	protected $type = 'Dpevent';
 

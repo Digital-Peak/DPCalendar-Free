@@ -1,5 +1,5 @@
 .com-dpcalendar-tools-default .dp-icon svg {
-	fill: currentColor;
+	fill: currentcolor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
@@ -29,7 +29,7 @@
 	padding: 0 5px;
 }
 .com-dpcalendar-tools-default .dp-quick-icon .dp-icon-overlay svg {
-	fill: #ffffff;
+	fill: #fff;
 	width: 10px;
 	height: 10px;
 	min-height: unset;
@@ -50,6 +50,7 @@
 	text-transform: uppercase;
 	font-size: 0.75rem;
 	font-weight: bold;
+	/* stylelint-disable-next-line declaration-block-no-shorthand-property-overrides */
 	transition: all 0.3s ease;
 	position: relative;
 }
@@ -60,7 +61,7 @@
 .com-dpcalendar-tools-default .dp-quick-icon__link:hover .dp-icon svg, .com-dpcalendar-tools-default .dp-quick-icon__link:focus .dp-icon svg, .com-dpcalendar-tools-default .dp-quick-icon__link:active .dp-icon svg {
 	fill: #fff;
 }
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
 	.com-dpcalendar-tools-default .dp-quick-icon {
 		max-width: none;
 	}

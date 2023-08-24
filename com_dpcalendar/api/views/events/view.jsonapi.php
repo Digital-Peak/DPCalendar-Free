@@ -133,7 +133,7 @@ class DPCalendarViewEvents extends BaseApiView
 		$item->description = $item->text;
 
 		foreach (FieldsHelper::getFields('com_dpcalendar.event', $item, true) as $field) {
-			$item->{$field->name} = isset($field->apivalue) ? $field->apivalue : $field->rawvalue;
+			$item->{$field->name} = $field->apivalue ?? $field->rawvalue;
 		}
 
 		$item->tags = [];

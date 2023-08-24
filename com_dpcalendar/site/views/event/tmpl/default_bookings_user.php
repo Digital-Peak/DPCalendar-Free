@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\Helper\Booking;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -12,7 +13,7 @@ if (!$this->event->user_discount) {
 ?>
 <div class="dp-booking-info__discount-user">
 	<?php foreach ($this->event->user_discount->value as $index => $value) { ?>
-		<?php if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $this->event, -2, $index) == 1000) { ?>
+		<?php if (Booking::getPriceWithDiscount(1000, $this->event, -2, $index) == 1000) { ?>
 			<?php continue; ?>
 		<?php } ?>
 		<div class="dp-userdiscount dp-info-box">

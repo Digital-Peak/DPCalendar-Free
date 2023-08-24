@@ -32,7 +32,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 	public function __construct(&$db = null)
 	{
-		if (!class_exists('DPCalendar\\Helper\\DPCalendarHelper')) {
+		if (!class_exists(DPCalendarHelper::class)) {
 			// Needed for versions
 			JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 		}
@@ -272,7 +272,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 				if (empty($part)) {
 					continue;
 				}
-				list($partName, $partValue) = explode('=', $part);
+				[$partName, $partValue] = explode('=', $part);
 
 				if ($partName === 'UNTIL') {
 					// Remove the timezone information, sabre assumes then the field is in user timezone
@@ -566,7 +566,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 		$this->_db->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in.
-		if ($checkin && (count($pks) == $this->_db->getAffectedRows())) {
+		if ($checkin && ((is_countable($pks) ? count($pks) : 0) == $this->_db->getAffectedRows())) {
 			// Checkin the rows.
 			foreach ($pks as $pk) {
 				$this->checkin($pk);
@@ -636,7 +636,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 	private function replaceLastInString($search, $replace, $str)
 	{
-		if (($pos = strrpos($str, $search)) !== false) {
+		if (($pos = strrpos($str, (string) $search)) !== false) {
 			$search_length = strlen($search);
 			$str           = substr_replace($str, $replace, $pos, $search_length);
 		}

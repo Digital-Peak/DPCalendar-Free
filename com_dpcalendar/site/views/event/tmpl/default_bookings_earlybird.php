@@ -1,4 +1,6 @@
 <?php
+use DPCalendar\Helper\Booking;
+use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -12,7 +14,7 @@ if (!$this->event->earlybird) {
 ?>
 <div class="dp-booking-info__discount-earlybird">
 	<?php foreach ($this->event->earlybird->value as $index => $value) { ?>
-		<?php if (\DPCalendar\Helper\Booking::getPriceWithDiscount(1000, $this->event, $index, -2) == 1000) { ?>
+		<?php if (Booking::getPriceWithDiscount(1000, $this->event, $index, -2) == 1000) { ?>
 			<?php continue; ?>
 		<?php } ?>
 		<div class="dp-earlybird dp-info-box">
@@ -35,7 +37,7 @@ if (!$this->event->earlybird) {
 					}
 				}
 				$dateFormated = $date->format($this->params->get('event_date_format', 'd.m.Y'), true); ?>
-				<?php echo JText::sprintf('COM_DPCALENDAR_VIEW_EVENT_EARLYBIRD_DISCOUNT_TEXT', $value, $dateFormated); ?>
+				<?php echo Text::sprintf('COM_DPCALENDAR_VIEW_EVENT_EARLYBIRD_DISCOUNT_TEXT', $value, $dateFormated); ?>
 			</span>
 			<span class="dp-earlybird__description"><?php echo $this->event->earlybird->description[$index]; ?></span>
 		</div>

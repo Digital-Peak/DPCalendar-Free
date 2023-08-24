@@ -89,7 +89,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 						}
 
 						if ($advanced) {
-							list($tmp, $id) = explode(':', $id, 2);
+							[$tmp, $id] = explode(':', $id, 2);
 						}
 
 						$array[] = $id;
@@ -99,7 +99,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 
 				if ($view == 'event') {
 					if ($advanced) {
-						list($tmp, $id) = explode(':', $query['id'], 2);
+						[$tmp, $id] = explode(':', $query['id'], 2);
 					} else {
 						$id = $query['id'];
 					}
@@ -139,7 +139,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 		$advanced = $params->get('sef_advanced_link', 0);
 
 		// Count route segments
-		$count = count($segments);
+		$count = is_countable($segments) ? count($segments) : 0;
 
 		if (! empty($segments) && $segments[0] == 'events') {
 			$vars['view']   = $segments[0];

@@ -1,4 +1,7 @@
 <?php
+
+use DPCalendar\Helper\Ical;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -71,7 +74,7 @@ class DPCalendarControllerIcal extends BaseController
 		header('Content-Type: text/calendar; charset=utf-8');
 		header('Content-disposition: attachment; filename="' . Path::clean($calendar->title) . '.ics"');
 
-		echo \DPCalendar\Helper\Ical::createIcalFromCalendar($calendars, false);
+		echo Ical::createIcalFromCalendar($calendars, false);
 
 		if ($loggedIn) {
 			Factory::getSession()->set('user', null);

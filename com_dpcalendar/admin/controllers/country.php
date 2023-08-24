@@ -1,4 +1,7 @@
 <?php
+
+use Joomla\CMS\MVC\Controller\FormController;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +9,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarControllerCountry extends JControllerForm
+class DPCalendarControllerCountry extends FormController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_COUNTRY    ';
 

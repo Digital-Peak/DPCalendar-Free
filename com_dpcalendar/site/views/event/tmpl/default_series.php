@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -28,7 +29,7 @@ if (!$this->seriesEvents || !$this->params->get('event_show_series', 1) || empty
 		<?php } ?>
 	</ul>
 	<p class="com-dpcalendar-event__series-info">
-		<?php echo JText::sprintf(
+		<?php echo Text::sprintf(
 			'COM_DPCALENDAR_VIEW_EVENT_SERIES_INFO',
 			$this->dateHelper->getDate($this->event->series_min_start_date)->format($this->params->get('event_date_format', 'd.m.Y'), true),
 			$this->dateHelper->getDate($this->event->series_max_end_date)->format($this->params->get('event_date_format', 'd.m.Y'), true)

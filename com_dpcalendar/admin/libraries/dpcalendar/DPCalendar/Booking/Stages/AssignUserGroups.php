@@ -7,6 +7,8 @@
 
 namespace DPCalendar\Booking\Stages;
 
+use Joomla\CMS\User\UserHelper;
+
 defined('_JEXEC') or die();
 
 use League\Pipeline\StageInterface;
@@ -36,7 +38,7 @@ class AssignUserGroups implements StageInterface
 		}
 
 		foreach (array_unique($groups) as $group) {
-			\JUserHelper::addUserToGroup($payload->item->user_id, $group);
+			UserHelper::addUserToGroup($payload->item->user_id, $group);
 		}
 
 		return $payload;

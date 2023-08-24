@@ -1,4 +1,11 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\CMS\Router\Route;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,7 +15,7 @@ defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.component.controlleradmin');
 
-class DPCalendarControllerExtcalendars extends JControllerAdmin
+class DPCalendarControllerExtcalendars extends AdminController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_EXTCALENDAR';
 
@@ -16,7 +23,7 @@ class DPCalendarControllerExtcalendars extends JControllerAdmin
 	{
 		parent::__construct($config);
 
-		$this->input = JFactory::getApplication()->input;
+		$this->input = Factory::getApplication()->input;
 	}
 
 	public function getModel($name = 'Extcalendar', $prefix = 'DPCalendarModel', $config = ['ignore_request' => true])
@@ -75,9 +82,9 @@ class DPCalendarControllerExtcalendars extends JControllerAdmin
 		$plugin = $this->input->getCmd('dpplugin');
 
 		if ($this->getModel()->cleanEventCache($plugin)) {
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_DPCALENDAR_VIEW_EXTCALENDAR_CACHE_CLEAR_SUCCESS'), 'message');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_DPCALENDAR_VIEW_EXTCALENDAR_CACHE_CLEAR_SUCCESS'), 'message');
 		} else {
-			JFactory::getApplication()->enqueueMessage(JText::_('COM_DPCALENDAR_VIEW_EXTCALENDAR_CACHE_CLEAR_ERROR'), 'error');
+			Factory::getApplication()->enqueueMessage(Text::_('COM_DPCALENDAR_VIEW_EXTCALENDAR_CACHE_CLEAR_ERROR'), 'error');
 		}
 
 		$url = 'index.php?option=com_dpcalendar&view=extcalendars&dpplugin=' . $plugin;
@@ -85,17 +92,17 @@ class DPCalendarControllerExtcalendars extends JControllerAdmin
 		if ($tmp) {
 			$url .= '&tmpl=' . $tmp;
 		}
-		$this->setRedirect(JRoute::_($url, false));
+		$this->setRedirect(Route::_($url, false));
 	}
 
 	public function sync()
 	{
 		$start = time();
-		JPluginHelper::importPlugin('dpcalendar');
-		JFactory::getApplication()->triggerEvent('onEventsSync', [$this->input->getCmd('dpplugin')]);
+		PluginHelper::importPlugin('dpcalendar');
+		Factory::getApplication()->triggerEvent('onEventsSync', [$this->input->getCmd('dpplugin')]);
 		$end = time();
 
-		JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_DPCALENDAR_VIEW_EXTCALENDARS_SYNC_FINISHED', $end - $start), 'success');
+		Factory::getApplication()->enqueueMessage(Text::sprintf('COM_DPCALENDAR_VIEW_EXTCALENDARS_SYNC_FINISHED', $end - $start), 'success');
 		DPCalendarHelper::sendMessage(null);
 	}
 }

@@ -1,4 +1,9 @@
 <?php
+
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\Form\FormRule;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,9 +13,9 @@ defined('_JEXEC') or die();
 
 use Joomla\Registry\Registry;
 
-class JFormRuleMinmaxtime extends JFormRule
+class JFormRuleMinmaxtime extends FormRule
 {
-	public function test(SimpleXMLElement $element, $value, $group = null, Registry $input = null, JForm $form = null)
+	public function test(SimpleXMLElement $element, $value, $group = null, Registry $input = null, Form $form = null)
 	{
 		// If the field is empty and not required, the field is valid.
 		$required = ((string)$element['required'] == 'true' || (string)$element['required'] == 'required');
@@ -25,17 +30,17 @@ class JFormRuleMinmaxtime extends JFormRule
 		}
 
 		// Get max date
-		$minDate = \DPCalendar\Helper\DPCalendarHelper::getDate($value);
+		$minDate = DPCalendarHelper::getDate($value);
 		$minTime = explode(':', $form->getFieldAttribute((string)$element['name'], 'min_time', '00:00'));
 		$minDate->setTime($minTime[0], $minTime[1]);
 
 		// Get the min date
-		$maxDate = \DPCalendar\Helper\DPCalendarHelper::getDate($value);
+		$maxDate = DPCalendarHelper::getDate($value);
 		$maxTime = explode(':', $form->getFieldAttribute((string)$element['name'], 'max_time', '24:00'));
 		$maxDate->setTime($maxTime[0], $maxTime[1]);
 
 		// The date of the value
-		$date = \DPCalendar\Helper\DPCalendarHelper::getDate($value);
+		$date = DPCalendarHelper::getDate($value);
 
 		// Check if the date is between
 		return $date >= $minDate && $date <= $maxDate;

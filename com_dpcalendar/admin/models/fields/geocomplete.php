@@ -10,13 +10,17 @@ defined('_JEXEC') or die();
 use DPCalendar\Helper\LayoutHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
 use DPCalendar\Translator\Translator;
+use Joomla\CMS\Form\Field\TextField;
 use Joomla\CMS\Form\FormHelper;
 use Joomla\CMS\Language\Text;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-FormHelper::loadFieldClass('text');
+if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Field\\TextField', false)) {
+	FormHelper::loadFieldClass('text');
+	class_alias('JFormFieldText', '\\Joomla\\CMS\\Form\\Field\\TextField');
+}
 
-class JFormFieldGeocomplete extends JFormFieldText
+class JFormFieldGeocomplete extends TextField
 {
 	protected $type = 'Geocomplete';
 

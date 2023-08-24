@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\Uri\Uri;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -7,7 +8,7 @@
 defined('_JEXEC') or die();
 
 // Compile the url
-$url = JUri::getInstance()->toString(['scheme', 'host', 'port']) . '/';
+$url = Uri::getInstance()->toString(['scheme', 'host', 'port']) . '/';
 $url .= trim($displayData['router']->getEventRoute($displayData['event']->id, $displayData['event']->catid), '/');
 ?>
 <meta itemprop="url" content="<?php echo $url; ?>">

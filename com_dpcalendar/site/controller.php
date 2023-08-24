@@ -1,4 +1,9 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\BaseController;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,16 +13,16 @@ defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.component.controller');
 
-class DPCalendarController extends JControllerLegacy
+class DPCalendarController extends BaseController
 {
 	public function display($cachable = false, $urlparams = false)
 	{
 		$cachable = true;
-		$user     = JFactory::getUser();
+		$user     = Factory::getUser();
 
-		$id    = JFactory::getApplication()->input->get('e_id');
-		$vName = JFactory::getApplication()->input->getCmd('view', 'calendar');
-		JFactory::getApplication()->input->set('view', $vName);
+		$id    = Factory::getApplication()->input->get('e_id');
+		$vName = Factory::getApplication()->input->getCmd('view', 'calendar');
+		Factory::getApplication()->input->set('view', $vName);
 
 		if ($user->get('id') || ($_SERVER['REQUEST_METHOD'] == 'POST' && $vName = 'list') || $vName = 'events') {
 			$cachable = false;
@@ -35,7 +40,7 @@ class DPCalendarController extends JControllerLegacy
 		// Check for edit form.
 		if ($vName == 'form' && is_numeric($id) && !$this->checkEditId('com_dpcalendar.edit.event', $id)) {
 			// Somehow the person just went to the form - we don't allow that.
-			throw new Exception(JText::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
+			throw new Exception(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
 		}
 
 		return parent::display($cachable, $safeurlparams);

@@ -104,7 +104,7 @@
 			root.items = items;
 			root.classList.add('dp-autocomplete');
 			input.parentElement.appendChild(root);
-			items.forEach((item, index) => {
+			items.forEach((item) => {
 				const e = document.createElement('a');
 				e.href = '#';
 				e.innerHTML = '<strong class="dp-autocomplete__item-title">' + item.title + '</strong> <span class="dp-autocomplete__item-details">' + item.details + '</span>';
@@ -126,7 +126,7 @@
 					name: 'sameWidth',
 					enabled: true,
 					fn: ({ state }) => {
-						state.styles.popper.width = state.rects.reference.width + `px`;
+						state.styles.popper.width = state.rects.reference.width + 'px';
 					},
 					effect: ({ state }) => {
 						state.elements.popper.style.width = state.elements.reference.offsetWidth + 'px';

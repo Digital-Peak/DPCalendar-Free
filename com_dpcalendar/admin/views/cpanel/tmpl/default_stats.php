@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\Helper\DPCalendarHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -20,28 +21,28 @@ defined('_JEXEC') or die();
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_YEAR'); ?>: </span>
 			<span class="dp-information__content">
 				<?php echo $this->totalBookings['year']['total']; ?>
-				[<?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['year']['price']); ?>]
+				[<?php echo DPCalendarHelper::renderPrice($this->totalBookings['year']['price']); ?>]
 			</span>
 		</div>
 		<div class="dp-information dp-grid">
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_MONTH'); ?>: </span>
 			<span class="dp-information__content">
 				<?php echo $this->totalBookings['month']['total']; ?>
-				[<?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['month']['price']); ?>]
+				[<?php echo DPCalendarHelper::renderPrice($this->totalBookings['month']['price']); ?>]
 			</span>
 		</div>
 		<div class="dp-information dp-grid">
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_WEEK'); ?>: </span>
 			<span class="dp-information__content">
 				<?php echo $this->totalBookings['week']['total']; ?>
-				[<?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['week']['price']); ?>]
+				[<?php echo DPCalendarHelper::renderPrice($this->totalBookings['week']['price']); ?>]
 			</span>
 		</div>
 		<div class="dp-information dp-grid">
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_STATS_BOOKING_TOTAL_NOTACTIVE'); ?>: </span>
 			<span class="dp-information__content">
 				<?php echo $this->totalBookings['notactive']['total']; ?>
-				[<?php echo \DPCalendar\Helper\DPCalendarHelper::renderPrice($this->totalBookings['notactive']['price']); ?>]
+				[<?php echo DPCalendarHelper::renderPrice($this->totalBookings['notactive']['price']); ?>]
 			</span>
 		</div>
 	</div>

@@ -1,4 +1,9 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Form\Form;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,12 +11,12 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewLocationForm extends \DPCalendar\View\BaseView
+class DPCalendarViewLocationForm extends BaseView
 {
 	public function display($tpl = null)
 	{
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
-		$model = JModelLegacy::getInstance('Location', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
+		$model = BaseDatabaseModel::getInstance('Location', 'DPCalendarModel');
 		$this->setModel($model, true);
 
 		return parent::display($tpl);
@@ -19,7 +24,7 @@ class DPCalendarViewLocationForm extends \DPCalendar\View\BaseView
 
 	public function init()
 	{
-		JForm::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
+		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 		$this->app->getLanguage()->load('', JPATH_ADMINISTRATOR);
 
 		$this->location   = $this->get('Item');

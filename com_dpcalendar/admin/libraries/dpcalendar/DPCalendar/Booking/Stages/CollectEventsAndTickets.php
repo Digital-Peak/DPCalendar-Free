@@ -7,6 +7,8 @@
 
 namespace DPCalendar\Booking\Stages;
 
+use Joomla\CMS\Language\Text;
+
 defined('_JEXEC') or die();
 
 use DPCalendar\Helper\Booking;
@@ -16,10 +18,7 @@ use League\Pipeline\StageInterface;
 
 class CollectEventsAndTickets implements StageInterface
 {
-	/**
-	 * @var \DPCalendarModelBooking
-	 */
-	private $model;
+	private \DPCalendarModelBooking $model;
 
 	/**
 	 * @var CMSApplication
@@ -38,7 +37,7 @@ class CollectEventsAndTickets implements StageInterface
 			$payload->tickets = $payload->oldItem->tickets;
 			foreach ($payload->tickets as $ticket) {
 				$payload->events[$ticket->event_id]                     = $this->model->getEvent($ticket->event_id);
-				$payload->events[$ticket->event_id]->waiting_list_count = count(array_filter(
+				$payload->events[$ticket->event_id]->waiting_list_count = count((array) array_filter(
 					$payload->events[$ticket->event_id]->tickets,
 					fn ($t) => $t->state == 8
 				));
@@ -65,17 +64,17 @@ class CollectEventsAndTickets implements StageInterface
 				unset($payload->data['event_id'][$eId]);
 			}
 
-			$event->waiting_list_count = count(array_filter($event->tickets, fn ($t) => $t->state == 8));
+			$event->waiting_list_count = count((array) array_filter($event->tickets, fn ($t) => $t->state == 8));
 
 			// If we can't book continue
 			if (!Booking::openForBooking($event)) {
 				if (DPCalendarHelper::getDate($event->start_date)->format('U') < DPCalendarHelper::getDate()->format('U')) {
-					$this->application->enqueueMessage(\JText::_('COM_DPCALENDAR_BOOK_ERROR_PAST'), 'warning');
+					$this->application->enqueueMessage(Text::_('COM_DPCALENDAR_BOOK_ERROR_PAST'), 'warning');
 
 					continue;
 				}
 				if ($event->capacity !== null && $event->capacity_used >= $event->capacity) {
-					$this->application->enqueueMessage(\JText::_('COM_DPCALENDAR_BOOK_ERROR_CAPACITY_EXHAUSTED'), 'warning');
+					$this->application->enqueueMessage(Text::_('COM_DPCALENDAR_BOOK_ERROR_CAPACITY_EXHAUSTED'), 'warning');
 
 					continue;
 				}

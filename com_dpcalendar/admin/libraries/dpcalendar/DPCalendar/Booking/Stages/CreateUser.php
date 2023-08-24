@@ -10,9 +10,15 @@ namespace DPCalendar\Booking\Stages;
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\User\UserHelper;
+use Joomla\Database\DatabaseDriver;
 use League\Pipeline\StageInterface;
+
+if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<') && !class_exists('\\Joomla\\Database\\DatabaseDriver', false)) {
+	class_alias('JDatabaseDriver', '\\Joomla\\Database\\DatabaseDriver');
+}
 
 class CreateUser implements StageInterface
 {
@@ -21,17 +27,14 @@ class CreateUser implements StageInterface
 	 */
 	private $application = null;
 
-	/**
-	 * @var \JDatabaseDriver
-	 */
-	private $db = null;
+	private ?DatabaseDriver $db = null;
 
 	/**
 	 * @var \UsersModelRegistration
 	 */
 	private $model = null;
 
-	public function __construct(CMSApplication $application, \JDatabaseDriver $db, \UsersModelRegistration $model)
+	public function __construct(CMSApplication $application, DatabaseDriver $db, \UsersModelRegistration $model)
 	{
 		$this->application = $application;
 		$this->db          = $db;
@@ -40,13 +43,14 @@ class CreateUser implements StageInterface
 
 	public function __invoke($payload)
 	{
+		$data = [];
 		// Do not create when state is not active and previous state was active as well
 		if ($payload->item->state != 1 || ($payload->oldItem && $payload->oldItem->state == 1)) {
 			return $payload;
 		}
 
 		// Only create the user when respective setting is set and user_id is not set
-		if (\JComponentHelper::getParams('com_dpcalendar')->get('booking_registration', 1) != 2 || $payload->data['user_id']) {
+		if (ComponentHelper::getParams('com_dpcalendar')->get('booking_registration', 1) != 2 || $payload->data['user_id']) {
 			return $payload;
 		}
 

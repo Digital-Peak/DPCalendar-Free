@@ -15,7 +15,6 @@ use Dompdf\Dompdf;
 use Dompdf\FontMetrics;
 use Dompdf\Options;
 use DPCalendar\Translator\Translator;
-use DPCalendarHelperRoute;
 use Exception;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Factory;
@@ -64,7 +63,7 @@ class Booking
 			);
 
 			return self::createPDF($details, $booking->uid, $toFile);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
 			return null;
@@ -135,7 +134,7 @@ class Booking
 
 			$qrcode = '';
 			if ($params->get('ticket_show_barcode', 1)) {
-				$qrcode = (new QRCode())->render(DPCalendarHelperRoute::getTicketCheckinRoute($ticket, true));
+				$qrcode = (new QRCode())->render(\DPCalendarHelperRoute::getTicketCheckinRoute($ticket, true));
 			}
 
 			$details = \DPCalendarHelper::renderLayout(
@@ -151,7 +150,7 @@ class Booking
 			);
 
 			return self::createPDF($details, $ticket->uid, $toFile);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
 			return null;
@@ -168,7 +167,7 @@ class Booking
 	 *
 	 * @return string
 	 */
-	public static function createCertificate($ticket, $params, $toFile = false)
+	public static function createCertificate($ticket, $params, $toFile = false, $booking = null)
 	{
 		try {
 			Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
@@ -182,8 +181,11 @@ class Booking
 			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$params, 0]);
 			$event->description = $event->text;
 
-			$model         = BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
-			$booking       = $model->getItem($ticket->booking_id);
+			if (!$booking) {
+				$model   = BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel', ['ignore_request' => true]);
+				$booking = $model->getItem($ticket->booking_id);
+			}
+
 			$booking->text = '';
 			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.booking', &$booking, &$params, 0]);
 
@@ -206,7 +208,7 @@ class Booking
 			);
 
 			return self::createPDF($details, $ticket->uid, $toFile);
-		} catch (Exception $e) {
+		} catch (\Exception $e) {
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 
 			return null;
@@ -244,7 +246,7 @@ class Booking
 			$model->setState('filter.expand', true);
 
 			if ($model->getTotal() > $limit) {
-				throw new Exception('Too many series events!', 1);
+				throw new \Exception('Too many series events!', 1);
 			}
 
 			$series = $model->getItems();

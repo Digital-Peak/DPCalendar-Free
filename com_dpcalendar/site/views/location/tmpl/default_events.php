@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\HTML\Block\Icon;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -27,7 +28,7 @@ if (!$this->params->get('location_show_upcoming_events', 1)) {
 				<div class="dp-event__date">
 					<?php echo $this->layoutHelper->renderLayout(
 						'block.icon',
-						['icon' => \DPCalendar\HTML\Block\Icon::CLOCK, 'title' => $this->translate('COM_DPCALENDAR_DATE')]
+						['icon' => Icon::CLOCK, 'title' => $this->translate('COM_DPCALENDAR_DATE')]
 					); ?>
 					<?php echo $date; ?>
 				</div>
@@ -36,7 +37,7 @@ if (!$this->params->get('location_show_upcoming_events', 1)) {
 						<?php echo $this->layoutHelper->renderLayout(
 							'block.icon',
 							[
-								'icon'  => \DPCalendar\HTML\Block\Icon::RECURRING,
+								'icon'  => Icon::RECURRING,
 								'title' => $this->translate('COM_DPCALENDAR_BOOKING_FIELD_SERIES_LABEL')
 							]
 						); ?>

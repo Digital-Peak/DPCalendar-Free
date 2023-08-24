@@ -1,4 +1,7 @@
 <?php
+
+use DPCalendar\Helper\Location;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -101,7 +104,7 @@ class DPCalendarModelLocations extends ListModel
 		$user = Factory::getUser();
 		foreach ($locations as $location) {
 			if (empty($location->color)) {
-				$location->color = \DPCalendar\Helper\Location::getColor($location);
+				$location->color = Location::getColor($location);
 			}
 
 			$location->params = new Registry($location->params);
@@ -226,12 +229,12 @@ class DPCalendarModelLocations extends ListModel
 			if (is_object($location)) {
 				$data = $location;
 			} elseif (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
-				list($latitude, $longitude) = explode(';', $location);
-				$data                       = new stdClass();
-				$data->latitude             = str_replace('latitude=', '', $latitude);
-				$data->longitude            = str_replace('longitude=', '', $longitude);
+				[$latitude, $longitude] = explode(';', $location);
+				$data                   = new stdClass();
+				$data->latitude         = str_replace('latitude=', '', $latitude);
+				$data->longitude        = str_replace('longitude=', '', $longitude);
 			} else {
-				$data = \DPCalendar\Helper\Location::get($location, false);
+				$data = Location::get($location, false);
 			}
 
 			if ($radius > -1 && !empty($data->latitude) && !empty($data->longitude)) {

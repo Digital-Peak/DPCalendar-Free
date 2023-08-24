@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\Helper\Location;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -17,14 +18,14 @@ foreach ($this->items as $event) {
 	$displayData          = $this->displayData;
 	$displayData['event'] = $event;
 	$description          = trim($this->layoutHelper->renderLayout('event.tooltip', $displayData));
-	$description          = \DPCalendar\Helper\DPCalendarHelper::fixImageLinks($description);
+	$description          = DPCalendarHelper::fixImageLinks($description);
 
 	$locations = [];
 	if (!empty($event->locations)) {
 		foreach ($event->locations as $location) {
 			$locations[] = [
 				'id'        => $event->id,
-				'location'  => \DPCalendar\Helper\Location::format($location),
+				'location'  => Location::format($location),
 				'latitude'  => $location->latitude,
 				'longitude' => $location->longitude
 			];

@@ -3,6 +3,6 @@
 	<fields>
 		<field name="id" type="text" label="JGLOBAL_FIELD_ID_LABEL" required="true"/>
 		<field name="title" type="text" label="JGLOBAL_TITLE"/>
-		<field name="description" type="textarea" filter="JComponentHelper::filterText" label="JGLOBAL_DESCRIPTION"/>
+		<field name="description" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" label="JGLOBAL_DESCRIPTION"/>
 	</fields>
 </form>

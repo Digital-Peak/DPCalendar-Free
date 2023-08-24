@@ -11,6 +11,7 @@ use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\AdminModel;
+use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
 
 class DPCalendarModelCoupon extends AdminModel
@@ -112,7 +113,7 @@ class DPCalendarModelCoupon extends AdminModel
 
 		$this->preprocessData('com_dpcalendar.coupon', $data);
 
-		return $data;
+		return $data instanceof Table ? $data->getProperties() : $data;
 	}
 
 	protected function populateState()

@@ -1,4 +1,10 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\MVC\Controller\AdminController;
+use Joomla\CMS\Session\Session;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -11,7 +17,7 @@ use Joomla\Utilities\ArrayHelper;
 
 JLoader::import('joomla.application.component.controlleradmin');
 
-class DPCalendarControllerEvents extends JControllerAdmin
+class DPCalendarControllerEvents extends AdminController
 {
 	public function __construct($config = [])
 	{
@@ -29,9 +35,9 @@ class DPCalendarControllerEvents extends JControllerAdmin
 	public function featured()
 	{
 		// Check for request forgeries
-		JSession::checkToken() or jexit(JText::_('JINVALID_TOKEN'));
+		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		$user   = JFactory::getUser();
+		$user   = Factory::getUser();
 		$ids    = $this->input->get('cid', [], 'array');
 		$values = [
 			'featured'   => 1,
@@ -53,19 +59,19 @@ class DPCalendarControllerEvents extends JControllerAdmin
 			if (!$user->authorise('core.edit.state', 'com_dpcalendar.category.' . (int)$event->catid)) {
 				// Prune items that you can't change.
 				unset($ids[$i]);
-				JFactory::getApplication()->enqueueMessage(JText::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'), 'warning');
+				Factory::getApplication()->enqueueMessage(Text::_('JLIB_APPLICATION_ERROR_EDITSTATE_NOT_PERMITTED'), 'warning');
 			}
 		}
 
 		if (empty($ids)) {
-			JFactory::getApplication()->enqueueMessage(JText::_('JERROR_NO_ITEMS_SELECTED'), 'warning');
+			Factory::getApplication()->enqueueMessage(Text::_('JERROR_NO_ITEMS_SELECTED'), 'warning');
 		} else {
 			// Get the model.
 			$model = $this->getModel();
 
 			// Publish the items.
 			if (!$model->featured($ids, $value)) {
-				JFactory::getApplication()->enqueueMessage($model->getError(), 'warning');
+				Factory::getApplication()->enqueueMessage($model->getError(), 'warning');
 			}
 		}
 

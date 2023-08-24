@@ -15,15 +15,14 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
 use Joomla\Registry\Registry;
-use stdClass;
 
 Table::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
 
 class Location
 {
-	private static $locationCache    = null;
-	private static $nomatimLanguages = ['en', 'de', 'it', 'fr'];
-	private static $googleLanguages  = [
+	private static $locationCache          = null;
+	private static array $nomatimLanguages = ['en', 'de', 'it', 'fr'];
+	private static array $googleLanguages  = [
 		'ar',
 		'eu',
 		'bg',
@@ -122,20 +121,19 @@ class Location
 	}
 
 	/**
-	 * Returns a location table for the given location. If the title is set it will use that one instead of the location.
-	 *
-	 * @param string $location
-	 * @param bool   $fill
-	 * @param string $title
-	 *
-	 * @return bool|\JTable
-	 */
+  * Returns a location table for the given location. If the title is set it will use that one instead of the location.
+  *
+  * @param string $location
+  * @param bool   $fill
+  * @param string $title
+  *
+  * @return bool|\Joomla\CMS\Table\Table
+  */
 	public static function get($location, $fill = true, $title = null)
 	{
 		$location = trim($location);
 
 		if (self::$locationCache == null) {
-			\JLoader::import('joomla.application.component.model');
 			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 			self::$locationCache = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 		}
@@ -249,7 +247,6 @@ class Location
 		if (empty($locationIds)) {
 			return [];
 		}
-		\JLoader::import('joomla.application.component.model');
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 		$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel');
@@ -291,7 +288,7 @@ class Location
 		$files          = is_dir($geoDBDirectory) ? scandir($geoDBDirectory) : [];
 
 		// Check if the data is available
-		if (count($files) < 3) {
+		if ((is_countable($files) ? count($files) : 0) < 3) {
 			return '';
 		}
 
@@ -307,9 +304,7 @@ class Location
 		try {
 			// Read the data from the file
 			$data = require $fileName;
-		} catch (\Throwable $e) {
-			return '';
-		} catch (\Exception $e) {
+		} catch (\Throwable|\Exception $e) {
 			return '';
 		}
 
@@ -361,7 +356,7 @@ class Location
 
 		$data = [];
 		foreach ($tmp->predictions as $prediction) {
-			$item          = new stdClass();
+			$item          = new \stdClass();
 			$item->title   = $prediction->description;
 			$item->value   = $prediction->description;
 			$item->details = '';
@@ -510,7 +505,7 @@ class Location
 	{
 		$url = DPCalendarHelper::getComponentParameter(
 			'map_api_openstreetmap_geocode_url',
-			'https://nominatim.openstreetmap.org/search/?format=json&addressdetails=1&limit=1&q={address}'
+			'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q={address}'
 		);
 
 		$coordinates = explode(',', $location);

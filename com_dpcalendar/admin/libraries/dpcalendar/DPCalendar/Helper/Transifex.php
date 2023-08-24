@@ -13,9 +13,9 @@ use DigitalPeak\ThinHTTP as HTTP;
 
 class Transifex
 {
-	private static $languages = [];
+	private static array $languages = [];
 
-	private static $key = '1/8c747f282bd8e1c117cf52c98989e604f9f17864';
+	private static string $key = '1/8c747f282bd8e1c117cf52c98989e604f9f17864';
 
 	public static function getResources(): array
 	{

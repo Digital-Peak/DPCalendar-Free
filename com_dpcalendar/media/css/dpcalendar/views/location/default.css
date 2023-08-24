@@ -1,3 +1,6 @@
+.com-dpcalendar-location {
+	/* stylelint-disable-next-line selector-class-pattern */
+}
 .com-dpcalendar-location .dp-button-bar {
 	margin-bottom: 10px;
 }
@@ -7,9 +10,6 @@
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
@@ -22,8 +22,8 @@
 }
 .com-dpcalendar-location .dp-button:disabled,
 .com-dpcalendar-location .dp-button[disabled] {
-	background-color: #cccccc;
-	color: #666666;
+	background-color: #ccc;
+	color: #666;
 	cursor: not-allowed;
 }
 .com-dpcalendar-location .dp-description {
@@ -47,7 +47,7 @@
 	border-bottom: none;
 }
 .com-dpcalendar-location .dp-icon svg {
-	fill: currentColor;
+	fill: currentcolor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
@@ -66,7 +66,7 @@
 	z-index: 10;
 	height: 4px;
 	background-color: #2d9ede;
-	animation: 12s 0s normal none 1 running calendarLoader;
+	animation: 12s 0s normal none 1 running calendar-loader;
 	animation-fill-mode: forwards;
 	animation-timing-function: cubix-bezier(0, 1, 0, 1);
 	animation-iteration-count: infinite;
@@ -74,7 +74,7 @@
 .com-dpcalendar-location .dp-loader_hidden::before {
 	display: none;
 }
-@keyframes calendarLoader {
+@keyframes calendar-loader {
 	0% {
 		right: 100%;
 	}
@@ -86,9 +86,11 @@
 		right: 1%;
 	}
 }
-.com-dpcalendar-location .dp-button-map-site, .com-dpcalendar-location .dp-button-map-directions {
+.com-dpcalendar-location .dp-button-map-site,
+.com-dpcalendar-location .dp-button-map-directions {
 	background-color: #4258FF;
-	color: #ffffff;
+	color: #fff;
+	/* stylelint-disable-next-line scss/no-global-function-names */
 	border: 1px solid #0f2bff;
 }
 .com-dpcalendar-location .dp-select {
@@ -111,7 +113,7 @@
 	position: relative;
 }
 .com-dpcalendar-location .dp-select-container__options {
-	background: #ffffff;
+	background: #fff;
 	border-radius: 4px;
 	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
 	max-height: 300px;
@@ -145,8 +147,6 @@
 	padding: 0.2rem;
 	border-radius: 0.25rem;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	-webkit-appearance: none;
-	-moz-appearance: none;
 	appearance: none;
 	box-sizing: border-box;
 }
@@ -236,7 +236,7 @@
 	.com-dpcalendar-location .dp-print-hide {
 		display: none !important;
 	}
-	.com-dpcalendar-location a:link:after, .com-dpcalendar-location a:visited:after {
+	.com-dpcalendar-location a:link::after, .com-dpcalendar-location a:visited::after {
 		display: none;
 		content: "";
 	}
@@ -264,7 +264,7 @@
 	cursor: pointer;
 }
 .com-dpcalendar-location {
-	--fc-button-text-color: #000000;
+	--fc-button-text-color: #000;
 	--fc-button-bg-color: #fefefe;
 	--fc-button-active-bg-color: #fefefe;
 	--fc-button-border-color: #c0c0c0;
@@ -344,7 +344,6 @@
 .com-dpcalendar-location .fc .fc-button-primary:not(:disabled):active:focus, .com-dpcalendar-location .fc .fc-button-primary:not(:disabled).fc-button-active:focus,
 .com-dpcalendar-location .fc .fc-button-primary:hover:not(:disabled):active:focus,
 .com-dpcalendar-location .fc .fc-button-primary:hover:not(:disabled).fc-button-active:focus {
-	-webkit-box-shadow: unset;
 	box-shadow: unset;
 }
 .com-dpcalendar-location .fc-icon span {
@@ -363,7 +362,7 @@
 .com-dpcalendar-location .fc-button-group .fc-button + .fc-button {
 	margin-left: 3px !important;
 }
-@media screen and (max-width: 540px) {
+@media screen and (width <= 540px) {
 	.com-dpcalendar-location .fc-header-toolbar {
 		flex-direction: column;
 	}
@@ -376,8 +375,8 @@
 }
 .com-dpcalendar-location__event-list .dp-event {
 	padding-left: 5px;
-	padding-top: 0px;
-	margin-top: 0px;
+	padding-top: 0;
+	margin-top: 0;
 	margin-bottom: 5px;
 	border-left: 5px solid;
 }
@@ -401,6 +400,8 @@
 }
 
 .dp-event-tooltip {
+	/* stylelint-disable-next-line selector-class-pattern */
+	/* stylelint-disable-next-line selector-class-pattern */
 	text-align: left;
 	font-size: 12px;
 }
@@ -422,7 +423,7 @@
 	background-color: #0dcaf0;
 }
 .dp-event-tooltip .dp-icon svg {
-	fill: currentColor;
+	fill: currentcolor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;

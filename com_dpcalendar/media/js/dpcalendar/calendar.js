@@ -5,16 +5,16 @@
  */
 (function () {
 	'use strict';
-	function getCalendarIds(calendar, options, util) {
+	function getCalendarIds(calendar, options) {
 		let calendars;
 		if (localStorage.getItem(options['storageId']) == null) {
 			localStorage.setItem(options['storageId'], JSON.stringify(options['calendarIds']));
 			calendars = options['calendarIds'];
 		}
 		if (!calendars) {
-			calendars = JSON.parse(localStorage.getItem(options['storageId'])).filter((calId) => {
-				return options['calendarIds'].findIndex((id) => String(id) === String(calId)) >= 0;
-			});
+			calendars = JSON.parse(localStorage.getItem(options['storageId'])).filter((calId) =>
+				options['calendarIds'].findIndex((id) => String(id) === String(calId)) >= 0
+			);
 		}
 		return options['singleCalendarsFetch'] ? [calendars.join(',')] : calendars;
 	}
@@ -35,7 +35,7 @@
 				});
 			});
 		}
-		const calendars = [].slice.call(calendar.parentElement.querySelectorAll('.com-dpcalendar-calendar__calendars .dp-input-checkbox, .com-dpcalendar-calendar-timeline__calendars .dp-input-checkbox'));
+		const calendars = [].slice.call(calendar.parentElement.querySelectorAll('.com-dpcalendar-calendar__calendars .dp-calendar__input, .com-dpcalendar-calendar-timeline__calendars .dp-calendar__input'));
 		calendars.forEach((input) => {
 			calendarIds.forEach((calId) => {
 				if (calId == input.value) {
@@ -48,7 +48,7 @@
 				if (checkbox.checked) {
 					calendar.dpCalendar.addEventSource({
 						id: calId,
-						events: (fetchInfo, successCallback, failureCallback) => {
+						events: (fetchInfo, successCallback) => {
 							util.request(
 								options['requestUrlRoot'] + '&ids=' + calId + '&date-start=' + fetchInfo.startStr + '&date-end=' + fetchInfo.endStr,
 								(json) => successCallback(json.data),
@@ -74,7 +74,7 @@
 				localStorage.setItem(options['storageId'], JSON.stringify(calendarIds));
 			});
 		});
-		const toggleBoxes = document.querySelector('.com-dpcalendar-calendar__list-toggle .dp-input-checkbox, .com-dpcalendar-calendar-timeline__list-toggle .dp-input-checkbox');
+		const toggleBoxes = document.querySelector('.com-dpcalendar-calendar__list-toggle-input, .com-dpcalendar-calendar-timeline__list-toggle-input');
 		if (toggleBoxes) {
 			toggleBoxes.addEventListener('click', () => {
 				calendars.forEach((input) => {
@@ -116,7 +116,7 @@
 			viewMappingReverse['resourceTimeGridWeek'] = 'week';
 			viewMappingReverse['resourceTimeGridDay'] = 'day';
 		}
-		return viewMappingReverse
+		return viewMappingReverse;
 	}
 	function setup$5(calendar, options) {
 		const viewMapping = getMappings(options);
@@ -285,7 +285,7 @@
 	}
 	function updateHash(d, view, options) {
 		const newHash = 'year=' + d.getUTCFullYear() + '&month=' + (d.getUTCMonth() + 1) + '&day=' + d.getUTCDate() + '&view=' + view;
-		if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, "&").replace('#', '') != newHash) {
+		if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, '&').replace('#', '') != newHash) {
 			window.location.hash = newHash;
 		}
 	}
@@ -477,7 +477,7 @@
 	}
 	function setup(calendar, options) {
 		calendar.dpEventMarkerSet = [];
-		options['viewClassNames'] = (info) => {
+		options['viewClassNames'] = () => {
 			const map = calendar.parentElement.querySelector('.dp-map');
 			if (!DPCalendar.Map || map == null || !options['show_map']) {
 				return;
@@ -572,7 +572,7 @@
 		getCalendarIds(calendar, options, DPCalendar).forEach((calId, index) => {
 			options['eventSources'][index] = {
 				id: calId,
-				events: (fetchInfo, successCallback, failureCallback) => {
+				events: (fetchInfo, successCallback) => {
 					DPCalendar.request(
 						options['requestUrlRoot'] + '&ids=' + calId + '&date-start=' + fetchInfo.startStr + '&date-end=' + fetchInfo.endStr,
 						(json) => successCallback(json.data),
@@ -586,7 +586,7 @@
 	}
 	const safeAdd = (x, y) => {
 		let lsw = (x & 0xFFFF) + (y & 0xFFFF);
-		return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xFFFF)
+		return (((x >> 16) + (y >> 16) + (lsw >> 16)) << 16) | (lsw & 0xFFFF);
 	};
 	const bitRotateLeft = (num, cnt) => (num << cnt) | (num >>> (32 - cnt));
 	const md5cmn = (q, a, b, x, s, t) => safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b),
@@ -612,7 +612,7 @@
 			d = md5ff(d, a, b, c, x[i + 13], 12, -40341101);
 			c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
 			b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
-			return [a, b, c, d]
+			return [a, b, c, d];
 		},
 		secondChunk = (chunks, x, i) => {
 			let [a, b, c, d] = chunks;
@@ -632,7 +632,7 @@
 			d = md5gg(d, a, b, c, x[i + 2], 9, -51403784);
 			c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
 			b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
-			return [a, b, c, d]
+			return [a, b, c, d];
 		},
 		thirdChunk = (chunks, x, i) => {
 			let [a, b, c, d] = chunks;
@@ -652,7 +652,7 @@
 			d = md5hh(d, a, b, c, x[i + 12], 11, -421815835);
 			c = md5hh(c, d, a, b, x[i + 15], 16, 530742520);
 			b = md5hh(b, c, d, a, x[i + 2], 23, -995338651);
-			return [a, b, c, d]
+			return [a, b, c, d];
 		},
 		fourthChunk = (chunks, x, i) => {
 			let [a, b, c, d] = chunks;
@@ -672,7 +672,7 @@
 			d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
 			c = md5ii(c, d, a, b, x[i + 2], 15, 718787259);
 			b = md5ii(b, c, d, a, x[i + 9], 21, -343485551);
-			return [a, b, c, d]
+			return [a, b, c, d];
 		};
 	const binlMD5 = (x, len) => {
 		x[len >> 5] |= 0x80 << (len % 32);
@@ -684,16 +684,16 @@
 				-1732584194,
 				271733878
 			];
-		return Array.from({length: Math.floor(x.length / 16) + 1}, (v, i) => i * 16)
+		return Array.from({ length: Math.floor(x.length / 16) + 1 }, (v, i) => i * 16)
 			.reduce((chunks, i) => commands
 				.reduce((newChunks, apply) => apply(newChunks, x, i), chunks.slice())
-				.map((chunk, index) => safeAdd(chunk, chunks[index])), initialChunks)
+				.map((chunk, index) => safeAdd(chunk, chunks[index])), initialChunks);
 	};
 	const binl2rstr = input => Array(input.length * 4).fill(8).reduce((output, k, i) => output + String.fromCharCode((input[(i * k) >> 5] >>> ((i * k) % 32)) & 0xFF), '');
 	const rstr2binl = input => Array.from(input).map(i => i.charCodeAt(0)).reduce((output, cc, i) => {
 		let resp = output.slice();
 		resp[(i * 8) >> 5] |= (cc & 0xFF) << ((i * 8) % 32);
-		return resp
+		return resp;
 	}, []);
 	const rstrMD5 = string => binl2rstr(binlMD5(rstr2binl(string), string.length * 8));
 	const strHMACMD5 = (key, data) => {
@@ -707,11 +707,11 @@
 			ipad[i] = k ^ 0x36363636;
 			opad[i] = k ^ 0x5C5C5C5C;
 		});
-		return binl2rstr(binlMD5(opad.concat(binlMD5(ipad.concat(rstr2binl(data)), 512 + data.length * 8)), 512 + 128))
+		return binl2rstr(binlMD5(opad.concat(binlMD5(ipad.concat(rstr2binl(data)), 512 + data.length * 8)), 512 + 128));
 	};
 	const rstr2hex = input => {
 		const hexTab = (pos) => '0123456789abcdef'.charAt(pos);
-		return Array.from(input).map(c => c.charCodeAt(0)).reduce((output, x, i) => output + hexTab((x >>> 4) & 0x0F) + hexTab(x & 0x0F), '')
+		return Array.from(input).map(c => c.charCodeAt(0)).reduce((output, x) => output + hexTab((x >>> 4) & 0x0F) + hexTab(x & 0x0F), '');
 	};
 	const str2rstrUTF8 = unicodeString => {
 		if (typeof unicodeString !== 'string') throw new TypeError('parameter ‘unicodeString’ is not a string');
@@ -720,7 +720,7 @@
 			.replace(/[\u0080-\u07ff]/g,
 				c => String.fromCharCode(0xc0 | cc(c) >> 6, 0x80 | cc(c) & 0x3f))
 			.replace(/[\u0800-\uffff]/g,
-				c => String.fromCharCode(0xe0 | cc(c) >> 12, 0x80 | cc(c) >> 6 & 0x3F, 0x80 | cc(c) & 0x3f))
+				c => String.fromCharCode(0xe0 | cc(c) >> 12, 0x80 | cc(c) >> 6 & 0x3F, 0x80 | cc(c) & 0x3f));
 	};
 	const rawMD5 = s => rstrMD5(str2rstrUTF8(s));
 	const hexMD5 = s => rstr2hex(rawMD5(s));
@@ -729,14 +729,14 @@
 	var md5 = (string, key, raw) => {
 		if (!key) {
 			if (!raw) {
-				return hexMD5(string)
+				return hexMD5(string);
 			}
-			return rawMD5(string)
+			return rawMD5(string);
 		}
 		if (!raw) {
-			return hexHMACMD5(key, string)
+			return hexHMACMD5(key, string);
 		}
-		return rawHMACMD5(key, string)
+		return rawHMACMD5(key, string);
 	};
 	function createCalendar(calendar, options) {
 		const assets = ['/com_dpcalendar/js/popper/popper.js'];

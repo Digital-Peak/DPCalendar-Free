@@ -1,4 +1,8 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\BaseController;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,12 +10,12 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarControllerPlugin extends JControllerLegacy
+class DPCalendarControllerPlugin extends BaseController
 {
 	public function action()
 	{
 		DPCalendarHelper::doPluginAction($this->input->getWord('dpplugin', $this->input->getWord('plugin')), $this->input->getWord('action'));
 
-		JFactory::getApplication()->close();
+		Factory::getApplication()->close();
 	}
 }

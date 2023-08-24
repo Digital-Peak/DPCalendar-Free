@@ -2,7 +2,7 @@
 <form addfieldpath="/administrator/components/com_dpcalendar/models/fields" addrulepath="/administrator/components/com_dpcalendar/models/rules">
 	<config><inlinehelp button="show"/></config>
 	<fieldset name="general" label="COM_DPCALENDAR_CONTENT">
-		<field name="title" type="text" required="true" class="dp-form-input" autocomplete="0" filter="JComponentHelper::filterText"
+		<field name="title" type="text" required="true" class="dp-form-input" autocomplete="0" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_TITLE_DESC"/>
 
 		<field name="catid" type="dpcalendaredit" class="dp-select"
@@ -123,7 +123,7 @@
 		<field name="rrule" type="text" class="dp-form-input"
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_DESC"/>
 
-		<field name="description" type="editor" buttons="true" filter="JComponentHelper::filterText"
+		<field name="description" type="editor" buttons="true" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
 
 		<field name="schedule" type="subform" multiple="true"
@@ -192,7 +192,7 @@
 			label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
 		<field name="booking_assign_user_groups" type="usergrouplist" multiple="true" class="dp-select"
 			label="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_DESC"/>
-		<field name="booking_information" type="editor" filter="JComponentHelper::filterText" buttons="true" hide="pagebreak,readmore"
+		<field name="booking_information" type="editor" filter="\Joomla\CMS\Component\ComponentHelper::filterText" buttons="true" hide="pagebreak,readmore"
 			label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
 	</fieldset>
 	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
@@ -381,9 +381,9 @@
 			<field name="event_map_long" type="text" useglobal="true" validate="decimal"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-			<field name="event_textbefore" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="event_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
-			<field name="event_textafter" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="event_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 			<field name="event_count_clicks" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">

@@ -33,7 +33,7 @@ if (empty($event->locations)) {
 					[<?php echo implode(', ', $event->roomTitles[$location->id]); ?>]
 				<?php } ?>
 			</a>
-			<?php if ($index < count($event->locations) - 1) { ?>
+			<?php if ($index < (is_countable($event->locations) ? count($event->locations) : 0) - 1) { ?>
 				<span class="dp-location__separator">,</span>
 			<?php } ?>
 			<div class="dp-location__description">

@@ -76,16 +76,16 @@ class DPCalendarViewEvent extends BaseView
 
 		$isNew      = ($this->event->id == 0);
 		$checkedOut = !($this->event->checked_out == 0 || $this->event->checked_out == $this->user->id);
-		$canDo      = DPCalendarHelper::getActions($this->event->catid, 0);
+		$canDo      = DPCalendarHelper::getActions($this->event->catid);
 
-		if (!$checkedOut && ($canDo->get('core.edit') || (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create'))))) {
+		if (!$checkedOut && ($canDo->get('core.edit') || (is_countable($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) ? count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) : 0))) {
 			ToolbarHelper::apply('event.apply');
 			ToolbarHelper::save('event.save');
 		}
-		if (!$checkedOut && (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')))) {
+		if (!$checkedOut && (is_countable($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) ? count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) : 0)) {
 			ToolbarHelper::save2new('event.save2new');
 		}
-		if (!$isNew && (count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) > 0)) {
+		if (!$isNew && ((is_countable($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) ? count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) : 0) > 0)) {
 			ToolbarHelper::save2copy('event.save2copy');
 		}
 		if ($this->state->params->get('save_history', 1) && $this->user->authorise('core.edit')) {

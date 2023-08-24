@@ -51,7 +51,7 @@ class DPCalendarViewEvents extends BaseView
 		$this->items = $this->get('Items');
 
 		if ($this->getModel()->getError()) {
-			\DPCalendar\Helper\DPCalendarHelper::sendMessage($this->getModel()->getError(), true);
+			DPCalendarHelper::sendMessage($this->getModel()->getError(), true);
 			$this->app->close();
 		}
 

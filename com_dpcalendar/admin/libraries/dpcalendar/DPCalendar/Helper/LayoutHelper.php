@@ -17,6 +17,6 @@ class LayoutHelper
 			$data['layoutHelper'] = $this;
 		}
 
-		return \JLayoutHelper::render($layout, $data, null, ['component' => 'com_dpcalendar', 'client' => 0]);
+		return \Joomla\CMS\Layout\LayoutHelper::render($layout, $data, null, ['component' => 'com_dpcalendar', 'client' => 0]);
 	}
 }

@@ -8,11 +8,15 @@
 defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\Form\FormHelper;
 
-FormHelper::loadFieldClass('list');
+if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Field\\ListField', false)) {
+	FormHelper::loadFieldClass('list');
+	class_alias('JFormFieldList', '\\Joomla\\CMS\\Form\\Field\\ListField');
+}
 
-class JFormFieldDPAuthor extends JFormFieldList
+class JFormFieldDPAuthor extends ListField
 {
 	public $type = 'DPAuthor';
 

@@ -1,4 +1,12 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\Factory;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Toolbar\Toolbar;
+use Joomla\CMS\Toolbar\ToolbarHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +14,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarViewLocations extends \DPCalendar\View\BaseView
+class DPCalendarViewLocations extends BaseView
 {
 	protected $items;
 	protected $pagination;
@@ -23,31 +31,31 @@ class DPCalendarViewLocations extends \DPCalendar\View\BaseView
 	{
 		$state = $this->get('State');
 		$canDo = DPCalendarHelper::getActions();
-		$user  = JFactory::getUser();
-		$bar   = JToolbar::getInstance('toolbar');
+		$user  = Factory::getUser();
+		$bar   = Toolbar::getInstance('toolbar');
 
 		if ($canDo->get('core.create')) {
-			JToolbarHelper::addNew('location.add');
+			ToolbarHelper::addNew('location.add');
 		}
 		if ($canDo->get('core.edit')) {
-			JToolbarHelper::editList('location.edit');
+			ToolbarHelper::editList('location.edit');
 		}
 		if ($canDo->get('core.edit.state')) {
-			JToolbarHelper::publish('locations.publish', 'JTOOLBAR_PUBLISH', true);
-			JToolbarHelper::unpublish('locations.unpublish', 'JTOOLBAR_UNPUBLISH', true);
+			ToolbarHelper::publish('locations.publish', 'JTOOLBAR_PUBLISH', true);
+			ToolbarHelper::unpublish('locations.unpublish', 'JTOOLBAR_UNPUBLISH', true);
 
-			JToolbarHelper::archiveList('locations.archive');
-			JToolbarHelper::checkin('locations.checkin');
+			ToolbarHelper::archiveList('locations.archive');
+			ToolbarHelper::checkin('locations.checkin');
 		}
 		if ($state->get('filter.state') == - 2 && $canDo->get('core.delete')) {
-			JToolbarHelper::deleteList('', 'locations.delete', 'JTOOLBAR_EMPTY_TRASH');
+			ToolbarHelper::deleteList('', 'locations.delete', 'JTOOLBAR_EMPTY_TRASH');
 		} elseif ($canDo->get('core.edit.state')) {
-			JToolbarHelper::trash('locations.trash');
+			ToolbarHelper::trash('locations.trash');
 		}
 
 		if ($canDo->get('core.edit') && DPCalendarHelper::isJoomlaVersion('3')) {
-			JHtml::_('bootstrap.modal', 'collapseModal');
-			$title = JText::_('JTOOLBAR_BATCH');
+			HTMLHelper::_('bootstrap.modal', 'collapseModal');
+			$title = Text::_('JTOOLBAR_BATCH');
 			$dhtml = "<button data-toggle=\"modal\" data-target=\"#collapseModal\" class=\"btn btn-small\">
 			<i class=\"icon-checkbox-partial\" title=\"$title\"></i>
 			$title</button>";

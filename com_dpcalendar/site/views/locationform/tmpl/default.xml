@@ -81,7 +81,7 @@
 			<field name="location_form_redirect" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
 				addfieldpath="/administrator/components/com_content/models/fields" addfieldprefix="Joomla\Component\Content\Administrator\Field"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_DESC"/>
-			<field name="location_form_custom_css" type="textarea" filter="JComponentHelper::filterText" useglobal="true"
+			<field name="location_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 			    label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 	</fields>

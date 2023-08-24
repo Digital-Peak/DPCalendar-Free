@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\Helper\DPCalendarHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,7 +9,7 @@ defined('_JEXEC') or die();
 
 $style = 'background-color: #' . $displayData['color'] . ';';
 $style .= 'box-shadow: 0 2px 0 #' . $displayData['color'] . ';';
-$style .= 'color: #' . \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($displayData['color']) . ';';
+$style .= 'color: #' . DPCalendarHelper::getOppositeBWColor($displayData['color']) . ';';
 ?>
 <div class="dp-flatcalendar">
 	<span class="dp-flatcalendar__day"><?php echo $displayData['date']->format('j', true); ?></span>

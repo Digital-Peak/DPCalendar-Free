@@ -1,4 +1,8 @@
 <?php
+
+use Joomla\CMS\MVC\Controller\FormController;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +10,7 @@
  */
 defined('_JEXEC') or die();
 
-class DPCalendarControllerCoupon extends JControllerForm
+class DPCalendarControllerCoupon extends FormController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_COUPON';
 
@@ -26,7 +30,7 @@ class DPCalendarControllerCoupon extends JControllerForm
 		return parent::save($key, $urlVar);
 	}
 
-	protected function postSaveHook(JModelLegacy $model, $validData = [])
+	protected function postSaveHook(BaseDatabaseModel $model, $validData = [])
 	{
 		$this->id    = $model->getState('coupon.id');
 		$this->error = $model->getError();

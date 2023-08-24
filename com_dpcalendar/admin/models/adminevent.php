@@ -289,7 +289,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$data->booking_assign_user_groups = explode(',', $data->booking_assign_user_groups);
 		}
 
-		return $data;
+		return $data instanceof Table ? $data->getProperties() : $data;
 	}
 
 	public function getItem($pk = null)
@@ -656,9 +656,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 				if ($table->original_id == '-1') {
 					$newTags = new TagsHelper();
 					$newTags = $newTags->getItemTags('com_dpcalendar.event', $table->id);
-					$newTags = array_map(function ($t) {
-						return $t->id;
-					}, $newTags);
+					$newTags = array_map(fn ($t) => $t->id, $newTags);
 
 					$table->populateTags($newTags);
 				}

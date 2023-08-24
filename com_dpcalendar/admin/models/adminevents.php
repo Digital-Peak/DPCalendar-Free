@@ -407,6 +407,6 @@ class DPCalendarModelAdminEvents extends ListModel
 			}
 		}
 
-		return $data;
+		return $data instanceof Table ? $data->getProperties() : $data;
 	}
 }

@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -16,8 +17,8 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/adminlist/default.js');
 	<div id="j-main-container">
 		<?php echo $this->loadtemplate('icons'); ?>
 		<div class="com-dpcalendar-cpanel__welcome">
-			<h2 class="dp-heading"><?php echo JText::_('COM_DPCALENDAR_VIEW_CPANEL_WELCOME'); ?></h2>
-			<p class="dp-paragraphe"><?php echo JText::_('COM_DPCALENDAR_VIEW_CPANEL_INTRO'); ?></p>
+			<h2 class="dp-heading"><?php echo Text::_('COM_DPCALENDAR_VIEW_CPANEL_WELCOME'); ?></h2>
+			<p class="dp-paragraphe"><?php echo Text::_('COM_DPCALENDAR_VIEW_CPANEL_INTRO'); ?></p>
 		</div>
 		<div class="com-dpcalendar-cpanel__boxes dp-grid">
 			<div class="dp-grid__column com-dpcalendar-cpanel__box"><?php echo $this->loadtemplate('events_upcoming'); ?></div>

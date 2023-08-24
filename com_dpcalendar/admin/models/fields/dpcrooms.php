@@ -4,11 +4,20 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JFormHelper::loadFieldClass('groupedlist');
+use Joomla\CMS\Form\Field\GroupedlistField;
+use Joomla\CMS\Form\FormHelper;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
-class JFormFieldDpcrooms extends JFormFieldGroupedList
+if (version_compare(JVERSION, 4, '<')) {
+	FormHelper::loadFieldClass('groupedlist');
+	class_alias('JFormFieldGroupedList', '\\Joomla\\CMS\\Form\\Field\\GroupedlistField');
+}
+
+class JFormFieldDpcrooms extends GroupedlistField
 {
 	protected $type = 'Dpcrooms';
 
@@ -20,11 +29,11 @@ class JFormFieldDpcrooms extends JFormFieldGroupedList
 
 		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
-		JModelLegacy::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
+		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 		$groups = parent::getGroups();
 		foreach ($this->form->getValue('location_ids') as $locationId) {
-			$model    = JModelLegacy::getInstance('Location', 'DPCalendarModel', ['ignore_request' => true]);
+			$model    = BaseDatabaseModel::getInstance('Location', 'DPCalendarModel', ['ignore_request' => true]);
 			$location = $model->getItem($locationId);
 
 			if (!$location->id || !$location->rooms) {
@@ -33,7 +42,7 @@ class JFormFieldDpcrooms extends JFormFieldGroupedList
 
 			$groups[$location->title] = [];
 			foreach ($location->rooms as $room) {
-				$groups[$location->title][] = JHtml::_('select.option', $location->id . '-' . $room->id, $room->title);
+				$groups[$location->title][] = HTMLHelper::_('select.option', $location->id . '-' . $room->id, $room->title);
 			}
 		}
 

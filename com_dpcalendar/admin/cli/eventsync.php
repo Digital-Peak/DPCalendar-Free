@@ -1,4 +1,7 @@
 <?php
+
+use Joomla\CMS\Menu\AbstractMenu;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -14,9 +17,9 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Router;
 use Joomla\Registry\Registry;
 
-$path = dirname(dirname(dirname(dirname(dirname(__FILE__)))));
+$path = dirname(__FILE__, 5);
 if (isset($_SERVER["SCRIPT_FILENAME"])) {
-	$path = dirname(dirname(dirname(dirname(dirname($_SERVER["SCRIPT_FILENAME"])))));
+	$path = dirname($_SERVER["SCRIPT_FILENAME"], 5);
 }
 
 define('JPATH_BASE', $path);
@@ -103,7 +106,7 @@ class DPCalendarEventSync extends CliApplication
 	public function getMenu($name = 'DPCalendar', $options = [])
 	{
 		try {
-			return JMenu::getInstance($name, $options);
+			return AbstractMenu::getInstance($name, $options);
 		} catch (Exception $e) {
 			return null;
 		}

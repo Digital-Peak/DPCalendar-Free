@@ -1,4 +1,8 @@
 <?php
+
+use Joomla\CMS\Factory;
+use Joomla\CMS\MVC\Controller\FormController;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -8,7 +12,7 @@ defined('_JEXEC') or die();
 
 JLoader::import('joomla.application.component.controllerform');
 
-class DPCalendarControllerExtcalendar extends JControllerForm
+class DPCalendarControllerExtcalendar extends FormController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_EXTCALENDAR';
 
@@ -16,7 +20,7 @@ class DPCalendarControllerExtcalendar extends JControllerForm
 	{
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
 
-		$tmp = JFactory::getApplication()->input->get('dpplugin');
+		$tmp = Factory::getApplication()->input->get('dpplugin');
 		if ($tmp) {
 			$append .= '&dpplugin=' . $tmp;
 		}
@@ -28,7 +32,7 @@ class DPCalendarControllerExtcalendar extends JControllerForm
 	{
 		$append = parent::getRedirectToListAppend();
 
-		$tmp = JFactory::getApplication()->input->get('dpplugin');
+		$tmp = Factory::getApplication()->input->get('dpplugin');
 		if ($tmp) {
 			$append .= '&dpplugin=' . $tmp;
 		}

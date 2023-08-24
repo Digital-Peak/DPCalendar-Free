@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\Helper\Booking;
+use DPCalendar\Helper\Location;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -19,7 +23,7 @@ use Joomla\CMS\Router\Route;
 
 class DPCalendarViewEvent extends BaseView
 {
-	protected $event;
+	public $event;
 
 	public function init()
 	{
@@ -109,7 +113,7 @@ class DPCalendarViewEvent extends BaseView
 		$this->authorName = '';
 		$author           = Factory::getUser($event->created_by);
 		if ($author) {
-			$this->authorName = $event->created_by_alias ? $event->created_by_alias : $author->name;
+			$this->authorName = $event->created_by_alias ?: $author->name;
 
 			if (file_exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php')) {
 				// Set the community builder username as content
@@ -181,7 +185,7 @@ class DPCalendarViewEvent extends BaseView
 
 		// Taxes stuff
 		$this->taxRate = null;
-		if ($this->country = \DPCalendar\Helper\Location::getCountryForIp()) {
+		if ($this->country = Location::getCountryForIp()) {
 			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 			$model         = BaseDatabaseModel::getInstance('Taxrate', 'DPCalendarModel', ['ignore_request' => true]);
 			$this->taxRate = $model->getItemByCountry($this->country->id);
@@ -268,7 +272,7 @@ class DPCalendarViewEvent extends BaseView
 
 		// Check if registration started
 		$now                   = \DPCalendarHelper::getDate();
-		$registrationStartDate = \DPCalendar\Helper\Booking::getRegistrationStartDate($event);
+		$registrationStartDate = Booking::getRegistrationStartDate($event);
 		if ($registrationStartDate->format('U') > $now->format('U')) {
 			return Text::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_START',
@@ -282,7 +286,7 @@ class DPCalendarViewEvent extends BaseView
 
 		// Check if registration ended
 		$now                = \DPCalendarHelper::getDate();
-		$regstrationEndDate = \DPCalendar\Helper\Booking::getRegistrationEndDate($event);
+		$regstrationEndDate = Booking::getRegistrationEndDate($event);
 		if ($regstrationEndDate->format('U') < $now->format('U')) {
 			return Text::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_END',

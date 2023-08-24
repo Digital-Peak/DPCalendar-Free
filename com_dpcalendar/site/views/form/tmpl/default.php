@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -59,7 +60,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->
 		<input type="hidden" name="tmpl" value="<?php echo $this->input->get('tmpl'); ?>" class="dp-input dp-input-hidden">
 		<input type="hidden" name="urlhash" value="<?php echo $this->input->getString('urlhash'); ?>" class="dp-input dp-input-hidden">
 		<input type="hidden" name="template_event_id" class="dp-input dp-input-hidden">
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 	<?php echo $this->loadTemplate('actions'); ?>
 </div>

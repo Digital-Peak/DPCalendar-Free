@@ -11,6 +11,6 @@
 				<option value="150">150</option>
 				<option value="180">180</option>
 		</field>
-		<field name="description" type="textarea" filter="JComponentHelper::filterText" label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
+		<field name="description" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
 	</fields>
 </form>

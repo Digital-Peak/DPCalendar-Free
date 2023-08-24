@@ -5,7 +5,7 @@
 }
 .plg-content-dpcalendar-bookings .dp-list > li {
 	border-bottom: 1px solid rgb(221, 221, 221);
-	padding: 1em 1em;
+	padding: 1em;
 }
 .plg-content-dpcalendar-bookings .dp-list > li:first-child {
 	border-top: 1px solid rgb(221, 221, 221);

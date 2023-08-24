@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -23,7 +24,7 @@ $this->dpdocument->addScriptOptions('adminlist', ['listOrder' => $this->state->g
 		<?php echo $this->loadTemplate('batch'); ?>
 		<input type="hidden" name="task" value=""/>
 		<input type="hidden" name="boxchecked" value="0"/>
-		<?php echo JHtml::_('form.token'); ?>
+		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>
 	<?php echo $this->loadTemplate('footer'); ?>
 </div>

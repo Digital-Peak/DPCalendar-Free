@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\Helper\Booking;
+use DPCalendar\Helper\Location;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -11,8 +15,8 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 
 // BC classes
-JLoader::registerAlias('DPCalendarHelperLocation', '\\DPCalendar\\Helper\\Location', '6.0');
-JLoader::registerAlias('DPCalendarHelperBooking', '\\DPCalendar\\Helper\\Booking', '6.0');
+JLoader::registerAlias('DPCalendarHelperLocation', '\\' . Location::class);
+JLoader::registerAlias('DPCalendarHelperBooking', '\\' . Booking::class);
 
 Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 Factory::getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');

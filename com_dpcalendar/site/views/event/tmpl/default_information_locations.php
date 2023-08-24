@@ -13,7 +13,7 @@ if (!$this->event->locations || !$this->params->get('event_show_location', '2'))
 ?>
 <dl class="dp-description dp-information__locations">
 	<dt class="dp-description__label">
-		<?php echo $this->translate('COM_DPCALENDAR_LOCATION' . (count($this->event->locations) > 1 ? 'S' : '')); ?>
+		<?php echo $this->translate('COM_DPCALENDAR_LOCATION' . ((is_countable($this->event->locations) ? count($this->event->locations) : 0) > 1 ? 'S' : '')); ?>
 	</dt>
 	<dd class="dp-description__description dp-locations">
 		<?php foreach ($this->event->locations as $index => $location) { ?>
@@ -26,7 +26,7 @@ if (!$this->event->locations || !$this->params->get('event_show_location', '2'))
 						[<?php echo implode(', ', $this->event->roomTitles[$location->id]); ?>]
 					<?php } ?>
 				</a>
-				<?php if ($index < count($this->event->locations) - 1) { ?>
+				<?php if ($index < (is_countable($this->event->locations) ? count($this->event->locations) : 0) - 1) { ?>
 					<span class="dp-location__separator">,</span>
 				<?php } ?>
 			</span>

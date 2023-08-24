@@ -4,16 +4,24 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-class JFormFieldBooking extends JFormField
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\FormField;
+use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Table\Table;
+
+class JFormFieldBooking extends FormField
 {
 	public $type     = 'Booking';
 	public $readonly = false;
 
 	protected function getInput()
 	{
-		if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
+		if (DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 			return false;
 		}
 
@@ -30,7 +38,7 @@ class JFormFieldBooking extends JFormField
 		$attr .= $this->required ? ' required' : '';
 
 		// Load the modal behavior script.
-		JHtml::_('behavior.modal', 'a.modal_' . $this->id);
+		HTMLHelper::_('behavior.modal', 'a.modal_' . $this->id);
 
 		// Build the script.
 		$script   = [];
@@ -48,15 +56,15 @@ class JFormFieldBooking extends JFormField
 		$script[] = '	}';
 
 		// Add the script to the document head.
-		JFactory::getDocument()->addScriptDeclaration(implode("\n", $script));
+		Factory::getDocument()->addScriptDeclaration(implode("\n", $script));
 
 		// Load the current Booking if available.
-		$table = JTable::getInstance('Booking', 'DPCalendarTable');
+		$table = Table::getInstance('Booking', 'DPCalendarTable');
 
 		if (is_numeric($this->value)) {
 			$table->load($this->value);
 		} else {
-			$table->username = JText::_('JLIB_FORM_SELECT_USER');
+			$table->username = Text::_('JLIB_FORM_SELECT_USER');
 		}
 
 		// Create a dummy text field with the booking name.
@@ -66,7 +74,7 @@ class JFormFieldBooking extends JFormField
 
 		// Create the user select button.
 		if ($this->readonly === false) {
-			$html[] = '		<a class="btn btn-primary modal_' . $this->id . '" title="' . JText::_('JLIB_FORM_CHANGE_USER') . '" href="' . $link . '"' .
+			$html[] = '		<a class="btn btn-primary modal_' . $this->id . '" title="' . Text::_('JLIB_FORM_CHANGE_USER') . '" href="' . $link . '"' .
 				' rel="{handler: \'iframe\', size: {x: 800, y: 500}}">';
 			$html[] = '<i class="icon-user"></i></a>';
 		}

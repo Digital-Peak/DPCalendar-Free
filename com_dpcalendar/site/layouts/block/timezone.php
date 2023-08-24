@@ -41,10 +41,10 @@ foreach ($regions as $name => $mask) {
 $actualTimezone = Factory::getSession()->get('user-timezone', $displayData['dateHelper']->getDate()->getTimezone()->getName(), 'DPCalendar');
 ?>
 <form action="<?php echo Uri::base(); ?>" method="get" class="dp-timezone dp-form">
-	<span class="dp-timezone__label">
+	<label class="dp-timezone__label" for="dp-timezone__select">
 		<?php echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_CHOOSE_TIMEZONE'); ?>:
-	</span>
-	<select name="tz" class="dp-select dp-timezone__select dp-select-container_unstyled">
+	</label>
+	<select name="tz" class="dp-select dp-timezone__select dp-select-container_unstyled" id="dp-timezone__select">
 		<option value="UTC"<?php $actualTimezone == 'UTC' ? ' selected' : ''; ?>>
 			<?php echo $displayData['translator']->translate('JLIB_FORM_VALUE_TIMEZONE_UTC'); ?>
 		</option>

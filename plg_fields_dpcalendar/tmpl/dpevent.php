@@ -1,4 +1,5 @@
 <?php
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -16,8 +17,7 @@ if (!is_array($value)) {
 }
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
-JLoader::import('joomla.application.component.model');
-JModelLegacy::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
+BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 $texts = [];
 foreach ($value as $eventId) {
@@ -26,7 +26,7 @@ foreach ($value as $eventId) {
 	}
 
 	// Getting the event
-	$model = JModelLegacy::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
+	$model = BaseDatabaseModel::getInstance('Event', 'DPCalendarModel', ['ignore_request' => true]);
 	$event = $model->getItem($eventId);
 	if (!$event) {
 		continue;

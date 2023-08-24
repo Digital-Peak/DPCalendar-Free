@@ -4,13 +4,21 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JLoader::import('components.com_fields.libraries.fieldsplugin', JPATH_ADMINISTRATOR);
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
+use Joomla\Component\Fields\Administrator\Plugin\FieldsPlugin;
+
+if (version_compare(JVERSION, 4, '<')) {
+	JLoader::import('components.com_fields.libraries.fieldsplugin', JPATH_ADMINISTRATOR);
+	class_alias('FieldsPlugin', '\\Joomla\\Component\\Fields\\Administrator\\Plugin\\FieldsPlugin');
+}
 
 class PlgFieldsDPCalendar extends FieldsPlugin
 {
-	public function onCustomFieldsPrepareDom($field, DOMElement $parent, JForm $form)
+	public function onCustomFieldsPrepareDom($field, DOMElement $parent, Form $form)
 	{
 		$fieldNode = parent::onCustomFieldsPrepareDom($field, $parent, $form);
 
@@ -37,19 +45,17 @@ class PlgFieldsDPCalendar extends FieldsPlugin
 			return;
 		}
 
-		$user = JFactory::getUser();
+		$user = Factory::getUser();
 
 		// When the user is the author of the event or an admin then all is ok
 		if ($event->created_by == $user->id || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar.' . $event->catid)) {
 			return;
 		}
 
-		$tickets = isset($event->tickets) ? $event->tickets : [];
+		$tickets = $event->tickets ?? [];
 
 		// Get the tickets of the actual logged in user
-		$myTickets = array_filter($tickets, function ($ticket) use ($user) {
-			return !$user->guest && $user->id && $ticket->user_id == $user->id && $ticket->state == 1;
-		});
+		$myTickets = array_filter($tickets, fn ($ticket) => !$user->guest && $user->id && $ticket->user_id == $user->id && $ticket->state == 1);
 
 		if ($myTickets) {
 			return;

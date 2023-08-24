@@ -1,4 +1,7 @@
 <?php
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -6,7 +9,7 @@
  */
 defined('_JEXEC') or die();
 
-if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
+if (DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 	return false;
 }
 
@@ -16,13 +19,13 @@ $field = new JFormFieldDpcountries();
 <div class="modal hide fade com-dpcalendar-adminlist__batch" id="collapseModal">
 	<div class="modal-header">
 		<button type="button" role="presentation" class="close" data-dismiss="modal">x</button>
-		<h3><?php echo JText::_('COM_DPCALENDAR_BATCH_OPTIONS'); ?></h3>
+		<h3><?php echo Text::_('COM_DPCALENDAR_BATCH_OPTIONS'); ?></h3>
 	</div>
 	<div class="modal-body">
-		<p><?php echo JText::_('COM_DPCALENDAR_BATCH_TIP'); ?></p>
+		<p><?php echo Text::_('COM_DPCALENDAR_BATCH_TIP'); ?></p>
 		<div class="control-group">
 			<div class="controls">
-				<?php echo JLayoutHelper::render('joomla.html.batch.language', []); ?>
+				<?php echo LayoutHelper::render('joomla.html.batch.language', []); ?>
 			</div>
 		</div>
 		<div class="control-group">
@@ -40,7 +43,7 @@ $field = new JFormFieldDpcountries();
 	</div>
 	<div class="modal-footer">
 		<button class="btn btn-primary" type="submit" onclick="Joomla.submitbutton('location.batch');">
-			<?php echo JText::_('JGLOBAL_BATCH_PROCESS'); ?>
+			<?php echo Text::_('JGLOBAL_BATCH_PROCESS'); ?>
 		</button>
 	</div>
 </div>

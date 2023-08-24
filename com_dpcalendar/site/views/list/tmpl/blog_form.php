@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\HTML\Block\Icon;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -74,16 +75,16 @@ if ($this->params->get('list_manage_search_form', 1) == 2) {
 	<div class="com-dpcalendar-blog__button-bar dp-button-bar">
 		<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 			<button class="dp-button dp-button-current-location" type="button">
-				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::LOCATION]); ?>
+				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
 				<?php echo $this->translate('COM_DPCALENDAR_VIEW_MAP_LABEL_CURRENT_LOCATION'); ?>
 			</button>
 		<?php } ?>
 		<button class="dp-button dp-button-search" type="button">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::OK]); ?>
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::OK]); ?>
 			<?php echo $this->translate('JSEARCH_FILTER'); ?>
 		</button>
 		<button class="dp-button dp-button-clear" type="button">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => \DPCalendar\HTML\Block\Icon::CANCEL]); ?>
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::CANCEL]); ?>
 			<?php echo $this->translate('JCLEAR'); ?>
 		</button>
 	</div>

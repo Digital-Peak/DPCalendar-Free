@@ -1,4 +1,5 @@
 <?php
+use DPCalendar\Helper\Booking;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -9,7 +10,7 @@ defined('_JEXEC') or die();
 ?>
 <div class="dp-booking-info__prices">
 	<?php foreach ($this->event->price->value as $key => $value) { ?>
-		<?php $discounted = \DPCalendar\Helper\Booking::getPriceWithDiscount($value, $this->event); ?>
+		<?php $discounted = Booking::getPriceWithDiscount($value, $this->event); ?>
 		<dl class="dp-description dp-booking-info__price">
 			<dt class="dp-description__label">
 				<?php echo $this->event->price->label[$key] ?: $this->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL'); ?>

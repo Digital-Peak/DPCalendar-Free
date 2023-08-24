@@ -61,7 +61,7 @@ class DPCalendarControllerEvent extends FormController
 
 	protected function allowEdit($data = [], $key = 'id')
 	{
-		$recordId = isset($data[$key]) ? $data[$key] : 0;
+		$recordId = $data[$key] ?? 0;
 		$event    = null;
 
 		if ($recordId) {
@@ -98,6 +98,7 @@ class DPCalendarControllerEvent extends FormController
 
 	public function cancel($key = 'e_id')
 	{
+		$success  = null;
 		$return   = true;
 		$recordId = $this->input->getString($key);
 		if (!$recordId || is_numeric($recordId)) {
@@ -433,7 +434,7 @@ class DPCalendarControllerEvent extends FormController
 					continue;
 				}
 
-				list($title, $coordinates) = explode(' [', $locationId);
+				[$title, $coordinates] = explode(' [', $locationId);
 
 				$location = Location::get(trim($coordinates, ']'), true, $title);
 				if (!$location->id) {
@@ -582,8 +583,8 @@ class DPCalendarControllerEvent extends FormController
 		$data = $this->input->post->get('jform', [], 'array');
 		$this->getModel()->invite(
 			$data['event_id'],
-			isset($data['users']) ? $data['users'] : [],
-			isset($data['groups']) ? $data['groups'] : []
+			$data['users'] ?? [],
+			$data['groups'] ?? []
 		);
 
 		$this->setRedirect(
@@ -703,7 +704,7 @@ class DPCalendarControllerEvent extends FormController
 		DPCalendarHelper::sendMessage(
 			null,
 			false,
-			['message' => $message, 'count' => count($events)]
+			['message' => $message, 'count' => is_countable($events) ? count($events) : 0]
 		);
 	}
 

@@ -41,7 +41,7 @@ class DPCalendarController extends ApiController
 
 	protected function save($recordKey = null)
 	{
-		$data = (array) json_decode($this->input->json->getRaw(), true);
+		$data = (array) json_decode($this->input->json->getRaw(), true, 512);
 
 		foreach (FieldsHelper::getFields('com_dpcalendar.event') as $field) {
 			if (!isset($data[$field->name])) {

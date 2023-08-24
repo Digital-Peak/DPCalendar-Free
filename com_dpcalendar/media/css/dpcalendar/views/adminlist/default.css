@@ -7,9 +7,6 @@
 	text-align: center;
 	white-space: nowrap;
 	vertical-align: middle;
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
 	user-select: none;
 	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
@@ -22,8 +19,8 @@
 }
 .com-dpcalendar-adminlist .dp-button:disabled,
 .com-dpcalendar-adminlist .dp-button[disabled] {
-	background-color: #cccccc;
-	color: #666666;
+	background-color: #ccc;
+	color: #666;
 	cursor: not-allowed;
 }
 .com-dpcalendar-adminlist .dp-datepicker {
@@ -41,7 +38,7 @@
 	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
 }
 .com-dpcalendar-adminlist .dp-icon svg {
-	fill: currentColor;
+	fill: currentcolor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
@@ -81,7 +78,7 @@
 .com-dpcalendar-adminlist .dp-table tr:nth-child(2n-1) td {
 	background-color: #f2f2f2;
 }
-@media screen and (max-width: 767px) {
+@media screen and (width <= 767px) {
 	.com-dpcalendar-adminlist .dp-table,
 	.com-dpcalendar-adminlist .dp-table tbody:not(.dp-table__thead),
 	.com-dpcalendar-adminlist .dp-table th,
@@ -102,7 +99,7 @@
 		padding-left: 50%;
 		text-align: left;
 	}
-	.com-dpcalendar-adminlist .dp-table td:before {
+	.com-dpcalendar-adminlist .dp-table td::before {
 		content: attr(data-column);
 		position: absolute;
 		left: 10px;
@@ -138,11 +135,11 @@
 	margin-bottom: 0 !important;
 }
 .com-dpcalendar-adminlist .js-stools-container-bar .btn-toolbar > * {
-	margin: 0 5px 0 5px;
+	margin: 0 5px;
 }
 .com-dpcalendar-adminlist .dp-table {
 	border: 0;
-	background-color: #ffffff;
+	background-color: #fff;
 }
 .com-dpcalendar-adminlist .dp-table__col-expand {
 	width: 30%;
@@ -150,12 +147,12 @@
 .com-dpcalendar-adminlist .dp-table__col-state, .com-dpcalendar-adminlist .dp-table__col-check, .com-dpcalendar-adminlist .dp-table__col-order {
 	width: 1%;
 }
-.com-dpcalendar-adminlist .dp-table thead td {
-	background-color: #ffffff !important;
-}
 .com-dpcalendar-adminlist .dp-table td, .com-dpcalendar-adminlist .dp-table th {
 	text-align: left;
 	border-left: 0;
+}
+.com-dpcalendar-adminlist .dp-table thead td {
+	background-color: #fff !important;
 }
 .com-dpcalendar-adminlist .dp-table tfoot tr td {
 	background-color: inherit !important;

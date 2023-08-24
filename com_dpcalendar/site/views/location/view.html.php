@@ -1,4 +1,8 @@
 <?php
+
+use DPCalendar\View\BaseView;
+use Joomla\CMS\HTML\Helpers\StringHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -7,11 +11,10 @@
 
 defined('_JEXEC') or die();
 
-use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
-class DPCalendarViewLocation extends \DPCalendar\View\BaseView
+class DPCalendarViewLocation extends BaseView
 {
 	public function display($tpl = null)
 	{
@@ -32,7 +35,6 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 		$this->location->tags = new TagsHelper();
 		$this->location->tags->getItemTags('com_dpcalendar.location', $this->location->id);
 
-		JLoader::import('joomla.application.component.model');
 		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
 		$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
@@ -86,7 +88,7 @@ class DPCalendarViewLocation extends \DPCalendar\View\BaseView
 
 		$metadesc = trim($this->location->metadata->get('metadesc', ''));
 		if (!$metadesc) {
-			$metadesc = JHtmlString::truncate($this->location->description ?: '', 100, true, false);
+			$metadesc = StringHelper::truncate($this->location->description ?: '', 100, true, false);
 		}
 		if ($metadesc) {
 			$this->document->setDescription($metadesc);

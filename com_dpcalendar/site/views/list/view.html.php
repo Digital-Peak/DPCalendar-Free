@@ -1,4 +1,7 @@
 <?php
+
+use Joomla\CMS\HTML\Helpers\StringHelper;
+
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -155,7 +158,11 @@ class DPCalendarViewList extends BaseView
 
 		$now = $this->dateHelper->getDate();
 		$now->setTime(0, 0, 0);
-		$model->setState('list.direction', $dateEnd->format('U') < $now->format('U') ? 'desc' : 'asc');
+		$model->setState('list.direction', $this->params->get('list_ordering', 'adaptive'));
+		if ($this->params->get('list_ordering', 'adaptive') === 'adaptive') {
+			$model->setState('list.direction', $dateEnd->format('U') < $now->format('U') ? 'desc' : 'asc');
+		}
+
 		$model->setState('list.limit', 100000);
 
 		// Location filters
@@ -188,7 +195,7 @@ class DPCalendarViewList extends BaseView
 
 			$desc = $this->params->get('list_description_length', null) != '0' ? HTMLHelper::_('content.prepare', $event->description) : '';
 			if (!$event->introText && $desc && $this->params->get('list_description_length', null) !== null) {
-				$descTruncated = JHtmlString::truncateComplex($desc, $this->params->get('list_description_length', null));
+				$descTruncated = StringHelper::truncateComplex($desc, $this->params->get('list_description_length', null));
 
 				// Move the dots inside the last tag
 				if (DPCalendarHelper::endsWith($descTruncated, '...') && $pos = strrpos($descTruncated, '</')) {

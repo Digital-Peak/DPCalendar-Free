@@ -461,6 +461,9 @@ $files = [
 '/media/com_dpcalendar/images/icons/sign-in-alt.svg',
 '/media/com_dpcalendar/images/icons/sync.svg',
 '/media/com_dpcalendar/images/icons/times.svg',
+
+// From v8.14.0 to v8.14.1
+'/modules/mod_dpcalendar_upcoming/script.php',
 ];
 
 foreach ($files as $file) {

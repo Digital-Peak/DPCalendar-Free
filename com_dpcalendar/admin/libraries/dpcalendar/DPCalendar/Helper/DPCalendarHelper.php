@@ -31,8 +31,13 @@ use Joomla\Registry\Registry;
 if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 	\JLoader::registerAlias('UsersModelRegistration', '\\Joomla\\Component\\Users\\Site\\Model\\RegistrationModel');
 } else {
-	class_alias('JHtmlSidebar', '\\Joomla\\CMS\\HTML\\Helpers\\Sidebar');
-	class_alias('JHtmlString', '\\Joomla\\CMS\\HTML\\Helpers\\StringHelper');
+	if (!class_exists('\\Joomla\\CMS\\HTML\\Helpers\\Sidebar', false)) {
+		class_alias('JHtmlSidebar', '\\Joomla\\CMS\\HTML\\Helpers\\Sidebar');
+	}
+
+	if (!class_exists('\\Joomla\\CMS\\HTML\\Helpers\\StringHelper', false)) {
+		class_alias('JHtmlString', '\\Joomla\\CMS\\HTML\\Helpers\\StringHelper');
+	}
 }
 
 \JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');

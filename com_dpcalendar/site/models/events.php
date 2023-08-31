@@ -141,7 +141,7 @@ class DPCalendarModelEvents extends ListModel
 			}
 
 			// Add the locations
-			$item->locations = [];
+			$item->locations = empty($item->locations) || $this->getState('filter.locations', []) ? [] : $item->locations;
 			if (!empty($item->location_ids) && empty($item->locations)) {
 				$model->setState('filter.search', 'ids:' . $item->location_ids);
 				$item->locations = $model->getItems();

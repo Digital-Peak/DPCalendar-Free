@@ -22,6 +22,8 @@ class DPCalendarViewEvents extends BaseView
 		// Registering shutdown function to catch fatal errors
 		register_shutdown_function([$this, 'handleError']);
 
+		header("Cache-Control: no-cache");
+
 		// Set some defaults
 		$this->input->set('list.limit', 1000);
 		$this->get('State')->set('filter.state', [1, 3]);

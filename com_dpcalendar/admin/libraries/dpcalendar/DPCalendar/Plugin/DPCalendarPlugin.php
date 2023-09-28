@@ -7,9 +7,6 @@
 
 namespace DPCalendar\Plugin;
 
-use Sabre\VObject\Component\VEvent;
-use Sabre\VObject\DateTimeParser;
-
 defined('_JEXEC') or die();
 
 use DigitalPeak\ThinHTTP as HTTP;
@@ -29,6 +26,8 @@ use Joomla\CMS\Table\Table;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
+use Sabre\VObject\Component\VEvent;
+use Sabre\VObject\DateTimeParser;
 use Sabre\VObject\Parser\Parser;
 use Sabre\VObject\Reader;
 
@@ -1068,19 +1067,21 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$locationFilterData->latitude  = null;
 		$locationFilterData->longitude = null;
 
+		if (is_object($location)) {
+			$locationFilterData = $location;
+		}
+
 		$radius = $options->get('radius');
 		if ($options->get('length-type') == 'm') {
 			$radius = $radius * 0.62137119;
 		}
 
-		if (strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
+		if (!$locationFilterData->latitude && strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
 			[$latitude, $longitude]        = explode(';', $location);
 			$locationFilterData->latitude  = str_replace('latitude=', '', $latitude);
 			$locationFilterData->longitude = str_replace('longitude=', '', $longitude);
-		} else {
-			if (!empty($location)) {
-				$locationFilterData = Location::get($location);
-			}
+		} elseif (!$locationFilterData->latitude && !empty($location)) {
+			$locationFilterData = Location::get($location);
 		}
 
 		$within = false;

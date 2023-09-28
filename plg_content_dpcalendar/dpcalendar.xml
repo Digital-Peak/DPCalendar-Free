@@ -2,12 +2,12 @@
 <extension type="plugin" group="content" method="upgrade">
 	<name>plg_content_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>2023-08</creationDate>
+	<creationDate>2023-09</creationDate>
 	<copyright>(C) 2015 Digital Peak GmbH</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.14.1</version>
+	<version>8.14.2</version>
 	<description>PLG_CONTENT_DPCALENDAR_XML_DESCRIPTION</description>
 	<files>
 		<filename plugin="dpcalendar">dpcalendar.php</filename>

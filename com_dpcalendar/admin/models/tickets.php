@@ -66,16 +66,25 @@ class DPCalendarModelTickets extends ListModel
 			return $items;
 		}
 
+		static $countryCache = null;
+
 		foreach ($items as $item) {
 			if ($item->country) {
-				$country = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel')->getItem($item->country);
-				if ($country) {
+				if ($countryCache === null) {
+					$countryCache = [];
 					Factory::getApplication()->getLanguage()->load(
 						'com_dpcalendar.countries',
 						JPATH_ADMINISTRATOR . '/components/com_dpcalendar'
 					);
-					$item->country_code       = $country->short_code;
-					$item->country_code_value = Text::_('COM_DPCALENDAR_COUNTRY_' . $country->short_code);
+				}
+
+				if (!array_key_exists($item->country, $countryCache)) {
+					$countryCache[$item->country] = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel')->getItem($item->country);
+				}
+
+				if ($countryCache[$item->country]) {
+					$item->country_code       = $countryCache[$item->country]->short_code;
+					$item->country_code_value = Text::_('COM_DPCALENDAR_COUNTRY_' . $countryCache[$item->country]->short_code);
 				}
 			}
 

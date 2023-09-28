@@ -96,10 +96,6 @@ class DPCalendarTableExtcalendar extends Table
 			$this->alias = StringHelper::increment($this->alias);
 		}
 
-		if (empty($this->_rules)) {
-			$this->_rules = new Rules(['core.edit' => [], 'core.create' => [], 'core.delete' => []]);
-		}
-
 		// Obfuscate the password
 		if (!empty($this->params)) {
 			$params = new Registry($this->params);

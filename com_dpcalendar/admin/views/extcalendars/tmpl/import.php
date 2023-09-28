@@ -22,15 +22,7 @@ $form = Form::getInstance('form', 'params');
 		<?php if (!$form->getFieldAttribute(str_replace('params[', '', trim($field->__get('name'), ']')), 'import', null, 'params')) { ?>
 			<?php continue; ?>
 		<?php } ?>
-		<div class="control-group">
-			<div class="control-label">
-				<?php echo $field->label; ?>
-			</div>
-			<div class="controls">
-				<?php echo $field->input; ?>
-				<br/><b><?php echo Text::_($field->description) ?></b>
-			</div>
-		</div>
+		<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 	<?php } ?>
 	<input type="hidden" name="task" value="plugin.action"/>
 	<input type="hidden" name="action" value="import"/>

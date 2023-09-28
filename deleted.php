@@ -464,6 +464,18 @@ $files = [
 
 // From v8.14.0 to v8.14.1
 '/modules/mod_dpcalendar_upcoming/script.php',
+
+// From v8.14.1 to case 10168
+'/plugins/system/dpcalendarytp/modules/elements/calendar/images/icon-small.svg',
+'/plugins/system/dpcalendarytp/modules/elements/list/images/icon-small.svg',
+
+// From v8.14.1 to case 10165
+'/plugins/system/dpcalendarytp/modules/elements/calendar/images/icon-small.svg',
+'/plugins/system/dpcalendarytp/modules/elements/list/images/icon-small.svg',
+
+// From v8.14.1 to case 10175
+'/plugins/system/dpcalendarytp/modules/elements/calendar/images/icon-small.svg',
+'/plugins/system/dpcalendarytp/modules/elements/list/images/icon-small.svg',
 ];
 
 foreach ($files as $file) {

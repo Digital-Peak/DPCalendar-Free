@@ -186,11 +186,16 @@ trait ExportTrait
 				case 'end_date':
 					return DPCalendarHelper::getDate($ticket->$name)->format($ticket->all_day ? 'Y-m-d' : 'Y-m-d H:i:s', true);
 				case 'type':
-					if (!BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel')->getEvent($ticket->event_id)->price) {
+					if (!$ticket->event_prices) {
 						return '';
 					}
 
-					return BaseDatabaseModel::getInstance('Booking', 'DPCalendarModel')->getEvent($ticket->event_id)->price->label[$ticket->type];
+					$prices = json_decode($ticket->event_prices);
+					if (!$prices || !array_key_exists($ticket->type, $prices->label)) {
+						return '';
+					}
+
+					return $prices->label[$ticket->type];
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
 				case 'user_name':

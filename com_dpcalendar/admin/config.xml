@@ -1582,7 +1582,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP_TILES_URL_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP_TILES_URL_DESC"/>
 		<field name="map_api_openstreetmap_geocode_url" type="text" showon="map_provider:openstreetmap"
-			default="https://nominatim.openstreetmap.org/search/?format=json&amp;addressdetails=1&amp;limit=1&amp;q={address}"
+			default="https://nominatim.openstreetmap.org/search?format=json&amp;addressdetails=1&amp;limit=1&amp;q={address}"
 			label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP_GEOCODE_URL_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_OPENSTREETMAP_GEOCODE_URL_DESC"/>
 	</fieldset>

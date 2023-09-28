@@ -16,6 +16,7 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/locationform/default.js');
 $action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id . $this->tmpl);
 ?>
 <div class="com-dpcalendar-locationform">
+	<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 	<form class="com-dpcalendar-locationform__form dp-form form-validate" method="post" name="adminForm" id="adminForm"
 		  action="<?php echo $action; ?>">
 		<?php echo HTMLHelper::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>

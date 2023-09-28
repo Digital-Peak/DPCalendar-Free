@@ -23,6 +23,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 ?>
 <div class="com-dpcalendar-locationform<?php echo $this->pageclass_sfx ? ' com-dpcalendar-locationform-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
+	<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 	<?php echo $this->loadTemplate('heading'); ?>
 	<form class="com-dpcalendar-locationform__form dp-form form-validate" method="post" name="adminForm" id="adminForm"
 		  action="<?php echo $action; ?>">

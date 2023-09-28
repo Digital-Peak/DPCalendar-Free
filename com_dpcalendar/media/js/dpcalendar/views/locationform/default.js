@@ -25,6 +25,7 @@
 			observer.observe(mapElement);
 		});
 	}
+	let internalChange = false;
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets([
 			'/com_dpcalendar/js/dpcalendar/dpcalendar.js',
@@ -60,6 +61,9 @@
 			const mapLoader = () => {
 				[].slice.call(document.querySelectorAll('#jform_street,#jform_number,#jform_zip,#jform_city,#jform_country,#jform_province')).forEach((input) => {
 					input.addEventListener('change', () => {
+						if (internalChange) {
+							return;
+						}
 						geoComplete.value = '';
 						let task = 'location.loc';
 						if (window.location.href.indexOf('administrator') == -1) {
@@ -76,7 +80,8 @@
 									document.getElementById('jform_latitude').value = 0;
 									document.getElementById('jform_longitude').value = 0;
 								}
-							}
+							},
+							true
 						);
 					});
 				});
@@ -112,7 +117,8 @@
 						if (DPCalendar.Map) {
 							DPCalendar.Map.moveMarker(map, getMarker(), json.data.latitude, json.data.longitude);
 						}
-					}
+					},
+					true
 				);
 			});
 			geoComplete.addEventListener('dp-autocomplete-change', (e) => {
@@ -124,7 +130,8 @@
 					'task=' + task + '&loc=' + encodeURIComponent(e.target.value.trim()),
 					(json) => {
 						DPCalendar.autocomplete.setItems(geoComplete, json.data);
-					}
+					},
+					true
 				);
 			});
 			geoComplete.parentElement.querySelector('.dp-button-action').addEventListener('click', (e) => {
@@ -146,20 +153,23 @@
 	function getAddresString() {
 		const getValue = (name) => {
 			const tmp = document.getElementById('jform_' + name);
+			if (tmp && tmp.tagName === 'SELECT') {
+				return tmp.options[tmp.selectedIndex].innerHTML + ', ';
+			}
 			return tmp ? tmp.value + ', ' : '';
 		};
 		let street = getValue('street');
 		if (street) {
 			const number = getValue('number');
 			if (number) {
-				street = street.substr(0, street.length - 2) + ' ' + number;
+				street = street.substring(0, street.length - 2) + ' ' + number;
 			}
 		}
 		let city = getValue('city');
 		if (city) {
 			const zip = getValue('zip');
 			if (zip) {
-				city += city.substr(0, city.length - 2) + ' ' + zip;
+				city += city.substring(0, city.length - 2) + ' ' + zip;
 			}
 		}
 		return street + city + getValue('province') + getValue('country');
@@ -173,6 +183,9 @@
 		});
 		if (document.getElementById('jform_country')) {
 			document.getElementById('jform_country').value = result.country;
+			internalChange = true;
+			document.getElementById('jform_country').dispatchEvent(new Event('change'));
+			internalChange = false;
 		}
 		if (document.getElementById('jform_number')) {
 			document.getElementById('jform_number').value = result.number;

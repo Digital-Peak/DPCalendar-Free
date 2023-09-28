@@ -17,6 +17,10 @@
 			}
 			this.langInputPlaceholder = langInputPlaceholder;
 			element.addEventListener('change', () => {
+				if (!this.multiple) {
+					this.selectValue(this.element.value);
+					return;
+				}
 				this.optionsElement.innerHTML = this.getOptionsHTML();
 				this.optionsSelectedElement.innerHTML = this.getSelectedOptionsHTML();
 				this.optionsListener();
@@ -139,8 +143,10 @@
 		}
 		selectValue(value) {
 			if (!this.multiple) {
-				this.element.value = value;
-				this.element.dispatchEvent(new Event('change'));
+				if (this.element.value !== value) {
+					this.element.value = value;
+					this.element.dispatchEvent(new Event('change'));
+				}
 				const selected = this.getOptions(this.element, true).find((o) => o.value === value);
 				if (selected) {
 					const a = document.createElement('span');

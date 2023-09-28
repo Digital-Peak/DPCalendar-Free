@@ -225,6 +225,23 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 				$this->run('update #__extensions set params = ' . $db->quote($params->toString()) . ' where extension_id = ' . $plugin->extension_id);
 			}
 		}
+
+		if (version_compare($version, '8.14.2') == -1) {
+			$params = ComponentHelper::getParams('com_dpcalendar');
+			$params->set(
+				'map_api_openstreetmap_geocode_url',
+				str_replace(
+					'/search/?',
+					'/search?',
+					$params->get(
+						'map_api_openstreetmap_geocode_url',
+						'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q={address}'
+					)
+				)
+			);
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
 	}
 
 	public function preflight($type, $parent)

@@ -20,9 +20,9 @@ Table::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
 
 class Location
 {
-	private static $locationCache          = null;
-	private static array $nomatimLanguages = ['en', 'de', 'it', 'fr'];
-	private static array $googleLanguages  = [
+	private static $locationCache            = null;
+	private static array $nominatimLanguages = ['en', 'de', 'it', 'fr'];
+	private static array $googleLanguages    = [
 		'ar',
 		'eu',
 		'bg',
@@ -372,11 +372,11 @@ class Location
 		$url = 'https://photon.komoot.io/api/?limit=5&';
 
 		$lang = DPCalendarHelper::getFrLanguage();
-		if (!in_array($lang, self::$nomatimLanguages)) {
+		if (!in_array($lang, self::$nominatimLanguages)) {
 			$lang = substr($lang, 0, strpos($lang, '-'));
 		}
 
-		if (in_array($lang, self::$nomatimLanguages)) {
+		if (in_array($lang, self::$nominatimLanguages)) {
 			$url .= 'lang=' . $lang . '&';
 		}
 
@@ -510,7 +510,7 @@ class Location
 
 		$coordinates = explode(',', $location);
 		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
-			$url = str_replace('/search/', '/reverse/', $url);
+			$url = str_replace('/search', '/reverse', $url);
 			$url = str_replace('&q={address}', '', $url);
 			$url .= '&lat=' . urlencode($coordinates[0]) . '&lon=' . urlencode($coordinates[1]);
 

@@ -281,19 +281,21 @@ class DPCalendarModelEvent extends ItemModel
 		$item->params->set(
 			'access-tickets',
 			is_numeric($item->catid) &&
-			((!$user->guest && $item->created_by == $user->id) || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
+			((!$user->guest && $item->created_by == $user->id)
+				|| $user->authorise('dpcalendar.admin.book', 'com_dpcalendar.category.' . $item->catid))
 		);
 		$item->params->set(
 			'access-bookings',
 			is_numeric($item->catid) &&
-			((!$user->guest && $item->created_by == $user->id) || $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
+			((!$user->guest && $item->created_by == $user->id)
+				|| $user->authorise('dpcalendar.admin.book', 'com_dpcalendar.category.' . $item->catid))
 		);
 		$item->params->set(
 			'send-tickets-mail',
 			is_numeric($item->catid) &&
 			// Allow to send mails when user is author, host or global admin
 			((!$user->guest && ($item->created_by == $user->id || in_array($user->id, explode(',', $item->host_ids ?: ''))))
-				|| $user->authorise('dpcalendar.admin.book', 'com_dpcalendar'))
+				|| $user->authorise('dpcalendar.admin.book', 'com_dpcalendar.category.' . $item->catid))
 		);
 
 		$calendar = DPCalendarHelper::getCalendar($item->catid);

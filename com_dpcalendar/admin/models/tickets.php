@@ -119,6 +119,7 @@ class DPCalendarModelTickets extends ListModel
 		// Join over the events
 		$query->select('e.catid AS event_calid, e.title as event_title, e.start_date, e.end_date, e.all_day, e.show_end_time, e.price as event_prices, e.booking_options as event_options, e.payment_provider as event_payment_provider, e.terms as event_terms, e.created_by as event_author, e.original_id as event_original_id, e.rrule as event_rrule, e.booking_cancel_closing_date as event_booking_cancel_closing_date');
 		$query->join('LEFT', $db->quoteName('#__dpcalendar_events') . ' AS e ON e.id = a.event_id');
+
 		// Join over the hosts
 		$query->select('GROUP_CONCAT(h.user_id) as event_host_ids');
 		$query->join('LEFT', $db->quoteName('#__dpcalendar_events_hosts') . ' AS h ON h.event_id = a.event_id');
@@ -162,6 +163,19 @@ class DPCalendarModelTickets extends ListModel
 			$query->where('a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)');
 		}
 
+		$catId = 0;
+		// Get the category id for access check
+		if ($this->getState('filter.event_id')) {
+			$this->getDbo()->setQuery(
+				'select catid from #__dpcalendar_events where id = ' . (int)$this->getState('filter.event_id')
+			);
+			$catId = $this->getDbo()->loadRow();
+
+			if ($catId) {
+				$catId = $catId[0];
+			}
+		}
+
 		// Filter by author
 		$authorId = $this->getState('filter.ticket_holder');
 		if (is_numeric($authorId)) {
@@ -169,7 +183,7 @@ class DPCalendarModelTickets extends ListModel
 			$query->where('a.user_id ' . $type . (int)$authorId);
 		} elseif ($this->getState('filter.public')) {
 			$query->where('public = 1');
-		} elseif ($authorId !== false && !$user->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
+		} elseif ($authorId !== false && !$user->authorise('dpcalendar.admin.book', 'com_dpcalendar' . ($catId ? '.category.' . $catId : ''))) {
 			if ($user->guest) {
 				$query->where('public = 1');
 			}

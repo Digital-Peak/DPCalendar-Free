@@ -179,10 +179,24 @@ class DPCalendarModelBookings extends ListModel
 			$query->where('a.processor like ' . $this->getDbo()->quote($processor . '%'));
 		}
 
+		$catId = 0;
+		// Get the category id for access check
+		if ($this->getState('filter.event_id')) {
+			$this->getDbo()->setQuery(
+				'select catid from #__dpcalendar_events where id = ' . (int)$this->getState('filter.event_id')
+			);
+			$catId = $this->getDbo()->loadRow();
+
+			if ($catId) {
+				$catId = $catId[0];
+			}
+		}
+
+
 		// On front end if we are not an admin only bookings are visible where we are the author of the event
 		if ($this->getState('filter.my', 0) != 1
 			&& Factory::getApplication()->isClient('site')
-			&& !$user->authorise('dpcalendar.admin.book', 'com_dpcalendar')
+			&& !$user->authorise('dpcalendar.admin.book', 'com_dpcalendar' . ($catId ? '.category.' . $catId : ''))
 		) {
 			// Join over the events
 			$query->join('LEFT', $db->quoteName('#__dpcalendar_events') . ' AS e ON e.id = t.event_id');

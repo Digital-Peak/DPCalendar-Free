@@ -5,6 +5,7 @@
  */
 (function () {
 	'use strict';
+	let internalChange = false;
 	function setup$5() {
 		const rrule = document.getElementById('jform_rrule');
 		if (!rrule) {
@@ -31,6 +32,9 @@
 		});
 	}
 	function updateFormFromRule() {
+		if (internalChange) {
+			return;
+		}
 		if (!document.getElementById('jform_scheduling')) {
 			changeVisiblity();
 			return;
@@ -40,6 +44,7 @@
 			changeVisiblity();
 			return;
 		}
+		internalChange = true;
 		let frequency = null;
 		rrule.split(';').forEach((rule) => {
 			const parts = rule.split('=');
@@ -53,39 +58,50 @@
 					if (input.value == parts[1]) {
 						frequency = input.value;
 					}
-					if (parts[1] == 'DAILY') {
+					if (parts[1] === 'DAILY') {
 						document.getElementById('jform_scheduling_daily_weekdays0').checked = false;
 						document.getElementById('jform_scheduling_daily_weekdays1').checked = true;
 					}
 				});
 				break;
 			case 'BYDAY':
-				if (frequency == 'WEEKLY' && parts[1] == 'MO,TU,WE,TH,FR') {
+				if (frequency === 'WEEKLY' && parts[1] == 'MO,TU,WE,TH,FR') {
 					document.getElementById('jform_scheduling_daily_weekdays0').checked = true;
 					document.getElementById('jform_scheduling_daily_weekdays1').checked = false;
 					document.getElementById('jform_scheduling1').checked = true;
 				}
+				if (frequency === 'WEEKLY') {
+					[].slice.call(document.querySelectorAll('#jform_scheduling_weekly_days option')).forEach((option) => option.selected = false);
+				}
+				if (frequency === 'MONTHLY') {
+					[].slice.call(document.querySelectorAll('#jform_scheduling_monthly_week option')).forEach((option) => option.selected = false);
+					[].slice.call(document.querySelectorAll('#jform_scheduling_monthly_week_days option')).forEach((option) => option.selected = false);
+				}
 				parts[1].split(',').forEach((value) => {
-					if (frequency == 'MONTHLY') {
-						const pos = value.length;
-						const day = value.substring(pos - 2, pos);
-						let week = value.substring(0, pos - 2);
-						if (week == -1) {
-							week = 'last';
-						}
-						if (week) {
-							document.querySelector('#jform_scheduling_monthly_week option[value="' + week + '"]').selected = true;
-							document.getElementById('jform_scheduling_monthly_week').dispatchEvent(new Event('change'));
-						}
-						if (day) {
-							document.querySelector('#jform_scheduling_monthly_week_days option[value="' + day + '"]').selected = true;
-							document.getElementById('jform_scheduling_monthly_week_days').dispatchEvent(new Event('change'));
-						}
-					} else {
+					if (frequency === 'WEEKLY') {
 						document.querySelector('#jform_scheduling_weekly_days option[value="' + value + '"]').selected = true;
-						document.getElementById('jform_scheduling_weekly_days').dispatchEvent(new Event('change'));
+						return;
+					}
+					const pos = value.length;
+					const day = value.substring(pos - 2, pos);
+					let week = value.substring(0, pos - 2);
+					if (week == -1) {
+						week = 'last';
+					}
+					if (week) {
+						document.querySelector('#jform_scheduling_monthly_week option[value="' + week + '"]').selected = true;
+					}
+					if (day) {
+						document.querySelector('#jform_scheduling_monthly_week_days option[value="' + day + '"]').selected = true;
 					}
 				});
+				if (frequency === 'WEEKLY') {
+					document.getElementById('jform_scheduling_weekly_days').dispatchEvent(new Event('change'));
+				}
+				if (frequency === 'MONTHLY') {
+					document.getElementById('jform_scheduling_monthly_week').dispatchEvent(new Event('change'));
+					document.getElementById('jform_scheduling_monthly_week_days').dispatchEvent(new Event('change'));
+				}
 				break;
 			case 'BYMONTHDAY':
 				document.getElementById('jform_scheduling_monthly_options').querySelector('input[value="by_day"]').checked = true;
@@ -110,8 +126,12 @@
 			}
 		});
 		changeVisiblity();
+		internalChange = false;
 	}
 	function updateRuleFromForm() {
+		if (internalChange) {
+			return;
+		}
 		if (!document.getElementById('jform_scheduling')) {
 			return;
 		}
@@ -182,7 +202,9 @@
 		const oldValue = document.getElementById('jform_rrule').value;
 		document.getElementById('jform_rrule').value = rule;
 		if (oldValue != rule) {
+			internalChange = true;
 			document.getElementById('jform_rrule').dispatchEvent(new Event('change'));
+			internalChange = false;
 		}
 	}
 	function changeVisiblity() {

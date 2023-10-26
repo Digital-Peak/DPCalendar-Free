@@ -1,19 +1,22 @@
 <?php
-use Joomla\Registry\Registry;
-use Joomla\CMS\Uri\Uri;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Uri\Uri;
 
 if ($this->params->get('show_selection', 1) == 2) {
 	return;
 }
 ?>
 <div class="com-dpcalendar-calendar__list com-dpcalendar-calendar__list_<?php echo $this->params->get('show_selection', 1) == 3 ? '' : 'hidden'; ?>">
-	<?php if ((is_countable($this->doNotListCalendars) ? count($this->doNotListCalendars) : 0) >= 10) { ?>
+	<?php if (count($this->doNotListCalendars ?: []) >= 10) { ?>
 		<div class="com-dpcalendar-calendar__list-toggle">
 			<input type="checkbox" id="calendars-toggle" class="dp-input dp-input-checkbox com-dpcalendar-calendar__list-toggle-input" checked>
 			<label for="calendars-toggle" class="dp-input-label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOGGLE'); ?></label>
@@ -21,9 +24,9 @@ if ($this->params->get('show_selection', 1) == 2) {
 	<?php } ?>
 	<div class="com-dpcalendar-calendar__calendars">
 		<?php foreach ($this->doNotListCalendars as $calendar) { ?>
-			<?php $style = 'background-color: #' . $calendar->color . ';'; ?>
-			<?php $style .= 'border-color: #' . $calendar->color . ';'; ?>
-			<?php $style .= 'color: #' . \DPCalendar\Helper\DPCalendarHelper::getOppositeBWColor($calendar->color); ?>
+			<?php $style = 'background-color: #' . str_replace('#', '', $calendar->color) . ';'; ?>
+			<?php $style .= 'border-color: #' . str_replace('#', '', $calendar->color) . ';'; ?>
+			<?php $style .= 'color: #' . DPCalendarHelper::getOppositeBWColor($calendar->color); ?>
 			<?php $icalRoute = $this->router->getCalendarIcalRoute($calendar->id); ?>
 			<div class="dp-calendar">
 				<label for="cal-<?php echo $calendar->id; ?>" class="dp-input-label dp-calendar__label">

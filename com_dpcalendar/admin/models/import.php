@@ -80,8 +80,10 @@ class DPCalendarModelImport extends BaseDatabaseModel
 				}
 
 				// Check if the event is within the date range
-				if (($event->start_date < $startDateAsSQL && $event->end_date < $startDateAsSQL)
-					|| ($event->start_date > $startDateAsSQL && $event->end_date > $endDateAsSQL)) {
+				if ($event->original_id > -1
+					&& (($event->start_date < $startDateAsSQL && $event->end_date < $startDateAsSQL)
+						|| ($event->start_date > $startDateAsSQL && $event->end_date > $endDateAsSQL))
+				) {
 					continue;
 				}
 

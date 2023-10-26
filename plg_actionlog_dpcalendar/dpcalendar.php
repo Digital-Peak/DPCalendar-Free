@@ -4,9 +4,15 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-JLoader::register('ActionLogPlugin', JPATH_ADMINISTRATOR . '/components/com_actionlogs/libraries/actionlogplugin.php');
+use Joomla\Component\Actionlogs\Administrator\Plugin\ActionLogPlugin;
+
+if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\Component\\Actionlogs\\Administrator\\Plugin\\ActionLogPlugin', false)) {
+	JLoader::import('components.com_actionlogs.libraries.actionlogplugin', JPATH_ADMINISTRATOR);
+	class_alias('ActionLogPlugin', '\\Joomla\\Component\\Actionlogs\\Administrator\\Plugin\\ActionLogPlugin');
+}
 
 class PlgActionlogDPCalendar extends ActionLogPlugin
 {

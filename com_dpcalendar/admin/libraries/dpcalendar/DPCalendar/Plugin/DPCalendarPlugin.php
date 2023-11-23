@@ -463,7 +463,12 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 
 		try {
-			$events = $cache->get([$this, 'fetchEvents'], [$id, $startDate, $endDate, $options]);
+			// Remove the id, when PHP 8.2.5 is obsolete
+			$events = $cache->get(
+				[$this, 'fetchEvents'],
+				[$id, $startDate, $endDate, $options],
+				md5($calendarId . $startDate . $endDate . serialize($options))
+			);
 			$cache->gc();
 		} catch (\Exception $e) {
 			$this->log($e->getMessage());
@@ -711,6 +716,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$event->original_id                       = 0;
 		$event->title                             = '';
 		$event->rrule                             = null;
+		$event->exdates                           = null;
 		$event->recurrence_id                     = null;
 		$event->start_date                        = '';
 		$event->end_date                          = '';
@@ -1076,11 +1082,12 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$radius = $radius * 0.62137119;
 		}
 
-		if (!$locationFilterData->latitude && strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
+		if (!$locationFilterData->latitude
+			&& is_string($location) && strpos($location, 'latitude=') !== false && strpos($location, 'longitude=') !== false) {
 			[$latitude, $longitude]        = explode(';', $location);
 			$locationFilterData->latitude  = str_replace('latitude=', '', $latitude);
 			$locationFilterData->longitude = str_replace('longitude=', '', $longitude);
-		} elseif (!$locationFilterData->latitude && !empty($location)) {
+		} elseif (!$locationFilterData->latitude && !empty($location) && is_string($location)) {
 			$locationFilterData = Location::get($location);
 		}
 

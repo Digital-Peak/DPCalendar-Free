@@ -319,7 +319,7 @@ class DPCalendarRouter extends RouterView
 		$dbquery = $db->getQuery(true);
 		$dbquery->select($dbquery->qn('id'))
 			->from($dbquery->qn('#__dpcalendar_events'))
-			->where('(alias = ' . $dbquery->quote($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : ''). ')');
+			->where('(alias = ' . $dbquery->quote($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : '') . ')');
 
 		if ($calIds && !in_array('-1', $calIds)) {
 			// Loop over the calids, they can be string as with DB cache of external events

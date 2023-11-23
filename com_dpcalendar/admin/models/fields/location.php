@@ -32,8 +32,13 @@ class JFormFieldLocation extends ListField
 		$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->getState();
 		$model->setState('list.limit', 0);
+		$model->setState('filter.state', 1);
 		foreach ($model->getItems() as $location) {
-			$options[] = HTMLHelper::_('select.option', $location->id, $location->title);
+			$options[] = HTMLHelper::_(
+				'select.option',
+				$location->id,
+				$location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
+			);
 		}
 
 		return $options;

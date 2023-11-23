@@ -153,7 +153,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$oldEvent->load($this->id);
 
 			// If there is a new rrule or date configuration do a hard reset
-			$hardReset = $this->all_day != $oldEvent->all_day || $this->start_date != $oldEvent->start_date || $this->end_date != $oldEvent->end_date || $this->rrule != $oldEvent->rrule;
+			$hardReset = $this->all_day != $oldEvent->all_day || $this->start_date != $oldEvent->start_date || $this->end_date != $oldEvent->end_date || $this->rrule != $oldEvent->rrule || $this->exdates != $oldEvent->exdates;
 			$oldTags   = new TagsHelper();
 			$oldTags   = $oldTags->getItemTags('com_dpcalendar.event', $this->id);
 			$oldTags   = array_map(fn ($t) => $t->id, $oldTags);
@@ -174,6 +174,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 					$this->start_date      = $oldEvent->start_date;
 					$this->end_date        = $oldEvent->end_date;
 					$this->rrule           = $oldEvent->rrule;
+					$this->exdates         = $oldEvent->exdates;
 					$this->price           = $oldEvent->price;
 					$this->booking_options = $oldEvent->booking_options;
 					$hardReset             = false;
@@ -281,8 +282,19 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 				$rrule .= $partName . '=' . $partValue . ';';
 			}
-
 			$text[] = 'RRULE:' . $rrule;
+
+			if ($this->exdates) {
+				$exdates = [];
+				foreach (json_decode($this->exdates) as $date) {
+					$exdates[] = DPCalendarHelper::getDate($date->date, true)->format('Ymd') . 'T' . $start->format('His') . 'Z';
+				}
+
+				if ($exdates) {
+					$text[] = 'EXDATE:' . implode(',', $exdates);
+				}
+			}
+
 			$text[] = 'END:VEVENT';
 			$text[] = 'END:VCALENDAR';
 

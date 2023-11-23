@@ -57,14 +57,14 @@ abstract class CalDAVPlugin extends SyncPlugin
 			}
 		}
 
-		$exdate = $original->EXDATE;
-		if ($exdate === null) {
+		$exdates = $original->EXDATE;
+		if ($exdates === null) {
 			$original->add('EXDATE', '');
 		}
 		$rec = DPCalendarHelper::getDate($oldEvent->start_date, $oldEvent->all_day)->format('Ymd' . ($oldEvent->all_day ? '' : '\THis\Z'));
 
 		try {
-			$original->EXDATE = trim($exdate . ',' . $rec, ',');
+			$original->EXDATE = trim($exdates . ',' . $rec, ',');
 			$original->EXDATE->add('VALUE', 'DATE' . ($oldEvent->all_day ? '' : '-TIME'));
 
 			// Echo '<pre>' . $c->serialize() . '</pre>'; die();

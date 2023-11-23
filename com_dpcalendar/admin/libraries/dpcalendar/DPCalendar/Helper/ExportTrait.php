@@ -288,6 +288,7 @@ trait ExportTrait
 
 		$fields = array_merge($fields, \FieldsHelper::getFields('com_dpcalendar.' . $realName));
 		DPCalendarHelper::sortFields($fields, $order);
+		$fields = array_filter($fields, fn ($field) => !in_array($field->name, $this->params->get('export_' . $realName . 's_fields_hide', [])));
 
 		$data   = [];
 		$data[] = array_map(fn ($field) => $field->label, $fields);
@@ -297,7 +298,7 @@ trait ExportTrait
 				$item->text = $item->description ?? '';
 			}
 
-			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $realName, &$item, &$item->params, 0]);
+			$this->app->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $realName, &$item, &$item->params, 0]);
 			$line = [];
 			foreach ($fields as $field) {
 				if (!isset($item->jcfields) || !key_exists($field->id, $item->jcfields)) {
@@ -305,8 +306,12 @@ trait ExportTrait
 					continue;
 				}
 
-				$value  = $item->jcfields[$field->id]->value;
-				$line[] = html_entity_decode($this->params->get('export_strip_html') ? strip_tags($value) : $value);
+				$value = $item->jcfields[$field->id]->{$this->params->get('export_value_type', 'value') === 'value' ? 'value' : 'rawvalue'};
+				if (is_array($value)) {
+					$value = implode(',', $value);
+				}
+
+				$line[] = html_entity_decode(trim($this->params->get('export_strip_html') ? strip_tags($value) : $value));
 			}
 
 			$data[] = $line;

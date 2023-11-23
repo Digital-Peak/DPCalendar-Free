@@ -15,6 +15,7 @@ if ($this->params->get('show_map', 1) == 1) {
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/calendar/default.css');
 $this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
+$this->dpdocument->addStyle($this->params->get('calendar_custom_css'));
 
 $this->params->set('header_show_print', false);
 $this->params->set('header_show_create', false);

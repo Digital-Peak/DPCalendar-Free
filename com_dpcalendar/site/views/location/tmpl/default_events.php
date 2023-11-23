@@ -41,7 +41,7 @@ if (!$this->params->get('location_show_upcoming_events', 1)) {
 								'title' => $this->translate('COM_DPCALENDAR_BOOKING_FIELD_SERIES_LABEL')
 							]
 						); ?>
-						<?php echo $this->dateHelper->transformRRuleToString($event->rrule, $event->start_date); ?>
+						<?php echo nl2br($this->dateHelper->transformRRuleToString($event->rrule, $event->start_date, $event->exdates)); ?>
 					</div>
 				<?php } ?>
 				<?php $this->displayData['event'] = $event; ?>

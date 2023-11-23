@@ -1,11 +1,12 @@
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `catid` varchar(255) NOT NULL DEFAULT '0',
+  `catid` varchar(191) NOT NULL DEFAULT '0',
   `uid` varchar(255) NOT NULL DEFAULT '',
   `original_id` int DEFAULT NULL,
   `title` varchar(255) NOT NULL DEFAULT '',
   `alias` varchar(255) NOT NULL DEFAULT '',
   `rrule` varchar(255) DEFAULT NULL,
+  `exdates` text,
   `recurrence_id` varchar(255) DEFAULT NULL,
   `start_date` datetime NULL DEFAULT NULL,
   `end_date` datetime NULL DEFAULT NULL,
@@ -49,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `metadesc` text,
   `metadata` text,
   `featured` TINYINT unsigned NOT NULL DEFAULT '0' COMMENT 'Set if link is featured.',
-  `xreference` varchar(255) NULL COMMENT 'A reference to enable linkages to external data sets.',
+  `xreference` varchar(191) NULL COMMENT 'A reference to enable linkages to external data sets.',
   `publish_up` datetime NULL DEFAULT NULL,
   `publish_down` datetime NULL DEFAULT NULL,
   `payment_provider` text,
@@ -64,8 +65,8 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   KEY `idx_featured_catid` (`featured`,`catid`),
   KEY `idx_language` (`language`),
   KEY `idx_xreference` (`xreference`),
-  KEY idx_original_id (original_id)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+  KEY `idx_original_id` (`original_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `rules`, `field_mappings`, `router`, `content_history_options`) VALUES
 ('Event', 'com_dpcalendar.event', '{"special":{"dbtable":"#__dpcalendar_events","key":"id","type":"Event","prefix":"DPCalendarTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Event","prefix":"DPCalendarTable","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"state","core_alias":"alias","core_created_time":"created","core_modified_time":"modified","core_body":"description", "core_hits":"hits","core_publish_up":"publish_up","core_publish_down":"publish_down","core_access":"access", "core_params":"attribs","core_featured":"featured", "core_metadata":"metadata", "core_language":"language", "core_images":"images", "core_urls":"url", "core_metakey":"metakey", "core_metadesc":"metadesc", "core_catid":"catid","core_xreference":"xreference", "asset_id":"asset_id"}, "special":{}}', 'DPCalendarHelperRoute::getEventRoute', '{"formFile":"administrator\\/components\\/com_dpcalendar\\/models\\/forms\\/event.xml", "hideFields":["asset_id","checked_out", "date","checked_out_time"],"ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time", "hits"],"convertToInt":["publish_up", "publish_down", "featured"],"displayLookup":[{"sourceColumn":"catid","targetTable":"#__categories","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"} ]}'),
@@ -102,14 +103,14 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
   `publish_up` datetime NULL DEFAULT NULL,
   `publish_down` datetime NULL DEFAULT NULL,
   `metadata` text,
-  `xreference` varchar(255) NULL,
+  `xreference` varchar(191) NULL,
   PRIMARY KEY (`id`),
   KEY `idx_checkout` (`checked_out`),
   KEY `idx_state` (`state`),
   KEY `idx_createdby` (`created_by`),
   KEY `idx_language` (`language`),
   KEY `idx_xreference` (`xreference`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `rules`, `field_mappings`, `router`, `content_history_options`) VALUES
 ('Location', 'com_dpcalendar.location', '{"special":{"dbtable":"#__dpcalendar_locations","key":"id","type":"Location","prefix":"DPCalendarTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Location","prefix":"DPCalendarTable","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"state","core_alias":"alias","core_created_time":"created","core_modified_time":"modified","core_body":"description","core_publish_up":"publish_up","core_publish_down":"publish_down","core_access":"access", "core_params":"attribs","core_featured":"featured", "core_metadata":"metadata", "core_language":"language", "core_metakey":"metakey", "core_metadesc":"metadesc"}, "special":{}}', 'DPCalendarHelperRoute::getLocationRoute', '{"formFile":"administrator\\/components\\/com_dpcalendar\\/models\\/forms\\/location.xml", "hideFields":["checked_out"],"ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time", "hits"],"convertToInt":["publish_up", "publish_down", "featured"],"displayLookup":[{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"} ]}');
@@ -118,18 +119,18 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events_location` (
   `event_id` int NOT NULL DEFAULT '0',
   `location_id` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`event_id`,`location_id`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_events_hosts` (
   `event_id` int NOT NULL DEFAULT '0',
   `user_id` int NOT NULL DEFAULT '0',
   PRIMARY KEY (`event_id`,`user_id`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_bookings` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL DEFAULT '0',
-  `uid` varchar(255) NOT NULL DEFAULT '',
+  `uid` varchar(191) NOT NULL DEFAULT '',
   `email` varchar(255) DEFAULT NULL,
   `telephone` varchar(255) DEFAULT NULL,
   `country` varchar(255) NOT NULL DEFAULT '',
@@ -168,14 +169,14 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_bookings` (
   KEY `uid` (`uid`),
   KEY `user_id` (`user_id`),
   KEY `state` (`state`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_tickets` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `booking_id` int NOT NULL DEFAULT 0,
   `event_id` int NOT NULL DEFAULT 0,
   `user_id` int NOT NULL DEFAULT 0,
-  `uid` varchar(255) NOT NULL DEFAULT '',
+  `uid` varchar(191) NOT NULL DEFAULT '',
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `telephone` varchar(255) DEFAULT NULL,
@@ -199,7 +200,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_tickets` (
   KEY `event_id` (`event_id`),
   KEY `user_id` (`user_id`),
   KEY `state` (`state`)
-) DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_coupons` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -207,6 +208,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_coupons` (
   `code` varchar(255) NOT NULL DEFAULT '',
   `value` int NOT NULL DEFAULT '0',
   `type` varchar(255) NOT NULL DEFAULT 'percentage',
+  `area` int NOT NULL DEFAULT '1',
   `calendars` text,
   `users` text,
   `emails` text,
@@ -227,14 +229,14 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_coupons` (
   KEY `idx_checkout` (`checked_out`),
   KEY `idx_state` (`state`),
   KEY `idx_createdby` (`created_by`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_extcalendars` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `asset_id` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `alias` varchar(255) NOT NULL DEFAULT '',
-  `plugin` varchar(255) NOT NULL DEFAULT '',
+  `plugin` varchar(191) NOT NULL DEFAULT '',
   `description` text,
   `color` varchar(255) NOT NULL DEFAULT '',
   `color_force` TINYINT NOT NULL DEFAULT '0',
@@ -259,7 +261,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_extcalendars` (
   KEY `idx_state` (`state`),
   KEY `idx_createdby` (`created_by`),
   KEY `idx_language` (`language`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_taxrates` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -282,7 +284,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_taxrates` (
   KEY `idx_checkout` (`checked_out`),
   KEY `idx_state` (`state`),
   KEY `idx_createdby` (`created_by`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_countries` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -303,7 +305,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_countries` (
   KEY `idx_checkout` (`checked_out`),
   KEY `idx_state` (`state`),
   KEY `idx_createdby` (`created_by`)
-) DEFAULT CHARSET=utf8 AUTO_INCREMENT=1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `#__dpcalendar_countries` (`short_code`, `state`) VALUES
 ('AF', 1),
@@ -576,13 +578,13 @@ CREATE TABLE #__dpcalendar_caldav_calendarobjects (
     uid VARBINARY(200),
     UNIQUE(calendarid, uri),
     INDEX calendarid_time (calendarid, firstoccurence)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE #__dpcalendar_caldav_calendars (
     id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     synctoken INTEGER UNSIGNED NOT NULL DEFAULT '1',
     components VARBINARY(21)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE #__dpcalendar_caldav_calendarinstances (
     id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -602,7 +604,7 @@ CREATE TABLE #__dpcalendar_caldav_calendarinstances (
     UNIQUE(principaluri, uri),
     UNIQUE(calendarid, principaluri),
     UNIQUE(calendarid, share_href)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE #__dpcalendar_caldav_calendarchanges (
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -611,7 +613,7 @@ CREATE TABLE #__dpcalendar_caldav_calendarchanges (
     calendarid INT UNSIGNED NOT NULL,
     operation TINYINT NOT NULL,
     INDEX calendarid_synctoken (calendarid, synctoken)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE #__dpcalendar_caldav_calendarsubscriptions (
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -627,7 +629,7 @@ CREATE TABLE #__dpcalendar_caldav_calendarsubscriptions (
     stripattachments TINYINT NULL,
     lastmodified INT UNSIGNED,
     UNIQUE(principaluri, uri)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE #__dpcalendar_caldav_schedulingobjects (
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -637,7 +639,7 @@ CREATE TABLE #__dpcalendar_caldav_schedulingobjects (
     lastmodified INT UNSIGNED,
     etag VARBINARY(32),
     size INT UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE #__dpcalendar_caldav_principals (
     id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -646,14 +648,14 @@ CREATE TABLE #__dpcalendar_caldav_principals (
     displayname VARCHAR(400),
     `external_id` INT unsigned NOT NULL,
     UNIQUE(uri)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE #__dpcalendar_caldav_groupmembers (
     id INTEGER UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     principal_id INTEGER UNSIGNED NOT NULL,
     member_id INTEGER UNSIGNED NOT NULL,
     UNIQUE(principal_id, member_id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE TABLE #__dpcalendar_caldav_propertystorage (
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
@@ -661,7 +663,7 @@ CREATE TABLE #__dpcalendar_caldav_propertystorage (
     name VARBINARY(100) NOT NULL,
     valuetype INT UNSIGNED,
     value MEDIUMBLOB
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 CREATE UNIQUE INDEX path_property ON #__dpcalendar_caldav_propertystorage (path(600), name(100));
 

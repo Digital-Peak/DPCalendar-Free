@@ -80,6 +80,20 @@ class DPCalendarViewEvent extends BaseView
 		);
 		$event->description = $event->text;
 
+		if ($event->introText) {
+			$event->text = $event->introText;
+			$this->app->triggerEvent(
+				'onContentPrepare',
+				[
+					'com_dpcalendar.event',
+					&$event,
+					&$event->params,
+					0
+				]
+			);
+			$event->introText = $event->text;
+		}
+
 		$event->displayEvent = new stdClass();
 		$results             = $this->app->triggerEvent(
 			'onContentAfterTitle',

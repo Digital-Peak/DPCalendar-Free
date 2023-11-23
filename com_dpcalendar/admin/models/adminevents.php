@@ -399,6 +399,8 @@ class DPCalendarModelAdminEvents extends ListModel
 		$data = parent::loadFormData();
 
 		if ($data instanceof stdClass && !empty($data->filter)) {
+			// Ensure filter is an array
+			$data->filter = (array)$data->filter;
 			if (!empty($data->filter['published'])) {
 				$data->filter['state'] = $data->filter['published'];
 			}

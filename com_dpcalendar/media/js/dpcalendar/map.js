@@ -90,15 +90,15 @@
 		if (Joomla.getOptions('DPCalendar.map.tiles.url') == 'google') {
 			let type = google.maps.MapTypeId.ROADMAP;
 			switch (options.type) {
-			case 2:
-				type = google.maps.MapTypeId.SATELLITE;
-				break;
-			case 3:
-				type = google.maps.MapTypeId.HYBRID;
-				break;
-			case 4:
-				type = google.maps.MapTypeId.TERRAIN;
-				break;
+				case 2:
+					type = google.maps.MapTypeId.SATELLITE;
+					break;
+				case 3:
+					type = google.maps.MapTypeId.HYBRID;
+					break;
+				case 4:
+					type = google.maps.MapTypeId.TERRAIN;
+					break;
 			}
 			const tiles = L.gridLayer.googleMutant({ type: type });
 			tiles.addTo(map);
@@ -126,7 +126,7 @@
 			});
 			tiles.addTo(map);
 		}
-		map.dpMarkersCluster = L.markerClusterGroup();
+		map.dpMarkersCluster = L.markerClusterGroup({ maxClusterRadius: options.radius ? options.radius : 30 });
 		map.addLayer(map.dpMarkersCluster);
 		map.dpBounds = new L.latLngBounds();
 		map.dpMarkers = [];

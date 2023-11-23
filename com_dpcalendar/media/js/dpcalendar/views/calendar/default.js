@@ -34,8 +34,8 @@
 				[].slice.call(noLink.querySelectorAll('a')).forEach((link) => link.removeAttribute('href'));
 			}, 2000);
 		}
-		const quickAdd = document.querySelector('.com-dpcalendar-calendar__quickadd');
-		if (quickAdd == null) {
+		const quickAdds = [].slice.call(document.querySelectorAll('.dp-quickadd'));
+		if (quickAdds.length === 0) {
 			return;
 		}
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
@@ -48,27 +48,45 @@
 				isEscape = (event.keyCode == 27);
 			}
 			if (isEscape) {
-				quickAdd.style.display = 'none';
+				quickAdds.forEach((quickAdd) => quickAdd.style.display = 'none');
 			}
 		};
 		document.addEventListener('click', (event) => {
-			if (quickAdd.contains(event.target) || event.target.classList.contains('dp-autocomplete__item-title')) {
-				return;
-			}
-			quickAdd.style.display = 'none';
+			quickAdds.forEach((quickAdd) => {
+				if (quickAdd.contains(event.target) || event.target.classList.contains('dp-autocomplete__item-title')) {
+					return;
+				}
+				quickAdd.style.display = 'none';
+			});
 		});
-		window.addEventListener('hashchange', () => quickAdd.querySelector('input[name=urlhash]').value = window.location.hash);
-		quickAdd.querySelector('input[name=urlhash]').value = window.location.hash;
-		quickAdd.querySelector('.dp-quickadd__button-submit').addEventListener('click', () => {
-			quickAdd.querySelector('input[name=task]').value = 'event.save';
-			quickAdd.querySelector('.dp-form').submit();
-		});
-		quickAdd.querySelector('.dp-quickadd__button-edit').addEventListener('click', () => {
-			quickAdd.querySelector('.dp-form').submit();
-		});
-		quickAdd.querySelector('.dp-quickadd__button-cancel').addEventListener('click', () => {
-			quickAdd.querySelector('input[name="jform[title]"]').value = '';
-			quickAdd.style.display = 'none';
+		quickAdds.forEach((quickAdd) => {
+			window.addEventListener('hashchange', () => quickAdd.querySelector('input[name=urlhash]').value = window.location.hash);
+			quickAdd.querySelector('input[name=urlhash]').value = window.location.hash;
+			quickAdd.querySelector('.dp-quickadd__button-submit').addEventListener('click', (e) => {
+				e.preventDefault();
+				quickAdd.querySelector('input[name=task]').value = 'event.saveajax';
+				const form = quickAdd.querySelector('.dp-form');
+				DPCalendar.request(
+					form.action.substring(form.action.indexOf('?')),
+					(json) => {
+						if (json.success) {
+							quickAdd.parentElement.querySelector(':scope > .dp-calendar').dpCalendar.refetchEvents();
+							quickAdd.querySelector('input[name="jform[title]"]').value = '';
+							quickAdd.style.display = 'none';
+						}
+					},
+					DPCalendar.formToQueryString(form),
+					true
+				);
+				return false;
+			});
+			quickAdd.querySelector('.dp-quickadd__button-edit').addEventListener('click', () => {
+				quickAdd.querySelector('.dp-form').submit();
+			});
+			quickAdd.querySelector('.dp-quickadd__button-cancel').addEventListener('click', () => {
+				quickAdd.querySelector('input[name="jform[title]"]').value = '';
+				quickAdd.style.display = 'none';
+			});
 		});
 	});
 })();

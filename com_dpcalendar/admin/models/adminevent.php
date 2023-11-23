@@ -379,6 +379,10 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$data['end_date']   = DPCalendarHelper::getDate($data['end_date'], $data['all_day'])->toSql(true);
 		}
 
+		if (isset($data['exdates']) && is_array($data['exdates'])) {
+			$data['exdates'] = $data['exdates'] ? json_encode($data['exdates']) : '';
+		}
+
 		if (isset($data['images']) && is_array($data['images'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['images']);
@@ -573,14 +577,15 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$this->getDbo()->execute();
 		}
 
-		if (!empty($event->location_ids)) {
+		if (!empty($event->location_ids) || $locationIds) {
 			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
 			$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
 			$model->setState('list.limit', 100);
-			$model->setState('filter.search', 'ids:' . implode(',', $event->location_ids));
+			$model->setState('filter.search', 'ids:' . implode(',', $event->location_ids ?? $locationIds));
 			$event->locations = $model->getItems();
 		}
 
+		$event->jcfields = $fields;
 		$this->sendMail($this->getState($this->getName() . '.new') ? 'create' : 'edit', [$event]);
 
 		// Notify the ticket holders

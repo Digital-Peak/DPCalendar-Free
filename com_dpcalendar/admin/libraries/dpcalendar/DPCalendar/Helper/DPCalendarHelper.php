@@ -46,6 +46,7 @@ class DPCalendarHelper
 {
 	public static $DISABLED_FREE_FIELDS = [
 		'rrule',
+		'exdates',
 		'capacity_used',
 		'max_tickets',
 		'booking_closing_date',

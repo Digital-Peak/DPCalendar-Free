@@ -72,12 +72,13 @@ class BaseView extends HtmlView
 		$this->state  = $state;
 		$this->params = $state->get('params', new Registry());
 
-		$this->dpdocument   = new HtmlDocument();
-		$this->dateHelper   = new DateHelper();
+		$this->dpdocument = new HtmlDocument();
+		$this->translator = new Translator();
+		$this->dateHelper = new DateHelper();
+		$this->dateHelper->setTranslator($this->translator);
 		$this->layoutHelper = new LayoutHelper();
 		$this->userHelper   = new UserHelper();
 		$this->router       = new Router();
-		$this->translator   = new Translator();
 		$this->input        = $this->app->input;
 
 		// The display data
@@ -132,7 +133,7 @@ class BaseView extends HtmlView
 			$this->addToolbar();
 
 			// Add colum select scripts on Joomla 4 lists
-			if (DPCalendarHelper::isJoomlaVersion('4', '>')) {
+			if (DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 				$this->document->getWebAssetManager()->useScript('table.columns');
 			}
 
@@ -200,7 +201,7 @@ class BaseView extends HtmlView
 	 */
 	protected function addToolbar()
 	{
-		if (DPCalendarHelper::isJoomlaVersion('4', '>') && $this->getModel() instanceof AdminModel) {
+		if (DPCalendarHelper::isJoomlaVersion('4', '>=') && $this->getModel() instanceof AdminModel) {
 			Toolbar::getInstance()->inlinehelp();
 		}
 

@@ -93,7 +93,7 @@ class JFormFieldEvent extends FormField
 			$query = $db->getQuery(true)
 				->select($db->quoteName('title'))
 				->from($db->quoteName('#__dpcalendar_events'))
-				->where($db->quoteName('id') . ' = '.(int)$value);
+				->where($db->quoteName('id') . ' = ' . (int)$value);
 			$db->setQuery($query);
 
 			try {

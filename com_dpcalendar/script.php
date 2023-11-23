@@ -13,6 +13,7 @@ use Joomla\CMS\Filesystem\File;
 use Joomla\CMS\Filesystem\Folder;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
 JLoader::register('DPCalendarHelper', __DIR__ . '/admin/helpers/dpcalendar.php');
@@ -239,6 +240,17 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 					)
 				)
 			);
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
+
+		if (version_compare($version, '8.15.0') == -1) {
+			$params = ComponentHelper::getParams('com_dpcalendar');
+			$uri    = Uri::getInstance($params->get(
+				'map_api_openstreetmap_geocode_url',
+				'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q={address}'
+			));
+			$params->set('map_api_openstreetmap_geocode_url', $uri->toString(['scheme', 'user', 'pass', 'host', 'port']));
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}

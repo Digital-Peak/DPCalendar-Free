@@ -28,9 +28,9 @@ if (empty($event->locations)) {
 				data-title="<?php echo $location->title; ?>"
 				data-color="<?php echo $event->color; ?>"></span>
 			<a href="<?php echo $this->router->getLocationRoute($location); ?>" class="dp-location__url dp-link">
-				<?php echo $location->title; ?>
+				<span class="dp-location__title"><?php echo $location->title; ?></span>
 				<?php if (!empty($event->roomTitles[$location->id])) { ?>
-					[<?php echo implode(', ', $event->roomTitles[$location->id]); ?>]
+					<span class="dp-location__rooms">[<?php echo implode(', ', $event->roomTitles[$location->id]); ?>]</span>
 				<?php } ?>
 			</a>
 			<?php if ($index < (is_countable($event->locations) ? count($event->locations) : 0) - 1) { ?>

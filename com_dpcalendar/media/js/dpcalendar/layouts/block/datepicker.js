@@ -7,15 +7,7 @@
 	'use strict';
 	loadDPAssets(['/com_dpcalendar/js/dayjs/dayjs.js'], () => {
 		loadDPAssets(['/com_dpcalendar/js/pikaday/pikaday.js', '/com_dpcalendar/css/pikaday/pikaday.css'], () => {
-			const names = Joomla.getOptions('DPCalendar.calendar.names');
-			dayjs.updateLocale('en', {
-				months: names['monthNames'],
-				monthsShort: names['monthNamesShort'],
-				weekdays: names['dayNames'],
-				weekdaysShort: names['dayNamesShort'],
-				weekdaysMin: names['dayNamesMin']
-			});
-			[].slice.call(document.querySelectorAll('.dp-datepicker')).forEach(picker => {
+			function loadPicker(picker) {
 				const element = picker.querySelector('.dp-datepicker__input');
 				const options = { trigger: picker.querySelector('.dp-datepicker__button'), setDefaultDate: true };
 				options.format = element.getAttribute('data-format');
@@ -60,7 +52,17 @@
 					weekdaysShort: names['dayNamesShort']
 				};
 				element.dpPikaday = new Pikaday(options);
+			}
+			document.addEventListener('subform-row-add', ({ detail: { row } }) => loadPicker(row.querySelector('.dp-datepicker')));
+			const names = Joomla.getOptions('DPCalendar.calendar.names');
+			dayjs.updateLocale('en', {
+				months: names['monthNames'],
+				monthsShort: names['monthNamesShort'],
+				weekdays: names['dayNames'],
+				weekdaysShort: names['dayNamesShort'],
+				weekdaysMin: names['dayNamesMin']
 			});
+			[].slice.call(document.querySelectorAll('.dp-datepicker')).forEach(loadPicker);
 		});
 	});
 })();

@@ -56,7 +56,7 @@ class JFormFieldDPCalendarEdit extends CategoryField
 			}
 		}
 
-		$ids = [];
+		$ids = !empty($calendar) && !$calendar->external ? [$calendar->id] : [];
 		if ($app->isClient('site')) {
 			$activeMenu = $app->getMenu()->getActive();
 			if ($activeMenu && $app->input->get('option') == 'com_dpcalendar') {

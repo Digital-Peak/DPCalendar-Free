@@ -61,19 +61,23 @@ class SetupForNew implements StageInterface
 
 	public function __invoke($payload)
 	{
-		$event = null;
 		// Default some data
-		$payload->data['price']    = 0;
-		$payload->data['tax']      = 0.00;
-		$payload->data['tax_rate'] = 0;
-		$payload->data['id']       = 0;
-		$payload->data['currency'] = DPCalendarHelper::getComponentParameter('currency', 'USD');
+		$event                          = null;
+		$payload->data['price']         = 0;
+		$payload->data['price_details'] = [];
+		$payload->data['price_tickets'] = 0.0;
+		$payload->data['price_options'] = 0.0;
+		$payload->data['tax']           = 0.00;
+		$payload->data['tax_rate']      = 0;
+		$payload->data['id']            = 0;
+		$payload->data['currency']      = $this->params->get('currency', 'USD');
 
 		// On front we force the user id to the logged in user
 		if ($this->autoAssignUser) {
 			$payload->data['user_id'] = $this->user->id;
 		}
 
+		// Collect the data
 		$amountTickets            = 0;
 		$payload->data['options'] = [];
 		foreach ($payload->events as $event) {
@@ -82,8 +86,58 @@ class SetupForNew implements StageInterface
 		}
 		$payload->data['options'] = implode(',', $payload->data['options']);
 
+		// When no amount is found, then abort
 		if ($amountTickets == 0) {
 			throw new \Exception(Text::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
+		}
+
+		// The prices for the different
+		$priceOptions = $payload->data['price_options'];
+		$priceTickets = $payload->data['price_tickets'];
+
+		// Load the coupon
+		$coupon = $this->couponModel->getItemByCode(
+			empty($payload->data['coupon_id']) ? null : $payload->data['coupon_id'],
+			$event->catid,
+			$payload->data['email'],
+			$payload->data['user_id']
+		);
+
+		// Set the coupon attributes
+		$payload->data['coupon_id'] = 0;
+		if ($coupon && $coupon->id) {
+			$payload->data['coupon_id']   = $coupon->id;
+			$payload->data['coupon_area'] = $coupon->area;
+		}
+
+		// Tickets price
+		if ($coupon && $coupon->id && $coupon->area == 2) {
+			$payload->data['price_tickets'] = $this->calculatePrice($coupon, $payload->data['price_tickets']);
+		}
+
+		// Options price
+		if ($coupon && $coupon->id && $coupon->area == 3) {
+			$payload->data['price_options'] = $this->calculatePrice($coupon, $payload->data['price_options']);
+		}
+
+		// Set the price from the prices minus the coupon price
+		$payload->data['price']       = $payload->data['price_tickets'] + $payload->data['price_options'];
+		$payload->data['coupon_rate'] = $priceTickets + $priceOptions - $payload->data['price_tickets'] - $payload->data['price_options'];
+
+		// Subtract from full price
+		if ($coupon && $coupon->id && $coupon->area == 1) {
+			$payload->data['price']       = $this->calculatePrice($coupon, $payload->data['price']);
+			$payload->data['coupon_rate'] = $priceTickets + $priceOptions - $payload->data['price'];
+		}
+
+		// Determine tax
+		$taxRate = !empty($payload->data['country']) ? $this->taxRateModel->getItemByCountry($payload->data['country']) : null;
+		if ($taxRate) {
+			$payload->data['tax']           = $taxRate->inclusive ? $payload->data['price'] - ($payload->data['price'] / (1 + ($taxRate->rate / 100))) : ($payload->data['price'] / 100) * $taxRate->rate;
+			$payload->data['price']         = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);
+			$payload->data['tax_rate']      = $taxRate->rate;
+			$payload->data['tax_title']     = $taxRate->title;
+			$payload->data['tax_inclusive'] = $taxRate->inclusive;
 		}
 
 		// Do not force state when not on front and is available
@@ -94,13 +148,13 @@ class SetupForNew implements StageInterface
 
 			// When skipping the review step always, set state to tickets reviewed
 			if ($payload->data['state'] == 0
-				&& DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 0) {
+				&& $this->params->get('booking_review_step', 2) == 0) {
 				$payload->data['state'] = 2;
 			}
 
 			// When skipping to review step on one ticket, set state to tickets reviewed
 			if ($payload->data['state'] == 0
-				&& DPCalendarHelper::getComponentParameter('booking_review_step', 2) == 2
+				&& $this->params->get('booking_review_step', 2) == 2
 				&& $amountTickets == 1) {
 				$payload->data['state'] = 2;
 			}
@@ -109,7 +163,7 @@ class SetupForNew implements StageInterface
 			if (!$payload->data['price']
 				&& ($event->capacity === null || $event->capacity_used < $event->capacity)
 				&& $payload->data['state'] == 2
-				&& !DPCalendarHelper::getComponentParameter('booking_confirm_step', 1)) {
+				&& !$this->params->get('booking_confirm_step', 1)) {
 				$payload->data['state'] = 1;
 			}
 
@@ -126,36 +180,24 @@ class SetupForNew implements StageInterface
 			}
 		}
 
-		$coupon = $this->couponModel->getItemByCode(
-			empty($payload->data['coupon_id']) ? null : $payload->data['coupon_id'],
-			$payload->data['price'],
-			$event->catid,
-			$payload->data['email'],
-			$payload->data['user_id']
-		);
-		if ($coupon && $coupon->id) {
-			$payload->data['coupon_id']   = $coupon->id;
-			$payload->data['coupon_rate'] = $coupon->discount_value;
-			$payload->data['price']       = $payload->data['price'] - $coupon->discount_value;
-		} else {
-			$payload->data['coupon_id'] = 0;
-		}
-
-		$taxRate = !empty($payload->data['country']) ? $this->taxRateModel->getItemByCountry($payload->data['country']) : null;
-		if ($taxRate) {
-			$payload->data['tax']      = $taxRate->inclusive ? $payload->data['price'] - ($payload->data['price'] / (1 + ($taxRate->rate / 100))) : ($payload->data['price'] / 100) * $taxRate->rate;
-			$payload->data['price']    = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);
-			$payload->data['tax_rate'] = $taxRate->rate;
-		}
-
+		// Compute the token
 		if ($this->params->get('bookingsys_enable_token')) {
 			$payload->data['token'] = bin2hex(random_bytes(16));
 		}
 
+		// Return the payload
 		return $payload;
 	}
 
-	private function handleOptions($payload, $event)
+	/**
+	 * Determine the price for the options of the event.
+	 *
+	 * @param object $payload
+	 * @param object $event
+	 *
+	 * @return void
+	 */
+	private function handleOptions(object $payload, object $event): void
 	{
 		// The booking options
 		if (empty($payload->data['event_id'][$event->id]['options'])) {
@@ -170,51 +212,107 @@ class SetupForNew implements StageInterface
 			}
 
 			$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key];
-			$payload->data['price'] += $amount[$key] * $option->price;
+
+			$priceOriginal = $option->price * $amount[$key];
+			$priceDiscount = $priceOriginal;
+
+			$payload->data['price_details'][$event->id]['options'][$key] = [
+				'discount' => DPCalendarHelper::renderPrice(number_format($priceDiscount, 2, '.', '')),
+				'original' => DPCalendarHelper::renderPrice(number_format($priceOriginal, 2, '.', '')),
+				'raw'      => number_format($priceOriginal, 2, '.', '')
+			];
+
+			$payload->data['price_options'] += $priceDiscount;
 		}
 	}
 
-	private function handleTickets($payload, $event, $amountTickets)
+	/**
+	 * Determine the price for the options of the event.
+	 *
+	 * @param object $payload
+	 * @param object $event
+	 * @param int    $amountTickets
+	 *
+	 * @return int
+	 */
+	private function handleTickets(object $payload, object $event, int $amountTickets): int
 	{
 		// The tickets to process
 		$amount = $payload->data['event_id'][$event->id]['tickets'];
 
+		// Free event
+		if (!$event->price) {
+			$event->amount_tickets[0] = $this->getAmountTickets($event, $payload, $amount, 0, 0);
+
+			// Add the event to the list of events with tickets
+			if ($event->amount_tickets[0]) {
+				$payload->eventsWithTickets[] = $event;
+			}
+
+			// Return the amount of new tickets
+			return $event->amount_tickets[0];
+		}
+
 		$amountTickets = 0;
 		$newTickets    = false;
-		if (!$event->price) {
-			// Free event
-			$event->amount_tickets[0] = $this->getAmountTickets($event, $payload, $amount, 0, $amountTickets);
-			$amountTickets += $event->amount_tickets[0];
 
-			if (!$newTickets && $event->amount_tickets[0]) {
-				$newTickets = true;
+		// Loop over the prices
+		foreach ($event->price->value as $index => $value) {
+			// Get the amount of tickets
+			$event->amount_tickets[$index] = $this->getAmountTickets($event, $payload, $amount, $index, $amountTickets);
+			$amountTickets += $event->amount_tickets[$index];
+
+			// Initialize the price details
+			$payload->data['price_details'][$event->id]['tickets'][$index] = ['discount' => '0.00', 'original' => '0.00'];
+
+			// Determine the price
+			$paymentRequired = Booking::paymentRequired($event);
+
+			// Load the price
+			if ($event->amount_tickets[$index] && $paymentRequired) {
+				// Set the original price
+				$priceOriginal = $value * $event->amount_tickets[$index];
+				// Get the price with a discount
+				$priceDiscount = Booking::getPriceWithDiscount($value, $event) * $event->amount_tickets[$index];
+
+				// Set the price details
+				$payload->data['price_details'][$event->id]['tickets'][$index] = [
+					'discount' => DPCalendarHelper::renderPrice(number_format($priceDiscount, 2, '.', '')),
+					'original' => DPCalendarHelper::renderPrice(number_format($priceOriginal, 2, '.', '')),
+					'raw'      => number_format($priceOriginal, 2, '.', '')
+				];
+
+				// Add the real price to the full price for tickets
+				$payload->data['price_tickets'] += $priceDiscount;
 			}
-		} else {
-			foreach ($event->price->value as $index => $value) {
-				$event->amount_tickets[$index] = $this->getAmountTickets($event, $payload, $amount, $index, $amountTickets);
-				$amountTickets += $event->amount_tickets[$index];
 
-				// Determine the price
-				$paymentRequired = Booking::paymentRequired($event);
-				if ($event->amount_tickets[$index] && $paymentRequired) {
-					// Determine the price based on the amount of tickets
-					$payload->data['price'] += Booking::getPriceWithDiscount($value, $event) * $event->amount_tickets[$index];
-				}
-
-				if (!$newTickets && $event->amount_tickets[$index]) {
-					$newTickets = true;
-				}
+			// Ensure there are new tickets
+			if (!$newTickets && $event->amount_tickets[$index]) {
+				$newTickets = true;
 			}
 		}
 
+		// Add the event to the list of events with tickets
 		if ($newTickets) {
 			$payload->eventsWithTickets[] = $event;
 		}
 
+		// Return the amount of new tickets
 		return $amountTickets;
 	}
 
-	private function getAmountTickets($event, $payload, $amount, $index, $alreadyCollected)
+	/**
+	 * Determine the price for the options of the event.
+	 *
+	 * @param object $payload
+	 * @param object $event
+	 * @param array  $amount
+	 * @param int    $index
+	 * @param int    $alreadyCollected
+	 *
+	 * @return int
+	 */
+	private function getAmountTickets(object $event, object $payload, array $amount, int $index, int $alreadyCollected): int
 	{
 		// Check if the user or email address has already tickets booked
 		$bookedTickets = 0;
@@ -252,5 +350,37 @@ class SetupForNew implements StageInterface
 		}
 
 		return $amountTickets;
+	}
+
+	/**
+	 * Calculate the price for the coupon.
+	 *
+	 * @param object $coupon
+	 * @param float  $price
+	 *
+	 * @return float
+	 */
+	private function calculatePrice(object $coupon, float $price): float
+	{
+		// Set the discount price
+		$discount = $price;
+
+		// Subtract the value
+		if ($coupon->type == 'value') {
+			$discount -= $coupon->value;
+		}
+
+		// Subtract the percentage
+		if ($coupon->type == 'percentage') {
+			$discount -= ($price / 100) * $coupon->value;
+		}
+
+		// Ensure a valid number
+		if ($discount < 0) {
+			$discount = 0.0;
+		}
+
+		// Return the discount
+		return $discount;
 	}
 }

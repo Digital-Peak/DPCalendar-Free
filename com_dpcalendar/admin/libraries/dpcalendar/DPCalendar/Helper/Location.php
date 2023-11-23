@@ -14,6 +14,7 @@ use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Table\Table;
+use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
 Table::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
@@ -369,7 +370,20 @@ class Location
 
 	private static function searchInOpenStreetMap($address)
 	{
-		$url = 'https://photon.komoot.io/api/?limit=5&';
+		$url = Uri::getInstance(DPCalendarHelper::getComponentParameter('map_api_openstreetmap_geocode_url', 'https://nominatim.openstreetmap.org'));
+		$url->setVar('format', 'json');
+		$url->setVar('addressdetails', 1);
+		$url->setVar('limit', 5);
+
+		$coordinates = explode(',', $address);
+		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+			$url->setPath('/reverse');
+			$url->setVar('lat', urlencode($coordinates[0]));
+			$url->setVar('lon', urlencode($coordinates[1]));
+		} else {
+			$url->setPath('/search');
+			$url->setVar('q', urlencode($address));
+		}
 
 		$lang = DPCalendarHelper::getFrLanguage();
 		if (!in_array($lang, self::$nominatimLanguages)) {
@@ -377,59 +391,52 @@ class Location
 		}
 
 		if (in_array($lang, self::$nominatimLanguages)) {
-			$url .= 'lang=' . $lang . '&';
+			$url->setVar('accept-language', $lang);
 		}
 
-		$tmp = (new HTTP())->get($url . 'q=' . urlencode($address));
+		$tmp = (new HTTP())->get($url->toString(), null, null, ['Accept: application/json, text/html']);
+		if (!$tmp || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
+			return [];
+		}
 
 		$data = [];
-		foreach ($tmp->features as $feature) {
-			if (!$feature->properties) {
+		foreach ($tmp->data as $address) {
+			if (!$address->address) {
 				continue;
 			}
 
-			// Normalize some data
-			if ($feature->properties->osm_key == 'place' && $feature->properties->osm_value == 'city' && empty($feature->properties->city)) {
-				$feature->properties->city = $feature->properties->name;
-				$feature->properties->name = null;
-			}
-			if ($feature->properties->osm_key == 'place' && $feature->properties->osm_value == 'county' && empty($feature->properties->county)) {
-				$feature->properties->county = $feature->properties->name;
-				$feature->properties->name   = null;
+			$item = new \stdClass();
+
+			if (empty($address->name)) {
+				$item->title = [];
+				if (!empty($address->address->country)) {
+					$item->title[] = $address->address->country;
+				}
+				if (!empty($address->address->state)) {
+					$item->title[] = $address->address->state;
+				}
+				if (!empty($address->address->county)) {
+					$item->title[] = $address->address->county;
+				}
+				if (!empty($address->address->town)) {
+					$item->title[] = $address->address->town;
+				}
+				if (!empty($address->address->postcode)) {
+					$item->title[] = $address->address->postcode;
+				}
+				if (!empty($address->address->road)) {
+					$item->title[] = $address->address->road;
+				}
+				if (!empty($address->address->house_number)) {
+					$item->title[] = $address->address->house_number;
+				}
+				$item->title = implode(', ', $item->title);
 			}
 
-			$item        = new \stdClass();
-			$item->value = $feature->geometry->coordinates[1] . ',' . $feature->geometry->coordinates[0];
-
-			$item->title = [];
-			if (!empty($feature->properties->country)) {
-				$item->title[] = $feature->properties->country;
-			}
-			if (!empty($feature->properties->state)) {
-				$item->title[] = $feature->properties->state;
-			}
-			if (!empty($feature->properties->county)) {
-				$item->title[] = $feature->properties->county;
-			}
-			if (!empty($feature->properties->city)) {
-				$item->title[] = $feature->properties->city;
-			}
-			if (!empty($feature->properties->postcode)) {
-				$item->title[] = $feature->properties->postcode;
-			}
-			if (!empty($feature->properties->street)) {
-				$item->title[] = $feature->properties->street;
-			}
-			if (!empty($feature->properties->housenumber)) {
-				$item->title[] = $feature->properties->housenumber;
-			}
-			$item->title = implode(', ', $item->title);
-
-			$item->details = [];
-			if (!empty($feature->properties->name)) {
-				$item->details[] = $feature->properties->name;
-			}
-			$item->details = implode(' ', $item->details);
+			$item->value = $address->lat . ',' . $address->lon;
+			$item->title = $address->name ?? $item->title;
+			// $address->display_name is a comma separated list, so when the name is empty that list is the title
+			$item->details = empty($address->name) ? '' : ($address->display_name ?? '');
 
 			$data[] = $item;
 		}
@@ -503,24 +510,34 @@ class Location
 
 	private static function fillObjectFromOpenStreetMap($location, $locObject)
 	{
-		$url = DPCalendarHelper::getComponentParameter(
-			'map_api_openstreetmap_geocode_url',
-			'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q={address}'
-		);
+		$url = Uri::getInstance(DPCalendarHelper::getComponentParameter('map_api_openstreetmap_geocode_url', 'https://nominatim.openstreetmap.org'));
+		$url->setVar('format', 'json');
+		$url->setVar('addressdetails', 1);
+		$url->setVar('limit', 1);
 
 		$coordinates = explode(',', $location);
 		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
-			$url = str_replace('/search', '/reverse', $url);
-			$url = str_replace('&q={address}', '', $url);
-			$url .= '&lat=' . urlencode($coordinates[0]) . '&lon=' . urlencode($coordinates[1]);
+			$url->setPath('/reverse');
+			$url->setVar('lat', urlencode($coordinates[0]));
+			$url->setVar('lon', urlencode($coordinates[1]));
 
 			$locObject->latitude  = $coordinates[0];
 			$locObject->longitude = $coordinates[1];
 		} else {
-			$url = str_replace('{address}', urlencode($location), $url);
+			$url->setPath('/search');
+			$url->setVar('q', urlencode($location));
 		}
 
-		$tmp = (new HTTP())->get($url);
+		$lang = DPCalendarHelper::getFrLanguage();
+		if (!in_array($lang, self::$nominatimLanguages)) {
+			$lang = substr($lang, 0, strpos($lang, '-'));
+		}
+
+		if (in_array($lang, self::$nominatimLanguages)) {
+			$url->setVar('accept-language', $lang);
+		}
+
+		$tmp = (new HTTP())->get($url->toString(), null, null, ['Accept: application/json, text/html']);
 		if (!$tmp || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
 			return;
 		}

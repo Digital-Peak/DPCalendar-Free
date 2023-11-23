@@ -7,20 +7,22 @@
 
 namespace DPCalendar\Helper;
 
-use Recurr\Rule;
-use Recurr\Transformer\Translator;
-
 defined('_JEXEC') or die();
 
+use DPCalendar\Translator\Translator;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
+use Recurr\Rule;
 use Recurr\Transformer\TextTransformer;
+use Recurr\Transformer\Translator as TransformerTranslator;
 
 class DateHelper
 {
-	public function transformRRuleToString($rrule, $startDate)
+	private $translator = null;
+
+	public function transformRRuleToString(?string $rrule, ?string $startDate, ?array $exdates = [])
 	{
 		if (!$rrule) {
 			return '';
@@ -28,6 +30,7 @@ class DateHelper
 
 		$start = $this->getDate($startDate);
 		$rule  = new Rule('', $start, null, $start->getTimezone()->getName());
+		$rule->setExDates($exdates ?: []);
 		$parts = $rule->parseString($rrule);
 
 		// Parser can't handle both
@@ -41,20 +44,28 @@ class DateHelper
 		}
 
 
-		$translator = new Translator();
+		$translator = new TransformerTranslator();
 		try {
 			$translator->loadLocale(substr(DPCalendarHelper::getFrLanguage(), 0, 2));
 		} catch (\InvalidArgumentException $e) {
 			// Translation doesn't exist, ignore it
 		}
 
+		$buffer = '';
 		try {
 			$rule->loadFromArray($parts);
-			return ucfirst((new TextTransformer($translator))->transform($rule));
+			$buffer = ucfirst((new TextTransformer($translator))->transform($rule));
+
+			if ($exdates) {
+				$buffer .= PHP_EOL;
+				$buffer .= $this->translator->translate('COM_DPCALENDAR_EXDATES_EXCLUDE_LIST_TEXT');
+				$buffer .= implode(', ', array_map(fn ($d) => $this->getDate($d)->format('d.m.Y', true), $exdates));
+			}
 		} catch (\Exception $e) {
 			// Do not crash as some rules are not parseable for the transformator
 		}
-		return '';
+
+		return $buffer;
 	}
 
 	public function getDate($date = null, $allDay = null, $tz = null)
@@ -170,7 +181,7 @@ class DateHelper
 		return Text::_(strtr($format, $replacements));
 	}
 
-	public static function minutesToDuration($minutes)
+	public function minutesToDuration($minutes)
 	{
 		if (!$minutes) {
 			return '00:00:00';
@@ -181,5 +192,10 @@ class DateHelper
 		$buffer .= str_pad($minutes % 60, 2, STR_PAD_LEFT);
 
 		return $buffer . ':00';
+	}
+
+	public function setTranslator(Translator $translator): void
+	{
+		$this->translator = $translator;
 	}
 }

@@ -13,7 +13,7 @@ class LayoutHelper
 {
 	public function renderLayout($layout, $data = [])
 	{
-		if (!array_key_exists('layoutHelper', $data) && strpos($layout, 'joomla.') !== 0) {
+		if (is_array($data) && !array_key_exists('layoutHelper', $data) && strpos($layout, 'joomla.') !== 0) {
 			$data['layoutHelper'] = $this;
 		}
 

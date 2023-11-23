@@ -15,6 +15,11 @@ class FieldsOrder
 	{
 		if (!isset($booking->jcfields)) {
 			$booking->text = '';
+
+			if (empty($booking->catid) && !empty($booking->tickets)) {
+				$booking->catid = $booking->tickets[0]->event_calid;
+			}
+
 			$app->triggerEvent('onContentPrepare', ['com_dpcalendar.booking', &$booking, &$params, 0]);
 		}
 

@@ -360,6 +360,13 @@ class DPCalendarControllerEvent extends FormController
 		DPCalendarHelper::sendMessage($model->getError(), true);
 	}
 
+	public function saveajax($key = null, $urlVar = 'e_id')
+	{
+		$success = $this->save($key, $urlVar);
+
+		DPCalendarHelper::sendMessage(!$success ? $this->message : '', $success, ['id' => Factory::getApplication()->getUserState('dpcalendar.event.id')]);
+	}
+
 	public function save($key = null, $urlVar = 'e_id')
 	{
 		if ($this->input->getInt($urlVar)) {
@@ -426,6 +433,13 @@ class DPCalendarControllerEvent extends FormController
 		}
 		// Format the end date to SQL format
 		$data['end_date'] = $end->toSql(false);
+
+		if (!empty($data['exdates'])) {
+			foreach ($data['exdates'] as $key => $date) {
+				$date['date']          = DPCalendarHelper::getDateFromString($date['date'], null, true)->toSql(false);
+				$data['exdates'][$key] = $date;
+			}
+		}
 
 		if (!empty($data['location_ids'])) {
 			$data['location_ids'] = (array)$data['location_ids'];
@@ -614,98 +628,6 @@ class DPCalendarControllerEvent extends FormController
 		$this->getModel()->mailtickets($data['event_id'], $data['subject'], $data['body'], [-1]);
 
 		$this->setRedirect($this->getReturnPage());
-	}
-
-	public function overlapping()
-	{
-		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
-
-		$data = $this->input->get('jform', [], 'array');
-
-		if (!array_key_exists('all_day', $data)) {
-			$data['all_day'] = false;
-		}
-
-		if (empty($data['start_date_time']) && empty($data['end_date_time'])) {
-			$data['all_day'] = '1';
-		}
-
-		$startDate = DPCalendarHelper::getDateFromString(
-			$data['start_date'],
-			$data['start_date_time'],
-			$data['all_day'] == '1'
-		);
-		$endDate = DPCalendarHelper::getDateFromString(
-			$data['end_date'],
-			$data['end_date_time'],
-			$data['all_day'] == '1'
-		);
-
-		if ($data['all_day']) {
-			$startDate->setTime(0, 0, 0);
-			$endDate->setTime(23, 59, 59);
-		}
-
-		// End date is exclusive
-		$endDate->modify('-1 second');
-
-		$model = $this->getModel('Events');
-		$model->getState();
-		$model->setState('list.limit', 4);
-		$model->setState('category.id', $data['catid']);
-		$model->setState('filter.ongoing', false);
-		$model->setState('filter.expand', true);
-		$model->setState('filter.language', $data['language']);
-		$model->setState('list.start-date', $startDate);
-		$model->setState('list.end-date', $endDate);
-		$model->setState('list.local-date', true);
-
-		if (DPCalendarHelper::getComponentParameter('event_form_check_overlaping_locations')) {
-			if (!empty($data['location_ids'])) {
-				$model->setState('filter.locations', $data['location_ids']);
-			}
-			if (!empty($data['rooms'])) {
-				$model->setState('filter.rooms', $data['rooms']);
-			}
-		}
-
-		// Get the events in that period
-		$events = $model->getItems();
-
-		if (!isset($data['id']) || !$data['id']) {
-			$data['id'] = $this->input->get('id');
-		}
-		foreach ($events as $key => $e) {
-			if ($e->id != $data['id'] && ($e->original_id == 0 || $e->original_id != $data['id'])) {
-				continue;
-			}
-			unset($events[$key]);
-		}
-
-		// Reset the end date
-		$endDate->modify('+1 second');
-
-		$event                = new stdClass();
-		$event->start_date    = $startDate->toSql();
-		$event->end_date      = $endDate->toSql();
-		$event->all_day       = $data['all_day'];
-		$event->show_end_time = true;
-		$date                 = strip_tags(DPCalendarHelper::getDateStringFromEvent($event));
-		$message              = DPCalendarHelper::renderEvents(
-			$events,
-			Text::_('COM_DPCALENDAR_VIEW_FORM_OVERLAPPING_EVENTS_' . ($events ? '' : 'NOT_') . 'FOUND'),
-			null,
-			[
-				'checkDate'    => $date,
-				'calendarName' => DPCalendarHelper::getCalendar($data['catid'])->title
-			]
-		);
-
-		DPCalendarHelper::sendMessage(
-			null,
-			false,
-			['message' => $message, 'count' => is_countable($events) ? count($events) : 0]
-		);
 	}
 
 	public function similar()

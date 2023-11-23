@@ -28,7 +28,7 @@
 			});
 		}
 		init() {
-			Array.from(this.element.selectedOptions).forEach((option) => option.selected = true);
+			Array.from(this.element.selectedOptions ?? []).forEach((option) => option.selected = true);
 			this.element.classList.add('dp-select-element');
 			this.container = document.createElement('div');
 			this.container.classList.add('dp-select-container');
@@ -257,7 +257,7 @@
 			this.input.style.width = (this.input.value ? this.input.value.length : this.langInputPlaceholder.length) + 'ch';
 		}
 	}
-	[].slice.call(document.querySelectorAll('.dp-select:not(.dp-select_plain)')).forEach((select) => {
+	[].slice.call(document.querySelectorAll('select.dp-select:not(.dp-select_plain)')).forEach((select) => {
 		loadDPAssets(['/com_dpcalendar/js/popper/popper.js'], () =>
 			(new DPSelectElement(select, Joomla.JText._('COM_DPCALENDAR_OPTIONS', ''))).init()
 		);

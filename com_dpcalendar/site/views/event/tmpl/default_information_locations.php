@@ -21,9 +21,9 @@ if (!$this->event->locations || !$this->params->get('event_show_location', '2'))
 				<?php $url = $this->params->get('event_show_location', '2') == '1' ?
 					$this->router->getLocationRoute($location) : '#dp-location-' . $location->id; ?>
 				<a href="<?php echo $url; ?>" class="dp-link dp-location__url">
-					<?php echo $location->title; ?>
+					<span class="dp-location__title"><?php echo $location->title; ?></span>
 					<?php if (!empty($this->event->roomTitles[$location->id])) { ?>
-						[<?php echo implode(', ', $this->event->roomTitles[$location->id]); ?>]
+						<span class="dp-location__rooms">[<?php echo implode(', ', $this->event->roomTitles[$location->id]); ?>]</span>
 					<?php } ?>
 				</a>
 				<?php if ($index < (is_countable($this->event->locations) ? count($this->event->locations) : 0) - 1) { ?>

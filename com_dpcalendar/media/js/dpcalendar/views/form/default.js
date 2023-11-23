@@ -52,77 +52,77 @@
 				return;
 			}
 			switch (parts[0]) {
-			case 'FREQ':
-				[].slice.call(document.getElementById('jform_scheduling').querySelectorAll('input')).forEach((input) => {
-					input.checked = input.value == parts[1];
-					if (input.value == parts[1]) {
-						frequency = input.value;
+				case 'FREQ':
+					[].slice.call(document.getElementById('jform_scheduling').querySelectorAll('input')).forEach((input) => {
+						input.checked = input.value == parts[1];
+						if (input.value == parts[1]) {
+							frequency = input.value;
+						}
+						if (parts[1] === 'DAILY') {
+							document.getElementById('jform_scheduling_daily_weekdays0').checked = false;
+							document.getElementById('jform_scheduling_daily_weekdays1').checked = true;
+						}
+					});
+					break;
+				case 'BYDAY':
+					if (frequency === 'WEEKLY' && parts[1] == 'MO,TU,WE,TH,FR') {
+						document.getElementById('jform_scheduling_daily_weekdays0').checked = true;
+						document.getElementById('jform_scheduling_daily_weekdays1').checked = false;
+						document.getElementById('jform_scheduling1').checked = true;
 					}
-					if (parts[1] === 'DAILY') {
-						document.getElementById('jform_scheduling_daily_weekdays0').checked = false;
-						document.getElementById('jform_scheduling_daily_weekdays1').checked = true;
-					}
-				});
-				break;
-			case 'BYDAY':
-				if (frequency === 'WEEKLY' && parts[1] == 'MO,TU,WE,TH,FR') {
-					document.getElementById('jform_scheduling_daily_weekdays0').checked = true;
-					document.getElementById('jform_scheduling_daily_weekdays1').checked = false;
-					document.getElementById('jform_scheduling1').checked = true;
-				}
-				if (frequency === 'WEEKLY') {
-					[].slice.call(document.querySelectorAll('#jform_scheduling_weekly_days option')).forEach((option) => option.selected = false);
-				}
-				if (frequency === 'MONTHLY') {
-					[].slice.call(document.querySelectorAll('#jform_scheduling_monthly_week option')).forEach((option) => option.selected = false);
-					[].slice.call(document.querySelectorAll('#jform_scheduling_monthly_week_days option')).forEach((option) => option.selected = false);
-				}
-				parts[1].split(',').forEach((value) => {
 					if (frequency === 'WEEKLY') {
-						document.querySelector('#jform_scheduling_weekly_days option[value="' + value + '"]').selected = true;
-						return;
+						[].slice.call(document.querySelectorAll('#jform_scheduling_weekly_days option')).forEach((option) => option.selected = false);
 					}
-					const pos = value.length;
-					const day = value.substring(pos - 2, pos);
-					let week = value.substring(0, pos - 2);
-					if (week == -1) {
-						week = 'last';
+					if (frequency === 'MONTHLY') {
+						[].slice.call(document.querySelectorAll('#jform_scheduling_monthly_week option')).forEach((option) => option.selected = false);
+						[].slice.call(document.querySelectorAll('#jform_scheduling_monthly_week_days option')).forEach((option) => option.selected = false);
 					}
-					if (week) {
-						document.querySelector('#jform_scheduling_monthly_week option[value="' + week + '"]').selected = true;
+					parts[1].split(',').forEach((value) => {
+						if (frequency === 'WEEKLY') {
+							document.querySelector('#jform_scheduling_weekly_days option[value="' + value + '"]').selected = true;
+							return;
+						}
+						const pos = value.length;
+						const day = value.substring(pos - 2, pos);
+						let week = value.substring(0, pos - 2);
+						if (week == -1) {
+							week = 'last';
+						}
+						if (week) {
+							document.querySelector('#jform_scheduling_monthly_week option[value="' + week + '"]').selected = true;
+						}
+						if (day) {
+							document.querySelector('#jform_scheduling_monthly_week_days option[value="' + day + '"]').selected = true;
+						}
+					});
+					if (frequency === 'WEEKLY') {
+						document.getElementById('jform_scheduling_weekly_days').dispatchEvent(new Event('change'));
 					}
-					if (day) {
-						document.querySelector('#jform_scheduling_monthly_week_days option[value="' + day + '"]').selected = true;
+					if (frequency === 'MONTHLY') {
+						document.getElementById('jform_scheduling_monthly_week').dispatchEvent(new Event('change'));
+						document.getElementById('jform_scheduling_monthly_week_days').dispatchEvent(new Event('change'));
 					}
-				});
-				if (frequency === 'WEEKLY') {
-					document.getElementById('jform_scheduling_weekly_days').dispatchEvent(new Event('change'));
+					break;
+				case 'BYMONTHDAY':
+					document.getElementById('jform_scheduling_monthly_options').querySelector('input[value="by_day"]').checked = true;
+					parts[1].split(',').forEach((value) =>
+						document.querySelector('#jform_scheduling_monthly_days option[value="' + value + '"]').selected = true
+					);
+					document.getElementById('jform_scheduling_monthly_days').dispatchEvent(new Event('change'));
+					break;
+				case 'COUNT':
+					document.getElementById('jform_scheduling_repeat_count').value = parts[1];
+					break;
+				case 'INTERVAL':
+					document.getElementById('jform_scheduling_interval').value = parts[1];
+					break;
+				case 'UNTIL': {
+					const untilField = document.getElementById('jform_scheduling_end_date');
+					const date = dayjs.utc(parts[1].replace('Z', ''), 'YYYYMMDD\Thhmmss');
+					untilField.value = date.format(untilField.getAttribute('data-format'));
+					untilField.setAttribute('data-date', date.format('YYYY-MM-DD'));
+					break;
 				}
-				if (frequency === 'MONTHLY') {
-					document.getElementById('jform_scheduling_monthly_week').dispatchEvent(new Event('change'));
-					document.getElementById('jform_scheduling_monthly_week_days').dispatchEvent(new Event('change'));
-				}
-				break;
-			case 'BYMONTHDAY':
-				document.getElementById('jform_scheduling_monthly_options').querySelector('input[value="by_day"]').checked = true;
-				parts[1].split(',').forEach((value) =>
-					document.querySelector('#jform_scheduling_monthly_days option[value="' + value + '"]').selected = true
-				);
-				document.getElementById('jform_scheduling_monthly_days').dispatchEvent(new Event('change'));
-				break;
-			case 'COUNT':
-				document.getElementById('jform_scheduling_repeat_count').value = parts[1];
-				break;
-			case 'INTERVAL':
-				document.getElementById('jform_scheduling_interval').value = parts[1];
-				break;
-			case 'UNTIL': {
-				const untilField = document.getElementById('jform_scheduling_end_date');
-				const date = dayjs.utc(parts[1].replace('Z', ''), 'YYYYMMDD\Thhmmss');
-				untilField.value = date.format(untilField.getAttribute('data-format'));
-				untilField.setAttribute('data-date', date.format('YYYY-MM-DD'));
-				break;
-			}
 			}
 		});
 		changeVisiblity();
@@ -208,10 +208,11 @@
 		}
 	}
 	function changeVisiblity() {
+		document.querySelector('.dp-field-rrule').classList.add('dp-control_hidden');
+		document.querySelector('.dp-field-exdates').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-end-date').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-interval').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-repeat-count').classList.add('dp-control_hidden');
-		document.querySelector('.dp-field-rrule').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-daily-weekdays').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-weekly-days').classList.add('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-monthly-options').classList.add('dp-control_hidden');
@@ -224,10 +225,11 @@
 		if (document.getElementById('jform_scheduling0').checked) {
 			return;
 		}
+		document.querySelector('.dp-field-rrule').classList.remove('dp-control_hidden');
+		document.querySelector('.dp-field-exdates').classList.remove('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-end-date').classList.remove('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-interval').classList.remove('dp-control_hidden');
 		document.querySelector('.dp-field-scheduling-repeat-count').classList.remove('dp-control_hidden');
-		document.querySelector('.dp-field-rrule').classList.remove('dp-control_hidden');
 		if (document.getElementById('jform_scheduling1').checked) {
 			document.querySelector('.dp-field-scheduling-daily-weekdays').classList.remove('dp-control_hidden');
 		}
@@ -246,7 +248,13 @@
 	}
 	function setup$4() {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
-		const check = DPCalendar.debounce(checkOverlapping, 2000);
+		const buttons = [].slice.call(document.querySelectorAll('.dp-button-apply, .button-apply, .dp-button-save, .button-save, .dp-button-save2new, .button-save-new, .dp-button-save2copy, .button-save-copy'));
+		const box = document.querySelector('.com-dpcalendar-eventform__overlapping');
+		if (box && box.getAttribute('data-overlapping')) {
+			document.querySelector('.dp-loader').classList.remove('dp-loader_hidden');
+			buttons.forEach((button) => button.disabled = true);
+		}
+		const check = DPCalendar.debounce(() => checkOverlapping(buttons), 2000);
 		[].slice.call(document.querySelectorAll('#jform_start_date, #jform_start_date_time, #jform_end_date, #jform_end_date_time, #jform_rooms')).forEach((input) => {
 			input.addEventListener('change', check);
 		});
@@ -264,7 +272,10 @@
 			document.getElementById('jform_end_date_time').style.display = 'none';
 		};
 		[].slice.call(document.querySelectorAll('#jform_all_day input')).forEach((input) => {
-			input.addEventListener('click', () => allDayAdapter(input.value == 0) && checkOverlapping());
+			input.addEventListener('click', () => {
+				allDayAdapter(input.value == 0);
+				checkOverlapping(buttons);
+			});
 		});
 		const allDayField = document.querySelector('#jform_all_day');
 		if (allDayField && allDayField.tagName.toLowerCase() == 'input') {
@@ -274,7 +285,7 @@
 		allDayAdapter(document.getElementById('jform_all_day0').checked
 			|| (!document.getElementById('jform_all_day0').checked && !document.getElementById('jform_all_day1').checked));
 	}
-	function checkOverlapping() {
+	function checkOverlapping(buttons) {
 		const box = document.querySelector('.com-dpcalendar-eventform__overlapping');
 		if (!box) {
 			return;
@@ -283,8 +294,9 @@
 		loadDPAssets(['/com_dpcalendar/js/domurl/url.js'], () => {
 			const url = new Url();
 			DPCalendar.request(
-				'task=event.overlapping',
+				'task=event.overlapping&format=json',
 				(json) => {
+					buttons.forEach((button) => button.disabled = false);
 					if (!json.data.message) {
 						return;
 					}
@@ -294,11 +306,12 @@
 					if (!box.getAttribute('data-overlapping')) {
 						return;
 					}
-					[].slice.call(document.querySelectorAll('.dp-button-apply, .button-apply, .dp-button-save, .button-save, .dp-button-save2new, .button-save-new, .dp-button-save2copy, .button-save-copy')).forEach((button) => {
-						button.disabled = json.data.count > 0;
-					});
+					buttons.forEach((button) => button.disabled = json.data.count > 0);
 				},
-				DPCalendar.formToQueryString(document.querySelector('.com-dpcalendar-eventform__form'), 'input:not([name=task]), select') + (url.query.e_id ? '&id=' + url.query.e_id : '')
+				DPCalendar.formToQueryString(document.querySelector('.com-dpcalendar-eventform__form'), 'input:not([name=task]), select') + (url.query.e_id ? '&id=' + url.query.e_id : ''),
+				true,
+				'POST',
+				() => buttons.forEach((button) => button.disabled = false)
 			);
 		});
 	}
@@ -400,7 +413,7 @@
 		DPCalendar.Map.clearMarkers(map);
 		[].slice.call(document.querySelectorAll('#jform_location_ids option:checked')).forEach((option) => {
 			const content = option.innerHTML;
-			const parts = content.substring(content.lastIndexOf('[') + 1, content.lastIndexOf(']')).split(':');
+			const parts = content.substring(content.lastIndexOf('[') + 1, content.lastIndexOf(']')).split(',');
 			if (parts.length < 2 || (parts[0] == 0 && parts[1] == 0)) {
 				return;
 			}
@@ -482,6 +495,11 @@
 				.then(() => ask(updateString, updateString !== Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET', '')))
 				.then((yes) => document.getElementById('jform_update_modified').value = yes)
 				.then(() => Joomla.submitform(task, form))
+				.then(() => {
+					[].slice.call(document.querySelectorAll('#toolbar button, .com-dpcalendar-eventform__actions button')).forEach((button) => {
+						button.disabled = true;
+					});
+				})
 				.catch(() => {
 					const loader = document.querySelector('.dp-loader');
 					if (loader) {

@@ -22,7 +22,7 @@ $dateString = $this->dateHelper->getDateStringFromEvent(
 		<?php echo $dateString; ?>
 		<?php if ($this->event->rrule) { ?>
 			<div class="com-dpcalendar-event__rrule">
-				<?php echo $this->dateHelper->transformRRuleToString($this->event->rrule, $this->event->start_date); ?>
+			<?php echo nl2br($this->dateHelper->transformRRuleToString($this->event->rrule, $this->event->start_date, $this->event->exdates)); ?>
 			</div>
 		<?php } ?>
 	</dd>

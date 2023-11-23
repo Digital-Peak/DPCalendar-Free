@@ -312,6 +312,10 @@ class DPCalendarModelEvent extends ItemModel
 			$item->color = $calendar->color;
 		}
 
+		if (is_string($item->exdates)) {
+			$item->exdates = ArrayHelper::getColumn((array)json_decode($item->exdates), 'date');
+		}
+
 		return $item;
 	}
 

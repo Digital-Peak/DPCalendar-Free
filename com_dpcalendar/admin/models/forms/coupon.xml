@@ -17,6 +17,12 @@
 			<option value="percentage">COM_DPCALENDAR_FIELD_COUPON_TYPE_PERCENTAGE</option>
 			<option value="value">COM_DPCALENDAR_FIELD_COUPON_TYPE_VALUE</option>
 		</field>
+		<field name="area" type="list" required="true" default="1" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_COUPON_AREA_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_AREA_DESC">
+			<option value="1">COM_DPCALENDAR_FIELD_COUPON_AREA_TICKETS_OPTIONS</option>
+			<option value="2">COM_DPCALENDAR_FIELD_COUPON_AREA_TICKETS</option>
+			<option value="3">COM_DPCALENDAR_FIELD_COUPON_AREA_OPTIONS</option>
+		</field>
 		<field name="limit" type="text" pattern="\d*" class="dp-form-input"
 			label="COM_DPCALENDAR_FIELD_COUPON_LIMIT_LABEL" description="COM_DPCALENDAR_FIELD_COUPON_LIMIT_DESC"/>
 		<field name="calendars" type="dpcalendar" multiple="true" class="dp-select" internal="true"
@@ -38,9 +44,6 @@
 
 		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
 			label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
-
-		<field name="created_by_alias" type="text"
-			label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
 
 		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
 			label="JGLOBAL_FIELD_MODIFIED_LABEL"/>

@@ -35,7 +35,7 @@ class JFormFieldDPCFields extends ListField
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 		Form::addFieldPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/fields');
 
-		$hide = explode(',', $this->element['hide']);
+		$hide = explode(',', $this->element['hide'] ?: '');
 		$form = Form::getInstance('com_dpcalendar.' . $this->element['section'], $this->element['section'], ['control' => 'jform']);
 		foreach ($form->getFieldset() as $field) {
 			$isHidden = false;

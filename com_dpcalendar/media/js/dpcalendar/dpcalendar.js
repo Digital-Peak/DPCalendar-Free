@@ -112,7 +112,7 @@
 		});
 		return true;
 	};
-	DPCalendar.request = (url, callback, data, updateLoader, method) => {
+	DPCalendar.request = (url, callback, data, updateLoader, method, errorCallback) => {
 		const loader = updateLoader !== false ? document.querySelector('.dp-loader') : null;
 		if (loader) {
 			loader.classList.remove('dp-loader_hidden');
@@ -143,8 +143,9 @@
 					if (document.getElementById('system-message-container')) {
 						Joomla.renderMessages({ error: [url + '<br>' + e.message] });
 					}
-					if (window.console) {
-						console.log(e);
+					console.log(e);
+					if (errorCallback) {
+						errorCallback();
 					}
 				}
 			},
@@ -153,6 +154,16 @@
 				if (loader) {
 					loader.classList.add('dp-loader_hidden');
 				}
+				try {
+					if (errorCallback) {
+						errorCallback();
+					}
+				} catch (e) {
+					if (document.getElementById('system-message-container')) {
+						Joomla.renderMessages({ error: [url + '<br>' + e.message] });
+					}
+					console.log(e);
+				}
 				if (!xhr.responseText) {
 					return;
 				}
@@ -160,6 +171,9 @@
 					const json = JSON.parse(xhr.responseText);
 					if (json.messages != null && json.messages.length !== 0 && document.getElementById('system-message-container')) {
 						Joomla.renderMessages(json.messages);
+					}
+					if (json.error) {
+						throw new Error(json.message + (json.trace ? '<br>' + json.trace : ''));
 					}
 				} catch (e) {
 					if (document.getElementById('system-message-container')) {

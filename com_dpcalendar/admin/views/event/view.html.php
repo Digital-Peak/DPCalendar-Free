@@ -56,6 +56,7 @@ class DPCalendarViewEvent extends BaseView
 		if ($this->event->original_id > '0') {
 			// Hide the scheduling fields
 			$this->form->removeField('rrule');
+			$this->form->removeField('exdates');
 			$this->form->removeField('scheduling');
 			$this->form->removeField('scheduling_end_date');
 			$this->form->removeField('scheduling_interval');

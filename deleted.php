@@ -476,6 +476,15 @@ $files = [
 // From v8.14.1 to case 10175
 '/plugins/system/dpcalendarytp/modules/elements/calendar/images/icon-small.svg',
 '/plugins/system/dpcalendarytp/modules/elements/list/images/icon-small.svg',
+
+// From v8.14.3 to update dependencies
+'/administrator/components/com_dpcalendar/vendor/doctrine/deprecations/phpcs.xml',
+'/administrator/components/com_dpcalendar/vendor/doctrine/deprecations/phpstan.neon',
+'/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/currencies/en_AE.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/currencies/en_PH.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/scripts/en_CA.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/timezones/om.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/timezones/rw.php',
 ];
 
 foreach ($files as $file) {

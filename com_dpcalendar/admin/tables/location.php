@@ -117,6 +117,7 @@ class DPCalendarTableLocation extends Table implements TaggableTableInterface, V
 		if (empty($this->alias)) {
 			$this->alias = $this->title;
 		}
+
 		$this->alias = ApplicationHelper::stringURLSafe($this->alias);
 		if (trim(str_replace('-', '', $this->alias)) == '') {
 			$this->alias = DPCalendarHelper::getDate()->format("Y-m-d-H-i-s");
@@ -144,6 +145,10 @@ class DPCalendarTableLocation extends Table implements TaggableTableInterface, V
 			}
 			$this->metakey = implode(", ", $clean_keys);
 		}
+
+		$this->country     = (int)$this->country;
+		$this->checked_out = (int)$this->checked_out;
+		$this->version     = (int)$this->version;
 
 		if (empty($this->created) || $this->created === $this->getDbo()->getNullDate()) {
 			$this->created = null;

@@ -37,7 +37,7 @@ class DPCalendarModelCoupon extends AdminModel
 		return $item;
 	}
 
-	public function getItemByCode($code, $price, $calid = 0, $email = '', $userId = 0)
+	public function getItemByCode($code, $calid = 0, $email = '', $userId = 0): ?object
 	{
 		if (empty($code)) {
 			return null;
@@ -48,41 +48,39 @@ class DPCalendarModelCoupon extends AdminModel
 			return null;
 		}
 
+		// Check calendars
 		if ($item->calendars && !in_array($calid, $item->calendars)) {
 			return null;
 		}
+
+		// Check mail
 		if ($item->emails && !in_array($email, explode(PHP_EOL, $item->emails))) {
 			return null;
 		}
+
+		// Check users
 		if ($item->users && !in_array($userId, $item->users)) {
 			return null;
 		}
 
+		// Check publishing state
 		$now = DPCalendarHelper::getDate();
 		if ($item->publish_up && $now->toSql() < $item->publish_up) {
 			return null;
 		}
+
 		if ($item->publish_down && $now->toSql() > $item->publish_down) {
 			return null;
 		}
 
+		// Check limit
 		if ($item->limit) {
 			$this->getDbo()->setQuery('select count(id) as total from #__dpcalendar_bookings where coupon_id = ' . (int)$item->id);
 			$count = $this->getDbo()->loadAssoc();
+
 			if ($count['total'] >= $item->limit) {
 				return null;
 			}
-		}
-
-		if ($item->type == 'value') {
-			$item->discount_value = $item->value;
-		}
-		if ($item->type == 'percentage') {
-			$item->discount_value = ($price / 100) * $item->value;
-		}
-
-		if ($item->discount_value < 0) {
-			$item->discount_value = 0;
 		}
 
 		return $item;

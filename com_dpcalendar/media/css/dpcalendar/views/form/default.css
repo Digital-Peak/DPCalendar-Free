@@ -459,7 +459,8 @@
 .com-dpcalendar-eventform .dp-autocomplete {
 	min-width: 100px;
 }
-.com-dpcalendar-eventform #jform_scheduling_end_date_time {
+.com-dpcalendar-eventform #jform_scheduling_end_date_time,
+.com-dpcalendar-eventform .dp-field-exdates .dp-timepicker {
 	display: none;
 }
 .com-dpcalendar-eventform__original-warning_reset {

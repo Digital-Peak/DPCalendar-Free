@@ -122,6 +122,15 @@
 		</field>
 		<field name="rrule" type="text" class="dp-form-input"
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_DESC"/>
+		<field name="exdates" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_DESC">
+			<form>
+				<fields>
+					<field name="date" type="datetimechooser" default="NOW"  all_day="1"
+						label="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_DATE_LABEL" required="true"/>
+				</fields>
+			</form>
+		</field>
 
 		<field name="description" type="editor" buttons="true" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
@@ -139,8 +148,7 @@
 		<field name="checked_out_time" type="hidden" filter="unset"/>
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
-		<field name="location_ids" type="sql" multiple="true" class="dp-select" key_field="id" value_field="title"
-			query="SELECT id, title FROM #__dpcalendar_locations where state = 1 order by title"
+		<field name="location_ids" type="location" multiple="true" class="dp-select"
 			label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC">
 			<option></option>
 		</field>

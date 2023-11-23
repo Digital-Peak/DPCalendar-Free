@@ -181,6 +181,10 @@ class DPCalendarModelEvents extends ListModel
 				$item->color = $calendar ? $calendar->color : '3366CC';
 			}
 
+			if (is_string($item->exdates)) {
+				$item->exdates = ArrayHelper::getColumn((array)json_decode($item->exdates), 'date');
+			}
+
 			if (is_string($item->price)) {
 				$item->price = json_decode($item->price);
 			}

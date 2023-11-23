@@ -69,7 +69,7 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 									'block.icon',
 									['icon'  => Icon::RECURRING, 'title' => $this->translate('COM_DPCALENDAR_BOOKING_FIELD_SERIES_LABEL')]
 								); ?>
-								<?php echo $this->dateHelper->transformRRuleToString($event->rrule, $event->start_date); ?>
+								<?php echo nl2br($this->dateHelper->transformRRuleToString($event->rrule, $event->start_date, $event->exdates)); ?>
 							</div>
 						<?php } ?>
 						<div class="dp-event__calendar">

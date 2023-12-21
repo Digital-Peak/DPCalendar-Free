@@ -9,7 +9,12 @@ defined('_JEXEC') or die();
 if (!class_exists('DPCalendarControllerBookingForm') || !$this->params->get('event_show_booking_form')) {
 	return;
 }
+
+$controller = new DPCalendarControllerBookingForm();
+if (!$controller->allowAdd([['event_id' => $this->event->id]])) {
+	return;
+}
 ?>
 <div class="com-dpcalendar-event__booking-form<?php echo $this->params->get('event_show_booking_form') == 1 ? ' dp-toggle_hidden' : ''; ?>">
-	<?php (new DPCalendarControllerBookingForm())->display(); ?>
+	<?php $controller->display(); ?>
 </div>

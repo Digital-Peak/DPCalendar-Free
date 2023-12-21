@@ -8,7 +8,7 @@
 		<field name="catid" type="dpcalendaredit" class="dp-select"
 			label="COM_DPCALENDAR_CALENDAR" description="COM_DPCALENDAR_FIELD_CALENDAR_DESC"/>
 
-		<field name="color" type="color" maxlength="6" size="6"
+		<field name="color" type="color" maxlength="6" size="6" validate="color"
 			label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"/>
 
 		<field name="url" type="url" class="dp-form-input"

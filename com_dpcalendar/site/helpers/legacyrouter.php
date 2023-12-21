@@ -76,7 +76,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 				$menuCatid = $mId;
 				$category  = DPCalendarHelper::getCalendar($calid);
 
-				if ($category && ! $category->external) {
+				if ($category && !$category->external) {
 					// TODO Throw error that the category either not exists or
 					// is unpublished
 					$path = $category->getPath();
@@ -113,7 +113,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 		}
 
 		if (isset($query['layout'])) {
-			if (! empty($query['Itemid']) && isset($menuItem->query['layout'])) {
+			if (!empty($query['Itemid']) && isset($menuItem->query['layout'])) {
 				if ($query['layout'] == $menuItem->query['layout']) {
 					unset($query['layout']);
 				}
@@ -141,14 +141,14 @@ class DPCalendarRouterLegacy implements RulesInterface
 		// Count route segments
 		$count = is_countable($segments) ? count($segments) : 0;
 
-		if (! empty($segments) && $segments[0] == 'events') {
+		if (!empty($segments) && $segments[0] == 'events') {
 			$vars['view']   = $segments[0];
 			$vars['format'] = 'raw';
 			return $vars;
 		}
 
 		// Standard routing for events.
-		if (! isset($item)) {
+		if (!isset($item)) {
 			$vars['view'] = $segments[0];
 			$vars['id']   = $segments[$count - 1];
 			return $vars;

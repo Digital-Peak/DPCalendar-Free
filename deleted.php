@@ -485,6 +485,18 @@ $files = [
 '/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/scripts/en_CA.php',
 '/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/timezones/om.php',
 '/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/timezones/rw.php',
+
+// From v8.15.0 to case 10397
+'/administrator/components/com_dpcalendar/libraries/dpcalendar/DPCalendar/Helper/Transifex.php',
+
+// From v8.15.0 to case 10464
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/LICENSE',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/phpdoc.xml',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/public',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/src/Data/MaskPatternTester.php',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/src/Data/QRDataAbstract.php',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/src/Data/QRDataInterface.php',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/src/Helpers',
 ];
 
 foreach ($files as $file) {

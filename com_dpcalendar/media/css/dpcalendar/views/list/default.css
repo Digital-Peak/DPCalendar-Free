@@ -111,6 +111,9 @@
 	color: #000;
 	border: 0;
 }
+.com-dpcalendar-list .dp-event__description {
+	margin-top: 1rem;
+}
 .com-dpcalendar-list .dp-event__actions, .com-dpcalendar-list .dp-event__date, .com-dpcalendar-list .dp-event__rrule, .com-dpcalendar-list .dp-event__calendar, .com-dpcalendar-list .dp-event__capacity, .com-dpcalendar-list .dp-event__price, .com-dpcalendar-list .dp-event__hits, .com-dpcalendar-list .dp-event__locations {
 	margin-right: 1rem;
 	display: inline-flex;

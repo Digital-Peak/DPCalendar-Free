@@ -41,7 +41,7 @@ class DPCalendarViewCoupons extends BaseView
 			ToolbarHelper::archiveList('coupons.archive');
 			ToolbarHelper::checkin('coupons.checkin');
 		}
-		if ($state->get('filter.state') == - 2 && $canDo->get('core.delete')) {
+		if ($state->get('filter.state') == -2 && $canDo->get('core.delete')) {
 			ToolbarHelper::deleteList('', 'coupons.delete', 'JTOOLBAR_EMPTY_TRASH');
 		} elseif ($canDo->get('core.edit.state')) {
 			ToolbarHelper::trash('coupons.trash');

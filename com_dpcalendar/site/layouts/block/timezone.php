@@ -60,8 +60,8 @@ $actualTimezone = Factory::getSession()->get('user-timezone', $displayData['date
 	</select>
 	<span class="dp-timezone__info dp-timezone__info_hidden">
 		<?php echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_DIFFERENT_TIMEZONE'); ?>
-		<a href="#" class="dp-link dp-link_confirm"><?php echo $displayData['translator']->translate('JYES'); ?></a>
-		<a href="#" class="dp-link dp-link_close"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_CLOSE'); ?></a>
+		<a href="/" class="dp-link dp-link_confirm"><?php echo $displayData['translator']->translate('JYES'); ?></a>
+		<a href="/" class="dp-link dp-link_close"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_CLOSE'); ?></a>
 	</span>
 	<input type="hidden" name="task" value="profile.tz" class="dp-input dp-input-hidden">
 	<input type="hidden" name="option" value="com_dpcalendar" class="dp-input dp-input-hidden">

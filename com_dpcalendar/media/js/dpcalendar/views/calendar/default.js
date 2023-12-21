@@ -62,8 +62,10 @@
 		quickAdds.forEach((quickAdd) => {
 			window.addEventListener('hashchange', () => quickAdd.querySelector('input[name=urlhash]').value = window.location.hash);
 			quickAdd.querySelector('input[name=urlhash]').value = window.location.hash;
+			const buttons = [].slice.call(quickAdd.querySelectorAll('.dp-quickadd__buttons .dp-button'));
 			quickAdd.querySelector('.dp-quickadd__button-submit').addEventListener('click', (e) => {
 				e.preventDefault();
+				buttons.forEach((button) => button.disabled = true);
 				quickAdd.querySelector('input[name=task]').value = 'event.saveajax';
 				const form = quickAdd.querySelector('.dp-form');
 				DPCalendar.request(
@@ -74,13 +76,17 @@
 							quickAdd.querySelector('input[name="jform[title]"]').value = '';
 							quickAdd.style.display = 'none';
 						}
+						buttons.forEach((button) => button.disabled = false);
 					},
 					DPCalendar.formToQueryString(form),
-					true
+					true,
+					null,
+					() => buttons.forEach((button) => button.disabled = false)
 				);
 				return false;
 			});
 			quickAdd.querySelector('.dp-quickadd__button-edit').addEventListener('click', () => {
+				buttons.forEach((button) => button.disabled = true);
 				quickAdd.querySelector('.dp-form').submit();
 			});
 			quickAdd.querySelector('.dp-quickadd__button-cancel').addEventListener('click', () => {

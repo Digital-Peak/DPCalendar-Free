@@ -46,8 +46,9 @@ class FieldsOrder
 		$bookingFields = array_merge($bookingFields, $booking->jcfields ?? []);
 
 		// Adjust country when it is the value
-		$order = $params->get('booking_fields_order', new \stdClass());
+		$order = (object)$params->get('booking_fields_order', new \stdClass());
 		foreach ($order as $index => $field) {
+			$field = (object)$field;
 			if ($field->field == 'country') {
 				$order->{$index}->field = 'country' . (!empty($booking->country_code_value) ? '_code_value' : '');
 			}
@@ -117,9 +118,10 @@ class FieldsOrder
 
 		$ticketFields = array_merge($ticketFields, $ticket->jcfields ?? []);
 
-		// Adjust caountry when it it the value
-		$order = $params->get('ticket_fields_order', new \stdClass());
+		// Adjust country when it it the value
+		$order = (object)$params->get('ticket_fields_order', new \stdClass());
 		foreach ($order as $index => $field) {
+			$field = (object)$field;
 			if ($field->field == 'country') {
 				$order->{$index}->field = 'country' . (!empty($ticket->country_code_value) ? '_code_value' : '');
 			}

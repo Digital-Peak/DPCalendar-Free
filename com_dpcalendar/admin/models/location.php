@@ -158,6 +158,13 @@ class DPCalendarModelLocation extends AdminModel
 			}
 		}
 
+		if (!empty($data['country']) && !is_numeric($data['country'])) {
+			$country = BaseDatabaseModel::getInstance('Country', 'DPCalendarModel', ['ignore_request' => true])->getItem(['short_code' => $data['country']]);
+			if ($country && $country->id) {
+				$data['country'] = $country->id;
+			}
+		}
+
 		$success = parent::save($data);
 
 		if ($success && $this->getState('location.new') === true) {

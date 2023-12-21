@@ -417,7 +417,7 @@
 		<field name="list_ordering" type="list" default="adaptive"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_DESC">
 			<option value="asc">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_ASC</option>
-			<option value="desc">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_DESC</option>
+			<option value="desc">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_DESCE</option>
 			<option value="adaptive">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_ADAPTIVE</option>
 		</field>
 		<field name="list_manage_search_form" type="list" default="1"

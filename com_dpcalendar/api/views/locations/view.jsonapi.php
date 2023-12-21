@@ -19,6 +19,17 @@ class DPCalendarViewLocations extends BaseApiView
 		'typeAlias',
 		'title',
 		'description',
+		'country',
+		'province',
+		'city',
+		'zip',
+		'street',
+		'number',
+		'rooms',
+		'latitude',
+		'longitude',
+		'url',
+		'color',
 		'language',
 		'state',
 		'metakey',
@@ -40,6 +51,17 @@ class DPCalendarViewLocations extends BaseApiView
 		'typeAlias',
 		'title',
 		'description',
+		'country',
+		'province',
+		'city',
+		'zip',
+		'street',
+		'number',
+		'rooms',
+		'latitude',
+		'longitude',
+		'url',
+		'color',
 		'language',
 		'state',
 		'metakey',
@@ -95,7 +117,7 @@ class DPCalendarViewLocations extends BaseApiView
 		PluginHelper::importPlugin('dpcalendar');
 
 		$item->text = $item->description;
-		Factory::getApplication()->triggerLocation('onContentPrepare', ['com_dpcalendar.location', &$item, &$item->params, 0]);
+		Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.location', &$item, &$item->params, 0]);
 		$item->description = $item->text;
 
 		foreach (FieldsHelper::getFields('com_dpcalendar.location', $item, true) as $field) {

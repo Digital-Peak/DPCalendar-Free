@@ -21,14 +21,17 @@
 			}
 			notification.innerHTML = notification.innerHTML.replace('%s', Intl.DateTimeFormat().resolvedOptions().timeZone);
 			notification.classList.remove('dp-timezone__info_hidden');
-			notification.querySelector('.dp-link_confirm').addEventListener('click', () => {
+			notification.querySelector('.dp-link_confirm').addEventListener('click', (e) => {
+				e.preventDefault();
 				select.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
 				select.form.submit();
+				return false;
 			});
 			notification.querySelector('.dp-link_close').addEventListener('click', (e) => {
 				e.preventDefault();
 				notification.classList.add('dp-timezone__info_hidden');
 				localStorage.setItem('DPCalendar.timezone.switcher.disable', 1);
+				return false;
 			});
 		});
 	});

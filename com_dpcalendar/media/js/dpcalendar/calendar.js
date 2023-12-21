@@ -283,9 +283,13 @@
 			}
 		});
 	}
-	function updateHash(d, view, options) {
+	function gotToDateAndView(d, view, options, calendar) {
+		if (!options['use_hash']) {
+			calendar.dpCalendar.gotoDate(d);
+			return;
+		}
 		const newHash = 'year=' + d.getUTCFullYear() + '&month=' + (d.getUTCMonth() + 1) + '&day=' + d.getUTCDate() + '&view=' + view;
-		if (options['use_hash'] && window.location.hash.replace(/&amp;/gi, '&').replace('#', '') != newHash) {
+		if (window.location.hash.replace(/&amp;/gi, '&').replace('#', '') != newHash) {
 			window.location.hash = newHash;
 		}
 	}
@@ -362,7 +366,7 @@
 				return;
 			}
 			if (options['headerToolbar'].right.indexOf(viewMapping['day']) > 0) {
-				updateHash(info.date, 'day', options);
+				gotToDateAndView(info.date, 'day', options, calendar);
 			}
 		};
 		document.body.addEventListener('click', (e) => {
@@ -384,7 +388,7 @@
 				icon: 'icon-calendar',
 				click: () => {
 					loadDPAssets(['/com_dpcalendar/js/pikaday/pikaday.js', '/com_dpcalendar/css/pikaday/pikaday.css'], () => {
-						const button = document.querySelector('.fc-datepicker-button');
+						const button = calendar.querySelector('.fc-datepicker-button');
 						let input = button.querySelector('input');
 						if (!input) {
 							input = document.createElement('input');
@@ -403,7 +407,7 @@
 								},
 								onSelect: (d) => {
 									const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate(), 0, 0, 0));
-									updateHash(date, getReversMappings(options)[calendar.dpCalendar.view.type], options);
+									gotToDateAndView(date, getReversMappings(options)[calendar.dpCalendar.view.type], options, calendar);
 								}
 							});
 						}
@@ -794,7 +798,9 @@
 				options['headerToolbar']['right'] = headers;
 			}
 			options['datesSet'] = (info) => {
-				updateHash(calendar.dpCalendar.getDate(), viewMappingReverse[info.view.type], options);
+				if (options['use_hash']) {
+					gotToDateAndView(calendar.dpCalendar.getDate(), viewMappingReverse[info.view.type], options, calendar);
+				}
 				adaptIcons(calendar);
 			};
 			const cal = new FullCalendar.Calendar(calendar, options);

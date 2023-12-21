@@ -15,6 +15,7 @@ use Joomla\CMS\Uri\Uri;
 if (!$this->event->locations || !$this->params->get('event_show_location', '2')) {
 	return;
 }
+$date = $this->dateHelper->getDate($this->event->start_date, $this->event->all_day);
 ?>
 <div class="com-dpcalendar-event__locations com-dpcalendar-event_small">
 	<?php if ($this->params->get('event_show_map', '1') == '1'
@@ -47,7 +48,8 @@ if (!$this->event->locations || !$this->params->get('event_show_location', '2'))
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EDIT]); ?>
 						</a>
 					<?php } ?>
-					<a href="<?php echo $this->router->getLocationRoute($location); ?>"
+					<a href="<?php echo $this->router->getLocationRoute($location)
+						. '#year=' . $date->format('Y', true) . '&month=' . $date->format('m', true) . '&day=' . $date->format('d', true); ?>"
 					   class="dp-link dp-location__detail-link" name="<?php echo 'dp-location-' . $location->id; ?>">
 						<?php echo $location->title; ?>
 					</a>

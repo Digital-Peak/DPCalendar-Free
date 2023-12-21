@@ -7,25 +7,25 @@
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\Transifex;
+use DPCalendar\Helper\Translation;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 class DPCalendarModelTools extends BaseDatabaseModel
 {
-	public function getResourcesFromTransifex()
+	public function getResourcesFromTranslation()
 	{
-		$resources = Transifex::getResources();
+		$resources = Translation::getResources();
 		if (!$resources) {
 			return;
 		}
 
-		$data = [];
-		foreach ($resources as $resource) {
-			$data[] = $resource->attributes;
+		foreach ($resources as $key => $component) {
+			if ($component->slug === 'glossary') {
+				unset($resources[$key]);
+				continue;
+			}
 		}
 
-		usort($data, fn ($r1, $r2) => strcmp($r1->name, $r2->name));
-
-		return $data;
+		return $resources;
 	}
 }

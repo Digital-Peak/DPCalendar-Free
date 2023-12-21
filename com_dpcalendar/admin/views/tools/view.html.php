@@ -18,16 +18,7 @@ class DPCalendarViewTools extends BaseView
 	protected function init()
 	{
 		if (strpos($this->getLayout(), 'translate') !== false) {
-			$this->resources = $this->get('ResourcesFromTransifex');
-
-			foreach ($this->resources as $resource) {
-				$name           = str_replace(['-', '_'], ' ', $resource->name);
-				$name           = ucwords($name);
-				$name           = str_replace('Plg', 'Plugin', $name);
-				$name           = str_replace('Mod', 'Module', $name);
-				$name           = str_replace('Com', 'Component', $name);
-				$resource->name = str_replace('Dpc', 'DPC', $name);
-			}
+			$this->resources = $this->get('ResourcesFromTranslation');
 
 			$this->languages = LanguageHelper::getKnownLanguages();
 			foreach ($this->languages as $language) {
@@ -36,6 +27,7 @@ class DPCalendarViewTools extends BaseView
 				}
 			}
 		}
+
 		if (strpos($this->getLayout(), 'import') !== false) {
 			PluginHelper::importPlugin('dpcalendar');
 

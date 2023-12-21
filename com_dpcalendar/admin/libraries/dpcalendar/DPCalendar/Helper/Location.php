@@ -381,7 +381,7 @@ class Location
 			$url->setVar('lat', urlencode($coordinates[0]));
 			$url->setVar('lon', urlencode($coordinates[1]));
 		} else {
-			$url->setPath('/search');
+			$url->setPath($url->getPath() . '/search');
 			$url->setVar('q', urlencode($address));
 		}
 
@@ -394,7 +394,12 @@ class Location
 			$url->setVar('accept-language', $lang);
 		}
 
-		$tmp = (new HTTP())->get($url->toString(), null, null, ['Accept: application/json, text/html']);
+		$tmp = (new HTTP())->get(
+			$url->toString(),
+			null,
+			null,
+			['Accept: application/json, text/html']
+		);
 		if (!$tmp || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
 			return [];
 		}
@@ -517,14 +522,14 @@ class Location
 
 		$coordinates = explode(',', $location);
 		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
-			$url->setPath('/reverse');
+			$url->setPath($url->getPath() . '/reverse');
 			$url->setVar('lat', urlencode($coordinates[0]));
 			$url->setVar('lon', urlencode($coordinates[1]));
 
 			$locObject->latitude  = $coordinates[0];
 			$locObject->longitude = $coordinates[1];
 		} else {
-			$url->setPath('/search');
+			$url->setPath($url->getPath() . '/search');
 			$url->setVar('q', urlencode($location));
 		}
 
@@ -537,7 +542,12 @@ class Location
 			$url->setVar('accept-language', $lang);
 		}
 
-		$tmp = (new HTTP())->get($url->toString(), null, null, ['Accept: application/json, text/html']);
+		$tmp = (new HTTP())->get(
+			$url->toString(),
+			null,
+			null,
+			['Accept: application/json, text/html']
+		);
 		if (!$tmp || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
 			return;
 		}

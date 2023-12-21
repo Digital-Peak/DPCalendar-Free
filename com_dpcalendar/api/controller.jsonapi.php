@@ -8,6 +8,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\MVC\Controller\ApiController;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
@@ -55,9 +56,48 @@ class DPCalendarController extends ApiController
 			unset($data[$field->name]);
 		}
 
+		if (!empty($data['calid']) && empty($data['catid'])) {
+			$data['catid'] = $data['calid'];
+		}
+
 		$this->input->set('data', $data);
 
 		return parent::save($recordKey);
+	}
+
+	public function displayList()
+	{
+		$apiFilterInfo = $this->input->get('filter', [], 'array');
+		$filter        = InputFilter::getInstance();
+
+		if (\array_key_exists('start-date', $apiFilterInfo)) {
+			$this->modelState->set('list.start-date', $filter->clean($apiFilterInfo['start-date'], 'STRING'));
+		}
+
+		if (\array_key_exists('end-date', $apiFilterInfo)) {
+			$this->modelState->set('list.end-date', $filter->clean($apiFilterInfo['end-date'], 'STRING'));
+		}
+
+		if (\array_key_exists('calids', $apiFilterInfo)) {
+			$this->modelState->set('category.id', explode(',', $apiFilterInfo['calids']));
+		}
+
+		if (\array_key_exists('search', $apiFilterInfo)) {
+			$this->modelState->set('filter.search', $filter->clean($apiFilterInfo['search'], 'RAW'));
+		}
+
+		if (\array_key_exists('expand', $apiFilterInfo)) {
+			$this->modelState->set('filter.expand', $filter->clean($apiFilterInfo['expand'], 'BOOL'));
+		}
+
+		$this->default_view = $this->input->get('controller', $this->default_view);
+		return parent::displayList();
+	}
+
+	public function displayItem($id = null)
+	{
+		$this->default_view = $this->input->get('controller', $this->default_view);
+		return parent::displayItem($id);
 	}
 
 	public function getModel($name = '', $prefix = 'DPCalendarModel', $config = [])

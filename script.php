@@ -9,6 +9,7 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerScript;
+use Joomla\Filesystem\Folder;
 
 class Pkg_DPCalendarInstallerScript extends InstallerScript
 {
@@ -48,11 +49,44 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 	public function update($parent)
 	{
 		$file = $parent->getParent()->getPath('source') . '/deleted.php';
-		if (!file_exists($file)) {
+		if (file_exists($file)) {
+			require $file;
+		}
+
+		$path    = JPATH_ADMINISTRATOR . '/manifests/packages/pkg_dpcalendar.xml';
+		$version = null;
+
+		if (file_exists($path)) {
+			$manifest = simplexml_load_file($path);
+			$version  = (string)$manifest->version;
+		}
+
+		if (empty($version) || $version == 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
-		require $file;
+		if (version_compare($version, '8.16.0') == -1) {
+			$this->run("update #__update_sites set location = 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=43&ext=extension.xml' where location = 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=44&ext=extension.xml'");
+
+			$this->run("update #__extensions set package_id = 0
+				where package_id = (select * from (select extension_id from #__extensions where element ='pkg_dpcalendar') as e)
+				and name not in ('plg_actionlog_dpcalendar', 'plg_content_dpcalendar', 'plg_fields_dpcalendar', 'plg_installer_dpcalendar', 'plg_privacy_dpcalendar', 'plg_user_dpcalendar', 'com_dpcalendar')");
+
+			$folders = Folder::folders(JPATH_ROOT, 'dpcalendar', true, true, ['api', 'cache', 'cli', 'images', 'layouts', 'libraries', 'media', 'templates', 'test']);
+			$folders = array_merge($folders, Folder::folders(JPATH_PLUGINS . '/dpcalendar', '.', false, true));
+			$folders = array_merge($folders, Folder::folders(JPATH_PLUGINS . '/dpcalendarpay', '.', false, true));
+			foreach ($folders as $folder) {
+				if (!is_dir($folder . '/language')) {
+					continue;
+				}
+
+				foreach (Folder::files($folder . '/language', '.', true, true) as $file) {
+					if (strpos(basename($file), basename(dirname($file))) === 0) {
+						unlink($file);
+					}
+				}
+			}
+		}
 	}
 
 	public function postflight($type, $parent)

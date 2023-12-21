@@ -78,8 +78,14 @@ class DPCalendarHelper
 			}
 			$user = Factory::getUser();
 
-			$calendar->params   = new Registry($calendar->params);
-			$calendar->color    = str_replace('#', '', $calendar->params->get('color', '3366CC'));
+			$calendar->params = new Registry($calendar->params);
+			$calendar->color  = str_replace('#', '', $calendar->params->get('color', '3366CC'));
+
+			// Check if it is a valid color
+			if ((\strlen($calendar->color) !== 6 && \strlen($calendar->color) !== 3) || !ctype_xdigit($calendar->color)) {
+				$calendar->color = '3366CC';
+			}
+
 			$calendar->external = false;
 			$calendar->system   = 'joomla';
 			$calendar->native   = true;

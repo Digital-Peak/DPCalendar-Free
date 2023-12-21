@@ -268,7 +268,8 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			}
 
 			// The rrule until field needs to be adapted to the user timezone
-			$rrule = '';
+			$untilDate = null;
+			$rrule     = '';
 			foreach (explode(';', strtoupper($this->rrule)) as $part) {
 				if (empty($part)) {
 					continue;
@@ -278,6 +279,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 				if ($partName === 'UNTIL') {
 					// Remove the timezone information, sabre assumes then the field is in user timezone
 					$partValue = str_replace('Z', '', $partValue);
+					$untilDate = (new DateTime($partValue))->modify('+2 days');
 				}
 
 				$rrule .= $partName . '=' . $partValue . ';';
@@ -300,7 +302,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 			/** @var VCalendar $cal */
 			$cal = Reader::read(implode(PHP_EOL, $text));
-			$cal = $cal->expand(new DateTime('1970-01-01'), new DateTime('2038-01-01'));
+			$cal = $cal->expand(new DateTime($start->modify('-2 days')->format('Ymd')), $untilDate ?: new DateTime('2038-01-01'));
 			foreach ($cal->VEVENT as $vevent) {
 				$startDate = DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), $this->all_day);
 				$endDate   = DPCalendarHelper::getDate($vevent->DTEND->getDateTime()->format('U'), $this->all_day);

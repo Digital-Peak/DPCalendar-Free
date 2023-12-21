@@ -1,5 +1,4 @@
 <?php
-use DPCalendar\Helper\Booking;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -82,16 +81,7 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 						</div>
 					<?php } ?>
 				</div>
-				<?php if ($this->params->get('list_show_booking', 1) && Booking::openForBooking($event)) { ?>
-					<a href="<?php echo $this->router->getBookingFormRouteFromEvent($event, $this->returnPage); ?>"
-					   class="dp-link dp-link_cta dp-button">
-						<?php echo $this->layoutHelper->renderLayout(
-							'block.icon',
-							['icon' => Icon::PLUS, 'title' => $this->translate('COM_DPCALENDAR_BOOK')]
-						); ?>
-						<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_TO_BOOK_TEXT'); ?>
-					</a>
-				<?php } ?>
+				<?php echo $this->loadTemplate('events_cta'); ?>
 				<?php if ($this->params->get('list_show_display_events') && $event->displayEvent->beforeDisplayContent) { ?>
 					<div class="dp-event__display-before-content"><?php echo $event->displayEvent->beforeDisplayContent; ?></div>
 				<?php } ?>

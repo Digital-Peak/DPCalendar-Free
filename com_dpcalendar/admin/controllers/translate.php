@@ -4,9 +4,10 @@
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\Transifex;
+use DPCalendar\Helper\Translation;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Language\Text;
@@ -30,15 +31,14 @@ class DPCalendarControllerTranslate extends BaseController
 
 		// Loop over the local languages
 		foreach (LanguageHelper::getKnownLanguages() as $language) {
-			foreach (Transifex::getResourceStats($resource) as $tr) {
-				$code = Transifex::getLangCode($tr->relationships->language->data->id);
-				if ($code === false || $code != $language['tag']) {
+			foreach (Translation::getResourceStats($resource) as $tr) {
+				if ($tr->code != $language['tag']) {
 					continue;
 				}
 
 				$data['languages'][] = [
-					'tag'     => $code,
-					'percent' => (int)((100 / $tr->attributes->total_strings) * $tr->attributes->translated_strings)
+					'tag'     => $tr->code,
+					'percent' => $tr->translated_percent
 				];
 			}
 		}
@@ -63,27 +63,24 @@ class DPCalendarControllerTranslate extends BaseController
 		}
 
 		// The stats
-		foreach (Transifex::getResourceStats($resource) as $tr) {
+		foreach (Translation::getResourceStats($resource) as $tr) {
 			// Ignore empty languages
-			if ((int)$tr->attributes->translated_strings === 0) {
+			if ((int)$tr->translated === 0) {
 				continue;
 			}
 
-			// Get the joomla language code
-			$code = Transifex::getLangCode($tr->relationships->language->data->id);
-
 			// Ignore en-GB
-			if ($code === 'en-GB') {
+			if ($tr->code === 'en-GB') {
 				continue;
 			}
 
 			// Check if the code is ok and if we have the language installed locally
-			if ($code === false || !array_key_exists($code, $localLanguages)) {
+			if (!array_key_exists($tr->code, $localLanguages)) {
 				continue;
 			}
 
 			// Get the content of the language
-			$content = Transifex::getResourceStrings($resource, $code);
+			$content = Translation::getResourceStrings($resource, $tr->code);
 			if (!$content) {
 				continue;
 			}
@@ -92,14 +89,14 @@ class DPCalendarControllerTranslate extends BaseController
 			$path = '';
 			if (strpos($resource, 'com_') !== false) {
 				$path = strpos($resource, '-admin') !== false ? JPATH_ADMINISTRATOR : JPATH_ROOT;
-				$path .= '/components/com_dpcalendar/language/' . $code . '/' . $code . '.'
+				$path .= '/components/com_dpcalendar/language/' . $tr->code . '/' . $tr->code . '.'
 					. str_replace(['-', '.admin', '.site'], ['.', '', ''], $resource);
 			}
 
 			if (strpos($resource, 'mod_') === 0) {
 				$mod  = str_replace('-sys', '', $resource);
 				$path = JPATH_ROOT;
-				$path .= '/modules/' . $mod . '/language/' . $code . '/' . $code . '.' . $mod;
+				$path .= '/modules/' . $mod . '/language/' . $tr->code . '/' . $tr->code . '.' . $mod;
 			}
 
 			if (strpos($resource, 'plg_') === 0) {
@@ -108,7 +105,7 @@ class DPCalendarControllerTranslate extends BaseController
 				$plugin = $db->loadObject();
 				if (!empty($plugin)) {
 					$path = JPATH_PLUGINS . '/';
-					$path .= $plugin->folder . '/' . $plugin->element . '/language/' . $code . '/' . $code . '.' . $plugin->name;
+					$path .= $plugin->folder . '/' . $plugin->element . '/language/' . $tr->code . '/' . $tr->code . '.' . $plugin->name;
 				}
 			}
 

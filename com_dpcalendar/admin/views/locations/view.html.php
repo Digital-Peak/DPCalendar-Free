@@ -47,7 +47,7 @@ class DPCalendarViewLocations extends BaseView
 			ToolbarHelper::archiveList('locations.archive');
 			ToolbarHelper::checkin('locations.checkin');
 		}
-		if ($state->get('filter.state') == - 2 && $canDo->get('core.delete')) {
+		if ($state->get('filter.state') == -2 && $canDo->get('core.delete')) {
 			ToolbarHelper::deleteList('', 'locations.delete', 'JTOOLBAR_EMPTY_TRASH');
 		} elseif ($canDo->get('core.edit.state')) {
 			ToolbarHelper::trash('locations.trash');

@@ -105,7 +105,7 @@
 			}
 			DPCalendar.request(
 				'task=' + task + '&loc=' + encodeURIComponent(pos.coords.latitude + ',' + pos.coords.longitude),
-				(json) => callback(json.data.formated)
+				(json) => callback(json.data.formatted)
 			);
 		}, (error) => {
 			Joomla.renderMessages({ error: [error.message] });

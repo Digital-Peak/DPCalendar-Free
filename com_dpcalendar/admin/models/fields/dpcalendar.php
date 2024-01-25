@@ -22,6 +22,7 @@ if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Fie
 
 class JFormFieldDPCalendar extends CategoryField
 {
+	public $element;
 	public $type = 'DPCalendar';
 
 	protected function getOptions()
@@ -40,18 +41,21 @@ class JFormFieldDPCalendar extends CategoryField
 
 		PluginHelper::importPlugin('dpcalendar');
 		$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
-		if (empty($tmp)) {
-			return $options;
+		if (!empty($tmp)) {
+			foreach ($tmp as $calendars) {
+				foreach ($calendars as $calendar) {
+					// Don't show caldav calendars
+					if (strpos($calendar->id, 'cd-') === 0) {
+						continue;
+					}
+					$options[] = HTMLHelper::_('select.option', $calendar->id, $calendar->title);
+				}
+			}
 		}
 
-		foreach ($tmp as $calendars) {
-			foreach ($calendars as $calendar) {
-				// Don't show caldav calendars
-				if (strpos($calendar->id, 'cd-') === 0) {
-					continue;
-				}
-				$options[] = HTMLHelper::_('select.option', $calendar->id, $calendar->title);
-			}
+		if ('' . $this->element['ids'] && $ids = explode(',', $this->element['ids'])) {
+			// Allow options which are empty for placeholder, in defined array or when all are selected
+			return array_values(array_filter($options, static fn ($o): bool => $o->value === '' || in_array($o->value, $ids) || in_array('-1', $ids)));
 		}
 
 		return $options;

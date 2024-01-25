@@ -17,6 +17,8 @@ JLoader::import('joomla.application.component.controlleradmin');
 
 class DPCalendarControllerExtcalendars extends AdminController
 {
+	public $input;
+	public $redirect;
 	protected $text_prefix = 'COM_DPCALENDAR_EXTCALENDAR';
 
 	public function __construct($config = [])
@@ -77,7 +79,7 @@ class DPCalendarControllerExtcalendars extends AdminController
 		return $return;
 	}
 
-	public function cacheclear()
+	public function cacheclear(): void
 	{
 		$plugin = $this->input->getCmd('dpplugin');
 
@@ -95,7 +97,7 @@ class DPCalendarControllerExtcalendars extends AdminController
 		$this->setRedirect(Route::_($url, false));
 	}
 
-	public function sync()
+	public function sync(): void
 	{
 		$start = time();
 		PluginHelper::importPlugin('dpcalendar');

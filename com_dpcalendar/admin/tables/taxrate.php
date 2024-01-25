@@ -15,6 +15,15 @@ use Joomla\Registry\Registry;
 
 class DPCalendarTableTaxrate extends Table
 {
+	public $id;
+	public $modified;
+	public $modified_by;
+	public $created;
+	public $created_by;
+	public $title;
+	public $publish_down;
+	public $publish_up;
+	public $checked_out_time;
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_taxrates', 'id', $db);
@@ -42,7 +51,7 @@ class DPCalendarTableTaxrate extends Table
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->get('id');
 		} else {
-			if (!(int)$this->created) {
+			if ((int)$this->created === 0) {
 				$this->created = $date->toSql();
 			}
 			if (empty($this->created_by)) {
@@ -64,10 +73,10 @@ class DPCalendarTableTaxrate extends Table
 		}
 
 		// Check for existing name
-		$query = 'SELECT id FROM #__dpcalendar_taxrates WHERE title = ' . $this->_db->Quote($this->title);
-		$this->_db->setQuery($query);
+		$query = 'SELECT id FROM #__dpcalendar_taxrates WHERE title = ' . $this->getDbo()->Quote($this->title);
+		$this->getDbo()->setQuery($query);
 
-		$xid = (int)$this->_db->loadResult();
+		$xid = (int)$this->getDbo()->loadResult();
 		if ($xid && $xid != (int)$this->id) {
 			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 

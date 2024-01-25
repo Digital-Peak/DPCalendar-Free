@@ -28,7 +28,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 	abstract protected function getOriginalData($uid, $calendarId);
 
-	public function deleteEvent($eventId, $calendarId)
+	public function deleteEvent($eventId, $calendarId): bool
 	{
 		$oldEvent = $this->fetchEvent($eventId, $calendarId);
 		$eventId  = substr($eventId, 0, strrpos($eventId, '_'));
@@ -41,8 +41,8 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 		\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
-		$calendar = DPCalendarHelper::getCalendar($oldEvent->catid);
-		$c        = Reader::read($this->getOriginalData($eventId, $calendarId));
+		DPCalendarHelper::getCalendar($oldEvent->catid);
+		$c = Reader::read($this->getOriginalData($eventId, $calendarId));
 
 		$original = null;
 		foreach ($c->children() as $index => $tmp) {
@@ -69,7 +69,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 			// Echo '<pre>' . $c->serialize() . '</pre>'; die();
 			$this->updateCalDAVEvent($eventId, $c->serialize(), $calendarId);
-		} catch (NoInstancesException $e) {
+		} catch (NoInstancesException $noInstancesException) {
 			$this->deleteCalDAVEvent($eventId, $calendarId);
 		}
 
@@ -111,8 +111,8 @@ abstract class CalDAVPlugin extends SyncPlugin
 
 				$c      = Reader::read($this->getOriginalData($eventId, $calendarId));
 				$vevent = null;
-				foreach ($c->VEVENT as $index => $tmp) {
-					if ((string)$tmp->UID != $eventId) {
+				foreach ($c->VEVENT as $tmp) {
+					if ((string)$tmp->UID !== $eventId) {
 						continue;
 					}
 					if ($event->original_id == '0') {
@@ -171,9 +171,13 @@ abstract class CalDAVPlugin extends SyncPlugin
 				if (isset($event->locations) && !empty($event->locations)) {
 					$vevent->LOCATION = Location::format($event->locations);
 					foreach ($event->locations as $loc) {
-						if (!empty($loc->latitude) && !empty($loc->longitude)) {
-							$vevent->GEO = $loc->latitude . ';' . $loc->longitude;
+						if (empty($loc->latitude)) {
+							continue;
 						}
+						if (empty($loc->longitude)) {
+							continue;
+						}
+						$vevent->GEO = $loc->latitude . ';' . $loc->longitude;
 					}
 				}
 
@@ -193,8 +197,8 @@ abstract class CalDAVPlugin extends SyncPlugin
 			}
 
 			return $this->createEvent($id, $calendarId)->id;
-		} catch (\Exception $e) {
-			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		} catch (\Exception $exception) {
+			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'warning');
 
 			return false;
 		}

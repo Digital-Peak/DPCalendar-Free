@@ -21,18 +21,18 @@
 			Joomla.submitform(task, form);
 			form.task.value = '';
 		};
-		const startInput = document.querySelector('input[name="filter[search_start]"]');
+		const startInput = document.querySelector('input[name="list[start-date]"]');
 		if (startInput) {
 			startInput.addEventListener('change', () => {
 				if (startInput.classList.contains('dp-datepicker__input') && !startInput.dpPikaday) {
 					return;
 				}
-				endInput.form.submit();
+				startInput.form.submit();
 			});
 			loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/datepicker.js', '/com_dpcalendar/js/dpcalendar/layouts/block/timepicker.js']);
 		}
 		Array.from(document.querySelectorAll('.dp-event__state div[role="tooltip"]')).forEach((state) => state.remove());
-		const endInput = document.querySelector('input[name="filter[search_end]"]');
+		const endInput = document.querySelector('input[name="list[end-date]"]');
 		if (endInput) {
 			endInput.addEventListener('change', () => {
 				if (endInput.classList.contains('dp-datepicker__input') && !endInput.dpPikaday) {
@@ -41,6 +41,12 @@
 				endInput.form.submit();
 			});
 		}
+		Array.from(document.querySelectorAll('.dp-input, .dp-select')).forEach((input) => {
+			if (input.id === startInput.id || input.id === endInput.id) {
+				return;
+			}
+			input.addEventListener('change', () => input.form.submit());
+		});
 		const closeButton = document.querySelector('.com-dpcalendar-events .dp-button-close');
 		if (closeButton) {
 			closeButton.addEventListener('click', () => {

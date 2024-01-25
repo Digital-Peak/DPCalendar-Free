@@ -22,6 +22,7 @@ $this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
 		<?php echo $this->quickaddForm->renderField('end_date'); ?>
 		<?php echo $this->quickaddForm->renderField('title'); ?>
 		<?php echo $this->quickaddForm->renderField('catid'); ?>
+		<?php echo $this->quickaddForm->renderField('color'); ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<input type="hidden" name="urlhash" class="dp-input dp-input-hidden">
 		<input type="hidden" name="jform[capacity]" value="0" class="dp-input dp-input-hidden">

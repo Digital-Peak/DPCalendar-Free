@@ -38,7 +38,7 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/tools/default.css');
 			</div>
 		</div>
 		<div class="com-dpcalendar-tools-default__footer">
-			<?php echo sprintf(Text::_('COM_DPCALENDAR_FOOTER'), $this->input->getString('DPCALENDAR_VERSION')); ?>
+			<?php echo sprintf(Text::_('COM_DPCALENDAR_FOOTER'), $this->input->getString('DPCALENDAR_VERSION', '')); ?>
 		</div>
 	</div>
 </div>

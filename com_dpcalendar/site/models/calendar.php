@@ -17,8 +17,9 @@ use Joomla\Registry\Registry;
 
 class DPCalendarModelCalendar extends ListModel
 {
-	private $items    = null;
-	private $allItems = null;
+	public $state;
+	private $items;
+	private $allItems;
 
 	protected function populateState($ordering = null, $direction = null)
 	{
@@ -26,7 +27,7 @@ class DPCalendarModelCalendar extends ListModel
 
 		$this->setState('filter.extension', 'com_dpcalendar');
 
-		if (!$app->input->getString('ids')) {
+		if (!$app->input->getString('ids', '')) {
 			$this->setState('filter.parentIds', $this->state->get('parameters.menu', new Registry())->get('ids'));
 			$this->setState('filter.categories', []);
 		} else {
@@ -63,7 +64,7 @@ class DPCalendarModelCalendar extends ListModel
 			$this->items    = [];
 			$this->allItems = [];
 
-			foreach ($this->getState('filter.parentIds', ['root']) as $calendar) {
+			foreach ((array)$this->getState('filter.parentIds', ['root']) as $calendar) {
 				if ($calendar == '-1') {
 					$calendar = 'root';
 				}
@@ -131,15 +132,16 @@ class DPCalendarModelCalendar extends ListModel
 
 		$form = Form::getInstance('com_dpcalendar.event', 'event', ['control' => 'jform']);
 		$form->setValue('start_date', null, $date->format($format, false));
+
 		$date->modify('+1 hour');
 		$form->setValue('end_date', null, $date->format($format, false));
 
 		$form->setFieldAttribute('start_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
 		$form->setFieldAttribute('start_date', 'formatTime', $params->get('event_form_time_format', 'H:i'));
-		$form->setFieldAttribute('start_date', 'formated', true);
+		$form->setFieldAttribute('start_date', 'formatted', true);
 		$form->setFieldAttribute('end_date', 'format', $params->get('event_form_date_format', 'd.m.Y'));
 		$form->setFieldAttribute('end_date', 'formatTime', $params->get('event_form_time_format', 'H:i'));
-		$form->setFieldAttribute('end_date', 'formated', true);
+		$form->setFieldAttribute('end_date', 'formatted', true);
 
 		$form->setFieldAttribute('start_date', 'min_time', $params->get('event_form_min_time'));
 		$form->setFieldAttribute('start_date', 'max_time', $params->get('event_form_max_time'));
@@ -148,6 +150,11 @@ class DPCalendarModelCalendar extends ListModel
 
 		// Enable to load only calendars with create permission
 		$form->setFieldAttribute('catid', 'action', 'true');
+		$form->setFieldAttribute('catid', 'calendar_filter', implode(',', $params->get('event_form_calendars', [])));
+
+		// Color
+		$form->setValue('color', null, $params->get('event_form_color'));
+		$form->setFieldAttribute('color', 'type', 'hidden');
 
 		return $form;
 	}

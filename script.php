@@ -46,7 +46,7 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 		return true;
 	}
 
-	public function update($parent)
+	public function update($parent): void
 	{
 		$file = $parent->getParent()->getPath('source') . '/deleted.php';
 		if (file_exists($file)) {
@@ -61,20 +61,24 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 			$version  = (string)$manifest->version;
 		}
 
-		if (empty($version) || $version == 'DP_DEPLOY_VERSION') {
+		if ($version === null || $version === '' || $version === '0' || $version == 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
 		if (version_compare($version, '8.16.0') == -1) {
-			$this->run("update #__update_sites set location = 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=43&ext=extension.xml' where location = 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=44&ext=extension.xml'");
+			$this->run("update #__update_sites set location = 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=43&ext=extension.xml' where location = 'https://cdn.digital-peak.com/update/stream.php?id=44'");
 
 			$this->run("update #__extensions set package_id = 0
 				where package_id = (select * from (select extension_id from #__extensions where element ='pkg_dpcalendar') as e)
 				and name not in ('plg_actionlog_dpcalendar', 'plg_content_dpcalendar', 'plg_fields_dpcalendar', 'plg_installer_dpcalendar', 'plg_privacy_dpcalendar', 'plg_user_dpcalendar', 'com_dpcalendar')");
 
 			$folders = Folder::folders(JPATH_ROOT, 'dpcalendar', true, true, ['api', 'cache', 'cli', 'images', 'layouts', 'libraries', 'media', 'templates', 'test']);
-			$folders = array_merge($folders, Folder::folders(JPATH_PLUGINS . '/dpcalendar', '.', false, true));
-			$folders = array_merge($folders, Folder::folders(JPATH_PLUGINS . '/dpcalendarpay', '.', false, true));
+			if (is_dir(JPATH_PLUGINS . '/dpcalendar')) {
+				$folders = array_merge($folders, Folder::folders(JPATH_PLUGINS . '/dpcalendar', '.', false, true));
+			}
+			if (is_dir(JPATH_PLUGINS . '/dpcalendarpay')) {
+				$folders = array_merge($folders, Folder::folders(JPATH_PLUGINS . '/dpcalendarpay', '.', false, true));
+			}
 			foreach ($folders as $folder) {
 				if (!is_dir($folder . '/language')) {
 					continue;
@@ -89,7 +93,7 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 		}
 	}
 
-	public function postflight($type, $parent)
+	public function postflight($type, $parent): void
 	{
 		// Perform some post install tasks
 		if ($type == 'install') {
@@ -105,14 +109,14 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 		$this->run("update `#__extensions` set enabled = 1 where name = 'plg_installer_dpcalendar'");
 	}
 
-	private function run($query)
+	private function run(string $query): void
 	{
 		try {
 			$db = Factory::getDBO();
 			$db->setQuery($query);
 			$db->execute();
-		} catch (Exception $e) {
-			Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+		} catch (Exception $exception) {
+			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'error');
 		}
 	}
 }

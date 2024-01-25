@@ -22,6 +22,8 @@ use Joomla\Registry\Registry;
  */
 abstract class SyncPlugin extends DPCalendarPlugin
 {
+	public $params;
+	public $_name;
 	/**
 	 * Getting the sync token to determine if a full sync needs to be done.
 	 *
@@ -33,7 +35,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 	{
 		$uri = str_replace('webcal://', 'https://', $calendar->params->get('uri'));
 
-		if (!$uri) {
+		if ($uri === '' || $uri === '0' || $uri === []) {
 			return random_int(0, mt_getrandmax());
 		}
 
@@ -49,11 +51,11 @@ abstract class SyncPlugin extends DPCalendarPlugin
 		$http     = HttpFactory::getHttp();
 		$response = $http->head($uri);
 
-		if (key_exists('ETag', $response->headers)) {
+		if (array_key_exists('ETag', $response->headers)) {
 			return $response->headers['ETag'];
 		}
 
-		if (key_exists('Last-Modified', $response->headers)) {
+		if (array_key_exists('Last-Modified', $response->headers)) {
 			return $response->headers['Last-Modified'];
 		}
 
@@ -67,7 +69,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 	 * @param \stdClass $calendar
 	 * @param boolean   $force
 	 */
-	private function sync($calendar, $force = false)
+	private function sync($calendar, bool $force = false): void
 	{
 		$calendarId = str_replace($this->identifier . '-', '', $calendar->id);
 		$db         = Factory::getDbo();
@@ -136,8 +138,8 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			$syncDateEnd = clone $syncDateStart;
 			$syncDateEnd->modify('+' . $this->params->get('sync_steps', '1 year'));
 
-			$events = $this->fetchEvents($calendarId, $syncDateStart, $syncDateEnd, $options);
-			foreach ($events as $index => $event) {
+			$events = $this->fetchEvents($calendarId, $options, $syncDateStart, $syncDateEnd);
+			foreach ($events as $event) {
 				// Check if we have processed the event already, mainly on recurring events
 				if (array_key_exists($event->id, $processedEvents)) {
 					continue;
@@ -197,10 +199,9 @@ abstract class SyncPlugin extends DPCalendarPlugin
 			}
 		}
 
-		if ($foundEvents) {
+		if ($foundEvents !== []) {
 			$db->setQuery(
-				'update #__dpcalendar_events set publish_down = null' .
-				' where id in (' . implode(',', $foundEvents) . ') or original_id in (' . implode(',', $foundEvents) . ')'
+				'update #__dpcalendar_events set publish_down = null where id in (' . implode(',', $foundEvents) . ') or original_id in (' . implode(',', $foundEvents) . ')'
 			);
 			$db->execute();
 		}
@@ -228,7 +229,7 @@ abstract class SyncPlugin extends DPCalendarPlugin
 	/**
 	 * Function to force a sync.
 	 */
-	public function onEventsSync($plugin = null, $ids = [])
+	public function onEventsSync($plugin = null, $ids = []): void
 	{
 		// Only do a sync when enabled in the plugin
 		if ($this->params->get('cache', 1) != 2) {

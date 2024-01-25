@@ -52,6 +52,7 @@ class DPCalendarControllerCaldav extends BaseController
 		$db->execute();
 
 		$db->setQuery('select count(id) from #__users');
+
 		$msg = sprintf(Text::_('COM_DPCALENDAR_CONTROLLER_CALDAV_SYNC_SUCCESS'), $db->loadResult());
 
 		$this->setRedirect(Route::_('index.php?option=com_dpcalendar&view=tools', false), $msg);

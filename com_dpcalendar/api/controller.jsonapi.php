@@ -19,6 +19,8 @@ use Joomla\Input\Input;
 
 class DPCalendarController extends ApiController
 {
+	public $modelState;
+	public $input;
 	protected $contentType  = 'dpcalendar';
 	protected $default_view = 'events';
 
@@ -49,7 +51,9 @@ class DPCalendarController extends ApiController
 				continue;
 			}
 
-			!isset($data['com_fields']) && $data['com_fields'] = [];
+			if (!isset($data['com_fields'])) {
+				$data['com_fields'] = [];
+			}
 
 			$data['com_fields'][$field->name] = $data[$field->name];
 

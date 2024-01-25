@@ -28,6 +28,7 @@
 }
 .com-dpcalendar-adminlist .dp-datepicker__input {
 	margin-right: -3px;
+	padding: 0.4rem;
 }
 .com-dpcalendar-adminlist .dp-datepicker__button {
 	margin: 0;
@@ -122,17 +123,8 @@
 .com-dpcalendar-adminlist .js-stools-container-bar {
 	width: unset;
 }
-.com-dpcalendar-adminlist__filterbar {
-	display: flex;
-	float: left;
-	height: inherit !important;
-	margin-right: 5px;
-}
-.com-dpcalendar-adminlist__filterbar .dp-datepicker {
-	margin-right: 5px;
-}
-.com-dpcalendar-adminlist__filterbar input {
-	margin-bottom: 0 !important;
+.com-dpcalendar-adminlist .dp-datepicker {
+	margin-right: 0.5rem;
 }
 .com-dpcalendar-adminlist .js-stools-container-bar .btn-toolbar > * {
 	margin: 0 5px;

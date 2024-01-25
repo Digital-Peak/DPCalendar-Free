@@ -7,6 +7,8 @@
 
 namespace DPCalendar\Helper;
 
+use Joomla\CMS\Layout\LayoutHelper as CMSHelper;
+
 defined('_JEXEC') or die();
 
 class LayoutHelper
@@ -17,6 +19,6 @@ class LayoutHelper
 			$data['layoutHelper'] = $this;
 		}
 
-		return \Joomla\CMS\Layout\LayoutHelper::render($layout, $data, null, ['component' => 'com_dpcalendar', 'client' => 0]);
+		return CMSHelper::render($layout, $data, null, ['component' => 'com_dpcalendar', 'client' => 0]);
 	}
 }

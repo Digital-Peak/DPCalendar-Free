@@ -22,12 +22,12 @@ class SetupForNew implements StageInterface
 	/**
 	 * @var CMSApplication
 	 */
-	private $application = null;
+	private $application;
 
 	/**
 	 * @var User
 	 */
-	private $user = null;
+	private $user;
 
 	private ?\DPCalendarModelTaxrate $taxRateModel = null;
 
@@ -38,10 +38,7 @@ class SetupForNew implements StageInterface
 	 */
 	private $params;
 
-	/**
-	 * @var bool
-	 */
-	private $autoAssignUser = false;
+	private bool $autoAssignUser = false;
 
 	public function __construct(
 		CMSApplication $application,
@@ -49,7 +46,7 @@ class SetupForNew implements StageInterface
 		\DPCalendarModelTaxrate $taxRateModel,
 		\DPCalendarModelCoupon $couponModel,
 		Registry $params,
-		$autoAssignUser
+		bool $autoAssignUser
 	) {
 		$this->application    = $application;
 		$this->user           = $user;
@@ -131,10 +128,10 @@ class SetupForNew implements StageInterface
 		}
 
 		// Determine tax
-		$taxRate = !empty($payload->data['country']) ? $this->taxRateModel->getItemByCountry($payload->data['country']) : null;
+		$taxRate = empty($payload->data['country']) ? null : $this->taxRateModel->getItemByCountry($payload->data['country']);
 		if ($taxRate) {
-			$payload->data['tax']           = $taxRate->inclusive ? $payload->data['price'] - ($payload->data['price'] / (1 + ($taxRate->rate / 100))) : ($payload->data['price'] / 100) * $taxRate->rate;
-			$payload->data['price']         = $payload->data['price'] + (!$taxRate->inclusive ? $payload->data['tax'] : 0);
+			$payload->data['tax'] = $taxRate->inclusive ? $payload->data['price'] - ($payload->data['price'] / (1 + ($taxRate->rate / 100))) : ($payload->data['price'] / 100) * $taxRate->rate;
+			$payload->data['price'] += $taxRate->inclusive ? 0 : $payload->data['tax'];
 			$payload->data['tax_rate']      = $taxRate->rate;
 			$payload->data['tax_title']     = $taxRate->title;
 			$payload->data['tax_inclusive'] = $taxRate->inclusive;
@@ -245,7 +242,7 @@ class SetupForNew implements StageInterface
 			$event->amount_tickets[0] = $this->getAmountTickets($event, $payload, $amount, 0, 0);
 
 			// Add the event to the list of events with tickets
-			if ($event->amount_tickets[0]) {
+			if ($event->amount_tickets[0] !== 0) {
 				$payload->eventsWithTickets[] = $event;
 			}
 
@@ -285,11 +282,14 @@ class SetupForNew implements StageInterface
 				// Add the real price to the full price for tickets
 				$payload->data['price_tickets'] += $priceDiscount;
 			}
-
 			// Ensure there are new tickets
-			if (!$newTickets && $event->amount_tickets[$index]) {
-				$newTickets = true;
+			if ($newTickets) {
+				continue;
 			}
+			if ($event->amount_tickets[$index] === 0) {
+				continue;
+			}
+			$newTickets = true;
 		}
 
 		// Add the event to the list of events with tickets
@@ -377,7 +377,7 @@ class SetupForNew implements StageInterface
 
 		// Ensure a valid number
 		if ($discount < 0) {
-			$discount = 0.0;
+			return 0.0;
 		}
 
 		// Return the discount

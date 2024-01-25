@@ -144,13 +144,13 @@ class DPCalendarModelForm extends DPCalendarModelAdminEvent
 		$app = Factory::getApplication();
 
 		// Load state from the request.
-		$pk = Factory::getApplication()->input->getString('e_id');
+		$pk = Factory::getApplication()->input->getString('e_id', '');
 		$this->setState('event.id', $pk);
 
 		// Add compatibility variable for default naming conventions.
 		$this->setState('form.id', $pk);
 
-		$categoryId = Factory::getApplication()->input->getString('catid');
+		$categoryId = Factory::getApplication()->input->getString('catid', '');
 		$this->setState('event.catid', $categoryId);
 
 		$return = Factory::getApplication()->input->get('return', null, 'default', 'base64');

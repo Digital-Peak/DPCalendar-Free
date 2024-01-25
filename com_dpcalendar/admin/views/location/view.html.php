@@ -12,7 +12,9 @@ defined('_JEXEC') or die();
 
 class DPCalendarViewLocation extends BaseView
 {
-	public function init()
+	public $location;
+	public $form;
+	protected function init()
 	{
 		$this->location = $this->get('Item');
 		$this->form     = $this->get('Form');
@@ -23,7 +25,7 @@ class DPCalendarViewLocation extends BaseView
 		$this->input->set('hidemainmenu', true);
 
 		$isNew      = ($this->location->id == 0);
-		$checkedOut = !($this->location->checked_out == 0 || $this->location->checked_out == $this->user->id);
+		$checkedOut = $this->location->checked_out != 0 && $this->location->checked_out != $this->user->id;
 		$canDo      = DPCalendarHelper::getActions();
 
 		if (!$checkedOut && $canDo->get('core.edit')) {

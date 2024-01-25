@@ -124,10 +124,13 @@ class DPCalendarModelExtcalendar extends AdminModel
 			// Increment the content version number.
 			$table->version++;
 		}
-
-		if (!isset($table->state) && $this->canEditState($table)) {
-			$table->state = 1;
+		if (isset($table->state)) {
+			return;
 		}
+		if (!$this->canEditState($table)) {
+			return;
+		}
+		$table->state = 1;
 	}
 
 	public function cleanEventCache($plugin)
@@ -151,7 +154,7 @@ class DPCalendarModelExtcalendar extends AdminModel
 					$ids[] = $externalCalendar->id;
 				}
 			}
-			if ($ids) {
+			if ($ids !== []) {
 				// Delete the events
 				$this->getDbo()->setQuery("delete from #__dpcalendar_events where catid in ('" . implode("','", $ids) . "')");
 				$this->getDbo()->execute();

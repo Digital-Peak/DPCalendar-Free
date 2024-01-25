@@ -1,5 +1,6 @@
 <?php
 
+use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\View\BaseView;
 use Joomla\CMS\Factory;
 
@@ -12,13 +13,31 @@ defined('_JEXEC') or die();
 
 class DPCalendarViewCpanel extends BaseView
 {
-	protected $title = 'COM_DPCALENDAR_VIEW_CPANEL';
+	public $upcomingEvents;
+	public $newEvents;
+	public $lastModifiedEvents;
+	public $totalEvents;
+	public $totalBookings;
+	public $calendars;
+	/**
+	 * @var never[]|mixed[]
+	 */
+	public $calendarsInternal;
+	/**
+	 * @var never[]|mixed[]
+	 */
+	public $calendarsExternal;
+	/**
+	 * @var bool
+	 */
+	public $needsGeoDBUpdate;
+	public $title = 'COM_DPCALENDAR_VIEW_CPANEL';
 
 	protected function init()
 	{
 		$model = $this->getModel();
 
-		$this->upcomingEvents     = $model->getEvents(\DPCalendar\Helper\DPCalendarHelper::getDate());
+		$this->upcomingEvents     = $model->getEvents(DPCalendarHelper::getDate());
 		$this->newEvents          = $model->getEvents(0, 'a.created', 'desc');
 		$this->lastModifiedEvents = $model->getEvents(0, 'a.modified', 'desc');
 

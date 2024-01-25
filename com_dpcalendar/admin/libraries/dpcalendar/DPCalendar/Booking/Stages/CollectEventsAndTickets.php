@@ -23,7 +23,7 @@ class CollectEventsAndTickets implements StageInterface
 	/**
 	 * @var CMSApplication
 	 */
-	private $application = null;
+	private $application;
 
 	public function __construct(CMSApplication $application, \DPCalendarModelBooking $model)
 	{
@@ -39,7 +39,7 @@ class CollectEventsAndTickets implements StageInterface
 				$payload->events[$ticket->event_id]                     = $this->model->getEvent($ticket->event_id);
 				$payload->events[$ticket->event_id]->waiting_list_count = count((array) array_filter(
 					$payload->events[$ticket->event_id]->tickets,
-					fn ($t) => $t->state == 8
+					static fn ($t): bool => $t->state == 8
 				));
 			}
 			$payload->eventsWithTickets = $payload->events;
@@ -64,7 +64,7 @@ class CollectEventsAndTickets implements StageInterface
 				unset($payload->data['event_id'][$eId]);
 			}
 
-			$event->waiting_list_count = count((array) array_filter($event->tickets, fn ($t) => $t->state == 8));
+			$event->waiting_list_count = count((array) array_filter($event->tickets, static fn ($t): bool => $t->state == 8));
 
 			// If we can't book continue
 			if (!Booking::openForBooking($event)) {

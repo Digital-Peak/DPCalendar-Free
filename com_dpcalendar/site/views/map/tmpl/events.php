@@ -51,9 +51,13 @@ $messages = $this->app->getMessageQueue();
 $lists = [];
 if (is_array($messages) && count($messages)) {
 	foreach ($messages as $message) {
-		if (isset($message['type']) && isset($message['message'])) {
-			$lists[$message['type']][] = $message['message'];
+		if (!isset($message['type'])) {
+			continue;
 		}
+		if (!isset($message['message'])) {
+			continue;
+		}
+		$lists[$message['type']][] = $message['message'];
 	}
 }
 

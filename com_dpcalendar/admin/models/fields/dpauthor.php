@@ -18,6 +18,7 @@ if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Fie
 
 class JFormFieldDPAuthor extends ListField
 {
+	public $element;
 	public $type = 'DPAuthor';
 
 	protected function getOptions()

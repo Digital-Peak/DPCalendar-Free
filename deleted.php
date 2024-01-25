@@ -497,6 +497,17 @@ $files = [
 '/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/src/Data/QRDataAbstract.php',
 '/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/src/Data/QRDataInterface.php',
 '/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/src/Helpers',
+
+// From v8.16.0 to update dependencies
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/.editorconfig',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/.phan',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-qrcode/.readthedocs.yml',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-settings-container/.phan',
+'/administrator/components/com_dpcalendar/vendor/chillerlan/php-settings-container/phpdoc.xml',
+'/administrator/components/com_dpcalendar/vendor/phenx/php-font-lib/.htaccess',
+'/administrator/components/com_dpcalendar/vendor/phenx/php-font-lib/bower.json',
+'/administrator/components/com_dpcalendar/vendor/phenx/php-font-lib/index.php',
+'/administrator/components/com_dpcalendar/vendor/phenx/php-font-lib/src/FontLib/Autoloader.php',
 ];
 
 foreach ($files as $file) {

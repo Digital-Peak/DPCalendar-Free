@@ -20,14 +20,15 @@ JLoader::import('controllers.location', JPATH_ADMINISTRATOR . '/components/com_d
 
 class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 {
+	public $option;
+	public $input;
 	protected $view_item = 'locationform';
 
-	public function __construct($config = [])
+	public function __construct()
 	{
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
 		Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables');
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
-
 		parent::__construct();
 	}
 
@@ -35,7 +36,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 	{
 		$location = null;
 
-		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
+		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 		if ($recordId) {
 			$location = $this->getModel()->getItem($recordId);
 		}
@@ -52,7 +53,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 	{
 		$location = null;
 
-		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
+		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 		if ($recordId) {
 			$location = $this->getModel()->getItem($recordId);
 		}
@@ -123,7 +124,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 
 	public function delete($key = 'l_id')
 	{
-		$recordId = $this->input->getInt($key);
+		$recordId = $this->input->getInt($key, 0);
 
 		if (!$this->allowDelete([
 			$key => $recordId
@@ -166,7 +167,7 @@ class DPCalendarControllerLocationForm extends DPCalendarControllerLocation
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = null)
 	{
 		$append = parent::getRedirectToItemAppend($recordId, $urlVar);
-		$itemId = $this->input->getInt('Itemid');
+		$itemId = $this->input->getInt('Itemid', 0);
 
 		if ($itemId) {
 			$append .= '&Itemid=' . $itemId;

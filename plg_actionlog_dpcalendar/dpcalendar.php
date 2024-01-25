@@ -16,7 +16,7 @@ if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\Component\\Act
 
 class PlgActionlogDPCalendar extends ActionLogPlugin
 {
-	public function onContentAfterSave($context, $item, $isNew)
+	public function onContentAfterSave($context, $item, $isNew): void
 	{
 		$message = $this->getMessage($context, $item, $isNew ? 'add' : 'update');
 
@@ -27,7 +27,7 @@ class PlgActionlogDPCalendar extends ActionLogPlugin
 		$this->addLog([$message], $isNew ? 'PLG_SYSTEM_ACTIONLOGS_CONTENT_ADDED' : 'PLG_SYSTEM_ACTIONLOGS_CONTENT_UPDATED', $context);
 	}
 
-	public function onContentAfterDelete($context, $item)
+	public function onContentAfterDelete($context, $item): void
 	{
 		$message = $this->getMessage($context, $item, 'delete');
 
@@ -38,7 +38,7 @@ class PlgActionlogDPCalendar extends ActionLogPlugin
 		$this->addLog([$message], 'PLG_SYSTEM_ACTIONLOGS_CONTENT_DELETED', $context);
 	}
 
-	private function getMessage($context, $item, $action)
+	private function getMessage($context, $item, string $action)
 	{
 		if (strpos($context, 'com_dpcalendar.') !== 0) {
 			return null;

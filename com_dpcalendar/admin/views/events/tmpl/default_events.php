@@ -118,16 +118,30 @@ $return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ID'); ?>"><?php echo (int)$item->id; ?></td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE'); ?>">
-					<?php if (($canEdit || $canEditOwn) && $item->original_title) { ?>
-						<a href="<?php echo $this->router->route('index.php?option=com_dpcalendar&task=event.edit&e_id=' . $item->original_id); ?>"
-						   title="<?php echo $this->translate('JACTION_EDIT'); ?>">
-							<?php echo $this->escape($item->original_title); ?>
+					<?php if (($canEdit || $canEditOwn) && $item->original_title) {
+							?>
+						<a href="<?php 
+							echo $this->router->route('index.php?option=com_dpcalendar&task=event.edit&e_id=' . $item->original_id);
+							?>"
+						   title="<?php 
+							echo $this->translate('JACTION_EDIT');
+							?>">
+							<?php 
+							echo $this->escape($item->original_title);
+							?>
 						</a>
-					<?php } else if ($item->original_title) { ?>
-						<span title="<?php echo Text::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->alias)); ?>">
-							<?php echo $this->escape($item->title); ?>
+					<?php 
+						} elseif ($item->original_title) {
+							?>
+						<span title="<?php 
+							echo Text::sprintf('JFIELD_ALIAS_LABEL', $this->escape($item->alias));
+							?>">
+							<?php 
+							echo $this->escape($item->title);
+							?>
 						</span>
-					<?php } ?>
+					<?php 
+						} ?>
 				</td>
 			</tr>
 		<?php } ?>

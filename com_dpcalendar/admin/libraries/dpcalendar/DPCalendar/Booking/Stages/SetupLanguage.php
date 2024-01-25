@@ -20,7 +20,7 @@ class SetupLanguage implements StageInterface
 	/**
 	 * @var CMSApplication
 	 */
-	private $application = null;
+	private $application;
 
 	public function __construct(CMSApplication $application)
 	{

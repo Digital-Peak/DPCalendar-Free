@@ -25,7 +25,7 @@ if (!$params) {
 }
 
 // Compile the return url
-$return = $displayData['input']->getInt('Itemid', null);
+$return = $displayData['input']->getInt('Itemid', 0);
 if (!empty($return)) {
 	$uri    = clone Uri::getInstance();
 	$uri    = $uri->toString(['scheme', 'host', 'port']);
@@ -33,7 +33,7 @@ if (!empty($return)) {
 }
 
 $calendar = DPCalendarHelper::getCalendar($event->catid);
-$user     = !empty($displayData['user']) ? $displayData['user'] : Factory::getUser();
+$user     = empty($displayData['user']) ? Factory::getUser() : $displayData['user'];
 ?>
 <div class="dp-event-tooltip">
 	<div class="dp-event-tooltip__date">

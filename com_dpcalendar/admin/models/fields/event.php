@@ -14,28 +14,32 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Session\Session;
+use Joomla\CMS\WebAsset\WebAssetManager;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 class JFormFieldEvent extends FormField
 {
+	public $element;
+	public $value;
+	public $id;
+	public $required;
+	public $name;
 	protected $type = 'Event';
 
 	protected function getInput()
 	{
-		$allowNew       = ((string)$this->element['new'] == 'true');
-		$allowEdit      = ((string)$this->element['edit'] == 'true');
-		$allowClear     = ((string)$this->element['clear'] != 'false');
-		$allowSelect    = ((string)$this->element['select'] != 'false');
-		$allowPropagate = ((string)$this->element['propagate'] == 'true');
-
-		$languages = LanguageHelper::getContentLanguages([0, 1], false);
+		$allowNew    = ((string)$this->element['new'] == 'true');
+		$allowEdit   = ((string)$this->element['edit'] == 'true');
+		$allowClear  = ((string)$this->element['clear'] != 'false');
+		$allowSelect = ((string)$this->element['select'] != 'false');
+		LanguageHelper::getContentLanguages([0, 1], false);
 
 		// Load language
 		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR);
 
 		// The active article id field.
-		$value = (int)$this->value ?: '';
+		$value = (int)$this->value !== 0 ? (int)$this->value : '';
 
 		// Create the modal id.
 		$modalId = 'Event_' . $this->id;
@@ -44,7 +48,7 @@ class JFormFieldEvent extends FormField
 			HTMLHelper::_('jquery.framework');
 			HTMLHelper::_('script', 'system/modal-fields.js', ['version' => 'auto', 'relative' => true]);
 		} else {
-			/** @var \Joomla\CMS\WebAsset\WebAssetManager $wa */
+			/** @var WebAssetManager $wa */
 			$wa = Factory::getApplication()->getDocument()->getWebAssetManager();
 
 			// Add the modal field script to the document head.
@@ -85,22 +89,18 @@ class JFormFieldEvent extends FormField
 		}
 
 		$urlSelect = $linkArticles . '&amp;function=jSelectEvent_' . $this->id;
-		$urlEdit   = $linkArticle . '&amp;task=event.edit&amp;id=\' + document.getElementById(&quot;' . $this->id . '_id&quot;).value + \'';
+		$urlEdit   = $linkArticle . "&amp;task=event.edit&amp;id=' + document.getElementById(&quot;" . $this->id . "_id&quot;).value + '";
 		$urlNew    = $linkArticle . '&amp;task=event.add';
-
-		if ($value) {
-			$db    = Factory::getDbo();
-			$query = $db->getQuery(true)
+		$db        = Factory::getDbo();
+		$query     = $db->getQuery(true)
 				->select($db->quoteName('title'))
 				->from($db->quoteName('#__dpcalendar_events'))
 				->where($db->quoteName('id') . ' = ' . (int)$value);
-			$db->setQuery($query);
-
-			try {
-				$title = $db->loadResult();
-			} catch (\RuntimeException $e) {
-				Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
-			}
+		$db->setQuery($query);
+		try {
+			$title = $db->loadResult();
+		} catch (RuntimeException $runtimeException) {
+			Factory::getApplication()->enqueueMessage($runtimeException->getMessage(), 'error');
 		}
 
 		$title = empty($title) ? Text::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT') : htmlspecialchars($title, ENT_QUOTES, 'UTF-8');
@@ -116,8 +116,7 @@ class JFormFieldEvent extends FormField
 
 		// Select article button
 		if ($allowSelect) {
-			$html .= '<button'
-				. ' class="btn btn-primary' . ($value ? ' hidden' : '') . '"'
+			$html .= '<button class="btn btn-primary' . ($value !== 0 && $value !== 0 && ($value !== 0 && $value !== '0') ? ' hidden' : '') . '"'
 				. ' id="' . $this->id . '_select"'
 				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
@@ -128,8 +127,7 @@ class JFormFieldEvent extends FormField
 
 		// New article button
 		if ($allowNew) {
-			$html .= '<button'
-				. ' class="btn btn-secondary' . ($value ? ' hidden' : '') . '"'
+			$html .= '<button class="btn btn-secondary' . ($value !== 0 && $value !== 0 && ($value !== 0 && $value !== '0') ? ' hidden' : '') . '"'
 				. ' id="' . $this->id . '_new"'
 				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
@@ -140,8 +138,7 @@ class JFormFieldEvent extends FormField
 
 		// Edit article button
 		if ($allowEdit) {
-			$html .= '<button'
-				. ' class="btn btn-secondary' . ($value ? '' : ' hidden') . '"'
+			$html .= '<button class="btn btn-secondary' . ($value !== 0 && $value !== 0 && ($value !== 0 && $value !== '0') ? '' : ' hidden') . '"'
 				. ' id="' . $this->id . '_edit"'
 				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
@@ -152,11 +149,10 @@ class JFormFieldEvent extends FormField
 
 		// Clear article button
 		if ($allowClear) {
-			$html .= '<button'
-				. ' class="btn btn-secondary' . ($value ? '' : ' hidden') . '"'
+			$html .= '<button class="btn btn-secondary' . ($value !== 0 && $value !== 0 && ($value !== 0 && $value !== '0') ? '' : ' hidden') . '"'
 				. ' id="' . $this->id . '_clear"'
 				. ' type="button"'
-				. ' onclick="window.processModalParent(\'' . $this->id . '\'); document.getElementById(\'' . $this->id . '_id\').dispatchEvent(new Event(\'change\')); return false;">'
+				. ' onclick="window.processModalParent(\'' . $this->id . "'); document.getElementById('" . $this->id . '_id\').dispatchEvent(new Event(\'change\')); return false;">'
 				. '<span class="fas fa-times" aria-hidden="true"></span> ' . Text::_('JCLEAR')
 				. '</button>';
 		}
@@ -198,8 +194,7 @@ class JFormFieldEvent extends FormField
 					'width'       => '800px',
 					'bodyHeight'  => 70,
 					'modalWidth'  => 80,
-					'footer'      => '<button type="button" class="btn btn-secondary"'
-						. ' onclick="window.processModalEdit(this, \'' . $this->id . '\', \'add\', \'event\', \'cancel\', \'item-form\'); return false;">'
+					'footer'      => '<button type="button" class="btn btn-secondary" onclick="window.processModalEdit(this, \'' . $this->id . '\', \'add\', \'event\', \'cancel\', \'item-form\'); return false;">'
 						. Text::_('COM_DPCALENDAR_CLOSE') . '</button>'
 						. '<button type="button" class="btn btn-primary"'
 						. ' onclick="window.processModalEdit(this, \'' . $this->id . '\', \'add\', \'event\', \'save\', \'item-form\'); return false;">'
@@ -226,8 +221,7 @@ class JFormFieldEvent extends FormField
 					'width'       => '800px',
 					'bodyHeight'  => 70,
 					'modalWidth'  => 80,
-					'footer'      => '<button type="button" class="btn btn-secondary"'
-						. ' onclick="window.processModalEdit(this, \'' . $this->id . '\', \'edit\', \'event\', \'cancel\', \'item-form\'); return false;">'
+					'footer'      => '<button type="button" class="btn btn-secondary" onclick="window.processModalEdit(this, \'' . $this->id . '\', \'edit\', \'event\', \'cancel\', \'item-form\'); return false;">'
 						. Text::_('COM_DPCALENDAR_CLOSE') . '</button>'
 						. '<button type="button" class="btn btn-primary"'
 						. ' onclick="window.processModalEdit(this, \'' . $this->id . '\', \'edit\', \'event\', \'save\', \'item-form\'); return false;">'
@@ -242,10 +236,8 @@ class JFormFieldEvent extends FormField
 		// Note: class='required' for client side validation.
 		$class = $this->required ? ' class="required modal-value"' : '';
 
-		$html .= '<input type="hidden" id="' . $this->id . '_id" ' . $class . ' data-required="' . (int)$this->required . '" name="' . $this->name
-			. '" data-text="' . htmlspecialchars(Text::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT'), ENT_COMPAT, 'UTF-8') . '" value="' . $value . '">';
-
-		return $html;
+		return $html . ('<input type="hidden" id="' . $this->id . '_id" ' . $class . ' data-required="' . (int)$this->required . '" name="' . $this->name
+			. '" data-text="' . htmlspecialchars(Text::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT'), ENT_COMPAT, 'UTF-8') . '" value="' . $value . '">');
 	}
 
 	/**

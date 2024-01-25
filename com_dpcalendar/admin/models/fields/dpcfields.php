@@ -24,6 +24,7 @@ if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Fie
 
 class JFormFieldDPCFields extends ListField
 {
+	public $element;
 	public $type = 'DPCFields';
 
 	protected function getOptions()
@@ -38,9 +39,15 @@ class JFormFieldDPCFields extends ListField
 		$hide = explode(',', $this->element['hide'] ?: '');
 		$form = Form::getInstance('com_dpcalendar.' . $this->element['section'], $this->element['section'], ['control' => 'jform']);
 		foreach ($form->getFieldset() as $field) {
+			$fieldName = $field->fieldname;
+
+			// When no filter form use the compiled field name
+			if (strpos($this->element['section'], 'filter') === false) {
+				$fieldName = DPCalendarHelper::getFieldName($field);
+			}
 			$isHidden = false;
 			foreach ($hide as $toHide) {
-				if (!fnmatch($toHide, DPCalendarHelper::getFieldName($field)) && $field->type != 'Spacer') {
+				if (!fnmatch($toHide, $fieldName) && $field->type != 'Spacer') {
 					continue;
 				}
 
@@ -52,7 +59,7 @@ class JFormFieldDPCFields extends ListField
 				continue;
 			}
 
-			$options[] = HTMLHelper::_('select.option', DPCalendarHelper::getFieldName($field), Text::_($field->getTitle()));
+			$options[] = HTMLHelper::_('select.option', $fieldName, Text::_($field->getTitle()));
 		}
 
 		$fields = FieldsHelper::getFields('com_dpcalendar.' . $this->element['section']);

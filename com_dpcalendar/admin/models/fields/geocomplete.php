@@ -22,6 +22,7 @@ if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Fie
 
 class JFormFieldGeocomplete extends TextField
 {
+	public $id;
 	protected $type = 'Geocomplete';
 
 	public function getInput()
@@ -33,9 +34,7 @@ class JFormFieldGeocomplete extends TextField
 
 		$input = parent::getInput();
 
-		$input .= '<button id="' . $this->id . '_find" class="dp-button dp-button-action" type="button" title="' . Text::_('JSEARCH_FILTER_SUBMIT') .
-			'"><i class="icon-search"></i></button>';
-
-		return $input;
+		return $input . ('<button id="' . $this->id . '_find" class="dp-button dp-button-action" type="button" title="' . Text::_('JSEARCH_FILTER_SUBMIT') .
+			'"><i class="icon-search"></i></button>');
 	}
 }

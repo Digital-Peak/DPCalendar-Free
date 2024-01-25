@@ -98,13 +98,13 @@ $options['views']['resday'] = [
 
 $max = $this->params->get('locations_max_time', 24);
 if (is_numeric($max)) {
-	$max = $max . ':00:00';
+	$max .= ':00:00';
 }
 $options['slotMaxTime'] = $max;
 
 $min = $this->params->get('locations_min_time', 0);
 if (is_numeric($min)) {
-	$min = $min . ':00:00';
+	$min .= ':00:00';
 }
 $options['slotMinTime'] = $min;
 

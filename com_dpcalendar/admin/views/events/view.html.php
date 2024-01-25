@@ -18,44 +18,45 @@ use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarViewEvents extends BaseView
 {
+	public $startDate;
+	public $endDate;
 	protected $items;
 	protected $pagination;
 	protected $authors;
 
-	public function init()
+	protected function init()
 	{
 		$this->setModel(BaseDatabaseModel::getInstance('AdminEvents', 'DPCalendarModel'), true);
 		$this->items      = $this->get('Items');
 		$this->pagination = $this->get('Pagination');
 		$this->authors    = $this->get('Authors');
 
-		$this->displayData['format'] = $this->params->get('event_form_date_format', 'd.m.Y');
+		$this->filterForm->removeField('location', 'filter');
+		$this->filterForm->removeField('length-type', 'filter');
+		$this->filterForm->removeField('radius', 'filter');
+		$this->filterForm->setFieldAttribute('calendars', 'multiple', 'false', 'filter');
 
 		$this->startDate = null;
-		if ($this->state->get('filter.search_start')) {
-			$this->startDate = DPCalendarHelper::getDateFromString(
-				$this->state->get('filter.search_start'),
-				null,
-				true,
-				$this->params->get('event_form_date_format', 'd.m.Y')
-			);
+		if ($date = $this->state->get('list.start-date')) {
+			$this->filterForm->setValue('start-date', 'list', $date);
 		}
 
 		$this->endDate = null;
-		if ($this->state->get('filter.search_end')) {
-			$this->endDate = DPCalendarHelper::getDateFromString(
-				$this->state->get('filter.search_end'),
-				null,
-				true,
-				$this->params->get('event_form_date_format', 'd.m.Y')
-			);
+		if ($date = $this->state->get('list.end-date')) {
+			$this->filterForm->setValue('end-date', 'list', $date);
 		}
+
+		// Set the date formats
+		$this->filterForm->setFieldAttribute('start-date', 'format', $this->params->get('event_form_date_format', 'd.m.Y'), 'list');
+		$this->filterForm->setFieldAttribute('start-date', 'formatted', '1', 'list');
+		$this->filterForm->setFieldAttribute('end-date', 'format', $this->params->get('event_form_date_format', 'd.m.Y'), 'list');
+		$this->filterForm->setFieldAttribute('end-date', 'formatted', '1', 'list');
 	}
 
 	protected function addToolbar()
 	{
 		$state = $this->get('State');
-		$canDo = \DPCalendarHelper::getActions($state->get('filter.category_id'));
+		$canDo = \DPCalendarHelper::getActions();
 		$user  = Factory::getUser();
 
 		$bar = Toolbar::getInstance('toolbar');
@@ -86,8 +87,8 @@ class DPCalendarViewEvents extends BaseView
 		if ($user->authorise('core.edit') && DPCalendarHelper::isJoomlaVersion('3')) {
 			$title = Text::_('JTOOLBAR_BATCH');
 			$dhtml = "<button data-toggle=\"modal\" data-target=\"#collapseModal\" class=\"btn btn-small\">
-			<i class=\"icon-checkbox-partial\" title=\"$title\"></i>
-			$title</button>";
+			<i class=\"icon-checkbox-partial\" title=\"{$title}\"></i>
+			{$title}</button>";
 			$bar->appendButton('Custom', $dhtml, 'batch');
 		}
 

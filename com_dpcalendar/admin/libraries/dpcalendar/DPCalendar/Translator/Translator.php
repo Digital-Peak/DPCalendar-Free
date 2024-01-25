@@ -20,7 +20,7 @@ class Translator
 
 	public function __construct(Language $language = null)
 	{
-		if ($language === null) {
+		if (!$language instanceof Language) {
 			$language = Factory::getLanguage();
 		}
 
@@ -32,7 +32,7 @@ class Translator
 		return $this->language->_($string);
 	}
 
-	public function translateJS($string)
+	public function translateJS($string): void
 	{
 		Text::script($string);
 	}

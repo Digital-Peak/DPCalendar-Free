@@ -15,10 +15,11 @@ defined('_JEXEC') or die();
 
 class PlgUserDPCalendar extends CMSPlugin
 {
+	public $params;
 	protected $app;
 	protected $autoloadLanguage = true;
 
-	public function onUserAfterSave($user, $isNew, $success, $msg)
+	public function onUserAfterSave($user, $isNew, $success, $msg): void
 	{
 		if (!$success) {
 			return;
@@ -100,7 +101,7 @@ class PlgUserDPCalendar extends CMSPlugin
 		}
 	}
 
-	public function onUserAfterDelete($user, $success, $msg)
+	public function onUserAfterDelete($user, $success, $msg): void
 	{
 		if (!$success) {
 			return;
@@ -113,6 +114,7 @@ class PlgUserDPCalendar extends CMSPlugin
 		$query->delete('#__dpcalendar_caldav_groupmembers');
 		$query->where('principal_id in (select id from #__dpcalendar_caldav_principals where external_id = ' . (int)$user['id'] . ')');
 		$query->orWhere('member_id in (select id from #__dpcalendar_caldav_principals where external_id = ' . (int)$user['id'] . ')');
+
 		$db->setQuery($query);
 		$db->execute();
 
@@ -125,6 +127,7 @@ class PlgUserDPCalendar extends CMSPlugin
 		$query = $db->getQuery(true);
 		$query->delete('#__dpcalendar_caldav_calendarobjects');
 		$query->where('calendarid in (' . $subQuery . ')');
+
 		$db->setQuery($query);
 		$db->execute();
 
@@ -137,12 +140,14 @@ class PlgUserDPCalendar extends CMSPlugin
 		$query = $db->getQuery(true);
 		$query->delete('#__dpcalendar_caldav_calendars');
 		$query->where('id in (' . $subQuery . ')');
+
 		$db->setQuery($query);
 		$db->execute();
 
 		$query = $db->getQuery(true);
 		$query->delete('#__dpcalendar_caldav_calendarinstances');
 		$query->where('principaluri = ' . $db->quote('principals/' . $user['username']));
+
 		$db->setQuery($query);
 		$db->execute();
 
@@ -150,6 +155,7 @@ class PlgUserDPCalendar extends CMSPlugin
 		$query = $db->getQuery(true);
 		$query->delete('#__dpcalendar_caldav_principals');
 		$query->where('external_id = ' . (int)$user['id']);
+
 		$db->setQuery($query);
 		$db->execute();
 	}

@@ -16,7 +16,7 @@ class DPCalendarViewExtcalendar extends BaseView
 	protected $item;
 	protected $form;
 
-	public function init()
+	protected function init()
 	{
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');

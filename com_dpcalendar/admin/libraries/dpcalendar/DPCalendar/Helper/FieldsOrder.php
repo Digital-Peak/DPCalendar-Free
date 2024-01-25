@@ -30,7 +30,7 @@ class FieldsOrder
 		$bookingFields[] = (object)['id' => 'telephone', 'name' => 'telephone'];
 		$bookingFields[] = (object)[
 			'id'    => 'country',
-			'name'  => 'country' . (!empty($booking->country_code_value) ? '_code_value' : ''),
+			'name'  => 'country' . (empty($booking->country_code_value) ? '' : '_code_value'),
 			'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'
 		];
 		$bookingFields[] = (object)[
@@ -50,7 +50,7 @@ class FieldsOrder
 		foreach ($order as $index => $field) {
 			$field = (object)$field;
 			if ($field->field == 'country') {
-				$order->{$index}->field = 'country' . (!empty($booking->country_code_value) ? '_code_value' : '');
+				$order->{$index}->field = 'country' . (empty($booking->country_code_value) ? '' : '_code_value');
 			}
 		}
 
@@ -102,7 +102,7 @@ class FieldsOrder
 		$ticketFields[] = (object)['id' => 'email', 'name' => 'email'];
 		$ticketFields[] = (object)[
 			'id'    => 'country',
-			'name'  => 'country' . (!empty($ticket->country_code_value) ? '_code_value' : ''),
+			'name'  => 'country' . (empty($ticket->country_code_value) ? '' : '_code_value'),
 			'label' => 'COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL'
 		];
 		$ticketFields[] = (object)[
@@ -123,7 +123,7 @@ class FieldsOrder
 		foreach ($order as $index => $field) {
 			$field = (object)$field;
 			if ($field->field == 'country') {
-				$order->{$index}->field = 'country' . (!empty($ticket->country_code_value) ? '_code_value' : '');
+				$order->{$index}->field = 'country' . (empty($ticket->country_code_value) ? '' : '_code_value');
 			}
 		}
 

@@ -108,7 +108,7 @@ trait ExportTrait
 			(object)['id' => 'timezone', 'name' => 'timezone', 'label' => Text::_('COM_DPCALENDAR_TIMEZONE')]
 		];
 
-		$parser = function ($name, $booking) {
+		$parser = static function ($name, $booking) {
 			switch ($name) {
 				case 'status':
 					return Booking::getStatusLabel($booking);
@@ -176,7 +176,7 @@ trait ExportTrait
 			(object)['id' => 'timezone', 'name' => 'timezone', 'label' => Text::_('COM_DPCALENDAR_TIMEZONE')]
 		];
 
-		$parser = function ($name, $ticket) {
+		$parser = static function ($name, $ticket) {
 			switch ($name) {
 				case 'status':
 					return Booking::getStatusLabel($ticket);
@@ -242,7 +242,7 @@ trait ExportTrait
 		$parser = function ($name, $location) {
 			switch ($name) {
 				case 'rooms':
-					return implode(', ', array_map(fn ($room) => $room->title, (array)$location->rooms));
+					return implode(', ', array_map(static fn ($room) => $room->title, (array)$location->rooms));
 				case 'status':
 					return Booking::getStatusLabel($location);
 				case 'created':
@@ -288,10 +288,10 @@ trait ExportTrait
 
 		$fields = array_merge($fields, \FieldsHelper::getFields('com_dpcalendar.' . $realName));
 		DPCalendarHelper::sortFields($fields, $order);
-		$fields = array_filter($fields, fn ($field) => !in_array($field->name, $this->params->get('export_' . $realName . 's_fields_hide', [])));
+		$fields = array_filter($fields, fn ($field): bool => !in_array($field->name, $this->params->get('export_' . $realName . 's_fields_hide', [])));
 
 		$data   = [];
-		$data[] = array_map(fn ($field) => $field->label, $fields);
+		$data[] = array_map(static fn ($field) => $field->label, $fields);
 
 		foreach ($items as $item) {
 			if (empty($item->text)) {
@@ -301,7 +301,7 @@ trait ExportTrait
 			$this->app->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $realName, &$item, &$item->params, 0]);
 			$line = [];
 			foreach ($fields as $field) {
-				if (!isset($item->jcfields) || !key_exists($field->id, $item->jcfields)) {
+				if (!isset($item->jcfields) || !array_key_exists($field->id, $item->jcfields)) {
 					$line[] = html_entity_decode($valueParser($field->name, $item) ?? '');
 					continue;
 				}

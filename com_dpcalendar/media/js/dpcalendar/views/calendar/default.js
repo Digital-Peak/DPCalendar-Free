@@ -53,7 +53,9 @@
 		};
 		document.addEventListener('click', (event) => {
 			quickAdds.forEach((quickAdd) => {
-				if (quickAdd.contains(event.target) || event.target.classList.contains('dp-autocomplete__item-title')) {
+				if (quickAdd.contains(event.target)
+					|| event.target.classList.contains('dp-autocomplete__item-title')
+					|| event.target.classList.contains('dp-select-option')) {
 					return;
 				}
 				quickAdd.style.display = 'none';

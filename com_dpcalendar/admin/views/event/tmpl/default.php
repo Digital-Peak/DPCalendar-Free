@@ -39,18 +39,26 @@ if (!empty($this->seriesEvents)) {
 	<div class="com-dpcalendar-eventform__loader">
 		<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 	</div>
-	<?php if ($this->event->original_id == '-1') { ?>
+	<?php if ($this->event->original_id == '-1') {
+	?>
 		<h4 class="com-dpcalendar-eventform__original-warning dp-info-box">
-			<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_ORIGINAL_WARNING'); ?>
+			<?php 
+	echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_ORIGINAL_WARNING');
+	?>
 		</h4>
-	<?php } else if (!empty($this->event->original_id)) { ?>
+	<?php 
+} elseif (!empty($this->event->original_id)) {
+	?>
 		<h4 class="dp-info-box">
-			<?php echo sprintf(
-				$this->translate('COM_DPCALENDAR_VIEW_EVENT_GOTO_ORIGINAL'),
-				$this->router->getEventFormRoute($this->event->original_id, $this->returnPage ? base64_decode($this->returnPage) : '')
-			); ?>
+			<?php 
+	echo sprintf(
+ 				$this->translate('COM_DPCALENDAR_VIEW_EVENT_GOTO_ORIGINAL'),
+ 				$this->router->getEventFormRoute($this->event->original_id, $this->returnPage ? base64_decode($this->returnPage) : '')
+ 			);
+	?>
 		</h4>
-	<?php } ?>
+	<?php 
+} ?>
 	<?php if ($this->params->get('event_form_check_overlaping', 0)) { ?>
 		<div class="com-dpcalendar-eventform__overlapping dp-info-box"
 			 data-overlapping="<?php echo $this->params->get('event_form_check_overlaping', 0) == '2'; ?>"></div>

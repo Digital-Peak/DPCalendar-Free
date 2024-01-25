@@ -14,6 +14,10 @@ use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 
 class DPCalendarViewEvents extends BaseApiView
 {
+	/**
+	 * @var DPCalendarSerializer
+	 */
+	public $serializer;
 	protected $fieldsToRenderItem = [
 		'id',
 		'typeAlias',
@@ -30,6 +34,8 @@ class DPCalendarViewEvents extends BaseApiView
 		'state',
 		'calendar',
 		'images',
+		'location_ids',
+		'host_ids',
 		'metakey',
 		'metadesc',
 		'metadata',
@@ -66,6 +72,8 @@ class DPCalendarViewEvents extends BaseApiView
 		'state',
 		'calendar',
 		'images',
+		'location_ids',
+		'host_ids',
 		'metakey',
 		'metadesc',
 		'metadata',

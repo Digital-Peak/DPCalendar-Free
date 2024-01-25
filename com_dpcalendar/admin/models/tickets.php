@@ -18,6 +18,7 @@ JLoader::import('components.com_dpcalendar.tables.booking', JPATH_ADMINISTRATOR)
 
 class DPCalendarModelTickets extends ListModel
 {
+	public $context;
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
@@ -49,9 +50,9 @@ class DPCalendarModelTickets extends ListModel
 		$published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_state', '', 'string');
 		$this->setState('filter.state', $published);
 		$bookingId = $this->getUserStateFromRequest($this->context . '.filter.booking_id', 'filter_booking_id');
-		$this->setState('filter.booking_id', !$bookingId ? Factory::getApplication()->input->get('b_id') : $bookingId);
+		$this->setState('filter.booking_id', $bookingId ?: Factory::getApplication()->input->get('b_id'));
 		$eventId = $this->getUserStateFromRequest($this->context . '.filter.event_id', 'filter_event_id');
-		$this->setState('filter.event_id', !$eventId ? Factory::getApplication()->input->get('e_id') : $eventId);
+		$this->setState('filter.event_id', $eventId ?: Factory::getApplication()->input->get('e_id'));
 
 		$app = Factory::getApplication();
 		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
@@ -92,11 +93,7 @@ class DPCalendarModelTickets extends ListModel
 				$item->price = 0;
 			}
 
-			if ($item->event_payment_provider) {
-				$item->event_payment_provider = explode(',', $item->event_payment_provider);
-			} else {
-				$item->event_payment_provider = [];
-			}
+			$item->event_payment_provider = $item->event_payment_provider ? explode(',', $item->event_payment_provider) : [];
 		}
 
 		return $items;

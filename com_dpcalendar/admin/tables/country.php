@@ -13,6 +13,15 @@ use Joomla\CMS\Table\Table;
 
 class DPCalendarTableCountry extends Table
 {
+	public $id;
+	public $modified;
+	public $modified_by;
+	public $created;
+	public $created_by;
+	public $short_code;
+	public $publish_down;
+	public $publish_up;
+	public $checked_out_time;
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_countries', 'id', $db);
@@ -29,7 +38,7 @@ class DPCalendarTableCountry extends Table
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->get('id');
 		} else {
-			if (!(int)$this->created) {
+			if ((int)$this->created === 0) {
 				$this->created = $date->toSql();
 			}
 			if (empty($this->created_by)) {
@@ -44,10 +53,10 @@ class DPCalendarTableCountry extends Table
 	public function check()
 	{
 		// Check for existing name
-		$query = 'SELECT id FROM #__dpcalendar_countries WHERE short_code = ' . $this->_db->Quote($this->short_code);
-		$this->_db->setQuery($query);
+		$query = 'SELECT id FROM #__dpcalendar_countries WHERE short_code = ' . $this->getDbo()->Quote($this->short_code);
+		$this->getDbo()->setQuery($query);
 
-		$xid = (int)$this->_db->loadResult();
+		$xid = (int)$this->getDbo()->loadResult();
 		if ($xid && $xid != (int)$this->id) {
 			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 

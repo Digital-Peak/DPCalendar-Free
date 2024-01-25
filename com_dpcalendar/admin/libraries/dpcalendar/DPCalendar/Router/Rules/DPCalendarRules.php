@@ -15,7 +15,9 @@ use Joomla\CMS\Component\Router\Rules\MenuRules;
 
 class DPCalendarRules extends MenuRules
 {
-	public function parse(&$segments, &$vars)
+	public $router;
+	public $lookup;
+	public function parse(&$segments, &$vars): void
 	{
 		parent::parse($segments, $vars);
 
@@ -39,7 +41,7 @@ class DPCalendarRules extends MenuRules
 		}
 	}
 
-	public function preprocess(&$query)
+	public function preprocess(&$query): void
 	{
 		if (!empty($query['view']) && in_array($query['view'], ['tickets', 'bookings']) && !empty($query['e_id'])) {
 			return;
@@ -95,7 +97,7 @@ class DPCalendarRules extends MenuRules
 		}
 	}
 
-	private function processForLocation(&$query)
+	private function processForLocation(&$query): void
 	{
 		// Do nothing when the query is not for a location
 		if (empty($query['view']) || ($query['view'] != 'location' && $query['view'] != 'locationform')) {
@@ -103,8 +105,8 @@ class DPCalendarRules extends MenuRules
 		}
 
 		// Loop over the menu items
-		foreach ($this->lookup as $languageName => $items) {
-			$id = !empty($query['id']) ? $query['id'] : (!empty($query['l_id']) ? $query['l_id'] : 0);
+		foreach ($this->lookup as $items) {
+			$id = empty($query['id']) ? (empty($query['l_id']) ? 0 : $query['l_id']) : ($query['id']);
 
 			// If the location exists in a location menu item, do nothing
 			if (!empty($items['location']) && array_key_exists($id, $items['location'])) {
@@ -132,7 +134,7 @@ class DPCalendarRules extends MenuRules
 		unset($query['Itemid']);
 	}
 
-	private function processForEvent(&$query)
+	private function processForEvent(&$query): void
 	{
 		// If menu item is forced
 		if (!empty($query['force_item_id'])) {
@@ -148,7 +150,7 @@ class DPCalendarRules extends MenuRules
 		}
 
 		// Check if a direct menu item is available
-		foreach ($this->lookup as $languageName => $items) {
+		foreach ($this->lookup as $items) {
 			// If there is menu item for the event use it
 			if (!empty($items['event']) && array_key_exists($query['id'], $items['event'])) {
 				// Ensure the correct item ID is set, can happen when a single event menu item exists and a calendar menu item
@@ -194,7 +196,7 @@ class DPCalendarRules extends MenuRules
 					$selectedCalendars[] = $child->id;
 				}
 			}
-			if (array_intersect($selectedCalendars, ['-1', $calendar->id])) {
+			if (array_intersect($selectedCalendars, ['-1', $calendar->id]) !== []) {
 				$query['Itemid'] = $active->id;
 
 				return;
@@ -202,8 +204,8 @@ class DPCalendarRules extends MenuRules
 		}
 
 		// Search in the lookup for a passable menu item
-		foreach ($this->lookup as $languageName => $items) {
-			foreach ($items as $viewName => $calIds) {
+		foreach ($this->lookup as $items) {
+			foreach ($items as $calIds) {
 				foreach ((array)$calIds as $calId => $menuItemId) {
 					if ($calId && ($calendar->id == $calId || $calId == -1)) {
 						$query['Itemid'] = $menuItemId;

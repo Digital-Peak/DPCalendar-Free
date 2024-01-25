@@ -15,7 +15,7 @@ defined('_JEXEC') or die();
 		<div class="dp-information dp-grid">
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_CHECKS_VERSION'); ?>: </span>
 			<span class="dp-information__content">
-				<?php echo $this->input->getString('DPCALENDAR_VERSION'); ?>
+				<?php echo $this->input->getString('DPCALENDAR_VERSION', ''); ?>
 			</span>
 		</div>
 		<div class="dp-information dp-grid">

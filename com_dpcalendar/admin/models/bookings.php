@@ -18,6 +18,7 @@ JLoader::import('components.com_dpcalendar.tables.booking', JPATH_ADMINISTRATOR)
 
 class DPCalendarModelBookings extends ListModel
 {
+	public $context;
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
@@ -221,8 +222,8 @@ class DPCalendarModelBookings extends ListModel
 			->clear('group')
 			->select('COUNT(distinct a.id)');
 
-		$this->_db->setQuery($query);
+		$this->getDbo()->setQuery($query);
 
-		return (int)$this->_db->loadResult();
+		return (int)$this->getDbo()->loadResult();
 	}
 }

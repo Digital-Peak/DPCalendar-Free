@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper as Helper;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\Helpers\Sidebar;
@@ -18,9 +19,9 @@ JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalen
 
 JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
-class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
+class DPCalendarHelper extends Helper
 {
-	public static function addSubmenu($vName = 'cpanel')
+	public static function addSubmenu($vName = 'cpanel'): void
 	{
 		Sidebar::addEntry(Text::_('COM_DPCALENDAR_SUBMENU_CPANEL'), 'index.php?option=com_dpcalendar&view=cpanel', $vName == 'cpanel');
 		Sidebar::addEntry(Text::_('COM_DPCALENDAR_SUBMENU_EVENTS'), 'index.php?option=com_dpcalendar&view=events', $vName == 'events');
@@ -71,7 +72,7 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 		}
 	}
 
-	public static function getActions($categoryId = 0)
+	public static function getActions($categoryId = 0): CMSObject
 	{
 		$user   = Factory::getUser();
 		$result = new CMSObject();
@@ -118,22 +119,20 @@ class DPCalendarHelper extends \DPCalendar\Helper\DPCalendarHelper
 		return $section;
 	}
 
-	public static function getContexts()
+	public static function getContexts(): array
 	{
 		Factory::getLanguage()->load('com_content', JPATH_ADMINISTRATOR);
 
-		$contexts = [
+		return [
 			'com_dpcalendar.event'      => Text::_('COM_DPCALENDAR_FIELDS_SECTION_EVENT'),
 			'com_dpcalendar.location'   => Text::_('COM_DPCALENDAR_FIELDS_SECTION_LOCATION'),
 			'com_dpcalendar.ticket'     => Text::_('COM_DPCALENDAR_FIELDS_SECTION_TICKET'),
 			'com_dpcalendar.booking'    => Text::_('COM_DPCALENDAR_FIELDS_SECTION_BOOKING'),
 			'com_dpcalendar.categories' => Text::_('COM_DPCALENDAR_FIELDS_SECTION_CALENDAR')
 		];
-
-		return $contexts;
 	}
 
-	public static function getCalendarRoute($calId)
+	public static function getCalendarRoute($calId): string
 	{
 		return DPCalendarHelperRoute::getCalendarRoute($calId);
 	}

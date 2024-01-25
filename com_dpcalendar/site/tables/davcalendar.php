@@ -14,6 +14,18 @@ defined('_JEXEC') or die();
 
 class DPCalendarTableDavcalendar extends Table
 {
+	public $calendarid;
+	/**
+	 * @var int
+	 */
+	public $access;
+	public $displayname;
+	public $uri;
+	public $id;
+	/**
+	 * @var string
+	 */
+	public $principaluri;
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_caldav_calendarinstances', 'id', $db);
@@ -42,11 +54,11 @@ class DPCalendarTableDavcalendar extends Table
 		}
 
 		// Check for existing name
-		$query = 'SELECT id FROM #__dpcalendar_caldav_calendarinstances WHERE uri = ' . $this->_db->Quote($this->uri ?: '') .
+		$query = 'SELECT id FROM #__dpcalendar_caldav_calendarinstances WHERE uri = ' . $this->getDbo()->Quote($this->uri ?: '') .
 			" and principaluri = 'principals/" . Factory::getUser()->username . "'";
-		$this->_db->setQuery($query);
+		$this->getDbo()->setQuery($query);
 
-		$xid = (int)$this->_db->loadResult();
+		$xid = (int)$this->getDbo()->loadResult();
 		if ($xid && $xid != (int)$this->id) {
 			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 

@@ -12,6 +12,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Mail\Exception\MailDisabledException;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Object\CMSObject;
@@ -25,6 +26,10 @@ JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/
 
 class DPCalendarModelAdminEvent extends AdminModel
 {
+	public $user;
+	public $table;
+	public $type;
+	public $tagsObserver;
 	public $typeAlias      = 'com_dpcalendar.event';
 	protected $text_prefix = 'COM_DPCALENDAR';
 	protected $name        = 'event';
@@ -42,7 +47,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 	{
 		parent::populateState();
 
-		$this->setState($this->getName() . '.id', Factory::getApplication()->input->getInt('e_id'));
+		$this->setState($this->getName() . '.id', Factory::getApplication()->input->getInt('e_id', 0));
 
 		$app = Factory::getApplication();
 		$this->setState('params', method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
@@ -136,6 +141,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 
 		$params = $this->getParams();
 
+		$form->setFieldAttribute('catid', 'calendar_filter', implode(',', $params->get('event_form_calendars', [])));
 		$form->setFieldAttribute('start_date', 'min_time', $params->get('event_form_min_time'));
 		$form->setFieldAttribute('start_date', 'max_time', $params->get('event_form_max_time'));
 		$form->setFieldAttribute('end_date', 'min_time', $params->get('event_form_min_time'));
@@ -149,7 +155,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 				$colorValues .= $color->color_option . ',';
 			}
 
-			if ($colorValues) {
+			if ($colorValues !== '' && $colorValues !== '0') {
 				$colorValues = substr($colorValues, 0, strlen($colorValues) - 1);
 			}
 
@@ -174,7 +180,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 
 		// Check the session for previously entered form data
 		// Ignore the data when ignore_request variable is set
-		$data = $app->input->getInt('ignore_request') === 1 ? [] : $app->getUserState('com_dpcalendar.edit.event.data', []);
+		$data = $app->input->getInt('ignore_request', 0) === 1 ? [] : $app->getUserState('com_dpcalendar.edit.event.data', []);
 
 		if (empty($data)) {
 			$data    = $this->getItem();
@@ -182,10 +188,11 @@ class DPCalendarModelAdminEvent extends AdminModel
 
 			// Prime some default values.
 			if ($eventId == '0') {
-				$data->set('catid', $app->input->getCmd('catid', $app->getUserState('com_dpcalendar.events.filter.category_id')));
+				$catId = $app->getUserState('com_dpcalendar.events.filter.calendars');
+				$data->set('catid', $app->input->getCmd('catid', is_array($catId) ? reset($catId) : $catId));
 
 				$requestParams = $app->input->get('jform', [], 'array');
-				if (!$data->get('catid') && key_exists('catid', $requestParams)) {
+				if (!$data->get('catid') && array_key_exists('catid', $requestParams)) {
 					$data->set('catid', $requestParams['catid']);
 				}
 			}
@@ -294,7 +301,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 
 	public function getItem($pk = null)
 	{
-		$pk   = (!empty($pk)) ? $pk : $this->getState($this->getName() . '.id');
+		$pk   = (empty($pk)) ? $this->getState($this->getName() . '.id') : $pk;
 		$item = null;
 		if (!empty($pk) && !is_numeric($pk)) {
 			PluginHelper::importPlugin('dpcalendar');
@@ -320,8 +327,8 @@ class DPCalendarModelAdminEvent extends AdminModel
 				$item->images = $registry->toArray();
 
 				if ($item->id > 0) {
-					$this->_db->setQuery('select location_id from #__dpcalendar_events_location where event_id = ' . (int)$item->id);
-					$locations = $this->_db->loadObjectList();
+					$this->getDbo()->setQuery('select location_id from #__dpcalendar_events_location where event_id = ' . (int)$item->id);
+					$locations = $this->getDbo()->loadObjectList();
 					if (!empty($locations)) {
 						$item->location_ids = [];
 						foreach ($locations as $location) {
@@ -329,8 +336,8 @@ class DPCalendarModelAdminEvent extends AdminModel
 						}
 					}
 
-					$this->_db->setQuery('select user_id from #__dpcalendar_events_hosts where event_id = ' . (int)$item->id);
-					$hosts = $this->_db->loadObjectList();
+					$this->getDbo()->setQuery('select user_id from #__dpcalendar_events_hosts where event_id = ' . (int)$item->id);
+					$hosts = $this->getDbo()->loadObjectList();
 					if (!empty($hosts)) {
 						$item->host_ids = [];
 						foreach ($hosts as $host) {
@@ -380,7 +387,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		}
 
 		if (isset($data['exdates']) && is_array($data['exdates'])) {
-			$data['exdates'] = $data['exdates'] ? json_encode($data['exdates']) : '';
+			$data['exdates'] = $data['exdates'] !== [] ? json_encode($data['exdates']) : '';
 		}
 
 		if (isset($data['images']) && is_array($data['images'])) {
@@ -397,7 +404,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$obj->value       = [];
 			$obj->label       = [];
 			$obj->description = [];
-			foreach ($data['price'] as $key => $p) {
+			foreach ($data['price'] as $p) {
 				$obj->value[]       = $p['value'];
 				$obj->label[]       = $p['label'];
 				$obj->description[] = $p['description'];
@@ -411,7 +418,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$obj->date        = [];
 			$obj->label       = [];
 			$obj->description = [];
-			foreach ($data['earlybird'] as $key => $p) {
+			foreach ($data['earlybird'] as $p) {
 				$obj->value[]       = $p['value'];
 				$obj->type[]        = $p['type'];
 				$obj->date[]        = $p['date'];
@@ -428,7 +435,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$obj->label           = [];
 			$obj->description     = [];
 			$obj->discount_groups = [];
-			foreach ($data['user_discount'] as $key => $p) {
+			foreach ($data['user_discount'] as $p) {
 				$obj->value[]           = $p['value'];
 				$obj->type[]            = $p['type'];
 				$obj->date[]            = $p['date'];
@@ -456,19 +463,19 @@ class DPCalendarModelAdminEvent extends AdminModel
 		}
 
 		if (isset($data['booking_options']) && is_array($data['booking_options'])) {
-			$data['booking_options'] = $data['booking_options'] ? json_encode($data['booking_options']) : '';
+			$data['booking_options'] = $data['booking_options'] !== [] ? json_encode($data['booking_options']) : '';
 		}
 
 		if (isset($data['schedule']) && is_array($data['schedule'])) {
-			$data['schedule'] = $data['schedule'] ? json_encode($data['schedule']) : '';
+			$data['schedule'] = $data['schedule'] !== [] ? json_encode($data['schedule']) : '';
 		}
 
 		if (isset($data['payment_provider']) && is_array($data['payment_provider'])) {
-			$data['payment_provider'] = $data['payment_provider'] ? implode(',', $data['payment_provider']) : '';
+			$data['payment_provider'] = $data['payment_provider'] !== [] ? implode(',', $data['payment_provider']) : '';
 		}
 
 		if (isset($data['booking_assign_user_groups']) && is_array($data['booking_assign_user_groups'])) {
-			$data['booking_assign_user_groups'] = $data['booking_assign_user_groups'] ? implode(',', $data['booking_assign_user_groups']) : '';
+			$data['booking_assign_user_groups'] = $data['booking_assign_user_groups'] !== [] ? implode(',', $data['booking_assign_user_groups']) : '';
 		}
 
 		// Only apply the default values on create
@@ -503,18 +510,14 @@ class DPCalendarModelAdminEvent extends AdminModel
 		$allIds         = $oldEventIds;
 		foreach ($rows as $tmp) {
 			$allIds[(int)$tmp->id] = (int)$tmp->id;
-			if ($locationIds) {
-				foreach ($locationIds as $location) {
-					$locationValues .= '(' . (int)$tmp->id . ',' . (int)$location . '),';
-				}
+			foreach ($locationIds as $location) {
+				$locationValues .= '(' . (int)$tmp->id . ',' . (int)$location . '),';
 			}
-			if ($hostIds) {
-				foreach ($hostIds as $host) {
-					$hostsValues .= '(' . (int)$tmp->id . ',' . (int)$host . '),';
-				}
+			foreach ($hostIds as $host) {
+				$hostsValues .= '(' . (int)$tmp->id . ',' . (int)$host . '),';
 			}
 
-			if (key_exists($tmp->id, $oldEventIds)) {
+			if (array_key_exists($tmp->id, $oldEventIds)) {
 				unset($oldEventIds[$tmp->id]);
 			}
 
@@ -525,7 +528,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 
 			// When modified events should not be updated and the modified date is different than the original event, ignore it
 			if (array_key_exists('update_modified', $data)
-				&& !(int)$data['update_modified']
+				&& (int)$data['update_modified'] === 0
 				&& $tmp->modified
 				&& $tmp->modified !== $event->modified) {
 				continue;
@@ -534,7 +537,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 			// Save the values on the child events
 			foreach ($fields as $field) {
 				$value = $field->value;
-				if (isset($data['com_fields']) && key_exists($field->name, $data['com_fields'])) {
+				if (isset($data['com_fields']) && array_key_exists($field->name, $data['com_fields'])) {
 					$value = $data['com_fields'][$field->name];
 				}
 				$fieldModel->setFieldValue($field->id, $tmp->id, $value);
@@ -560,7 +563,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		}
 
 		// Insert the new associations
-		if (!empty($locationValues)) {
+		if ($locationValues !== '' && $locationValues !== '0') {
 			$this->getDbo()->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $locationValues);
 			$this->getDbo()->execute();
 		}
@@ -572,7 +575,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		}
 
 		// Insert the new associations
-		if (!empty($hostsValues)) {
+		if ($hostsValues !== '' && $hostsValues !== '0') {
 			$this->getDbo()->setQuery('insert into #__dpcalendar_events_hosts (event_id, user_id) values ' . $hostsValues);
 			$this->getDbo()->execute();
 		}
@@ -589,7 +592,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		$this->sendMail($this->getState($this->getName() . '.new') ? 'create' : 'edit', [$event]);
 
 		// Notify the ticket holders
-		if (key_exists('notify_changes', $data) && $data['notify_changes']) {
+		if (array_key_exists('notify_changes', $data) && $data['notify_changes']) {
 			$langs   = [$app->getLanguage()->getTag() => $app->getLanguage()];
 			$tickets = $this->getTickets($event->id);
 			foreach ($tickets as $ticket) {
@@ -661,7 +664,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 				if ($table->original_id == '-1') {
 					$newTags = new TagsHelper();
 					$newTags = $newTags->getItemTags('com_dpcalendar.event', $table->id);
-					$newTags = array_map(fn ($t) => $t->id, $newTags);
+					$newTags = array_map(static fn ($t) => $t->id, $newTags);
 
 					$table->populateTags($newTags);
 				}
@@ -724,7 +727,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		$pks = (array)$pks;
 		ArrayHelper::toInteger($pks);
 
-		if (empty($pks)) {
+		if ($pks === []) {
 			$this->setError(Text::_('COM_DPCALENDAR_NO_ITEM_SELECTED'));
 
 			return false;
@@ -733,8 +736,8 @@ class DPCalendarModelAdminEvent extends AdminModel
 		try {
 			$this->getDbo()->setQuery('UPDATE #__dpcalendar_events SET featured = ' . (int)$value . ' WHERE id IN (' . implode(',', $pks) . ')');
 			$this->getDbo()->execute();
-		} catch (Exception $e) {
-			$this->setError($e->getMessage());
+		} catch (Exception $exception) {
+			$this->setError($exception->getMessage());
 
 			return false;
 		}
@@ -885,7 +888,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		return $params;
 	}
 
-	private function sendMail($action, $events)
+	private function sendMail(string $action, $events): void
 	{
 		// The current user
 		$user = Factory::getUser();
@@ -902,11 +905,12 @@ class DPCalendarModelAdminEvent extends AdminModel
 				return;
 			}
 
-			if ($calendar = \DPCalendarHelper::getCalendar($event->catid)) {
+			if ($calendar = DPCalendarHelper::getCalendar($event->catid)) {
 				$calendarGroups = array_merge($calendarGroups, $calendar->params->get('notification_groups_' . $action, []));
 			}
 
-			if ($user->id != $event->created_by) {
+			if (($user->id != $event->created_by && DPCalendarHelper::getComponentParameter('notification_author', 0) == 1)
+				|| DPCalendarHelper::getComponentParameter('notification_author', 0) == 2) {
 				$authors[] = $event->created_by;
 			}
 		}
@@ -932,7 +936,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 		DPCalendarHelper::sendMail($subject, $body, 'notification_groups_' . $action, $calendarGroups);
 
 		// Check if authors should get a mail
-		if (!$authors || !DPCalendarHelper::getComponentParameter('notification_author')) {
+		if ($authors === [] || !DPCalendarHelper::getComponentParameter('notification_author', 0)) {
 			return;
 		}
 
@@ -959,6 +963,10 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$extraVars
 		);
 
+		if (!$subject || !$body) {
+			return;
+		}
+
 		$app = Factory::getApplication();
 
 		// Loop over the authors to send the notification
@@ -977,7 +985,10 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$mailer->IsHTML(true);
 			$mailer->addRecipient($u->email);
 			$app->triggerEvent('onDPCalendarBeforeSendMail', ['com_dpcalendar.event.save.author', $mailer, $events]);
-			$mailer->Send();
+			try {
+				$mailer->Send();
+			} catch (MailDisabledException $e) {
+			}
 			$app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.event.save.author', $mailer, $events]);
 		}
 	}

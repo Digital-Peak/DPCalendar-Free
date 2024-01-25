@@ -1,5 +1,6 @@
 <?php
 
+use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\View\BaseView;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
@@ -13,7 +14,25 @@ defined('_JEXEC') or die();
 
 class DPCalendarViewCalendar extends BaseView
 {
-	public function init()
+	/**
+	 * @var mixed
+	 */
+	public $items;
+	/**
+	 * @var mixed[]
+	 */
+	public $selectedCalendars;
+	public $doNotListCalendars;
+	public $quickaddForm;
+	/**
+	 * @var never[]|\stdClass[]|mixed[]
+	 */
+	public $resources;
+	/**
+	 * @var non-falsy-string|null
+	 */
+	public $returnPage;
+	protected function init()
 	{
 		$items = $this->get('AllItems');
 
@@ -51,7 +70,7 @@ class DPCalendarViewCalendar extends BaseView
 		}
 
 		// If none are selected, use selected calendars
-		$this->doNotListCalendars = empty($doNotListCalendars) ? $this->items : $doNotListCalendars;
+		$this->doNotListCalendars = $doNotListCalendars === [] ? $this->items : $doNotListCalendars;
 
 		$this->quickaddForm = $this->getModel()->getQuickAddForm($this->params);
 
@@ -59,7 +78,7 @@ class DPCalendarViewCalendar extends BaseView
 		if ($this->params->get('calendar_filter_locations')
 			&& $this->params->get('calendar_resource_views')
 			&& $this->getLayout() == 'default'
-			&& !\DPCalendar\Helper\DPCalendarHelper::isFree()) {
+			&& !DPCalendarHelper::isFree()) {
 			// Load the model
 			BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
 			$model = BaseDatabaseModel::getInstance('Locations', 'DPCalendarModel', ['ignore_request' => true]);
@@ -81,21 +100,21 @@ class DPCalendarViewCalendar extends BaseView
 			$this->resources = array_values($this->doNotListCalendars);
 		}
 
-		$this->returnPage = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;
+		$this->returnPage = $this->input->getInt('Itemid', 0) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', 0) : null;
 
 		return parent::init();
 	}
 
-	private function fillCalendar($calendar)
+	private function fillCalendar($calendar): void
 	{
 		if (isset($calendar->event)) {
 			return;
 		}
 
-		$calendar->event = new \stdClass();
+		$calendar->event = new stdClass();
 
 		// For some plugins
-		!empty($calendar->description) ? $calendar->text = $calendar->description : $calendar->text = null;
+		empty($calendar->description) ? $calendar->text = null : ($calendar->text = $calendar->description);
 
 		$this->app->triggerEvent('onContentPrepare', ['com_dpcalendar.categories', &$calendar, &$calendar->params, 0]);
 

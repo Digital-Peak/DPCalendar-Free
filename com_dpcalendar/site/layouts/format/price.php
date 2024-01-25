@@ -12,19 +12,19 @@ if (!$price) {
 }
 
 $separator = DPCalendarHelper::getComponentParameter('currency_separator', '.');
-if (key_exists('separator', $displayData) && $displayData['separator']) {
+if (array_key_exists('separator', $displayData) && $displayData['separator']) {
 	$separator = $displayData['separator'];
 }
 
 $thousandSeparator = DPCalendarHelper::getComponentParameter('currency_thousands_separator', "'");
-if (key_exists('thousands_separator', $displayData) && $displayData['thousands_separator']) {
+if (array_key_exists('thousands_separator', $displayData) && $displayData['thousands_separator']) {
 	$thousandSeparator = $displayData['thousands_separator'];
 }
 
 $price = number_format(trim($price), 2, $separator, $thousandSeparator);
 
 $currency = DPCalendarHelper::getComponentParameter('currency_symbol', '$');
-if (key_exists('currency', $displayData) && $displayData['currency']) {
+if (array_key_exists('currency', $displayData) && $displayData['currency']) {
 	$currency = $displayData['currency'];
 }
 

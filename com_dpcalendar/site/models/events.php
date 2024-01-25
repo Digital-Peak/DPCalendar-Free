@@ -10,6 +10,7 @@ use Joomla\String\StringHelper;
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
@@ -24,10 +25,17 @@ JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 
 class DPCalendarModelEvents extends ListModel
 {
+	public $context;
+	public $_params;
+	public $filter_fields;
+	protected $filterFormName = 'filter_adminevents';
+
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
-			$config['filter_fields'] = ['id', 'a.id', 'title', 'a.title', 'hits', 'a.hits'];
+			$config['filter_fields'] = [
+				'id', 'a.id', 'title', 'a.title', 'search', 'location', 'length-type', 'radius', 'calendars', 'created_by'
+			];
 		}
 
 		parent::__construct($config);
@@ -107,18 +115,18 @@ class DPCalendarModelEvents extends ListModel
 		}
 		if ($containsExternalEvents) {
 			$dbItems = [];
-			if ($categoryIds) {
+			if ($categoryIds !== []) {
 				$dbItems = parent::getItems();
 			}
 			$items = array_merge($dbItems, $items);
-			usort($items, [$this, 'compareEvent']);
+			usort($items, fn ($event1, $event2) => $this->compareEvent($event1, $event2));
 			if ($this->getState('list.limit') > 0) {
 				$items = array_slice($items, 0, $this->getState('list.limit'));
 			}
 		} else {
 			$items = parent::getItems();
 			if ($items && $this->getState('list.ordering', 'a.start_date') == 'a.start_date') {
-				usort($items, [$this, 'compareEvent']);
+				usort($items, fn ($event1, $event2) => $this->compareEvent($event1, $event2));
 			}
 		}
 
@@ -132,9 +140,9 @@ class DPCalendarModelEvents extends ListModel
 		$model->setState('list.ordering', 'ordering');
 		$model->setState('list.direction', 'asc');
 
-		foreach ($items as $key => $item) {
+		foreach ($items as $item) {
 			// Initialize the parameters
-			if (!isset($this->_params)) {
+			if (!property_exists($this, '_params') || $this->_params === null) {
 				$params = new Registry();
 				$params->loadString($item->params ?: '');
 				$item->params = $params;
@@ -175,10 +183,12 @@ class DPCalendarModelEvents extends ListModel
 				$item->rooms = [];
 			}
 
+			$item->color = str_replace('#', '', $item->color ?? '');
+
 			// If the event has no color, use the one from the calendar
 			$calendar = DPCalendarHelper::getCalendar($item->catid);
-			if (empty($item->color)) {
-				$item->color = $calendar ? $calendar->color : '3366CC';
+			if ($item->color === '' || $item->color === '0' || $item->color === []) {
+				$item->color = $calendar ? str_replace('#', '', $calendar->color) : '3366CC';
 			}
 
 			// Check if it is a valid color
@@ -233,8 +243,8 @@ class DPCalendarModelEvents extends ListModel
 				$item->booking_options     = null;
 			}
 
-			\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
-			\DPCalendar\Helper\DPCalendarHelper::parseReadMore($item);
+			DPCalendarHelper::parseImages($item);
+			DPCalendarHelper::parseReadMore($item);
 		}
 
 		return $items;
@@ -333,7 +343,7 @@ class DPCalendarModelEvents extends ListModel
 					$cats[$child->id] = $db->q($child->id);
 				}
 			}
-			if (!empty($cats)) {
+			if ($cats !== []) {
 				$query->where('a.catid IN (' . implode(',', $cats) . ')');
 			}
 
@@ -465,7 +475,7 @@ class DPCalendarModelEvents extends ListModel
 				$mustNot = [];
 				$can     = [];
 				foreach ($searchTerms as $search) {
-					if (!$search) {
+					if ($search === '' || $search === '0') {
 						continue;
 					}
 					switch (substr($search, 0, 1)) {
@@ -537,7 +547,7 @@ class DPCalendarModelEvents extends ListModel
 
 		// Filter by tags
 		$tagIds = (array)$this->getState('filter.tags');
-		if ($tagIds) {
+		if ($tagIds !== []) {
 			$query->join(
 				'LEFT',
 				$db->quoteName('#__contentitem_tag_map', 'tagmap') . ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' .
@@ -548,7 +558,7 @@ class DPCalendarModelEvents extends ListModel
 			$query->where($db->quoteName('tagmap.tag_id') . ' in (' . implode(',', $tagIds) . ')');
 		}
 
-		if ($author = $this->getState('filter.author')) {
+		if ($author = $this->getState('filter.author', 0)) {
 			// My events when author is -1
 			$cond = 'a.created_by = ' . (int)($author == '-1' ? $user->id : $author);
 
@@ -567,18 +577,6 @@ class DPCalendarModelEvents extends ListModel
 			$query->where('a.original_id = ' . (int)$this->getState('filter.children', 0));
 		}
 
-		$search = $this->getState('filter.search_start');
-		if (!empty($search)) {
-			$search = $db->quote($db->escape($search, true));
-			$query->where('a.start_date >= ' . $search);
-		}
-
-		$search = $this->getState('filter.search_end');
-		if (!empty($search)) {
-			$search = $db->quote($db->escape($search, true));
-			$query->where('a.end_date <= ' . $search);
-		}
-
 		// Add the list ordering clause.
 		$query->order($db->escape($this->getState('list.ordering', 'a.start_date')) . ' ' . $db->escape($this->getState('list.direction', 'ASC')));
 
@@ -589,9 +587,9 @@ class DPCalendarModelEvents extends ListModel
 		return $query;
 	}
 
-	private function buildSearchQuery($terms, $searchColumns, $termOperator)
+	private function buildSearchQuery(array $terms, $searchColumns, string $termOperator)
 	{
-		if (!$terms) {
+		if ($terms === []) {
 			return '';
 		}
 		$db = Factory::getDbo();
@@ -633,10 +631,13 @@ class DPCalendarModelEvents extends ListModel
 		return '(' . $searchQuery . ')';
 	}
 
-	public function setStateFromParams(Registry $params)
+	public function setStateFromParams(Registry $params): void
 	{
 		// Filter for author
-		$this->setState('filter.author', $params->get('calendar_filter_author', $params->get('list_filter_author', 0)));
+		$author = $params->get('calendar_filter_author', $params->get('list_filter_author', 0));
+		if ((int)$author !== 0) {
+			$this->setState('filter.author', $author);
+		}
 
 		// Filter for locations
 		$this->setState('filter.locations', $params->get('calendar_filter_locations', $params->get('list_filter_locations')));
@@ -647,12 +648,12 @@ class DPCalendarModelEvents extends ListModel
 
 	protected function populateState($ordering = null, $direction = null)
 	{
-		// Initialise variables
+		// Initialize variables
 		$app    = Factory::getApplication();
 		$params = method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
 
 		// List state information
-		if ($app->input->getInt('limit', null) === null) {
+		if ($app->input->getInt('limit', 0) === 0) {
 			$limit = $app->getUserStateFromRequest('global.list.limit', 'limit', $app->get('list_limit'));
 			$this->setState('list.limit', $limit);
 		} else {
@@ -679,7 +680,7 @@ class DPCalendarModelEvents extends ListModel
 		}
 		$this->setState('list.direction', $listOrder);
 
-		$id = $app->input->getString('ids', null);
+		$id = $app->input->getString('ids', '');
 		if ($id && !is_array($id)) {
 			$id = explode(',', $id);
 		}
@@ -687,7 +688,7 @@ class DPCalendarModelEvents extends ListModel
 			$id = $params->get('ids');
 		}
 		$this->setState('category.id', $id);
-		$this->setState('category.recursive', $app->input->getString('layout') == 'module');
+		$this->setState('category.recursive', $app->input->getString('layout', '') == 'module');
 
 		$user = Factory::getUser();
 		if (!$user->authorise('core.edit.state', 'com_dpcalendar') && !$user->authorise('core.edit', 'com_dpcalendar')) {
@@ -703,7 +704,9 @@ class DPCalendarModelEvents extends ListModel
 			'filter.language',
 			$app->isClient('site') ? $app->getLanguageFilter() : ($app->getLanguage() ? $app->getLanguage()->getTag() : null)
 		);
-		$this->setState('filter.search', $this->getUserStateFromRequest('com_dpcalendar.filter.search', 'filter-search'));
+		$this->setState('filter.search', $this->getUserStateFromRequest($this->context . '.filter.search', 'filter-search'));
+
+		$this->setState('filter.author', $this->getUserStateFromRequest($this->context . '.filter.author', 'filter_created_by'));
 
 		// Filter for
 		$this->setState('filter.expand', true);
@@ -715,6 +718,27 @@ class DPCalendarModelEvents extends ListModel
 
 		// Load the parameters.
 		$this->setState('params', $params);
+
+		parent::populateState($ordering, $direction);
+
+		if ($calendars = $this->getUserStateFromRequest($this->context . '.filter.calendars', 'filter_calendars')) {
+			$this->setState('filter.calendars', array_filter($calendars, static fn ($c): bool => !empty($c)));
+		}
+	}
+
+	public function getActiveFilters()
+	{
+		$filters = parent::getActiveFilters();
+
+		if ($startDate = $this->getState('list.start-date')) {
+			$filters['start-date'] = $startDate;
+		}
+
+		if ($endDate = $this->getState('list.end-date')) {
+			$filters['end-date'] = $endDate;
+		}
+
+		return $filters;
 	}
 
 	public function compareEvent($event1, $event2)

@@ -15,6 +15,7 @@ use Tobscure\JsonApi\Resource;
 
 class DPCalendarSerializer extends JoomlaSerializer
 {
+	public $type;
 	public function calendar($model)
 	{
 		$serializer = new JoomlaSerializer('calendars');

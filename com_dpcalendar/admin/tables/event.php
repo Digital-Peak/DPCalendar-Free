@@ -30,6 +30,65 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 {
 	use TaggableTableTrait;
 
+	public $access;
+	public $access_content;
+	public $id;
+	public $modified;
+	public $modified_by;
+	public $created;
+	public $created_by;
+	public $language;
+	public $alias;
+	public $start_date;
+	public $all_day;
+	public $end_date;
+	public $original_id;
+	public $rrule;
+	public $exdates;
+	public $price;
+	public $booking_options;
+	public $booking_series;
+	public $capacity;
+	public $uid;
+	public $images;
+	public $color;
+	public $catid;
+	public $xreference;
+	public $rooms;
+	public $title;
+	public $show_end_time;
+	public $url;
+	public $description;
+	public $schedule;
+	public $max_tickets;
+	public $booking_opening_date;
+	public $booking_closing_date;
+	public $booking_cancel_closing_date;
+	public $booking_waiting_list;
+	public $earlybird;
+	public $user_discount;
+	public $booking_information;
+	public $terms;
+	public $state;
+	public $params;
+	public $metakey;
+	public $metadesc;
+	public $metadata;
+	public $featured;
+	public $publish_up;
+	public $publish_down;
+	public $payment_provider;
+	public $capacity_used;
+	public $checked_out_time;
+	public $hits;
+	public $checked_out;
+
+	public $_update_modified;
+	public $typeAlias;
+	public $newTags;
+	protected $_tbl_key;
+	protected $_tbl;
+
 	public function __construct(&$db = null)
 	{
 		if (!class_exists(DPCalendarHelper::class)) {
@@ -44,6 +103,8 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 				'DPCalendarTableEvent',
 				['typeAlias' => 'com_dpcalendar.event']
 			);
+			unset($this->typeAlias);
+			unset($this->newTags);
 		} else {
 			$this->typeAlias = 'com_dpcalendar.event';
 		}
@@ -93,7 +154,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->id;
 		}
-		if (!$this->id && !intval($this->created)) {
+		if (!$this->id && (int) $this->created === 0) {
 			$this->created = $date->toSql();
 		}
 		if (!$this->id && empty($this->created_by)) {
@@ -133,7 +194,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 		}
 
 		if ($this->original_id < 1) {
-			$this->original_id = !empty($this->rrule) ? -1 : 0;
+			$this->original_id = empty($this->rrule) ? 0 : -1;
 		}
 		if ($this->original_id > 0) {
 			$this->rrule = null;
@@ -148,7 +209,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 		$oldEvent    = Table::getInstance('Event', 'DPCalendarTable');
 		$hardReset   = false;
-		$tagsChanged = isset($this->newTags) && !$this->newTags;
+		$tagsChanged = !empty($this->newTags);
 		if ($this->id > 0) {
 			$oldEvent->load($this->id);
 
@@ -156,9 +217,9 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$hardReset = $this->all_day != $oldEvent->all_day || $this->start_date != $oldEvent->start_date || $this->end_date != $oldEvent->end_date || $this->rrule != $oldEvent->rrule || $this->exdates != $oldEvent->exdates;
 			$oldTags   = new TagsHelper();
 			$oldTags   = $oldTags->getItemTags('com_dpcalendar.event', $this->id);
-			$oldTags   = array_map(fn ($t) => $t->id, $oldTags);
+			$oldTags   = array_map(static fn ($t) => $t->id, $oldTags);
 
-			$tagsChanged = !isset($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
+			$tagsChanged = empty($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
 			if ($this->price != $oldEvent->price || $this->booking_options != $oldEvent->booking_options || ($hardReset && $this->rrule && $this->booking_series != 1)) {
 				// Check for tickets
@@ -187,8 +248,8 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 		// Only delete the childs when a hard reset must be done
 		if ($this->id > 0 && $hardReset) {
-			$this->_db->setQuery('delete from #__dpcalendar_events where original_id = ' . (int)$this->id);
-			$this->_db->execute();
+			$this->getDbo()->setQuery('delete from #__dpcalendar_events where original_id = ' . (int)$this->id);
+			$this->getDbo()->execute();
 		}
 
 		// Null capacity for unlimited usage
@@ -271,7 +332,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$untilDate = null;
 			$rrule     = '';
 			foreach (explode(';', strtoupper($this->rrule)) as $part) {
-				if (empty($part)) {
+				if ($part === '' || $part === '0') {
 					continue;
 				}
 				[$partName, $partValue] = explode('=', $part);
@@ -292,7 +353,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 					$exdates[] = DPCalendarHelper::getDate($date->date, true)->format('Ymd') . 'T' . $start->format('His') . 'Z';
 				}
 
-				if ($exdates) {
+				if ($exdates !== []) {
 					$text[] = 'EXDATE:' . implode(',', $exdates);
 				}
 			}
@@ -312,7 +373,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 				$table->alias         = ApplicationHelper::stringURLSafe($table->alias . '-' . $startDate->format('U'));
 				$table->start_date    = $startDate->toSql();
-				$table->recurrence_id = $startDate->format('Ymd' . (!$table->all_day ? '\THis\Z' : ''));
+				$table->recurrence_id = $startDate->format('Ymd' . ($table->all_day ? '' : '\THis\Z'));
 				$table->end_date      = $endDate->toSql();
 				$table->original_id   = $this->id;
 				$table->rrule         = '';
@@ -330,7 +391,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 					);
 				}
 
-				if (isset($this->newTags)) {
+				if (!empty($this->newTags)) {
 					$table->newTags = $this->newTags;
 				}
 
@@ -345,7 +406,7 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$this->populateTags();
 		}
 
-		$query = $this->_db->getQuery(true);
+		$query = $this->getDbo()->getQuery(true);
 		$query->update('#__dpcalendar_events');
 
 		if (is_array($this->price)) {
@@ -357,70 +418,70 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 		// Fields to update
 		$files = [
-			$this->_db->qn('catid') . ' = ' . $this->_db->q($this->catid),
-			$this->_db->qn('title') . ' = ' . $this->_db->q($this->title),
-			$this->_db->qn('color') . ' = ' . $this->_db->q($this->color),
-			$this->_db->qn('show_end_time') . ' = ' . $this->_db->q($this->show_end_time),
-			$this->_db->qn('url') . ' = ' . $this->_db->q($this->url),
-			$this->_db->qn('images') . ' = ' . $this->_db->q($this->images),
-			$this->_db->qn('description') . ' = ' . $this->_db->q($this->description),
-			$this->_db->qn('schedule') . ' = ' . $this->_db->q($this->schedule),
-			$this->_db->qn('capacity') . ' = ' . ($this->capacity === null ? 'NULL' : $this->_db->q($this->capacity)),
-			$this->_db->qn('max_tickets') . ' = ' . $this->_db->q($this->max_tickets),
-			$this->_db->qn('booking_opening_date') . ' = ' . $this->_db->q($this->booking_opening_date),
-			$this->_db->qn('booking_closing_date') . ' = ' . $this->_db->q($this->booking_closing_date),
-			$this->_db->qn('booking_cancel_closing_date') . ' = ' . $this->_db->q($this->booking_cancel_closing_date),
-			$this->_db->qn('booking_series') . ' = ' . $this->_db->q($this->booking_series),
-			$this->_db->qn('booking_waiting_list') . ' = ' . $this->_db->q($this->booking_waiting_list),
-			$this->_db->qn('price') . ' = ' . $this->_db->q($this->price),
-			$this->_db->qn('earlybird') . ' = ' . $this->_db->q($this->earlybird),
-			$this->_db->qn('user_discount') . ' = ' . $this->_db->q($this->user_discount),
-			$this->_db->qn('booking_information') . ' = ' . $this->_db->q($this->booking_information),
-			$this->_db->qn('terms') . ' = ' . $this->_db->q($this->terms),
-			$this->_db->qn('state') . ' = ' . $this->_db->q($this->state),
-			$this->_db->qn('checked_out') . ' = ' . $this->_db->q(0),
-			$this->_db->qn('checked_out_time') . ' = null',
-			$this->_db->qn('access') . ' = ' . $this->_db->q($this->access),
-			$this->_db->qn('access_content') . ' = ' . $this->_db->q($this->access_content),
-			$this->_db->qn('params') . ' = ' . $this->_db->q($this->params),
-			$this->_db->qn('rooms') . ' = ' . $this->_db->q($this->rooms ?: ''),
-			$this->_db->qn('language') . ' = ' . $this->_db->q($this->language),
-			$this->_db->qn('modified') . ' = ' . ($this->modified ? $this->_db->q($this->modified) : 'null'),
-			$this->_db->qn('modified_by') . ' = ' . $this->_db->q($user->id),
-			$this->_db->qn('created_by') . ' = ' . $this->_db->q($this->created_by),
-			$this->_db->qn('metakey') . ' = ' . $this->_db->q($this->metakey ?: ''),
-			$this->_db->qn('metadesc') . ' = ' . $this->_db->q($this->metadesc ?: ''),
-			$this->_db->qn('metadata') . ' = ' . $this->_db->q($this->metadata),
-			$this->_db->qn('featured') . ' = ' . $this->_db->q($this->featured),
-			$this->_db->qn('publish_up') . ' = ' . ($this->publish_up ? $this->_db->q($this->publish_up) : 'null'),
-			$this->_db->qn('publish_down') . ' = ' . ($this->publish_down ? $this->_db->q($this->publish_down) : 'null'),
-			$this->_db->qn('payment_provider') . ' = ' . $this->_db->q($this->payment_provider)
+			$this->getDbo()->qn('catid') . ' = ' . $this->getDbo()->q($this->catid),
+			$this->getDbo()->qn('title') . ' = ' . $this->getDbo()->q($this->title),
+			$this->getDbo()->qn('color') . ' = ' . $this->getDbo()->q($this->color),
+			$this->getDbo()->qn('show_end_time') . ' = ' . $this->getDbo()->q($this->show_end_time),
+			$this->getDbo()->qn('url') . ' = ' . $this->getDbo()->q($this->url),
+			$this->getDbo()->qn('images') . ' = ' . $this->getDbo()->q($this->images),
+			$this->getDbo()->qn('description') . ' = ' . $this->getDbo()->q($this->description),
+			$this->getDbo()->qn('schedule') . ' = ' . $this->getDbo()->q($this->schedule),
+			$this->getDbo()->qn('capacity') . ' = ' . ($this->capacity === null ? 'NULL' : $this->getDbo()->q($this->capacity)),
+			$this->getDbo()->qn('max_tickets') . ' = ' . $this->getDbo()->q($this->max_tickets),
+			$this->getDbo()->qn('booking_opening_date') . ' = ' . $this->getDbo()->q($this->booking_opening_date),
+			$this->getDbo()->qn('booking_closing_date') . ' = ' . $this->getDbo()->q($this->booking_closing_date),
+			$this->getDbo()->qn('booking_cancel_closing_date') . ' = ' . $this->getDbo()->q($this->booking_cancel_closing_date),
+			$this->getDbo()->qn('booking_series') . ' = ' . $this->getDbo()->q($this->booking_series),
+			$this->getDbo()->qn('booking_waiting_list') . ' = ' . $this->getDbo()->q($this->booking_waiting_list),
+			$this->getDbo()->qn('price') . ' = ' . $this->getDbo()->q($this->price),
+			$this->getDbo()->qn('earlybird') . ' = ' . $this->getDbo()->q($this->earlybird),
+			$this->getDbo()->qn('user_discount') . ' = ' . $this->getDbo()->q($this->user_discount),
+			$this->getDbo()->qn('booking_information') . ' = ' . $this->getDbo()->q($this->booking_information),
+			$this->getDbo()->qn('terms') . ' = ' . $this->getDbo()->q($this->terms),
+			$this->getDbo()->qn('state') . ' = ' . $this->getDbo()->q($this->state),
+			$this->getDbo()->qn('checked_out') . ' = ' . $this->getDbo()->q(0),
+			$this->getDbo()->qn('checked_out_time') . ' = null',
+			$this->getDbo()->qn('access') . ' = ' . $this->getDbo()->q($this->access),
+			$this->getDbo()->qn('access_content') . ' = ' . $this->getDbo()->q($this->access_content),
+			$this->getDbo()->qn('params') . ' = ' . $this->getDbo()->q($this->params),
+			$this->getDbo()->qn('rooms') . ' = ' . $this->getDbo()->q($this->rooms ?: ''),
+			$this->getDbo()->qn('language') . ' = ' . $this->getDbo()->q($this->language),
+			$this->getDbo()->qn('modified') . ' = ' . ($this->modified ? $this->getDbo()->q($this->modified) : 'null'),
+			$this->getDbo()->qn('modified_by') . ' = ' . $this->getDbo()->q($user->id),
+			$this->getDbo()->qn('created_by') . ' = ' . $this->getDbo()->q($this->created_by),
+			$this->getDbo()->qn('metakey') . ' = ' . $this->getDbo()->q($this->metakey ?: ''),
+			$this->getDbo()->qn('metadesc') . ' = ' . $this->getDbo()->q($this->metadesc ?: ''),
+			$this->getDbo()->qn('metadata') . ' = ' . $this->getDbo()->q($this->metadata),
+			$this->getDbo()->qn('featured') . ' = ' . $this->getDbo()->q($this->featured),
+			$this->getDbo()->qn('publish_up') . ' = ' . ($this->publish_up ? $this->getDbo()->q($this->publish_up) : 'null'),
+			$this->getDbo()->qn('publish_down') . ' = ' . ($this->publish_down ? $this->getDbo()->q($this->publish_down) : 'null'),
+			$this->getDbo()->qn('payment_provider') . ' = ' . $this->getDbo()->q($this->payment_provider)
 		];
 
 		// If the xreference does exist, then we need to create it with the proper scheme
 		if ($this->xreference) {
 			// Replacing the _0 with the start date
-			$files[] = $this->_db->qn('xreference') . ' = concat(' . $this->_db->q($this->replaceLastInString('_0', '_', $this->xreference)) .
+			$files[] = $this->getDbo()->qn('xreference') . ' = concat(' . $this->getDbo()->q($this->replaceLastInString('_0', '_', $this->xreference)) .
 				", DATE_FORMAT(start_date, CASE WHEN all_day = '1' THEN '%Y%m%d' ELSE '%Y%m%d%H%i' END))";
 		} else {
-			$files[] = $this->_db->qn('xreference') . ' = null';
+			$files[] = $this->getDbo()->qn('xreference') . ' = null';
 		}
 
 		// Reset capacity used only when the whole series can be booked
 		if ($this->booking_series == 1) {
-			$files[] = $this->_db->qn('capacity_used') . ' = ' . $this->_db->q($this->capacity_used);
+			$files[] = $this->getDbo()->qn('capacity_used') . ' = ' . $this->getDbo()->q($this->capacity_used);
 		}
 
 		$query->set($files);
-		$query->where($this->_db->qn('original_id') . ' = ' . $this->_db->q($this->id));
+		$query->where($this->getDbo()->qn('original_id') . ' = ' . $this->getDbo()->q($this->id));
 
-		if ($oldEvent->modified && isset($this->_update_modified) && $this->_update_modified == 0) {
-			$query->where('(' . $this->_db->qn('modified') . ' = ' . $this->_db->q($oldEvent->modified)
+		if ($oldEvent->modified && $this->_update_modified !== null && $this->_update_modified == 0) {
+			$query->where('(' . $this->getDbo()->qn('modified') . ' = ' . $this->getDbo()->q($oldEvent->modified)
 				. ' or modified is null)');
 		}
 
-		$this->_db->setQuery($query);
-		$this->_db->execute();
+		$this->getDbo()->setQuery($query);
+		$this->getDbo()->execute();
 
 		return $success;
 	}
@@ -464,20 +525,24 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 		// Clean up keywords -- eliminate extra spaces between phrases and cr (\r) and lf (\n) characters from string
 		if (!empty($this->metakey)) {
 			// Only process if not empty
-			$bad_characters = ["\n", "\r", "\"", "<", ">"];
+			$bad_characters = ["\n", "\r", '"', "<", ">"];
 			$after_clean    = StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys           = explode(',', $after_clean);
 			$clean_keys     = [];
 			foreach ($keys as $key) {
-				if (trim($key)) {
-					$clean_keys[] = trim($key);
+				if (trim($key) === '') {
+					continue;
 				}
+				if (trim($key) === '0') {
+					continue;
+				}
+				$clean_keys[] = trim($key);
 			}
 			$this->metakey = implode(", ", $clean_keys);
 		}
 
 		// Images can be an empty json string
-		if (!$this->id && !isset($this->images)) {
+		if (!$this->id && (!property_exists($this, 'images') || $this->images === null)) {
 			$this->images = '{}';
 		}
 
@@ -527,10 +592,10 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 
 		$success = parent::delete($pk);
 		if ($success && $pk > 0) {
-			$this->_db->setQuery('delete from #__dpcalendar_events where original_id = ' . (int)$pk);
-			$this->_db->execute();
-			$this->_db->setQuery('delete from #__dpcalendar_tickets where event_id = ' . (int)$pk);
-			$this->_db->execute();
+			$this->getDbo()->setQuery('delete from #__dpcalendar_events where original_id = ' . (int)$pk);
+			$this->getDbo()->execute();
+			$this->getDbo()->setQuery('delete from #__dpcalendar_tickets where event_id = ' . (int)$pk);
+			$this->getDbo()->execute();
 		}
 		if ($success && $this->catid) {
 			DPCalendarHelper::increaseEtag($this->catid);
@@ -570,17 +635,17 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 		if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
 			$checkin = '';
 		} else {
-			$checkin = ' AND (checked_out = 0 OR checked_out = ' . (int)$userId . ')';
+			$checkin = ' AND (checked_out = 0 OR checked_out = ' . $userId . ')';
 		}
 
 		// Update the publishing state for rows with the given primary keys.
-		$this->_db->setQuery(
-			'UPDATE ' . $this->_db->quoteName($this->_tbl) . ' SET ' . $this->_db->quoteName('state') . ' = ' . (int)$state . ' WHERE (' . $where . ')' . $checkin
+		$this->getDbo()->setQuery(
+			'UPDATE ' . $this->getDbo()->quoteName($this->_tbl) . ' SET ' . $this->getDbo()->quoteName('state') . ' = ' . $state . ' WHERE (' . $where . ')' . $checkin
 		);
-		$this->_db->execute();
+		$this->getDbo()->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in.
-		if ($checkin && ((is_countable($pks) ? count($pks) : 0) == $this->_db->getAffectedRows())) {
+		if ($checkin && ((is_countable($pks) ? count($pks) : 0) == $this->getDbo()->getAffectedRows())) {
 			// Checkin the rows.
 			foreach ($pks as $pk) {
 				$this->checkin($pk);
@@ -604,15 +669,15 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 			$pk = $this->id;
 		}
 
-		$query = $this->_db->getQuery(true);
+		$query = $this->getDbo()->getQuery(true);
 		$query->update($this->_tbl);
-		$query->set($this->_db->quoteName('capacity_used') . ' = (' . $this->_db->quoteName('capacity_used') . ' ' . ($increment ? '+' : '-') . ' 1)');
+		$query->set($this->getDbo()->quoteName('capacity_used') . ' = (' . $this->getDbo()->quoteName('capacity_used') . ' ' . ($increment ? '+' : '-') . ' 1)');
 		$query->where('(id = ' . (int)$pk . ' or (original_id = ' . (int)$pk . ' and booking_series = 1))');
 		if (!$increment) {
 			$query->where('capacity_used > 0');
 		}
-		$this->_db->setQuery($query);
-		$this->_db->execute();
+		$this->getDbo()->setQuery($query);
+		$this->getDbo()->execute();
 
 		if ($increment) {
 			$this->capacity_used++;
@@ -623,10 +688,10 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 		return true;
 	}
 
-	public function populateTags($newTags = null)
+	public function populateTags($newTags = null): void
 	{
-		$this->_db->setQuery('select * from #__dpcalendar_events where ' . $this->_db->qn('original_id') . ' = ' . $this->_db->q($this->id));
-		foreach ($this->_db->loadAssocList() as $child) {
+		$this->getDbo()->setQuery('select * from #__dpcalendar_events where ' . $this->getDbo()->qn('original_id') . ' = ' . $this->getDbo()->q($this->id));
+		foreach ($this->getDbo()->loadAssocList() as $child) {
 			$table = new self($this->getDbo());
 			$table->bind($child);
 
@@ -641,16 +706,9 @@ class DPCalendarTableEvent extends Table implements TaggableTableInterface, Vers
 		}
 	}
 
-	public function clearDb()
+	private function replaceLastInString(string $search, string $replace, $str)
 	{
-		$this->_db = null;
-
-		return true;
-	}
-
-	private function replaceLastInString($search, $replace, $str)
-	{
-		if (($pos = strrpos($str, (string) $search)) !== false) {
+		if (($pos = strrpos($str, $search)) !== false) {
 			$search_length = strlen($search);
 			$str           = substr_replace($str, $replace, $pos, $search_length);
 		}

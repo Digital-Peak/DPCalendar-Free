@@ -49,19 +49,15 @@ class Translation
 		$languages = self::getLangmap();
 
 		if ($inverse) {
-			return array_search($lang, $languages);
+			return array_search($lang, $languages, true);
 		}
 
-		if (isset($languages[$lang])) {
-			return $languages[$lang];
-		}
-
-		return false;
+		return $languages[$lang] ?? false;
 	}
 
-	private static function getLangmap()
+	private static function getLangmap(): array
 	{
-		if (!count(self::$languages)) {
+		if (self::$languages === []) {
 			$langMap = [
 				'af_ZA: af-ZA',
 				'am_ET: am-ET',

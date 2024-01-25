@@ -20,7 +20,7 @@ class SendNotificationMail implements StageInterface
 	/**
 	 * @var Mail
 	 */
-	private $mailer = null;
+	private $mailer;
 
 	public function __construct(Mail $mailer)
 	{
@@ -82,7 +82,7 @@ class SendNotificationMail implements StageInterface
 				continue;
 			}
 
-			if (!(int)$e->created_by) {
+			if ((int)$e->created_by === 0) {
 				continue;
 			}
 

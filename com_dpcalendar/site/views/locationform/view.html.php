@@ -13,6 +13,9 @@ defined('_JEXEC') or die();
 
 class DPCalendarViewLocationForm extends BaseView
 {
+	public $location;
+	public $form;
+	public $returnPage;
 	public function display($tpl = null)
 	{
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
@@ -22,7 +25,7 @@ class DPCalendarViewLocationForm extends BaseView
 		return parent::display($tpl);
 	}
 
-	public function init()
+	protected function init()
 	{
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models/forms');
 		$this->app->getLanguage()->load('', JPATH_ADMINISTRATOR);

@@ -4,12 +4,12 @@
 	<packager>Digital Peak</packager>
 	<name>DPCalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>2023-12</creationDate>
+	<creationDate>2024-01</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.16.0</version>
+	<version>8.17.0</version>
 	<files>
 		<file id="plg_actionlog_dpcalendar" type="plugin" group="search" client="site">plg_actionlog_dpcalendar.zip</file>
 		<file id="plg_content_dpcalendar" type="plugin" group="content" client="site">plg_content_dpcalendar.zip</file>
@@ -21,6 +21,6 @@
 	</files>
 	<scriptfile>script.php</scriptfile>
 	<updateservers>
-		<server type="extension" priority="1" name="DPCalendar Free"><![CDATA[https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=4&ext=extension.xml]]></server>
+		<server type="extension" priority="1" name="DPCalendar Free"><![CDATA[https://cdn.digital-peak.com/update/stream.php?id=4]]></server>
 	</updateservers>
 </extension>

@@ -21,22 +21,22 @@ class Router
 		return Route::_(\DPCalendarHelperRoute::getCalendarRoute($calId));
 	}
 
-	public function getCalendarIcalRoute($calId, $token = '')
+	public function getCalendarIcalRoute(string $calId, ?string $token = ''): string
 	{
 		return \DPCalendarHelperRoute::getCalendarIcalRoute($calId, $token);
 	}
 
-	public function getEventRoute($id, $calId, $full = false, $autoRoute = true, $defaultItemId = 0)
+	public function getEventRoute($id, ?string $calId = '', $full = false, $autoRoute = true, $defaultItemId = 0)
 	{
 		return \DPCalendarHelperRoute::getEventRoute($id, $calId, $full, $autoRoute, $defaultItemId);
 	}
 
-	public function getEventFormRoute($id, $return = null, $append = null, $xhtml = true)
+	public function getEventFormRoute(?string $id, $return = null, $append = null, $xhtml = true)
 	{
 		return Route::_(\DPCalendarHelperRoute::getFormRoute($id, $return, $append), $xhtml);
 	}
 
-	public function getEventDeleteRoute($id, $return = null)
+	public function getEventDeleteRoute(string $id, $return = null)
 	{
 		return Route::_('index.php?option=com_dpcalendar&task=event.delete&e_id=' . $id . '&return=' . base64_encode($return));
 	}
@@ -46,7 +46,7 @@ class Router
 		return \DPCalendarHelperRoute::getLocationRoute($location);
 	}
 
-	public function getLocationFormRoute($id, $return = null)
+	public function getLocationFormRoute(?string $id, $return = null): string
 	{
 		return \DPCalendarHelperRoute::getLocationFormRoute($id, $return);
 	}

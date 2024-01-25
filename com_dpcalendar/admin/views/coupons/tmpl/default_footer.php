@@ -9,5 +9,5 @@ defined('_JEXEC') or die();
 
 ?>
 <div class="com-dpcalendar-adminlist__footer dp-footer">
-	<?php echo Text::sprintf('COM_DPCALENDAR_FOOTER', $this->input->getString('DPCALENDAR_VERSION')); ?>
+	<?php echo Text::sprintf('COM_DPCALENDAR_FOOTER', $this->input->getString('DPCALENDAR_VERSION', '')); ?>
 </div>

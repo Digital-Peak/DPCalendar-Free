@@ -15,6 +15,13 @@ defined('_JEXEC') or die();
 
 class DPCalendarViewTools extends BaseView
 {
+	public $resources;
+	public $languages;
+	/**
+	 * @var never[]|mixed[]
+	 */
+	public $calendars;
+	public $plugins;
 	protected function init()
 	{
 		if (strpos($this->getLayout(), 'translate') !== false) {

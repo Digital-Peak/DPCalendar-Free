@@ -22,6 +22,11 @@ if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Fie
 
 class JFormFieldDPCalendarEdit extends CategoryField
 {
+	/**
+	 * @var array<string, string>
+	 */
+	public $element;
+	public $value;
 	public $type = 'DPCalendarEdit';
 
 	protected function getOptions()
@@ -43,7 +48,7 @@ class JFormFieldDPCalendarEdit extends CategoryField
 
 		if (empty($calendar) || $calendar->external) {
 			PluginHelper::importPlugin('dpcalendar');
-			$tmp = $app->triggerEvent('onCalendarsFetch', [null, !empty($calendar->system) ? $calendar->system : null]);
+			$tmp = $app->triggerEvent('onCalendarsFetch', [null, empty($calendar->system) ? null : $calendar->system]);
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
 					foreach ($calendars as $externalCalendar) {
@@ -67,8 +72,22 @@ class JFormFieldDPCalendarEdit extends CategoryField
 		// Reset keys, so we can reorder properly
 		$options = array_values($options);
 
-		$toMove = [];
-		for ($i = 0; $i < count($options); $i++) {
+		$filter = '' . $this->element['calendar_filter'];
+		if ($filter !== '') {
+			$filter = explode(',', $filter);
+			foreach ($options as $key => $cal) {
+				if ($filter === [] || in_array($cal->value, $filter)) {
+					continue;
+				}
+				unset($options[$key]);
+			}
+
+			$options = array_values($options);
+		}
+
+		$toMove  = [];
+		$counter = count($options);
+		for ($i = 0; $i < $counter; $i++) {
 			$option = $options[$i];
 
 			if (!in_array($option->value, $ids)) {
@@ -76,9 +95,11 @@ class JFormFieldDPCalendarEdit extends CategoryField
 			}
 
 			$toMove[$i] = $option;
+			// Move subitems as well
+			$counter = count($options);
 
 			// Move subitems as well
-			for ($j = $i + 1; $j < count($options); $j++) {
+			for ($j = $i + 1; $j < $counter; $j++) {
 				$child = $options[$j];
 
 				if (!isset($child->level) || !isset($option->level) || $child->level <= $option->level) {

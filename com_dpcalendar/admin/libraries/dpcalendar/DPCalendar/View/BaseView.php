@@ -16,8 +16,10 @@ use DPCalendar\Helper\UserHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
 use DPCalendar\Router\Router;
 use DPCalendar\Translator\Translator;
+use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\HTML\Helpers\Sidebar;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -35,26 +37,54 @@ use Joomla\Registry\Registry;
 
 class BaseView extends HtmlView
 {
+	/** @var string */
+	public $tmpl;
+
+	/** @var HtmlDocument */
+	public $dpdocument;
+
+	/** @var LayoutHelper */
+	public $layoutHelper;
+
+	/** @var UserHelper */
+	public $userHelper;
+
+	/** @var array */
+	public $displayData;
+
+	public $document;
+	public $sidebar;
+
+	/** @var Form $filterForm */
+	public $filterForm;
+
+	public $activeFilters;
+
+	/** @var string */
+	public $pageclass_sfx;
+	public $title;
+	public $icon;
+	public $_charset;
 	protected $state;
 	protected $params;
 
 	/** @var Input */
-	protected $input = null;
+	protected $input;
 
 	/** @var CMSApplication */
-	protected $app = null;
+	protected $app;
 
 	/** @var User */
-	protected $user = null;
+	protected $user;
 
 	/** @var Translator */
-	protected $translator = null;
+	protected $translator;
 
 	/** @var Router */
-	protected $router = null;
+	protected $router;
 
 	/** @var DateHelper */
-	protected $dateHelper = null;
+	protected $dateHelper;
 
 	public function display($tpl = null)
 	{
@@ -76,6 +106,7 @@ class BaseView extends HtmlView
 		$this->translator = new Translator();
 		$this->dateHelper = new DateHelper();
 		$this->dateHelper->setTranslator($this->translator);
+
 		$this->layoutHelper = new LayoutHelper();
 		$this->userHelper   = new UserHelper();
 		$this->router       = new Router();
@@ -93,12 +124,17 @@ class BaseView extends HtmlView
 			'params'       => $this->params
 		];
 
+		if ($this->app instanceof AdministratorApplication) {
+			$this->filterForm    = $this->get('FilterForm');
+			$this->activeFilters = $this->get('ActiveFilters');
+		}
+
 		try {
 			$this->init();
-		} catch (\Exception $e) {
-			$this->app->enqueueMessage($e->getMessage(), 'error');
-			if ($e->getCode()) {
-				$this->app->setHeader('status', $e->getCode(), true);
+		} catch (\Exception $exception) {
+			$this->app->enqueueMessage($exception->getMessage(), 'error');
+			if ($exception->getCode()) {
+				$this->app->setHeader('status', $exception->getCode(), true);
 			}
 
 			return false;
@@ -145,8 +181,6 @@ class BaseView extends HtmlView
 			} else {
 				$this->sidebar = null;
 			}
-			$this->filterForm    = $this->get('FilterForm');
-			$this->activeFilters = $this->get('ActiveFilters');
 		}
 
 		parent::display($tpl);
@@ -284,7 +318,7 @@ class BaseView extends HtmlView
 		$title = $this->params->get('page_title', '');
 
 		if (empty($title)) {
-			$title = $this->app->get('sitename');
+			return $this->app->get('sitename');
 		}
 
 		return $title;

@@ -29,12 +29,12 @@
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
 			const root = document.querySelector('.com-dpcalendar-list, .com-dpcalendar-blog, .com-dpcalendar-timeline');
 			const geoComplete = root.querySelector('.dp-input_location');
-			if (geoComplete && geoComplete.dataset.dpAutocomplete == 1) {
+			if (geoComplete && (geoComplete.dataset.dpAutocomplete == 1 || Joomla.getOptions('DPCalendar.view.list.autocomplete') == 1)) {
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/autocomplete.js'], () => {
 					DPCalendar.autocomplete.create(geoComplete);
-					geoComplete.addEventListener('dp-autocomplete-select', () => {
-						root.querySelector('.dp-form:not(.dp-timezone)').submit();
-					});
+					geoComplete.addEventListener('dp-autocomplete-select', () =>
+						root.querySelector('.dp-form:not(.dp-timezone)').submit()
+					);
 					geoComplete.addEventListener('dp-autocomplete-change', (e) => {
 						let task = 'location.searchloc';
 						if (window.location.href.indexOf('administrator') == -1) {
@@ -52,13 +52,21 @@
 			const map = root.querySelector('.dp-map');
 			if (map) {
 				watchElements([map]);
-				if (geoComplete && geoComplete.getAttribute('data-latitude') && geoComplete.getAttribute('data-longitude')) {
+				let latitude = geoComplete.dataset.latitude;
+				if (!latitude && Joomla.getOptions('DPCalendar.view.list.location')) {
+					latitude = Joomla.getOptions('DPCalendar.view.list.location').latitude;
+				}
+				let longitude = geoComplete.dataset.longitude;
+				if (!longitude && Joomla.getOptions('DPCalendar.view.list.location')) {
+					longitude = Joomla.getOptions('DPCalendar.view.list.location').longitude;
+				}
+				if (geoComplete && latitude && longitude) {
 					map.addEventListener('dp-map-loaded', () => {
 						DPCalendar.Map.drawCircle(
 							map,
-							{ latitude: geoComplete.getAttribute('data-latitude'), longitude: geoComplete.getAttribute('data-longitude') },
-							root.querySelector('.dp-input[name=radius]').value,
-							root.querySelector('.dp-input[name="length-type"]').value
+							{ latitude: latitude, longitude: longitude },
+							root.querySelector('.dp-select[name="filter[radius]"]').value,
+							root.querySelector('.dp-select[name="filter[length-type]"]').value
 						);
 					});
 				}
@@ -72,7 +80,7 @@
 			});
 			[].slice.call(root.querySelectorAll('.dp-input, .dp-select')).forEach((input) => {
 				input.addEventListener('change', () => {
-					if (input.name == 'location' && input.nextElementSibling) {
+					if (input.name == 'filter[location]' && input.nextElementSibling) {
 						return;
 					}
 					if (input.classList.contains('dp-datepicker__input') && !input.dpPikaday) {
@@ -92,13 +100,9 @@
 			if (button) {
 				button.addEventListener('click', (e) => {
 					e.preventDefault();
-					[].slice.call(root.querySelectorAll('.dp-input:not([name="Itemid"])')).forEach((input) => {
+					[].slice.call(root.querySelectorAll('.dp-input:not([name="Itemid"]), .dp-select')).forEach((input) => {
 						input.value = '';
 					});
-					if (geoComplete) {
-						root.querySelector('[name=radius]').value = 20;
-						root.querySelector('[name=length-type]').value = 'm';
-					}
 					root.querySelector('.dp-form:not(.dp-timezone)').submit();
 					return false;
 				});
@@ -109,7 +113,7 @@
 					e.preventDefault();
 					DPCalendar.currentLocation((address) => {
 						const form = e.target.closest('.dp-form:not(.dp-timezone)');
-						form.querySelector('[name=location]').value = address;
+						form.querySelector('.dp-input[name=filter[location]]').value = address;
 						form.submit();
 					});
 					return false;

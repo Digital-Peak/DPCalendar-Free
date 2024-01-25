@@ -13,6 +13,8 @@ use Joomla\CMS\Language\Text;
 
 class JFormFieldDPRadio extends FormField
 {
+	public $element;
+	public $value;
 	protected $type = 'DPRadio';
 
 	protected function getInput()
@@ -21,7 +23,7 @@ class JFormFieldDPRadio extends FormField
 		$html = [];
 
 		// Initialize some field attributes.
-		$class = $this->element['class'] ? ' class="radio ' . (string)$this->element['class'] . '"' : ' class="radio"';
+		$class = $this->element['class'] ? ' class="radio ' . $this->element['class'] . '"' : ' class="radio"';
 
 		// Start the radio field output.
 		$html[] = '<fieldset id="' . $this->id . '"' . $class . '>';
@@ -32,12 +34,12 @@ class JFormFieldDPRadio extends FormField
 		// Build the radio field output.
 		foreach ($options as $i => $option) {
 			// Initialize some option attributes.
-			$checked  = ((string)$option->value == (string)$this->value) ? ' checked="checked"' : '';
-			$class    = !empty($option->class) ? ' class="' . $option->class . '"' : '';
+			$checked  = ((string)$option->value === (string)$this->value) ? ' checked="checked"' : '';
+			$class    = empty($option->class) ? '' : ' class="' . $option->class . '"';
 			$disabled = !empty($option->disable) || !empty($this->element['disabled']) ? ' disabled="disabled"' : '';
 
 			// Initialize some JavaScript option attributes.
-			$onclick = !empty($option->onclick) ? ' onclick="' . $option->onclick . '"' : '';
+			$onclick = empty($option->onclick) ? '' : ' onclick="' . $option->onclick . '"';
 
 			$html[] = '<input type="radio" id="' . $this->id . $i . '" name="' . $this->name . '"' . ' value="' .
 				htmlspecialchars($option->value, ENT_COMPAT, 'UTF-8') . '"' . $checked . $onclick . $disabled . '/>';

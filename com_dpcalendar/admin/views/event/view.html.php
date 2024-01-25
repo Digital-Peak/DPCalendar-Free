@@ -13,7 +13,14 @@ use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class DPCalendarViewEvent extends BaseView
 {
-	public function init()
+	public $event;
+	public $form;
+	public $returnPage;
+	/**
+	 * @var never[]|\stdClass[]
+	 */
+	public $seriesEvents;
+	protected function init()
 	{
 		// Set the default model
 		$this->setModel(BaseDatabaseModel::getInstance('AdminEvent', 'DPCalendarModel'), true);
@@ -30,7 +37,7 @@ class DPCalendarViewEvent extends BaseView
 			$model->setState('filter.children', $this->event->id);
 			$model->setState('filter.modified', $this->event->modified ?: '0000-00-00');
 			$model->setState('filter.state', null);
-			$model->setState('filter.search_start', null);
+			$model->setState('list.start-date', null);
 
 			foreach ($model->getItems() as $event) {
 				$e                 = new stdClass();
@@ -68,7 +75,6 @@ class DPCalendarViewEvent extends BaseView
 			$this->form->removeField('scheduling_monthly_week_days');
 			$this->form->removeField('scheduling_monthly_days');
 		}
-		$this->canDo = DPCalendarHelper::getActions($this->state->get('filter.category_id'));
 	}
 
 	protected function addToolbar()
@@ -76,7 +82,7 @@ class DPCalendarViewEvent extends BaseView
 		$this->input->set('hidemainmenu', true);
 
 		$isNew      = ($this->event->id == 0);
-		$checkedOut = !($this->event->checked_out == 0 || $this->event->checked_out == $this->user->id);
+		$checkedOut = $this->event->checked_out != 0 && $this->event->checked_out != $this->user->id;
 		$canDo      = DPCalendarHelper::getActions($this->event->catid);
 
 		if (!$checkedOut && ($canDo->get('core.edit') || (is_countable($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) ? count($this->user->getAuthorisedCategories('com_dpcalendar', 'core.create')) : 0))) {

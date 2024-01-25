@@ -21,6 +21,8 @@ use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarModelLocations extends ListModel
 {
+	public $context;
+	public $state;
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
@@ -168,7 +170,7 @@ class DPCalendarModelLocations extends ListModel
 
 		// Filter by tags
 		$tagIds = (array)$this->getState('filter.tags');
-		if ($tagIds) {
+		if ($tagIds !== []) {
 			$query->join(
 				'LEFT',
 				$db->quoteName('#__contentitem_tag_map', 'tagmap') . ' ON ' . $db->quoteName('tagmap.content_item_id') . ' = ' .
@@ -242,7 +244,7 @@ class DPCalendarModelLocations extends ListModel
 				$longitude = (float)$data->longitude;
 
 				if ($this->getState('filter.length-type') == 'mile') {
-					$radius = $radius * 1.60934;
+					$radius *= 1.60934;
 				}
 
 				$longitudeMin = $longitude - rad2deg(asin($radius / 6371) / cos(deg2rad($latitude)));

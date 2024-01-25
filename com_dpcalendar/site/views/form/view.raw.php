@@ -14,6 +14,11 @@ JLoader::import('joomla.application.component.view');
 
 class DPCalendarViewForm extends HtmlView
 {
+	public $params;
+	/**
+	 * @var mixed
+	 */
+	public $user;
 	protected $form;
 	protected $item;
 	protected $returnPage;
@@ -22,7 +27,7 @@ class DPCalendarViewForm extends HtmlView
 	public function display($tpl = null)
 	{
 		// Initialise variables.
-		$app  = Factory::getApplication();
+		Factory::getApplication();
 		$user = Factory::getUser();
 
 		// Get model data.
@@ -46,7 +51,7 @@ class DPCalendarViewForm extends HtmlView
 		}
 
 		// Check for errors.
-		if (is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) {
+		if ((is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) !== 0) {
 			Factory::getApplication()->enqueueMessage(implode("\n", $errors), 500);
 
 			return false;

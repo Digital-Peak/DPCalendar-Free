@@ -25,7 +25,7 @@ class JFormRuleMinmaxtime extends FormRule
 		}
 
 		// If we don't have a full set up, ignore the rule
-		if (!$form || !$input || $input->get('all_day')) {
+		if (!$form instanceof Form || !$input instanceof Registry || $input->get('all_day')) {
 			return true;
 		}
 

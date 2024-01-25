@@ -23,9 +23,24 @@ use Joomla\CMS\Router\Route;
 
 class DPCalendarViewEvent extends BaseView
 {
+	public $roomTitles;
+	public $avatar;
+	public $authorName;
+	public $seriesEvents;
+	public $seriesEventsTotal;
+	public $originalEvent;
+	public $noBookingMessage;
+	public $taxRate;
+	public $country;
+	public $returnPage;
+	public $mailTicketsForm;
+	/**
+	 * @var int
+	 */
+	public $heading;
 	public $event;
 
-	public function init()
+	protected function init()
 	{
 		if ($this->getLayout() === 'empty') {
 			return;
@@ -35,7 +50,7 @@ class DPCalendarViewEvent extends BaseView
 
 		$event = $this->get('Item');
 		if (!$event || !$event->id) {
-			throw new \Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
+			throw new Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
 
 		// Use the options from the event
@@ -54,7 +69,7 @@ class DPCalendarViewEvent extends BaseView
 		if (!in_array($event->access, $levels) ||
 			((in_array($event->access, $levels) && (isset($event->category_access) && !in_array($event->category_access, $levels))))
 		) {
-			throw new \Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'));
+			throw new Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'));
 		}
 
 		if ($this->getLayout() === 'mailtickets' && !$event->params->get('send-tickets-mail')) {
@@ -151,7 +166,7 @@ class DPCalendarViewEvent extends BaseView
 
 		$hosts = [];
 		foreach (array_unique(explode(',', $this->event->host_ids ?: '')) as $host) {
-			if (!$host) {
+			if ($host === '' || $host === '0') {
 				continue;
 			}
 
@@ -214,11 +229,13 @@ class DPCalendarViewEvent extends BaseView
 		foreach ($event->tickets as $ticket) {
 			// Try to find the label of the ticket type
 			$ticket->price_label = '';
-			if ($event->price) {
-				if (array_key_exists($ticket->type, $event->price->label) && $event->price->label[$ticket->type]) {
-					$ticket->price_label = $event->price->label[$ticket->type];
-				}
+			if (!$event->price) {
+				continue;
 			}
+			if (!(array_key_exists($ticket->type, $event->price->label) && $event->price->label[$ticket->type])) {
+				continue;
+			}
+			$ticket->price_label = $event->price->label[$ticket->type];
 		}
 
 		if ($this->getLayout() === 'mailtickets') {
@@ -269,12 +286,12 @@ class DPCalendarViewEvent extends BaseView
 		}
 
 		// When booking is disabled or not available
-		if ($event->capacity == '0' || $event->state == 3 || \DPCalendarHelper::isFree()) {
+		if ($event->capacity == '0' || $event->state == 3 || DPCalendarHelper::isFree()) {
 			return '';
 		}
 
 		// Check permissions
-		$calendar = \DPCalendarHelper::getCalendar($event->catid);
+		$calendar = DPCalendarHelper::getCalendar($event->catid);
 		if (!$calendar || !$calendar->canBook) {
 			return '';
 		}
@@ -285,7 +302,7 @@ class DPCalendarViewEvent extends BaseView
 		}
 
 		// Check if registration started
-		$now                   = \DPCalendarHelper::getDate();
+		$now                   = DPCalendarHelper::getDate();
 		$registrationStartDate = Booking::getRegistrationStartDate($event);
 		if ($registrationStartDate->format('U') > $now->format('U')) {
 			return Text::sprintf(
@@ -299,7 +316,7 @@ class DPCalendarViewEvent extends BaseView
 		}
 
 		// Check if registration ended
-		$now                = \DPCalendarHelper::getDate();
+		$now                = DPCalendarHelper::getDate();
 		$regstrationEndDate = Booking::getRegistrationEndDate($event);
 		if ($regstrationEndDate->format('U') < $now->format('U')) {
 			return Text::sprintf(
@@ -367,7 +384,7 @@ class DPCalendarViewEvent extends BaseView
 		$metaDesc = trim($this->event->metadata->get('metadesc', ''));
 
 		// Build it from the description
-		if (!$metaDesc) {
+		if ($metaDesc === '' || $metaDesc === '0') {
 			// Add meta prefix only when it is set to empty
 			$metaDesc = ($this->params->get('event_prefix_meta_description', '1') == '2' ? $metaPrefix : '')
 				. HTMLHelper::_('string.truncate', $this->event->description, 100, true, false);
@@ -379,7 +396,7 @@ class DPCalendarViewEvent extends BaseView
 		}
 
 		// Set the meta description when available
-		if ($metaDesc) {
+		if ($metaDesc !== '' && $metaDesc !== '0') {
 			$this->document->setDescription(trim($metaDesc));
 		}
 
@@ -393,9 +410,16 @@ class DPCalendarViewEvent extends BaseView
 
 		$mdata = $this->event->metadata->toArray();
 		foreach ($mdata as $k => $v) {
-			if ($v && $k != 'metadesc' && $k != 'metakey') {
-				$this->document->setMetadata($k, $v);
+			if (!$v) {
+				continue;
 			}
+			if ($k == 'metadesc') {
+				continue;
+			}
+			if ($k == 'metakey') {
+				continue;
+			}
+			$this->document->setMetadata($k, $v);
 		}
 
 		if ($this->params->get('event_show_page_heading', 0) != 2) {

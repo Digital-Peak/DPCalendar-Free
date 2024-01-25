@@ -11,11 +11,17 @@ use DPCalendar\Helper\DateHelper;
 use DPCalendar\Helper\LayoutHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
 use Joomla\CMS\Form\FormField;
+use Joomla\CMS\Language\Text;
 
 JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
 class JFormFieldDatetimechooser extends FormField
 {
+	public $hint;
+	public $element;
+	public $value;
+	public $id;
+	public $name;
 	protected $type = 'Datetimechooser';
 
 	public function getInput()
@@ -23,17 +29,17 @@ class JFormFieldDatetimechooser extends FormField
 		$dateHelper = new DateHelper();
 
 		$dateFormat = (string)$this->element['format'];
-		if (empty($dateFormat)) {
+		if ($dateFormat === '' || $dateFormat === '0') {
 			$dateFormat = DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y');
 		}
 
 		$timeFormat = (string)$this->element['formatTime'];
-		if (empty($timeFormat)) {
+		if ($timeFormat === '' || $timeFormat === '0') {
 			$timeFormat = DPCalendarHelper::getComponentParameter('event_time_format', 'H:i');
 		}
 
-		$allDay   = (string)$this->element['all_day'] == '1';
-		$formated = (string)$this->element['formated'];
+		$allDay    = (string)$this->element['all_day'] == '1';
+		$formatted = (string)$this->element['formatted'];
 
 		// Handle the special case for "now".
 		$date = null;
@@ -44,7 +50,7 @@ class JFormFieldDatetimechooser extends FormField
 			$date = $dateHelper->getDate();
 			$date->setTime($date->format('H', true), 0, 0);
 			$date->modify($this->value);
-		} elseif ($this->value && $formated) {
+		} elseif ($this->value && $formatted) {
 			$date = DPCalendarHelper::getDateFromString($this->value, null, $allDay, $dateFormat, $timeFormat);
 		} elseif ($this->value) {
 			$date = $dateHelper->getDate($this->value, $allDay);
@@ -60,10 +66,15 @@ class JFormFieldDatetimechooser extends FormField
 			'firstDay'    => DPCalendarHelper::getComponentParameter('weekstart', '1'),
 			'pair'        => (string)$this->element['datepair'],
 			'document'    => new HtmlDocument(),
-			'dateHelper'  => $dateHelper
+			'dateHelper'  => $dateHelper,
+			'title'       => $this->hint ? Text::_($this->hint) : ''
 		]);
 
-		$buffer .= $layoutHelper->renderLayout('block.timepicker', [
+		if ($allDay) {
+			return $buffer;
+		}
+
+		return $buffer . $layoutHelper->renderLayout('block.timepicker', [
 			'id'         => $this->id . '_time',
 			'name'       => str_replace(']', '_time]', $this->name),
 			'date'       => $date,
@@ -71,11 +82,9 @@ class JFormFieldDatetimechooser extends FormField
 			'min'        => (string)$this->element['min_time'],
 			'max'        => (string)$this->element['max_time'],
 			'step'       => DPCalendarHelper::getComponentParameter('event_form_time_step', 30),
-			'pair'       => (string)$this->element['datepair'] . '_time',
+			'pair'       => $this->element['datepair'] . '_time',
 			'document'   => new HtmlDocument(),
 			'dateHelper' => $dateHelper
 		]);
-
-		return $buffer;
 	}
 }

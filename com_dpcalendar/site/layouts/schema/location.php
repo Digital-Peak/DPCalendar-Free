@@ -8,7 +8,7 @@ defined('_JEXEC') or die();
 
 $event     = $displayData['event'];
 $locations = empty($event->locations) ? [] : (array)$event->locations;
-if (!$locations) {
+if ($locations === []) {
 	$url       = $event->url ?: $displayData['router']->getEventRoute($event->id, $event->catid, true, true);
 	$locations = [(object)['url' => $url]];
 }

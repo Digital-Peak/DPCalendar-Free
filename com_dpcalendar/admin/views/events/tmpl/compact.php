@@ -18,7 +18,7 @@ foreach ($this->items as $event) {
 
 	do {
 		$date = $start->format('Y-m-d', true);
-		if (!key_exists($date, $tmp)) {
+		if (!array_key_exists($date, $tmp)) {
 			$tmp[$date] = [];
 		}
 		$tmp[$date][] = $event;

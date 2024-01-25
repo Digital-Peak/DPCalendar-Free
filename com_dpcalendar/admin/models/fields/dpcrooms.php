@@ -19,6 +19,7 @@ if (version_compare(JVERSION, 4, '<')) {
 
 class JFormFieldDpcrooms extends GroupedlistField
 {
+	public $form;
 	protected $type = 'Dpcrooms';
 
 	public function getGroups()

@@ -11,7 +11,7 @@ defined('_JEXEC') or die();
 	<?php foreach ($this->locationGroups as $id => $locations) { ?>
 		<div class="dp-location-group dp-location-group-<?php echo $id; ?>">
 			<div class="dp-location-group__locations">
-				<?php foreach ($locations as $index => $location) { ?>
+				<?php foreach ($locations as $location) { ?>
 					<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
 					<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<div class="dp-location__details"

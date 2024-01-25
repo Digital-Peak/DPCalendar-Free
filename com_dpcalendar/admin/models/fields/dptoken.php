@@ -39,8 +39,7 @@ class JFormFieldDptoken extends TextField
 		$buffer .= parent::getInput();
 		$buffer .= '<button class="dp-button dp-token-gen">' . htmlspecialchars(Text::_('COM_DPCALENDAR_GENERATE')) . '</button>';
 		$buffer .= '<button class="dp-button dp-token-clear">' . htmlspecialchars(Text::_('JCLEAR')) . '</button>';
-		$buffer .= '</div>';
 
-		return $buffer;
+		return $buffer . '</div>';
 	}
 }

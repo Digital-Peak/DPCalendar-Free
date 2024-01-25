@@ -13,6 +13,7 @@ defined('_JEXEC') or die();
 
 class DPCalendarController extends BaseController
 {
+	public $input;
 	public function display($cachable = false, $urlparams = false)
 	{
 		$view = $this->input->get('view');
@@ -24,7 +25,7 @@ class DPCalendarController extends BaseController
 
 		$this->input->set('view', $view);
 		$layout = $this->input->getCmd('layout', 'default');
-		$id     = $this->input->getInt('id');
+		$id     = $this->input->getInt('id', 0);
 
 		if ($view != 'event' && $view != 'location' && $view != 'booking') {
 			DPCalendarHelper::addSubmenu($this->input->getCmd('view', 'cpanel'));

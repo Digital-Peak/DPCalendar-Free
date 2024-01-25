@@ -28,12 +28,12 @@ class DPCalendarModelTaxrate extends AdminModel
 
 	public function getItemByCountry($countryId)
 	{
-		$query = $this->_db->getQuery(true)
+		$query = $this->getDbo()->getQuery(true)
 			->select('*')
 			->from('#__dpcalendar_taxrates')->where('countries like\'%"country":"' . $countryId . '"%\'')->where('state = 1');
-		$this->_db->setQuery($query);
+		$this->getDbo()->setQuery($query);
 
-		$taxRate = $this->_db->loadObject();
+		$taxRate = $this->getDbo()->loadObject();
 		if (!$taxRate || !$taxRate->id) {
 			return null;
 		}
@@ -103,7 +103,7 @@ class DPCalendarModelTaxrate extends AdminModel
 	{
 		$app = Factory::getApplication();
 
-		$pk = $app->input->getInt('r_id');
+		$pk = $app->input->getInt('r_id', 0);
 		$this->setState('taxrate.id', $pk);
 		$this->setState('form.id', $pk);
 

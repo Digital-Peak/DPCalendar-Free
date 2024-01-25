@@ -15,7 +15,8 @@ use Joomla\CMS\Session\Session;
 
 class DPCalendarControllerEvent extends FormController
 {
-	public function overlapping()
+	public $input;
+	public function overlapping(): void
 	{
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
@@ -66,11 +67,17 @@ class DPCalendarControllerEvent extends FormController
 		if (!isset($data['id']) || !$data['id']) {
 			$data['id'] = $this->input->get('id', 0);
 		}
+
 		foreach ($events as $key => $e) {
-			if ($e->id != $data['id'] && $e->original_id != $data['id']) {
-				continue;
+			// Unset the own id
+			if ($e->id == $data['id'] || ($e->original_id != 0 && $e->original_id == $data['id'])) {
+				unset($events[$key]);
 			}
-			unset($events[$key]);
+
+			// Remove events where the end date is like the start date
+			if ($e->end_date === $startDate->toSql()) {
+				unset($events[$key]);
+			}
 		}
 
 		Factory::getLanguage()->load('com_dpcalendar', JPATH_SITE . '/components/com_dpcalendar');

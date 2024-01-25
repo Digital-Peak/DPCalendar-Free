@@ -118,7 +118,7 @@ class DPCalendarModelCoupon extends AdminModel
 	{
 		$app = Factory::getApplication();
 
-		$pk = $app->input->getInt('co_id');
+		$pk = $app->input->getInt('co_id', 0);
 		$this->setState('coupon.id', $pk);
 		$this->setState('form.id', $pk);
 

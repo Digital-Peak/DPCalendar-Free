@@ -16,6 +16,8 @@ use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarModelExtcalendars extends ListModel
 {
+	public $context;
+	public $state;
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {

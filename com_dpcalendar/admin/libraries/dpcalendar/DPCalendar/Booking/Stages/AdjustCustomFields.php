@@ -9,6 +9,7 @@ namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
 
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use League\Pipeline\StageInterface;
 
 \JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
@@ -24,8 +25,8 @@ class AdjustCustomFields implements StageInterface
 		// Clear the cache, doggy
 		try {
 			$reflection = new \ReflectionProperty(\FieldsHelper::class, 'fieldsCache');
-		} catch (\Exception $e) {
-			$reflection = new \ReflectionProperty(\Joomla\Component\Fields\Administrator\Helper\FieldsHelper::class, 'fieldsCache');
+		} catch (\Exception $exception) {
+			$reflection = new \ReflectionProperty(FieldsHelper::class, 'fieldsCache');
 		}
 		$reflection->setAccessible(true);
 		$reflection->setValue(null, null);

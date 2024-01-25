@@ -45,13 +45,17 @@ Table::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/tables')
  */
 abstract class DPCalendarPlugin extends CMSPlugin
 {
-	public $extCalendarsCache   = null;
-	protected $identifier       = null;
+	public $_name;
+	public $params;
+	public $_type;
+	public $_subject;
+	public $extCalendarsCache;
+	protected $identifier;
 	protected $cachingEnabled   = true;
 	protected $autoloadLanguage = true;
 
 	/** @var CMSApplication $app */
-	protected $app = null;
+	protected $app;
 
 	public function getIdentifier()
 	{
@@ -84,7 +88,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$cal = Reader::read($content);
 
 			foreach ($cal->VEVENT as $event) {
-				if ((string)$event->UID != $uid) {
+				if ((string)$event->UID !== $uid) {
 					continue;
 				}
 
@@ -113,7 +117,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$end->modify('+1 day');
 
 		$tmpEvent = $this->createEvent($eventId, $calendarId);
-		foreach ($this->fetchEvents($calendarId, $start, $end, new Registry()) as $event) {
+		foreach ($this->fetchEvents($calendarId, new Registry(), $start, $end) as $event) {
 			if ($event->id == $tmpEvent->id) {
 				return $event;
 			}
@@ -140,14 +144,14 @@ abstract class DPCalendarPlugin extends CMSPlugin
 	 *
 	 * @return array
 	 */
-	public function fetchEvents($calendarId, Date $startDate = null, Date $endDate = null, Registry $options)
+	public function fetchEvents($calendarId, Registry $options, Date $startDate = null, Date $endDate = null)
 	{
 		$s = $startDate;
-		if ($s) {
+		if ($s instanceof Date) {
 			$s = clone $startDate;
 		}
 		$e = $endDate;
-		if ($e) {
+		if ($e instanceof Date) {
 			$e = clone $endDate;
 		}
 
@@ -164,17 +168,13 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$content = implode(PHP_EOL, $content);
 		}
 
-		if (empty($options)) {
-			$options = new Registry();
-		}
-
 		\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 		$cal = null;
 
 		try {
 			$cal = Reader::read($content, Parser::OPTION_IGNORE_INVALID_LINES);
-		} catch (\Exception $e) {
-			$this->log($e->getMessage());
+		} catch (\Exception $exception) {
+			$this->log($exception->getMessage());
 			$this->log('Content is:' . nl2br(substr($content, 0, 200)));
 
 			return [];
@@ -204,8 +204,8 @@ abstract class DPCalendarPlugin extends CMSPlugin
 				$endDate->setTimezone(new \DateTimeZone('UTC'));
 				$cal = $cal->expand($startDate, $endDate);
 			}
-		} catch (\Exception $e) {
-			$this->log($e->getMessage());
+		} catch (\Exception $exception) {
+			$this->log($exception->getMessage());
 
 			return [];
 		}
@@ -229,7 +229,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		$dbCal = $this->getDbCal($calendarId);
 		foreach ($data as $event) {
-			if (!empty($filter)) {
+			if ($filter !== '' && $filter !== '0') {
 				$string = StringHelper::strtolower($event->SUMMARY) . ' ' . StringHelper::strtolower($event->DESCRIPTION) . ' ' . StringHelper::strtolower($event->LOCATION);
 				if (!DPCalendarHelper::matches($string, $filter)) {
 					continue;
@@ -264,20 +264,19 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		usort(
 			$events,
-			function ($event1, $event2) use ($order) {
+			static function ($event1, $event2) use ($order): int {
 				$first  = $event1;
 				$second = $event2;
 				if (strtolower($order) == 'desc') {
 					$first  = $event2;
 					$second = $event1;
 				}
-
 				return strcmp($first->start_date, $second->start_date);
 			}
 		);
 
 		if (!empty($limit) && count($events) >= $limit) {
-			$events = array_slice($events, 0, $limit);
+			return array_slice($events, 0, $limit);
 		}
 
 		return $events;
@@ -335,7 +334,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		return $calendars;
 	}
 
-	protected function getContent($calendarId, Date $startDate = null, Date $endDate = null, Registry $options)
+	protected function getContent($calendarId, Date $startDate = null, Date $endDate = null, Registry $options = null)
 	{
 		$calendar = $this->getDbCal($calendarId);
 		if (empty($calendar)) {
@@ -361,8 +360,8 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$content = str_replace("\nEND:VCALENDAR", '', $content);
 
 			return "BEGIN:VCALENDAR\n" . $content . "\nEND:VCALENDAR";
-		} catch (\Exception $e) {
-			$this->log($e->getMessage());
+		} catch (\Exception $exception) {
+			$this->log($exception->getMessage());
 
 			return '';
 		}
@@ -401,7 +400,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 	 * @param string $eventId
 	 * @param string $calendarId
 	 */
-	public function prepareForm($eventId, $calendarId, $form, $data)
+	public function prepareForm($eventId, $calendarId, $form, $data): void
 	{
 		$this->cleanupFormForEdit($calendarId, $form, $data);
 	}
@@ -427,12 +426,12 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$cache->options['locking'] = false;
 
 		try {
-			$event = $cache->get([$this, 'fetchEvent'], [$id[1], $id[0]]);
+			$event = $cache->get(fn ($eventId, $calendarId) => $this->fetchEvent($eventId, $calendarId), [$id[1], $id[0]]);
 			$cache->gc();
 
 			return $event;
-		} catch (\Exception $e) {
-			$this->log($e->getMessage());
+		} catch (\Exception $exception) {
+			$this->log($exception->getMessage());
 
 			return $this->fetchEvent($id[1], $id[0]);
 		}
@@ -453,11 +452,11 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$cache->setLifeTime($params->get('cache_time', 900) / 60);
 		$cache->options['locking'] = false;
 
-		if ($options == null) {
+		if (!$options instanceof Registry) {
 			$options = new Registry();
 		}
 
-		if ($startDate) {
+		if ($startDate instanceof Date) {
 			// If now we cache at least for the minute
 			$startDate->setTime($startDate->format('H', true), $startDate->format('i'));
 		}
@@ -465,15 +464,15 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		try {
 			// Remove the id, when PHP 8.2.5 is obsolete
 			$events = $cache->get(
-				[$this, 'fetchEvents'],
+				fn ($calendarId, ?Date $startDate = null, ?Date $endDate = null, ?Registry $options = null): array => $this->fetchEvents($calendarId, $options, $startDate, $endDate),
 				[$id, $startDate, $endDate, $options],
 				md5($calendarId . $startDate . $endDate . serialize($options))
 			);
 			$cache->gc();
-		} catch (\Exception $e) {
-			$this->log($e->getMessage());
+		} catch (\Exception $exception) {
+			$this->log($exception->getMessage());
 
-			$events = $this->fetchEvents($id, $startDate, $endDate, $options);
+			$events = $this->fetchEvents($id, $options, $startDate, $endDate);
 		}
 
 		return $events;
@@ -495,7 +494,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 					$ids[] = (int)str_replace($this->identifier . '-', '', $calendarId);
 				}
 			}
-			if (empty($ids)) {
+			if ($ids === []) {
 				return [];
 			}
 		}
@@ -784,26 +783,23 @@ abstract class DPCalendarPlugin extends CMSPlugin
 			$endDate  = clone $startDate;
 			$duration = DateTimeParser::parseDuration($event->DURATION, true);
 			$endDate->modify($duration);
-
 			if ($allDay) {
 				$endDate->modify('-1 day');
 			}
+		} elseif (!$event->DTEND) {
+			$endDate = clone $startDate;
+			$endDate->setTime(23, 59, 59);
 		} else {
-			if (!$event->DTEND) {
-				$endDate = clone $startDate;
-				$endDate->setTime(23, 59, 59);
-			} else {
-				$endDate = DPCalendarHelper::getDate($event->DTEND->getDateTime()->format('U'), $allDay);
-				if ($allDay) {
-					$endDate->modify('-1 day');
-				}
+			$endDate = DPCalendarHelper::getDate($event->DTEND->getDateTime()->format('U'), $allDay);
+			if ($allDay) {
+				$endDate->modify('-1 day');
 			}
 		}
 
 		// Search for the original to get the rrule
 		$original = null;
 		foreach ($originals as $tmp) {
-			if ((string)$tmp->UID == (string)$event->UID && $tmp->{'RECURRENCE-ID'} === null && $tmp->RRULE !== null) {
+			if ((string)$tmp->UID === (string)$event->UID && $tmp->{'RECURRENCE-ID'} === null && $tmp->RRULE !== null) {
 				$original = $tmp;
 
 				if ($event->{'RECURRENCE-ID'} === null &&
@@ -821,9 +817,16 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		if ($event->{'RECURRENCE-ID'}) {
 			$recurrenceDate = $event->{'RECURRENCE-ID'}->getDateTime()->format('U');
 			foreach ($originals as $o) {
-				if ($recurrenceDate == $o->DTSTART->getDateTime()->format('U') && (string)$o->UID == (string)$event->UID && $o->RRULE === null) {
-					$event = $o;
+				if ($recurrenceDate != $o->DTSTART->getDateTime()->format('U')) {
+					continue;
 				}
+				if ((string)$o->UID !== (string)$event->UID) {
+					continue;
+				}
+				if ($o->RRULE !== null) {
+					continue;
+				}
+				$event = $o;
 			}
 		}
 
@@ -843,10 +846,11 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		$tmpEvent->start_date = $startDate->toSql();
 		$tmpEvent->end_date   = $endDate->toSql();
 
-		$title                 = (string)$event->SUMMARY;
-		$title                 = str_replace('\n', ' ', $title);
-		$title                 = str_replace('\N', ' ', $title);
-		$tmpEvent->title       = Ical::icalDecode($title);
+		$title           = (string)$event->SUMMARY;
+		$title           = str_replace('\n', ' ', $title);
+		$title           = str_replace('\N', ' ', $title);
+		$tmpEvent->title = Ical::icalDecode($title);
+
 		$tmpEvent->alias       = ApplicationHelper::stringURLSafe($tmpEvent->title);
 		$tmpEvent->description = Ical::icalDecode((string)$event->DESCRIPTION);
 
@@ -865,7 +869,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 
 		$description = (string)$event->{'X-ALT-DESC'};
-		if (!empty($description)) {
+		if ($description !== '' && $description !== '0') {
 			$desc = $description;
 			if (is_array($desc)) {
 				$desc = implode(' ', $desc);
@@ -874,7 +878,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 		}
 
 		$author = (string)$event->ORGANIZER;
-		if (!empty($author)) {
+		if ($author !== '' && $author !== '0') {
 			$tmpEvent->created_by_alias = str_replace('MAILTO:', '', $author);
 		}
 
@@ -890,77 +894,80 @@ abstract class DPCalendarPlugin extends CMSPlugin
 						$booking->name = (string)$param;
 					}
 				}
-
 				// A name is at least required
-				if (!empty($booking->name)) {
-					$tmpEvent->bookings[] = $booking;
+				if ($booking->name === '') {
+					continue;
 				}
+				if ($booking->name === '0') {
+					continue;
+				}
+				$tmpEvent->bookings[] = $booking;
 			}
 		}
 
 		// Add none standard properties
 		$color = (string)$event->{'x-color'};
-		if (!empty($color) && !DPCalendarHelper::getCalendar($tmpEvent->catid)->color_force) {
+		if ($color !== '' && $color !== '0' && !DPCalendarHelper::getCalendar($tmpEvent->catid)->color_force) {
 			$tmpEvent->color = $color;
 		}
 
 		$url = (string)$event->URL;
-		if (!empty($url)) {
+		if ($url !== '' && $url !== '0') {
 			$tmpEvent->url = $url;
 		}
 
 		$url = (string)$event->{'x-url'};
-		if (!empty($url)) {
+		if ($url !== '' && $url !== '0') {
 			$tmpEvent->url = $url;
 		}
 
 		$alias = (string)$event->{'x-alias'};
-		if (!empty($alias)) {
+		if ($alias !== '' && $alias !== '0') {
 			$tmpEvent->alias = $alias;
 		}
 
 		$language = (string)$event->{'x-language'};
-		if (!empty($language)) {
+		if ($language !== '' && $language !== '0') {
 			$tmpEvent->language = $language;
 		}
 
 		$publishUp = (string)$event->{'x-publish-up'};
-		if (!empty($publishUp)) {
+		if ($publishUp !== '' && $publishUp !== '0') {
 			$tmpEvent->publish_up = $publishUp;
 		}
 
 		$publishDown = (string)$event->{'x-publish-down'};
-		if (!empty($publishDown)) {
+		if ($publishDown !== '' && $publishDown !== '0') {
 			$tmpEvent->publish_down = $publishDown;
 		}
 
 		$tmpEvent->images = new \stdClass();
 		$tmpImageData     = (string)$event->{'x-image'};
-		if (!empty($tmpImageData)) {
+		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_full = $tmpImageData;
 		}
 		$tmpImageData = (string)$event->{'x-image-full'};
-		if (!empty($tmpImageData)) {
+		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_full = $tmpImageData;
 		}
 		$tmpImageData = (string)$event->{'x-image-full-alt'};
-		if (!empty($tmpImageData)) {
+		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_full_alt = $tmpImageData;
 		}
 		$tmpImageData = (string)$event->{'x-image-full-caption'};
-		if (!empty($tmpImageData)) {
+		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_full_caption = $tmpImageData;
 		}
 		$tmpImageData = (string)$event->{'x-image-intro'};
-		if (!empty($tmpImageData)) {
+		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_intro = $tmpImageData;
 		}
 		$tmpImageData = (string)$event->{'x-image-intro-alt'};
-		if (!empty($tmpImageData)) {
+		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_intro_alt = $tmpImageData;
 		}
 		$tmpImageData = (string)$event->{'x-image-intro-caption'};
-		if (!empty($tmpImageData)) {
+		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_intro_caption = $tmpImageData;
 		}
 
@@ -985,9 +992,9 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		$location  = (string)$event->LOCATION;
 		$locations = [];
-		if (!empty($location)) {
+		if ($location !== '' && $location !== '0') {
 			$geo = (string)$event->GEO;
-			if (!empty($geo) && strpos($geo, ';') !== false) {
+			if ($geo !== '' && $geo !== '0' && strpos($geo, ';') !== false) {
 				static $locationModel = null;
 				if ($locationModel == null) {
 					BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models', 'DPCalendarModel');
@@ -1019,7 +1026,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 				$locations[] = Location::get(Ical::icalDecode($location));
 			}
 		}
-		$tmpEvent->locations = array_filter($locations, fn ($location) => (int)$location->state === 1);
+		$tmpEvent->locations = array_filter($locations, static fn ($location): bool => (int)$location->state === 1);
 		$tmpEvent->all_day   = $allDay ? 1 : 0;
 
 		if ($original !== null && $recId !== null) {
@@ -1079,7 +1086,7 @@ abstract class DPCalendarPlugin extends CMSPlugin
 
 		$radius = $options->get('radius');
 		if ($options->get('length-type') == 'm') {
-			$radius = $radius * 0.62137119;
+			$radius *= 0.62137119;
 		}
 
 		if (!$locationFilterData->latitude

@@ -12,7 +12,8 @@ defined('_JEXEC') or die();
 
 class DPCalendarControllerPlugin extends BaseController
 {
-	public function action()
+	public $input;
+	public function action(): void
 	{
 		DPCalendarHelper::doPluginAction($this->input->getWord('dpplugin', $this->input->getWord('plugin')), $this->input->getWord('action'));
 

@@ -14,7 +14,19 @@ use Joomla\CMS\Plugin\PluginHelper;
 
 class DPCalendarViewForm extends BaseView
 {
-	public function init()
+	public $form;
+	public $returnPage;
+	public $user;
+	public $app;
+	public $event;
+	/**
+	 * @var never[]|\stdClass[]
+	 */
+	public $seriesEvents;
+	public $input;
+	public $params;
+
+	protected function init()
 	{
 		$user = $this->user;
 
@@ -29,7 +41,7 @@ class DPCalendarViewForm extends BaseView
 		$authorised = true;
 		if (empty($this->event->id)) {
 			$tmp        = $this->app->triggerEvent('onCalendarsFetch', [null, 'cd']);
-			$authorised = DPCalendarHelper::canCreateEvent() || !empty(array_filter($tmp));
+			$authorised = DPCalendarHelper::canCreateEvent() || array_filter($tmp) !== [];
 		}
 
 		if (!$authorised && (is_countable($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) ? count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) : 0) < 1) {
@@ -43,7 +55,7 @@ class DPCalendarViewForm extends BaseView
 			$model->setState('filter.children', $this->event->id);
 			$model->setState('filter.modified', $this->event->modified ?: '0000-00-00');
 			$model->setState('filter.state', null);
-			$model->setState('filter.search_start', null);
+			$model->setState('list.start-date', null);
 
 			foreach ($model->getItems() as $event) {
 				$e                 = new stdClass();
@@ -59,39 +71,39 @@ class DPCalendarViewForm extends BaseView
 		}
 
 		$requestParams = $this->input->get('jform', [], 'array');
-		if (key_exists('start_date', $requestParams)) {
+		if (array_key_exists('start_date', $requestParams)) {
 			$this->form->setFieldAttribute('start_date', 'filter', null);
-			$this->form->setFieldAttribute('start_date', 'formated', true);
+			$this->form->setFieldAttribute('start_date', 'formatted', true);
 			$this->form->setValue(
 				'start_date',
 				null,
-				$requestParams['start_date'] . (key_exists('start_date_time', $requestParams) ? ' ' . $requestParams['start_date_time'] : '')
+				$requestParams['start_date'] . (array_key_exists('start_date_time', $requestParams) ? ' ' . $requestParams['start_date_time'] : '')
 			);
 		}
 
-		if (key_exists('end_date', $requestParams)) {
+		if (array_key_exists('end_date', $requestParams)) {
 			$this->form->setFieldAttribute('end_date', 'filter', null);
-			$this->form->setFieldAttribute('end_date', 'formated', true);
+			$this->form->setFieldAttribute('end_date', 'formatted', true);
 			$this->form->setValue(
 				'end_date',
 				null,
-				$requestParams['end_date'] . (key_exists('end_date_time', $requestParams) ? ' ' . $requestParams['end_date_time'] : '')
+				$requestParams['end_date'] . (array_key_exists('end_date_time', $requestParams) ? ' ' . $requestParams['end_date_time'] : '')
 			);
 		}
 
-		if (key_exists('title', $requestParams)) {
+		if (array_key_exists('title', $requestParams)) {
 			$this->form->setValue('title', null, $requestParams['title']);
 		}
 
-		if (key_exists('catid', $requestParams)) {
+		if (array_key_exists('catid', $requestParams)) {
 			$this->form->setValue('catid', null, $requestParams['catid']);
 		}
 
-		if (key_exists('location_ids', $requestParams) && $requestParams['location_ids'] && reset($requestParams['location_ids'])) {
+		if (array_key_exists('location_ids', $requestParams) && $requestParams['location_ids'] && reset($requestParams['location_ids'])) {
 			$this->form->setValue('location_ids', null, $requestParams['location_ids']);
 		}
 
-		if (key_exists('rooms', $requestParams)) {
+		if (array_key_exists('rooms', $requestParams)) {
 			$this->form->setValue('rooms', null, $requestParams['rooms']);
 		}
 

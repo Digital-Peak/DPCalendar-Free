@@ -56,6 +56,7 @@
 }
 .com-dpcalendar-eventform .dp-datepicker__input {
 	margin-right: -3px;
+	padding: 0.4rem;
 }
 .com-dpcalendar-eventform .dp-datepicker__button {
 	margin: 0;
@@ -458,6 +459,9 @@
 .com-dpcalendar-eventform .dp-datepicker .dp-input,
 .com-dpcalendar-eventform .dp-autocomplete {
 	min-width: 100px;
+}
+.com-dpcalendar-eventform .dp-timepicker {
+	padding: 0.4rem;
 }
 .com-dpcalendar-eventform #jform_scheduling_end_date_time,
 .com-dpcalendar-eventform .dp-field-exdates .dp-timepicker {

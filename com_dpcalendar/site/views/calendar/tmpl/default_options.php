@@ -78,13 +78,13 @@ $options['navLinks']              = true;
 
 $max = $params->get('max_time', 24);
 if (is_numeric($max)) {
-	$max = $max . ':00:00';
+	$max .= ':00:00';
 }
 $options['slotMaxTime'] = $max;
 
 $min = $params->get('min_time', 0);
 if (is_numeric($min)) {
-	$min = $min . ':00:00';
+	$min .= ':00:00';
 }
 $options['slotMinTime'] = $min;
 

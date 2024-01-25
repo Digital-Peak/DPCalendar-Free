@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\ListField;
 use Joomla\CMS\Form\FormHelper;
@@ -27,7 +28,7 @@ class JFormFieldDPMenuItems extends ListField
 	public function getOptions()
 	{
 		$app = Factory::getApplication();
-		$id  = $app->input->getInt('id');
+		$id  = $app->input->getInt('id', 0);
 
 		if ($app->input->get('view') == 'extcalendar') {
 			PluginHelper::importPlugin('dpcalendar');
@@ -43,7 +44,7 @@ class JFormFieldDPMenuItems extends ListField
 			}
 		}
 
-		$calendar = \DPCalendar\Helper\DPCalendarHelper::getCalendar($id);
+		$calendar = DPCalendarHelper::getCalendar($id);
 
 		if (!$calendar) {
 			return [];

@@ -7,8 +7,8 @@
 defined('_JEXEC') or die();
 
 $event = $displayData['event'];
-$price = $price = $event->price;
-if (!$price || !is_array($price->value) || empty($price->value)) {
+$price = $event->price;
+if (!$price || !is_array($price->value) || $price->value === []) {
 	$price              = new stdClass();
 	$price->value       = [0];
 	$price->label       = [''];

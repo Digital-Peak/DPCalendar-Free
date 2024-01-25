@@ -62,7 +62,7 @@ class SendWaitingListMail implements StageInterface
 			}
 		}
 
-		if (!empty($body)) {
+		if ($body !== '' && $body !== '0') {
 			$this->mailer->setSubject($subject);
 			$this->mailer->setBody($body);
 			$this->mailer->IsHTML(true);
@@ -72,7 +72,7 @@ class SendWaitingListMail implements StageInterface
 			if ($payload->mailParams->get('booking_include_ics', 1)) {
 				$icsFile = JPATH_ROOT . '/tmp/' . $payload->item->uid . '.ics';
 				$content = Ical::createIcalFromEvents($payload->eventsWithTickets, false, true);
-				if (!$content || !file_put_contents($icsFile, $content)) {
+				if (!$content || (file_put_contents($icsFile, $content) === 0 || file_put_contents($icsFile, $content) === false)) {
 					$icsFile = null;
 				} else {
 					$this->mailer->addAttachment($icsFile);

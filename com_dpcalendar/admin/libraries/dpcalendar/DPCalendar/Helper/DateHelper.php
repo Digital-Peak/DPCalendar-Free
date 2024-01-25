@@ -20,17 +20,18 @@ use Recurr\Transformer\Translator as TransformerTranslator;
 
 class DateHelper
 {
-	private $translator = null;
+	private ?\DPCalendar\Translator\Translator $translator = null;
 
-	public function transformRRuleToString(?string $rrule, ?string $startDate, ?array $exdates = [])
+	public function transformRRuleToString(?string $rrule, ?string $startDate, ?array $exdates = []): string
 	{
-		if (!$rrule) {
+		if ($rrule === null || $rrule === '' || $rrule === '0') {
 			return '';
 		}
 
 		$start = $this->getDate($startDate);
 		$rule  = new Rule('', $start, null, $start->getTimezone()->getName());
-		$rule->setExDates($exdates ?: []);
+		$rule->setExDates($exdates !== null && $exdates !== [] ? $exdates : []);
+
 		$parts = $rule->parseString($rrule);
 
 		// Parser can't handle both
@@ -47,7 +48,7 @@ class DateHelper
 		$translator = new TransformerTranslator();
 		try {
 			$translator->loadLocale(substr(DPCalendarHelper::getFrLanguage(), 0, 2));
-		} catch (\InvalidArgumentException $e) {
+		} catch (\InvalidArgumentException $invalidArgumentException) {
 			// Translation doesn't exist, ignore it
 		}
 
@@ -56,12 +57,12 @@ class DateHelper
 			$rule->loadFromArray($parts);
 			$buffer = ucfirst((new TextTransformer($translator))->transform($rule));
 
-			if ($exdates) {
+			if ($exdates !== null && $exdates !== []) {
 				$buffer .= PHP_EOL;
 				$buffer .= $this->translator->translate('COM_DPCALENDAR_EXDATES_EXCLUDE_LIST_TEXT');
 				$buffer .= implode(', ', array_map(fn ($d) => $this->getDate($d)->format('d.m.Y', true), $exdates));
 			}
-		} catch (\Exception $e) {
+		} catch (\Exception $exception) {
 			// Do not crash as some rules are not parseable for the transformator
 		}
 
@@ -104,7 +105,7 @@ class DateHelper
 		);
 	}
 
-	public function getNames()
+	public function getNames(): array
 	{
 		$options                    = [];
 		$options['monthNames']      = [];
@@ -174,14 +175,14 @@ class DateHelper
 		];
 
 		// Converts escaped characters
-		foreach ($replacements as $from => $to) {
+		foreach (array_keys($replacements) as $from) {
 			$replacements['\\' . $from] = '[' . $from . ']';
 		}
 
 		return Text::_(strtr($format, $replacements));
 	}
 
-	public function minutesToDuration($minutes)
+	public function minutesToDuration($minutes): string
 	{
 		if (!$minutes) {
 			return '00:00:00';

@@ -15,6 +15,8 @@ use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarModelTaxrates extends ListModel
 {
+	public $context;
+	public $state;
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
@@ -88,7 +90,7 @@ class DPCalendarModelTaxrates extends ListModel
 		// Create a new query object
 		$db    = $this->getDbo();
 		$query = $db->getQuery(true);
-		$user  = Factory::getUser();
+		Factory::getUser();
 
 		// Select the required fields from the table
 		$query->select($this->getState('list.select', 'a.*'));

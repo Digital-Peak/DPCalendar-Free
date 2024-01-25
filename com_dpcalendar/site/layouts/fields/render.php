@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-if (!key_exists('item', $displayData) || !key_exists('context', $displayData)) {
+if (!array_key_exists('item', $displayData) || !array_key_exists('context', $displayData)) {
 	return;
 }
 
@@ -27,7 +27,7 @@ $parts     = explode('.', $context);
 $component = $parts[0];
 $fields    = [];
 
-if (key_exists('fields', $displayData)) {
+if (array_key_exists('fields', $displayData)) {
 	$fields = $displayData['fields'];
 } else {
 	if (!empty($item->jcfields)) {

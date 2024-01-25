@@ -33,17 +33,17 @@ ini_set('display_errors', 1);
 
 class DPCalendarEventSync extends CliApplication
 {
-	public function doExecute()
+	public $input;
+	public function doExecute(): void
 	{
 		Log::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.errors.php'], Log::ERROR, 'com_dpcalendar');
 		Log::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.php'], Log::NOTICE, 'com_dpcalendar');
 
-		set_error_handler(function ($errorLevel, $errorMessage, $errorFile, $errorLine) {
+		set_error_handler(static function ($errorLevel, string $errorMessage, string $errorFile, string $errorLine): void {
 			// Ignore deprecated messages
 			if ($errorLevel == E_DEPRECATED || $errorLevel === E_USER_DEPRECATED) {
 				return;
 			}
-
 			Log::add(
 				'Fatal Error during event sync! Exception is in file ' . $errorFile . ' on line ' . $errorLine . ': ' . PHP_EOL . $errorMessage,
 				Log::ERROR,
@@ -70,7 +70,7 @@ class DPCalendarEventSync extends CliApplication
 		$property->setValue($user, true);
 		Factory::getSession()->set('user', $user);
 
-		if ($ids = $this->input->getString('calids', [])) {
+		if ($ids = $this->input->getString('calids', '')) {
 			$ids = explode(',', $ids);
 		}
 
@@ -79,12 +79,12 @@ class DPCalendarEventSync extends CliApplication
 			Factory::getApplication()->triggerEvent('onEventsSync', [null, $ids]);
 
 			Log::add('Finished with the DPCalendar event sync', Log::DEBUG, 'com_dpcalendar');
-		} catch (Exception $e) {
-			Log::add('Error during event sync! Exception is: ' . PHP_EOL . $e, Log::ERROR, 'com_dpcalendar');
+		} catch (Exception $exception) {
+			Log::add('Error during event sync! Exception is: ' . PHP_EOL . $exception, Log::ERROR, 'com_dpcalendar');
 		}
 	}
 
-	public function enqueueMessage($msg, $type = 'message')
+	public function enqueueMessage($msg, $type = 'message'): void
 	{
 		Log::add($msg, Log::ERROR, 'com_dpcalendar');
 	}
@@ -98,7 +98,7 @@ class DPCalendarEventSync extends CliApplication
 	{
 		try {
 			return new Router($options);
-		} catch (Exception $e) {
+		} catch (Exception $exception) {
 			return null;
 		}
 	}
@@ -107,7 +107,7 @@ class DPCalendarEventSync extends CliApplication
 	{
 		try {
 			return AbstractMenu::getInstance($name, $options);
-		} catch (Exception $e) {
+		} catch (Exception $exception) {
 			return null;
 		}
 	}

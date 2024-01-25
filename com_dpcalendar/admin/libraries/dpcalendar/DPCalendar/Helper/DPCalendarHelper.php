@@ -28,7 +28,7 @@ use Joomla\Registry\Registry;
 
 \JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');
 
-if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '>=')) {
+if (DPCalendarHelper::isJoomlaVersion('4', '>=')) {
 	\JLoader::registerAlias('UsersModelRegistration', '\\Joomla\\Component\\Users\\Site\\Model\\RegistrationModel');
 } else {
 	if (!class_exists('\\Joomla\\CMS\\HTML\\Helpers\\Sidebar', false)) {
@@ -116,7 +116,7 @@ class DPCalendarHelper
 		return $calendar;
 	}
 
-	public static function increaseEtag($calendarId)
+	public static function increaseEtag($calendarId): void
 	{
 		// If we are not a native calendar do nothing
 		if (!is_numeric($calendarId)) {
@@ -182,17 +182,17 @@ class DPCalendarHelper
 			$tmp = @convert_uudecode(base64_decode($string));
 
 			// Probably not obfuscated
-			if (!$tmp) {
+			if ($tmp === '' || $tmp === '0' || $tmp === false) {
 				return $string;
 			}
 
 			return $tmp;
-		} catch (\Exception $e) {
+		} catch (\Exception $exception) {
 			return $string;
 		}
 	}
 
-	public static function parseReadMore($event)
+	public static function parseReadMore($event): void
 	{
 		if (!empty($event->introText)) {
 			return;
@@ -200,7 +200,7 @@ class DPCalendarHelper
 
 		$pattern = '#<hr\s+id=("|\')system-readmore("|\')\s*\/*>#i';
 
-		if (!$event->description || !preg_match($pattern, $event->description)) {
+		if (!$event->description || (preg_match($pattern, $event->description) === 0 || preg_match($pattern, $event->description) === 0 || preg_match($pattern, $event->description) === false)) {
 			$event->introText = '';
 			return;
 		}
@@ -208,7 +208,7 @@ class DPCalendarHelper
 		[$event->introText, $event->description] = preg_split($pattern, $event->description, 2);
 	}
 
-	public static function parseImages($event)
+	public static function parseImages($event): void
 	{
 		if (is_string($event->images)) {
 			$event->images = json_decode($event->images);
@@ -239,9 +239,13 @@ class DPCalendarHelper
 		if (!empty($event->images->image_intro) && $pos = strpos($event->images->image_intro, '#')) {
 			$event->images->image_intro = substr($event->images->image_intro, 0, $pos);
 		}
-		if (!empty($event->images->image_full) && $pos = strpos($event->images->image_full, '#')) {
-			$event->images->image_full = substr($event->images->image_full, 0, $pos);
+		if (empty($event->images->image_full)) {
+			return;
 		}
+		if (($pos = strpos($event->images->image_full, '#')) === 0 || ($pos = strpos($event->images->image_full, '#')) === false) {
+			return;
+		}
+		$event->images->image_full = substr($event->images->image_full, 0, $pos);
 	}
 
 	public static function dayToString($day, $abbr = false)
@@ -281,10 +285,10 @@ class DPCalendarHelper
 		return $dateObj;
 	}
 
-	public static function getDateFromString($date, $time, $allDay, $dateFormat = null, $timeFormat = null)
+	public static function getDateFromString($date, ?string $time, $allDay, $dateFormat = null, $timeFormat = null)
 	{
 		$string = $date;
-		if (!empty($time)) {
+		if ($time !== null && $time !== '' && $time !== '0') {
 			$string = $date . ($allDay ? '' : ' ' . $time);
 		}
 
@@ -349,9 +353,7 @@ class DPCalendarHelper
 				'Error was: ' . implode(',', $errors['warnings']) . ' ' . implode(',', $errors['errors']));
 		}
 
-		$date = self::getDate($date->format('U'), $allDay);
-
-		return $date;
+		return self::getDate($date->format('U'), $allDay);
 	}
 
 	public static function getDateStringFromEvent($event, $dateFormat = null, $timeFormat = null, $noTags = false)
@@ -406,7 +408,7 @@ class DPCalendarHelper
 		return preg_replace($pattern, $replace, $dateString);
 	}
 
-	public static function renderEvents(array $events = null, $output, $params = null, $eventParams = [])
+	public static function renderEvents(array $events = null, ?string $output = '', $params = null, $eventParams = [])
 	{
 		if ($events === null) {
 			$events = [];
@@ -417,7 +419,7 @@ class DPCalendarHelper
 
 		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
-		$return = Factory::getApplication()->input->getInt('Itemid', null);
+		$return = Factory::getApplication()->input->getInt('Itemid', 0);
 		if (!empty($return)) {
 			$return = Route::_('index.php?Itemid=' . $return, false);
 		}
@@ -444,7 +446,7 @@ class DPCalendarHelper
 
 			$variables['canBook']  = Booking::openForBooking($event);
 			$variables['bookLink'] = \DPCalendarHelperRoute::getBookingFormRouteFromEvent($event, $return);
-			$variables['booking']  = isset($event->booking) ? (bool)$event->booking : false;
+			$variables['booking']  = isset($event->booking) && (bool)$event->booking;
 
 			$variables['calendarLink'] = \DPCalendarHelperRoute::getCalendarRoute($event->catid);
 			$variables['backLink']     = \DPCalendarHelperRoute::getEventRoute($event->id, $event->catid);
@@ -500,7 +502,7 @@ class DPCalendarHelper
 			if (isset($event->locations) && !empty($event->locations)) {
 				$variables['location'] = $event->locations;
 				foreach ($event->locations as $location) {
-					if (key_exists($location->id, $locationCache)) {
+					if (array_key_exists($location->id, $locationCache)) {
 						$location = $locationCache[$location->id];
 					} else {
 						$tmp                          = Location::format($location);
@@ -613,8 +615,8 @@ class DPCalendarHelper
 			$m = new \Mustache_Engine();
 
 			return $m->render($output, $configuration);
-		} catch (\Exception $e) {
-			echo $e->getMessage();
+		} catch (\Exception $exception) {
+			echo $exception->getMessage();
 		}
 	}
 
@@ -657,11 +659,7 @@ class DPCalendarHelper
 			if ($size == 0) {
 				$size = $params->get('avatar_height', 0);
 			}
-			if ($size == 0) {
-				$size = '';
-			} else {
-				$size = '?s=' . $size;
-			}
+			$size  = $size == 0 ? '' : '?s=' . $size;
 			$image = 'https://www.gravatar.com/avatar/' . md5(strtolower(trim($email))) . $size;
 		}
 
@@ -695,11 +693,7 @@ class DPCalendarHelper
 			} else {
 				$w = '';
 			}
-			if ($h != 0) {
-				$h = 'height="' . $h . '"';
-			} else {
-				$h = '';
-			}
+			$h = $h != 0 ? 'height="' . $h . '"' : '';
 
 			return '<img src="' . $image . '" ' . $w . ' ' . $h . ' loading="lazy"/>';
 		}
@@ -772,13 +766,13 @@ class DPCalendarHelper
 			$lang = substr($lang, 0, strpos($lang, '-'));
 		}
 		if (!in_array($lang, $languages)) {
-			$lang = 'en';
+			return 'en';
 		}
 
 		return $lang;
 	}
 
-	public static function doPluginAction($plugin, $action, $data = null)
+	public static function doPluginAction(string $plugin, $action, $data = null)
 	{
 		PluginHelper::importPlugin('dpcalendar');
 
@@ -859,7 +853,7 @@ class DPCalendarHelper
 		return PluginHelper::isEnabled('captcha') && $accessCaptcha;
 	}
 
-	public static function sendMessage($message, $error = false, array $data = [])
+	public static function sendMessage($message, $error = false, array $data = []): void
 	{
 		ob_clean();
 
@@ -892,7 +886,7 @@ class DPCalendarHelper
 		}
 
 		$groups = array_unique(array_filter(array_merge($groups, $additionalGroups)));
-		if (empty($groups)) {
+		if ($groups === []) {
 			return [];
 		}
 
@@ -912,7 +906,7 @@ class DPCalendarHelper
 
 			$mailer = Factory::getMailer();
 
-			if ($fromMail) {
+			if ($fromMail !== null && $fromMail !== '' && $fromMail !== '0') {
 				$mailer->setFrom($fromMail);
 			}
 
@@ -974,7 +968,7 @@ class DPCalendarHelper
 				continue;
 			}
 
-			if ($appending) {
+			if ($appending !== null && $appending !== 0) {
 				$criteria[$appending] .= ' ' . str_replace('"', '', $value);
 				if (self::endsWith($value, '"')) {
 					$appending = null;
@@ -992,11 +986,11 @@ class DPCalendarHelper
 				continue;
 			}
 			if (self::startsWith($q, '-')) {
-				if (strpos($text, (string) substr($q, 1)) !== false) {
+				if (strpos($text, substr($q, 1)) !== false) {
 					return false;
 				}
 			} elseif (self::startsWith($q, '+')) {
-				if (strpos($text, (string) substr($q, 1)) === false) {
+				if (strpos($text, substr($q, 1)) === false) {
 					return false;
 				}
 			} elseif (strpos($text, $q) === false) {
@@ -1013,7 +1007,7 @@ class DPCalendarHelper
 	 * @param $fields
 	 * @param $order
 	 */
-	public static function sortFields(&$fields, $order)
+	public static function sortFields(array &$fields, $order): void
 	{
 		$order = (array)$order;
 
@@ -1031,15 +1025,15 @@ class DPCalendarHelper
 		}
 
 		// Check if empty
-		if (!$order) {
+		if ($order === []) {
 			return;
 		}
 
 		// Get the field names out of the object
-		$order = array_values(array_map(fn ($f) => $f->field ?? $f['field'], $order));
+		$order = array_values(array_map(static fn ($f) => $f->field ?? $f['field'], $order));
 
 		// Sort the fields array when needed
-		if (!$order) {
+		if ($order === []) {
 			return;
 		}
 
@@ -1049,11 +1043,10 @@ class DPCalendarHelper
 		// Sort the fields
 		usort(
 			$fields,
-			function ($f1, $f2) use ($order, $keys) {
+			static function ($f1, $f2) use ($order, $keys) {
 				$fieldName = property_exists($f1, 'fieldname') ? 'fieldname' : 'name';
-				$k1        = in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order) : -1;
-				$k2        = in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order) : -1;
-
+				$k1        = in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order, true) : -1;
+				$k2        = in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order, true) : -1;
 				if ($k1 >= 0 && $k2 < 0) {
 					return -1;
 				}
@@ -1063,8 +1056,7 @@ class DPCalendarHelper
 				if ($k1 >= 0 && $k2 >= 0) {
 					return $k1 > $k2 ? 1 : -1;
 				}
-
-				return array_search($f1->id, $keys) - array_search($f2->id, $keys);
+				return array_search($f1->id, $keys, true) - array_search($f2->id, $keys, true);
 			}
 		);
 	}
@@ -1077,7 +1069,7 @@ class DPCalendarHelper
 		}
 
 		if ($forRender) {
-			$fieldName = 'dp-field-' . str_replace('_', '-', $fieldName);
+			return 'dp-field-' . str_replace('_', '-', $fieldName);
 		}
 
 		return $fieldName;
@@ -1088,7 +1080,8 @@ class DPCalendarHelper
 		$text = str_replace('\n', PHP_EOL, $text);
 
 		// IE does not handle &apos; entity!
-		$text                 = preg_replace('/&apos;/', '&#39;', $text);
+		$text = preg_replace('/&apos;/', '&#39;', $text);
+
 		$section_html_pattern = '%# Rev:20100913_0900 github.com/jmrware/LinkifyURL
 		# Section text into HTML <A> tags  and everything else.
 		(                              # $1: Everything not HTML <A> tag.
@@ -1105,9 +1098,8 @@ class DPCalendarHelper
 			'DPCalendarHelper',
 			'linkifyHtmlCallback'
 		], $text);
-		$text = nl2br($text);
 
-		return $text;
+		return nl2br($text);
 	}
 
 	public static function linkify($text)
@@ -1157,13 +1149,9 @@ class DPCalendarHelper
 		return preg_replace($url_pattern, $url_replace, $text);
 	}
 
-	public static function linkifyHtmlCallback($matches)
+	public static function linkifyHtmlCallback(array $matches)
 	{
-		if (isset($matches[2])) {
-			return $matches[2];
-		}
-
-		return self::linkify($matches[1]);
+		return $matches[2] ?? self::linkify($matches[1]);
 	}
 
 	public static function fixImageLinks($buffer)
@@ -1188,7 +1176,7 @@ class DPCalendarHelper
 	public static function increaseMemoryLimit($limit)
 	{
 		$memMax = trim(@ini_get('memory_limit'));
-		if ($memMax) {
+		if ($memMax !== '' && $memMax !== '0') {
 			$last = strtolower($memMax[strlen($memMax) - 1]);
 			switch ($last) {
 				case 'g':

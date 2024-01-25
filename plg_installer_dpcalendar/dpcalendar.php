@@ -13,7 +13,7 @@ use Joomla\CMS\Uri\Uri;
 
 class PlgInstallerDPCalendar extends CMSPlugin
 {
-	public function onInstallerBeforePackageDownload(&$url, &$headers)
+	public function onInstallerBeforePackageDownload(&$url, &$headers): void
 	{
 		if (strpos($url, '/download/dpcalendar/') === false) {
 			return;

@@ -17,6 +17,9 @@ use Joomla\CMS\Session\Session;
 
 class DPCalendarControllerLocation extends FormController
 {
+	public $input;
+	public $id;
+	public $error;
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
 	public function batch($model = null)
@@ -43,22 +46,22 @@ class DPCalendarControllerLocation extends FormController
 		$this->error = $model->getError();
 	}
 
-	public function loc()
+	public function loc(): void
 	{
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		$loc = Location::get($this->input->getString('loc'), false);
+		$loc = Location::get($this->input->getString('loc', ''), false);
 
-		$data             = (array)$loc;
-		$data['formated'] = Location::format([$loc]);
+		$data              = (array)$loc;
+		$data['formatted'] = Location::format([$loc]);
 		DPCalendarHelper::sendMessage(null, false, $data);
 	}
 
-	public function searchloc()
+	public function searchloc(): void
 	{
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		DPCalendarHelper::sendMessage(null, false, Location::search(trim($this->input->getString('loc'))));
+		DPCalendarHelper::sendMessage(null, false, Location::search(trim($this->input->getString('loc', ''))));
 	}
 
 	public function edit($key = null, $urlVar = 'l_id')

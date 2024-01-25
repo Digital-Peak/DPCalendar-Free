@@ -24,7 +24,7 @@ class Com_DPCalendarInstallerScript extends InstallerScript
 	protected $minimumJoomla   = '3.10.5';
 	protected $allowDowngrades = true;
 
-	public function update($parent)
+	public function update($parent): void
 	{
 		$path    = JPATH_ADMINISTRATOR . '/components/com_dpcalendar/dpcalendar.xml';
 		$version = null;
@@ -34,7 +34,7 @@ class Com_DPCalendarInstallerScript extends InstallerScript
 			$version  = (string)$manifest->version;
 		}
 
-		if (empty($version) || $version == 'DP_DEPLOY_VERSION') {
+		if ($version === null || $version === '' || $version === '0' || $version == 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
@@ -127,7 +127,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 
 				$bookings[$ticket->booking_id . '-' . $ticket->type] = true;
 			}
-			if ($ticketsToDelete) {
+			if ($ticketsToDelete !== []) {
 				$db->setQuery('delete from #__dpcalendar_tickets where id in (' . implode(',', $ticketsToDelete) . ')');
 				$db->execute();
 			}
@@ -188,14 +188,11 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
 
-		if (version_compare($version, '8.14.0') == -1) {
-			if (version_compare(4, JVERSION, '>')) {
-				// Force standard routing on Joomla 4
-				$params = ComponentHelper::getParams('com_dpcalendar');
-				$params->set('sef_advanced', 1);
-
-				$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
-			}
+		if (version_compare($version, '8.14.0') == -1 && version_compare(4, JVERSION, '>')) {
+			// Force standard routing on Joomla 4
+			$params = ComponentHelper::getParams('com_dpcalendar');
+			$params->set('sef_advanced', 1);
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
 
 		if (version_compare($version, '8.7.0') == -1) {
@@ -254,6 +251,13 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
+
+		if (version_compare($version, '8.17.0') == -1) {
+			$params = ComponentHelper::getParams('com_dpcalendar');
+			$params->set('list_date_start', $params->get('date_start', ''));
+
+			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
+		}
 	}
 
 	public function preflight($type, $parent)
@@ -268,7 +272,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			$manifest = simplexml_load_file($path);
 			$version  = (string)$manifest->version;
 		}
-		if (!empty($version) && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '7.0.0') < 0) {
+		if ($version !== null && $version !== '' && $version !== '0' && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '7.0.0') < 0) {
 			Factory::getApplication()->enqueueMessage(
 				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 7.0.0 running. Please install the latest release from version 7 first.',
 				'error'
@@ -279,7 +283,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 		}
 	}
 
-	public function postflight($type, $parent)
+	public function postflight($type, $parent): void
 	{
 		if ($parent->getElement() != 'com_dpcalendar') {
 			return;
@@ -317,14 +321,14 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 		}
 	}
 
-	private function run($query)
+	private function run(string $query): void
 	{
 		try {
 			$db = Factory::getDBO();
 			$db->setQuery($query);
 			$db->execute();
-		} catch (Exception $e) {
-			Factory::getApplication()->enqueueMessage($e->getMessage(), 'error');
+		} catch (Exception $exception) {
+			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'error');
 		}
 	}
 }

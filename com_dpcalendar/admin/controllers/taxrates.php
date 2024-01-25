@@ -15,7 +15,6 @@ class DPCalendarControllerTaxrates extends AdminController
 
 	public function getModel($name = 'Taxrate', $prefix = 'DPCalendarModel', $config = ['ignore_request' => true])
 	{
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
+		return parent::getModel($name, $prefix, $config);
 	}
 }

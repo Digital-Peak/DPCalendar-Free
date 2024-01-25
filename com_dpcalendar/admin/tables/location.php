@@ -22,6 +22,37 @@ use Joomla\Utilities\ArrayHelper;
 class DPCalendarTableLocation extends Table implements TaggableTableInterface, VersionableTableInterface
 {
 	use TaggableTableTrait;
+	public $typeAlias;
+	public $id;
+	public $modified;
+	public $modified_by;
+	public $created;
+	public $created_by;
+	public $alias;
+	public $title;
+	public $publish_down;
+	public $publish_up;
+	public $metakey;
+	/**
+	 * @var int
+	 */
+	public $country;
+	/**
+	 * @var int
+	 */
+	public $checked_out;
+	/**
+	 * @var int
+	 */
+	public $version;
+	public $checked_out_time;
+	public $color;
+	public $_tbl_key;
+	public $_tbl;
+	/**
+	 * @var int
+	 */
+	public $state;
 
 	public function __construct(&$db)
 	{
@@ -74,7 +105,7 @@ class DPCalendarTableLocation extends Table implements TaggableTableInterface, V
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->get('id');
 		} else {
-			if (!(int)$this->created) {
+			if ((int)$this->created === 0) {
 				$this->created = $date->toSql();
 			}
 			if (empty($this->created_by)) {
@@ -104,10 +135,10 @@ class DPCalendarTableLocation extends Table implements TaggableTableInterface, V
 		}
 
 		// Check for existing name
-		$query = 'SELECT id FROM #__dpcalendar_locations WHERE title = ' . $this->_db->Quote($this->title);
-		$this->_db->setQuery($query);
+		$query = 'SELECT id FROM #__dpcalendar_locations WHERE title = ' . $this->getDbo()->Quote($this->title);
+		$this->getDbo()->setQuery($query);
 
-		$xid = (int)$this->_db->loadResult();
+		$xid = (int)$this->getDbo()->loadResult();
 		if ($xid && $xid != (int)$this->id) {
 			$this->setError(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 
@@ -133,15 +164,19 @@ class DPCalendarTableLocation extends Table implements TaggableTableInterface, V
 		// Clean up keywords -- eliminate extra spaces between phrases
 		// and cr (\r) and lf (\n) characters from string
 		if (!empty($this->metakey)) {
-			$bad_characters = ["\n", "\r", "\"", "<", ">"];
+			$bad_characters = ["\n", "\r", '"', "<", ">"];
 
 			$after_clean = StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys        = explode(',', $after_clean);
 			$clean_keys  = [];
 			foreach ($keys as $key) {
-				if (trim($key)) {
-					$clean_keys[] = trim($key);
+				if (trim($key) === '') {
+					continue;
 				}
+				if (trim($key) === '0') {
+					continue;
+				}
+				$clean_keys[] = trim($key);
 			}
 			$this->metakey = implode(", ", $clean_keys);
 		}
@@ -203,25 +238,25 @@ class DPCalendarTableLocation extends Table implements TaggableTableInterface, V
 		if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
 			$checkin = '';
 		} else {
-			$checkin = ' AND (checked_out = 0 OR checked_out = ' . (int)$userId . ')';
+			$checkin = ' AND (checked_out = 0 OR checked_out = ' . $userId . ')';
 		}
 
 		// Update the publishing state for rows with the given primary keys.
-		$this->_db->setQuery(
-			'UPDATE ' . $this->_db->quoteName($this->_tbl) . ' SET ' . $this->_db->quoteName('state') . ' = ' . (int)$state . ' WHERE (' . $where .
+		$this->getDbo()->setQuery(
+			'UPDATE ' . $this->getDbo()->quoteName($this->_tbl) . ' SET ' . $this->getDbo()->quoteName('state') . ' = ' . $state . ' WHERE (' . $where .
 			')' . $checkin
 		);
 
 		try {
-			$this->_db->execute();
-		} catch (RuntimeException $e) {
-			$this->setError($e->getMessage());
+			$this->getDbo()->execute();
+		} catch (RuntimeException $runtimeException) {
+			$this->setError($runtimeException->getMessage());
 
 			return false;
 		}
 
 		// If checkin is supported and all rows were adjusted, check them in
-		if ($checkin && ((is_countable($pks) ? count($pks) : 0) == $this->_db->getAffectedRows())) {
+		if ($checkin && ((is_countable($pks) ? count($pks) : 0) == $this->getDbo()->getAffectedRows())) {
 			// Checkin the rows
 			foreach ($pks as $pk) {
 				$this->checkin($pk);

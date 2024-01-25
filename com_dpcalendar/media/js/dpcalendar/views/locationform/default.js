@@ -205,7 +205,7 @@
 		document.getElementById('jform_latitude').value = result.latitude;
 		document.getElementById('jform_longitude').value = result.longitude;
 		if (document.getElementById('jform_title').value == '') {
-			document.getElementById('jform_title').value = result.formated;
+			document.getElementById('jform_title').value = result.formatted;
 		}
 	}
 })();

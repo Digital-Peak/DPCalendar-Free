@@ -19,6 +19,7 @@ JLoader::import('joomla.application.component.controlleradmin');
 
 class DPCalendarControllerEvents extends AdminController
 {
+	public $input;
 	public function __construct($config = [])
 	{
 		parent::__construct($config);
@@ -27,12 +28,10 @@ class DPCalendarControllerEvents extends AdminController
 
 	public function getModel($name = 'AdminEvent', $prefix = 'DPCalendarModel', $config = ['ignore_request' => true])
 	{
-		$model = parent::getModel($name, $prefix, $config);
-
-		return $model;
+		return parent::getModel($name, $prefix, $config);
 	}
 
-	public function featured()
+	public function featured(): void
 	{
 		// Check for request forgeries
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));

@@ -15,6 +15,9 @@
 			if (this.classes.length < 2) {
 				this.classes.push('dp-select-container__input_unstyled');
 			}
+			if (this.multiple && !langInputPlaceholder) {
+				Array.from(this.element.options ?? []).filter((option) => option.value === '').forEach((option) => langInputPlaceholder = option.innerHTML);
+			}
 			this.langInputPlaceholder = langInputPlaceholder;
 			element.addEventListener('change', () => {
 				if (!this.multiple) {
@@ -29,16 +32,18 @@
 		}
 		init() {
 			Array.from(this.element.selectedOptions ?? []).forEach((option) => option.selected = true);
+			const selected = this.getSelectedOptionsHTML();
 			this.element.classList.add('dp-select-element');
 			this.container = document.createElement('div');
 			this.container.classList.add('dp-select-container');
 			this.container.innerHTML = `<div class="dp-select-container__options" tabindex="0">${this.getOptionsHTML()}</div>
       <div class="dp-select-container__input ${this.classes.join(' ')}">
-	  <div class="dp-select-container__options-selected">${this.getSelectedOptionsHTML()}</div>
-	  <input type="text" class="dp-select-input" ${this.disabled ? 'disabled' : ''} placeholder="${this.langInputPlaceholder}" />
+	  <div class="dp-select-container__options-selected">${selected}</div>
+	  <input type="text" class="dp-select-input" ${this.disabled ? 'disabled' : ''} placeholder="${selected ? '' : this.langInputPlaceholder}" />
       </div>`;
 			this.element.insertAdjacentElement('afterend', this.container);
 			this.input = this.container.querySelector('.dp-select-input');
+			this.input.dataset.placeholder = this.input.placeholder ?? '';
 			this.optionsElement = this.container.querySelector('.dp-select-container__options');
 			this.optionsSelectedElement = this.container.querySelector('.dp-select-container__options-selected');
 			this.popperInstance = Popper.createPopper(this.container.querySelector('.dp-select-container__input'), this.optionsElement, {
@@ -181,6 +186,9 @@
 		getOptionsHTML(options = this.getOptions()) {
 			let html = '';
 			options.filter((o) => !o.selected).forEach((option) => {
+				if (this.multiple && option.value === '') {
+					return;
+				}
 				if ('options' in option) {
 					html += `<div class="dp-select-option-group">
             <span class="dp-select-option-group__label">${option.label}</span>
@@ -201,6 +209,9 @@
 			}
 			let html = '';
 			options.filter((o) => o.selected).forEach((option) => {
+				if (this.multiple && option.value === '') {
+					return;
+				}
 				if ('options' in option) {
 					html += `
           <div class="dp-select-option-group">
@@ -216,6 +227,9 @@
           </div>`;
 				}
 			});
+			if (this.input) {
+				this.input.placeholder = html ? '' : this.input.dataset.placeholder;
+			}
 			return html;
 		}
 		getOptions(element = this.element, flat = false) {

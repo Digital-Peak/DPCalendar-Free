@@ -10,6 +10,7 @@ use DPCalendar\Helper\Location;
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -22,12 +23,16 @@ use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarControllerEvent extends FormController
 {
+	public $input;
+	public $option;
+	public $view_item;
+	public $view_list;
 	protected $urlVar = 'e_id';
 
 	protected function allowAdd($data = [])
 	{
 		// Initialize variables
-		$categoryId = ArrayHelper::getValue($data, 'catid', $this->input->getInt('filter_category_id'), 'int');
+		$categoryId = ArrayHelper::getValue($data, 'catid', $this->input->getInt('filter_calendars', 0), 'int');
 
 		if (!$categoryId) {
 			// In the absence of better information, revert to the component permissions
@@ -41,7 +46,7 @@ class DPCalendarControllerEvent extends FormController
 	{
 		$event = null;
 
-		$recordId = (int)isset($data[$key]) ? $data[$key] : 0;
+		$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 		if ($recordId) {
 			$event = $this->getModel()->getItem($recordId);
 		}
@@ -66,15 +71,15 @@ class DPCalendarControllerEvent extends FormController
 			$data['all_day'] = '1';
 		}
 
-		if (!key_exists('all_day', $data)) {
+		if (!array_key_exists('all_day', $data)) {
 			$data['all_day'] = 0;
 		}
 
-		if (!key_exists('color', $data)) {
+		if (!array_key_exists('color', $data)) {
 			$data['color'] = '';
 		}
 
-		if (!key_exists('payment_provider', $data)) {
+		if (!array_key_exists('payment_provider', $data)) {
 			$data['payment_provider'] = '';
 		}
 
@@ -112,7 +117,7 @@ class DPCalendarControllerEvent extends FormController
 		$result = false;
 		if (!is_numeric($data['catid'])) {
 			PluginHelper::importPlugin('dpcalendar');
-			$data['id'] = $this->input->getInt($urlVar, null);
+			$data['id'] = $this->input->getInt($urlVar, 0);
 
 			$model     = $this->getModel();
 			$form      = $model->getForm($data, false);
@@ -193,7 +198,7 @@ class DPCalendarControllerEvent extends FormController
 		return parent::getModel($name, $prefix, $config);
 	}
 
-	public function similar()
+	public function similar(): void
 	{
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
@@ -244,7 +249,7 @@ class DPCalendarControllerEvent extends FormController
 
 		BaseDatabaseModel::addIncludePath(JPATH_SITE . '/components/com_dpcalendar/models', 'DPCalendarModel');
 
-		$data = $this->getModel('Event')->getItem($this->input->getInt('template_event_id'));
+		$data = $this->getModel('Event')->getItem($this->input->getInt('template_event_id', 0));
 
 		if (!$data) {
 			return parent::reload($key, $urlVar);
@@ -252,10 +257,10 @@ class DPCalendarControllerEvent extends FormController
 
 		$formData = $this->input->post->get('jform', [], 'array');
 
-		$data->id = !empty($formData['id']) ? $formData['id'] : 0;
+		$data->id = empty($formData['id']) ? 0 : $formData['id'];
 
 		// Reset the color when equal to calendar
-		if ($data->color == \DPCalendar\Helper\DPCalendarHelper::getCalendar($data->catid)->color) {
+		if ($data->color == DPCalendarHelper::getCalendar($data->catid)->color) {
 			$data->color = '';
 		}
 
@@ -265,12 +270,12 @@ class DPCalendarControllerEvent extends FormController
 		return parent::reload($key, $urlVar);
 	}
 
-	public function newlocation()
+	public function newlocation(): void
 	{
 		// Check for request forgeries
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
-		$location = Location::get($this->input->getString('lookup'), false, $this->input->getString('lookup_title'));
+		$location = Location::get($this->input->getString('lookup', ''), false, $this->input->getString('lookup_title', ''));
 
 		$data = [];
 		if ($location->title) {
@@ -279,7 +284,7 @@ class DPCalendarControllerEvent extends FormController
 					'display' => $location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
 				];
 		}
-		DPCalendarHelper::sendMessage(null, empty($data), $data);
+		DPCalendarHelper::sendMessage(null, $data === [], $data);
 	}
 
 	protected function getRedirectToItemAppend($recordId = null, $urlVar = 'e_id')
@@ -287,7 +292,7 @@ class DPCalendarControllerEvent extends FormController
 		return parent::getRedirectToItemAppend($recordId, $urlVar);
 	}
 
-	private function transformDatesToSql()
+	private function transformDatesToSql(): void
 	{
 		$data = $this->input->post->get('jform', [], 'array');
 

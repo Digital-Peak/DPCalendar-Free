@@ -6,6 +6,30 @@
 .com-dpcalendar-list__form_hidden {
 	display: none;
 }
+.com-dpcalendar-list__form-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1rem 1rem;
+	margin-bottom: 1rem;
+}
+.com-dpcalendar-list__form-container .dp-datepicker,
+.com-dpcalendar-list__form-container .dp-datepicker .dp-input {
+	flex: 1 0 200px;
+}
+.com-dpcalendar-list__form-container #filter_search {
+	flex: 0 0 100%;
+}
+.com-dpcalendar-list__form-container #filter_location {
+	flex: 1 0 200px;
+}
+.com-dpcalendar-list__form-container #filter_radius,
+.com-dpcalendar-list__form-container #filter_length_type {
+	flex: 0 0 200px;
+}
+.com-dpcalendar-list__form-container input,
+.com-dpcalendar-list__form-container select {
+	margin: 0 !important;
+}
 .com-dpcalendar-list__actions.dp-button-bar {
 	text-align: center;
 }
@@ -30,30 +54,6 @@
 }
 .com-dpcalendar-list__button-bar.dp-button-bar {
 	display: block;
-}
-.com-dpcalendar-list__form-container {
-	margin: 0 -5px;
-	display: flex;
-	flex-wrap: wrap;
-}
-.com-dpcalendar-list__form-container > div {
-	display: flex;
-	flex: 1 1 260px;
-	margin: 0 5px 10px;
-}
-.com-dpcalendar-list__form-container .dp-input, .com-dpcalendar-list__form-container .dp-select {
-	width: 100%;
-	overflow: hidden;
-	margin-bottom: 0;
-}
-.com-dpcalendar-list__date-search .dp-datepicker {
-	flex: 1 0 0;
-}
-.com-dpcalendar-list__date-search .dp-datepicker-start-date {
-	margin-right: 10px;
-}
-.com-dpcalendar-list__date-search input + input, .com-dpcalendar-list__radius-search select + select {
-	margin-left: 10px;
 }
 @media screen and (width <= 540px) {
 	.com-dpcalendar-list .dp-button-bar {
@@ -194,6 +194,7 @@
 }
 .com-dpcalendar-list .dp-datepicker__input {
 	margin-right: -3px;
+	padding: 0.4rem;
 }
 .com-dpcalendar-list .dp-datepicker__button {
 	margin: 0;

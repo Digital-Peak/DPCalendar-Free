@@ -15,6 +15,22 @@ use Joomla\Registry\Registry;
 
 class DPCalendarTableCoupon extends Table
 {
+	public $id;
+	public $modified;
+	public $modified_by;
+	public $created;
+	public $created_by;
+	public $code;
+	public $title;
+	public $publish_down;
+	public $publish_up;
+	public $checked_out_time;
+	public $limit;
+	public $checked_out;
+	/**
+	 * @var string|null
+	 */
+	public $emails;
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_coupons', 'id', $db);
@@ -49,7 +65,7 @@ class DPCalendarTableCoupon extends Table
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->get('id');
 		} else {
-			if (!(int)$this->created) {
+			if ((int)$this->created === 0) {
 				$this->created = $date->toSql();
 			}
 			if (empty($this->created_by)) {

@@ -21,6 +21,24 @@ use Joomla\Registry\Registry;
 
 class DPCalendarTableExtcalendar extends Table
 {
+	public $params;
+	public $id;
+	public $modified;
+	public $modified_by;
+	public $created;
+	public $created_by;
+	public $alias;
+	public $_tbl_key;
+	public $title;
+	public $language;
+	public $publish_down;
+	public $publish_up;
+	public $sync_date;
+	public $metakey;
+	/**
+	 * @var string[]|string
+	 */
+	public $color;
 	public function __construct(&$db)
 	{
 		parent::__construct('#__dpcalendar_extcalendars', 'id', $db);
@@ -82,7 +100,7 @@ class DPCalendarTableExtcalendar extends Table
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->get('id');
 		} else {
-			if (!(int)$this->created) {
+			if ((int)$this->created === 0) {
 				$this->created = $date->toSql();
 			}
 			if (empty($this->created_by)) {
@@ -146,10 +164,10 @@ class DPCalendarTableExtcalendar extends Table
 		}
 
 		// Check for existing name
-		$query = 'SELECT id FROM #__dpcalendar_extcalendars WHERE title = ' . $this->_db->Quote($this->title);
-		$this->_db->setQuery($query);
+		$query = 'SELECT id FROM #__dpcalendar_extcalendars WHERE title = ' . $this->getDbo()->Quote($this->title);
+		$this->getDbo()->setQuery($query);
 
-		$xid = (int)$this->_db->loadResult();
+		$xid = (int)$this->getDbo()->loadResult();
 		if ($xid && $xid != (int)$this->id) {
 			$this->setError(Text::sprintf('COM_DPCALENDAR_EXTCALENDAR_ERR_TABLES_NAME', htmlspecialchars($this->title)));
 
@@ -194,15 +212,19 @@ class DPCalendarTableExtcalendar extends Table
 		// Clean up keywords -- eliminate extra spaces between phrases
 		// and cr (\r) and lf (\n) characters from string
 		if (!empty($this->metakey)) {
-			$bad_characters = ["\n", "\r", "\"", "<", ">"];
+			$bad_characters = ["\n", "\r", '"', "<", ">"];
 
 			$after_clean = StringHelper::str_ireplace($bad_characters, "", $this->metakey);
 			$keys        = explode(',', $after_clean);
 			$clean_keys  = [];
 			foreach ($keys as $key) {
-				if (trim($key)) {
-					$clean_keys[] = trim($key);
+				if (trim($key) === '') {
+					continue;
 				}
+				if (trim($key) === '0') {
+					continue;
+				}
+				$clean_keys[] = trim($key);
 			}
 			$this->metakey = implode(", ", $clean_keys);
 		}

@@ -175,6 +175,17 @@
 			future: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_FUTURE'),
 			week: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_WEEK')
 		};
+		options['buttonHints'] = {
+			prev() {
+				return '';
+			},
+			next() {
+				return '';
+			},
+			today() {
+				return '';
+			}
+		};
 	}
 	function setup$4(calendar, options) {
 		options['eventDragStart'] = (info) => {

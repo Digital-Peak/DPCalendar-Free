@@ -17,7 +17,11 @@ use Joomla\Registry\Registry;
 
 class DPCalendarViewMap extends BaseView
 {
-	public function display($tpl = null)
+	/**
+	 * @var mixed
+	 */
+	public $items;
+	public function display($tpl = null): void
 	{
 		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel');
 		$this->setModel($model, true);
@@ -25,17 +29,17 @@ class DPCalendarViewMap extends BaseView
 		parent::display($tpl);
 	}
 
-	public function init()
+	protected function init()
 	{
 		$access = 0;
 		$params = null;
 
-		if ($this->input->getInt('module-id')) {
+		if ($this->input->getInt('module-id', 0)) {
 			$db    = Factory::getDbo();
 			$query = $db->getQuery(true);
 			$query->select('m.*');
 			$query->from('#__modules AS m');
-			$query->where('id = ' . $this->input->getInt('module-id'));
+			$query->where('id = ' . $this->input->getInt('module-id', 0));
 			$db->setQuery($query);
 			$module = $db->loadObject();
 
@@ -49,7 +53,7 @@ class DPCalendarViewMap extends BaseView
 				$access = $module->access;
 			}
 		} else {
-			$menu   = $this->app->getMenu()->getItem($this->input->getInt('Itemid'));
+			$menu   = $this->app->getMenu()->getItem($this->input->getInt('Itemid', 0));
 			$params = $menu && !empty($menu->getParams()) ? $menu->getParams() : ComponentHelper::getParams('com_dpcalendar');
 			$access = $menu && !empty($menu->access) ? $menu->access : 1;
 		}
@@ -67,6 +71,7 @@ class DPCalendarViewMap extends BaseView
 		$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
 		$model->getState();
 		$model->setState('filter.parentIds', $this->params->get('ids', ['root']));
+
 		$ids = [];
 		foreach ($model->getItems() as $calendar) {
 			$ids[] = $calendar->id;
@@ -97,7 +102,7 @@ class DPCalendarViewMap extends BaseView
 		$items = $this->get('Items');
 
 		// Check for errors
-		if (is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) {
+		if ((is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) !== 0) {
 			throw new Exception(implode("\n", $errors));
 		}
 
@@ -108,7 +113,7 @@ class DPCalendarViewMap extends BaseView
 		$this->items = $items;
 	}
 
-	private function handleDate($type, $params)
+	private function handleDate(string $type, $params): void
 	{
 		$context = 'com_dpcalendar.map.';
 		$date    = null;

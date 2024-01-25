@@ -39,7 +39,7 @@ class PlgFieldsDPCalendar extends FieldsPlugin
 		return $fieldNode;
 	}
 
-	public function onCustomFieldsBeforePrepareField($context, $event, $field)
+	public function onCustomFieldsBeforePrepareField($context, $event, $field): void
 	{
 		if ($context != 'com_dpcalendar.event' || !$field->params->get('dpcalendar_cf_only_tickets')) {
 			return;
@@ -55,9 +55,9 @@ class PlgFieldsDPCalendar extends FieldsPlugin
 		$tickets = $event->tickets ?? [];
 
 		// Get the tickets of the actual logged in user
-		$myTickets = array_filter($tickets, fn ($ticket) => !$user->guest && $user->id && $ticket->user_id == $user->id && $ticket->state == 1);
+		$myTickets = array_filter($tickets, static fn ($ticket): bool => !$user->guest && $user->id && $ticket->user_id == $user->id && $ticket->state == 1);
 
-		if ($myTickets) {
+		if ($myTickets !== []) {
 			return;
 		}
 

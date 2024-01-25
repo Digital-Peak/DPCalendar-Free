@@ -14,7 +14,7 @@ defined('_JEXEC') or die();
 
 class DPCalendarControllerImport extends BaseController
 {
-	public function add($data = [])
+	public function add($data = []): void
 	{
 		Session::checkToken() or jexit(Text::_('JINVALID_TOKEN'));
 
@@ -24,15 +24,15 @@ class DPCalendarControllerImport extends BaseController
 		$this->setRedirect(Route::_('index.php?option=com_dpcalendar&view=tools&layout=import', false), implode('<br>', $model->get('messages')));
 	}
 
-	public function geodb()
+	public function geodb(): void
 	{
 		$model = $this->getModel('Import', '', []);
 
 		$message = '';
 		try {
 			$model->importGeoDB();
-		} catch (Exception $e) {
-			$message = Text::sprintf('COM_DPCALENDAR_CONTROLLER_GEO_IMPORT_ERROR', $e->getMessage());
+		} catch (Exception $exception) {
+			$message = Text::sprintf('COM_DPCALENDAR_CONTROLLER_GEO_IMPORT_ERROR', $exception->getMessage());
 		}
 		$this->setRedirect(Route::_('index.php?option=com_dpcalendar&view=cpanel', false), $message, $message ? 'error' : null);
 	}

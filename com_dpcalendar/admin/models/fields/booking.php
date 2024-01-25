@@ -16,6 +16,11 @@ use Joomla\CMS\Table\Table;
 
 class JFormFieldBooking extends FormField
 {
+	public $id;
+	public $class;
+	public $size;
+	public $required;
+	public $value;
 	public $type     = 'Booking';
 	public $readonly = false;
 
@@ -33,8 +38,8 @@ class JFormFieldBooking extends FormField
 			(isset($excluded) ? ('&amp;excluded=' . base64_encode(json_encode($excluded))) : '');
 
 		// Initialize some field attributes.
-		$attr = !empty($this->class) ? ' class="' . $this->class . '"' : '';
-		$attr .= !empty($this->size) ? ' size="' . $this->size . '"' : '';
+		$attr = empty($this->class) ? '' : ' class="' . $this->class . '"';
+		$attr .= empty($this->size) ? '' : ' size="' . $this->size . '"';
 		$attr .= $this->required ? ' required' : '';
 
 		// Load the modal behavior script.

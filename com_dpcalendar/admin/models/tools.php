@@ -15,7 +15,7 @@ class DPCalendarModelTools extends BaseDatabaseModel
 	public function getResourcesFromTranslation()
 	{
 		$resources = Translation::getResources();
-		if (!$resources) {
+		if ($resources === []) {
 			return;
 		}
 

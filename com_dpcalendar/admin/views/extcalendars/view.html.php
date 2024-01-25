@@ -18,9 +18,9 @@ class DPCalendarViewExtCalendars extends BaseView
 {
 	protected $items;
 	protected $pagination;
-	protected $pluginParams = null;
+	protected $pluginParams;
 
-	public function init()
+	protected function init()
 	{
 		$this->items        = $this->get('Items');
 		$this->pagination   = $this->get('Pagination');
@@ -31,7 +31,7 @@ class DPCalendarViewExtCalendars extends BaseView
 			$this->pluginParams->loadString($plugin->params);
 		}
 
-		if (is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) {
+		if ((is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) !== 0) {
 			throw new Exception(implode("\n", $errors));
 		}
 	}

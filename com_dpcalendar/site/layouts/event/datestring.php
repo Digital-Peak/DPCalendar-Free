@@ -9,10 +9,10 @@ defined('_JEXEC') or die();
 
 $event = $displayData['event'];
 
-$dateFormat = !empty($displayData['dateFormat']) ? $displayData['dateFormat'] : DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y');
-$timeFormat = !empty($displayData['timeFormat']) ? $displayData['timeFormat'] : DPCalendarHelper::getComponentParameter('event_time_format', 'H:i');
+$dateFormat = empty($displayData['dateFormat']) ? DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y') : $displayData['dateFormat'];
+$timeFormat = empty($displayData['timeFormat']) ? DPCalendarHelper::getComponentParameter('event_time_format', 'H:i') : $displayData['timeFormat'];
 
-$translator = !empty($displayData['translator']) ? $displayData['translator'] : new Translator();
+$translator = empty($displayData['translator']) ? new Translator() : $displayData['translator'];
 $dateFormat = $translator->translate($dateFormat);
 $timeFormat = $translator->translate($timeFormat);
 

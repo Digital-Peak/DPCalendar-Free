@@ -12,20 +12,23 @@ use DPCalendar\Helper\DPCalendarHelper;
 use DPCalendar\HTML\Document\HtmlDocument;
 use DPCalendar\Router\Router;
 use DPCalendar\Translator\Translator;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
+use Joomla\Database\DatabaseDriver;
 use Joomla\Utilities\ArrayHelper;
 
 class PlgContentDPCalendar extends CMSPlugin
 {
-	/** @var \Joomla\CMS\Application\CMSApplication */
+	public $params;
+	/** @var CMSApplication */
 	protected $app;
 
-	/** @var \Joomla\Database\DatabaseDriver */
+	/** @var DatabaseDriver */
 	protected $db;
 
 	protected $autoloadLanguage = true;
@@ -38,7 +41,7 @@ class PlgContentDPCalendar extends CMSPlugin
 
 		// Count how many times we need to process events
 		$count = substr_count($item->text, '{{#events');
-		if (!$count) {
+		if ($count === 0) {
 			return true;
 		}
 
@@ -77,16 +80,14 @@ class PlgContentDPCalendar extends CMSPlugin
 			// Loop through the params and set them on the model
 			foreach ($params as $string) {
 				$string = trim($string);
-				if (!$string) {
+				if ($string === '' || $string === '0') {
 					continue;
 				}
 
 				$paramKey   = null;
 				$paramValue = null;
 				$parts      = explode('=', $string);
-				if (count($parts) > 0) {
-					$paramKey = $parts[0];
-				}
+				$paramKey   = $parts[0];
 				if (count($parts) > 1) {
 					$paramValue = $parts[1];
 				}
@@ -208,7 +209,7 @@ class PlgContentDPCalendar extends CMSPlugin
 			$buffer .= ob_get_clean();
 		}
 
-		if (!$layout) {
+		if ($layout === '' || $layout === '0') {
 			return $buffer;
 		}
 
@@ -219,12 +220,14 @@ class PlgContentDPCalendar extends CMSPlugin
 		$model->setState('list.start-date', 0);
 		$model->setState('filter.expand', false);
 		$model->setState('filter.author', $userId);
+
 		$authoredEvents = $model->getItems();
 
 		$model = BaseDatabaseModel::getInstance('Events', 'DPCalendarModel', ['ignore_request' => true]);
 		$model->setState('list.start-date', 0);
 		$model->setState('filter.expand', false);
 		$model->setState('filter.hosts', $userId);
+
 		$hostEvents = $model->getItems();
 
 		ob_start();
@@ -232,7 +235,7 @@ class PlgContentDPCalendar extends CMSPlugin
 		return $buffer . ob_get_clean();
 	}
 
-	public function onContentAfterDelete($context, $item)
+	public function onContentAfterDelete($context, $item): void
 	{
 		// Check if it is a category to delete
 		if ($context != 'com_categories.category') {

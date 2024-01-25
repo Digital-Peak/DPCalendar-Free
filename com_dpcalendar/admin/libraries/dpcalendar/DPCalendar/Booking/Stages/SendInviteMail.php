@@ -57,7 +57,7 @@ class SendInviteMail implements StageInterface
 			)
 		);
 
-		if (!empty($body)) {
+		if ($body !== '' && $body !== '0') {
 			$this->mailer->setSubject($subject);
 			$this->mailer->setBody($body);
 			$this->mailer->IsHTML(true);

@@ -12,7 +12,9 @@ defined('_JEXEC') or die();
 
 class DPCalendarViewCoupon extends BaseView
 {
-	public function init()
+	public $coupon;
+	public $form;
+	protected function init()
 	{
 		$this->coupon = $this->get('Item');
 		$this->form   = $this->get('Form');
@@ -23,7 +25,7 @@ class DPCalendarViewCoupon extends BaseView
 		$this->input->set('hidemainmenu', true);
 
 		$isNew      = ($this->coupon->id == 0);
-		$checkedOut = !($this->coupon->checked_out == 0 || $this->coupon->checked_out == $this->user->id);
+		$checkedOut = $this->coupon->checked_out != 0 && $this->coupon->checked_out != $this->user->id;
 		$canDo      = DPCalendarHelper::getActions();
 
 		if (!$checkedOut && $canDo->get('core.edit')) {

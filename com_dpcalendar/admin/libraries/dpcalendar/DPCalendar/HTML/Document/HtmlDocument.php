@@ -18,7 +18,7 @@ use Joomla\CMS\HTML\HTMLHelper;
  */
 class HtmlDocument
 {
-	public function loadScriptFile($path, $extension = 'com_dpcalendar')
+	public function loadScriptFile($path, string $extension = 'com_dpcalendar'): void
 	{
 		if (strpos($path, '//') === 0 || strpos($path, 'https://') === 0) {
 			Factory::getDocument()->addScript($path, [], ['defer' => true]);
@@ -40,23 +40,23 @@ class HtmlDocument
 		HTMLHelper::_('script', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto'], ['defer' => true]);
 	}
 
-	public function addScript($content)
+	public function addScript($content): void
 	{
 		Factory::getApplication()->getDocument()->addScriptDeclaration($content);
 	}
 
-	public function addScriptOptions($key, $options)
+	public function addScriptOptions(string $key, $options): void
 	{
 		Factory::getApplication()->getDocument()->addScriptOptions('DPCalendar.' . $key, $options);
 	}
 
-	public function loadStyleFile($path, $extension = 'com_dpcalendar')
+	public function loadStyleFile($path, string $extension = 'com_dpcalendar'): void
 	{
 		$path = str_replace('.css', '.min.css', $path);
 		HTMLHelper::_('stylesheet', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto']);
 	}
 
-	public function addStyle($content)
+	public function addStyle($content): void
 	{
 		if (!$content) {
 			return;
@@ -65,7 +65,7 @@ class HtmlDocument
 		Factory::getApplication()->getDocument()->addStyleDeclaration($content);
 	}
 
-	private static function getGoogleLanguage()
+	private function getGoogleLanguage()
 	{
 		$languages = [
 			'ar',
@@ -130,7 +130,7 @@ class HtmlDocument
 			$lang = substr($lang, 0, strpos($lang, '-'));
 		}
 		if (!in_array($lang, $languages)) {
-			$lang = 'en';
+			return 'en';
 		}
 
 		return $lang;

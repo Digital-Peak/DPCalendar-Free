@@ -21,7 +21,7 @@ Table::addIncludePath(JPATH_ADMINISTRATOR . 'components/com_dpcalendar/tables');
 
 class Location
 {
-	private static $locationCache            = null;
+	private static $locationCache;
 	private static array $nominatimLanguages = ['en', 'de', 'it', 'fr'];
 	private static array $googleLanguages    = [
 		'ar',
@@ -84,7 +84,7 @@ class Location
 		'zh-TW'
 	];
 
-	public static function getDirectionsLink($location, $zoom = 6)
+	public static function getDirectionsLink($location, $zoom = 6): string
 	{
 		if (DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'openstreetmap') {
 			return 'https://www.openstreetmap.org/directions?route=;' . $location->latitude . ',' . $location->longitude
@@ -94,7 +94,7 @@ class Location
 		return 'https://www.google.com/maps/dir/?api=1&destination=' . self::format([$location]);
 	}
 
-	public static function getMapLink($location, $zoom = 6)
+	public static function getMapLink($location, $zoom = 6): string
 	{
 		if (!$location || DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'none') {
 			return '';
@@ -160,7 +160,7 @@ class Location
 
 				if ($locations) {
 					$locObject = $locations[0];
-					if ((int)$locObject->latitude) {
+					if ((int)$locObject->latitude !== 0) {
 						return $locObject;
 					}
 				}
@@ -230,7 +230,7 @@ class Location
 		return $locObject;
 	}
 
-	public static function search($address)
+	public static function search($address): array
 	{
 		if (DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap') == 'none') {
 			return [];
@@ -257,7 +257,7 @@ class Location
 		return $model->getItems();
 	}
 
-	public static function within($location, $latitude, $longitude, $radius)
+	public static function within($location, $latitude, $longitude, $radius): bool
 	{
 		if ($radius == -1) {
 			return true;
@@ -278,7 +278,7 @@ class Location
 			$location->latitude < $latitudeMax;
 	}
 
-	public static function getColor($location)
+	public static function getColor($location): string
 	{
 		return substr(md5($location->latitude . '-' . $location->longitude . '-' . $location->title), 0, 6);
 	}
@@ -331,7 +331,10 @@ class Location
 		return '';
 	}
 
-	private static function searchInGoogle($address)
+	/**
+	 * @return mixed[]
+	 */
+	private static function searchInGoogle($address): array
 	{
 		$url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=' . trim(\DPCalendarHelper::getComponentParameter('map_api_google_key')) . '&';
 
@@ -368,7 +371,10 @@ class Location
 		return $data;
 	}
 
-	private static function searchInOpenStreetMap($address)
+	/**
+	 * @return mixed[]
+	 */
+	private static function searchInOpenStreetMap($address): array
 	{
 		$url = Uri::getInstance(DPCalendarHelper::getComponentParameter('map_api_openstreetmap_geocode_url', 'https://nominatim.openstreetmap.org'));
 		$url->setVar('format', 'json');
@@ -400,7 +406,7 @@ class Location
 			null,
 			['Accept: application/json, text/html']
 		);
-		if (!$tmp || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
+		if (!$tmp instanceof \stdClass || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
 			return [];
 		}
 
@@ -449,7 +455,7 @@ class Location
 		return $data;
 	}
 
-	private static function fillObjectFromGoogle($location, $locObject)
+	private static function fillObjectFromGoogle($location, $locObject): void
 	{
 		$url = 'https://maps.google.com/maps/api/geocode/json?key=' . trim(DPCalendarHelper::getComponentParameter('map_api_google_key')) . '&';
 
@@ -492,8 +498,6 @@ class Location
 					$locObject->province = $part->long_name;
 					break;
 				case 'locality':
-					$locObject->city = $part->long_name;
-					break;
 				case 'postal_town':
 					$locObject->city = $part->long_name;
 					break;
@@ -513,7 +517,7 @@ class Location
 		$locObject->longitude = $tmp->results[0]->geometry->location->lng;
 	}
 
-	private static function fillObjectFromOpenStreetMap($location, $locObject)
+	private static function fillObjectFromOpenStreetMap($location, $locObject): void
 	{
 		$url = Uri::getInstance(DPCalendarHelper::getComponentParameter('map_api_openstreetmap_geocode_url', 'https://nominatim.openstreetmap.org'));
 		$url->setVar('format', 'json');
@@ -548,7 +552,7 @@ class Location
 			null,
 			['Accept: application/json, text/html']
 		);
-		if (!$tmp || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
+		if (!$tmp instanceof \stdClass || (empty($tmp->address) && (empty($tmp->data) || empty($tmp->data[0]->address)))) {
 			return;
 		}
 
@@ -598,7 +602,7 @@ class Location
 		}
 	}
 
-	private static function fillObjectFromMapbox($location, $locObject)
+	private static function fillObjectFromMapbox($location, $locObject): void
 	{
 		$coordinates = explode(',', $location);
 		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
@@ -617,7 +621,7 @@ class Location
 		$url .= '&language=' . $lang;
 
 		$tmp = (new HTTP())->get($url);
-		if (!$tmp || empty($tmp->features)) {
+		if (!$tmp instanceof \stdClass || empty($tmp->features)) {
 			return;
 		}
 

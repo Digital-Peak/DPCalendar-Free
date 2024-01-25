@@ -14,6 +14,14 @@ use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 
 class DPCalendarViewLocations extends BaseApiView
 {
+	/**
+	 * @var DPCalendarSerializer
+	 */
+	public $serializer;
+	/**
+	 * @var string[]
+	 */
+	public $relationship;
 	protected $fieldsToRenderItem = [
 		'id',
 		'typeAlias',

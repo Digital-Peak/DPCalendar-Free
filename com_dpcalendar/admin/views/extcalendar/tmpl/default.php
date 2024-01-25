@@ -23,7 +23,7 @@ $fieldSets = ['general' => $fieldSets['general']] + $fieldSets;
 <div class="com-dpcalendar-extcalendar com-dpcalendar-adminform">
 	<form class="com-dpcalendar-extcalendar__form dp-form form-validate" method="post" name="adminForm"
 		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&id=' . (int)$this->item->id); ?>">
-		<?php foreach ($fieldSets as $name => $fieldSet) { ?>
+		<?php foreach (array_keys($fieldSets) as $name) { ?>
 			<?php foreach ($this->form->getFieldset($name) as $field) { ?>
 				<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 			<?php } ?>

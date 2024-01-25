@@ -12,6 +12,12 @@ defined('_JEXEC') or die();
 
 class DPCalendarViewMap extends BaseView
 {
+	/**
+	 * @var array<string, mixed>
+	 */
+	public $displayData;
+	public $startDate;
+	public $endDate;
 	public function display($tpl = null)
 	{
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
@@ -20,7 +26,7 @@ class DPCalendarViewMap extends BaseView
 		return parent::display($tpl);
 	}
 
-	public function init()
+	protected function init()
 	{
 		$this->displayData['format'] = $this->params->get('map_date_format', 'd.m.Y');
 

@@ -15,12 +15,12 @@ JLoader::import('joomla.application.component.controlleradmin');
 
 class DPCalendarControllerLocations extends AdminController
 {
+	public $message;
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
 	public function getModel($name = 'Location', $prefix = 'DPCalendarModel', $config = ['ignore_request' => true])
 	{
-		$model = parent::getModel($name, $prefix, $config);
-		return $model;
+		return parent::getModel($name, $prefix, $config);
 	}
 
 	public function publish()

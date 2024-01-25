@@ -365,8 +365,18 @@
 				<option value="metadata:robots">JFIELD_METADATA_ROBOTS_LABEL</option>
 				<option value="metadata:rights">JFIELD_META_RIGHTS_LABEL</option>
 			</field>
+			<field name="event_form_calendars" type="dpcalendar" multiple="true" class="dp-select"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CALENDARS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CALENDARS_DESC"/>
+			<field name="event_form_redirect" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
+				addfieldpath="/administrator/components/com_content/models/fields" addfieldprefix="Joomla\Component\Content\Administrator\Field"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_DESC"/>
 
 			<field type="spacer" label=""/>
+			<field name="event_form_show_end_time" type="list" useglobal="true"
+					label="COM_DPCALENDAR_FIELD_SHOW_END_TIME_LABEL" description="COM_DPCALENDAR_FIELD_SHOW_END_TIME_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
 			<field name="event_form_all_day" type="list" useglobal="true"
 				   label="COM_DPCALENDAR_FIELD_ALL_DAY_LABEL" description="COM_DPCALENDAR_FIELD_ALL_DAY_DESC">
 				<option value="">JDEFAULT</option>

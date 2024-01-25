@@ -21,7 +21,8 @@ use Joomla\Registry\Registry;
 
 class DPCalendarControllerIcal extends BaseController
 {
-	public function download()
+	public $input;
+	public function download(): void
 	{
 		// Remove the script time limit.
 		@set_time_limit(0);
@@ -105,7 +106,7 @@ class DPCalendarControllerIcal extends BaseController
 		}
 
 		// Get a fake login response
-		\JLoader::import('joomla.user.authentication');
+		JLoader::import('joomla.user.authentication');
 		$options            = ['remember' => false];
 		$response           = new AuthenticationResponse();
 		$response->status   = Authentication::STATUS_SUCCESS;

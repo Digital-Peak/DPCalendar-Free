@@ -1,50 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fields name="filter">
-		<field name="search" type="text" label=""
-			description="" hint="JSEARCH_FILTER" />
-		<field name="event_type" type="list" label="COM_DPCALENDAR_VIEW_EVENTS_SELECT_NORMAL_EVENTS"
-			description="" onchange="this.form.submit();">
-			<option value="1">COM_DPCALENDAR_VIEW_EVENTS_SELECT_ORIGIONAL_EVENTS</option>
-			<option value="2">COM_DPCALENDAR_VIEW_EVENTS_SELECT_BOTH_EVENTS</option>
-			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_NORMAL_EVENTS</option>
-		</field>
-		<field name="state" type="status" label="COM_CONTENT_FILTER_PUBLISHED"
-			description="COM_CONTENT_FILTER_PUBLISHED_DESC" onchange="this.form.submit();">
-			<option value="">JOPTION_SELECT_PUBLISHED</option>
-		</field>
-		<field name="category_id" type="category" label="JOPTION_FILTER_CATEGORY_LABEL"
-			extension="com_dpcalendar" description="JOPTION_FILTER_CATEGORY_DESC"
-			onchange="this.form.submit();" published="0,1,2">
-			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_CALENDAR</option>
-		</field>
-		<field name="access" type="accesslevel" label="JOPTION_FILTER_ACCESS"
-			description="JOPTION_FILTER_ACCESS_DESC" onchange="this.form.submit();">
-			<option value="">JOPTION_SELECT_ACCESS</option>
-		</field>
-		<field name="language" type="contentlanguage" label="JOPTION_FILTER_LANGUAGE"
-			description="JOPTION_FILTER_LANGUAGE_DESC" onchange="this.form.submit();">
-			<option value="">JOPTION_SELECT_LANGUAGE</option>
-			<option value="*">JALL</option>
-		</field>
-		<field name="tag" type="tag" mode="nested" label="JOPTION_FILTER_TAG"
-			description="JOPTION_FILTER_TAG_DESC" onchange="this.form.submit();">
-			<option value="">JOPTION_SELECT_TAG</option>
-		</field>
-		<field name="created_by" type="dpauthor" label="COM_CONTENT_FILTER_AUTHOR" table_name="dpcalendar_events"
-			description="COM_CONTENT_FILTER_AUTHOR_DESC" onchange="this.form.submit();">
-			<option value="">JOPTION_SELECT_AUTHOR</option>
-		</field>
-		<field name="level" type="integer" first="1" last="10" step="1"
-			label="JOPTION_FILTER_LEVEL" languages="*" description="JOPTION_FILTER_LEVEL_DESC"
-			onchange="this.form.submit();">
-			<option value="">JOPTION_SELECT_MAX_LEVELS</option>
-		</field>
-	</fields>
 	<fields name="list">
-		<field name="fullordering" type="list" label="COM_CONTENT_LIST_FULL_ORDERING"
-			description="COM_CONTENT_LIST_FULL_ORDERING_DESC" onchange="this.form.submit();"
-			default="a.start_date ASC">
+		<field name="start-date" type="datetimechooser" all_day="1" hint="COM_DPCALENDAR_FIELD_START_DATE_LABEL"
+			label="COM_DPCALENDAR_FIELD_START_DATE_LABEL"/>
+		<field name="end-date" type="datetimechooser" all_day="1" hint="COM_DPCALENDAR_FIELD_END_DATE_LABEL"
+			label="COM_DPCALENDAR_FIELD_END_DATE_LABEL"/>
+		<field name="fullordering" type="list" default="a.start_date ASC">
 			<option value="">JGLOBAL_SORT_BY</option>
 			<option value="a.state ASC">JSTATUS_ASC</option>
 			<option value="a.state DESC">JSTATUS_DESC</option>
@@ -65,8 +26,51 @@
 			<option value="original_title ASC">COM_DPCALENDAR_VIEWS_FILTERS_ORIGINAL_TITLE_ASC</option>
 			<option value="original_title DESC">COM_DPCALENDAR_VIEWS_FILTERS_ORIGINAL_TITLE_DESC</option>
 		</field>
-		<field name="limit" type="limitbox" class="input-mini" default="25"
-			label="COM_CONTENT_LIST_LIMIT" description="COM_CONTENT_LIST_LIMIT_DESC"
-			onchange="this.form.submit();" />
+		<field name="limit" type="limitbox" class="input-mini" default="25"/>
+	</fields>
+	<fields name="filter">
+		<field name="search" type="text" class="dp-input" hint="JSEARCH_FILTER" label="JSEARCH_FILTER"/>
+		<field name="location" type="text" class="dp-input dp-input_location" autocomplete="off" hint="COM_DPCALENDAR_LOCATION"
+			label="COM_DPCALENDAR_LOCATION"/>
+		<field name="radius" type="list" class="dp-select dp-select_plain" default="50">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="20">20</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="500">500</option>
+			<option value="1000">1000</option>
+			<option value="-1">JALL</option>
+		</field>
+		<field name="length-type" type="list" class="dp-select dp-select_plain" default="m">
+			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_METER</option>
+			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_MILE</option>
+		</field>
+		<field name="event_type" type="list" class="dp-select dp-select_plain">
+			<option value="1">COM_DPCALENDAR_VIEW_EVENTS_SELECT_ORIGIONAL_EVENTS</option>
+			<option value="2">COM_DPCALENDAR_VIEW_EVENTS_SELECT_BOTH_EVENTS</option>
+			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_NORMAL_EVENTS</option>
+		</field>
+		<field name="state" type="status" class="dp-select dp-select_plain">
+			<option value="">JOPTION_SELECT_PUBLISHED</option>
+		</field>
+		<field name="calendars" type="dpcalendar" class="dp-select" multiple="true"
+			label="COM_DPCALENDAR_CALENDARS" >
+			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_CALENDAR</option>
+		</field>
+		<field name="access" type="accesslevel" class="dp-select dp-select_plain">
+			<option value="">JOPTION_SELECT_ACCESS</option>
+		</field>
+		<field name="language" type="contentlanguage" class="dp-select dp-select_plain">
+			<option value="">JOPTION_SELECT_LANGUAGE</option>
+			<option value="*">JALL</option>
+		</field>
+		<field name="tag" type="tag" mode="nested">
+			<option value="">JOPTION_SELECT_TAG</option>
+		</field>
+		<field name="created_by" type="dpauthor"  class="dp-select dp-select_plain" table_name="dpcalendar_events"
+			label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL" >
+			<option value="">JOPTION_SELECT_AUTHOR</option>
+		</field>
 	</fields>
 </form>

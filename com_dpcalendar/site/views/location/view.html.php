@@ -16,6 +16,23 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 class DPCalendarViewLocation extends BaseView
 {
+	/**
+	 * @var never[]|mixed[]
+	 */
+	public $ids;
+	public $events;
+	/**
+	 * @var \stdClass[]
+	 */
+	public $resources;
+	/**
+	 * @var non-falsy-string|null
+	 */
+	public $returnPage;
+	/**
+	 * @var int
+	 */
+	public $heading;
 	public function display($tpl = null)
 	{
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
@@ -24,9 +41,9 @@ class DPCalendarViewLocation extends BaseView
 		return parent::display($tpl);
 	}
 
-	public function init()
+	protected function init()
 	{
-		$this->location = $this->getModel()->getItem($this->input->getInt('id'));
+		$this->location = $this->getModel()->getItem($this->input->getInt('id', 0));
 
 		if ($this->location->id == null) {
 			throw new Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'), 404);
@@ -55,6 +72,7 @@ class DPCalendarViewLocation extends BaseView
 		$model->setState('filter.state', [1, 3]);
 		$model->setState('filter.language', $this->app->getLanguage()->getTag());
 		$model->setState('filter.locations', [$this->location->id]);
+
 		$this->events = $model->getItems();
 
 		$rooms = [];
@@ -66,7 +84,7 @@ class DPCalendarViewLocation extends BaseView
 
 		$this->resources[] = (object)['id' => $this->location->id, 'title' => $this->location->title, 'children' => $rooms];
 
-		$this->returnPage = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;
+		$this->returnPage = $this->input->getInt('Itemid', 0) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', 0) : null;
 	}
 
 	protected function prepareDocument()
@@ -87,7 +105,7 @@ class DPCalendarViewLocation extends BaseView
 		$this->document->setTitle($title);
 
 		$metadesc = trim($this->location->metadata->get('metadesc', ''));
-		if (!$metadesc) {
+		if ($metadesc === '' || $metadesc === '0') {
 			$metadesc = StringHelper::truncate($this->location->description ?: '', 100, true, false);
 		}
 		if ($metadesc) {

@@ -16,7 +16,7 @@ class DPCalendarViewCoupons extends BaseView
 	protected $pagination;
 	protected $state;
 
-	public function init()
+	protected function init()
 	{
 		$this->state      = $this->get('State');
 		$this->items      = $this->get('Items');

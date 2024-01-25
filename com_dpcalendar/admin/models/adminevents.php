@@ -17,6 +17,8 @@ use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarModelAdminEvents extends ListModel
 {
+	public $context;
+	public $state;
 	public function __construct($config = [])
 	{
 		if (empty($config['filter_fields'])) {
@@ -35,8 +37,8 @@ class DPCalendarModelAdminEvents extends ListModel
 				'a.checked_out',
 				'checked_out_time',
 				'a.checked_out_time',
-				'category_id',
-				'a.category_id',
+				'calendars',
+				'a.calendars',
 				'category_title',
 				'state',
 				'a.state',
@@ -89,8 +91,8 @@ class DPCalendarModelAdminEvents extends ListModel
 		$published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '');
 		$this->setState('filter.state', $published);
 
-		$categoryId = $this->getUserStateFromRequest($this->context . '.filter.category_id', 'filter_category_id');
-		$this->setState('filter.category_id', $categoryId);
+		$calendars = $this->getUserStateFromRequest($this->context . '.filter.calendars', 'filter_calendars');
+		$this->setState('filter.calendars', $calendars);
 
 		$level = $this->getUserStateFromRequest($this->context . '.filter.level', 'filter_level');
 		$this->setState('filter.level', $level);
@@ -108,49 +110,37 @@ class DPCalendarModelAdminEvents extends ListModel
 		// List state information.
 		parent::populateState('a.start_date', 'asc');
 
+		$format          = DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y');
+		$listRequestData = $this->getUserStateFromRequest($this->context . 'list', 'list', [], 'array');
+
 		// Joomla resets the start and end date
-		$search = $this->getUserStateFromRequest(
-			$this->context . '.filter.search_start',
-			'filter_search_start',
-			DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'), true),
-			'none',
-			false
-		);
+		$search = $listRequestData['start-date'] ?? DPCalendarHelper::getDate()->format($format, true);
 		try {
-			DPCalendarHelper::getDateFromString(
-				$search,
-				null,
-				true,
-				DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
-			);
-		} catch (Exception $e) {
+			DPCalendarHelper::getDateFromString($search, null, true, $format);
+		} catch (Exception $exception) {
 			if ($search) {
-				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+				Factory::getApplication()->enqueueMessage($exception->getMessage(), 'warning');
 			}
-			$search = DPCalendarHelper::getDate()->format(DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'), true);
+			$search                        = DPCalendarHelper::getDate()->format($format, true);
+			$listRequestData['start-date'] = '';
 
-			Factory::getApplication()->setUserState($this->context . '.filter.search_start', $search);
+			Factory::getApplication()->setUserState($this->context . '.list', $listRequestData);
 		}
-		$this->setState('filter.search_start', $search);
+		$this->setState('list.start-date', $search);
 
-		$search = $this->getUserStateFromRequest($this->context . '.filter.search_end', 'filter_search_end', '', 'none', false);
-
+		$search = $listRequestData['end-date'] ?? '';
 		if ($search) {
 			try {
-				DPCalendarHelper::getDateFromString(
-					$search,
-					null,
-					true,
-					DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
-				);
+				DPCalendarHelper::getDateFromString($search, null, true, $format);
 			} catch (Exception $e) {
 				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 				$search = '';
 
-				Factory::getApplication()->setUserState($this->context . '.filter.search_end', $search);
+				$listRequestData['end-date'] = '';
+				Factory::getApplication()->setUserState($this->context . '.list', $listRequestData);
 			}
 		}
-		$this->setState('filter.search_end', $search);
+		$this->setState('list.end-date', $search);
 	}
 
 	protected function getStoreId($id = '')
@@ -160,7 +150,7 @@ class DPCalendarModelAdminEvents extends ListModel
 		$id .= ':' . $this->getState('filter.access');
 		$id .= ':' . $this->getState('filter.state');
 		$id .= ':' . $this->getState('filter.event_type');
-		$id .= ':' . $this->getState('filter.category_id');
+		$id .= ':' . implode(',', (array)$this->getState('filter.calendars', []));
 		$id .= ':' . $this->getState('filter.language');
 
 		return parent::getStoreId($id);
@@ -179,9 +169,22 @@ class DPCalendarModelAdminEvents extends ListModel
 		foreach ($items as $item) {
 			// Add the locations
 			$item->locations = [];
-			if (!empty($item->location_ids) && empty($item->locations)) {
+			if (!empty($item->location_ids) && $item->locations === []) {
 				$model->setState('filter.search', 'ids:' . $item->location_ids);
 				$item->locations = $model->getItems();
+			}
+
+			$item->color = str_replace('#', '', $item->color ?? '');
+
+			// If the event has no color, use the one from the calendar
+			$calendar = DPCalendarHelper::getCalendar($item->catid);
+			if ($item->color === '' || $item->color === '0' || $item->color === []) {
+				$item->color = $calendar ? str_replace('#', '', $calendar->color) : '3366CC';
+			}
+
+			// Check if it is a valid color
+			if ((\strlen($item->color) !== 6 && \strlen($item->color) !== 3) || !ctype_xdigit($item->color)) {
+				$item->color = '3366CC';
 			}
 		}
 
@@ -266,25 +269,25 @@ class DPCalendarModelAdminEvents extends ListModel
 		$query->where('c.published IN (0, 1)');
 
 		// Filter by a single or group of categories.
-		$baselevel  = 1;
-		$categoryId = $this->getState('filter.category_id');
-		if (is_numeric($categoryId)) {
+		$baselevel = 1;
+		$calendars = array_filter((array)$this->getState('filter.calendars', []), static fn ($c): bool => !empty($c));
+		if (count($calendars) === 1) {
 			$cat_tbl = Table::getInstance('Category', 'JTable');
-			$cat_tbl->load($categoryId);
+			$cat_tbl->load(reset($calendars));
 			$rgt       = $cat_tbl->rgt;
 			$lft       = $cat_tbl->lft;
 			$baselevel = (int)$cat_tbl->level;
 			$query->where('c.lft >= ' . (int)$lft);
 			$query->where('c.rgt <= ' . (int)$rgt);
-		} elseif (is_array($categoryId)) {
-			ArrayHelper::toInteger($categoryId);
-			$categoryId = implode(',', $categoryId);
-			$query->where('a.catid IN (' . $categoryId . ')');
+		} elseif (count($calendars) > 1) {
+			ArrayHelper::toInteger($calendars);
+			$calendars = implode(',', $calendars);
+			$query->where('a.catid IN (' . $calendars . ')');
 		}
 
 		// Filter on the level.
 		if ($level = $this->getState('filter.level')) {
-			$query->where('c.level <= ' . ((int)$level + (int)$baselevel - 1));
+			$query->where('c.level <= ' . ((int)$level + $baselevel - 1));
 		}
 
 		// Filter by author
@@ -307,7 +310,8 @@ class DPCalendarModelAdminEvents extends ListModel
 				$query->where('(a.title LIKE ' . $search . ' OR a.alias LIKE ' . $search . ' OR a.description LIKE ' . $search . ')');
 			}
 		}
-		$search = $this->getState('filter.search_start');
+
+		$search = $this->getState('list.start-date');
 		if (!empty($search)) {
 			$search = DPCalendarHelper::getDateFromString(
 				$search,
@@ -319,7 +323,7 @@ class DPCalendarModelAdminEvents extends ListModel
 			$search = $db->quote($db->escape($search->toSql(), true));
 			$query->where('a.start_date >= ' . $search);
 		}
-		$search = $this->getState('filter.search_end');
+		$search = $this->getState('list.end-date');
 		if (!empty($search)) {
 			$search = DPCalendarHelper::getDateFromString(
 				$search,
@@ -404,8 +408,8 @@ class DPCalendarModelAdminEvents extends ListModel
 			if (!empty($data->filter['published'])) {
 				$data->filter['state'] = $data->filter['published'];
 			}
-			if (!empty($data->filter['category_id'])) {
-				$data->filter['cat_id'] = $data->filter['category_id'];
+			if (!empty($data->filter['calendars'])) {
+				$data->filter['cat_id'] = is_array($data->filter['calendars']) ? reset($data->filter['calendars']) : $data->filter['calendars'];
 			}
 		}
 

@@ -34,12 +34,13 @@ class DPCalendarModelCpanel extends BaseDatabaseModel
 
 	public function getTotalEvents()
 	{
-		$query = $this->_db->getQuery(true);
+		$query = $this->getDbo()->getQuery(true);
 		$query->select('count(id) as total');
 		$query->from('#__dpcalendar_events');
-		$this->_db->setQuery($query);
 
-		return $this->_db->loadResult();
+		$this->getDbo()->setQuery($query);
+
+		return $this->getDbo()->loadResult();
 	}
 
 	public function getCalendars()
@@ -64,52 +65,57 @@ class DPCalendarModelCpanel extends BaseDatabaseModel
 		$data = [];
 		$date = DPCalendarHelper::getDate();
 
-		$query = $this->_db->getQuery(true);
+		$query = $this->getDbo()->getQuery(true);
 		$query->select('count(id) as total, sum(price) as price');
 		$query->from('#__dpcalendar_bookings');
-		$query->where('book_date > ' . $this->_db->quote($date->format('Y') . '-01-01'));
+		$query->where('book_date > ' . $this->getDbo()->quote($date->format('Y') . '-01-01'));
 		$query->where('state = 1');
-		$this->_db->setQuery($query);
 
-		$data['year'] = $this->_db->loadAssoc();
+		$this->getDbo()->setQuery($query);
 
-		$query = $this->_db->getQuery(true);
+		$data['year'] = $this->getDbo()->loadAssoc();
+
+		$query = $this->getDbo()->getQuery(true);
 		$query->select('count(id) as total, sum(price) as price');
 		$query->from('#__dpcalendar_bookings');
-		$query->where('book_date > ' . $this->_db->quote($date->format('Y-m') . '-01'));
+		$query->where('book_date > ' . $this->getDbo()->quote($date->format('Y-m') . '-01'));
 		$query->where('state = 1');
-		$this->_db->setQuery($query);
 
-		$data['month'] = $this->_db->loadAssoc();
+		$this->getDbo()->setQuery($query);
+
+		$data['month'] = $this->getDbo()->loadAssoc();
 
 		$date->modify('last monday');
-		$query = $this->_db->getQuery(true);
+		$query = $this->getDbo()->getQuery(true);
 		$query->select('count(id) as total, sum(price) as price');
 		$query->from('#__dpcalendar_bookings');
-		$query->where('book_date > ' . $this->_db->quote($date->format('Y-m-d')));
+		$query->where('book_date > ' . $this->getDbo()->quote($date->format('Y-m-d')));
 		$query->where('state = 1');
-		$this->_db->setQuery($query);
 
-		$data['week'] = $this->_db->loadAssoc();
+		$this->getDbo()->setQuery($query);
 
-		$query = $this->_db->getQuery(true);
+		$data['week'] = $this->getDbo()->loadAssoc();
+
+		$query = $this->getDbo()->getQuery(true);
 		$query->select('count(id) as total, sum(price) as price');
 		$query->from('#__dpcalendar_bookings');
 		$query->where('state != 1');
-		$this->_db->setQuery($query);
 
-		$data['notactive'] = $this->_db->loadAssoc();
+		$this->getDbo()->setQuery($query);
+
+		$data['notactive'] = $this->getDbo()->loadAssoc();
 
 		return $data;
 	}
 
 	public function getTotalTaxRates()
 	{
-		$query = $this->_db->getQuery(true);
+		$query = $this->getDbo()->getQuery(true);
 		$query->select('count(id) as total');
 		$query->from('#__dpcalendar_taxrates');
-		$this->_db->setQuery($query);
 
-		return $this->_db->loadResult();
+		$this->getDbo()->setQuery($query);
+
+		return $this->getDbo()->loadResult();
 	}
 }

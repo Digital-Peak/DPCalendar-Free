@@ -12,6 +12,9 @@ defined('_JEXEC') or die();
 
 class DPCalendarControllerCoupon extends FormController
 {
+	public $input;
+	public $id;
+	public $error;
 	protected $text_prefix = 'COM_DPCALENDAR_COUPON';
 
 	public function save($key = null, $urlVar = 'co_id')

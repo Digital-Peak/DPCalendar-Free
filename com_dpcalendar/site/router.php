@@ -19,6 +19,9 @@ use Joomla\CMS\Plugin\PluginHelper;
 
 class DPCalendarRouter extends RouterView
 {
+	public $app;
+	public $views;
+	public $menu;
 	public function __construct($app = null, $menu = null)
 	{
 		$params = ComponentHelper::getParams('com_dpcalendar');
@@ -111,7 +114,7 @@ class DPCalendarRouter extends RouterView
 		return parent::parse($segments);
 	}
 
-	private function updateEventParentForQuery($query)
+	private function updateEventParentForQuery($query): void
 	{
 		// Check if the query is an event view
 		if (empty($query['view']) || $query['view'] != 'event' || empty($query['Itemid'])) {
@@ -176,7 +179,7 @@ class DPCalendarRouter extends RouterView
 			return [0 => $id];
 		}
 
-		if (!strpos($id, ':')) {
+		if (strpos($id, ':') === 0 || strpos($id, ':') === false) {
 			$db      = Factory::getDbo();
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
@@ -219,7 +222,7 @@ class DPCalendarRouter extends RouterView
 			return [0 => $id];
 		}
 
-		if (!strpos($id, ':')) {
+		if (strpos($id, ':') === 0 || strpos($id, ':') === false) {
 			$db      = Factory::getDbo();
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
@@ -237,7 +240,7 @@ class DPCalendarRouter extends RouterView
 
 	public function getLocationsSegment($id, $query)
 	{
-		if (!strpos($id, ':')) {
+		if (strpos($id, ':') === 0 || strpos($id, ':') === false) {
 			$db      = Factory::getDbo();
 			$dbquery = $db->getQuery(true);
 			$dbquery->select($dbquery->qn('alias'))
@@ -310,9 +313,13 @@ class DPCalendarRouter extends RouterView
 
 		foreach ($calIds as $calId) {
 			// If the event belongs to the external calendar, return the segment as it is the id
-			if (!is_numeric($calId) && strpos($segment, (string) $calId) === 0) {
-				return $segment;
+			if (is_numeric($calId)) {
+				continue;
 			}
+			if (strpos($segment, (string) $calId) !== 0) {
+				continue;
+			}
+			return $segment;
 		}
 
 		$db      = Factory::getDbo();

@@ -25,6 +25,7 @@ use Joomla\Utilities\ArrayHelper;
 
 class DPCalendarModelLocation extends AdminModel
 {
+	public $user;
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
 	protected $batch_commands = [
@@ -146,7 +147,7 @@ class DPCalendarModelLocation extends AdminModel
 		if ($input->get('task') == 'save2copy') {
 			$origTable = $this->getTable();
 
-			$origTable->load($input->getInt('l_id'));
+			$origTable->load($input->getInt('l_id', 0));
 			$data['alias'] = $origTable->title === $data['title'] ? $origTable->alias : '';
 
 			if ($data['title'] == $origTable->title) {
@@ -203,7 +204,7 @@ class DPCalendarModelLocation extends AdminModel
 		return $success;
 	}
 
-	private function modifyField(Form $form, $name)
+	private function modifyField(Form $form, string $name): void
 	{
 		$params = $this->getState('params');
 		if (!$params) {
@@ -306,17 +307,20 @@ class DPCalendarModelLocation extends AdminModel
 			// Increment the content version number.
 			$table->version++;
 		}
-
-		if (!isset($table->state) && $this->canEditState($table)) {
-			$table->state = 1;
+		if (isset($table->state)) {
+			return;
 		}
+		if (!$this->canEditState($table)) {
+			return;
+		}
+		$table->state = 1;
 	}
 
 	protected function populateState()
 	{
 		$app = Factory::getApplication();
 
-		$pk = $app->input->getInt('l_id');
+		$pk = $app->input->getInt('l_id', 0);
 		$this->setState('location.id', $pk);
 		$this->setState('form.id', $pk);
 
@@ -337,8 +341,8 @@ class DPCalendarModelLocation extends AdminModel
 			// Delete associations
 			$pks = (array)$pks;
 			ArrayHelper::toInteger($pks);
-			$this->_db->setQuery('delete from #__dpcalendar_events_location where location_id in (' . implode(',', $pks) . ')');
-			$this->_db->execute();
+			$this->getDbo()->setQuery('delete from #__dpcalendar_events_location where location_id in (' . implode(',', $pks) . ')');
+			$this->getDbo()->execute();
 		}
 
 		return $success;

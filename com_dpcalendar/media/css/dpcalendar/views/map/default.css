@@ -54,6 +54,7 @@
 }
 .com-dpcalendar-map .dp-datepicker__input {
 	margin-right: -3px;
+	padding: 0.4rem;
 }
 .com-dpcalendar-map .dp-datepicker__button {
 	margin: 0;

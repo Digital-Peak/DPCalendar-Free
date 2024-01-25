@@ -17,7 +17,8 @@ JLoader::import('joomla.filesystem.folder');
 
 class DPCalendarControllerTranslate extends BaseController
 {
-	public function fetch()
+	public $input;
+	public function fetch(): void
 	{
 		// The resource to fetch
 		$resource = $this->input->getCmd('resource');

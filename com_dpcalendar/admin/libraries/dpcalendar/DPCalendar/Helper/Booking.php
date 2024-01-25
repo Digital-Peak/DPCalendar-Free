@@ -17,6 +17,7 @@ use Dompdf\Options;
 use DPCalendar\Translator\Translator;
 use Exception;
 use Joomla\CMS\Access\Access;
+use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\Text;
@@ -38,12 +39,12 @@ class Booking
 	 * @param \stdClass $booking
 	 * @param \stdClass $tickets
 	 * @param Registry  $params
-	 * @param string    $toFile
+	 * @param bool      $toFile
 	 * @param Language  $language
 	 *
 	 * @return string
 	 */
-	public static function createReceipt($booking, $tickets, $params, $toFile = false, $language = null)
+	public static function createReceipt($booking, $tickets, $params, bool $toFile = false, $language = null): ?string
 	{
 		try {
 			if ($language == null) {
@@ -63,8 +64,8 @@ class Booking
 			);
 
 			return self::createPDF($details, $booking->uid, $toFile);
-		} catch (\Exception $e) {
-			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		} catch (\Exception $exception) {
+			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'warning');
 
 			return null;
 		}
@@ -74,7 +75,7 @@ class Booking
 	 * Loads the invoice from the given booking.
 	 *
 	 * @param \stdClass $booking
-	 * @param string    $toFile
+	 * @param bool      $toFile
 	 *
 	 * @return string
 	 */
@@ -117,11 +118,11 @@ class Booking
 	 *
 	 * @param stdClass $ticket
 	 * @param Registry $params
-	 * @param string   $toFile
+	 * @param bool     $toFile
 	 *
 	 * @return string
 	 */
-	public static function createTicket($ticket, $params, $toFile = false)
+	public static function createTicket($ticket, $params, bool $toFile = false): ?string
 	{
 		try {
 			Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
@@ -150,8 +151,8 @@ class Booking
 			);
 
 			return self::createPDF($details, $ticket->uid, $toFile);
-		} catch (\Exception $e) {
-			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		} catch (\Exception $exception) {
+			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'warning');
 
 			return null;
 		}
@@ -163,11 +164,11 @@ class Booking
 	 *
 	 * @param stdClass $ticket
 	 * @param Registry $params
-	 * @param string   $toFile
+	 * @param bool     $toFile
 	 *
 	 * @return string
 	 */
-	public static function createCertificate($ticket, $params, $toFile = false, $booking = null)
+	public static function createCertificate($ticket, $params, bool $toFile = false, $booking = null): ?string
 	{
 		try {
 			Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
@@ -208,8 +209,8 @@ class Booking
 			);
 
 			return self::createPDF($details, $ticket->uid, $toFile);
-		} catch (\Exception $e) {
-			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
+		} catch (\Exception $exception) {
+			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'warning');
 
 			return null;
 		}
@@ -225,7 +226,7 @@ class Booking
 	 * @return array
 	 * @throws \Exception
 	 */
-	public static function getSeriesEvents($event, $limit = 40)
+	public static function getSeriesEvents($event, $limit = 40): array
 	{
 		if (!$event) {
 			return [];
@@ -251,7 +252,7 @@ class Booking
 
 			$series = $model->getItems();
 			foreach ($series as $e) {
-				if (!self::openForBooking($e) || key_exists($e->id, $events)) {
+				if (!self::openForBooking($e) || array_key_exists($e->id, $events)) {
 					continue;
 				}
 				$events[$e->id] = $e;
@@ -261,7 +262,7 @@ class Booking
 		return $events;
 	}
 
-	public static function paymentRequired($event)
+	public static function paymentRequired($event): bool
 	{
 		if (empty($event)) {
 			return false;
@@ -270,7 +271,7 @@ class Booking
 		return $event->price != '0.00' && !empty($event->price) && !empty($event->price->value);
 	}
 
-	public static function openForCancel($booking, $states = [1, 4, 8])
+	public static function openForCancel($booking, $states = [1, 4, 8]): bool
 	{
 		if (!$booking) {
 			return false;
@@ -287,7 +288,7 @@ class Booking
 		foreach ($booking->tickets as $ticket) {
 			$now        = DPCalendarHelper::getDate();
 			$cancelDate = DPCalendarHelper::getDate(
-				!empty($ticket->event_booking_cancel_closing_date) ? $ticket->event_booking_cancel_closing_date : $ticket->start_date
+				empty($ticket->event_booking_cancel_closing_date) ? $ticket->start_date : $ticket->event_booking_cancel_closing_date
 			);
 
 			// Check if it is a relative date
@@ -339,7 +340,7 @@ class Booking
 	 *
 	 * @param \stdClass $event
 	 *
-	 * @return \Joomla\CMS\Date\Date
+	 * @return Date
 	 */
 	public static function getRegistrationStartDate($event)
 	{
@@ -365,7 +366,7 @@ class Booking
 	 *
 	 * @param \stdClass $event
 	 *
-	 * @return \Joomla\CMS\Date\Date
+	 * @return Date
 	 */
 	public static function getRegistrationEndDate($event)
 	{
@@ -397,7 +398,7 @@ class Booking
 	 *
 	 * @deprecated will be removed without replacement
 	 */
-	public static function getPaymentStatementFromPlugin($booking, $params = null, $language = null)
+	public static function getPaymentStatementFromPlugin($booking, $params = null, $language = null): string
 	{
 		return '';
 	}
@@ -419,7 +420,7 @@ class Booking
 	 */
 	public static function getPriceWithDiscount($price, $event, $earlyBirdIndex = -1, $userGroupIndex = -1)
 	{
-		if (!$price) {
+		if ($price === 0.0) {
 			return 0;
 		}
 		$newPrice = $price;
@@ -447,11 +448,7 @@ class Booking
 					continue;
 				}
 
-				if ($event->earlybird->type[$index] == 'value') {
-					$newPrice = $newPrice - $value;
-				} else {
-					$newPrice = $newPrice - (($newPrice / 100) * $value);
-				}
+				$newPrice = $event->earlybird->type[$index] == 'value' ? $newPrice - $value : $newPrice - (($newPrice / 100) * $value);
 
 				if ($newPrice < 0) {
 					$newPrice = 0;
@@ -467,15 +464,11 @@ class Booking
 					continue;
 				}
 				$groups = $event->user_discount->discount_groups[$index];
-				if (!array_intersect($userGroups, $groups)) {
+				if (array_intersect($userGroups, $groups) === []) {
 					continue;
 				}
 
-				if ($event->user_discount->type[$index] == 'value') {
-					$newPrice = $newPrice - $value;
-				} else {
-					$newPrice = $newPrice - (($newPrice / 100) * $value);
-				}
+				$newPrice = $event->user_discount->type[$index] == 'value' ? $newPrice - $value : $newPrice - (($newPrice / 100) * $value);
 
 				if ($newPrice < 0) {
 					$newPrice = 0;
@@ -516,7 +509,6 @@ class Booking
 			case 7:
 				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED';
 				break;
-				break;
 			case 8:
 				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING';
 				break;
@@ -531,7 +523,7 @@ class Booking
 		return Text::_($status);
 	}
 
-	public static function createPDF(string $details, string $name, bool $toFile)
+	public static function createPDF(string $details, string $name, bool $toFile): string
 	{
 		if (!file_exists(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json')) {
 			copy(
@@ -546,19 +538,15 @@ class Booking
 		$options->set('isPhpEnabled', true);
 		$options->setChroot(array_merge([JPATH_ROOT], $options->getChroot()));
 		$options->setTempDir(Factory::getApplication()->get('tmp_path', JPATH_ROOT . '/tmp'));
+
 		$dompdf = new Dompdf($options);
 		$dompdf->loadHtml($details);
 		$dompdf->setBasePath(JPATH_ROOT);
 		$dompdf->render();
 
 		/** @deprecated when footer exists */
-		if (!strpos($details, '<footer')) {
-			$dompdf->getCanvas()->page_script(function (
-				int $pageNumber,
-				int $pageCount,
-				Canvas $canvas,
-				FontMetrics $fontMetrics
-			) {
+		if (strpos($details, '<footer') === 0 || strpos($details, '<footer') === false) {
+			$dompdf->getCanvas()->page_script(static function (int $pageNumber, int $pageCount, Canvas $canvas, FontMetrics $fontMetrics): void {
 				$format = DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y')
 					. ' ' . DPCalendarHelper::getComponentParameter('event_time_format', 'H:i');
 				$font = $fontMetrics->getFont('DejaVu Sans');

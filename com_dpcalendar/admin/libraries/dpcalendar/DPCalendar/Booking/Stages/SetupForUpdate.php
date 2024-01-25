@@ -19,12 +19,12 @@ class SetupForUpdate implements StageInterface
 	/**
 	 * @var CMSApplication
 	 */
-	private $application = null;
+	private $application;
 
 	/**
 	 * @var User
 	 */
-	private $user = null;
+	private $user;
 
 	private ?\DPCalendarModelBooking $bookingModel = null;
 

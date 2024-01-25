@@ -9,6 +9,7 @@ namespace DPCalendar\Booking\Stages;
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
@@ -16,7 +17,7 @@ use Joomla\CMS\User\UserHelper;
 use Joomla\Database\DatabaseDriver;
 use League\Pipeline\StageInterface;
 
-if (\DPCalendar\Helper\DPCalendarHelper::isJoomlaVersion('4', '<') && !class_exists('\\Joomla\\Database\\DatabaseDriver', false)) {
+if (DPCalendarHelper::isJoomlaVersion('4', '<') && !class_exists('\\Joomla\\Database\\DatabaseDriver', false)) {
 	class_alias('JDatabaseDriver', '\\Joomla\\Database\\DatabaseDriver');
 }
 
@@ -25,14 +26,14 @@ class CreateUser implements StageInterface
 	/**
 	 * @var CMSApplication
 	 */
-	private $application = null;
+	private $application;
 
 	private ?DatabaseDriver $db = null;
 
 	/**
 	 * @var \UsersModelRegistration
 	 */
-	private $model = null;
+	private $model;
 
 	public function __construct(CMSApplication $application, DatabaseDriver $db, \UsersModelRegistration $model)
 	{

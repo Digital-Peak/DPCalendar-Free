@@ -36,8 +36,8 @@ if (!$this->event->earlybird) {
 						$date->setTime(23, 59, 59);
 					}
 				}
-				$dateFormated = $date->format($this->params->get('event_date_format', 'd.m.Y'), true); ?>
-				<?php echo Text::sprintf('COM_DPCALENDAR_VIEW_EVENT_EARLYBIRD_DISCOUNT_TEXT', $value, $dateFormated); ?>
+				$dateFormatted = $date->format($this->params->get('event_date_format', 'd.m.Y'), true); ?>
+				<?php echo Text::sprintf('COM_DPCALENDAR_VIEW_EVENT_EARLYBIRD_DISCOUNT_TEXT', $value, $dateFormatted); ?>
 			</span>
 			<span class="dp-earlybird__description"><?php echo $this->event->earlybird->description[$index]; ?></span>
 		</div>

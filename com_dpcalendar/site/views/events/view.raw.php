@@ -14,7 +14,9 @@ use Joomla\Registry\Registry;
 
 class DPCalendarViewEvents extends BaseView
 {
-	public function init()
+	public $items;
+	public $compactMode;
+	protected function init()
 	{
 		// Don't display errors as we want to send them nicely in the ajax response
 		ini_set('display_errors', false);
@@ -44,7 +46,7 @@ class DPCalendarViewEvents extends BaseView
 			$this->getModel()->setState('list.end-date', $end);
 		}
 
-		if ($id = $this->input->getString('module-id')) {
+		if ($id = $this->input->getString('module-id', '')) {
 			$moduleParams = new Registry(ModuleHelper::getModuleById($id)->params);
 			$this->getModel()->setStateFromParams($moduleParams);
 			$this->params->merge($moduleParams);
@@ -63,7 +65,7 @@ class DPCalendarViewEvents extends BaseView
 		}
 	}
 
-	public function handleError()
+	public function handleError(): void
 	{
 		// Getting last error
 		$error = error_get_last();

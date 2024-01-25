@@ -13,7 +13,7 @@ use Sabre\HTTP\ResponseInterface;
 
 class Joomla extends Plugin
 {
-	public function beforeMethod(RequestInterface $request, ResponseInterface $response)
+	public function beforeMethod(RequestInterface $request, ResponseInterface $response): void
 	{
 		$method = $request->getMethod();
 		$path   = $request->getPath();

@@ -63,7 +63,7 @@ class Ical
 	 * @return string
 	 * @throws \Exception
 	 */
-	public static function createIcalFromEvents($events, $asDownload = false, $forceEvents = false, \DPCalendarModelEvents $eventsModel = null)
+	public static function createIcalFromEvents(array $events, $asDownload = false, $forceEvents = false, \DPCalendarModelEvents $eventsModel = null)
 	{
 		\JLoader::import('components.com_dpcalendar.vendor.autoload', JPATH_ADMINISTRATOR);
 
@@ -89,7 +89,7 @@ class Ical
 			if ($event->original_id > 0 && !$forceEvents) {
 				unset($events[$key]);
 			}
-			if (key_exists($event->catid, $calendars)) {
+			if (array_key_exists($event->catid, $calendars)) {
 				continue;
 			}
 			if (!empty($event->category_title)) {
@@ -100,7 +100,7 @@ class Ical
 		}
 		// $text[] = 'X-WR-CALNAME:'.implode('; ', $calendars);
 
-		foreach ($events as $key => $event) {
+		foreach ($events as $event) {
 			$text = array_merge($text, self::addEventData($event, $eventsModel));
 		}
 		$text[] = 'END:VCALENDAR';
@@ -121,20 +121,21 @@ class Ical
 		$newText = str_replace('\n', '<br/>', $text);
 		$newText = str_replace('\N', '<br/>', $newText);
 		$newText = str_replace('\,', ',', $newText);
-		$newText = str_replace('\;', ';', $newText);
 
-		return $newText;
+		return str_replace('\;', ';', $newText);
 	}
 
 	public static function icalEncode($text)
 	{
 		$newText = str_replace(',', '\,', $text);
-		$newText = str_replace(';', '\;', $newText);
 
-		return $newText;
+		return str_replace(';', '\;', $newText);
 	}
 
-	private static function addEventData($event, \DPCalendarModelEvents $eventsModel = null)
+	/**
+	 * @return mixed[]
+	 */
+	private static function addEventData($event, \DPCalendarModelEvents $eventsModel = null): array
 	{
 		$childsToAdd = [];
 		$text        = [];
@@ -242,7 +243,7 @@ class Ical
 						}
 					}
 				}
-				if ($exdates) {
+				if ($exdates !== []) {
 					$text[] = 'EXDATE:' . implode(',', $exdates);
 				}
 
@@ -289,7 +290,7 @@ class Ical
 
 		$customLocation = '';
 		if (isset($event->locations) && !empty($event->locations)) {
-			$customLocation = implode(', ', array_map(fn ($l) => $l->title, $event->locations));
+			$customLocation = implode(', ', array_map(static fn ($l) => $l->title, $event->locations));
 			$text[]         = 'LOCATION:' . self::icalEncode(Location::format($event->locations));
 			if (!empty($event->locations[0]->latitude) && !empty($event->locations[0]->longitude)) {
 				$text[] = 'GEO:' . $event->locations[0]->latitude . ';' . $event->locations[0]->longitude;
@@ -301,7 +302,7 @@ class Ical
 			$text[] = 'X-ROOMS:' . implode(', ', array_merge(...array_values($event->roomTitles)));
 		}
 
-		if ($customLocation) {
+		if ($customLocation !== '' && $customLocation !== '0') {
 			$text[] = 'X-LOCATION-DISPLAYNAME:' . $customLocation;
 		}
 
@@ -369,7 +370,7 @@ class Ical
 
 		try {
 			$tz = new \DateTimeZone($tzid);
-		} catch (\Exception $e) {
+		} catch (\Exception $exception) {
 			return false;
 		}
 
@@ -427,11 +428,20 @@ class Ical
 				$tzfrom = $offset;
 				$vt->add($cmp);
 			}
-
 			// we covered the entire date range
-			if ($std && $dst && min($t_std, $t_dst) < $from && max($t_std, $t_dst) > $to) {
-				break;
+			if ($std === null) {
+				continue;
 			}
+			if ($dst === null) {
+				continue;
+			}
+			if (min($t_std, $t_dst) >= $from) {
+				continue;
+			}
+			if (max($t_std, $t_dst) <= $to) {
+				continue;
+			}
+			break;
 		}
 
 		// add X-MICROSOFT-CDO-TZID if available

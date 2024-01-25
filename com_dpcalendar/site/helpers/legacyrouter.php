@@ -13,11 +13,11 @@ use Joomla\CMS\Factory;
 
 class DPCalendarRouterLegacy implements RulesInterface
 {
-	public function preprocess(&$query)
+	public function preprocess(&$query): void
 	{
 	}
 
-	public function build(&$query, &$segments)
+	public function build(array &$query, array &$segments)
 	{
 		// Get a menu item based on Itemid or currently active
 		$app      = Factory::getApplication();
@@ -27,15 +27,10 @@ class DPCalendarRouterLegacy implements RulesInterface
 
 		// We need a menu item. Either the one specified in the query, or the
 		// current active one if none specified
-		if (empty($query['Itemid'])) {
-			$menuItem = $menu->getActive();
-		} else {
-			$menuItem = $menu->getItem($query['Itemid']);
-		}
+		$menuItem = empty($query['Itemid']) ? $menu->getActive() : $menu->getItem($query['Itemid']);
 
-		$mView  = (empty($menuItem->query['view'])) ? null : $menuItem->query['view'];
-		$mCatid = (empty($menuItem->query['calid'])) ? null : $menuItem->query['calid'];
-		$mId    = (empty($menuItem->query['id'])) ? null : $menuItem->query['id'];
+		$mView = (empty($menuItem->query['view'])) ? null : $menuItem->query['view'];
+		$mId   = (empty($menuItem->query['id'])) ? null : $menuItem->query['id'];
 
 		if (isset($query['view'])) {
 			$view = $query['view'];
@@ -54,7 +49,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 		}
 
 		// Are we dealing with an event that is attached to a menu item?
-		if (isset($query['view']) && ($mView == $query['view']) and (isset($query['id'])) and ($mId == intval($query['id']))) {
+		if (isset($query['view']) && ($mView == $query['view']) and (isset($query['id'])) and ($mId == (int) $query['id'])) {
 			unset($query['view']);
 			unset($query['calid']);
 			unset($query['id']);
@@ -63,7 +58,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 		}
 
 		if (isset($view) and ($view == 'calendar' or $view == 'event')) {
-			if (isset($query['id']) && $mId != intval($query['id']) || $mView != $view) {
+			if (isset($query['id']) && $mId != (int) $query['id'] || $mView != $view) {
 				$calid = null;
 				if ($view == 'event' && isset($query['calid'])) {
 					$calid = $query['calid'];
@@ -84,7 +79,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 
 					$array = [];
 					foreach ($path as $id) {
-						if ((int) $id == (int) $menuCatid) {
+						if ((int) $id === (int) $menuCatid) {
 							break;
 						}
 
@@ -117,17 +112,15 @@ class DPCalendarRouterLegacy implements RulesInterface
 				if ($query['layout'] == $menuItem->query['layout']) {
 					unset($query['layout']);
 				}
-			} else {
-				if ($query['layout'] == 'default') {
-					unset($query['layout']);
-				}
+			} elseif ($query['layout'] == 'default') {
+				unset($query['layout']);
 			}
 		}
 
 		return $segments;
 	}
 
-	public function parse(&$segments, &$vars)
+	public function parse(array &$segments, array &$vars)
 	{
 		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
 
@@ -141,7 +134,7 @@ class DPCalendarRouterLegacy implements RulesInterface
 		// Count route segments
 		$count = is_countable($segments) ? count($segments) : 0;
 
-		if (!empty($segments) && $segments[0] == 'events') {
+		if ($segments !== [] && $segments[0] == 'events') {
 			$vars['view']   = $segments[0];
 			$vars['format'] = 'raw';
 			return $vars;

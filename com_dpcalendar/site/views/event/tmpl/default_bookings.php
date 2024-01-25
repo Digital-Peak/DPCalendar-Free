@@ -18,12 +18,16 @@ if (($event->capacity !== null && (int)$event->capacity === 0) || DPCalendarHelp
 
 $tickets = [];
 foreach ($event->tickets as $t) {
-	if ($this->user->id > 0 && $this->user->id == $t->user_id) {
-		$tickets[] = $t;
+	if ($this->user->id <= 0) {
+		continue;
 	}
+	if ($this->user->id != $t->user_id) {
+		continue;
+	}
+	$tickets[] = $t;
 }
 
-if ($tickets) {
+if ($tickets !== []) {
 	$this->app->enqueueMessage(
 		Text::plural('COM_DPCALENDAR_VIEW_EVENT_BOOKED_TEXT', count($tickets), DPCalendarHelperRoute::getTicketsRoute(null, $event->id, true))
 	);
@@ -60,7 +64,7 @@ if ($tickets) {
 		<dl class="dp-description dp-booking-info__waiting">
 			<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_BOOKING_WAITING_LIST'); ?></dt>
 			<dd class="dp-description__description dp-event-waiting">
-				<?php echo $event->waiting_list_count ?: count(array_filter($event->tickets, fn ($t) => $t->state == 8)); ?>
+				<?php echo $event->waiting_list_count ?: count(array_filter($event->tickets, static fn($t): bool => $t->state == 8)); ?>
 			</dd>
 		</dl>
 	<?php } ?>

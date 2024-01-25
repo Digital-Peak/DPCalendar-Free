@@ -22,6 +22,7 @@ if (version_compare(JVERSION, 4, '<') && !class_exists('\\Joomla\\CMS\\Form\\Fie
 
 class JFormFieldDpevent extends ListField
 {
+	public $element;
 	protected $type = 'Dpevent';
 
 	public function getOptions()
@@ -31,6 +32,7 @@ class JFormFieldDpevent extends ListField
 		$model = BaseDatabaseModel::getInstance('Calendar', 'DPCalendarModel');
 		$model->getState();
 		$model->setState('filter.parentIds', explode(',', $this->element->attributes()->calendar_ids ?: ''));
+
 		$ids = [];
 		foreach ($model->getItems() as $calendar) {
 			$ids[] = $calendar->id;
@@ -54,7 +56,7 @@ class JFormFieldDpevent extends ListField
 		if ($endDate == 'same day') {
 			$endDate = clone $startDate;
 			$endDate->setTime(23, 59, 59);
-		} elseif ($endDate) {
+		} elseif ($endDate !== '' && $endDate !== '0') {
 			$tmp = $dateHelper->getDate($endDate);
 			$tmp->sub(new DateInterval("PT" . $tmp->format("s") . "S"));
 			$tmp->sub(new DateInterval("PT" . ($tmp->format("i") % 15) . "M"));

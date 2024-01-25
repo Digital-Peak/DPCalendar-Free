@@ -17,10 +17,10 @@ if (!is_array($locations)) {
 $buffer = '';
 foreach ($locations as $index => $location) {
 	if (!empty($location->street)) {
-		$buffer .= $location->street . (!empty($location->number) ? ' ' . $location->number : '') . ', ';
+		$buffer .= $location->street . (empty($location->number) ? '' : ' ' . $location->number) . ', ';
 	}
 	if (!empty($location->city)) {
-		$buffer .= (!empty($location->zip) ? $location->zip . ' ' : '') . $location->city . ', ';
+		$buffer .= (empty($location->zip) ? '' : $location->zip . ' ') . $location->city . ', ';
 	}
 	if (!empty($location->province)) {
 		$buffer .= $location->province . ', ';

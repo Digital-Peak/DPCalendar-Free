@@ -311,38 +311,31 @@
 			description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 	</fieldset>
 	<fieldset name="map" label="COM_DPCALENDAR_FIELD_CONFIG_MAP_LABEL"
-			  description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
 		<field name="map_expand" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
 		<field name="map_include_ongoing" type="radio" class="btn-group" default="0"
-				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_DESC">
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
 		<field name="map_date_format" type="text" default="d.m.Y"
-				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>
 		<field name="map_view_zoom" type="text" default="4"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
 		<field name="map_view_lat" type="text" default="47" validate="decimal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
 		<field name="map_view_long" type="text" default="4" validate="decimal"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="map_view_width" type="text" default="100%"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
 		<field name="map_view_height" type="text" default="600px"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
 		<field name="map_view_radius" type="list" default="20"
-				label="COM_DPCALENDAR_FIELD_CONFIG_MAP_RADIUS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_MAP_RADIUS_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_MAP_RADIUS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_MAP_RADIUS_DESC">
 			<option value="5">5</option>
 			<option value="10">10</option>
 			<option value="15">15</option>
@@ -355,45 +348,45 @@
 			<option value="-1">JALL</option>
 		</field>
 		<field name="map_view_length_type" type="radio" class="btn-group" default="m"
-				label="COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_DESC">
 			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_METER</option>
 			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_MILE</option>
 		</field>
 		<field name="map_show_event_as_popup" type="list" default="0"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_DESC">
 			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_FULL</option>
 			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL</option>
 			<option value="2">JDISABLED</option>
 		</field>
 		<field name="map_popup_width" type="text" showon="map_show_event_as_popup:1"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_WIDTH_DESC"/>
 		<field name="map_popup_height" type="text" showon="map_show_event_as_popup:1"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
 		<field name="map_filter_author" type="dpauthor" default="0" table_name="dpcalendar_events"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_DESC">
 			<option value="-1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_MY</option>
 			<option value="0">JNONE</option>
 		</field>
 		<field name="map_autocomplete" type="radio" default="1" class="btn-group"
-				label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
+			label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
 		<field name="map_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
-				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="map_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
-				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
 	</fieldset>
 	<fieldset name="list" label="COM_DPCALENDAR_FIELD_CONFIG_LIST_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
-		<field name="date_start" type="text"
+		description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="list_date_start" type="text"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_DATE_START_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_DATE_START_DESC"/>
+		<field name="list_date_end" type="text"
+			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_DATE_END_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_DATE_END_DESC"/>
 		<field name="list_title_format" type="text" default="j.n.Y"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_HEADER_DATE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_HEADER_DATE_DESC"/>
 		<field name="list_increment" type="text" default="1 month"
@@ -426,6 +419,11 @@
 			<option value="2">COM_DPCALENDAR_EXPAND</option>
 			<option value="0">JHIDE</option>
 		</field>
+		<field name="list_search_form_hidden_fields" type="dpcfields" section="filter_adminevents" multiple="true"
+			layout="joomla.form.field.list-fancy-select" hide="length_type,radius,event-type,state,access,language,tag,limit,fullordering"
+			showon="list_manage_search_form:1[OR]list_manage_search_form:2"
+			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 		<field name="list_show_hits" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_DESC">
 			<option value="0">JNO</option>
@@ -756,6 +754,8 @@
 			<option value="metadata:robots">JFIELD_METADATA_ROBOTS_LABEL</option>
 			<option value="metadata:rights">JFIELD_META_RIGHTS_LABEL</option>
 		</field>
+		<field name="event_form_calendars" type="dpcalendar" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FORM_CALENDARS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_CALENDARS_DESC"/>
 		<field name="event_form_redirect" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
 			addfieldpath="/administrator/components/com_content/models/fields" addfieldprefix="Joomla\Component\Content\Administrator\Field"
 			label="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FORM_REDIRECT_DESC"/>
@@ -1728,11 +1728,12 @@
 		<field name="notification_groups_location_create" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
 			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_DESC"/>
-		<field name="notification_author" type="radio" class="btn-group" default="0"
+		<field name="notification_author" type="list" default="0"
 			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DESC">
 			<option value="0">JNO</option>
-			<option value="1">JYES</option>
+			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DIFFERENT_USER</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_ALWAYS</option>
 		</field>
 		<field name="captcha_groups" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_LABEL"

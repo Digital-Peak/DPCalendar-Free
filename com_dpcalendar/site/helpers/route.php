@@ -16,9 +16,9 @@ use Joomla\CMS\Uri\Uri;
 
 class DPCalendarHelperRoute
 {
-	private static $lookup;
+	private static ?array $lookup = null;
 
-	public static function getEventRoute($id, $calId, $full = false, $autoRoute = true, $defaultItemId = 0)
+	public static function getEventRoute($id, ?string $calId = '', $full = false, $autoRoute = true, $defaultItemId = 0)
 	{
 		// Check if we come from com_tags where the link is generated id:alias
 		$parts = $id ? explode(':', $id) : [];
@@ -63,16 +63,14 @@ class DPCalendarHelperRoute
 		return Route::link('site', $link, false, Route::TLS_IGNORE, $full);
 	}
 
-	public static function getFormRoute($id, $return = null, $append = null)
+	public static function getFormRoute(?string $id, $return = null, $append = null): string
 	{
-		if ($id) {
+		if ($id !== null && $id !== '' && $id !== '0') {
 			$link = 'index.php?option=com_dpcalendar&task=event.edit&e_id=' . $id;
+		} elseif (Factory::getApplication()->isClient('administrator')) {
+			$link = 'index.php?option=com_dpcalendar&task=event.add&e_id=0';
 		} else {
-			if (Factory::getApplication()->isClient('administrator')) {
-				$link = 'index.php?option=com_dpcalendar&task=event.add&e_id=0';
-			} else {
-				$link = 'index.php?option=com_dpcalendar&view=form&e_id=0';
-			}
+			$link = 'index.php?option=com_dpcalendar&view=form&e_id=0';
 		}
 
 		$itemId = Factory::getApplication()->input->get('Itemid', null);
@@ -114,9 +112,9 @@ class DPCalendarHelperRoute
 		return Route::_($link, false);
 	}
 
-	public static function getLocationFormRoute($id, $return = null)
+	public static function getLocationFormRoute(?string $id, $return = null): string
 	{
-		if ($id) {
+		if ($id !== null && $id !== '' && $id !== '0') {
 			$link = 'index.php?option=com_dpcalendar&task=locationform.edit&l_id=' . $id;
 		} else {
 			$link = 'index.php?option=com_dpcalendar&view=locationform&l_id=0';
@@ -257,7 +255,7 @@ class DPCalendarHelperRoute
 
 		$url = Route::link('site', 'index.php' . self::getUrl($args, false)->toString(['query', 'fragment']), false);
 		if ($full) {
-			$url = Uri::getInstance()->toString(['host', 'port', 'scheme']) . $url;
+			return Uri::getInstance()->toString(['host', 'port', 'scheme']) . $url;
 		}
 
 		return $url;
@@ -327,19 +325,19 @@ class DPCalendarHelperRoute
 		return self::getUrl($args, true);
 	}
 
-	public static function getCalendarIcalRoute($calId, $token = '')
+	public static function getCalendarIcalRoute(string $calId, ?string $token = ''): string
 	{
 		$url = Uri::base();
 		$url .= 'index.php?option=com_dpcalendar&task=ical.download&id=' . $calId;
 
-		if ($token) {
+		if ($token !== null && $token !== '' && $token !== '0') {
 			$url .= '&token=' . $token;
 		}
 
 		return $url;
 	}
 
-	public static function getCalendarRoute($calId)
+	public static function getCalendarRoute($calId): string
 	{
 		if ($calId instanceof CategoryNode) {
 			$id       = $calId->id;
@@ -396,7 +394,7 @@ class DPCalendarHelperRoute
 		return $link;
 	}
 
-	public static function getCategoryRoute($catid, $language)
+	public static function getCategoryRoute($catid, $language): string
 	{
 		// Is needed for smart search categories indexing
 		JLoader::import('components.com_dpcalendar.helpers.dpcalendar', JPATH_ADMINISTRATOR);
@@ -454,10 +452,14 @@ class DPCalendarHelperRoute
 								continue;
 							}
 							self::$lookup[$view][$id] = $item->id;
-							if ($root && !$root->external) {
-								foreach ($root->getChildren(true) as $child) {
-									self::$lookup[$view][$child->id] = $item->id;
-								}
+							if (!$root) {
+								continue;
+							}
+							if ($root->external) {
+								continue;
+							}
+							foreach ($root->getChildren(true) as $child) {
+								self::$lookup[$view][$child->id] = $item->id;
 							}
 						}
 					}
@@ -496,7 +498,7 @@ class DPCalendarHelperRoute
 		return null;
 	}
 
-	private static function getUrl($arguments = [], $route = true, $needles = [], $defaultItemId = 0)
+	private static function getUrl(array $arguments = [], $route = true, $needles = [], $defaultItemId = 0)
 	{
 		$uri = clone Uri::getInstance();
 		if (Factory::getDocument()->getType() != 'html' || Factory::getApplication()->isClient('site')) {

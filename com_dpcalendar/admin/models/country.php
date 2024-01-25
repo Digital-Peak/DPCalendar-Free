@@ -75,7 +75,7 @@ class DPCalendarModelCountry extends AdminModel
 	{
 		$app = Factory::getApplication();
 
-		$pk = $app->input->getInt('c_id');
+		$pk = $app->input->getInt('c_id', 0);
 		$this->setState('country.id', $pk);
 		$this->setState('form.id', $pk);
 

@@ -20,7 +20,7 @@ class DPCalendarViewLocations extends BaseView
 	protected $pagination;
 	protected $state;
 
-	public function init()
+	protected function init()
 	{
 		$this->state      = $this->get('State');
 		$this->items      = $this->get('Items');
@@ -31,8 +31,8 @@ class DPCalendarViewLocations extends BaseView
 	{
 		$state = $this->get('State');
 		$canDo = DPCalendarHelper::getActions();
-		$user  = Factory::getUser();
-		$bar   = Toolbar::getInstance('toolbar');
+		Factory::getUser();
+		$bar = Toolbar::getInstance('toolbar');
 
 		if ($canDo->get('core.create')) {
 			ToolbarHelper::addNew('location.add');
@@ -57,8 +57,8 @@ class DPCalendarViewLocations extends BaseView
 			HTMLHelper::_('bootstrap.modal', 'collapseModal');
 			$title = Text::_('JTOOLBAR_BATCH');
 			$dhtml = "<button data-toggle=\"modal\" data-target=\"#collapseModal\" class=\"btn btn-small\">
-			<i class=\"icon-checkbox-partial\" title=\"$title\"></i>
-			$title</button>";
+			<i class=\"icon-checkbox-partial\" title=\"{$title}\"></i>
+			{$title}</button>";
 			$bar->appendButton('Custom', $dhtml, 'batch');
 		}
 		parent::addToolbar();

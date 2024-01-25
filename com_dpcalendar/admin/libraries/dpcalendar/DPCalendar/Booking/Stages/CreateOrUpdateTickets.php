@@ -7,7 +7,6 @@
 
 namespace DPCalendar\Booking\Stages;
 
-use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Object\CMSObject;
 
 defined('_JEXEC') or die();
@@ -18,14 +17,11 @@ use League\Pipeline\StageInterface;
 
 class CreateOrUpdateTickets implements StageInterface
 {
-	private ?CMSApplication $application = null;
-
 	private \DPCalendarModelTicket $model;
 
-	public function __construct(\DPCalendarModelTicket $model, CMSApplication $application)
+	public function __construct(\DPCalendarModelTicket $model)
 	{
-		$this->model       = $model;
-		$this->application = $application;
+		$this->model = $model;
 	}
 
 	public function __invoke($payload)

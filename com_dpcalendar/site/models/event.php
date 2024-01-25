@@ -7,6 +7,7 @@
 
 defined('_JEXEC') or die();
 
+use DPCalendar\Helper\DPCalendarHelper;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Multilanguage;
@@ -22,15 +23,15 @@ JLoader::import('components.com_dpcalendar.tables.event', JPATH_ADMINISTRATOR);
 class DPCalendarModelEvent extends ItemModel
 {
 	protected $view_item = 'contact';
-	protected $_item     = null;
-	protected $_context  = 'com_dpcalendar.event';
+	protected $_item;
+	protected $_context = 'com_dpcalendar.event';
 
 	protected function populateState()
 	{
 		$app = Factory::getApplication('site');
 
 		// Load state from the request.
-		$pk = $app->input->getString('id');
+		$pk = $app->input->getString('id', '');
 		$this->setState('event.id', $pk);
 
 		$params = method_exists($app, 'getParams') ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
@@ -53,7 +54,7 @@ class DPCalendarModelEvent extends ItemModel
 
 	public function &getItem($pk = null)
 	{
-		$pk = (!empty($pk)) ? $pk : $this->getState('event.id');
+		$pk = (empty($pk)) ? $this->getState('event.id') : $pk;
 
 		if ($this->_item === null) {
 			$this->_item = [];
@@ -275,8 +276,8 @@ class DPCalendarModelEvent extends ItemModel
 			$item->booking_options     = null;
 		}
 
-		\DPCalendar\Helper\DPCalendarHelper::parseImages($item);
-		\DPCalendar\Helper\DPCalendarHelper::parseReadMore($item);
+		DPCalendarHelper::parseImages($item);
+		DPCalendarHelper::parseReadMore($item);
 
 		$item->params->set(
 			'access-tickets',
@@ -307,9 +308,11 @@ class DPCalendarModelEvent extends ItemModel
 			($item->created_by == $user->id || $user->authorise('dpcalendar.invite', 'com_dpcalendar.category.' . $item->catid))
 		);
 
+		$item->color = str_replace('#', '', $item->color ?? '');
+
 		// Ensure a color is set
-		if (empty($item->color)) {
-			$item->color = $calendar ? $calendar->color : '3366CC';
+		if ($item->color === '' || $item->color === '0' || $item->color === []) {
+			$item->color = $calendar ? str_replace('#', '', $calendar->color) : '3366CC';
 		}
 
 		// Check if it is a valid color
@@ -352,6 +355,7 @@ class DPCalendarModelEvent extends ItemModel
 		$startDate = DPCalendarHelper::getDate($event->start_date);
 		// We do not want to have the current event in the series
 		$startDate->modify('+1 second');
+
 		$model->setState('list.start-date', $startDate);
 
 		return $model;

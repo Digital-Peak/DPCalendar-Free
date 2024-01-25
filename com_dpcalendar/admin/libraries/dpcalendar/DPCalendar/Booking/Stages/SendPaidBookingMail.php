@@ -20,7 +20,7 @@ class SendPaidBookingMail implements StageInterface
 	/**
 	 * @var Mail
 	 */
-	private $mailer = null;
+	private $mailer;
 
 	public function __construct(Mail $mailer)
 	{
@@ -77,7 +77,7 @@ class SendPaidBookingMail implements StageInterface
 		$files = [];
 		if ($payload->mailParams->get('booking_include_receipt', 1)) {
 			$fileName = Booking::createReceipt($payload->item, $payload->tickets, $payload->mailParams, true);
-			if ($fileName) {
+			if ($fileName !== '' && $fileName !== '0') {
 				$this->mailer->addAttachment($fileName);
 				$files[] = $fileName;
 			}
@@ -86,7 +86,7 @@ class SendPaidBookingMail implements StageInterface
 		if ($payload->mailParams->get('booking_include_tickets', 1)) {
 			foreach ($payload->tickets as $ticket) {
 				$fileName = Booking::createTicket($ticket, $payload->mailParams, true);
-				if ($fileName) {
+				if ($fileName !== '' && $fileName !== '0') {
 					$this->mailer->addAttachment($fileName);
 					$files[] = $fileName;
 				}
@@ -99,14 +99,14 @@ class SendPaidBookingMail implements StageInterface
 					unlink($file);
 				}
 			}
-		} catch (\Exception $e) {
+		} catch (\Exception $exception) {
 			foreach ($files as $file) {
 				if (file_exists($file)) {
 					unlink($file);
 				}
 			}
 
-			throw $e;
+			throw $exception;
 		}
 
 		return $payload;

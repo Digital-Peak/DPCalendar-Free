@@ -13,6 +13,23 @@ use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 
 class DPCalendarViewLocations extends BaseView
 {
+	/**
+	 * @var never[]|\stdClass[]
+	 */
+	public $resources;
+	/**
+	 * @var array<int|string, \non-empty-array<\int<0, \max>, \mixed>>
+	 */
+	public $locationGroups;
+	public $events;
+	/**
+	 * @var never[]|mixed[]
+	 */
+	public $ids;
+	/**
+	 * @var non-falsy-string|null
+	 */
+	public $returnPage;
 	public function display($tpl = null)
 	{
 		BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/models');
@@ -22,7 +39,7 @@ class DPCalendarViewLocations extends BaseView
 		return parent::display($tpl);
 	}
 
-	public function init()
+	protected function init()
 	{
 		$ids = $this->params->get('ids');
 		if ($ids && !in_array(-1, $ids)) {
@@ -58,7 +75,7 @@ class DPCalendarViewLocations extends BaseView
 		}
 
 		// Sort the location groups
-		uksort($locationGroups, function ($id1, $id2) use ($locationGroups) {
+		uksort($locationGroups, function ($id1, $id2) use ($locationGroups): int {
 			// Handle countries special
 			if ($this->params->get('locations_output_grouping') != 'country') {
 				return strcmp($id1, $id2);
@@ -91,6 +108,6 @@ class DPCalendarViewLocations extends BaseView
 			$this->events = $model->getItems();
 		}
 
-		$this->returnPage = $this->input->getInt('Itemid', null) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', null) : null;
+		$this->returnPage = $this->input->getInt('Itemid', 0) ? 'index.php?Itemid=' . $this->input->getInt('Itemid', 0) : null;
 	}
 }

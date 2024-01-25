@@ -95,7 +95,7 @@ class DPCalendar extends PDO
 
 		$data = [];
 		foreach ($model->getItems() as $event) {
-			if (key_exists($event->uid, $data) || $event->original_id > 0) {
+			if (array_key_exists($event->uid, $data) || $event->original_id > 0) {
 				continue;
 			}
 			$data[$event->uid] = $this->toSabreArray($event);
@@ -152,7 +152,7 @@ class DPCalendar extends PDO
 
 		$data = [];
 		foreach ($model->getItems() as $event) {
-			if (key_exists($event->uid, $data) || $event->original_id > 0) {
+			if (array_key_exists($event->uid, $data) || $event->original_id > 0) {
 				continue;
 			}
 			$data[$event->uid] = $this->toSabreArray($event);
@@ -180,10 +180,10 @@ class DPCalendar extends PDO
 
 			if ($componentType == 'VEVENT' && !empty($filters['comp-filters'][0]['time-range'])) {
 				$timeRange = $filters['comp-filters'][0]['time-range'];
-				if (is_array($timeRange) && key_exists('start', $timeRange) && !empty($timeRange['start'])) {
+				if (is_array($timeRange) && array_key_exists('start', $timeRange) && !empty($timeRange['start'])) {
 					$model->setState('list.start-date', $timeRange['start']->getTimeStamp());
 				}
-				if (is_array($timeRange) && key_exists('end', $timeRange) && !empty($timeRange['end'])) {
+				if (is_array($timeRange) && array_key_exists('end', $timeRange) && !empty($timeRange['end'])) {
 					$model->setState('list.end-date', $timeRange['end']->getTimeStamp());
 				}
 			}
@@ -249,6 +249,7 @@ class DPCalendar extends PDO
 
 		$event = $this->getTable();
 		$event->load(['uid' => $objectUri]);
+
 		$obj = Reader::read($calendarData);
 
 		if ($event->original_id == '0') {
@@ -268,6 +269,7 @@ class DPCalendar extends PDO
 
 		$db = Factory::getDbo();
 		$db->setQuery('select * from #__dpcalendar_events where original_id = ' . $db->quote($event->id));
+
 		$children = $db->loadObjectList('', 'DPCalendarTableEvent');
 
 		foreach ($obj->VEVENT as $vEvent) {
@@ -351,13 +353,9 @@ class DPCalendar extends PDO
 		return Table::getInstance($type, 'DPCalendarTable');
 	}
 
-	private function merge(Table $dpEvent, $vEvent)
+	private function merge(Table $dpEvent, $vEvent): void
 	{
-		if (isset($vEvent->SUMMARY)) {
-			$dpEvent->title = $vEvent->SUMMARY->getValue();
-		} else {
-			$dpEvent->title = '(no title)';
-		}
+		$dpEvent->title = isset($vEvent->SUMMARY) ? $vEvent->SUMMARY->getValue() : '(no title)';
 
 		if (isset($vEvent->DESCRIPTION)) {
 			$dpEvent->description = $vEvent->DESCRIPTION->getValue();
@@ -365,15 +363,12 @@ class DPCalendar extends PDO
 		$dpEvent->all_day = strlen($vEvent->DTSTART->getValue()) > 10 ? 0 : 1;
 
 		$start = $vEvent->DTSTART->getDateTime();
-		if ($dpEvent->all_day) {
-			$start = $start->setTime(0, 0, 0);
-		} else {
-			$start = $start->setTimezone(new \DateTimeZone('UTC'));
-		}
+		$start = $dpEvent->all_day !== 0 ? $start->setTime(0, 0, 0) : $start->setTimezone(new \DateTimeZone('UTC'));
+
 		$dpEvent->start_date = $start->format(Factory::getDbo()->getDateFormat());
 
 		$end = $vEvent->DTEND->getDateTime();
-		if ($dpEvent->all_day) {
+		if ($dpEvent->all_day !== 0) {
 			$end = $end->setTime(0, 0, 0);
 			$end = $end->modify('-1 day');
 		} else {
@@ -466,10 +461,11 @@ class DPCalendar extends PDO
 		}
 	}
 
-	private function toSabreArray($event)
+	private function toSabreArray($event): array
 	{
 		$ical = Ical::createIcalFromEvents([$event]);
-		$data = [
+
+		return [
 			'id'           => $event->id,
 			'uri'          => $event->uid,
 			'lastmodified' => DPCalendarHelper::getDate($event->modified)->format('U'),
@@ -478,7 +474,5 @@ class DPCalendar extends PDO
 			'etag'         => '"' . md5($ical) . '"',
 			'calendardata' => $ical
 		];
-
-		return $data;
 	}
 }

@@ -29,6 +29,9 @@ BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_dpcalen
  */
 abstract class PaymentPlugin extends CMSPlugin
 {
+	public $params;
+	public $_type;
+	public $_name;
 	/**
 	 * Should a notification being sent after the callback.
 	 *
@@ -46,7 +49,7 @@ abstract class PaymentPlugin extends CMSPlugin
 	/**
 	 * @var CMSApplication
 	 */
-	protected $app = null;
+	protected $app;
 
 	/**
 	 * Method to finish the transaction. Returns the data for the booking with transaction information.
@@ -127,7 +130,7 @@ abstract class PaymentPlugin extends CMSPlugin
 		if ($t = $this->app->input->get('token')) {
 			$tmpl = '&token=' . $t;
 		}
-		if ($t = $this->app->input->getInt('Itemid')) {
+		if ($t = $this->app->input->getInt('Itemid', 0)) {
 			$tmpl .= '&Itemid=' . $t;
 		}
 
@@ -216,8 +219,8 @@ abstract class PaymentPlugin extends CMSPlugin
 
 			// Get the response from the callback
 			$data = $this->finishTransaction($data, $booking, $provider);
-		} catch (\Exception $e) {
-			$this->app->enqueueMessage(ucfirst($this->_name) . ': ' . $e->getMessage(), 'error');
+		} catch (\Exception $exception) {
+			$this->app->enqueueMessage(ucfirst($this->_name) . ': ' . $exception->getMessage(), 'error');
 			$this->app->redirect(\DPCalendarHelperRoute::getBookingRoute($booking) . '&layout=confirm');
 
 			return false;
@@ -262,7 +265,7 @@ abstract class PaymentPlugin extends CMSPlugin
 		}
 
 		$providers = [];
-		foreach ($this->params->get('providers') as $index => $p) {
+		foreach ($this->params->get('providers') as $p) {
 			if (isset($p->state) && $p->state == '0') {
 				continue;
 			}
@@ -298,7 +301,7 @@ abstract class PaymentPlugin extends CMSPlugin
 	{
 		// Make sure we have a booking to cancel
 		if (!isset($data['b_id'])) {
-			$data['b_id'] = $this->app->input->getInt('b_id');
+			$data['b_id'] = $this->app->input->getInt('b_id', 0);
 		}
 
 		// Display the message and set it as failure

@@ -21,7 +21,7 @@ use Joomla\CMS\Uri\Uri;
 				</h2>
 			<?php } ?>
 			<div class="dp-location-group__locations">
-				<?php foreach ($locations as $index => $location) { ?>
+				<?php foreach ($locations as $location) { ?>
 					<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
 					<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<h<?php echo $id ? 3 : 2; ?> class="dp-heading">

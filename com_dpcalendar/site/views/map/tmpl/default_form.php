@@ -73,5 +73,5 @@ defined('_JEXEC') or die();
 			<?php echo $this->translate('JCLEAR'); ?>
 		</button>
 	</div>
-	<input type="hidden" name="Itemid" value="<?php echo $this->input->getInt('Itemid'); ?>" class="dp-input dp-input-hidden">
+	<input type="hidden" name="Itemid" value="<?php echo $this->input->getInt('Itemid', 0); ?>" class="dp-input dp-input-hidden">
 </form>

@@ -79,7 +79,7 @@ class SendNewBookingMail implements StageInterface
 			)
 		);
 
-		if (!empty($body)) {
+		if ($body !== '' && $body !== '0') {
 			if ($payload->mailParams->get('bookingsys_author_as_mail_from')) {
 				foreach ($payload->eventsWithTickets as $event) {
 					$this->mailer->setFrom(Factory::getUser($event->created_by)->email);
@@ -95,7 +95,7 @@ class SendNewBookingMail implements StageInterface
 			if ($payload->mailParams->get('booking_include_ics', 1)) {
 				$icsFile = JPATH_ROOT . '/tmp/' . $payload->item->uid . '.ics';
 				$content = Ical::createIcalFromEvents($payload->eventsWithTickets, false, true);
-				if (!$content || !file_put_contents($icsFile, $content)) {
+				if (!$content || (file_put_contents($icsFile, $content) === 0 || file_put_contents($icsFile, $content) === false)) {
 					$icsFile = null;
 				} else {
 					$this->mailer->addAttachment($icsFile);
@@ -107,7 +107,7 @@ class SendNewBookingMail implements StageInterface
 			if ($payload->mailParams->get('booking_include_tickets', 1) && $payload->item->state == 1) {
 				foreach ($payload->tickets as $ticket) {
 					$fileName = Booking::createTicket($ticket, $payload->mailParams, true);
-					if ($fileName) {
+					if ($fileName !== '' && $fileName !== '0') {
 						$this->mailer->addAttachment($fileName);
 						$files[] = $fileName;
 					}
@@ -116,7 +116,7 @@ class SendNewBookingMail implements StageInterface
 
 			if ($payload->mailParams->get('booking_include_receipt', 1)) {
 				$fileName = Booking::createReceipt($payload->item, $payload->tickets, $payload->mailParams, true);
-				if ($fileName) {
+				if ($fileName !== '' && $fileName !== '0') {
 					$this->mailer->addAttachment($fileName);
 					$files[] = $fileName;
 				}

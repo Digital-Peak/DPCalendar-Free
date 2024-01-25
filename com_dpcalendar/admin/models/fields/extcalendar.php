@@ -21,6 +21,8 @@ if (!class_exists('DPCalendarHelper')) {
 
 class JFormFieldExtcalendar extends FormField
 {
+	public $element;
+	public $id;
 	protected $type = 'Extcalendar';
 
 	public function getInput()
@@ -34,8 +36,7 @@ class JFormFieldExtcalendar extends FormField
 		$url .= '&dpplugin=' . $this->element['plugin'];
 		$url .= '&import=' . $this->element['import'];
 		$url .= '&tmpl=component';
-		$buffer = '<iframe src="' . Route::_($url) . '" style="width:100%; border:0"m id="' . $this->id . '" name="' . $this->id . '"></iframe>';
 
-		return $buffer;
+		return '<iframe src="' . Route::_($url) . '" style="width:100%; border:0"m id="' . $this->id . '" name="' . $this->id . '"></iframe>';
 	}
 }

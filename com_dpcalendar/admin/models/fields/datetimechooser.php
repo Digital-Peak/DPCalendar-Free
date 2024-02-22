@@ -70,7 +70,7 @@ class JFormFieldDatetimechooser extends FormField
 			'title'       => $this->hint ? Text::_($this->hint) : ''
 		]);
 
-		if ($allDay) {
+		if ((string)$this->element['show_time'] === '0') {
 			return $buffer;
 		}
 

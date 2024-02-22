@@ -40,7 +40,7 @@
 			<option value="MONTHLY">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY</option>
 			<option value="YEARLY">COM_DPCALENDAR_FIELD_SCHEDULING_YEARLY</option>
 		</field>
-		<field name="scheduling_end_date" type="datetimechooser" all_day="1" default="+2 Month"
+		<field name="scheduling_end_date" type="datetimechooser" all_day="1" show_time="0" default="+2 Month"
 		    label="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_DESC"/>
 		<field name="scheduling_interval" type="text" default="1"
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_DESC"/>
@@ -126,7 +126,7 @@
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_DESC">
 			<form>
 				<fields>
-					<field name="date" type="datetimechooser" default="NOW"  all_day="1"
+					<field name="date" type="datetimechooser" default="NOW" all_day="1" show_time="0"
 						label="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_DATE_LABEL" required="true"/>
 				</fields>
 			</form>

@@ -130,7 +130,7 @@ class DPCalendarModelCalendar extends ListModel
 		$format = $params->get('event_form_date_format', 'd.m.Y') . ' ' . $params->get('event_form_time_format', 'H:i');
 		$date   = DPCalendarHelper::getDate();
 
-		$form = Form::getInstance('com_dpcalendar.event', 'event', ['control' => 'jform']);
+		$form = Form::getInstance('com_dpcalendar.event.quickadd', 'event', ['control' => 'jform']);
 		$form->setValue('start_date', null, $date->format($format, false));
 
 		$date->modify('+1 hour');

@@ -263,6 +263,9 @@
 		}
 		check();
 		const allDayAdapter = (showDates) => {
+			if (!document.getElementById('jform_start_date_time')) {
+				return;
+			}
 			if (showDates) {
 				document.getElementById('jform_start_date_time').style.display = 'inline-block';
 				document.getElementById('jform_end_date_time').style.display = 'inline-block';

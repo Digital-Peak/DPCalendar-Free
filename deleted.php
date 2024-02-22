@@ -517,7 +517,7 @@ foreach ($files as $file) {
 		continue;
 	}
 
-	if (pathinfo($fullPath, PATHINFO_EXTENSION)) {
+	if (is_file($fullPath)) {
 		unlink($fullPath);
 		continue;
 	}

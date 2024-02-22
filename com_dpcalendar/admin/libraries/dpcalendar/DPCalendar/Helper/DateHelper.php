@@ -20,7 +20,7 @@ use Recurr\Transformer\Translator as TransformerTranslator;
 
 class DateHelper
 {
-	private ?\DPCalendar\Translator\Translator $translator = null;
+	private ?Translator $translator = null;
 
 	public function transformRRuleToString(?string $rrule, ?string $startDate, ?array $exdates = []): string
 	{

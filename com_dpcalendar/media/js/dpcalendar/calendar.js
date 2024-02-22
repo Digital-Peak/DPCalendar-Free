@@ -330,6 +330,9 @@
 			window.location = DPCalendar.encode(info.event.url);
 		};
 		options['dateClick'] = (info) => {
+			if (options['event_create_form'] == 0) {
+				return;
+			}
 			const form = calendar.parentElement.querySelector('.dp-quickadd .dp-form');
 			let date = dayjs.utc(info.date);
 			if (form) {

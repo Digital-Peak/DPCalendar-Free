@@ -39,7 +39,7 @@ class JFormFieldEvent extends FormField
 		Factory::getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR);
 
 		// The active article id field.
-		$value = (int)$this->value !== 0 ? (int)$this->value : '';
+		$value = (int)$this->value;
 
 		// Create the modal id.
 		$modalId = 'Event_' . $this->id;
@@ -95,7 +95,7 @@ class JFormFieldEvent extends FormField
 		$query     = $db->getQuery(true)
 				->select($db->quoteName('title'))
 				->from($db->quoteName('#__dpcalendar_events'))
-				->where($db->quoteName('id') . ' = ' . (int)$value);
+				->where($db->quoteName('id') . ' = ' . $value);
 		$db->setQuery($query);
 		try {
 			$title = $db->loadResult();
@@ -116,7 +116,7 @@ class JFormFieldEvent extends FormField
 
 		// Select article button
 		if ($allowSelect) {
-			$html .= '<button class="btn btn-primary' . ($value !== 0 && $value !== 0 && ($value !== 0 && $value !== '0') ? ' hidden' : '') . '"'
+			$html .= '<button class="btn btn-primary' . ($value !== 0 ? ' hidden' : '') . '"'
 				. ' id="' . $this->id . '_select"'
 				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
@@ -127,7 +127,7 @@ class JFormFieldEvent extends FormField
 
 		// New article button
 		if ($allowNew) {
-			$html .= '<button class="btn btn-secondary' . ($value !== 0 && $value !== 0 && ($value !== 0 && $value !== '0') ? ' hidden' : '') . '"'
+			$html .= '<button class="btn btn-secondary' . ($value !== 0 ? ' hidden' : '') . '"'
 				. ' id="' . $this->id . '_new"'
 				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
@@ -138,7 +138,7 @@ class JFormFieldEvent extends FormField
 
 		// Edit article button
 		if ($allowEdit) {
-			$html .= '<button class="btn btn-secondary' . ($value !== 0 && $value !== 0 && ($value !== 0 && $value !== '0') ? '' : ' hidden') . '"'
+			$html .= '<button class="btn btn-secondary' . ($value !== 0 ? '' : ' hidden') . '"'
 				. ' id="' . $this->id . '_edit"'
 				. ' data-bs-toggle="modal" data-toggle="modal"'
 				. ' type="button"'
@@ -149,7 +149,7 @@ class JFormFieldEvent extends FormField
 
 		// Clear article button
 		if ($allowClear) {
-			$html .= '<button class="btn btn-secondary' . ($value !== 0 && $value !== 0 && ($value !== 0 && $value !== '0') ? '' : ' hidden') . '"'
+			$html .= '<button class="btn btn-secondary' . ($value !== 0 ? '' : ' hidden') . '"'
 				. ' id="' . $this->id . '_clear"'
 				. ' type="button"'
 				. ' onclick="window.processModalParent(\'' . $this->id . "'); document.getElementById('" . $this->id . '_id\').dispatchEvent(new Event(\'change\')); return false;">'
@@ -237,7 +237,7 @@ class JFormFieldEvent extends FormField
 		$class = $this->required ? ' class="required modal-value"' : '';
 
 		return $html . ('<input type="hidden" id="' . $this->id . '_id" ' . $class . ' data-required="' . (int)$this->required . '" name="' . $this->name
-			. '" data-text="' . htmlspecialchars(Text::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT'), ENT_COMPAT, 'UTF-8') . '" value="' . $value . '">');
+			. '" data-text="' . htmlspecialchars(Text::_('COM_DPCALENDAR_VIEW_EVENT_FIELD_ID_SELECT_EVENT'), ENT_COMPAT, 'UTF-8') . '" value="' . ($value ?: '') . '">');
 	}
 
 	/**

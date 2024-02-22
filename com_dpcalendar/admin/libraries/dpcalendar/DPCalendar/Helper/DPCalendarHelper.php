@@ -19,6 +19,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
+use Joomla\CMS\Mail\Exception\MailDisabledException;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Router\Route;
@@ -914,8 +915,12 @@ class DPCalendarHelper
 			$mailer->setBody($message);
 			$mailer->IsHTML(true);
 			$mailer->addRecipient($user->email);
-			$mailer->Send();
-			$userMails[$userId] = $user;
+
+			try {
+				$mailer->Send();
+				$userMails[$userId] = $user;
+			} catch (MailDisabledException $e) {
+			}
 		}
 
 		return $userMails;

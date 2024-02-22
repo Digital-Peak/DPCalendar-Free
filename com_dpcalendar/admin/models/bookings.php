@@ -149,7 +149,7 @@ class DPCalendarModelBookings extends ListModel
 		}
 
 		$eventId = $this->getState('filter.event_id');
-		if (is_numeric($eventId)) {
+		if ($eventId && is_numeric($eventId)) {
 			$eventId = [$eventId];
 		}
 		if (is_array($eventId)) {

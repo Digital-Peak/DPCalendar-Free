@@ -128,7 +128,7 @@ class Location
   * @param bool   $fill
   * @param string $title
   *
-  * @return bool|\Joomla\CMS\Table\Table
+  * @return bool|Table
   */
 	public static function get($location, $fill = true, $title = null)
 	{
@@ -145,14 +145,21 @@ class Location
 				if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 					self::$locationCache->setState('filter.latitude', $coordinates[0]);
 					self::$locationCache->setState('filter.longitude', $coordinates[1]);
+					self::$locationCache->setState('filter.xreference', null);
+					self::$locationCache->setState('filter.search', null);
 				} else {
+					self::$locationCache->setState('filter.latitude', 0);
+					self::$locationCache->setState('filter.longitude', 0);
 					self::$locationCache->setState('filter.xreference', $location);
+					self::$locationCache->setState('filter.search', null);
 				}
 
 				$locations = self::$locationCache->getItems();
 
 				// When no items search in alias as it can be the same for different locations because of stripping out characters like double whitespaces
 				if (!$locations && self::$locationCache->getState('filter.xreference')) {
+					self::$locationCache->setState('filter.latitude', 0);
+					self::$locationCache->setState('filter.longitude', 0);
 					self::$locationCache->setState('filter.xreference', null);
 					self::$locationCache->setState('filter.search', ApplicationHelper::stringURLSafe($location));
 					$locations = self::$locationCache->getItems();

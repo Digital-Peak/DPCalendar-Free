@@ -202,7 +202,7 @@ class DPCalendarModelAdminEvent extends AdminModel
 			$data = new CMSObject($data);
 		}
 
-		if ($data instanceof stdClass) {
+		if ($data instanceof stdClass && !$data instanceof CMSObject) {
 			$data = new CMSObject($data);
 		}
 

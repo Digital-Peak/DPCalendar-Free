@@ -177,13 +177,13 @@
 		};
 		options['buttonHints'] = {
 			prev() {
-				return '';
+				return Joomla.JText._('COM_DPCALENDAR_PREVIOUS');
 			},
 			next() {
-				return '';
+				return Joomla.JText._('COM_DPCALENDAR_NEXT');
 			},
 			today() {
-				return '';
+				return Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 			}
 		};
 	}

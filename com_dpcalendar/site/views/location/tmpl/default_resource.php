@@ -25,6 +25,8 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD');
 
 $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('COM_DPCALENDAR_CLOSE');
+$this->translator->translateJS('COM_DPCALENDAR_PREVIOUS');
+$this->translator->translateJS('COM_DPCALENDAR_NEXT');
 $this->translator->translateJS('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 
 $this->dpdocument->addScriptOptions('calendar.names', $this->dateHelper->getNames());

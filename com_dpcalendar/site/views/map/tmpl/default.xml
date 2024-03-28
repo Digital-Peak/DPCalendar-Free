@@ -166,12 +166,6 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
-			<field name="event_show_series" type="list" useglobal="true"
-				   label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL"
-				   description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-			</field>
 			<field name="event_show_tickets" type="list" useglobal="true"
 				   label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL"
 				   description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_DESC">
@@ -197,6 +191,14 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_show_series" type="list" useglobal="true"
+				   label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL"
+				   description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_series_max" type="text" useglobal="true" validate="number" filter="integer"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SERIES_LIMIT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SERIES_LIMIT_DESC"/>
 			<field name="event_show_map" type="list" useglobal="true"
 				   label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL"
 				   description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_DESC">

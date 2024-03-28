@@ -559,11 +559,6 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_show_series" type="radio" default="1" class="btn-group"
-			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
 		<field name="event_show_tickets" type="list" class="btn-group" default="0"
 			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_DESC">
 			<option value="0">JNO</option>
@@ -586,16 +581,23 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field name="event_show_series" type="radio" default="1" class="btn-group"
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="event_series_max" type="text" default="5" validate="number" filter="integer" showon="event_show_series:1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SERIES_LIMIT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SERIES_LIMIT_DESC"/>
 		<field name="event_show_map" type="radio" default="1" class="btn-group"
 			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="event_map_zoom" type="text" default="4"
+		<field name="event_map_zoom" type="text" default="4" showon="event_show_map:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
-		<field name="event_map_lat" type="text" default="47" validate="decimal"
+		<field name="event_map_lat" type="text" default="47" validate="decimal" showon="event_show_map:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
-		<field name="event_map_long" type="text" default="4" validate="decimal"
+		<field name="event_map_long" type="text" default="4" validate="decimal" showon="event_show_map:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
 		<field name="event_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>

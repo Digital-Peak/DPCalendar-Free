@@ -36,6 +36,8 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_
 
 $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('COM_DPCALENDAR_CLOSE');
+$this->translator->translateJS('COM_DPCALENDAR_PREVIOUS');
+$this->translator->translateJS('COM_DPCALENDAR_NEXT');
 $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 $this->translator->translateJS('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 

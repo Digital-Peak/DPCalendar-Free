@@ -508,6 +508,9 @@ $files = [
 '/administrator/components/com_dpcalendar/vendor/phenx/php-font-lib/bower.json',
 '/administrator/components/com_dpcalendar/vendor/phenx/php-font-lib/index.php',
 '/administrator/components/com_dpcalendar/vendor/phenx/php-font-lib/src/FontLib/Autoloader.php',
+
+// From v8.17.1 to case 9935
+'/administrator/components/com_dpcalendar/vendor/doctrine/collections/.doctrine-project.json',
 ];
 
 foreach ($files as $file) {

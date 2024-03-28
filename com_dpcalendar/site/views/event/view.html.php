@@ -193,7 +193,8 @@ class DPCalendarViewEvent extends BaseView
 		$this->originalEvent     = null;
 
 		if ($event->original_id > 0 || $event->original_id == '-1') {
-			$seriesModel             = $model->getSeriesEventsModel($this->event);
+			$seriesModel = $model->getSeriesEventsModel($this->event);
+			$seriesModel->setState('list.limit', (int)$this->params->get('event_series_max', 5));
 			$this->seriesEvents      = $seriesModel->getItems();
 			$this->seriesEventsTotal = $seriesModel->getTotal();
 			$this->originalEvent     = $model->getItem($event->original_id);

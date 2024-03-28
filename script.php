@@ -9,6 +9,7 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerScript;
+use Joomla\Component\Installer\Administrator\Model\UpdatesitesModel;
 use Joomla\Filesystem\Folder;
 
 class Pkg_DPCalendarInstallerScript extends InstallerScript
@@ -103,6 +104,14 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 			$this->run(
 				"insert ignore into `#__modules_menu` (menuid, moduleid) select 0 as menuid, id as moduleid from `#__modules` where module like 'mod_dpcalendar%'"
 			);
+		}
+
+		if ($type == 'update') {
+			$model = Factory::getApplication()->bootComponent('installer')->getMVCFactory()->createModel('Updatesites', 'Administrator', ['ignore_request' => true]);
+
+			if ($model instanceof UpdatesitesModel) {
+				$model->rebuild();
+			}
 		}
 
 		// Make sure the installer plugin is enabled

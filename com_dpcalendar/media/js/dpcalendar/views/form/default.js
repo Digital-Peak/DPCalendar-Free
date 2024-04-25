@@ -484,18 +484,18 @@
 				Joomla.submitform(task, form);
 				return;
 			}
-			let updateString = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_MODIFIED', '');
+			let updateString = Joomla.Text._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_MODIFIED', '');
 			if (updateString) {
 				Joomla.getOptions('DPCalendar.event.form.seriesevents').forEach((event) => {
 					updateString += '<p><a href="' + event.edit_link + '" target="_blank">' + event.title + ' ' + event.formatted_date + '</a></p>';
 				});
 			}
 			if (document.querySelectorAll('.com-dpcalendar-eventform .dp-field_reset').length > 0) {
-				updateString = Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET', '');
+				updateString = Joomla.Text._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET', '');
 			}
-			ask(Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION', ''), true)
+			ask(Joomla.Text._('COM_DPCALENDAR_VIEW_EVENT_SEND_TICKET_HOLDERS_NOFICATION', ''), true)
 				.then((yes) => document.getElementById('jform_notify_changes').value = yes)
-				.then(() => ask(updateString, updateString !== Joomla.JText._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET', '')))
+				.then(() => ask(updateString, updateString !== Joomla.Text._('COM_DPCALENDAR_VIEW_EVENT_FORM_UPDATE_RESET', '')))
 				.then((yes) => document.getElementById('jform_update_modified').value = yes)
 				.then(() => Joomla.submitform(task, form))
 				.then(() => {
@@ -520,17 +520,17 @@
 			loadDPAssets(['/com_dpcalendar/js/tingle/tingle.js', '/com_dpcalendar/css/tingle/tingle.css'], () => {
 				const modal = new tingle.modal({ footer: true, closeMethods: [], cssClass: ['dpcalendar-modal'] });
 				modal.setContent(question);
-				modal.addFooterBtn(Joomla.JText._('JYES'), 'dp-button', () => {
+				modal.addFooterBtn(Joomla.Text._('JYES'), 'dp-button', () => {
 					modal.close();
 					resolve(1);
 				});
 				if (hasNo) {
-					modal.addFooterBtn(Joomla.JText._('JNO'), 'dp-button', () => {
+					modal.addFooterBtn(Joomla.Text._('JNO'), 'dp-button', () => {
 						modal.close();
 						resolve(0);
 					});
 				}
-				modal.addFooterBtn(Joomla.JText._('JCANCEL'), 'dp-button', () => {
+				modal.addFooterBtn(Joomla.Text._('JCANCEL'), 'dp-button', () => {
 					modal.close();
 					reject();
 				});
@@ -580,11 +580,11 @@
 				});
 			});
 		});
-		if (Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS', '')) {
+		if (Joomla.Text._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS', '')) {
 			[].slice.call(document.querySelectorAll('.dp-field-scheduling .controls, .dp-tabs__tab-booking .controls, #com-dpcalendar-form-Content #booking .controls')).forEach((el) => {
 				const option = document.createElement('span');
 				option.className = 'dp-free-information-text';
-				option.innerText = Joomla.JText._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');
+				option.innerText = Joomla.Text._('COM_DPCALENDAR_ONLY_AVAILABLE_SUBSCRIBERS');
 				el.appendChild(option);
 			});
 		}

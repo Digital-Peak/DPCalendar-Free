@@ -277,7 +277,7 @@ class DPCalendarModelEvents extends ListModel
 
 		if ($user->id > 0 && !DPCalendarHelper::isFree()) {
 			// Join to tickets to add a field if the logged in user has a ticket for the event
-			$query->select('t.id as booking');
+			$query->select('max(t.id) as booking');
 			$query->join('LEFT', '#__dpcalendar_tickets AS t ON (t.event_id = a.id or t.event_id = a.original_id) and t.user_id = ' . (int)$user->id);
 		}
 
@@ -286,7 +286,7 @@ class DPCalendarModelEvents extends ListModel
 		$query->join('LEFT', '#__dpcalendar_tickets AS wl ON (wl.event_id = a.id or wl.event_id = a.original_id) and wl.state = 8');
 
 		// Join on series max/min
-		$query->select('ser.min_date AS series_min_start_date, ser.max_date AS series_max_end_date');
+		$query->select('min(ser.min_date) AS series_min_start_date, max(ser.max_date) AS series_max_end_date');
 		$query->join(
 			'LEFT',
 			'(select original_id, max(end_date) as max_date, min(start_date) as min_date from #__dpcalendar_events group by original_id) ser on ' . ($this->getState('filter.expand') ? 'ser.original_id = a.original_id and a.original_id > 0' : 'ser.original_id = a.id')
@@ -559,12 +559,18 @@ class DPCalendarModelEvents extends ListModel
 		}
 
 		if ($author = $this->getState('filter.author', 0)) {
+			$author = is_array($author) ? ArrayHelper::toInteger($author) : [$author];
+			if (in_array(-1, $author)) {
+				$author[] = $user->id;
+				$author   = array_filter($author, fn ($a) => $a != '-1');
+			}
 			// My events when author is -1
-			$cond = 'a.created_by = ' . (int)($author == '-1' ? $user->id : $author);
+			$cond = 'a.created_by in (' . implode(',', $author) . ')';
 
-			if ($author == '-1' && $user->id > 0 && !DPCalendarHelper::isFree()) {
+			if (!in_array(-1, $author) && $user->id > 0 && !DPCalendarHelper::isFree()) {
 				$cond .= ' or t.id is not null';
 			}
+
 			$query->where('(' . $cond . ')');
 		}
 

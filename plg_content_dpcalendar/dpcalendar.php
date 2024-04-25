@@ -20,6 +20,7 @@ use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Table\Table;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
 class PlgContentDPCalendar extends CMSPlugin
@@ -151,8 +152,11 @@ class PlgContentDPCalendar extends CMSPlugin
 				$event->description = $event->text;
 			}
 
+			$params = new Registry(ComponentHelper::getParams('com_dpcalendar'));
+			$params->set('description_length', 0);
+
 			// Render the output
-			$output = DPCalendarHelper::renderEvents($events, '{{#events}}' . substr($item->text, $start, $end - $start) . '{{/events}}');
+			$output = DPCalendarHelper::renderEvents($events, '{{#events}}' . substr($item->text, $start, $end - $start) . '{{/events}}', $params);
 
 			// Set the output on the item
 			$item->text = substr_replace($item->text, $output, $starts[0][1], $end + 11 - $starts[0][1]);

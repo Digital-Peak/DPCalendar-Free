@@ -255,6 +255,7 @@
 }
 .com-dpcalendar-locations .fc-event span {
 	overflow-wrap: break-word;
+	hyphens: auto;
 	white-space: normal;
 }
 .com-dpcalendar-locations .fc-event .dp-event__capacity {

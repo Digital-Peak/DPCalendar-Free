@@ -16,7 +16,7 @@
 				stickyFooter: false,
 				closeMethods: ['overlay', 'button', 'escape'],
 				cssClass: ['dpcalendar-modal'],
-				closeLabel: Joomla.JText._('COM_DPCALENDAR_CLOSE'),
+				closeLabel: Joomla.Text._('COM_DPCALENDAR_CLOSE'),
 				onClose: () => {
 					if (closeFunction) {
 						closeFunction(modal.modalBox.children[0].querySelector('iframe'));
@@ -224,7 +224,7 @@
 			event.preventDefault();
 			let text = el.getAttribute('data-confirmtext');
 			if (!text) {
-				text = Joomla.JText._('COM_DPCALENDAR_CONFIRM_DELETE');
+				text = Joomla.Text._('COM_DPCALENDAR_CONFIRM_DELETE');
 			}
 			if (el.classList.contains('dp-action-delete') && !confirm(text)) {
 				return false;

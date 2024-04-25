@@ -12,6 +12,8 @@ use DPCalendar\Helper\Location;
 defined('_JEXEC') or die();
 
 use DPCalendar\View\BaseView;
+use Joomla\CMS\Access\Access;
+use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\TagsHelper;
@@ -137,10 +139,11 @@ class DPCalendarViewEvent extends BaseView
 		}
 
 		/** @deprecated */
-		$this->roomTitles = $event->roomTitles;
-		$this->avatar     = '';
-		$this->authorName = '';
-		$author           = Factory::getUser($event->created_by);
+		$this->roomTitles          = $event->roomTitles;
+		$this->avatar              = '';
+		$this->authorName          = '';
+		$this->event->contact_link = '';
+		$author                    = Factory::getUser($event->created_by);
 		if ($author) {
 			$this->authorName = $event->created_by_alias ?: $author->name;
 
@@ -154,10 +157,21 @@ class DPCalendarViewEvent extends BaseView
 			}
 
 			$this->avatar = DPCalendarHelper::getAvatar($author->id, $author->email, $this->params);
+
+			if (is_dir(JPATH_ROOT . '/components/com_dpusers')) {
+				$component = ComponentHelper::getComponent('com_dpusers');
+				$items     = $this->app->getMenu()->getItems('component_id', $component->id);
+				foreach ($items as $item) {
+					if (!array_intersect(Access::getGroupsByUser($event->created_by), $item->getParams()->get('groups_ids', []))) {
+						continue;
+					}
+
+					$this->event->contact_link = Route::_('index.php?option=com_dpusers&view=user&id=' . (int)$event->created_by . '&Itemid=' . $item->id);
+				}
+			}
 		}
 
 		JLoader::register('ContactHelperRoute', JPATH_SITE . '/components/com_contact/helpers/route.php');
-		$this->event->contact_link = '';
 		if (!empty($event->contactid)) {
 			$this->event->contact_link = Route::_(
 				ContactHelperRoute::getContactRoute($event->contactid . ':' . $event->contactalias, $event->contactcatid)

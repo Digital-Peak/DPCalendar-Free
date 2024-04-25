@@ -76,9 +76,9 @@
 			gestureHandlingOptions: {
 				duration: 2000,
 				text: {
-					touch: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_TOUCH'),
-					scroll: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_SCROLL'),
-					scrollMac: Joomla.JText._('COM_DPCALENDAR_LEAFLET_TEXT_SCROLLMAC')
+					touch: Joomla.Text._('COM_DPCALENDAR_LEAFLET_TEXT_TOUCH'),
+					scroll: Joomla.Text._('COM_DPCALENDAR_LEAFLET_TEXT_SCROLL'),
+					scrollMac: Joomla.Text._('COM_DPCALENDAR_LEAFLET_TEXT_SCROLLMAC')
 				}
 			}
 		}).setView(
@@ -189,7 +189,7 @@
 	}
 	function ask(element) {
 		element.classList.add('dp-map_consent');
-		element.innerHTML = Joomla.JText._('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_CONSENT_INFO_TEXT');
+		element.innerHTML = Joomla.Text._('COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_CONSENT_INFO_TEXT');
 		element.addEventListener('click', () => {
 			if (!element.classList.contains('dp-map_consent')) {
 				return;

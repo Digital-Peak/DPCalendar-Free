@@ -153,37 +153,37 @@
 		options['progressiveEventRendering'] = false;
 		options['weekNumberTitle'] = '';
 		options['weekNumberFormat'] = { week: 'numeric' };
-		options['moreLinkContent'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
-		options['allDayContent'] = Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
+		options['moreLinkContent'] = Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
+		options['allDayContent'] = Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
 		options['buttonText'] = {
-			today: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY'),
-			year: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_YEAR'),
-			month: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_MONTH'),
-			week: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_WEEK'),
-			day: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_DAY'),
-			list: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_LIST')
+			today: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY'),
+			year: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_YEAR'),
+			month: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_MONTH'),
+			week: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_WEEK'),
+			day: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_DAY'),
+			list: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_LIST')
 		};
 		options['listTexts'] = {
-			until: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_UNTIL'),
-			past: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_PAST'),
-			today: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_TODAY'),
-			tomorrow: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_TOMORROW'),
-			thisWeek: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_THIS_WEEK'),
-			nextWeek: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_NEXT_WEEK'),
-			thisMonth: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_THIS_MONTH'),
-			nextMonth: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_NEXT_MONTH'),
-			future: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_FUTURE'),
-			week: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_WEEK')
+			until: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_UNTIL'),
+			past: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_PAST'),
+			today: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_TODAY'),
+			tomorrow: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_TOMORROW'),
+			thisWeek: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_THIS_WEEK'),
+			nextWeek: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_NEXT_WEEK'),
+			thisMonth: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_THIS_MONTH'),
+			nextMonth: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_NEXT_MONTH'),
+			future: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_FUTURE'),
+			week: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_WEEK')
 		};
 		options['buttonHints'] = {
 			prev() {
-				return Joomla.JText._('COM_DPCALENDAR_PREVIOUS');
+				return Joomla.Text._('COM_DPCALENDAR_PREVIOUS');
 			},
 			next() {
-				return Joomla.JText._('COM_DPCALENDAR_NEXT');
+				return Joomla.Text._('COM_DPCALENDAR_NEXT');
 			},
 			today() {
-				return Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
+				return Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 			}
 		};
 	}
@@ -337,6 +337,7 @@
 			let date = dayjs.utc(info.date);
 			if (form) {
 				info.jsEvent.preventDefault();
+				form.querySelector('input[name=urlhash]').value = window.location.hash;
 				if (info.view.type == viewMapping['month']) {
 					date = date.hour(8);
 					date = date.minute(0);
@@ -387,7 +388,7 @@
 			if (!e.target || !e.target.closest('.dp-event-tooltip__action-delete')) {
 				return true;
 			}
-			if (confirm(Joomla.JText._('COM_DPCALENDAR_CONFIRM_DELETE'))) {
+			if (confirm(Joomla.Text._('COM_DPCALENDAR_CONFIRM_DELETE'))) {
 				return true;
 			}
 			e.preventDefault();
@@ -398,7 +399,7 @@
 		options['customButtons'] = {};
 		if (options['headerToolbar'].left.indexOf('datepicker')) {
 			options['customButtons'].datepicker = {
-				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER'),
+				text: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER'),
 				icon: 'icon-calendar',
 				click: () => {
 					loadDPAssets(['/com_dpcalendar/js/pikaday/pikaday.js', '/com_dpcalendar/css/pikaday/pikaday.css'], () => {
@@ -432,7 +433,7 @@
 		}
 		if (options['headerToolbar'].left.indexOf('print')) {
 			options['customButtons'].print = {
-				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'),
+				text: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'),
 				icon: 'icon-print',
 				click: () => {
 					const printWindow = window.open();
@@ -448,15 +449,15 @@
 		}
 		if (options['headerToolbar'].left.indexOf('add') && options['event_create_url']) {
 			options['customButtons'].add = {
-				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD'),
+				text: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD'),
 				icon: 'icon-add',
-				click: () => location.href = options['event_create_url']
+				click: () => location.href = options['event_create_url'] + '&urlhash=' + encodeURIComponent(window.location.hash)
 			};
 		}
 		if (options['headerToolbar'].left.indexOf('fullscreen')) {
 			options['customButtons'].fullscreen_open = {
 				icon: 'icon-fullscreen',
-				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_OPEN'),
+				text: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_OPEN'),
 				click: () => {
 					document.querySelector('.com-dpcalendar-calendar').requestFullscreen();
 					document.querySelector('.fc-fullscreen_open-button').style.setProperty('display', 'none', 'important');
@@ -465,7 +466,7 @@
 			};
 			options['customButtons'].fullscreen_close = {
 				icon: 'icon-fullscreen',
-				text: Joomla.JText._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_CLOSE'),
+				text: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_CLOSE'),
 				click: () => {
 					if (document.fullscreenElement) {
 						document.exitFullscreen();
@@ -509,7 +510,7 @@
 				content += '<span class="dp-event__capacity"><svg class="dp-event__capacity-icon"><use href="#dp-icon-users"/></svg>';
 				content += '<span class="dp-event__capacity-text">';
 				if (info.event.extendedProps.capacity === null) {
-					content += Joomla.JText._('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
+					content += Joomla.Text._('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED');
 				} else {
 					content += info.event.extendedProps.capacity_used + '/' + info.event.extendedProps.capacity;
 				}

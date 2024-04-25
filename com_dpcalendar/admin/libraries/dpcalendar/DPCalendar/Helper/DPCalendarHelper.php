@@ -523,8 +523,32 @@ class DPCalendarHelper
 				$variables['description'] = HTMLHelper::_('string.truncate', $variables['description'], $params->get('description_length', 0));
 			}
 
-			$variables['url']  = $event->url;
-			$variables['hits'] = $event->hits;
+			$variables['url']   = $event->url;
+			$variables['hits']  = $event->hits;
+			$variables['state'] = $event->state;
+
+			$status = 'JUNPUBLISHED';
+			switch ($event->state) {
+				case 0:
+					$status = 'JUNPUBLISHED';
+					break;
+				case 1:
+					$status = 'JPUBLISHED';
+					break;
+				case 2:
+					$status = 'JARCHIVED';
+					break;
+				case 3:
+					$status = 'COM_DPCALENDAR_FIELD_VALUE_CANCELED';
+					break;
+				case -2:
+					$status = 'JTRASHED';
+					break;
+				case -3:
+					$status = 'COM_DPCALENDAR_FIELD_VALUE_REPORTED';
+					break;
+			}
+			$variables['stateName'] = Text::_($status);
 
 			self::parseImages($event);
 			$variables['images'] = $event->images;

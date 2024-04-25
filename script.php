@@ -9,6 +9,7 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerScript;
+use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\Component\Installer\Administrator\Model\UpdatesitesModel;
 use Joomla\Filesystem\Folder;
 
@@ -107,10 +108,18 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 		}
 
 		if ($type == 'update') {
-			$model = Factory::getApplication()->bootComponent('installer')->getMVCFactory()->createModel('Updatesites', 'Administrator', ['ignore_request' => true]);
+			if (version_compare(JVERSION, '4.0.0') !== -1) {
+				$model = Factory::getApplication()->bootComponent('installer')->getMVCFactory()->createModel('Updatesites', 'Administrator', ['ignore_request' => true]);
 
-			if ($model instanceof UpdatesitesModel) {
-				$model->rebuild();
+				if ($model instanceof UpdatesitesModel) {
+					$model->rebuild();
+				}
+			} else {
+				BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_installer/models', 'InstallerModel');
+				$model = BaseDatabaseModel::getInstance('Updatesites', 'InstallerModel', ['ignore_request' => true]);
+				if ($model instanceof InstallerModelUpdatesites) {
+					$model->rebuild();
+				}
 			}
 		}
 

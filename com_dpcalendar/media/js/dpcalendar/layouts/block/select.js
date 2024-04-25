@@ -273,7 +273,7 @@
 	}
 	[].slice.call(document.querySelectorAll('select.dp-select:not(.dp-select_plain)')).forEach((select) => {
 		loadDPAssets(['/com_dpcalendar/js/popper/popper.js'], () =>
-			(new DPSelectElement(select, Joomla.JText._('COM_DPCALENDAR_OPTIONS', ''))).init()
+			(new DPSelectElement(select, Joomla.Text._('COM_DPCALENDAR_OPTIONS', ''))).init()
 		);
 	});
 })();

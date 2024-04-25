@@ -256,6 +256,7 @@
 }
 .com-dpcalendar-calendar-timeline .fc-event span {
 	overflow-wrap: break-word;
+	hyphens: auto;
 	white-space: normal;
 }
 .com-dpcalendar-calendar-timeline .fc-event .dp-event__capacity {
@@ -436,6 +437,7 @@
 }
 .com-dpcalendar-calendar-timeline .fc-header-toolbar h2 {
 	padding: 4px 15px 0;
+	font-weight: unset;
 }
 .com-dpcalendar-calendar-timeline__list {
 	overflow: hidden;

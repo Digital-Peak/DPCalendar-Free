@@ -125,7 +125,7 @@
 			const deleteLink = document.querySelector('.dp-event .dp-link_delete');
 			if (deleteLink) {
 				deleteLink.addEventListener('click', (e) => {
-					if (!confirm(Joomla.JText._('COM_DPCALENDAR_CONFIRM_DELETE'))) {
+					if (!confirm(Joomla.Text._('COM_DPCALENDAR_CONFIRM_DELETE'))) {
 						e.preventDefault();
 						return false;
 					}

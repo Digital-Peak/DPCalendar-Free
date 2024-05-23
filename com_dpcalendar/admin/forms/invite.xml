@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field"
+		name="content">
+		<field name="users" type="sql" multiple="true" class="dp-select"
+			query="select id as value, name as text from #__users where block = 0 order by text" value_field="text" key_field="value"
+			label="COM_DPCALENDAR_INVITE_FIELD_USERS_LABEL" description="COM_DPCALENDAR_INVITE_FIELD_USERS_DESC"/>
+		<field name="groups" type="usergrouplist" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_INVITE_FIELD_USER_GROUPS_LABEL" description="COM_DPCALENDAR_INVITE_FIELD_USER_GROUPS_DESC"/>
+		<field name="event_id" type="hidden" />
+		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha" />
+	</fieldset>
+</form>

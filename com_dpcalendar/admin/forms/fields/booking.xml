@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<fieldset>
+		<field name="assigned_cat_ids" type="hidden"/>
+	</fieldset>
+	<fields name="params" label="COM_FIELDS_FIELD_BASIC_LABEL"
+	    addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field">
+		<fieldset name="dpcalendar" label="COM_DPCALENDAR_TICKET">
+			<field name="ticket_field" type="dpcfields" section="ticket"
+			    hide="id,event_id,series,user_id,price,state,latitude,longitude,name,email,country,province,city,street,zip,number,telephone,type,public,captcha"
+			    label="COM_DPCALENDAR_FIELDS_BOOKING_FIELD_TICKET_RELATION_LABEL"
+			    description="COM_DPCALENDAR_FIELDS_BOOKING_FIELD_TICKET_RELATION_DESC">
+				<option value="">JNONE</option>
+			</field>
+		</fieldset>
+		<fieldset name="basic">
+			<field name="display" type="list" default="0"
+			    label="COM_FIELDS_FIELD_DISPLAY_LABEL" description="COM_FIELDS_FIELD_DISPLAY_DESC">
+				<option value="0">JNO</option>
+			</field>
+		</fieldset>
+	</fields>
+</form>

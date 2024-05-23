@@ -145,7 +145,9 @@
 		);
 		options['timeZone'] = Joomla.getOptions('DPCalendar.timezone');
 		options['initialView'] = viewMapping[options['initialView']];
-		if (document.body.clientWidth < options['screen_size_list_view'] && viewMappingReverse[options['initialView']] != 'day') {
+		if (document.body.clientWidth < options['screen_size_list_view']
+			&& viewMappingReverse[options['initialView']] != 'day'
+			&& options['headerToolbar'].right.indexOf('list') !== -1) {
 			options['initialView'] = viewMapping['list'];
 		}
 		options['schedulerLicenseKey'] = 'GPL-My-Project-Is-Open-Source';
@@ -155,6 +157,10 @@
 		options['weekNumberFormat'] = { week: 'numeric' };
 		options['moreLinkContent'] = Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_MORE');
 		options['allDayContent'] = Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_ALL_DAY');
+		options['buttonHints'] = {
+			next: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_NEXT'),
+			prev: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PREVIOUS')
+		};
 		options['buttonText'] = {
 			today: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY'),
 			year: Joomla.Text._('COM_DPCALENDAR_VIEW_CALENDAR_VIEW_YEAR'),
@@ -534,10 +540,14 @@
 				desc = desc.replace('task=event.delete', 'task=event.delete&urlhash=' + encodeURIComponent(window.location.hash));
 				desc = desc.replace('task=event.edit', 'task=event.edit&urlhash=' + encodeURIComponent(window.location.hash));
 				if (!info.isMirror) {
+					let elements = [info.el];
+					if (info.el.classList.contains('fc-bg-event')) {
+						elements.push(info.el.closest('.fc-day').querySelector('.fc-daygrid-day-number'));
+					}
 					loadDPAssets(['/com_dpcalendar/js/tippy/tippy.js', '/com_dpcalendar/css/tippy/tippy.css'], () => {
 						const content = document.createElement('div');
 						content.innerHTML = desc;
-						tippy(info.el, {
+						tippy(elements, {
 							interactive: true,
 							delay: 100,
 							arrow: true,
@@ -715,19 +725,6 @@
 		return resp;
 	}, []);
 	const rstrMD5 = string => binl2rstr(binlMD5(rstr2binl(string), string.length * 8));
-	const strHMACMD5 = (key, data) => {
-		let bkey = rstr2binl(key),
-			ipad = Array(16).fill(undefined ^ 0x36363636),
-			opad = Array(16).fill(undefined ^ 0x5C5C5C5C);
-		if (bkey.length > 16) {
-			bkey = binlMD5(bkey, key.length * 8);
-		}
-		bkey.forEach((k, i) => {
-			ipad[i] = k ^ 0x36363636;
-			opad[i] = k ^ 0x5C5C5C5C;
-		});
-		return binl2rstr(binlMD5(opad.concat(binlMD5(ipad.concat(rstr2binl(data)), 512 + data.length * 8)), 512 + 128));
-	};
 	const rstr2hex = input => {
 		const hexTab = (pos) => '0123456789abcdef'.charAt(pos);
 		return Array.from(input).map(c => c.charCodeAt(0)).reduce((output, x) => output + hexTab((x >>> 4) & 0x0F) + hexTab(x & 0x0F), '');
@@ -743,19 +740,12 @@
 	};
 	const rawMD5 = s => rstrMD5(str2rstrUTF8(s));
 	const hexMD5 = s => rstr2hex(rawMD5(s));
-	const rawHMACMD5 = (k, d) => strHMACMD5(str2rstrUTF8(k), str2rstrUTF8(d));
-	const hexHMACMD5 = (k, d) => rstr2hex(rawHMACMD5(k, d));
 	var md5 = (string, key, raw) => {
-		if (!key) {
-			if (!raw) {
+		{
+			{
 				return hexMD5(string);
 			}
-			return rawMD5(string);
 		}
-		if (!raw) {
-			return hexHMACMD5(key, string);
-		}
-		return rawHMACMD5(key, string);
 	};
 	function createCalendar(calendar, options) {
 		const assets = ['/com_dpcalendar/js/popper/popper.js'];

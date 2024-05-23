@@ -297,7 +297,7 @@
 		loadDPAssets(['/com_dpcalendar/js/domurl/url.js'], () => {
 			const url = new Url();
 			DPCalendar.request(
-				'task=event.overlapping&format=json',
+				'view=event&layout=overlapping&format=json',
 				(json) => {
 					buttons.forEach((button) => button.disabled = false);
 					if (!json.data.message) {

@@ -7,6 +7,9 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\Registry\Registry;
+
 if (!array_key_exists('item', $displayData) || !array_key_exists('context', $displayData)) {
 	return;
 }
@@ -21,9 +24,7 @@ if (!$context) {
 	return;
 }
 
-JLoader::register('FieldsHelper', JPATH_ADMINISTRATOR . '/components/com_fields/helpers/fields.php');
-
-$parts     = explode('.', $context);
+$parts     = explode('.', (string) $context);
 $component = $parts[0];
 $fields    = [];
 
@@ -44,9 +45,7 @@ if (!$fields) {
 ?>
 <div class="dp-fields">
 	<?php foreach ($fields as $field) { ?>
-		<?php if (!isset($field->value) || $field->value == '') { ?>
-			<?php continue; ?>
-		<?php } ?>
+		<?php if (empty($field->value) || empty($field->params)) { continue; } ?>
 		<?php echo FieldsHelper::render($context, 'field.' . $field->params->get('layout', 'render'), ['field' => $field]); ?>
 	<?php } ?>
 </div>

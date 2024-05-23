@@ -32,7 +32,7 @@ if ($locations === []) {
 						<meta itemprop="postalCode" content="<?php echo $location->zip; ?>">
 					<?php } ?>
 					<?php if (!empty($location->street)) { ?>
-						<meta itemprop="streetAddress" content="<?php echo $location->street . ' ' . $location->number; ?>">
+						<meta itemprop="streetAddress" content="<?php echo $location->street . (empty($location->number) ? '' : ' ' . $location->number); ?>">
 					<?php } ?>
 					<?php if (!empty($location->country_code_value)) { ?>
 						<meta itemprop="addressCountry" content="<?php echo $location->country_code_value; ?>">

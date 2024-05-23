@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-use DPCalendar\HTML\Block\Icon;
+use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 
 $displayData['document']->addScriptOptions('calendar.names', $displayData['dateHelper']->getNames());
 

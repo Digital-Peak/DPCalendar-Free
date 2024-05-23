@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
+	<config><inlinehelp button="show"/></config>
+	<fieldset name="general" label="COM_DPCALENDAR_CONTENT">
+		<field name="title" type="text" required="true" class="dp-form-input" autocomplete="0" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
+			label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_TITLE_DESC"/>
+
+		<field name="catid" type="dpcalendaredit" class="dp-select"
+			label="COM_DPCALENDAR_CALENDAR" description="COM_DPCALENDAR_FIELD_CALENDAR_DESC"/>
+
+		<field name="color" type="color" maxlength="6" size="6"
+			label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_FIELD_COLOR_DESC"/>
+
+		<field name="url" type="url" class="dp-form-input"
+			label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"/>
+
+		<field name="start_date" type="datetimechooser" default="NOW" required="true" datepair="end_date" validate="minmaxtime"
+			label="COM_DPCALENDAR_FIELD_START_DATE_LABEL" description="COM_DPCALENDAR_FIELD_START_DATE_DESC"/>
+
+		<field name="end_date" type="datetimechooser" default="+1 hour" required="true" validate="minmaxtime"
+			label="COM_DPCALENDAR_FIELD_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_END_DATE_DESC"/>
+
+		<field name="show_end_time" type="dpradio" default="1" class="dp-form-radio"
+			label="COM_DPCALENDAR_FIELD_SHOW_END_TIME_LABEL" description="COM_DPCALENDAR_FIELD_SHOW_END_TIME_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="all_day" type="dpradio" default="0" class="dp-form-radio"
+			label="COM_DPCALENDAR_FIELD_ALL_DAY_LABEL" description="COM_DPCALENDAR_FIELD_ALL_DAY_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+
+		<field name="scheduling" type="dpradio" default="0" class="dp-form-radio"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_DESC">
+			<option value="0">JNO</option>
+			<option value="DAILY">COM_DPCALENDAR_FIELD_SCHEDULING_DAILY</option>
+			<option value="WEEKLY">COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY</option>
+			<option value="MONTHLY">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY</option>
+			<option value="YEARLY">COM_DPCALENDAR_FIELD_SCHEDULING_YEARLY</option>
+		</field>
+		<field name="scheduling_end_date" type="datetimechooser" all_day="1" show_time="0" default="+2 Month"
+		    label="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_DESC"/>
+		<field name="scheduling_interval" type="text" default="1"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_DESC"/>
+		<field name="scheduling_repeat_count" type="text"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_REPEAT_COUNT_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_REPEAT_COUNT_DESC"/>
+		<field name="scheduling_daily_weekdays" type="dpradio" default="0" class="dp-form-radio"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_DAILY_WEEK_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_DAILY_WEEK_DAYS_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="scheduling_weekly_days" type="list" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_DESC">
+			<option value="MO">MONDAY</option>
+			<option value="TU">TUESDAY</option>
+			<option value="WE">WEDNESDAY</option>
+			<option value="TH">THURSDAY</option>
+			<option value="FR">FRIDAY</option>
+			<option value="SA">SATURDAY</option>
+			<option value="SU">SUNDAY</option>
+		</field>
+		<field name="scheduling_monthly_options" type="dpradio" default="by_week" class="dp-form-radio"
+			label="" description="">
+			<option value="by_day">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_DAY</option>
+			<option value="by_week">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_WEEK</option>
+		</field>
+		<field name="scheduling_monthly_week" type="list" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_DESC">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="last">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_LAST
+			</option>
+		</field>
+		<field name="scheduling_monthly_week_days" type="list" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_DESC">
+			<option value="MO">MONDAY</option>
+			<option value="TU">TUESDAY</option>
+			<option value="WE">WEDNESDAY</option>
+			<option value="TH">THURSDAY</option>
+			<option value="FR">FRIDAY</option>
+			<option value="SA">SATURDAY</option>
+			<option value="SU">SUNDAY</option>
+		</field>
+		<field name="scheduling_monthly_days" type="list" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_DAYS_DESC">
+			<option value="1">1</option>
+			<option value="2">2</option>
+			<option value="3">3</option>
+			<option value="4">4</option>
+			<option value="5">5</option>
+			<option value="6">6</option>
+			<option value="7">7</option>
+			<option value="8">8</option>
+			<option value="9">9</option>
+			<option value="10">10</option>
+			<option value="11">11</option>
+			<option value="12">12</option>
+			<option value="13">13</option>
+			<option value="14">14</option>
+			<option value="15">15</option>
+			<option value="16">16</option>
+			<option value="17">17</option>
+			<option value="18">18</option>
+			<option value="19">19</option>
+			<option value="20">20</option>
+			<option value="21">21</option>
+			<option value="22">22</option>
+			<option value="23">23</option>
+			<option value="24">24</option>
+			<option value="25">25</option>
+			<option value="26">26</option>
+			<option value="27">27</option>
+			<option value="28">28</option>
+			<option value="29">29</option>
+			<option value="30">30</option>
+			<option value="31">31</option>
+		</field>
+		<field name="rrule" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_DESC"/>
+		<field name="exdates" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_DESC">
+			<form>
+				<fields>
+					<field name="date" type="datetimechooser" default="NOW" all_day="1" show_time="0"
+						label="COM_DPCALENDAR_FIELD_SCHEDULING_EXDATES_DATE_LABEL" required="true"/>
+				</fields>
+			</form>
+		</field>
+
+		<field name="description" type="editor" buttons="true" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
+			label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
+
+		<field name="schedule" type="subform" multiple="true"
+			formsource="administrator/components/com_dpcalendar/forms/event_schedule.xml"
+			label="COM_DPCALENDAR_FIELD_SCHEDULE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULE_DESC"/>
+
+		<field name="id" type="hidden" readonly="true" default="0"
+			label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
+		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
+		<field type="hidden" name="notify_changes" default="0"/>
+		<field type="hidden" name="update_modified" default="0"/>
+		<field name="checked_out" type="hidden" filter="unset"/>
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+	</fieldset>
+	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
+		<field name="location_ids" type="location" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC">
+			<option></option>
+		</field>
+		<field name="rooms" type="dpcrooms" multiple="true" showon="location_ids!:"
+			label="COM_DPCALENDAR_ROOMS" description="COM_DPCALENDAR_FIELD_ROOMS_DESC"/>
+		<field name="location_lookup" type="text" class="dp-form-input" autocomplete="0"
+			label="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_LOOKUP_DESC"/>
+	</fieldset>
+	<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
+		<field name="capacity" type="text"
+			label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
+		<field name="capacity_used" type="text"
+			label="COM_DPCALENDAR_FIELD_CAPACITY_USED_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_USED_DESC"/>
+		<field name="max_tickets" type="text" default="1"
+			label="COM_DPCALENDAR_FIELD_MAX_TICKETS_LABEL" description="COM_DPCALENDAR_FIELD_MAX_TICKETS_DESC"/>
+		<field name="booking_opening_date" type="text" validate="calendar"
+			label="COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_OPENING_DATE_DESC"/>
+		<field name="booking_closing_date" type="text" validate="calendar"
+			label="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CLOSING_DATE_DESC"/>
+		<field name="booking_cancel_closing_date" type="text" validate="calendar"
+			label="COM_DPCALENDAR_FIELD_BOOKING_CANCEL_CLOSING_DATE_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_CANCEL_CLOSING_DATE_DESC"/>
+		<field name="booking_series" type="list" default="2"
+			label="COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_SERIES_DESC">
+			<option value="0">JNO</option>
+			<option value="2">COM_DPCALENDAR_FIELD_BOOKING_SERIES_OPTION</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="booking_waiting_list" type="dpradio" default="0" class="dp-form-radio"
+			label="COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="price" type="subform" multiple="true"
+			formsource="administrator/components/com_dpcalendar/forms/event_price.xml"
+			label="COM_DPCALENDAR_FIELD_PRICE_LABEL" description="COM_DPCALENDAR_FIELD_PRICE_DESC"/>
+		<field name="earlybird" type="subform" multiple="true"
+			formsource="administrator/components/com_dpcalendar/forms/event_earlybird.xml"
+			label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL" description="COM_DPCALENDAR_FIELD_EARLYBIRD_DESC"/>
+		<field name="user_discount" type="subform" multiple="true"
+			formsource="administrator/components/com_dpcalendar/forms/event_userdiscount.xml"
+			label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL" description="COM_DPCALENDAR_FIELD_USER_DISCOUNT_DESC"/>
+		<field name="booking_options" type="subform" multiple="true"
+			formsource="administrator/components/com_dpcalendar/forms/event_booking_options.xml"
+			label="COM_DPCALENDAR_OPTIONS" description="COM_DPCALENDAR_FIELD_BOOKING_OPTIONS_DESC"/>
+		<field name="payment_provider" type="dppaymentprovider" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
+		<field name="terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
+			addfieldpath="/administrator/components/com_content/models/fields" addfieldprefix="Joomla\Component\Content\Administrator\Field"
+			label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
+		<field name="booking_assign_user_groups" type="usergrouplist" multiple="true" class="dp-select"
+			label="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_DESC"/>
+		<field name="booking_information" type="editor" filter="\Joomla\CMS\Component\ComponentHelper::filterText" buttons="true" hide="pagebreak,readmore"
+			label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
+	</fieldset>
+	<fieldset name="publishing" label="COM_DPCALENDAR_PUBLISHING">
+		<field name="alias" type="text" class="dp-form-input"
+			label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_FIELD_ALIAS_DESC"/>
+		<field name="tags" type="tag" multiple="true" label="JTAG"/>
+		<field name="featured" type="list" default="0" label="JFEATURED" description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="hits" type="text" readonly="true" filter="unset" label="JGLOBAL_HITS" description="COM_DPCALENDAR_HITS_DESC"/>
+		<field name="state" type="list" class="chzn-color-state" filter="intval" default="1"
+			label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="3">COM_DPCALENDAR_FIELD_VALUE_CANCELED</option>
+			<option value="-3">COM_DPCALENDAR_FIELD_VALUE_REPORTED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+		<field name="access" type="accesslevel" default="1" label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>
+		<field name="access_content" type="accesslevel" default="1" label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL"
+			description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"/>
+		<field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
+			<option value="*">JALL</option>
+		</field>
+		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
+			label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
+		<field name="created_by" type="user" label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL" description="COM_DPCALENDAR_FIELD_AUTHOR_DESC"/>
+		<field name="created_by_alias" type="text" label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
+		<field name="host_ids" type="sql" multiple="true" class="dp-select" key_field="value" value_field="text"
+			query="SELECT id as value, name as text FROM #__users where block = 0 order by text"
+			label="COM_DPCALENDAR_FIELD_HOSTS_LABEL" description="COM_DPCALENDAR_FIELD_HOSTS_DESC">
+		</field>
+		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
+			label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_DPCALENDAR_FIELD_MODIFIED_DESC"/>
+		<field name="modified_by" type="user" readonly="true" filter="unset" label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"/>
+		<field name="publish_up" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S" label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
+			description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
+		<field name="publish_down" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL"
+			description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
+		<field name="version_note" type="text" labelclass="control-label" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL"
+			description="JGLOBAL_FIELD_VERSION_NOTE_DESC"/>
+	</fieldset>
+	<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
+		<field name="xreference" type="text"
+			label="COM_DPCALENDAR_FIELD_XREFERENCE_LABEL" description="COM_DPCALENDAR_FIELD_XREFERENCE_DESC"/>
+	</fieldset>
+
+	<fields name="images">
+		<fieldset name="images" label="COM_DPCALENDAR_IMAGES">
+			<field name="image_intro" type="media" class="dp-form-input"
+				label="COM_DPCALENDAR_FIELD_IMAGE_INTRO_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_INTRO_DESC"/>
+			<field name="image_intro_alt" type="text" class="dp-form-input"
+				label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"/>
+			<field name="image_intro_caption" type="text" class="dp-form-input"
+				label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"/>
+			<field name="image_full" type="media" class="dp-form-input"
+				label="COM_DPCALENDAR_FIELD_IMAGE_FULL_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_FULL_DESC"/>
+			<field name="image_full_alt" type="text" class="dp-form-input"
+				label="COM_DPCALENDAR_FIELD_IMAGE_ALT_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_ALT_DESC"/>
+			<field name="image_full_caption" type="text" class="dp-form-input"
+				label="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_LABEL" description="COM_DPCALENDAR_FIELD_IMAGE_CAPTION_DESC"/>
+		</fieldset>
+	</fields>
+
+	<fields name="params">
+		<fieldset name="jbasic" label="COM_DPCALENDAR_FIELDSET_OPTIONS">
+			<field name="event_date_format" type="text" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_DATE_FORMAT_DESC"/>
+			<field name="event_time_format" type="text" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_DESC"/>
+			<field name="event_show_calendar" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LINK_MONTH</option>
+			</field>
+			<field name="event_show_date" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_location" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
+			</field>
+			<field name="event_show_url" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_author" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_AUTHOR_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_hosts" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_HOSTS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_HOSTS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_booking_form" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_bookings" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_price" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_PRICE_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_capacity" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_capacity_used" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CAPACITY_USED_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_tickets" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LIMITED</option>
+			</field>
+			<field name="event_show_print" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_mail" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_copy" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_COPY_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_series" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_SERIES_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_series_max" type="text" useglobal="true" validate="number" filter="integer"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SERIES_LIMIT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SERIES_LIMIT_DESC"/>
+			<field name="event_show_map" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAP_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_map_zoom" type="text" useglobal="true" size="5"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_ZOOM_DESC"/>
+			<field name="event_map_lat" type="text" useglobal="true" validate="decimal"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
+			<field name="event_map_long" type="text" useglobal="true" validate="decimal"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
+			<field name="event_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
+			<field name="event_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_AFTER_DESC"/>
+			<field name="event_count_clicks" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_COUNTCLICKS_LABEL" description="COM_DPCALENDAR_FIELD_COUNTCLICKS_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_show_page_heading" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
+				<option value="2">JGLOBAL_INHERIT</option>
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="event_prefix_meta_description" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_EMPTY</option>
+			</field>
+			<field name="event_custom_css" type="textarea"  useglobal="true" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
+		</fieldset>
+	</fields>
+	<fields name="metadata">
+		<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
+			<field name="metakey" type="textarea"
+				label="JFIELD_META_KEYWORDS_LABEL" description="JFIELD_META_KEYWORDS_DESC"/>
+			<field name="metadesc" type="textarea"
+				label="JFIELD_META_DESCRIPTION_LABEL" description="JFIELD_META_DESCRIPTION_DESC"/>
+			<field name="robots" type="list"
+				label="JFIELD_METADATA_ROBOTS_LABEL" description="JFIELD_METADATA_ROBOTS_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="index, follow">JGLOBAL_INDEX_FOLLOW</option>
+				<option value="noindex, follow">JGLOBAL_NOINDEX_FOLLOW</option>
+				<option value="index, nofollow">JGLOBAL_INDEX_NOFOLLOW</option>
+				<option value="noindex, nofollow">JGLOBAL_NOINDEX_NOFOLLOW</option>
+			</field>
+			<field name="rights" type="text" filter="string"
+				label="JFIELD_META_RIGHTS_LABEL" description="JFIELD_META_RIGHTS_DESC"/>
+		</fieldset>
+	</fields>
+</form>

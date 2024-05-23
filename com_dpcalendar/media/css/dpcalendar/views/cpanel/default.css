@@ -45,10 +45,10 @@
 	min-width: 100px;
 	box-sizing: border-box;
 	padding: 14px 5px 11px;
-	background-color: #fff;
+	background-color: var(--body-bg, #fff);
 	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
 	border: 1px solid rgba(0, 0, 0, 0.02);
-	color: #565656;
+	color: var(--body-color, #565656);
 	vertical-align: middle;
 	text-decoration: none;
 	transition-property: none;
@@ -83,7 +83,7 @@
 }
 .com-dpcalendar-cpanel__box {
 	display: grid;
-	background-color: #fff;
+	background-color: var(--body-bg, #fff);
 	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);
 }
 .com-dpcalendar-cpanel__box .dp-heading {

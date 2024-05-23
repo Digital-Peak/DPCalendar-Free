@@ -7,8 +7,8 @@
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\Booking;
-use DPCalendar\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
 if (!$bookings) {
 	return;

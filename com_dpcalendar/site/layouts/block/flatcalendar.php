@@ -1,5 +1,5 @@
 <?php
-use DPCalendar\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>

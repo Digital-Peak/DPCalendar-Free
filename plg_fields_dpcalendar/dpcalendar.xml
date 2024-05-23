@@ -2,19 +2,20 @@
 <extension type="plugin" group="fields" method="upgrade">
 	<name>plg_fields_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>2024-04</creationDate>
+	<creationDate>2024-05</creationDate>
 	<copyright>(C) 2017 Digital Peak GmbH</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>8.18.0</version>
+	<version>9.0.0</version>
 	<description>PLG_FIELDS_DPCALENDAR_XML_DESCRIPTION</description>
+	<namespace path="src">DigitalPeak\Plugin\Fields\DPCalendar</namespace>
 	<files>
-		<filename plugin="dpcalendar">dpcalendar.php</filename>
-		<folder>fields</folder>
-		<folder>params</folder>
-		<folder>tmpl</folder>
 		<folder>language</folder>
+		<folder>params</folder>
+		<folder plugin="dpcalendar">services</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
 	</files>
 	<config>
 		<fields name="params">

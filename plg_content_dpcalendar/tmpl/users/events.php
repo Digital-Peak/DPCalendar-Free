@@ -7,7 +7,7 @@
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
 if (!$authoredEvents && !$hostEvents) {
 	return;
@@ -30,8 +30,8 @@ $document->loadStyleFile('events.css', 'plg_content_dpcalendar');
 						<?php echo $dateHelper->getDateStringFromEvent($event); ?>
 					</span>
 					<span class="dp-event__calendar">
-						<?php $calendar = DPCalendarHelper::getCalendar($event->catid); ?>
-						<?php echo $calendar != null ? $calendar->title : $event->catid; ?>
+						<?php $calendar = \Joomla\CMS\Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid); ?>
+						<?php echo $calendar != null ? $calendar->getTitle() : $event->catid; ?>
 					</span>
 			    </li>
 			<?php } ?>
@@ -51,8 +51,8 @@ $document->loadStyleFile('events.css', 'plg_content_dpcalendar');
 						<?php echo $dateHelper->getDateStringFromEvent($event); ?>
 					</span>
 					<span class="dp-event__calendar">
-						<?php $calendar = DPCalendarHelper::getCalendar($event->catid); ?>
-						<?php echo $calendar != null ? $calendar->title : $event->catid; ?>
+						<?php $calendar = \Joomla\CMS\Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid); ?>
+						<?php echo $calendar != null ? $calendar->getTitle() : $event->catid; ?>
 					</span>
 				</li>
 			<?php } ?>

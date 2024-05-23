@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form
+	addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
+	<fields name="list">
+		<field name="start-date" type="datetimechooser" all_day="1" show_time="0" hint="COM_DPCALENDAR_FIELD_START_DATE_LABEL"
+			label="COM_DPCALENDAR_FIELD_START_DATE_LABEL"/>
+		<field name="end-date" type="datetimechooser" all_day="1" show_time="0" hint="COM_DPCALENDAR_FIELD_END_DATE_LABEL"
+			label="COM_DPCALENDAR_FIELD_END_DATE_LABEL"/>
+		<field name="fullordering" type="list" default="a.start_date ASC">
+			<option value="">JGLOBAL_SORT_BY</option>
+			<option value="a.state ASC">JSTATUS_ASC</option>
+			<option value="a.state DESC">JSTATUS_DESC</option>
+			<option value="a.title ASC">JGLOBAL_TITLE_ASC</option>
+			<option value="a.title DESC">JGLOBAL_TITLE_DESC</option>
+			<option value="a.created_by ASC">JAUTHOR_ASC</option>
+			<option value="a.created_by DESC">JAUTHOR_DESC</option>
+			<option value="a.color ASC">COM_DPCALENDAR_VIEWS_FILTERS_COLOR_ASC</option>
+			<option value="a.color DESC">COM_DPCALENDAR_VIEWS_FILTERS_COLOR_DESC</option>
+			<option value="a.access ASC">JGRID_HEADING_ACCESS_ASC</option>
+			<option value="a.access DESC">JGRID_HEADING_ACCESS_DESC</option>
+			<option value="a.language ASC">JGRID_HEADING_LANGUAGE_ASC</option>
+			<option value="a.language DESC">JGRID_HEADING_LANGUAGE_DESC</option>
+			<option value="a.start_date ASC">JDATE_ASC</option>
+			<option value="a.start_date DESC">JDATE_DESC</option>
+			<option value="a.id ASC">JGRID_HEADING_ID_ASC</option>
+			<option value="a.id DESC">JGRID_HEADING_ID_DESC</option>
+			<option value="original_title ASC">COM_DPCALENDAR_VIEWS_FILTERS_ORIGINAL_TITLE_ASC</option>
+			<option value="original_title DESC">COM_DPCALENDAR_VIEWS_FILTERS_ORIGINAL_TITLE_DESC</option>
+		</field>
+		<field name="limit" type="limitbox" class="input-mini" default="25"/>
+	</fields>
+	<fields name="filter">
+		<field name="search" type="text" class="dp-input" hint="JSEARCH_FILTER" label="JSEARCH_FILTER"/>
+		<field name="location" type="text" class="dp-input dp-input_location" autocomplete="off" hint="COM_DPCALENDAR_LOCATION"
+			label="COM_DPCALENDAR_LOCATION"/>
+		<field name="radius" type="list" class="dp-select dp-select_plain" default="50">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="20">20</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="500">500</option>
+			<option value="1000">1000</option>
+			<option value="-1">JALL</option>
+		</field>
+		<field name="length-type" type="list" class="dp-select dp-select_plain" default="m">
+			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_METER</option>
+			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_MILE</option>
+		</field>
+		<field name="event_type" type="list" class="dp-select dp-select_plain">
+			<option value="1">COM_DPCALENDAR_VIEW_EVENTS_SELECT_ORIGIONAL_EVENTS</option>
+			<option value="2">COM_DPCALENDAR_VIEW_EVENTS_SELECT_BOTH_EVENTS</option>
+			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_NORMAL_EVENTS</option>
+		</field>
+		<field name="state" type="status" class="dp-select dp-select_plain">
+			<option value="">JOPTION_SELECT_PUBLISHED</option>
+		</field>
+		<field name="calendars" type="dpcalendar" class="dp-select" multiple="true"
+			label="COM_DPCALENDAR_CALENDARS" >
+			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_CALENDAR</option>
+		</field>
+		<field name="access" type="accesslevel" class="dp-select dp-select_plain">
+			<option value="">JOPTION_SELECT_ACCESS</option>
+		</field>
+		<field name="language" type="contentlanguage" class="dp-select dp-select_plain">
+			<option value="">JOPTION_SELECT_LANGUAGE</option>
+			<option value="*">JALL</option>
+		</field>
+		<field name="tag" type="tag" mode="nested">
+			<option value="">JOPTION_SELECT_TAG</option>
+		</field>
+		<field name="created_by" type="dpauthor"  class="dp-select dp-select_plain" table_name="dpcalendar_events"
+			label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL" >
+			<option value="">JOPTION_SELECT_AUTHOR</option>
+		</field>
+	</fields>
+</form>

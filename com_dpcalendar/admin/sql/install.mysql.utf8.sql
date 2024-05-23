@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `catid` varchar(191) NOT NULL DEFAULT '0',
+  `catid` varchar(255) NOT NULL DEFAULT '0',
   `uid` varchar(255) NOT NULL DEFAULT '',
   `original_id` int DEFAULT NULL,
   `title` varchar(255) NOT NULL DEFAULT '',
@@ -50,7 +50,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `metadesc` text,
   `metadata` text,
   `featured` TINYINT unsigned NOT NULL DEFAULT '0' COMMENT 'Set if link is featured.',
-  `xreference` varchar(191) NULL COMMENT 'A reference to enable linkages to external data sets.',
+  `xreference` varchar(255) NULL COMMENT 'A reference to enable linkages to external data sets.',
   `publish_up` datetime NULL DEFAULT NULL,
   `publish_down` datetime NULL DEFAULT NULL,
   `payment_provider` text,
@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `rules`, `field_mappings`, `router`, `content_history_options`) VALUES
-('Event', 'com_dpcalendar.event', '{"special":{"dbtable":"#__dpcalendar_events","key":"id","type":"Event","prefix":"DPCalendarTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Event","prefix":"DPCalendarTable","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"state","core_alias":"alias","core_created_time":"created","core_modified_time":"modified","core_body":"description", "core_hits":"hits","core_publish_up":"publish_up","core_publish_down":"publish_down","core_access":"access", "core_params":"attribs","core_featured":"featured", "core_metadata":"metadata", "core_language":"language", "core_images":"images", "core_urls":"url", "core_metakey":"metakey", "core_metadesc":"metadesc", "core_catid":"catid","core_xreference":"xreference", "asset_id":"asset_id"}, "special":{}}', 'DPCalendarHelperRoute::getEventRoute', '{"formFile":"administrator\\/components\\/com_dpcalendar\\/models\\/forms\\/event.xml", "hideFields":["asset_id","checked_out", "date","checked_out_time"],"ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time", "hits"],"convertToInt":["publish_up", "publish_down", "featured"],"displayLookup":[{"sourceColumn":"catid","targetTable":"#__categories","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"} ]}'),
-('DPCalendar Category', 'com_dpcalendar.category', '{"special":{"dbtable":"#__categories","key":"id","type":"Category","prefix":"JTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Corecontent","prefix":"JTable","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"published","core_alias":"alias","core_created_time":"created_time","core_modified_time":"modified_time","core_body":"description","core_hits":"hits","core_publish_up":"null","core_publish_down":"null","core_access":"access", "core_params":"params","core_featured":"null", "core_metadata":"metadata", "core_language":"language", "core_images":"null", "core_urls":"null","core_version":"version", "core_ordering":"null", "core_metakey":"metakey", "core_metadesc":"metadesc", "core_catid":"parent_id","core_xreference":"null", "asset_id":"asset_id"}, "special": {"parent_id":"parent_id","lft":"lft","rgt":"rgt","level":"level","path":"path","extension":"extension","note":"note"}}', 'DPCalendarHelperRoute::getCalendarRoute', '');
+('Event', 'com_dpcalendar.event', '{"special":{"dbtable":"#__dpcalendar_events","key":"id","type":"Event","prefix":"Administrator","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Event","prefix":"Administrator","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"state","core_alias":"alias","core_created_time":"created","core_modified_time":"modified","core_body":"description", "core_hits":"hits","core_publish_up":"publish_up","core_publish_down":"publish_down","core_access":"access", "core_params":"attribs","core_featured":"featured", "core_metadata":"metadata", "core_language":"language", "core_images":"images", "core_urls":"url", "core_metakey":"metakey", "core_metadesc":"metadesc", "core_catid":"catid","core_xreference":"xreference", "asset_id":"asset_id"}, "special":{}}', '\DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getEventRoute', '{"formFile":"administrator\\/components\\/com_dpcalendar\\/models\\/forms\\/event.xml", "hideFields":["asset_id","checked_out", "date","checked_out_time"],"ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time", "hits"],"convertToInt":["publish_up", "publish_down", "featured"],"displayLookup":[{"sourceColumn":"catid","targetTable":"#__categories","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"} ]}'),
+('DPCalendar Category', 'com_dpcalendar.category', '{"special":{"dbtable":"#__categories","key":"id","type":"Category","prefix":"JTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Corecontent","prefix":"JTable","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"published","core_alias":"alias","core_created_time":"created_time","core_modified_time":"modified_time","core_body":"description","core_hits":"hits","core_publish_up":"null","core_publish_down":"null","core_access":"access", "core_params":"params","core_featured":"null", "core_metadata":"metadata", "core_language":"language", "core_images":"null", "core_urls":"null","core_version":"version", "core_ordering":"null", "core_metakey":"metakey", "core_metadesc":"metadesc", "core_catid":"parent_id","core_xreference":"null", "asset_id":"asset_id"}, "special": {"parent_id":"parent_id","lft":"lft","rgt":"rgt","level":"level","path":"path","extension":"extension","note":"note"}}', '\DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getCalendarRoute', '');
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
   `publish_up` datetime NULL DEFAULT NULL,
   `publish_down` datetime NULL DEFAULT NULL,
   `metadata` text,
-  `xreference` varchar(191) NULL,
+  `xreference` varchar(255) NULL,
   PRIMARY KEY (`id`),
   KEY `idx_checkout` (`checked_out`),
   KEY `idx_state` (`state`),
@@ -113,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_locations` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 DEFAULT COLLATE=utf8mb4_unicode_ci;
 
 INSERT INTO `#__content_types` (`type_title`, `type_alias`, `table`, `rules`, `field_mappings`, `router`, `content_history_options`) VALUES
-('Location', 'com_dpcalendar.location', '{"special":{"dbtable":"#__dpcalendar_locations","key":"id","type":"Location","prefix":"DPCalendarTable","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Location","prefix":"DPCalendarTable","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"state","core_alias":"alias","core_created_time":"created","core_modified_time":"modified","core_body":"description","core_publish_up":"publish_up","core_publish_down":"publish_down","core_access":"access", "core_params":"attribs","core_featured":"featured", "core_metadata":"metadata", "core_language":"language", "core_metakey":"metakey", "core_metadesc":"metadesc"}, "special":{}}', 'DPCalendarHelperRoute::getLocationRoute', '{"formFile":"administrator\\/components\\/com_dpcalendar\\/models\\/forms\\/location.xml", "hideFields":["checked_out"],"ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time", "hits"],"convertToInt":["publish_up", "publish_down", "featured"],"displayLookup":[{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"} ]}');
+('Location', 'com_dpcalendar.location', '{"special":{"dbtable":"#__dpcalendar_locations","key":"id","type":"Location","prefix":"Administrator","config":"array()"},"common":{"dbtable":"#__ucm_content","key":"ucm_id","type":"Location","prefix":"Administrator","config":"array()"}}', '', '{"common":{"core_content_item_id":"id","core_title":"title","core_state":"state","core_alias":"alias","core_created_time":"created","core_modified_time":"modified","core_body":"description","core_publish_up":"publish_up","core_publish_down":"publish_down","core_access":"access", "core_params":"attribs","core_featured":"featured", "core_metadata":"metadata", "core_language":"language", "core_metakey":"metakey", "core_metadesc":"metadesc"}, "special":{}}', '\DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getLocationRoute', '{"formFile":"administrator\\/components\\/com_dpcalendar\\/models\\/forms\\/location.xml", "hideFields":["checked_out"],"ignoreChanges":["modified_by", "modified", "checked_out", "checked_out_time", "hits"],"convertToInt":["publish_up", "publish_down", "featured"],"displayLookup":[{"sourceColumn":"created_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"},{"sourceColumn":"access","targetTable":"#__viewlevels","targetColumn":"id","displayColumn":"title"},{"sourceColumn":"modified_by","targetTable":"#__users","targetColumn":"id","displayColumn":"name"} ]}');
 
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_events_location` (
   `event_id` int NOT NULL DEFAULT '0',
@@ -130,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events_hosts` (
 CREATE TABLE IF NOT EXISTS `#__dpcalendar_bookings` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL DEFAULT '0',
-  `uid` varchar(191) NOT NULL DEFAULT '',
+  `uid` varchar(255) NOT NULL DEFAULT '',
   `email` varchar(255) DEFAULT NULL,
   `telephone` varchar(255) DEFAULT NULL,
   `country` varchar(255) NOT NULL DEFAULT '',
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_tickets` (
   `booking_id` int NOT NULL DEFAULT 0,
   `event_id` int NOT NULL DEFAULT 0,
   `user_id` int NOT NULL DEFAULT 0,
-  `uid` varchar(191) NOT NULL DEFAULT '',
+  `uid` varchar(255) NOT NULL DEFAULT '',
   `email` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `telephone` varchar(255) DEFAULT NULL,
@@ -236,7 +236,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_extcalendars` (
   `asset_id` int unsigned NOT NULL DEFAULT '0',
   `title` varchar(255) NOT NULL DEFAULT '',
   `alias` varchar(255) NOT NULL DEFAULT '',
-  `plugin` varchar(191) NOT NULL DEFAULT '',
+  `plugin` varchar(255) NOT NULL DEFAULT '',
   `description` text,
   `color` varchar(255) NOT NULL DEFAULT '',
   `color_force` TINYINT NOT NULL DEFAULT '0',

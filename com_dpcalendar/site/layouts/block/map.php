@@ -1,14 +1,15 @@
 <?php
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\DPCalendarHelper;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Text;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
 $document = $displayData['document'];
 
@@ -88,7 +89,7 @@ $languages = [
 ];
 $lang      = DPCalendarHelper::getFrLanguage();
 if (!in_array($lang, $languages)) {
-	$lang = substr($lang, 0, strpos($lang, '-'));
+	$lang = substr($lang, 0, strpos($lang, '-') ?: 0);
 }
 if (!in_array($lang, $languages)) {
 	$lang = 'en';

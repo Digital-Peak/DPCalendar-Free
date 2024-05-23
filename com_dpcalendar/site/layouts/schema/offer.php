@@ -9,7 +9,7 @@ defined('_JEXEC') or die();
 $event = $displayData['event'];
 $price = $event->price;
 if (!$price || !is_array($price->value) || $price->value === []) {
-	$price              = new stdClass();
+	$price              = new \stdClass();
 	$price->value       = [0];
 	$price->label       = [''];
 	$price->description = [''];
@@ -28,10 +28,10 @@ if (!$price || !is_array($price->value) || $price->value === []) {
 		<div itemprop="offers" itemtype="https://schema.org/Offer" itemscope>
 			<meta itemprop="price" content="<?php echo $value; ?>">
 			<?php if ($price->label[$key]) { ?>
-				<meta itemprop="name" content="<?php echo htmlentities($price->label[$key], ENT_COMPAT, 'UTF-8'); ?>">
+				<meta itemprop="name" content="<?php echo htmlentities((string) $price->label[$key], ENT_COMPAT, 'UTF-8'); ?>">
 			<?php } ?>
 			<?php if ($price->description[$key]) { ?>
-				<meta itemprop="description" content="<?php echo htmlentities(strip_tags($price->description[$key]), ENT_COMPAT, 'UTF-8'); ?>">
+				<meta itemprop="description" content="<?php echo htmlentities(strip_tags((string) $price->description[$key]), ENT_COMPAT, 'UTF-8'); ?>">
 			<?php } ?>
 		</div>
 	<?php } ?>

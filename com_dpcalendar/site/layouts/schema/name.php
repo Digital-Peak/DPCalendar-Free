@@ -7,4 +7,4 @@
 defined('_JEXEC') or die();
 
 ?>
-<meta itemprop="name" content="<?php echo htmlentities($displayData['event']->title, ENT_COMPAT, 'UTF-8'); ?>">
+<meta itemprop="name" content="<?php echo htmlentities((string) $displayData['event']->title, ENT_COMPAT, 'UTF-8'); ?>">

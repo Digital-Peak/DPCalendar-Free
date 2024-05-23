@@ -7,17 +7,25 @@
 
 defined('_JEXEC') or die();
 
-use DPCalendar\HTML\Block\Icon;
+use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Factory;
 
-$icon = basename($displayData['icon']);
-$path = JPATH_ROOT . '/templates/' . Factory::getApplication()->getTemplate() . '/images/com_dpcalendar/icons/' . $icon . '.svg';
-if (!file_exists($path)) {
-	$path = JPATH_ROOT . '/templates/' . Factory::getApplication()->getTemplate() . '/images/icons/' . $icon . '.svg';
+$app  = Factory::getApplication();
+if (!$app instanceof CMSApplication) {
+	return '';
 }
+
+$icon = basename((string) $displayData['icon']);
+$path = JPATH_ROOT . '/templates/' . $app->getTemplate() . '/images/com_dpcalendar/icons/' . $icon . '.svg';
+if (!file_exists($path)) {
+	$path = JPATH_ROOT . '/templates/' . $app->getTemplate() . '/images/icons/' . $icon . '.svg';
+}
+
 if (!file_exists($path)) {
 	$path = JPATH_ROOT . '/media/com_dpcalendar/images/icons/' . $icon . '.svg';
 }
+
 if (!file_exists($path)) {
 	echo '';
 	return;
@@ -33,7 +41,7 @@ if (in_array($path, Icon::$pathCache)) {
 } else {
 	Icon::$pathCache[] = $path;
 
-	$content = @file_get_contents($path);
+	$content = @file_get_contents($path) ?: '';
 	if (!empty($displayData['title'])) {
 		$content = str_replace('><path', '><title>' . $displayData['title'] . '</title><path', $content);
 	}

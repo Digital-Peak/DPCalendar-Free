@@ -7,88 +7,45 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Filesystem\File;
-use Joomla\CMS\Filesystem\Folder;
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
-use Joomla\CMS\Table\Table;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
 use Joomla\CMS\Uri\Uri;
+use Joomla\Database\DatabaseAwareInterface;
+use Joomla\Database\DatabaseAwareTrait;
+use Joomla\Filesystem\File;
+use Joomla\Filesystem\Folder;
 use Joomla\Registry\Registry;
 
-JLoader::register('DPCalendarHelper', __DIR__ . '/admin/helpers/dpcalendar.php');
-
-class Com_DPCalendarInstallerScript extends InstallerScript
+class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseAwareInterface
 {
-	protected $minimumPhp      = '7.4.0';
-	protected $minimumJoomla   = '3.10.5';
+	use DatabaseAwareTrait;
+
+	protected $minimumPhp      = '8.1.0';
+	protected $minimumJoomla   = '4.4.4';
 	protected $allowDowngrades = true;
 
-	public function update($parent): void
+	public function update(): void
 	{
 		$path    = JPATH_ADMINISTRATOR . '/components/com_dpcalendar/dpcalendar.xml';
 		$version = null;
 
 		if (file_exists($path)) {
 			$manifest = simplexml_load_file($path);
-			$version  = (string)$manifest->version;
+			$version  = $manifest instanceof SimpleXMLElement ? (string)$manifest->version : '';
 		}
 
-		if ($version === null || $version === '' || $version === '0' || $version == 'DP_DEPLOY_VERSION') {
+		if ($version === null || $version === '' || $version === '0' || $version === 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
-		$db = Factory::getDbo();
+		$db = $this->getDatabase();
 
-		if (version_compare($version, '7.0.0') == -1) {
-			// Defaulting some params which have changed
-			$params = ComponentHelper::getParams('com_dpcalendar');
-			$params->set('sef_advanced', 0);
-			$params->set('map_provider', 'google');
-
-			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
-
-			// Disable template overrides
-			$rootPath = JPATH_SITE . '/templates';
-			foreach (Folder::folders($rootPath, '.', true, true) as $path) {
-				if (strpos($path, 'dpcalendar') === false || strpos($path, '-v6') !== false || !file_exists($path)) {
-					continue;
-				}
-				Folder::move($path, $path . '-v6');
-				Factory::getApplication()->enqueueMessage(
-					'We have disabled the template overrides in ' . $path . '. They do not work with version 7 anymore!',
-					'warning'
-				);
-			}
-		}
-
-		if (version_compare($version, '7.2.7') == -1) {
-			$this->run('alter table `#__dpcalendar_events` CHANGE `plugintype` `plugintype` text');
-		}
-
-		if (version_compare($version, '7.2.7') == -1) {
-			// Defaulting some params which have changed
-			$params = ComponentHelper::getParams('com_dpcalendar');
-			$params->set('list_filter_featured', $params->get('list_filter_featured', '2') == '2' ? 0 : 1);
-
-			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
-
-			// Map was never shown, so disable it
-			$this->run('update #__modules set params = replace(params, \'"show_map":"1"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
-			$this->run('update #__modules set params = replace(params, \'"show_map":"2"\', \'"show_map":"0"\') where `module` like "mod_dpcalendar_mini"');
-		}
-
-		if (version_compare($version, '7.3.4') == -1) {
-			// Defaulting some params which have changed
-			$params = ComponentHelper::getParams('com_dpcalendar');
-			$params->set('description_length', $params->get('description_length', 100));
-
-			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
-
-			$this->run('update #__modules set params = replace(params, \'"description_length":""\', \'"description_length":"100"\') where `module` like "mod_dpcalendar_mini"');
-		}
-
-		if (version_compare($version, '7.4.0') == -1) {
+		if (version_compare($version, '8.2.0') == -1) {
 			// Defaulting some params which have changed
 			$params = ComponentHelper::getParams('com_dpcalendar');
 			$params->set('booking_registration', $params->get('booking_show_registration', 100));
@@ -118,7 +75,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 					continue;
 				}
 				$price = 0;
-				$types = json_decode($ticket->price);
+				$types = json_decode((string)$ticket->price);
 				if ($types && array_key_exists($ticket->type, $types->value)) {
 					$price = $types->value[$ticket->type];
 				}
@@ -134,12 +91,12 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 
 			$db->setQuery("select * from #__extensions where folder like 'dpcalendarpay'");
 			foreach ($db->loadObjectList() as $plugin) {
-				if (!$plugin->params || $plugin->params == '[]' || $plugin->params == '{}' || strpos($plugin->params, 'providers0') !== false) {
+				if (!$plugin->params || $plugin->params == '[]' || $plugin->params == '{}' || str_contains((string)$plugin->params, 'providers0')) {
 					continue;
 				}
 
 				$params = '{"providers":{"providers0":{"id":1,"title":"Default","description":"",';
-				$params .= trim($plugin->params, '{}');
+				$params .= trim((string)$plugin->params, '{}');
 				$params .= '}}}';
 
 				if ($plugin->element == 'stripe') {
@@ -154,9 +111,10 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			// Disable template overrides
 			$rootPath = JPATH_SITE . '/templates';
 			foreach (Folder::folders($rootPath, '.', true, true) as $path) {
-				if (strpos($path, 'dpcalendar') === false || strpos($path, '-v7') !== false || !file_exists($path)) {
+				if (!str_contains((string)$path, 'dpcalendar') || str_contains((string)$path, '-v7') || !file_exists($path)) {
 					continue;
 				}
+
 				Folder::move($path, $path . '-v7');
 				Factory::getApplication()->enqueueMessage(
 					'We have disabled the template overrides in ' . $path . '. They do not work with version 8 anymore!',
@@ -188,7 +146,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 			$this->run('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"');
 		}
 
-		if (version_compare($version, '8.14.0') == -1 && version_compare(4, JVERSION, '>')) {
+		if (version_compare($version, '8.14.0') == -1) {
 			// Force standard routing on Joomla 4
 			$params = ComponentHelper::getParams('com_dpcalendar');
 			$params->set('sef_advanced', 1);
@@ -207,6 +165,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 					continue;
 				}
 
+				/** @var stdClass $provider */
 				foreach ($providers as $provider) {
 					if (isset($provider->state) && !isset($provider->booking_state)) {
 						$provider->booking_state = $provider->state;
@@ -231,7 +190,7 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 				str_replace(
 					'/search/?',
 					'/search?',
-					$params->get(
+					(string)$params->get(
 						'map_api_openstreetmap_geocode_url',
 						'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1&q={address}'
 					)
@@ -260,50 +219,64 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 		}
 	}
 
-	public function preflight($type, $parent)
+	public function preflight($type, $parent): bool
 	{
 		if (!parent::preflight($type, $parent)) {
 			return false;
 		}
 
+		// Check for the minimum Joomla 5 version before continuing
+		if (version_compare(JVERSION, '5.0.0', '>=') && version_compare(JVERSION, '5.1.0', '<')) {
+			Log::add(Text::sprintf('JLIB_INSTALLER_MINIMUM_JOOMLA', '5.1.0'), Log::WARNING, 'jerror');
+
+			return false;
+		}
+
+		$app = Factory::getApplication();
+
 		$path    = JPATH_ADMINISTRATOR . '/components/com_dpcalendar/dpcalendar.xml';
 		$version = null;
 		if (file_exists($path)) {
 			$manifest = simplexml_load_file($path);
-			$version  = (string)$manifest->version;
+			$version  = $manifest instanceof SimpleXMLElement ? (string)$manifest->version : '';
 		}
-		if ($version !== null && $version !== '' && $version !== '0' && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '7.0.0') < 0) {
-			Factory::getApplication()->enqueueMessage(
-				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 7.0.0 running. Please install the latest release from version 7 first.',
+
+		if ($version !== null && $version !== '' && $version !== '0' && $version !== 'DP_DEPLOY_VERSION' && version_compare($version, '8.0.0') < 0) {
+			$app->enqueueMessage(
+				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 8.0.0 running. Please install the latest release from version 8 first.',
 				'error'
 			);
-			Factory::getApplication()->redirect('index.php?option=com_installer&view=install');
+
+			if ($app instanceof CMSWebApplicationInterface) {
+				$app->redirect('index.php?option=com_installer&view=install');
+			}
 
 			return false;
 		}
+
+		return true;
 	}
 
-	public function postflight($type, $parent): void
+	public function postflight(string $type, InstallerAdapter $parent): void
 	{
 		if ($parent->getElement() != 'com_dpcalendar') {
 			return;
 		}
 
-		if (Folder::exists(JPATH_ADMINISTRATOR . '/components/com_falang/contentelements')) {
+		if (is_dir(JPATH_ADMINISTRATOR . '/components/com_falang/contentelements')) {
 			File::copy(
-				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/falang/dpcalendar_events.xml',
+				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/config/falang/dpcalendar_events.xml',
 				JPATH_ADMINISTRATOR . '/components/com_falang/contentelements/dpcalendar_events.xml'
 			);
 			File::copy(
-				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/libraries/falang/dpcalendar_locations.xml',
+				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/config/falang/dpcalendar_locations.xml',
 				JPATH_ADMINISTRATOR . '/components/com_falang/contentelements/dpcalendar_locations.xml'
 			);
 		}
 
-		if ($type == 'install' || $type == 'discover_install') {
+		if ($type === 'install' || $type === 'discover_install') {
 			// Create default calendar
-			Table::addIncludePath(JPATH_LIBRARIES . '/joomla/database/table');
-			$category              = Table::getInstance('Category');
+			$category              = Factory::getApplication()->bootComponent('categories')->getMVCFactory()->createTable('Category', 'Administrator');
 			$category->extension   = 'com_dpcalendar';
 			$category->title       = 'Uncategorised';
 			$category->alias       = 'uncategorised';
@@ -324,7 +297,8 @@ left join #__dpcalendar_bookings as b on t.booking_id = b.id');
 	private function run(string $query): void
 	{
 		try {
-			$db = Factory::getDBO();
+			$db = $this->getDatabase();
+			;
 			$db->setQuery($query);
 			$db->execute();
 		} catch (Exception $exception) {

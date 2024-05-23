@@ -4,7 +4,10 @@
  * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
 $price = $displayData['price'];
 if (!$price) {
@@ -21,7 +24,7 @@ if (array_key_exists('thousands_separator', $displayData) && $displayData['thous
 	$thousandSeparator = $displayData['thousands_separator'];
 }
 
-$price = number_format(trim($price), 2, $separator, $thousandSeparator);
+$price = number_format((float)trim((string) $price), 2, $separator, $thousandSeparator);
 
 $currency = DPCalendarHelper::getComponentParameter('currency_symbol', '$');
 if (array_key_exists('currency', $displayData) && $displayData['currency']) {

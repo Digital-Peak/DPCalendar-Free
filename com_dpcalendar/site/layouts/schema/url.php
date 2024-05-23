@@ -9,6 +9,6 @@ defined('_JEXEC') or die();
 
 // Compile the url
 $url = Uri::getInstance()->toString(['scheme', 'host', 'port']) . '/';
-$url .= trim($displayData['router']->getEventRoute($displayData['event']->id, $displayData['event']->catid), '/');
+$url .= trim((string) $displayData['router']->getEventRoute($displayData['event']->id, $displayData['event']->catid), '/');
 ?>
 <meta itemprop="url" content="<?php echo $url; ?>">

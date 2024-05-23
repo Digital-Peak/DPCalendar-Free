@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<metadata>
+	<layout title="COM_DPCALENDAR_PROFILE_VIEW_DEFAULT_TITLE">
+		<message>
+			<![CDATA[COM_DPCALENDAR_VIEW_PROFILE_DEFAULT_DESC]]>
+		</message>
+	</layout>
+	<fields name="params" addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field">
+		<fieldset name="basic">
+			<field name="profile_show_sharing" type="list" useglobal="true" class="btn-group btn-group-yesno"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_PROFILE_ENABLE_SHARING_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_PROFILE_ENABLE_SHARING_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
+			<field name="profile_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
+			       label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+			       description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
+		</fieldset>
+	</fields>
+</metadata>

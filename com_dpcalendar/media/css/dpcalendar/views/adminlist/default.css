@@ -50,6 +50,8 @@
 	border-collapse: collapse;
 	empty-cells: show;
 	overflow-x: auto;
+	background-color: var(--body-bg, #fff);
+	color: var(--body-color, #000);
 }
 .com-dpcalendar-adminlist .dp-table caption {
 	color: #000;
@@ -62,22 +64,14 @@
 	overflow: visible;
 	padding: 0.7em 1em;
 	text-align: center;
+	border-bottom: rgb(206, 206, 206) solid 1px;
 }
 .com-dpcalendar-adminlist .dp-table__thead, .com-dpcalendar-adminlist .dp-table thead {
 	text-align: left;
 	vertical-align: bottom;
 }
-.com-dpcalendar-adminlist .dp-table td {
-	background-color: transparent;
-}
 .com-dpcalendar-adminlist .dp-table .dp-cell-price {
 	text-align: right;
-}
-.com-dpcalendar-adminlist .dp-table-odd td {
-	background-color: #f2f2f2;
-}
-.com-dpcalendar-adminlist .dp-table tr:nth-child(2n-1) td {
-	background-color: #f2f2f2;
 }
 @media screen and (width <= 767px) {
 	.com-dpcalendar-adminlist .dp-table,
@@ -131,7 +125,6 @@
 }
 .com-dpcalendar-adminlist .dp-table {
 	border: 0;
-	background-color: #fff;
 }
 .com-dpcalendar-adminlist .dp-table__col-expand {
 	width: 30%;
@@ -143,11 +136,7 @@
 	text-align: left;
 	border-left: 0;
 }
-.com-dpcalendar-adminlist .dp-table thead td {
-	background-color: #fff !important;
-}
 .com-dpcalendar-adminlist .dp-table tfoot tr td {
-	background-color: inherit !important;
 	border-bottom: 0;
 }
 .com-dpcalendar-adminlist .dp-link-featured.active {

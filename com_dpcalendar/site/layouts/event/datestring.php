@@ -1,11 +1,14 @@
 <?php
-use DPCalendar\Translator\Translator;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
+
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 
 $event = $displayData['event'];
 
@@ -25,15 +28,15 @@ $endTime   = DPCalendarHelper::getDate($event->end_date, $event->all_day)->forma
 $endTime   = trim($endTime);
 ?>
 <span class="dp-date dp-time">
-	<?php if ($event->all_day && $startDate == $endDate) { ?>
+	<?php if ($event->all_day && $startDate === $endDate) { ?>
 		<span class="dp-date__start"><?php echo $startDate; ?></span>
 	<?php } ?>
-	<?php if ($event->all_day && $startDate != $endDate) { ?>
+	<?php if ($event->all_day && $startDate !== $endDate) { ?>
 		<span class="dp-date__start"><?php echo $startDate; ?></span>
 		<span class="dp-date__separator">-</span>
 		<span class="dp-date__end"><?php echo $endDate; ?></span>
 	<?php } ?>
-	<?php if (!$event->all_day && $startDate == $endDate) { ?>
+	<?php if (!$event->all_day && $startDate === $endDate) { ?>
 		<span class="dp-date__start"><?php echo $startDate; ?></span>
 		<span class="dp-time__start"><?php echo $startTime; ?></span>
 		<?php if ($event->show_end_time) { ?>
@@ -41,7 +44,7 @@ $endTime   = trim($endTime);
 			<span class="dp-time__end"><?php echo $endTime; ?></span>
 		<?php } ?>
 	<?php } ?>
-	<?php if (!$event->all_day && $startDate != $endDate) { ?>
+	<?php if (!$event->all_day && $startDate !== $endDate) { ?>
 		<span class="dp-date__start"><?php echo $startDate; ?></span>
 		<span class="dp-time__start"><?php echo $startTime; ?></span>
 		<span class="dp-date__separator dp-time__separator">-</span>

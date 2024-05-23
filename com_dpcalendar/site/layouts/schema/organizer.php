@@ -9,9 +9,9 @@ defined('_JEXEC') or die();
 
 use Joomla\CMS\Uri\Uri;
 
-$authorName = $displayData['event']->created_by_alias ?: $displayData['userHelper']->getUser($displayData['event']->created_by)->name;
+$authorName = $displayData['event']->created_by_alias ?: $displayData['event']->author;
 ?>
 <div itemprop="organizer" itemscope itemtype="http://schema.org/Organization">
-	<meta itemprop="name" content="<?php echo htmlentities($authorName ?: '', ENT_COMPAT, 'UTF-8'); ?>">
+	<meta itemprop="name" content="<?php echo htmlentities((string) ($authorName ?: ''), ENT_COMPAT, 'UTF-8'); ?>">
 	<meta itemprop="url" content="<?php echo $displayData['event']->url ?: Uri::getInstance()->toString(); ?>">
 </div>

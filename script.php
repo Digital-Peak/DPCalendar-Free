@@ -7,40 +7,59 @@
 
 defined('_JEXEC') or die();
 
+use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Log\Log;
 use Joomla\Component\Installer\Administrator\Model\UpdatesitesModel;
+use Joomla\Database\DatabaseAwareInterface;
+use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Filesystem\Folder;
 
-class Pkg_DPCalendarInstallerScript extends InstallerScript
+class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseAwareInterface
 {
-	protected $minimumPhp      = '7.4.0';
-	protected $minimumJoomla   = '3.10.5';
+	use DatabaseAwareTrait;
+
+	protected $minimumPhp      = '8.1.0';
+	protected $minimumJoomla   = '4.4.4';
 	protected $allowDowngrades = true;
 
-	public function preflight($type, $parent)
+	public function preflight($type, $parent): bool
 	{
 		if (!parent::preflight($type, $parent)) {
 			return false;
 		}
 
+		// Check for the minimum Joomla 5 version before continuing
+		if (version_compare(JVERSION, '5.0.0', '>=') && version_compare(JVERSION, '5.1.0', '<')) {
+			Log::add(Text::sprintf('JLIB_INSTALLER_MINIMUM_JOOMLA', '5.1.0'), Log::WARNING, 'jerror');
+
+			return false;
+		}
+
 		$version = null;
 		$this->run("select * from `#__extensions` where element = 'pkg_dpcalendar'");
-		$package = Factory::getDbo()->loadObject();
+		$package = $this->getDatabase()->loadObject();
 		if ($package) {
-			$info = json_decode($package->manifest_cache);
+			$info = json_decode((string)$package->manifest_cache);
 			if (isset($info->version)) {
 				$version = $info->version;
 			}
 		}
 
-		if ($version && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '7.0.0') < 0) {
-			Factory::getApplication()->enqueueMessage(
-				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 7.0.0 running. Please install the latest release from version 7 first.',
+		if ($version && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '8.0.0') < 0) {
+			$app = Factory::getApplication();
+			if (!$app instanceof CMSWebApplicationInterface) {
+				return false;
+			}
+
+			$app->enqueueMessage(
+				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 8.0.0 running. Please install the latest release from version 8 first.',
 				'error'
 			);
-			Factory::getApplication()->redirect('index.php?option=com_installer&view=install');
+			$app->redirect('index.php?option=com_installer&view=install');
 
 			return false;
 		}
@@ -48,7 +67,7 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 		return true;
 	}
 
-	public function update($parent): void
+	public function update(InstallerAdapter $parent): void
 	{
 		$file = $parent->getParent()->getPath('source') . '/deleted.php';
 		if (file_exists($file)) {
@@ -60,10 +79,10 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 
 		if (file_exists($path)) {
 			$manifest = simplexml_load_file($path);
-			$version  = (string)$manifest->version;
+			$version  = $manifest instanceof SimpleXMLElement ? (string)$manifest->version : null;
 		}
 
-		if ($version === null || $version === '' || $version === '0' || $version == 'DP_DEPLOY_VERSION') {
+		if ($version === null || $version === '' || $version === '0' || $version === 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
@@ -87,7 +106,7 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 				}
 
 				foreach (Folder::files($folder . '/language', '.', true, true) as $file) {
-					if (strpos(basename($file), basename(dirname($file))) === 0) {
+					if (str_starts_with(basename((string)$file), basename(dirname((string)$file)))) {
 						unlink($file);
 					}
 				}
@@ -95,10 +114,10 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 		}
 	}
 
-	public function postflight($type, $parent): void
+	public function postflight(string $type): void
 	{
 		// Perform some post install tasks
-		if ($type == 'install') {
+		if ($type === 'install') {
 			$this->run("update `#__extensions` set enabled = 1 where type = 'plugin' and element = 'dpcalendar'");
 			$this->run("update `#__extensions` set enabled = 1 where type = 'plugin' and element = 'manual'");
 
@@ -107,19 +126,16 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 			);
 		}
 
-		if ($type == 'update') {
-			if (version_compare(JVERSION, '4.0.0') !== -1) {
-				$model = Factory::getApplication()->bootComponent('installer')->getMVCFactory()->createModel('Updatesites', 'Administrator', ['ignore_request' => true]);
+		if ($type === 'update') {
+			try {
+				$model = Factory::getApplication()->bootComponent('installer')
+					->getMVCFactory()->createModel('Updatesites', 'Administrator', ['ignore_request' => true]);
 
 				if ($model instanceof UpdatesitesModel) {
 					$model->rebuild();
 				}
-			} else {
-				BaseDatabaseModel::addIncludePath(JPATH_ADMINISTRATOR . '/components/com_installer/models', 'InstallerModel');
-				$model = BaseDatabaseModel::getInstance('Updatesites', 'InstallerModel', ['ignore_request' => true]);
-				if ($model instanceof InstallerModelUpdatesites) {
-					$model->rebuild();
-				}
+			} catch (Exception) {
+				// Ignore as rebuild can fail when the user has no permission like when updating from site services
 			}
 		}
 
@@ -130,7 +146,7 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript
 	private function run(string $query): void
 	{
 		try {
-			$db = Factory::getDBO();
+			$db = $this->getDatabase();
 			$db->setQuery($query);
 			$db->execute();
 		} catch (Exception $exception) {

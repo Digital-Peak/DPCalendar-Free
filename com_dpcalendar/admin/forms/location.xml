@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+	<config><inlinehelp button="show"/></config>
+	<fieldset name="general" label="COM_DPCALENDAR_CONTENT"
+		addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field"
+		addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
+		<field name="id" type="hidden" readonly="true"
+			label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
+
+		<field name="geocomplete" type="geocomplete" class="dp-form-input" autocomplete="0"
+			label="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_DESC"/>
+
+		<field name="title" type="text" required="true" class="dp-form-input"
+			label="JGLOBAL_TITLE" description="COM_DPCALENDAR_LOCATION_FIELD_TITLE_DESC"/>
+
+		<field name="country" type="dpcountries" class="dp-form-input dp-select"
+			label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_DESC"/>
+		<field name="province" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_DESC"/>
+		<field name="city" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_CITY_DESC"/>
+		<field name="zip" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_ZIP_DESC"/>
+		<field name="street" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_STREET_DESC"/>
+		<field name="number" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_NUMBER_DESC"/>
+		<field name="latitude" type="text" validate="decimal" class="dp-form-input"
+			label="COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_DESC"/>
+		<field name="longitude" type="text" validate="decimal" class="dp-form-input"
+			label="COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_DESC"/>
+
+		<field name="url" type="url" filter="url" class="dp-form-input"
+			label="COM_DPCALENDAR_FIELD_URL_LABEL" description="COM_DPCALENDAR_FIELD_URL_DESC"/>
+		<field name="color" type="color" maxlength="6" size="6"
+			label="COM_DPCALENDAR_FIELD_COLOR_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_COLOR_DESC"/>
+	</fieldset>
+	<fieldset addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" name="description"
+		label="COM_DPCALENDAR_DESCRIPTION">
+		<field name="description" type="editor" buttons="true" hide="pagebreak,readmore" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
+			label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
+	</fieldset>
+	<fieldset name="rooms" label="COM_DPCALENDAR_ROOMS">
+		<field name="rooms" type="subform" multiple="true" formsource="administrator/components/com_dpcalendar/forms/location_room.xml"
+			label="" description=""/>
+	</fieldset>
+	<fieldset addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" name="publishing"
+		label="COM_DPCALENDAR_PUBLISHING">
+
+		<field name="alias" type="text"
+			label="JFIELD_ALIAS_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_ALIAS_DESC"/>
+
+		<field name="state" type="list" filter="intval" default="1"
+			label="JSTATUS" description="COM_DPCALENDAR_FIELD_STATE_DESC">
+			<option value="1">JPUBLISHED</option>
+			<option value="0">JUNPUBLISHED</option>
+			<option value="2">JARCHIVED</option>
+			<option value="-2">JTRASHED</option>
+		</field>
+
+		<field name="tags" type="tag" multiple="true" label="JTAG"/>
+		<field name="language" type="contentlanguage"
+			label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
+			<option value="*">JALL</option>
+		</field>
+
+		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
+			label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
+
+		<field name="created_by_alias" type="text"
+			label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
+
+		<field name="modified" type="calendar" readonly="true" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
+			label="JGLOBAL_FIELD_MODIFIED_LABEL"/>
+
+		<field name="checked_out" type="hidden" filter="unset"/>
+
+		<field name="checked_out_time" type="hidden" filter="unset"/>
+
+		<field name="publish_up" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+			label="JGLOBAL_FIELD_PUBLISH_UP_LABEL" description="JGLOBAL_FIELD_PUBLISH_UP_DESC"/>
+
+		<field name="publish_down" type="calendar" filter="user_utc" format="%Y-%m-%d %H:%M:%S"
+			label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL" description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"/>
+
+		<field name="captcha" type="captcha" label="COM_DPCALENDAR_FIELD_CAPTCHA_LABEL" validate="captcha"/>
+		<field name="ordering" type="text"
+			label="JFIELD_ORDERING_LABEL" description="JFIELD_ORDERING_DESC"/>
+
+		<field name="created_by" type="user"
+			label="JGLOBAL_FIELD_CREATED_BY_LABEL" description="JGLOBAL_FIELD_CREATED_BY_Desc"/>
+
+		<field name="modified_by" type="user" readonly="true" filter="unset"
+			label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"/>
+
+		<field name="version" type="text" readonly="true" filter="unset"
+			label="COM_DPCALENDAR_LOCATION_FIELD_VERSION_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_VERSION_DESC"/>
+	</fieldset>
+	<fields name="metadata">
+		<fieldset name="jmetadata" label="JGLOBAL_FIELDSET_METADATA_OPTIONS">
+			<field name="metadesc" type="textarea" rows="3" cols="30"
+				label="JFIELD_META_DESCRIPTION_LABEL" description="JFIELD_META_DESCRIPTION_DESC"/>
+			<field name="metakey" type="textarea" rows="3" cols="30"
+				label="JFIELD_META_KEYWORDS_LABEL" description="JFIELD_META_KEYWORDS_DESC"/>
+			<field name="robots" type="list"
+				label="JFIELD_METADATA_ROBOTS_LABEL" description="JFIELD_METADATA_ROBOTS_DESC">
+				<option value="">JGLOBAL_USE_GLOBAL</option>
+				<option value="index, follow">JGLOBAL_INDEX_FOLLOW</option>
+				<option value="noindex, follow">JGLOBAL_NOINDEX_FOLLOW</option>
+				<option value="index, nofollow">JGLOBAL_INDEX_NOFOLLOW</option>
+				<option value="noindex, nofollow">JGLOBAL_NOINDEX_NOFOLLOW</option>
+			</field>
+
+			<field name="rights" type="text" required="false" filter="string" cols="30" rows="2"
+				label="JFIELD_META_RIGHTS_LABEL" description="JFIELD_META_RIGHTS_DESC"/>
+
+			<field name="xreference" type="hidden"/>
+		</fieldset>
+	</fields>
+</form>

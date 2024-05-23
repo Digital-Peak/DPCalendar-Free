@@ -7,8 +7,9 @@
 
 defined('_JEXEC') or die();
 
-use DPCalendar\Helper\Booking;
-use DPCalendar\HTML\Block\Icon;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -19,6 +20,12 @@ $event = $displayData['event'];
 if (!$event) {
 	return;
 }
+
+$calendar = \Joomla\CMS\Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
+if (!$calendar instanceof \DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface) {
+	return;
+}
+
 $params = $displayData['params'];
 if (!$params) {
 	$params = new Registry();
@@ -32,8 +39,7 @@ if (!empty($return)) {
 	$return = $uri . $displayData['router']->route('index.php?Itemid=' . $return, false);
 }
 
-$calendar = DPCalendarHelper::getCalendar($event->catid);
-$user     = empty($displayData['user']) ? Factory::getUser() : $displayData['user'];
+$user = empty($displayData['user']) ? Factory::getApplication()->getIdentity() : $displayData['user'];
 ?>
 <div class="dp-event-tooltip">
 	<div class="dp-event-tooltip__date">
@@ -46,7 +52,7 @@ $user     = empty($displayData['user']) ? Factory::getUser() : $displayData['use
 			]
 		); ?>
 	</div>
-	<div class="dp-event-tooltip__calendar">[<?php echo $calendar ? $calendar->title : $this->event->catid; ?>]</div>
+	<div class="dp-event-tooltip__calendar">[<?php echo $calendar->getTitle(); ?>]</div>
 	<?php if ($params->get('show_event_as_popup', '0') != '2') { ?>
 		<a href="<?php echo $displayData['router']->getEventRoute($event->id, $event->catid); ?>" class="dp-event-tooltip__link dp-link">
 			<?php echo $event->title; ?>
@@ -74,12 +80,13 @@ $user     = empty($displayData['user']) ? Factory::getUser() : $displayData['use
 				); ?>
 			</a>
 		<?php } ?>
-		<?php if ($calendar->canEdit || ($calendar->canEditOwn && $event->created_by == $user->id)) { ?>
+		<?php if ($calendar->canEdit() || ($calendar->canEditOwn() && $event->created_by == $user->id)) { ?>
 			<?php if ($event->checked_out && $user->id != $event->checked_out) { ?>
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
 					[
 						'icon'  => Icon::LOCK,
+						// @phpstan-ignore-next-line
 						'title' => Text::sprintf('COM_DPCALENDAR_VIEW_EVENT_CHECKED_OUT_BY', Factory::getUser($event->checked_out)->name)
 					]
 				); ?>
@@ -92,7 +99,7 @@ $user     = empty($displayData['user']) ? Factory::getUser() : $displayData['use
 				</a>
 			<?php } ?>
 		<?php } ?>
-		<?php if (($calendar->canDelete || ($calendar->canEditOwn && $event->created_by == $user->id)) && (!$event->checked_out || $user->id == $event->checked_out)) { ?>
+		<?php if (($calendar->canDelete() || ($calendar->canEditOwn() && $event->created_by == $user->id)) && (!$event->checked_out || $user->id == $event->checked_out)) { ?>
 			<a href="<?php echo $displayData['router']->getEventDeleteRoute($event->id, $return); ?>"
 				class="dp-event-tooltip__action dp-event-tooltip__action-delete dp-link">
 				<?php echo $displayData['layoutHelper']->renderLayout(

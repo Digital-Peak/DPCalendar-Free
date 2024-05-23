@@ -1,5 +1,0 @@
-# If login to the DPCalendar CalDAV server does not work in CGI environments
-# this file must be renamed to .htaccess
-
-RewriteEngine On
-RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

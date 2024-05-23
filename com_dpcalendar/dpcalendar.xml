@@ -9,6 +9,7 @@
 	<authorUrl>joomla.digital-peak.com</authorUrl>
 	<version>9.0.0</version>
 	<description>COM_DPCALENDAR_XML_DESCRIPTION</description>
+	<namespace path="src">DigitalPeak\Component\DPCalendar</namespace>
 	<install>
 		<sql>
 			<file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
@@ -26,16 +27,11 @@
 	</uninstall>
 	<scriptfile>script.php</scriptfile>
 	<files folder="site">
-		<filename>dpcalendar.php</filename>
-		<filename>controller.php</filename>
-		<filename>router.php</filename>
-		<folder>controllers</folder>
-		<folder>helpers</folder>
+		<folder>forms</folder>
 		<folder>language</folder>
 		<folder>layouts</folder>
-		<folder>models</folder>
-		<folder>tables</folder>
-		<folder>views</folder>
+		<folder>src</folder>
+		<folder>tmpl</folder>
 	</files>
 	<media destination="com_dpcalendar" folder="media">
 		<folder>css</folder>
@@ -56,17 +52,15 @@
 		<files folder="admin">
 			<filename>access.xml</filename>
 			<filename>config.xml</filename>
-			<filename>controller.php</filename>
-			<filename>dpcalendar.php</filename>
-			<folder>controllers</folder>
-			<folder>helpers</folder>
+			<folder>cli</folder>
+			<folder>config</folder>
+			<folder>forms</folder>
 			<folder>language</folder>
-			<folder>libraries</folder>
-			<folder>models</folder>
+			<folder>services</folder>
 			<folder>sql</folder>
-			<folder>tables</folder>
+			<folder>src</folder>
+			<folder>tmpl</folder>
 			<folder>vendor</folder>
-			<folder>views</folder>
 		</files>
 	</administration>
 </extension>

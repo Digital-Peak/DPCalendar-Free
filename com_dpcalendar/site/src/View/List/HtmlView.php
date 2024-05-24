@@ -23,6 +23,13 @@ use Joomla\Registry\Registry;
 
 class HtmlView extends BaseView
 {
+	/**
+	 * Public variable, also used outside like in YOOtheme.
+	 *
+	 * @var array
+	 */
+	public $events = [];
+
 	/** @var string */
 	protected $returnPage;
 
@@ -37,9 +44,6 @@ class HtmlView extends BaseView
 
 	/** @var string */
 	protected $prevLink;
-
-	/** @var array */
-	protected $events = [];
 
 	/** @var string */
 	protected $increment;

@@ -493,7 +493,8 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			$events = $cache->get(
 				fn ($calendarId, Registry $options, ?Date $startDate = null, ?Date $endDate = null): array
 					=> $this->fetchEvents($calendarId, $options, $startDate, $endDate),
-				[$id, $options, $startDate, $endDate]
+				[$id, $options, $startDate, $endDate],
+				md5($startDate . $endDate . serialize($options))
 			);
 			$cache->gc();
 		} catch (\Exception $exception) {

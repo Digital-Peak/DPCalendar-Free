@@ -25,14 +25,13 @@ define('JPATH_BASE', $path);
 require_once JPATH_BASE . '/includes/defines.php';
 require_once JPATH_BASE . '/includes/framework.php';
 
-
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 // @phpstan-ignore-next-line
 class DPCalendarEventSync extends CliApplication
 {
-	private Registry $session = new Registry();
+	private Registry $session;
 
 	protected function doExecute(): void
 	{
@@ -70,6 +69,7 @@ class DPCalendarEventSync extends CliApplication
 		$property->setAccessible(true);
 		$property->setValue($user, true);
 
+		$this->session = new Registry();
 		$this->session->set('user', $user);
 
 		if (($ids = $this->input->getString('calids', '')) !== '' && ($ids = $this->input->getString('calids', '')) !== '0') {

@@ -55,11 +55,6 @@ class HtmlDocument
 		HTMLHelper::_('script', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto'], ['defer' => true]);
 	}
 
-	public function addScript(string $content): void
-	{
-		$this->app->getDocument()->getWebAssetManager()->addInlineScript($content);
-	}
-
 	public function addScriptOptions(string $key, mixed $options): void
 	{
 		$this->app->getDocument()->addScriptOptions('DPCalendar.' . $key, $options);
@@ -71,9 +66,18 @@ class HtmlDocument
 		HTMLHelper::_('stylesheet', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto']);
 	}
 
-	public function addStyle(string $content): void
+	public function addScript(?string $content = ''): void
 	{
-		if ($content === '' || $content === '0') {
+		if ($content === null || $content === '' || $content === '0') {
+			return;
+		}
+
+		$this->app->getDocument()->getWebAssetManager()->addInlineScript($content);
+	}
+
+	public function addStyle(?string $content = ''): void
+	{
+		if ($content === null || $content === '' || $content === '0') {
 			return;
 		}
 

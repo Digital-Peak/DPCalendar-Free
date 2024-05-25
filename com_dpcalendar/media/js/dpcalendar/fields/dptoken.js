@@ -117,6 +117,19 @@
 		return resp;
 	}, []);
 	const rstrMD5 = string => binl2rstr(binlMD5(rstr2binl(string), string.length * 8));
+	const strHMACMD5 = (key, data) => {
+		let bkey = rstr2binl(key),
+			ipad = Array(16).fill(undefined ^ 0x36363636),
+			opad = Array(16).fill(undefined ^ 0x5C5C5C5C);
+		if (bkey.length > 16) {
+			bkey = binlMD5(bkey, key.length * 8);
+		}
+		bkey.forEach((k, i) => {
+			ipad[i] = k ^ 0x36363636;
+			opad[i] = k ^ 0x5C5C5C5C;
+		});
+		return binl2rstr(binlMD5(opad.concat(binlMD5(ipad.concat(rstr2binl(data)), 512 + data.length * 8)), 512 + 128));
+	};
 	const rstr2hex = input => {
 		const hexTab = (pos) => '0123456789abcdef'.charAt(pos);
 		return Array.from(input).map(c => c.charCodeAt(0)).reduce((output, x) => output + hexTab((x >>> 4) & 0x0F) + hexTab(x & 0x0F), '');
@@ -132,12 +145,19 @@
 	};
 	const rawMD5 = s => rstrMD5(str2rstrUTF8(s));
 	const hexMD5 = s => rstr2hex(rawMD5(s));
+	const rawHMACMD5 = (k, d) => strHMACMD5(str2rstrUTF8(k), str2rstrUTF8(d));
+	const hexHMACMD5 = (k, d) => rstr2hex(rawHMACMD5(k, d));
 	var md5 = (string, key, raw) => {
-		{
-			{
+		if (!key) {
+			if (!raw) {
 				return hexMD5(string);
 			}
+			return rawMD5(string);
 		}
+		if (!raw) {
+			return hexHMACMD5(key, string);
+		}
+		return rawHMACMD5(key, string);
 	};
 	document.addEventListener('DOMContentLoaded', () => {
 		document.querySelector('.dp-token-gen').addEventListener('click', (e) => {

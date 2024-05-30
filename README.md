@@ -3,9 +3,9 @@
 This is the source of DPCalendar. Here you will find the component, some modules and plugins of DPCalendar.
 
 ## PREREQUISITS
-- Joomla 3.10.5 and above
+- Joomla 4.4.4 and above
 - MySQL >= 5.5.0
-- PHP >= 7.4.0
+- PHP >= 8.1.0
 - Browsers: Firefox, Edge, Chrome, Opera but not Internet Explorer
 
 ## INSTALLATION

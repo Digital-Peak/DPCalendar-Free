@@ -28,10 +28,13 @@
 }
 .com-dpcalendar-adminlist .dp-datepicker__input {
 	margin-right: -3px;
-	padding: 0.4rem;
 }
 .com-dpcalendar-adminlist .dp-datepicker__button {
 	margin: 0;
+	border: var(--form-control-border, var(--border-width, 1px) solid #ced4da);
+	border-radius: var(--border-radius);
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
 }
 .com-dpcalendar-adminlist .dp-grid {
 	display: grid;

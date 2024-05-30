@@ -17,7 +17,7 @@ $displayData['localFormat'] = empty($displayData['localFormat']) ? false : $disp
 	<input type="text"
 		<?php echo empty($displayData['id']) ? '' : 'id="' . $displayData['id'] . '"'; ?>
 		name="<?php echo $displayData['name']; ?>"
-		class="dp-datepicker__input dp-input dp-input-text"
+		class="dp-datepicker__input dp-input dp-input-text form-control"
 		title="<?php echo empty($displayData['title']) ? '' : $displayData['title']; ?>"
 		placeholder="<?php echo empty($displayData['title']) ? '' : $displayData['title']; ?>"
 		autocomplete="off"
@@ -26,6 +26,6 @@ $displayData['localFormat'] = empty($displayData['localFormat']) ? false : $disp
 		data-first-day="<?php echo empty($displayData['firstDay']) ? '' : $displayData['firstDay']; ?>"
 		data-pair="<?php echo empty($displayData['pair']) ? '' : $displayData['pair']; ?>">
 	<button type="button" class="dp-datepicker__button dp-button" aria-label="<?php echo empty($displayData['title']) ? '' : $displayData['title']; ?>">
-		<?php echo $displayData['layoutHelper']->renderLayout('block.icon', ['icon' => Icon::CALENDAR]); ?>
+		<?php echo $displayData['layoutHelper']->renderLayout('block.icon', ['icon' => Icon::CALENDAR, 'force' => $displayData['force_icon'] ?? false]); ?>
 	</button>
 </div>

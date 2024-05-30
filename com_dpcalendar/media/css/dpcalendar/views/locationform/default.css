@@ -112,8 +112,8 @@
 }
 .com-dpcalendar-locationform .dp-form-input {
 	width: 100%;
-	min-height: 28px; /* Safari/Chrome, other WebKit */ /* Firefox, other Gecko */
-	box-sizing: border-box; /* Opera/IE 8+ */
+	min-height: 28px;
+	box-sizing: border-box;
 }
 .com-dpcalendar-locationform .dp-loader {
 	position: relative;
@@ -287,6 +287,7 @@
 	position: relative;
 	padding: 0.2rem 1rem;
 	cursor: pointer;
+	line-height: initial;
 }
 .com-dpcalendar-locationform .dp-select-option-group__label {
 	display: block;

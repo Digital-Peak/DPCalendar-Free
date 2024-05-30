@@ -9,16 +9,15 @@ namespace DigitalPeak\Component\DPCalendar\Site\Service;
 
 defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Router\Rules\DPCalendarRules;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Categories\CategoryFactoryInterface;
-use Joomla\CMS\Categories\CategoryNode;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Component\Router\RouterView;
 use Joomla\CMS\Component\Router\RouterViewConfiguration;
 use Joomla\CMS\Component\Router\Rules\NomenuRules;
 use Joomla\CMS\Component\Router\Rules\StandardRules;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Menu\AbstractMenu;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\Database\DatabaseAwareTrait;
@@ -314,12 +313,10 @@ class Router extends RouterView
 
 		foreach ($calIds as $calId) {
 			// If the event belongs to the external calendar, return the segment as it is the id
-			if (is_numeric($calId)) {
+			if (is_numeric($calId) || !str_starts_with($segment, (string)$calId)) {
 				continue;
 			}
-			if (!str_starts_with($segment, (string)$calId)) {
-				continue;
-			}
+
 			return $segment;
 		}
 
@@ -335,13 +332,13 @@ class Router extends RouterView
 			foreach ($calIds as $calId) {
 				$condition .= $db->quote($calId) . ',';
 
-				$cal = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($calId);
-				if (!$cal instanceof CategoryNode) {
+				$cal = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($calId);
+				if (!$cal instanceof CalendarInterface) {
 					continue;
 				}
 
 				foreach ($cal->getChildren(true) as $child) {
-					$condition .= $db->quote((string)$child->id) . ',';
+					$condition .= $db->quote($child->getId()) . ',';
 				}
 			}
 			$dbquery->where(trim($condition, ',') . ')');
@@ -359,7 +356,7 @@ class Router extends RouterView
 		}
 
 		// Return the result
-		return $result;
+		return $result ?: '';
 	}
 
 	public function getTicketId(string $segment): string
@@ -376,7 +373,7 @@ class Router extends RouterView
 			->where('id = ' . (int)$segment);
 		$db->setQuery($dbquery);
 
-		return $db->loadResult();
+		return $db->loadResult() ?: '';
 	}
 
 	public function getLocationId(string $segment): int

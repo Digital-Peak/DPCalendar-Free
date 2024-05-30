@@ -31,10 +31,13 @@
 }
 .com-dpcalendar-calendar-timeline .dp-datepicker__input {
 	margin-right: -3px;
-	padding: 0.4rem;
 }
 .com-dpcalendar-calendar-timeline .dp-datepicker__button {
 	margin: 0;
+	border: var(--form-control-border, var(--border-width, 1px) solid #ced4da);
+	border-radius: var(--border-radius);
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
 }
 .com-dpcalendar-calendar-timeline .dp-toggle {
 	cursor: pointer;
@@ -159,6 +162,7 @@
 	position: relative;
 	padding: 0.2rem 1rem;
 	cursor: pointer;
+	line-height: initial;
 }
 .com-dpcalendar-calendar-timeline .dp-select-option-group__label {
 	display: block;

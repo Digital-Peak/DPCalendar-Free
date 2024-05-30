@@ -5,7 +5,7 @@
 		<field name="title" type="text" required="true" class="dp-form-input" autocomplete="0" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="JGLOBAL_TITLE" description="COM_DPCALENDAR_FIELD_TITLE_DESC"/>
 
-		<field name="catid" type="dpcalendaredit" class="dp-select"
+		<field name="catid" type="dpcalendaredit" class="dp-select dp-form-select"
 			label="COM_DPCALENDAR_CALENDAR" description="COM_DPCALENDAR_FIELD_CALENDAR_DESC"/>
 
 		<field name="color" type="color" maxlength="6" size="6"
@@ -51,7 +51,7 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
-		<field name="scheduling_weekly_days" type="list" multiple="true" class="dp-select"
+		<field name="scheduling_weekly_days" type="list" multiple="true" class="dp-select dp-form-select"
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_DESC">
 			<option value="MO">MONDAY</option>
 			<option value="TU">TUESDAY</option>
@@ -66,7 +66,7 @@
 			<option value="by_day">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_DAY</option>
 			<option value="by_week">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_OPTIONS_WEEK</option>
 		</field>
-		<field name="scheduling_monthly_week" type="list" multiple="true" class="dp-select"
+		<field name="scheduling_monthly_week" type="list" multiple="true" class="dp-select dp-form-select"
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_DESC">
 			<option value="1">1</option>
 			<option value="2">2</option>
@@ -76,7 +76,7 @@
 			<option value="last">COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_WEEK_LAST
 			</option>
 		</field>
-		<field name="scheduling_monthly_week_days" type="list" multiple="true" class="dp-select"
+		<field name="scheduling_monthly_week_days" type="list" multiple="true" class="dp-select dp-form-select"
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_WEEKLY_DAYS_DESC">
 			<option value="MO">MONDAY</option>
 			<option value="TU">TUESDAY</option>
@@ -86,7 +86,7 @@
 			<option value="SA">SATURDAY</option>
 			<option value="SU">SUNDAY</option>
 		</field>
-		<field name="scheduling_monthly_days" type="list" multiple="true" class="dp-select"
+		<field name="scheduling_monthly_days" type="list" multiple="true" class="dp-select dp-form-select"
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_DAYS_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_MONTHLY_DAYS_DESC">
 			<option value="1">1</option>
 			<option value="2">2</option>
@@ -148,7 +148,7 @@
 		<field name="checked_out_time" type="hidden" filter="unset"/>
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
-		<field name="location_ids" type="location" multiple="true" class="dp-select"
+		<field name="location_ids" type="location" multiple="true" class="dp-select dp-form-select"
 			label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC">
 			<option></option>
 		</field>
@@ -193,12 +193,12 @@
 		<field name="booking_options" type="subform" multiple="true"
 			formsource="administrator/components/com_dpcalendar/forms/event_booking_options.xml"
 			label="COM_DPCALENDAR_OPTIONS" description="COM_DPCALENDAR_FIELD_BOOKING_OPTIONS_DESC"/>
-		<field name="payment_provider" type="dppaymentprovider" multiple="true" class="dp-select"
+		<field name="payment_provider" type="dppaymentprovider" multiple="true" class="dp-select dp-form-select"
 			label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 		<field name="terms" type="modal_article" select="true" new="true" edit="true" clear="true" class="dp-form-input"
 			addfieldpath="/administrator/components/com_content/models/fields" addfieldprefix="Joomla\Component\Content\Administrator\Field"
 			label="COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_TERMS_DESC"/>
-		<field name="booking_assign_user_groups" type="usergrouplist" multiple="true" class="dp-select"
+		<field name="booking_assign_user_groups" type="usergrouplist" multiple="true" class="dp-select dp-form-select"
 			label="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_USER_GROUPS_DESC"/>
 		<field name="booking_information" type="editor" filter="\Joomla\CMS\Component\ComponentHelper::filterText" buttons="true" hide="pagebreak,readmore"
 			label="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_LABEL" description="COM_DPCALENDAR_FIELD_BOOKING_INFORMATION_DESC"/>
@@ -227,11 +227,11 @@
 		<field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
 			<option value="*">JALL</option>
 		</field>
-		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true"
+		<field name="created" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc" translateformat="true" showtime="true" class="dp-select dp-form-select"
 			label="JGLOBAL_FIELD_CREATED_LABEL" description="JGLOBAL_FIELD_CREATED_DESC"/>
 		<field name="created_by" type="user" label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL" description="COM_DPCALENDAR_FIELD_AUTHOR_DESC"/>
 		<field name="created_by_alias" type="text" label="JGLOBAL_FIELD_CREATED_BY_ALIAS_LABEL" description="JGLOBAL_FIELD_CREATED_BY_ALIAS_DESC"/>
-		<field name="host_ids" type="sql" multiple="true" class="dp-select" key_field="value" value_field="text"
+		<field name="host_ids" type="sql" multiple="true" class="dp-select dp-form-select" key_field="value" value_field="text"
 			query="SELECT id as value, name as text FROM #__users where block = 0 order by text"
 			label="COM_DPCALENDAR_FIELD_HOSTS_LABEL" description="COM_DPCALENDAR_FIELD_HOSTS_DESC">
 		</field>

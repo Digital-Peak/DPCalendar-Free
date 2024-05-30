@@ -147,6 +147,7 @@
 	position: relative;
 	padding: 0.2rem 1rem;
 	cursor: pointer;
+	line-height: initial;
 }
 .com-dpcalendar-event-mailtickets .dp-select-option-group__label {
 	display: block;

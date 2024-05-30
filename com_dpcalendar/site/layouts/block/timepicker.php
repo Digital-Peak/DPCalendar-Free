@@ -10,12 +10,11 @@ defined('_JEXEC') or die();
 <input type="text"
 	id="<?php echo $displayData['id']; ?>"
 	name="<?php echo $displayData['name']; ?>"
-	class="dp-timepicker dp-input dp-input-text"
+	class="dp-timepicker dp-input dp-form-input dp-input-text form-control"
 	autocomplete="off"
 	data-format="<?php echo $displayData['dateHelper']->convertPHPDateToJS($displayData['format']); ?>"
 	data-time="<?php echo $displayData['date']->format('H:i:s', true); ?>"
 	data-pair="<?php echo $displayData['pair']; ?>"
 	data-min-time="<?php echo $displayData['min']; ?>"
 	data-max-time="<?php echo $displayData['max']; ?>"
-	data-step="<?php echo $displayData['step']; ?>"
-/>
+	data-step="<?php echo $displayData['step']; ?>"/>

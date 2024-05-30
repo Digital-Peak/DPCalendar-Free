@@ -63,6 +63,7 @@ class DatetimechooserField extends FormField
 			'pair'        => (string)$this->element['datepair'],
 			'document'    => new HtmlDocument(),
 			'dateHelper'  => $dateHelper,
+			'force_icon'  => true,
 			'title'       => $this->hint !== '' && $this->hint !== '0' ? Text::_($this->hint) : ''
 		]);
 

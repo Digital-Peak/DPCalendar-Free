@@ -72,9 +72,7 @@ class DPCalendarEventSync extends CliApplication
 		$this->session = new Registry();
 		$this->session->set('user', $user);
 
-		if (($ids = $this->input->getString('calids', '')) !== '' && ($ids = $this->input->getString('calids', '')) !== '0') {
-			$ids = explode(',', $ids);
-		}
+		$ids = array_filter(explode(',', $this->input->getString('calids', '')));
 
 		try {
 			PluginHelper::importPlugin('dpcalendar');

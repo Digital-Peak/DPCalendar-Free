@@ -36,10 +36,10 @@ if (!empty($displayData['raw'])) {
 	return;
 }
 
-if (in_array($path, Icon::$pathCache)) {
+if (array_key_exists($path, Icon::$pathCache) && (!array_key_exists('force', $displayData) || !$displayData['force'])) {
 	$content = '<svg><use href="#dp-icon-' . $icon . '"/></svg>';
 } else {
-	Icon::$pathCache[] = $path;
+	Icon::$pathCache[$path] = $path;
 
 	$content = @file_get_contents($path) ?: '';
 	if (!empty($displayData['title'])) {

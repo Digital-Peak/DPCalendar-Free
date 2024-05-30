@@ -173,7 +173,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		$this->authorName          = $event->created_by_alias ?: '';
 		$this->event->contact_link = '';
 		$author                    = $this->getUserFactory()->loadUserById($event->created_by);
-		if ($author->id !== 0) {
+		if (!empty($author->id)) {
 			$this->authorName = $event->created_by_alias ?: $author->name;
 
 			if (file_exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php')) {

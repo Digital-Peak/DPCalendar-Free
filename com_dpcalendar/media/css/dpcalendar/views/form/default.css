@@ -56,10 +56,13 @@
 }
 .com-dpcalendar-eventform .dp-datepicker__input {
 	margin-right: -3px;
-	padding: 0.4rem;
 }
 .com-dpcalendar-eventform .dp-datepicker__button {
 	margin: 0;
+	border: var(--form-control-border, var(--border-width, 1px) solid #ced4da);
+	border-radius: var(--border-radius);
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
 }
 .com-dpcalendar-eventform .dp-control, .com-dpcalendar-eventform .control-group {
 	display: flex;
@@ -136,8 +139,8 @@
 }
 .com-dpcalendar-eventform .dp-form-input {
 	width: 100%;
-	min-height: 28px; /* Safari/Chrome, other WebKit */ /* Firefox, other Gecko */
-	box-sizing: border-box; /* Opera/IE 8+ */
+	min-height: 28px;
+	box-sizing: border-box;
 }
 .com-dpcalendar-eventform .dp-loader {
 	position: relative;
@@ -311,6 +314,7 @@
 	position: relative;
 	padding: 0.2rem 1rem;
 	cursor: pointer;
+	line-height: initial;
 }
 .com-dpcalendar-eventform .dp-select-option-group__label {
 	display: block;
@@ -459,9 +463,6 @@
 .com-dpcalendar-eventform .dp-datepicker .dp-input,
 .com-dpcalendar-eventform .dp-autocomplete {
 	min-width: 100px;
-}
-.com-dpcalendar-eventform .dp-timepicker {
-	padding: 0.4rem;
 }
 .com-dpcalendar-eventform #jform_scheduling_end_date_time,
 .com-dpcalendar-eventform .dp-field-exdates .dp-timepicker {

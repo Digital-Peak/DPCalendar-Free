@@ -16,10 +16,7 @@ defined('_JEXEC') or die();
 
 class FieldsOrderModel extends BaseModel
 {
-	/**
-	 * @param \stdClass $booking
-	 */
-	public function getBookingFields($booking, Registry $params, CMSApplicationInterface $app): array
+	public function getBookingFields(\stdClass $booking, Registry $params, CMSApplicationInterface $app): array
 	{
 		if (!isset($booking->jcfields)) {
 			$booking->text = '';
@@ -99,10 +96,8 @@ class FieldsOrderModel extends BaseModel
 		return $bookingFields;
 	}
 
-	/**
-	 * @param \stdClass $ticket
-	 */
-	public function getTicketFields($ticket, Registry $params, CMSApplicationInterface $app): array
+
+	public function getTicketFields(\stdClass $ticket, Registry $params, CMSApplicationInterface $app): array
 	{
 		if (!isset($ticket->jcfields)) {
 			$ticket->text = '';

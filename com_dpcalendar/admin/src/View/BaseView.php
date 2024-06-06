@@ -259,8 +259,12 @@ class BaseView extends HtmlView
 	/**
 	 * Translate the given key.
 	 */
-	protected function translate(string $key): string
+	protected function translate(?string $key = ''): string
 	{
+		if ($key === null || $key === '') {
+			return '';
+		}
+
 		return $this->translator->translate($key);
 	}
 
@@ -292,7 +296,7 @@ class BaseView extends HtmlView
 		$title = $this->params->get('page_title', '');
 
 		if (empty($title)) {
-			return $this->app->get('sitename');
+			return $this->app->get('sitename', '');
 		}
 
 		return $title;

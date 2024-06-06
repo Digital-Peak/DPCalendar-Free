@@ -629,6 +629,9 @@ $files = [
 '/plugins/task/dpcalendar/dpcalendar.php',
 '/plugins/user/dpcalendar/dpcalendar.php',
 '/plugins/webservices/dpcalendar/dpcalendar.php',
+
+// Delete installer file for revert of column length
+'/administrator/components/com_dpcalendar/sql/updates/mysql/9.0.0.sql',
 ];
 
 foreach ($files as $file) {

@@ -780,13 +780,13 @@ class DPCalendarHelper
 		return PluginHelper::isEnabled('captcha') && $accessCaptcha;
 	}
 
-	public static function sendMessage(string $message, bool $error = false, array $data = []): void
+	public static function sendMessage(?string $message = '', bool $error = false, array $data = []): void
 	{
 		ob_clean();
 
 		header('Content-Type: application/json');
 
-		if ($message !== '' && $message !== '0') {
+		if ($message !== '' && $message !== '0' && $message !== null) {
 			Factory::getApplication()->enqueueMessage($message, $error ? 'error' : 'message');
 		}
 		echo new JsonResponse($data);

@@ -27,7 +27,12 @@ class DisplayController extends BaseController implements CurrentUserInterface
 		$vName = $this->input->getCmd('view', 'calendar');
 		$this->input->set('view', $vName);
 
-		if ($user->id || ($_SERVER['REQUEST_METHOD'] == 'POST' && $vName === 'list') || $vName === 'events') {
+		// Disable caching when a user
+		if ($user->id
+			// The list has a date
+			|| (($_SERVER['REQUEST_METHOD'] == 'POST' || $this->input->get('date-start') || $this->input->get('date-end')) && $vName === 'list')
+			// Or on ajax requests
+			|| $vName === 'events') {
 			$cachable = false;
 		}
 

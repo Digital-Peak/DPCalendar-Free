@@ -13,7 +13,6 @@ use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Log\Log;
-use Joomla\Component\Installer\Administrator\Model\UpdatesitesModel;
 use Joomla\Database\DatabaseAwareInterface;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Filesystem\Folder;
@@ -112,6 +111,15 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 				}
 			}
 		}
+
+		if (version_compare($version, '9.0.5') == -1) {
+			$this->run(
+				"UPDATE `#__update_sites` SET location=replace(location,'&ext=extension.xml','') where location like 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=%'"
+			);
+			$this->run(
+				"UPDATE `#__update_sites` SET location=replace(location,'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=','https://cdn.digital-peak.com/update/stream.php?id=') where location like 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=%'"
+			);
+		}
 	}
 
 	public function postflight(string $type): void
@@ -124,19 +132,6 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			$this->run(
 				"insert ignore into `#__modules_menu` (menuid, moduleid) select 0 as menuid, id as moduleid from `#__modules` where module like 'mod_dpcalendar%'"
 			);
-		}
-
-		if ($type === 'update') {
-			try {
-				$model = Factory::getApplication()->bootComponent('installer')
-					->getMVCFactory()->createModel('Updatesites', 'Administrator', ['ignore_request' => true]);
-
-				if ($model instanceof UpdatesitesModel) {
-					$model->rebuild();
-				}
-			} catch (Exception) {
-				// Ignore as rebuild can fail when the user has no permission like when updating from site services
-			}
 		}
 
 		// Make sure the installer plugin is enabled

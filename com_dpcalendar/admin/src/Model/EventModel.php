@@ -799,10 +799,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		return $ticketsModel->getItems();
 	}
 
-	/**
-	 * @param \stdClass $item
-	 */
-	private function getDefaultValues($item): array
+	private function getDefaultValues(\stdClass $item): array
 	{
 		$params = $this->getParams();
 		$data   = [];

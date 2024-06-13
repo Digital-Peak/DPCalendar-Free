@@ -7,7 +7,7 @@
 	<license>https://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>9.0.4</version>
+	<version>9.0.5</version>
 	<description>PLG_ACTIONLOG_DPCALENDAR_XML_DESCRIPTION</description>
 	<namespace path="src">DigitalPeak\Plugin\Actionlog\DPCalendar</namespace>
 	<files>

@@ -9,10 +9,12 @@ namespace DigitalPeak\Component\DPCalendar\Api\Controller;
 
 defined('_JEXEC') or die;
 
+use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\MVC\Controller\ApiController;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Tobscure\JsonApi\Exception\InvalidParameterException;
 
 class EventsController extends ApiController
 {
@@ -38,6 +40,13 @@ class EventsController extends ApiController
 
 		if (!empty($data['calid']) && empty($data['catid'])) {
 			$data['catid'] = $data['calid'];
+		}
+
+		if ($this->input->getMethod() === 'POST') {
+			$calendar = $this->getModel('Calendar', 'Administrator')->getCalendar($data['catid'] ?? 0);
+			if (!$calendar instanceof CalendarInterface) {
+				throw new InvalidParameterException('Calendar not found', 404);
+			}
 		}
 
 		$this->input->set('data', $data);

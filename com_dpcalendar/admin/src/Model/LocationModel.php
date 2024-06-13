@@ -250,17 +250,16 @@ class LocationModel extends AdminModel
 			$data->metadata = $data->metadata->toArray();
 		}
 
-		$data->setProperties($this->getDefaultValues($data));
+		foreach ($this->getDefaultValues($data) as $key => $value) {
+			$data->{$key} = $value;
+		}
 
 		$this->preprocessData('com_dpcalendar.location', $data);
 
 		return $data instanceof BasicTable ? $data->getData() : $data;
 	}
 
-	/**
-	 * @param \stdClass $item
-	 */
-	private function getDefaultValues($item): array
+	private function getDefaultValues(\stdClass $item): array
 	{
 		$params = $this->getParams();
 		$data   = [];

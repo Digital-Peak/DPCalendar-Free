@@ -175,7 +175,7 @@ class SetupForNew implements StageInterface
 		$amount = $payload->data['event_id'][$event->id]['options'];
 		foreach ($event->booking_options as $key => $option) {
 			$key = preg_replace('/\D/', '', (string)$key);
-			if (!array_key_exists($key !== '' && $key !== '0' && $key !== [] && $key !== null ? $key : '', $amount) || empty($amount[$key])) {
+			if (!array_key_exists(empty($key) && $key !== '0' ? '' : $key, $amount) || empty($amount[$key])) {
 				continue;
 			}
 

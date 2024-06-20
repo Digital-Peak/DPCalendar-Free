@@ -54,22 +54,24 @@ class CouponTable extends BasicTable
 	protected string $tableName = 'dpcalendar_coupons';
 	protected $_columnAlias     = ['published' => 'state'];
 
-	public function bind($array, $ignore = '')
+	public function bind($data, $ignore = '')
 	{
-		if (isset($array['params']) && is_array($array['params'])) {
+		$data = is_object($data) ? get_object_vars($data) : $data;
+
+		if (isset($data['params']) && is_array($data['params'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['params']);
-			$array['params'] = (string)$registry;
+			$registry->loadArray($data['params']);
+			$data['params'] = (string)$registry;
 		}
 
-		if (isset($array['calendars']) && is_array($array['calendars'])) {
-			$array['calendars'] = implode(',', $array['calendars']);
+		if (isset($data['calendars']) && is_array($data['calendars'])) {
+			$data['calendars'] = implode(',', $data['calendars']);
 		}
-		if (isset($array['users']) && is_array($array['users'])) {
-			$array['users'] = implode(',', $array['users']);
+		if (isset($data['users']) && is_array($data['users'])) {
+			$data['users'] = implode(',', $data['users']);
 		}
 
-		return parent::bind($array, $ignore);
+		return parent::bind($data, $ignore);
 	}
 
 	public function store($updateNulls = false)

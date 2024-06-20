@@ -79,6 +79,8 @@ class EventsController extends ApiController
 			$this->modelState->set('filter.expand', $filter->clean($apiFilterInfo['expand'], 'BOOL'));
 		}
 
+		$this->modelState->set('filter.state', \array_key_exists('state', $apiFilterInfo) ? explode(',', (string)$apiFilterInfo['state']) : [1]);
+
 		return parent::displayList();
 	}
 }

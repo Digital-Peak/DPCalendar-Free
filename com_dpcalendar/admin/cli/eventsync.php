@@ -35,6 +35,8 @@ class DPCalendarEventSync extends CliApplication
 
 	protected function doExecute(): void
 	{
+		echo 'This cli script is deprecated! Please use the task scheduler instead. More information can be found on https://joomla.digital-peak.com/documentation/dpcalendar/joomla-plugins/task';
+
 		Log::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.errors.php'], Log::ERROR, ['com_dpcalendar']);
 		Log::addLogger(['text_file' => 'com_dpcalendars.cli.eventsync.php'], Log::NOTICE, ['com_dpcalendar']);
 

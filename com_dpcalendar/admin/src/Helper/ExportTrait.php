@@ -94,6 +94,7 @@ trait ExportTrait
 			(object)['id' => 'street', 'name' => 'street', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL')],
 			(object)['id' => 'number', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL')],
 			(object)['id' => 'price', 'name' => 'price', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL')],
+			(object)['id' => 'options', 'name' => 'options', 'label' => Text::_('COM_DPCALENDAR_OPTIONS')],
 			(object)['id' => 'net_amount', 'name' => 'net_amount', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL')],
 			(object)['id' => 'processor', 'name' => 'processor', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PAYMENT_PROVIDER_LABEL')],
 			(object)['id' => 'user_name', 'name' => 'user_name', 'label' => Text::_('JGLOBAL_USERNAME')],
@@ -110,6 +111,30 @@ trait ExportTrait
 					return Booking::getStatusLabel($booking);
 				case 'book_date':
 					return DPCalendarHelper::getDate($booking->$name)->format('Y-m-d H:i:s', true);
+				case 'options':
+					if (empty($booking->tickets) || empty($booking->options)) {
+						return '';
+					}
+
+					$buffer = [];
+					foreach (explode(',', (string)$booking->options) as $o) {
+						[$eventId, $type, $amount] = explode('-', $o);
+						foreach ($booking->tickets as $ticket) {
+							if ($ticket->event_id != $eventId) {
+								continue;
+							}
+
+							$options = json_decode((string)$ticket->event_options);
+							if (empty($options) || empty($options->{'booking_options' . $type})) {
+								continue;
+							}
+
+							$buffer[] = $options->{'booking_options' . $type}->label . ': ' . $amount;
+							break;
+						}
+					}
+
+					return implode(', ', $buffer);
 				case 'event':
 					$events = [];
 					foreach ($booking->tickets as $ticket) {

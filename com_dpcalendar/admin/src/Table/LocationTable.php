@@ -80,33 +80,35 @@ class LocationTable extends BasicTable implements TaggableTableInterface, Versio
 	protected string $tableName = 'dpcalendar_locations';
 	protected $_columnAlias     = ['published' => 'state'];
 
-	public function bind($array, $ignore = '')
+	public function bind($data, $ignore = '')
 	{
-		if (isset($array['params']) && is_array($array['params'])) {
+		$data = is_object($data) ? get_object_vars($data) : $data;
+
+		if (isset($data['params']) && is_array($data['params'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['params']);
-			$array['params'] = (string)$registry;
+			$registry->loadArray($data['params']);
+			$data['params'] = (string)$registry;
 		}
 
-		if (isset($array['metadata']) && is_array($array['metadata'])) {
+		if (isset($data['metadata']) && is_array($data['metadata'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['metadata']);
-			$array['metadata'] = (string)$registry;
+			$registry->loadArray($data['metadata']);
+			$data['metadata'] = (string)$registry;
 		}
 
-		if (isset($array['images']) && is_array($array['images'])) {
+		if (isset($data['images']) && is_array($data['images'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['images']);
-			$array['images'] = (string)$registry;
+			$registry->loadArray($data['images']);
+			$data['images'] = (string)$registry;
 		}
 
-		if (isset($array['rooms']) && is_array($array['rooms'])) {
+		if (isset($data['rooms']) && is_array($data['rooms'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['rooms']);
-			$array['rooms'] = (string)$registry;
+			$registry->loadArray($data['rooms']);
+			$data['rooms'] = (string)$registry;
 		}
 
-		return parent::bind($array, $ignore);
+		return parent::bind($data, $ignore);
 	}
 
 	public function store($updateNulls = false)

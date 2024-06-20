@@ -278,7 +278,12 @@ class EventsModel extends ListModel
 		// Filter by published state
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
-			$query->where('a.state = ' . (int)$published);
+			$published = [$published];
+		}
+
+		if ($published) {
+			$published = ArrayHelper::toInteger($published);
+			$query->where('a.state in (' . implode(',', $published) . ')');
 		} elseif ($published === '') {
 			$query->where('a.state IN (0, 1, 3)');
 		}

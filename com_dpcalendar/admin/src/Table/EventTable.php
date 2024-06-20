@@ -214,25 +214,27 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		$this->access_content = $params->get('event_form_access_content');
 	}
 
-	public function bind($array, $ignore = '')
+	public function bind($data, $ignore = '')
 	{
-		if (is_array($array) && isset($array['params']) && is_array($array['params'])) {
+		$data = is_object($data) ? get_object_vars($data) : $data;
+
+		if (isset($data['params']) && is_array($data['params'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['params']);
-			$array['params'] = (string)$registry;
+			$registry->loadArray($data['params']);
+			$data['params'] = (string)$registry;
 		}
 
-		if (is_array($array) && isset($array['metadata']) && is_array($array['metadata'])) {
+		if (isset($data['metadata']) && is_array($data['metadata'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['metadata']);
-			$array['metadata'] = (string)$registry;
+			$registry->loadArray($data['metadata']);
+			$data['metadata'] = (string)$registry;
 		}
 
-		if (is_array($array) && isset($array['rooms']) && is_array($array['rooms'])) {
-			$array['rooms'] = implode(',', $array['rooms']);
+		if (isset($data['rooms']) && is_array($data['rooms'])) {
+			$data['rooms'] = implode(',', $data['rooms']);
 		}
 
-		return parent::bind($array, $ignore);
+		return parent::bind($data, $ignore);
 	}
 
 	public function store($updateNulls = false)

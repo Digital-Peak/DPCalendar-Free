@@ -42,15 +42,17 @@ class TaxrateTable extends BasicTable
 	protected string $tableName = 'dpcalendar_taxrates';
 	protected $_columnAlias     = ['published' => 'state'];
 
-	public function bind($array, $ignore = '')
+	public function bind($data, $ignore = '')
 	{
-		if (isset($array['countries']) && is_array($array['countries'])) {
+		$data = is_object($data) ? get_object_vars($data) : $data;
+
+		if (isset($data['countries']) && is_array($data['countries'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['countries']);
-			$array['countries'] = (string)$registry;
+			$registry->loadArray($data['countries']);
+			$data['countries'] = (string)$registry;
 		}
 
-		return parent::bind($array, $ignore);
+		return parent::bind($data, $ignore);
 	}
 
 	public function store($updateNulls = false)

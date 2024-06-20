@@ -49,6 +49,8 @@ class LocationsController extends ApiController
 			$this->modelState->set('filter.search', $filter->clean($apiFilterInfo['search'], 'RAW'));
 		}
 
+		$this->modelState->set('filter.state', \array_key_exists('state', $apiFilterInfo) ? explode(',', (string)$apiFilterInfo['state']) : [1]);
+
 		return parent::displayList();
 	}
 }

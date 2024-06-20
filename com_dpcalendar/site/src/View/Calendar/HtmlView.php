@@ -12,8 +12,8 @@ defined('_JEXEC') or die();
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\Calendar;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Model\CalendarModel;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 
@@ -54,9 +54,12 @@ class HtmlView extends BaseView
 		}
 		$this->selectedCalendars = $selectedCalendars;
 
+		/** @var CalendarModel $calendarModel */
+		$calendarModel = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator');
+
 		$doNotListCalendars = [];
 		foreach ($this->params->get('idsdnl', []) as $id) {
-			$parent = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($id);
+			$parent = $calendarModel->getCalendar($id);
 			if ($parent == null) {
 				continue;
 			}
@@ -67,7 +70,7 @@ class HtmlView extends BaseView
 			}
 
 			foreach ($parent->getChildren(true) as $child) {
-				$doNotListCalendars[$child->getId()] = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($child->getId());
+				$doNotListCalendars[$child->getId()] = $child;
 				$this->fillCalendar($child);
 			}
 		}
@@ -141,12 +144,11 @@ class HtmlView extends BaseView
 			['com_dpcalendar.categories', &$calendar, &$this->params, 0]
 		);
 		$calendar->event->afterDisplayContent = trim(implode("\n", $results));
-		if ($calendar->text === '') {
+
+		if ($calendar->text === '' || $calendar->text === '0') {
 			return;
 		}
-		if ($calendar->text === '0') {
-			return;
-		}
+
 		$calendar->setDescription($calendar->text);
 	}
 }

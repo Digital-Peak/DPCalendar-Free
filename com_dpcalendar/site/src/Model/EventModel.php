@@ -148,7 +148,7 @@ class EventModel extends ItemModel
 				}
 
 				if ($state) {
-					ArrayHelper::toInteger($state);
+					$state = ArrayHelper::toInteger($state);
 					$query->where('(a.state in (' . implode(',', $state) . ')' . $stateOwner . ')');
 					$query->where('(a.publish_up is null OR a.publish_up <= ' . $nowDate . ')');
 					$query->where('(a.publish_down is null OR a.publish_down >= ' . $nowDate . ')');

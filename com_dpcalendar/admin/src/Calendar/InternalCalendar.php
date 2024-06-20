@@ -30,7 +30,7 @@ class InternalCalendar extends Calendar
 
 		$this->setColor($color);
 
-		$this->setDescription($calendar->description);
+		$this->setDescription($calendar->description ?: '');
 		$this->setLevel($calendar->level);
 		$this->setAccess($calendar->access);
 		$this->setParams(new Registry($calendar->params));

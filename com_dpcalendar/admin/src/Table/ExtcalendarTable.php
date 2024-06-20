@@ -91,21 +91,23 @@ class ExtcalendarTable extends BasicTable
 		return $success;
 	}
 
-	public function bind($array, $ignore = '')
+	public function bind($data, $ignore = '')
 	{
-		if (isset($array['params']) && is_array($array['params'])) {
+		$data = is_object($data) ? get_object_vars($data) : $data;
+
+		if (isset($data['params']) && is_array($data['params'])) {
 			$registry = new Registry();
-			$registry->loadArray($array['params']);
-			$array['params'] = (string)$registry;
+			$registry->loadArray($data['params']);
+			$data['params'] = (string)$registry;
 		}
 
 		// Bind the rules.
-		if (isset($array['rules']) && is_array($array['rules'])) {
-			$rules = new Rules($array['rules']);
+		if (isset($data['rules']) && is_array($data['rules'])) {
+			$rules = new Rules($data['rules']);
 			$this->setRules($rules);
 		}
 
-		return parent::bind($array, $ignore);
+		return parent::bind($data, $ignore);
 	}
 
 	public function load($keys = null, $reset = true)

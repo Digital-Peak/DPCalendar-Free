@@ -133,10 +133,10 @@
 			<field name="locations_axisformat_day" type="text" useglobal="true" showon="locations_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_AXIS_FORMAT_DAY_DESC"/>
-			<field name="locations_min_time" type="text" useglobal="true" showon="locations_show_resource_view:1"
+			<field name="locations_min_time" type="text" pattern="\d*\:?\d*" useglobal="true" showon="locations_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-			<field name="locations_max_time" type="text" useglobal="true" showon="locations_show_resource_view:1"
+			<field name="locations_max_time" type="text" pattern="\d*\:?\d*" useglobal="true" showon="locations_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 			<field name="locations_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"

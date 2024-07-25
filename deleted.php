@@ -632,6 +632,9 @@ $files = [
 
 // Delete installer file for revert of column length
 '/administrator/components/com_dpcalendar/sql/updates/mysql/9.0.0.sql',
+
+// From 8.19.1 to case 10938
+'/media/com_dpcalendar/js/polyfill',
 ];
 
 foreach ($files as $file) {

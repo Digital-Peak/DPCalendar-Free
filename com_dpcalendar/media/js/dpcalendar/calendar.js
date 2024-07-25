@@ -749,9 +749,6 @@
 	};
 	function createCalendar(calendar, options) {
 		const assets = ['/com_dpcalendar/js/popper/popper.js'];
-		if (!window.Intl && typeof window.Intl !== 'object') {
-			assets.push('/com_dpcalendar/js/polyfill/intl.js');
-		}
 		if (options['resources']) {
 			assets.push('/com_dpcalendar/js/scheduler/scheduler.js');
 		} else {

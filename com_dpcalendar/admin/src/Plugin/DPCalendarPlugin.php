@@ -916,7 +916,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			}
 		}
 
-		$calendar = $this->getDbCal($tmpEvent->catid);
+		$calendar = $this->getDbCal($calendarId);
 
 		// Add none standard properties
 		$color = (string)$event->{'x-color'};

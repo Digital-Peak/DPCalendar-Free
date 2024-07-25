@@ -352,8 +352,7 @@ class LocationModel extends AdminModel
 		$success = parent::delete($pks);
 		if ($success) {
 			// Delete associations
-			$pks = (array)$pks;
-			ArrayHelper::toInteger($pks);
+			$pks = ArrayHelper::toInteger((array)$pks);
 			$this->getDatabase()->setQuery('delete from #__dpcalendar_events_location where location_id in (' . implode(',', $pks) . ')');
 			$this->getDatabase()->execute();
 		}
@@ -372,7 +371,7 @@ class LocationModel extends AdminModel
 			throw new \Exception(Text::_('JLIB_APPLICATION_ERROR_BATCH_CANNOT_EDIT'));
 		}
 
-		ArrayHelper::toInteger($pks);
+		$pks = ArrayHelper::toInteger($pks);
 		$this->getDatabase()->setQuery('update #__dpcalendar_locations set country = ' . (int)$value . ' where id in (' . implode(',', $pks) . ')');
 		$this->getDatabase()->execute();
 

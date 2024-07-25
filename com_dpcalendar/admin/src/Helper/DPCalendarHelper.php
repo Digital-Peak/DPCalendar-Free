@@ -68,10 +68,7 @@ class DPCalendarHelper
 		// @phpstan-ignore-next-line
 		$user = Factory::getUser();
 		if ($user->id) {
-			$userLanguage = $user->getParam('language', 'en-GB');
-			if (!empty($userLanguage)) {
-				$language = $userLanguage;
-			}
+			return $user->getParam('language', $language);
 		}
 
 		return $language;

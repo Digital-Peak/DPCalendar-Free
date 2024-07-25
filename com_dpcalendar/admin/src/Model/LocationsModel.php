@@ -172,7 +172,7 @@ class LocationsModel extends ListModel
 				'#__contentitem_tag_map tagmap ON tagmap.content_item_id = a.id AND tagmap.type_alias = ' . $db->quote('com_dpcalendar.location')
 			);
 
-			ArrayHelper::toInteger($tagIds);
+			$tagIds = ArrayHelper::toInteger($tagIds);
 			$query->where('tagmap.tag_id in (' . implode(',', $tagIds) . ')');
 		}
 
@@ -199,7 +199,7 @@ class LocationsModel extends ListModel
 		if ($search = $this->getState('filter.search')) {
 			if (stripos((string)$search, 'ids:') === 0) {
 				$ids = explode(',', substr((string)$search, 4));
-				ArrayHelper::toInteger($ids);
+				$ids = ArrayHelper::toInteger($ids);
 				$query->where('a.id in (' . implode(',', $ids) . ')');
 			} elseif (stripos((string)$search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr((string)$search, 3));

@@ -365,7 +365,7 @@ class EventsModel extends ListModel
 		if (is_numeric($state)) {
 			$query->where('(a.state = ' . (int)$state . $stateOwner . ')');
 		} elseif (is_array($state)) {
-			ArrayHelper::toInteger($state);
+			$state = ArrayHelper::toInteger($state);
 			$query->where('(a.state in (' . implode(',', $state) . ')' . $stateOwner . ')');
 		}
 		// Do not show trashed events on the front-end

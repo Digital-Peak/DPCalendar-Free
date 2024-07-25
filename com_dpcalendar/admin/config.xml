@@ -242,10 +242,10 @@
 		<field name="first_hour" type="text" default="6"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_DESC"/>
-		<field name="min_time" type="text" default="0"
+		<field name="min_time" type="text" default="0" pattern="\d*\:?\d*"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-		<field name="max_time" type="text" default="24"
+		<field name="max_time" type="text" default="24" pattern="\d*\:?\d*"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 		<field name="current_time_indicator" type="radio" default="1" class="btn-group"
@@ -1287,10 +1287,10 @@
 		<field name="locations_axisformat_day" type="text" default="H:i" showon="locations_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_DESC"/>
-		<field name="locations_min_time" type="text" default="0" showon="locations_show_resource_view:1"
+		<field name="locations_min_time" type="text" default="0" pattern="\d*\:?\d*" showon="locations_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-		<field name="locations_max_time" type="text" default="24" showon="locations_show_resource_view:1"
+		<field name="locations_max_time" type="text" default="24" pattern="\d*\:?\d*" showon="locations_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 		<field name="locations_filter_author" type="dpauthor" default="0" table_name="dpcalendar_locations"
@@ -1427,10 +1427,10 @@
 		<field name="location_axisformat_day" type="text" default="H:i" showon="location_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_DESC"/>
-		<field name="location_min_time" type="text" default="0" showon="location_show_resource_view:1"
+		<field name="location_min_time" type="text" default="0" pattern="\d*\:?\d*" showon="location_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-		<field name="location_max_time" type="text" default="24" showon="location_show_resource_view:1"
+		<field name="location_max_time" type="text" default="24" pattern="\d*\:?\d*" showon="location_show_resource_view:1"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 		<field name="location_show_page_heading" type="list" default="0"

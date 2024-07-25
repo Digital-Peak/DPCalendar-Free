@@ -303,7 +303,7 @@ class EventsModel extends ListModel
 			$query->where('c.lft >= ' . (int)$lft);
 			$query->where('c.rgt <= ' . (int)$rgt);
 		} elseif (count($calendars) > 1) {
-			ArrayHelper::toInteger($calendars);
+			$calendars = ArrayHelper::toInteger($calendars);
 			$calendars = implode(',', $calendars);
 			$query->where('a.catid IN (' . $calendars . ')');
 		}

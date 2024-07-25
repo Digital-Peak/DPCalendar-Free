@@ -29,6 +29,7 @@ return new class () implements ServiceProviderInterface {
 				);
 				$plugin->setApplication(Factory::getApplication());
 				$plugin->setDatabase($container->get(DatabaseInterface::class));
+
 				return $plugin;
 			}
 		);

@@ -20,21 +20,9 @@ class DisplayController extends BaseController implements CurrentUserInterface
 
 	public function display($cachable = false, $urlparams = [])
 	{
-		$cachable = true;
-		$user     = $this->getCurrentUser();
-
 		$id    = $this->input->get('e_id');
 		$vName = $this->input->getCmd('view', 'calendar');
 		$this->input->set('view', $vName);
-
-		// Disable caching when a user
-		if ($user->id
-			// The list has a date
-			|| (($_SERVER['REQUEST_METHOD'] == 'POST' || $this->input->get('date-start') || $this->input->get('date-end')) && $vName === 'list')
-			// Or on ajax requests
-			|| $vName === 'events') {
-			$cachable = false;
-		}
 
 		$safeurlparams = [
 			'id'               => 'STRING',
@@ -51,6 +39,7 @@ class DisplayController extends BaseController implements CurrentUserInterface
 			throw new \Exception(Text::sprintf('JLIB_APPLICATION_ERROR_UNHELD_ID', $id), 403);
 		}
 
-		return parent::display($cachable, $safeurlparams);
+		// The views are not cacheable because the ids are stored in the params
+		return parent::display(false, $safeurlparams);
 	}
 }

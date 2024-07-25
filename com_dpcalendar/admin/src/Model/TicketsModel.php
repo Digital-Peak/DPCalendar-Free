@@ -205,7 +205,7 @@ class TicketsModel extends ListModel
 			$eventId = [$eventId];
 		}
 		if (is_array($eventId)) {
-			ArrayHelper::toInteger($eventId);
+			$eventId = ArrayHelper::toInteger($eventId);
 
 			// Also search in original events
 			$this->getDatabase()->setQuery(

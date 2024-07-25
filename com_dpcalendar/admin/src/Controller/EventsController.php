@@ -47,7 +47,7 @@ class EventsController extends AdminController implements CurrentUserInterface
 		];
 		$task  = $this->getTask();
 		$value = ArrayHelper::getValue($values, $task, 0, 'int');
-		ArrayHelper::toInteger($ids);
+		$ids   = ArrayHelper::toInteger($ids);
 
 		$model = $this->getModel('Events');
 		$model->setState('filter.ids', $ids);

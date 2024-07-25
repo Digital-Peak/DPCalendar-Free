@@ -50,12 +50,12 @@
 								DPCalendar.Map.createMarker(mapObject, locationData);
 							});
 						});
-						if (json.data.location && root.querySelector('.dp-input[name=radius]').value != -1) {
+						if (json.data.location && root.querySelector('.dp-input-select[name=radius]').value != -1) {
 							DPCalendar.Map.drawCircle(
 								mapObject,
 								json.data.location,
-								root.querySelector('.dp-input[name=radius]').value,
-								root.querySelector('.dp-input[name="length-type"]').value
+								root.querySelector('.dp-input-select[name=radius]').value,
+								root.querySelector('.dp-input-select[name="length-type"]').value
 							);
 						}
 					},
@@ -65,7 +65,7 @@
 				);
 			};
 			[].slice.call(document.querySelectorAll('.dp-search-map')).forEach((map) => {
-				[].slice.call(map.querySelectorAll('.dp-input, .dp-select:not(.dp-timezone__select)')).forEach((input) => {
+				[].slice.call(map.querySelectorAll('.dp-input-text, .dp-input-select:not(.dp-timezone__select)')).forEach((input) => {
 					input.addEventListener('change', (event) => {
 						event.preventDefault();
 						update(map);
@@ -119,9 +119,7 @@
 				if (button) {
 					button.addEventListener('click', (e) => {
 						e.preventDefault();
-						[].slice.call(map.querySelectorAll('.dp-input:not([name="Itemid"])')).forEach((input) => {
-							input.value = '';
-						});
+						[].slice.call(map.querySelectorAll('.dp-input-text:not([name="Itemid"])')).forEach((input) => input.value = '');
 						const radius = map.querySelector('[name=radius]');
 						radius.value = radius.getAttribute('data-default') ? radius.getAttribute('data-default') : 20;
 						const length = map.querySelector('[name=length-type]');

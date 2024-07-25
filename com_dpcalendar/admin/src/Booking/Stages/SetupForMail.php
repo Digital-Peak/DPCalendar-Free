@@ -9,6 +9,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
@@ -62,13 +63,14 @@ class SetupForMail implements StageInterface
 				Route::TLS_IGNORE,
 				true
 			),
-			'bookingUid'   => $payload->item->uid,
-			'sitename'     => $this->application->get('sitename'),
-			'user'         => $payload->item->name,
-			'tickets'      => $payload->tickets,
-			'countTickets' => $payload->tickets ? count($payload->tickets) : 0,
-			'acceptUrl'    => RouteHelper::getInviteChangeRoute($payload->item, true, true),
-			'declineUrl'   => RouteHelper::getInviteChangeRoute($payload->item, false, true)
+			'bookingUid'         => $payload->item->uid,
+			'bookingStatusLabel' => Booking::getStatusLabel($payload->item),
+			'sitename'           => $this->application->get('sitename'),
+			'user'               => $payload->item->name,
+			'tickets'            => $payload->tickets,
+			'countTickets'       => $payload->tickets ? count($payload->tickets) : 0,
+			'acceptUrl'          => RouteHelper::getInviteChangeRoute($payload->item, true, true),
+			'declineUrl'         => RouteHelper::getInviteChangeRoute($payload->item, false, true)
 		];
 
 		if (!empty($payload->item->jcfields)) {

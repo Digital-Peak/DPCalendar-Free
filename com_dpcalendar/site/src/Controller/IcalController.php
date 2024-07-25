@@ -10,7 +10,6 @@ namespace DigitalPeak\Component\DPCalendar\Site\Controller;
 defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Ical;
 use DigitalPeak\ThinHTTP\CurlClient;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Authentication\Authentication;

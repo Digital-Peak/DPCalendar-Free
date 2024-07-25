@@ -125,7 +125,7 @@ class TaxratesModel extends ListModel
 		if (!empty($search)) {
 			if (stripos((string)$search, 'ids:') === 0) {
 				$ids = explode(',', substr((string)$search, 4));
-				ArrayHelper::toInteger($ids);
+				$ids = ArrayHelper::toInteger($ids);
 				$query->where('a.id in (' . implode(',', $ids) . ')');
 			} elseif (stripos((string)$search, 'id:') === 0) {
 				$query->where('a.id = ' . (int)substr((string)$search, 3));

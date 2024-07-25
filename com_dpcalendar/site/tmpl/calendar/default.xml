@@ -257,10 +257,10 @@
 			<field name="first_hour" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_DESC"/>
-			<field name="min_time" type="text" useglobal="true"
+			<field name="min_time" type="text" useglobal="true" pattern="\d*\:?\d*"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-			<field name="max_time" type="text" useglobal="true"
+			<field name="max_time" type="text" useglobal="true" pattern="\d*\:?\d*"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 			<field name="current_time_indicator" type="list" useglobal="true"

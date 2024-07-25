@@ -222,7 +222,7 @@ class LocationTable extends BasicTable implements TaggableTableInterface, Versio
 		$k = $this->_tbl_key;
 
 		// Sanitize input.
-		ArrayHelper::toInteger($pks);
+		$pks    = ArrayHelper::toInteger($pks);
 		$userId = (int)$userId;
 		$state  = (int)$state;
 
@@ -255,7 +255,7 @@ class LocationTable extends BasicTable implements TaggableTableInterface, Versio
 		$this->getDatabase()->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in
-		if ($checkin && ((is_countable($pks) ? count($pks) : 0) == $this->getDatabase()->getAffectedRows())) {
+		if ($checkin && count($pks) === $this->getDatabase()->getAffectedRows()) {
 			// Checkin the rows
 			foreach ($pks as $pk) {
 				$this->checkin($pk);

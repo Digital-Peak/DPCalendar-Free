@@ -658,7 +658,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 
 	protected function prepareTable($table)
 	{
-		if (empty($table->state) && $this->canEditState($table)) {
+		if (empty($table->state) && $table->state != '0' && $this->canEditState($table)) {
 			$table->state = 1;
 		}
 

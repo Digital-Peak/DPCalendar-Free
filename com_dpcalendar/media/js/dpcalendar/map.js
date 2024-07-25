@@ -47,7 +47,10 @@
 		if (map == null || map.dpmap == null || map.dpmap.dpMarkers == null) {
 			return;
 		}
-		map.dpmap.dpMarkers.forEach((marker) => map.dpmap.dpMarkersCluster.removeLayer(marker));
+		map.dpmap.dpMarkers.forEach((marker) => {
+			map.dpmap.removeLayer(marker);
+			map.dpmap.dpMarkersCluster.removeLayer(marker);
+		});
 		map.dpmap.dpMarkers = [];
 		map.dpmap.dpCachedMarkers = [];
 		map.dpmap.dpBounds = new L.latLngBounds();

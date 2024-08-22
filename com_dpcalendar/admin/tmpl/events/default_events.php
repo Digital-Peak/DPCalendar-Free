@@ -35,6 +35,7 @@ $return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ACCESS', 'a.access', $listDirn, $listOrder); ?></th>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'JAUTHOR', 'a.created_by', $listDirn, $listOrder); ?></th>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'a.language', $listDirn, $listOrder); ?></th>
+			<th><?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_HITS', 'a.hits', $listDirn, $listOrder); ?></th>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE', 'original_title', $listDirn, $listOrder); ?></th>
 		</tr>
@@ -97,7 +98,7 @@ $return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 					<div><?php echo $this->dateHelper->transformRRuleToString($item->rrule ?: $item->original_rrule, $item->start_date); ?></div>
 				</td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_COLOR_LABEL'); ?>">
-					<?php $color = $item->color ?: \Joomla\CMS\Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($item->catid)->color; ?>
+					<?php $color = $item->color ?: $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($item->catid)->color; ?>
 					<div style="background: none repeat scroll 0 0 #<?php echo $color; ?>; color: #<?php echo DPCalendarHelper::getOppositeBWColor($color); ?>"
 						 class="dp-event__color">
 						<?php echo $this->escape($color); ?>
@@ -116,6 +117,7 @@ $return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 						<?php echo $item->language_title ? $this->escape($item->language_title) : $this->translate('JUNDEFINED'); ?>
 					<?php } ?>
 				</td>
+				<td data-column="<?php echo $this->translate('JGLOBAL_HITS'); ?>"><?php echo (int)$item->hits; ?></td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ID'); ?>"><?php echo (int)$item->id; ?></td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE'); ?>">
 					<?php if (($canEdit || $canEditOwn) && $item->original_title) {

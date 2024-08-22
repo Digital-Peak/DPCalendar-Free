@@ -61,7 +61,7 @@ class IcalModel extends BaseDatabaseModel
 	 * in the events data. If this is not the case the force flag will generate ical content of the available event
 	 * data, even when they are instances of a series.
 	 */
-	public function createIcalFromEvents(array $events, bool $asDownload = false, bool $forceEvents = false, EventsModel $eventsModel = null): string
+	public function createIcalFromEvents(array $events, bool $asDownload = false, bool $forceEvents = false, ?EventsModel $eventsModel = null): string
 	{
 		$text   = [];
 		$text[] = 'BEGIN:VCALENDAR';
@@ -132,7 +132,7 @@ class IcalModel extends BaseDatabaseModel
 		return str_replace(';', '\;', $newText);
 	}
 
-	private function addEventData(\stdClass|EventTable $event, EventsModel $eventsModel = null): array
+	private function addEventData(\stdClass|EventTable $event, ?EventsModel $eventsModel = null): array
 	{
 		$childsToAdd = [];
 		$text        = [];

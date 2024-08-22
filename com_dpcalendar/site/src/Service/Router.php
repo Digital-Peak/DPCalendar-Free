@@ -50,6 +50,7 @@ class Router extends RouterView
 		$this->registerView($event);
 
 		$form = new RouterViewConfiguration('form');
+		$form->setKey('calid');
 		$this->registerView($form);
 
 		$bookings = new RouterViewConfiguration('bookings');

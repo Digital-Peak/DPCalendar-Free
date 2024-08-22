@@ -32,7 +32,7 @@ class Booking
 	 * If to file is set, then the PDF will be written to a file and the file
 	 * name is returned. Otherwise it will be offered as download.
 	 */
-	public static function createReceipt(\stdClass $booking, array $tickets, Registry $params, bool $toFile = false, Language $language = null): ?string
+	public static function createReceipt(\stdClass $booking, array $tickets, Registry $params, bool $toFile = false, ?Language $language = null): ?string
 	{
 		try {
 			if ($language == null) {
@@ -138,7 +138,7 @@ class Booking
 	 * If to file is set, then the PDF will be written to a file and the file
 	 * name is returned. Otherwise it will be offered as download.
 	 */
-	public static function createCertificate(\stdClass $ticket, Registry $params, bool $toFile = false, \stdClass $booking = null): ?string
+	public static function createCertificate(\stdClass $ticket, Registry $params, bool $toFile = false, ?\stdClass $booking = null): ?string
 	{
 		try {
 			Factory::getApplication()->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');

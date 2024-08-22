@@ -220,7 +220,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 		$extCalendarTable->store();
 	}
 
-	public function onEventsFetch(string $calendarId, Date $startDate = null, Date $endDate = null, Registry $options = null): array
+	public function onEventsFetch(string $calendarId, ?Date $startDate = null, ?Date $endDate = null, ?Registry $options = null): array
 	{
 		if ($this->params->get('cache', 1) == 2) {
 			return [];

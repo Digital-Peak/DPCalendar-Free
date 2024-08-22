@@ -34,9 +34,10 @@ class EventController extends FormController implements CurrentUserInterface
 {
 	use CurrentUserTrait;
 
-	protected $view_item = 'form';
-	protected $view_list = 'calendar';
-	protected $option    = 'com_dpcalendar';
+	protected $view_item         = 'form';
+	protected $view_list         = 'calendar';
+	protected $option            = 'com_dpcalendar';
+	private string $editCalendar = '';
 
 	public function add(): bool
 	{
@@ -201,7 +202,13 @@ class EventController extends FormController implements CurrentUserInterface
 
 			return false;
 		}
-		if ($this->getModel()->getItem($recordId) != null && !is_numeric($recordId)) {
+
+		$event = $this->getModel()->getItem($recordId);
+		if ($event instanceof \stdClass) {
+			$this->editCalendar = $event->catid;
+		}
+
+		if ($event !== null && !is_numeric($recordId)) {
 			$values = (array)$this->app->getUserState($context . '.id');
 
 			$values[] = $recordId;
@@ -222,7 +229,10 @@ class EventController extends FormController implements CurrentUserInterface
 			return true;
 		}
 
-		return parent::edit($key, $urlVar);
+		$success            = parent::edit($key, $urlVar);
+		$this->editCalendar = '';
+
+		return $success;
 	}
 
 	public function getModel($name = 'Form', $prefix = 'Site', $config = ['ignore_request' => true])
@@ -247,6 +257,10 @@ class EventController extends FormController implements CurrentUserInterface
 
 		if ($return !== '' && $return !== '0') {
 			$append .= '&return=' . base64_encode($return);
+		}
+
+		if ($this->editCalendar !== '' && $this->editCalendar !== '0') {
+			$append .= '&calid=' . $this->editCalendar;
 		}
 
 		return $append . $hash;

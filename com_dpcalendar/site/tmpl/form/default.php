@@ -60,6 +60,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->
 		<?php } ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<input type="hidden" name="return" value="<?php echo $this->returnPage; ?>" class="dp-input dp-input-hidden">
+		<input type="hidden" name="Itemid" value="<?php echo $this->input->getInt('Itemid'); ?>" class="dp-input dp-input-hidden">
 		<input type="hidden" name="tmpl" value="<?php echo $this->input->get('tmpl'); ?>" class="dp-input dp-input-hidden">
 		<input type="hidden" name="urlhash" value="<?php echo $this->input->getString('urlhash', ''); ?>" class="dp-input dp-input-hidden">
 		<input type="hidden" name="template_event_id" class="dp-input dp-input-hidden">

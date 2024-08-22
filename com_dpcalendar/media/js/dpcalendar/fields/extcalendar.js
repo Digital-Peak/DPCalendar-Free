@@ -7,7 +7,7 @@
 	'use strict';
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/iframe-resizer/iframeresizer.js'], () => {
-			iFrameResize({ log: false });
+			iFrameResize({ log: false, license: 'GPLv3' });
 		});
 	});
 })();

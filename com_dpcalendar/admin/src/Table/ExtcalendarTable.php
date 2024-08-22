@@ -181,7 +181,7 @@ class ExtcalendarTable extends BasicTable
 		return 'com_dpcalendar.extcalendar.' . (int)$this->$k;
 	}
 
-	protected function _getAssetParentId(Table $table = null, $id = null)
+	protected function _getAssetParentId(?Table $table = null, $id = null)
 	{
 		$asset = new Asset($this->getDbo());
 		$asset->loadByName('com_dpcalendar');
@@ -258,7 +258,7 @@ class ExtcalendarTable extends BasicTable
 			$this->metakey = implode(", ", $clean_keys);
 		}
 
-		$this->color = str_replace('#', '', $this->color);
+		$this->color = str_replace('#', '', (string)$this->color);
 
 		return true;
 	}

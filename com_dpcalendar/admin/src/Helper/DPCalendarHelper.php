@@ -12,7 +12,6 @@ defined('_JEXEC') or die();
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\Access\Access;
-use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
@@ -177,30 +176,10 @@ class DPCalendarHelper
 
 	public static function getDate(mixed $date = null, ?bool $allDay = false, ?string $tz = null): Date
 	{
-		$dateObj = $date instanceof Date ? clone $date : Factory::getDate($date ?? '', $tz);
-		if ($allDay === true) {
-			return $dateObj;
-		}
-
-		$app = Factory::getApplication();
-
-		$timezone = $app->get('offset');
-		$user     = $app->getIdentity();
-		if ($user && $user->id !== 0) {
-			$userTimezone = $user->getParam('timezone');
-			if (!empty($userTimezone)) {
-				$timezone = $userTimezone;
-			}
-		}
-
-		if ($timezone && $app instanceof CMSWebApplicationInterface) {
-			$dateObj->setTimezone(new \DateTimeZone($app->getSession()->get('DPCalendar.user-timezone', $timezone)));
-		}
-
-		return $dateObj;
+		return (new DateHelper())->getDate($date, $allDay, $tz);
 	}
 
-	public static function getDateFromString(mixed $date, ?string $time, bool $allDay, string $dateFormat = null, string $timeFormat = null): Date
+	public static function getDateFromString(mixed $date, ?string $time, bool $allDay, ?string $dateFormat = null, ?string $timeFormat = null): Date
 	{
 		$string = $date;
 		if ($time !== null && $time !== '' && $time !== '0') {
@@ -277,26 +256,9 @@ class DPCalendarHelper
 		return self::getDate($date->format('U'), $allDay);
 	}
 
-	/**
-	 * @param \stdClass $event
-	 */
-	public static function getDateStringFromEvent($event, string $dateFormat = null, string $timeFormat = null, bool $noTags = false): string
+	public static function getDateStringFromEvent(\stdClass $event, ?string $dateFormat = null, ?string $timeFormat = null, bool $noTags = false): string
 	{
-		$text = LayoutHelper::render(
-			'event.datestring',
-			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat],
-			'',
-			['component' => 'com_dpcalendar', 'client' => 0]
-		);
-
-		if (!$noTags) {
-			return $text;
-		}
-
-		$text = strip_tags($text);
-		$text = preg_replace("/\s\s+/", ' ', $text);
-
-		return trim((string)$text);
+		return (new DateHelper())->getDateStringFromEvent($event, $dateFormat, $timeFormat, $noTags);
 	}
 
 	public static function dateStringToDatepickerFormat(string $dateString): string
@@ -333,7 +295,7 @@ class DPCalendarHelper
 		return preg_replace($pattern, $replace, $dateString) !== '' && preg_replace($pattern, $replace, $dateString) !== '0' && preg_replace($pattern, $replace, $dateString) !== [] ? preg_replace($pattern, $replace, $dateString) : '';
 	}
 
-	public static function renderEvents(array $events = null, string $output = '', ?Registry $params = null, array $eventParams = []): string
+	public static function renderEvents(?array $events = null, string $output = '', ?Registry $params = null, array $eventParams = []): string
 	{
 		if ($events === null) {
 			$events = [];
@@ -490,7 +452,7 @@ class DPCalendarHelper
 			if (!empty($event->created_by_alias)) {
 				$variables['author'] = $event->created_by_alias;
 			}
-			$variables['avatar'] = self::getAvatar($author->id, $author->email ?: '', $params);
+			$variables['avatar'] = self::getAvatar($author->id ?: 0, $author->email ?: '', $params);
 
 			$variables['capacity']          = $event->capacity == null ? Text::_('COM_DPCALENDAR_FIELD_CAPACITY_UNLIMITED') : $event->capacity;
 			$variables['capacityUsed']      = $event->capacity_used;
@@ -500,7 +462,7 @@ class DPCalendarHelper
 					if ($booking->user_id < 1) {
 						continue;
 					}
-					$booking->avatar = self::getAvatar($booking->id, $booking->email, $params);
+					$booking->avatar = self::getAvatar($booking->user_id, $booking->email, $params);
 				}
 				$variables['bookings'] = $event->bookings;
 			}
@@ -578,7 +540,7 @@ class DPCalendarHelper
 		return '';
 	}
 
-	public static function renderPrice(string $price = '', string $currencySymbol = null, string $separator = null, string $thousandSeparator = null): string
+	public static function renderPrice(string $price = '', ?string $currencySymbol = null, ?string $separator = null, ?string $thousandSeparator = null): string
 	{
 		if ($price === '') {
 			return $price;
@@ -614,6 +576,10 @@ class DPCalendarHelper
 
 	public static function getAvatar(int $userId, string $email, Registry $params): string
 	{
+		if ($userId === 0) {
+			return '';
+		}
+
 		$image          = null;
 		$avatarProvider = $params->get('avatar', 1);
 		if ($avatarProvider == 2) {
@@ -640,30 +606,33 @@ class DPCalendarHelper
 				$image = selectTemplate() . 'images/avatar/tnnophoto_n.png';
 			}
 		}
+
 		if (($avatarProvider == 1 || $avatarProvider == 3) && file_exists($jomsocial)) {
 			include_once $jomsocial;
 			$image = \CFactory::getUser($userId)->getThumbAvatar();
 		}
+
 		if (($avatarProvider == 1 || $avatarProvider == 5) && file_exists($easy)) {
 			// @phpstan-ignore-next-line
 			$image = \Foundry::user($userId)->getAvatar();
 		}
-		if ($image != null) {
-			$w = $params->get('avatar_width', 0);
-			$h = $params->get('avatar_height', 0);
-			if ($w != 0) {
-				$w = 'width="' . $w . '"';
-			} elseif ($h == 0) {
-				$w = 'width="80"';
-			} else {
-				$w = '';
-			}
-			$h = $h != 0 ? 'height="' . $h . '"' : '';
 
-			return '<img src="' . $image . '" ' . $w . ' ' . $h . ' loading="lazy"/>';
+		if ($image === null) {
+			return '';
 		}
 
-		return '';
+		$w = $params->get('avatar_width', 0);
+		$h = $params->get('avatar_height', 0);
+		if ($w != 0) {
+			$w = 'width="' . $w . '"';
+		} elseif ($h == 0) {
+			$w = 'width="80"';
+		} else {
+			$w = '';
+		}
+		$h = $h != 0 ? 'height="' . $h . '"' : '';
+
+		return '<img src="' . $image . '" ' . $w . ' ' . $h . ' loading="lazy"/>';
 	}
 
 	public static function getGoogleLanguage(): string
@@ -795,7 +764,7 @@ class DPCalendarHelper
 	 * Sends a mail to all users of the given component parameter groups.
 	 * The user objects are returned where a mail is sent to.
 	 */
-	public static function sendMail(string $subject, string $message, string $parameter, array $additionalGroups = [], string $fromMail = null): array
+	public static function sendMail(string $subject, string $message, string $parameter, array $additionalGroups = [], ?string $fromMail = null): array
 	{
 		$groups = self::getComponentParameter($parameter);
 

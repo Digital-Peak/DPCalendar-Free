@@ -27,7 +27,7 @@ class ExtcalendarField extends FormField
 			return '';
 		}
 
-		$app->getSession()->set('DPCalendar.extcalendarOrigin', Uri::getInstance()->toString());
+		$app->getSession()->set('com_dpcalendar.extcalendar.origin', Uri::getInstance()->toString());
 
 		(new HtmlDocument())->loadScriptFile('dpcalendar/fields/extcalendar.js');
 		$app->getDocument()->getWebAssetManager()->addInlineStyle('#general .controls {margin-left: 0} #general .control-label {width: 0}');

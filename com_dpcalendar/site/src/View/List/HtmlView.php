@@ -342,28 +342,26 @@ class HtmlView extends BaseView
 			// Truncate the description and add read more
 			$desc = $this->params->get('list_description_length', null) != '0' ? HTMLHelper::_('content.prepare', $event->description) : '';
 			if (!$event->introText && $desc && $this->params->get('list_description_length', null) !== null) {
-				$descTruncated = StringHelper::truncateComplex($desc, $this->params->get('list_description_length', null));
+				$event->introText = StringHelper::truncateComplex($desc, $this->params->get('list_description_length', null));
 
 				// Move the dots inside the last tag
-				if (DPCalendarHelper::endsWith($descTruncated, '...') && $pos = strrpos($descTruncated, '</')) {
-					$descTruncated = trim(substr_replace($descTruncated, '...</', $pos, 2), '.');
+				if (DPCalendarHelper::endsWith($event->introText, '...') && $pos = strrpos($event->introText, '</')) {
+					$event->introText = trim(substr_replace($event->introText, '...</', $pos, 2), '.');
 				}
+			}
 
-				if ($desc != $descTruncated) {
-					$event->alternative_readmore = Text::_('COM_DPCALENDAR_READ_MORE');
+			if ($event->introText) {
+				$event->alternative_readmore = Text::_('COM_DPCALENDAR_READ_MORE');
 
-					// Meta data is handled differently
-					$desc = str_replace('itemprop="url"', '', (string)$this->layoutHelper->renderLayout(
-						'joomla.content.readmore',
-						[
-							'item'   => $event,
-							'params' => new Registry(['access-view' => true]),
-							'link'   => $this->router->getEventRoute($event->id, $event->catid)
-						]
-					));
-
-					$desc = $descTruncated . $desc;
-				}
+				// Meta data is handled differently
+				$event->introText .= str_replace('itemprop="url"', '', (string)$this->layoutHelper->renderLayout(
+					'joomla.content.readmore',
+					[
+						'item'   => $event,
+						'params' => new Registry(['access-view' => true]),
+						'link'   => $this->router->getEventRoute($event->id, $event->catid)
+					]
+				));
 			}
 
 			$event->truncatedDescription = $event->introText ?: $desc;

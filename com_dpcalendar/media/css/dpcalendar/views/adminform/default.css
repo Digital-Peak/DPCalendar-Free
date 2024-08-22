@@ -18,30 +18,30 @@
 }
 .com-dpcalendar-adminform .dp-form-radio input[type=radio]:empty + label {
 	position: relative;
+	margin-right: 0.5rem;
+	cursor: pointer;
 	float: left;
 	line-height: 2em;
 	text-indent: 3em;
-	cursor: pointer;
 	user-select: none;
-	margin-right: 0.5rem;
 }
 .com-dpcalendar-adminform .dp-form-radio input[type=radio]:empty + label::before {
-	position: absolute;
 	display: block;
+	position: absolute;
 	top: 0;
 	bottom: 0;
 	left: 0;
-	content: "";
 	width: 2.5em;
+	content: "";
 	background: #D1D3D4;
 	border-radius: 3px 0 0 3px;
 }
 .com-dpcalendar-adminform .dp-form-radio input[type=radio]:checked + label::before {
-	content: "✔";
-	text-indent: 0.9em;
+	background-color: #46a546;
 	/* stylelint-disable-next-line scss/no-global-function-names */
 	color: #cdeacd;
-	background-color: #46a546;
+	content: "✔";
+	text-indent: 0.9em;
 }
 .com-dpcalendar-adminform .dp-form-radio input[type=radio]:focus ~ label::before {
 	box-shadow: 0 0 0 3px #999;
@@ -64,23 +64,6 @@
 	width: 100%;
 	min-height: 28px;
 	box-sizing: border-box;
-}
-.com-dpcalendar-adminform .dp-control, .com-dpcalendar-adminform .control-group {
-	display: flex;
-	margin-bottom: 5px;
-}
-.com-dpcalendar-adminform .dp-control__label, .com-dpcalendar-adminform .control-group .control-label,
-.com-dpcalendar-adminform .control-group .form-label {
-	flex: 0 0 20%;
-	padding-top: 5px;
-	text-align: left;
-}
-.com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls,
-.com-dpcalendar-adminform .control-group .form-control {
-	flex: 1 1 80%;
-}
-.com-dpcalendar-adminform .dp-control_hidden {
-	display: none;
 }
 @media screen and (width <= 640px) {
 	.com-dpcalendar-adminform .dp-control, .com-dpcalendar-adminform .control-group {
@@ -106,37 +89,54 @@
 		margin-left: 0;
 	}
 }
+.com-dpcalendar-adminform .dp-control, .com-dpcalendar-adminform .control-group {
+	display: flex;
+	margin-bottom: 5px;
+}
+.com-dpcalendar-adminform .dp-control__label, .com-dpcalendar-adminform .control-group .control-label,
+.com-dpcalendar-adminform .control-group .form-label {
+	flex: 0 0 20%;
+	padding-top: 5px;
+	text-align: left;
+}
+.com-dpcalendar-adminform .dp-control__input, .com-dpcalendar-adminform .control-group .controls,
+.com-dpcalendar-adminform .control-group .form-control {
+	flex: 1 1 80%;
+}
+.com-dpcalendar-adminform .dp-control_hidden {
+	display: none;
+}
 .com-dpcalendar-adminform .dp-select {
 	width: 100%;
 	border: 1px solid #ccc;
 }
 .com-dpcalendar-adminform .dp-select-element {
-	border: 0 !important;
-	clip: rect(0 0 0 0) !important;
-	clip-path: inset(50%) !important;
+	position: absolute !important;
+	width: 1px !important;
 	height: 1px !important;
 	overflow: hidden !important;
 	padding: 0 !important;
-	position: absolute !important;
+	border: 0 !important;
 	white-space: nowrap !important;
-	width: 1px !important;
+	clip: rect(0 0 0 0) !important;
+	clip-path: inset(50%) !important;
 }
 .com-dpcalendar-adminform .dp-select-container {
-	width: 100%;
 	position: relative;
+	width: 100%;
 }
 .com-dpcalendar-adminform .dp-select-container__options {
-	background: #fff;
-	border-radius: 4px;
-	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
+	z-index: 10001;
+	width: 100%;
 	max-height: 300px;
-	opacity: 0;
 	overflow: hidden scroll;
 	padding: 0;
+	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
+	background: #fff;
+	border-radius: 4px;
+	opacity: 0;
 	pointer-events: none;
 	transition: 300ms ease-in-out;
-	width: 100%;
-	z-index: 10001;
 }
 .com-dpcalendar-adminform .dp-select-container__options.open {
 	opacity: 1;
@@ -153,24 +153,24 @@
 .com-dpcalendar-adminform .dp-select-container_unstyled, .com-dpcalendar-adminform .dp-select-container__input_unstyled {
 	display: block;
 	width: 100%;
-	cursor: pointer;
+	padding: 0.2rem;
 	border: 1px solid #ced4da;
 	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
-	padding: 0.2rem;
+	box-sizing: border-box;
+	cursor: pointer;
 	border-radius: 0.25rem;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	appearance: none;
-	box-sizing: border-box;
 }
 .com-dpcalendar-adminform .dp-select-input {
 	display: inline-block !important;
 	width: 1ch;
-	box-sizing: content-box !important;
 	margin: 0 !important;
 	padding: 0 !important;
-	outline: none !important;
 	border: 0 !important;
 	box-shadow: none !important;
+	box-sizing: content-box !important;
+	outline: none !important;
 }
 .com-dpcalendar-adminform .dp-select-input:disabled {
 	cursor: not-allowed;
@@ -187,10 +187,10 @@
 }
 .com-dpcalendar-adminform .dp-select-option-group__label {
 	display: block;
-	font-weight: bold;
 	margin: 0.2rem 0;
 	padding: 0.2rem 0.5rem;
 	border-bottom: 1px solid #cecece;
+	font-weight: bold;
 }
 .com-dpcalendar-adminform .dp-select-option[data-selected=true], .com-dpcalendar-adminform .dp-select-option:hover {
 	background: #ddd;

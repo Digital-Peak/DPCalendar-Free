@@ -31,10 +31,10 @@ class LocationformController extends LocationController implements CurrentUserIn
 
 	public function __construct(
 		$config = [],
-		MVCFactoryInterface $factory = null,
+		?MVCFactoryInterface $factory = null,
 		?CMSApplication $app = null,
 		?Input $input = null,
-		FormFactoryInterface $formFactory = null
+		?FormFactoryInterface $formFactory = null
 	) {
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/forms');
 		parent::__construct($config, $factory, $app, $input, $formFactory);

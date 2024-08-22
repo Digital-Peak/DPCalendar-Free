@@ -6,8 +6,8 @@
 }
 .plg-content-dpcalendar-contact-events .dp-list > li,
 .plg-content-dpcalendar-user-events .dp-list > li {
-	border-bottom: 1px solid rgb(221, 221, 221);
 	padding: 1em;
+	border-bottom: 1px solid rgb(221, 221, 221);
 }
 .plg-content-dpcalendar-contact-events .dp-list > li:first-child,
 .plg-content-dpcalendar-user-events .dp-list > li:first-child {

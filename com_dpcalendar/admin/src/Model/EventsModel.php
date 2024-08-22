@@ -24,7 +24,7 @@ use Joomla\Utilities\ArrayHelper;
 
 class EventsModel extends ListModel
 {
-	public function __construct($config = [], MVCFactoryInterface $factory = null)
+	public function __construct($config = [], ?MVCFactoryInterface $factory = null)
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = [
@@ -80,6 +80,8 @@ class EventsModel extends ListModel
 
 	protected function populateState($ordering = null, $direction = null)
 	{
+		$app = Factory::getApplication();
+
 		// Load the filter state.
 		$search = $this->getUserStateFromRequest($this->context . '.filter.search', 'filter_search');
 		$this->setState('filter.search', $search);
@@ -96,7 +98,8 @@ class EventsModel extends ListModel
 		$published = $this->getUserStateFromRequest($this->context . '.filter.state', 'filter_published', '');
 		$this->setState('filter.state', $published);
 
-		$calendars = $this->getUserStateFromRequest($this->context . '.filter.calendars', 'filter_calendars');
+		$filter    = $app->getInput()->get('filter', []);
+		$calendars = $this->getUserStateFromRequest($this->context . '.filter.calendars', 'filter_calendars', $filter['category_id'] ?? null);
 		$this->setState('filter.calendars', $calendars);
 
 		$level = $this->getUserStateFromRequest($this->context . '.filter.level', 'filter_level');
@@ -108,15 +111,14 @@ class EventsModel extends ListModel
 		$tag = $this->getUserStateFromRequest($this->context . '.filter.tag', 'filter_tag', '');
 		$this->setState('filter.tag', $tag);
 
-		// Load the parameters.
-		$app = Factory::getApplication();
+		// Load the parameters
 		$this->setState('params', $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
-		// List state information.
+		// List state information
 		parent::populateState('a.start_date', 'asc');
 
 		$format          = DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y');
-		$listRequestData = $this->getUserStateFromRequest($this->context . 'list', 'list', null, 'array');
+		$listRequestData = $this->getUserStateFromRequest($this->context . 'list', 'list', null, 'array', false);
 		if (empty($listRequestData)) {
 			$listRequestData = [];
 		}
@@ -430,6 +432,11 @@ class EventsModel extends ListModel
 			if (!empty($data->filter['published'])) {
 				$data->filter['state'] = $data->filter['published'];
 			}
+
+			if (!empty($data->filter['category_id']) && empty($data->filter['calendars'])) {
+				$data->filter['calendars'] = $data->filter['category_id'];
+			}
+
 			if (!empty($data->filter['calendars'])) {
 				$data->filter['cat_id'] = is_array($data->filter['calendars']) ? reset($data->filter['calendars']) : $data->filter['calendars'];
 			}

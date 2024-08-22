@@ -90,7 +90,7 @@ class JsonapiView extends BaseApiView
 		parent::__construct($config);
 	}
 
-	public function displayList(array $items = null)
+	public function displayList(?array $items = null)
 	{
 		foreach (FieldsHelper::getFields('com_dpcalendar.location') as $field) {
 			$this->fieldsToRenderList[] = $field->id;

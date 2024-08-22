@@ -13,7 +13,6 @@ use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Site\Service\Router;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Component\Router\Rules\MenuRules;
-use Joomla\CMS\Factory;
 
 class DPCalendarRules extends MenuRules
 {
@@ -51,6 +50,7 @@ class DPCalendarRules extends MenuRules
 
 		// Special treatment for events and locations
 		$this->processForEvent($query);
+		$this->processForEventForm($query);
 		$this->processForLocation($query);
 	}
 
@@ -72,7 +72,9 @@ class DPCalendarRules extends MenuRules
 			$menuItems = [$menuItems];
 		}
 
-		// As the ids of the calendar are in the params we need to assign them as calendar ids to the lookup
+		$model = $this->router->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator');
+
+		// As the calendar ids are in the params we need to assign them as calendar ids to the lookup
 		foreach ($menuItems as $menuItem) {
 			// Get the calendar ids form the menu item
 			$ids = $menuItem->getParams()->get('ids');
@@ -88,7 +90,39 @@ class DPCalendarRules extends MenuRules
 					continue;
 				}
 
-				$cal = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($id);
+				$cal = $model->getCalendar($id);
+				if (!$cal instanceof CalendarInterface) {
+					continue;
+				}
+
+				foreach ($cal->getChildren(true) as $child) {
+					$this->lookup[$language][$menuItem->query['view']][$child->getId()] = $menuItem->id;
+				}
+			}
+		}
+
+		// As the calendar ids are in the params we need to assign them as calendar ids to the lookup for the event forms
+		foreach ($menuItems as $menuItem) {
+			if ($menuItem->query['view'] !== 'form') {
+				continue;
+			}
+
+			// Get the calendar ids form the menu item
+			$ids = $menuItem->getParams()->get('event_form_calendars');
+			if (!$ids) {
+				$this->lookup[$language][$menuItem->query['view']][-1] = $menuItem->id;
+				continue;
+			}
+
+			if (!is_array($this->lookup[$language][$menuItem->query['view']])) {
+				$this->lookup[$language][$menuItem->query['view']] = (array)$this->lookup[$language][$menuItem->query['view']];
+			}
+
+			// Assign the menu item to the lookup
+			foreach ($ids as $id) {
+				$this->lookup[$language][$menuItem->query['view']][$id] = $menuItem->id;
+
+				$cal = $model->getCalendar($id);
 				if (!$cal instanceof CalendarInterface) {
 					continue;
 				}
@@ -164,7 +198,8 @@ class DPCalendarRules extends MenuRules
 		}
 
 		// Get the calendar
-		$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($query['calid']);
+		$calendar = $this->router->app->bootComponent('dpcalendar')
+			->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($query['calid']);
 		if (!$calendar instanceof CalendarInterface) {
 			return;
 		}
@@ -190,7 +225,7 @@ class DPCalendarRules extends MenuRules
 			foreach ($active->getParams()->get('ids', []) as $selectedCalendar) {
 				$selectedCalendars[] = $selectedCalendar;
 
-				$cal = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($selectedCalendar);
+				$cal = $this->router->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($selectedCalendar);
 				if (!$cal instanceof CalendarInterface) {
 					continue;
 				}
@@ -221,5 +256,32 @@ class DPCalendarRules extends MenuRules
 
 		// Unset the item id, the router creates then global urls
 		unset($query['Itemid']);
+	}
+
+	private function processForEventForm(array &$query): void
+	{
+		// Do nothing when the query is not for an event form
+		if (empty($query['view']) || $query['view'] !== 'form') {
+			return;
+		}
+
+		// Loop over the menu items
+		foreach ($this->lookup as $items) {
+			$id = empty($query['calid']) ? 0 : $query['calid'];
+
+			// If the location exists in a location menu item, do nothing
+			if (!empty($items['form']) && array_key_exists($id, $items['form'])) {
+				$query['Itemid'] = $items['form'][$id];
+
+				return;
+			}
+
+			// Search in the lookup for a passable menu item
+			if (!empty($items['form']) && array_key_exists(-1, $items['form'])) {
+				$query['Itemid'] = $items['form'][-1];
+
+				return;
+			}
+		}
 	}
 }

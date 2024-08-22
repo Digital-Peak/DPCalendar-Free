@@ -15,7 +15,6 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\Application\CMSApplicationInterface;
-use Joomla\CMS\Router\Route;
 use Joomla\Registry\Registry;
 use League\Pipeline\StageInterface;
 
@@ -52,17 +51,10 @@ class SetupForMail implements StageInterface
 		$format                             = $params->get('event_date_format', 'd.m.Y') . ' ' . $params->get('event_time_format', 'H:i');
 		$payload->item->book_date_formatted = DPCalendarHelper::getDate($payload->item->book_date)->format($format, true);
 		$payload->mailVariables             = [
-			'booking'           => $payload->item,
-			'bookingDetails'    => $details,
-			'bookingLink'       => RouteHelper::getBookingRoute($payload->item, true),
-			'bookingCancelLink' => Route::link(
-				'site',
-				'index.php?option=com_dpcalendar&task=booking.cancel&b_id=' . $payload->item->id
-					. ($payload->item->token ? '&token=' . $payload->item->token : ''),
-				false,
-				Route::TLS_IGNORE,
-				true
-			),
+			'booking'            => $payload->item,
+			'bookingDetails'     => $details,
+			'bookingLink'        => RouteHelper::getBookingRoute($payload->item, true),
+			'bookingCancelLink'  => RouteHelper::getBookingRoute($payload->item, true) . '&action=cancel',
 			'bookingUid'         => $payload->item->uid,
 			'bookingStatusLabel' => Booking::getStatusLabel($payload->item),
 			'sitename'           => $this->application->get('sitename'),

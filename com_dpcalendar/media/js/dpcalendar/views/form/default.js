@@ -434,11 +434,12 @@
 				document.querySelector('input[name=template_event_id]').value = e.detail.value;
 				Joomla.submitbutton('event.reloadfromevent');
 			});
+			let id = document.querySelector('.com-dpcalendar-eventform__form input[name="Itemid"]');
 			const url = new Url();
 			titleInput.addEventListener('dp-autocomplete-change', () => {
 				loadDPAssets(['/com_dpcalendar/js/dpcalendar/dpcalendar.js'], () => {
 					DPCalendar.request(
-						'task=event.similar',
+						'task=event.similar' + (id ? '&Itemid=' + id.value : ''),
 						(json) => DPCalendar.autocomplete.setItems(titleInput, json.data),
 						DPCalendar.formToQueryString(document.querySelector('.com-dpcalendar-eventform__form'), 'input:not([name=task]), select') + '&id=' + url.query.e_id
 					);

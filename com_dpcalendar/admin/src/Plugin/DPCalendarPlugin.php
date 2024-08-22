@@ -154,7 +154,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 	 * events need to be.
 	 * - length-type: The length type in kilometers or miles
 	 */
-	public function fetchEvents(string $calendarId, Registry $options, Date $startDate = null, Date $endDate = null): array
+	public function fetchEvents(string $calendarId, Registry $options, ?Date $startDate = null, ?Date $endDate = null): array
 	{
 		$s = $startDate;
 		if ($s instanceof Date) {
@@ -268,11 +268,11 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			}
 
 			// Ignore event when event start date is after end date
-			if (!$options->get('expand', true) && $tmpEvent->rrule === null && $tmpEvent->start_date > $endSQLDate) {
+			if (!$options->get('expand', true) && $tmpEvent->start_date > $endSQLDate) {
 				continue;
 			}
 
-			// Ignore event when event end date is before start date
+			// Ignore event when event end date is before start date and no recurring series
 			if (!$options->get('expand', true) && $tmpEvent->rrule === null && $tmpEvent->end_date < $startSQLDate) {
 				continue;
 			}
@@ -291,11 +291,49 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 				if (isset($parts['UNTIL'])) {
 					$parts['UNTIL'] = substr((string)$parts['UNTIL'], 0, 8);
 				}
+
+				// Load the rrule
 				$rule->loadFromArray($parts);
 
-				$transformer = new ArrayTransformer();
-				$result      = $transformer->transform($rule)->startsBetween($startDate, $endDate, true)->toArray();
-				if ($result === []) {
+				// Create the transformer
+				$transformer = (new ArrayTransformer())->transform($rule);
+
+				// Flag if the rule contains an overlapping instance
+				$overlaps = false;
+
+				// Flag to indicate if there is an instance before the range
+				$before = false;
+
+				// Loop over the instances of the transformer
+				foreach ($transformer->toArray() as $recurrence) {
+					// The dates
+					$start = $recurrence->getStart();
+					$end   = $recurrence->getEnd();
+
+					// Check between the range
+					if ($start <= $endDate && $end >= $startDate) {
+						$overlaps = true;
+						break;
+					}
+
+					// Set the before flag
+					if ($start < $startDate && $end < $startDate) {
+						$before = true;
+					}
+
+					// When the instance is after and there was one before, set the overlaps flag
+					if ($start > $startDate && $end > $startDate && $before) {
+						$overlaps = true;
+						break;
+					}
+				}
+
+				$app = $this->getApplication();
+				if (!$overlaps && $transformer->count() >= 731 && $app instanceof CMSApplicationInterface) {
+					$app->enqueueMessage('The event "' . $tmpEvent->title . '" could not be imported as the recurrence rule range was too big and not all instances could be checked if they are within the date range. Define the recurring rule closer to the import date range and try again.');
+				}
+
+				if (!$overlaps) {
 					continue;
 				}
 			}
@@ -373,7 +411,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		return $calendars;
 	}
 
-	protected function getContent(string $calendarId, Date $startDate = null, Date $endDate = null, Registry $options = null): string
+	protected function getContent(string $calendarId, ?Date $startDate = null, ?Date $endDate = null, ?Registry $options = null): string
 	{
 		$calendar = $this->getDbCal($calendarId);
 		if (!$calendar instanceof ExternalCalendarInterface) {
@@ -463,7 +501,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		}
 	}
 
-	public function onEventsFetch(string $calendarId, Date $startDate = null, Date $endDate = null, Registry $options = null): array
+	public function onEventsFetch(string $calendarId, ?Date $startDate = null, ?Date $endDate = null, ?Registry $options = null): array
 	{
 		if ($calendarId && !str_starts_with($calendarId, $this->identifier)) {
 			return [];
@@ -733,7 +771,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		$event->recurrence_id                     = null;
 		$event->start_date                        = '';
 		$event->end_date                          = '';
-		$event->show_end_time                     = true;
+		$event->show_end_time                     = 1;
 		$event->all_day                           = 0;
 		$event->color                             = '';
 		$event->url                               = '';
@@ -818,7 +856,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 				$original = $tmp;
 
 				if ($event->{'RECURRENCE-ID'} === null
-					&& $start->getDateTime()->format('U') == (string)$original->DTSTART->getDateTime()->format('U')
+					&& $start->getDateTime()->format('U') === (string)$original->DTSTART->getDateTime()->format('U')
 					&& $event->RRULE === null) {
 					$event->add('RECURRENCE-ID', (string)$start);
 					// @phpstan-ignore-next-line
@@ -986,7 +1024,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		$showEndTime = $event->{'x-show-end-time'};
 		if ($showEndTime) {
-			$tmpEvent->show_end_time = (string)$showEndTime !== '0';
+			$tmpEvent->show_end_time = (string)$showEndTime !== '0' ? 1 : 0;
 		}
 
 		if ($event->ATTACH) {
@@ -1096,8 +1134,8 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		}
 
 		$locationFilterData            = new \stdClass();
-		$locationFilterData->latitude  = null;
-		$locationFilterData->longitude = null;
+		$locationFilterData->latitude  = 0;
+		$locationFilterData->longitude = 0;
 
 		if ($location instanceof \stdClass) {
 			$locationFilterData = $location;
@@ -1108,19 +1146,21 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			$radius *= 0.62137119;
 		}
 
+		$model = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator');
+
 		if (!$locationFilterData->latitude
 			&& is_string($location) && str_contains($location, 'latitude=') && str_contains($location, 'longitude=')) {
 			[$latitude, $longitude]        = explode(';', $location);
 			$locationFilterData->latitude  = str_replace('latitude=', '', $latitude);
 			$locationFilterData->longitude = str_replace('longitude=', '', $longitude);
 		} elseif (!$locationFilterData->latitude && !empty($location) && is_string($location)) {
-			$locationFilterData = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location);
+			$locationFilterData = $model->getLocation($location);
 		}
 
 		$within = false;
 		foreach ($event->locations as $loc) {
 			if (!in_array($loc->id, $locationIds)
-				&& !$this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->within($loc, $locationFilterData->latitude, $locationFilterData->longitude, $radius)) {
+				&& !$model->within($loc, $locationFilterData->latitude, $locationFilterData->longitude, $radius)) {
 				continue;
 			}
 			$within = true;

@@ -15,7 +15,7 @@ class Translator
 {
 	private readonly Language $language;
 
-	public function __construct(Language $language = null)
+	public function __construct(?Language $language = null)
 	{
 		if (!$language instanceof Language) {
 			$language = Factory::getApplication()->getLanguage();

@@ -78,6 +78,9 @@
 		if (toggleBoxes) {
 			toggleBoxes.addEventListener('click', () => {
 				calendars.forEach((input) => {
+					if (input.checked === toggleBoxes.checked) {
+						return;
+					}
 					input.checked = !toggleBoxes.checked;
 					input.click();
 				});

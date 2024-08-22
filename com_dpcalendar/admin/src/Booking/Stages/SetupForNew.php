@@ -9,6 +9,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Exception\TicketExhaustedException;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\CouponModel;
@@ -61,7 +62,7 @@ class SetupForNew implements StageInterface
 
 		// When no amount is found, then abort
 		if ($amountTickets == 0) {
-			throw new \Exception(Text::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
+			throw new TicketExhaustedException(Text::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
 		}
 
 		// The prices for the different
@@ -165,7 +166,7 @@ class SetupForNew implements StageInterface
 	/**
 	 * Determine the price for the options of the event.
 	 */
-	private function handleOptions(\stdClass $payload, \stdClass|EventTable $event): void
+	private function handleOptions(\stdClass $payload, \stdClass $event): void
 	{
 		// The booking options
 		if (empty($payload->data['event_id'][$event->id]['options'])) {

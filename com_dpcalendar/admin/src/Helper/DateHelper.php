@@ -71,40 +71,61 @@ class DateHelper
 
 	public function getDate(Date|\DateTime|string|null $date = null, bool|int|null $allDay = null, ?string $tz = null): Date
 	{
-		$app     = Factory::getApplication();
-		$dateObj = $date instanceof Date ? clone $date : Factory::getDate($date ?: '', $tz);
+		// Load the application
+		$app = Factory::getApplication();
 
+		// Create the date object
+		$dateObj = $date instanceof Date ? clone $date : Factory::getDate($date ?? '', $tz);
+
+		// The global timezone
 		$timezone = $app->get('offset');
-		$user     = $app->getIdentity();
+
+		// The user object
+		$user = $app->getIdentity();
+
+		// Check if the user exists
 		if ($user && $user->id !== 0) {
-			$userTimezone = $user->getParam('timezone');
-			if (!empty($userTimezone)) {
-				$timezone = $userTimezone;
-			}
+			// Load the timezone from the user
+			$timezone = $user->getParam('timezone', $timezone);
 		}
 
-		if ($app instanceof CMSWebApplicationInterface) {
-			$timezone = $app->getSession()->get('DPCalendar.user-timezone', $timezone);
+		// Set the flag if the timezone switcher is enabled
+		static $timeZoneSwitcherEnabled = null;
+		if ($timeZoneSwitcherEnabled === null) {
+			$timeZoneSwitcherEnabled = (int)DPCalendarHelper::getComponentParameter('enable_tz_switcher', 0);
 		}
 
+		// Load the timezone from the session
+		if ($app instanceof CMSWebApplicationInterface && $timeZoneSwitcherEnabled === 1) {
+			$timezone = $app->getSession()->get('com_dpcalendar.user.timezone', $timezone);
+		}
+
+		// Set the timezone when not an ell day date
 		if ($allDay === false || $allDay === 0 || $allDay === null) {
 			$dateObj->setTimezone(new \DateTimeZone($timezone));
 		}
 
+		// The date object
 		return $dateObj;
 	}
 
-	/**
-	 * @param \stdClass $event
-	 */
-	public function getDateStringFromEvent($event, ?string $dateFormat = null, ?string $timeFormat = null): string
+	public function getDateStringFromEvent(\stdClass $event, ?string $dateFormat = null, ?string $timeFormat = null, bool $noTags = false): string
 	{
-		return LayoutHelper::render(
+		$text = LayoutHelper::render(
 			'event.datestring',
 			['event' => $event, 'dateFormat' => $dateFormat, 'timeFormat' => $timeFormat],
 			'',
 			['component' => 'com_dpcalendar', 'client' => 0]
 		);
+
+		if (!$noTags) {
+			return $text;
+		}
+
+		$text = strip_tags($text);
+		$text = preg_replace("/\s\s+/", ' ', $text);
+
+		return trim((string)$text);
 	}
 
 	public function getNames(): array

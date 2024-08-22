@@ -25,7 +25,7 @@ use Joomla\Utilities\ArrayHelper;
 
 class EventsModel extends ListModel
 {
-	public function __construct($config = [], MVCFactoryInterface $factory = null)
+	public function __construct($config = [], ?MVCFactoryInterface $factory = null)
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = [
@@ -637,8 +637,8 @@ class EventsModel extends ListModel
 	public function setStateFromParams(Registry $params): void
 	{
 		// Filter for author
-		$author = $params->get('calendar_filter_author', $params->get('list_filter_author', 0));
-		if ((int)$author !== 0) {
+		$author = $params->get('calendar_filter_author', $params->get('list_filter_author'));
+		if ($author !== null) {
 			$this->setState('filter.author', $author);
 		}
 

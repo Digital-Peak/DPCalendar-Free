@@ -21,7 +21,7 @@ class DPCalendar extends PrivacyPlugin
 	/**
 	 * @return mixed[]
 	 */
-	public function onPrivacyExportRequest(RequestTable $request, User $user = null): array
+	public function onPrivacyExportRequest(RequestTable $request, ?User $user = null): array
 	{
 		if (!$user instanceof User) {
 			return [];

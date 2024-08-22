@@ -65,7 +65,7 @@ class DpradioField extends FormField
 
 		foreach ($this->element->children() as $option) {
 			// Only add <option /> elements.
-			if ($option->getName() != 'option') {
+			if ($option->getName() !== 'option') {
 				continue;
 			}
 

@@ -8,8 +8,6 @@
 defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-use Joomla\CMS\Application\CMSWebApplicationInterface;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Uri\Uri;
 
 if (DPCalendarHelper::getComponentParameter('enable_tz_switcher', '0') == '0') {
@@ -38,8 +36,7 @@ foreach ($regions as $name => $mask) {
 	}
 }
 
-$app = Factory::getApplication();
-$actualTimezone = $app instanceof CMSWebApplicationInterface ? $app->get('DPCalendar.user-timezone', $displayData['dateHelper']->getDate()->getTimezone()->getName()) : 'UTC';
+$actualTimezone = $displayData['dateHelper']->getDate()->getTimezone()->getName();
 ?>
 <form action="<?php
 echo Uri::base();

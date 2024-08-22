@@ -6,19 +6,19 @@
 }
 .com-dpcalendar-location .dp-button {
 	display: inline-block;
-	font-weight: 400;
+	padding: 4px 10px;
+	background-color: #fefefe;
+	color: #212529;
+	border: 1px solid #c0c0c0;
 	text-align: center;
+	font-weight: 400;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 	white-space: nowrap;
+	cursor: pointer;
 	vertical-align: middle;
 	user-select: none;
-	border: 1px solid #c0c0c0;
 	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-	padding: 4px 10px;
-	color: #212529;
-	background-color: #fefefe;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-	cursor: pointer;
 }
 .com-dpcalendar-location .dp-button:disabled,
 .com-dpcalendar-location .dp-button[disabled] {
@@ -58,14 +58,14 @@
 	height: 0;
 }
 .com-dpcalendar-location .dp-loader::before {
-	content: "";
+	z-index: 10;
 	position: absolute;
 	right: 100%;
-	left: 0;
 	bottom: 2px;
-	z-index: 10;
+	left: 0;
 	height: 4px;
 	background-color: #2d9ede;
+	content: "";
 	animation: 12s 0s normal none 1 running calendar-loader;
 	animation-fill-mode: forwards;
 	animation-timing-function: cubix-bezier(0, 1, 0, 1);
@@ -98,32 +98,32 @@
 	border: 1px solid #ccc;
 }
 .com-dpcalendar-location .dp-select-element {
-	border: 0 !important;
-	clip: rect(0 0 0 0) !important;
-	clip-path: inset(50%) !important;
+	position: absolute !important;
+	width: 1px !important;
 	height: 1px !important;
 	overflow: hidden !important;
 	padding: 0 !important;
-	position: absolute !important;
+	border: 0 !important;
 	white-space: nowrap !important;
-	width: 1px !important;
+	clip: rect(0 0 0 0) !important;
+	clip-path: inset(50%) !important;
 }
 .com-dpcalendar-location .dp-select-container {
-	width: 100%;
 	position: relative;
+	width: 100%;
 }
 .com-dpcalendar-location .dp-select-container__options {
-	background: #fff;
-	border-radius: 4px;
-	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
+	z-index: 10001;
+	width: 100%;
 	max-height: 300px;
-	opacity: 0;
 	overflow: hidden scroll;
 	padding: 0;
+	box-shadow: 3px 3px 3px 3px rgba(0, 0, 0, 0.16);
+	background: #fff;
+	border-radius: 4px;
+	opacity: 0;
 	pointer-events: none;
 	transition: 300ms ease-in-out;
-	width: 100%;
-	z-index: 10001;
 }
 .com-dpcalendar-location .dp-select-container__options.open {
 	opacity: 1;
@@ -140,24 +140,24 @@
 .com-dpcalendar-location .dp-select-container_unstyled, .com-dpcalendar-location .dp-select-container__input_unstyled {
 	display: block;
 	width: 100%;
-	cursor: pointer;
+	padding: 0.2rem;
 	border: 1px solid #ced4da;
 	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
-	padding: 0.2rem;
+	box-sizing: border-box;
+	cursor: pointer;
 	border-radius: 0.25rem;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	appearance: none;
-	box-sizing: border-box;
 }
 .com-dpcalendar-location .dp-select-input {
 	display: inline-block !important;
 	width: 1ch;
-	box-sizing: content-box !important;
 	margin: 0 !important;
 	padding: 0 !important;
-	outline: none !important;
 	border: 0 !important;
 	box-shadow: none !important;
+	box-sizing: content-box !important;
+	outline: none !important;
 }
 .com-dpcalendar-location .dp-select-input:disabled {
 	cursor: not-allowed;
@@ -174,10 +174,10 @@
 }
 .com-dpcalendar-location .dp-select-option-group__label {
 	display: block;
-	font-weight: bold;
 	margin: 0.2rem 0;
 	padding: 0.2rem 0.5rem;
 	border-bottom: 1px solid #cecece;
+	font-weight: bold;
 }
 .com-dpcalendar-location .dp-select-option[data-selected=true], .com-dpcalendar-location .dp-select-option:hover {
 	background: #ddd;
@@ -211,23 +211,23 @@
 }
 .com-dpcalendar-location .dp-timezone {
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
+	flex-wrap: wrap;
 }
 .com-dpcalendar-location .dp-timezone > * {
 	flex: 1;
 }
 .com-dpcalendar-location .dp-timezone__label {
 	flex: 0;
-	font-weight: bold;
 	margin-right: 10px;
+	font-weight: bold;
 	white-space: nowrap;
 }
 .com-dpcalendar-location .dp-timezone__info {
 	flex: 0 0 100%;
-	background-color: rgb(200, 204, 208);
-	padding: 1rem;
 	margin: 0.2rem 0;
+	padding: 1rem;
+	background-color: rgb(200, 204, 208);
 }
 .com-dpcalendar-location .dp-timezone__info_hidden {
 	display: none;
@@ -241,26 +241,26 @@
 		content: "";
 	}
 	.com-dpcalendar-location dt {
-		float: left !important;
+		min-width: 150px;
+		max-width: 150px;
 		margin: 0 !important;
 		padding: 0 !important;
-		max-width: 150px;
-		min-width: 150px;
+		float: left !important;
 	}
 	.com-dpcalendar-location dd {
-		float: left !important;
+		max-width: 350px;
 		margin: 0 0 0 5px !important;
 		padding: 0 !important;
-		max-width: 350px;
+		float: left !important;
 	}
 }
 .com-dpcalendar-location .dp-map_consent {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	font-size: 2em;
-	border: 1px solid #b2b2b2;
 	background-color: #f2f2f2;
+	border: 1px solid #b2b2b2;
+	font-size: 2em;
 	cursor: pointer;
 }
 .com-dpcalendar-location {
@@ -324,13 +324,13 @@
 .com-dpcalendar-location .fc .fc-button-primary,
 .com-dpcalendar-location .fc .fc-button-primary:hover {
 	padding: 5px;
-	border: 1px solid #c0c0c0;
-	border-radius: 0.1rem;
-	font-weight: 400;
 	background-color: #fefefe;
 	color: #000;
-	background-image: none;
+	border: 1px solid #c0c0c0;
+	font-weight: 400;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	border-radius: 0.1rem;
+	background-image: none;
 }
 .com-dpcalendar-location .fc .fc-button-primary.fc-corner-right,
 .com-dpcalendar-location .fc .fc-button-primary:hover.fc-corner-right {
@@ -375,10 +375,10 @@
 	}
 }
 .com-dpcalendar-location__event-list .dp-event {
-	padding-left: 5px;
-	padding-top: 0;
 	margin-top: 0;
 	margin-bottom: 5px;
+	padding-top: 0;
+	padding-left: 5px;
 	border-left: 5px solid;
 }
 .com-dpcalendar-location .dp-map {
@@ -403,31 +403,33 @@
 .dp-event-tooltip {
 	/* stylelint-disable-next-line selector-class-pattern */
 	/* stylelint-disable-next-line selector-class-pattern */
-	text-align: left;
-	font-size: 12px;
 }
 .dp-event-tooltip .dp-badge, .dp-event-tooltip .dp-event-tooltip_unpublished, .dp-event-tooltip .dp-event-tooltip_canceled {
 	display: inline-block;
 	padding: 0.25em;
+	text-align: center;
 	font-size: 70%;
 	font-weight: 700;
 	line-height: 1;
-	text-align: center;
 	border-radius: 0.2rem;
 }
 .dp-event-tooltip .dp-badge_warning, .dp-event-tooltip .dp-event-tooltip_unpublished {
-	color: #212529;
 	background-color: #ffc107;
+	color: #212529;
 }
 .dp-event-tooltip .dp-badge_info, .dp-event-tooltip .dp-event-tooltip_canceled {
-	color: #212529;
 	background-color: #0dcaf0;
+	color: #212529;
 }
 .dp-event-tooltip .dp-icon svg {
 	fill: currentcolor;
 	width: 1em;
 	height: 1em;
 	vertical-align: -2px;
+}
+.dp-event-tooltip {
+	text-align: left;
+	font-size: 12px;
 }
 .dp-event-tooltip__date, .dp-event-tooltip__calendar {
 	display: inline-block;
@@ -440,9 +442,9 @@
 	display: block;
 }
 .dp-event-tooltip__actions {
-	border-top: 1px solid rgba(0, 0, 0, 0.5);
 	margin-top: 0.5rem;
 	padding-top: 0.5rem;
+	border-top: 1px solid rgba(0, 0, 0, 0.5);
 }
 .dp-event-tooltip__action {
 	padding: 0.2rem;
@@ -457,8 +459,8 @@
 }
 
 .tippy-tooltip {
-	padding: 0.4rem;
 	max-width: 200px;
+	padding: 0.4rem;
 }
 
 .pika-single th,

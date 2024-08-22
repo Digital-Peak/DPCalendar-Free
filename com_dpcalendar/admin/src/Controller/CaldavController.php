@@ -15,7 +15,7 @@ use Joomla\CMS\Router\Route;
 
 class CaldavController extends BaseController
 {
-	public function syncUsers(): bool
+	public function sync(): bool
 	{
 		$users = $this->getModel()->syncUsers();
 

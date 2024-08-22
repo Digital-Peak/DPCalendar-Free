@@ -331,7 +331,7 @@ class EventModel extends ItemModel
 		return $item;
 	}
 
-	public function hit(string $id = null): bool
+	public function hit(?string $id = null): bool
 	{
 		if ($id === null || $id === '' || $id === '0') {
 			$id = $this->getState('event.id');

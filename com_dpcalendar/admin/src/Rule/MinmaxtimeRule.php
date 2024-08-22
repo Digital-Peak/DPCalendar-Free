@@ -16,7 +16,7 @@ use Joomla\Registry\Registry;
 
 class MinmaxtimeRule extends FormRule
 {
-	public function test(\SimpleXMLElement $element, $value, $group = null, Registry $input = null, Form $form = null): bool
+	public function test(\SimpleXMLElement $element, $value, $group = null, ?Registry $input = null, ?Form $form = null): bool
 	{
 		// If the field is empty and not required, the field is valid.
 		$required = ((string)$element['required'] === 'true' || (string)$element['required'] === 'required');

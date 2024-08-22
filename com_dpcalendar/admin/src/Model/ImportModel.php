@@ -24,9 +24,11 @@ class ImportModel extends BaseDatabaseModel
 	{
 		PluginHelper::importPlugin('dpcalendar');
 
-		$input = Factory::getApplication()->getInput();
+		$app = Factory::getApplication();
 
-		$tmp       = Factory::getApplication()->triggerEvent('onCalendarsFetch');
+		$input = $app->getInput();
+
+		$tmp       = $app->triggerEvent('onCalendarsFetch');
 		$calendars = array_merge(...(array)$tmp);
 
 		$categoriesModel = $this->bootComponent('categories')->getMVCFactory()->createModel('Categories', 'Administrator', ['ignore_request' => true]);
@@ -41,6 +43,13 @@ class ImportModel extends BaseDatabaseModel
 		$msgs = [];
 		foreach ($calendars as $cal) {
 			if (!in_array($cal->id, $calendarsToimport)) {
+				continue;
+			}
+
+			$events = $app->triggerEvent('onEventsFetch', [$cal->id, $start, $end, new Registry(['expand' => false])]);
+			$events = array_merge(...(array)$events);
+			if ($events === []) {
+				$msgs[] = sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_CREATED'), 0, $cal->title);
 				continue;
 			}
 
@@ -64,9 +73,6 @@ class ImportModel extends BaseDatabaseModel
 				$model->save($data);
 				$category = $model->getItem($model->getState('category.id'));
 			}
-
-			$events = Factory::getApplication()->triggerEvent('onEventsFetch', [$cal->id, $start, $end, new Registry(['expand' => false])]);
-			$events = array_merge(...(array)$events);
 
 			$startDateAsSQL = $start->toSql();
 			$endDateAsSQL   = $end->toSql();
@@ -117,7 +123,7 @@ class ImportModel extends BaseDatabaseModel
 				$model->getState();
 
 				if (!$model->save($eventData)) {
-					Factory::getApplication()->enqueueMessage($model->getError(), 'warning');
+					$app->enqueueMessage($model->getError(), 'warning');
 					continue;
 				}
 

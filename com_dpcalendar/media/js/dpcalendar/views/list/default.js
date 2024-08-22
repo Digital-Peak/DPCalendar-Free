@@ -78,7 +78,7 @@
 					return false;
 				});
 			});
-			[].slice.call(root.querySelectorAll('.dp-input, .dp-select')).forEach((input) => {
+			[].slice.call(root.querySelectorAll('.dp-form:not(.dp-timezone) .dp-input, .dp-form:not(.dp-timezone) .dp-select')).forEach((input) => {
 				input.addEventListener('change', () => {
 					if (input.name == 'filter[location]' && input.nextElementSibling) {
 						return;

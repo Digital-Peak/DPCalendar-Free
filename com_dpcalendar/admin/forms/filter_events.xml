@@ -6,7 +6,7 @@
 			label="COM_DPCALENDAR_FIELD_START_DATE_LABEL"/>
 		<field name="end-date" type="datetimechooser" all_day="1" show_time="0" hint="COM_DPCALENDAR_FIELD_END_DATE_LABEL"
 			label="COM_DPCALENDAR_FIELD_END_DATE_LABEL"/>
-		<field name="fullordering" type="list" default="a.start_date ASC">
+		<field name="fullordering" class="js-select-submit-on-change" type="list" default="a.start_date ASC">
 			<option value="">JGLOBAL_SORT_BY</option>
 			<option value="a.state ASC">JSTATUS_ASC</option>
 			<option value="a.state DESC">JSTATUS_DESC</option>
@@ -27,7 +27,7 @@
 			<option value="original_title ASC">COM_DPCALENDAR_VIEWS_FILTERS_ORIGINAL_TITLE_ASC</option>
 			<option value="original_title DESC">COM_DPCALENDAR_VIEWS_FILTERS_ORIGINAL_TITLE_DESC</option>
 		</field>
-		<field name="limit" type="limitbox" class="input-mini" default="25"/>
+		<field name="limit" type="limitbox" class="input-mini js-select-submit-on-change" default="25"/>
 	</fields>
 	<fields name="filter">
 		<field name="search" type="text" class="dp-input" hint="JSEARCH_FILTER" label="JSEARCH_FILTER"/>

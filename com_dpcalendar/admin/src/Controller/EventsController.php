@@ -23,7 +23,7 @@ class EventsController extends AdminController implements CurrentUserInterface
 {
 	use CurrentUserTrait;
 
-	public function __construct($config = [], MVCFactoryInterface $factory = null, ?CMSApplication $app = null, ?Input $input = null)
+	public function __construct($config = [], ?MVCFactoryInterface $factory = null, ?CMSApplication $app = null, ?Input $input = null)
 	{
 		parent::__construct($config, $factory, $app, $input);
 		$this->registerTask('unfeatured', 'featured');

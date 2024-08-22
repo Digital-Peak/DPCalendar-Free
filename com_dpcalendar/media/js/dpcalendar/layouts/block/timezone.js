@@ -8,7 +8,7 @@
 	document.addEventListener('DOMContentLoaded', () => {
 		loadDPAssets(['/com_dpcalendar/js/dpcalendar/layouts/block/select.js']);
 		[].slice.call(document.querySelectorAll('.dp-timezone__select')).forEach((select) => {
-			select.addEventListener('change', () => select.form.submit());
+			select.addEventListener('change', () => DPCalendar.request('task=profile.tz&tz=' + select.value, () => location.reload()));
 			if (localStorage.getItem('DPCalendar.timezone.switcher.disable') == 1) {
 				return;
 			}
@@ -24,7 +24,7 @@
 			notification.querySelector('.dp-link_confirm').addEventListener('click', (e) => {
 				e.preventDefault();
 				select.value = Intl.DateTimeFormat().resolvedOptions().timeZone;
-				select.form.submit();
+				select.dispatchEvent(new Event('change'));
 				return false;
 			});
 			notification.querySelector('.dp-link_close').addEventListener('click', (e) => {

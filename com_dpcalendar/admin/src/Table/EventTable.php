@@ -787,7 +787,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		return true;
 	}
 
-	public function populateTags(array $newTags = null): void
+	public function populateTags(?array $newTags = null): void
 	{
 		$this->getDatabase()->setQuery('select * from #__dpcalendar_events where original_id = ' . (int)$this->id);
 		foreach ($this->getDatabase()->loadAssocList() as $child) {

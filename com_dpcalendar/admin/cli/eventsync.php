@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-define('_JEXEC', 1);
+\define('_JEXEC', 1);
 
 use Joomla\CMS\Application\CliApplication;
 use Joomla\CMS\Factory;
@@ -16,12 +16,12 @@ use Joomla\CMS\Router\Router;
 use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
 
-$path = dirname(__FILE__, 5);
+$path = \dirname(__FILE__, 5);
 if (isset($_SERVER["SCRIPT_FILENAME"])) {
-	$path = dirname((string)$_SERVER["SCRIPT_FILENAME"], 5);
+	$path = \dirname((string)$_SERVER["SCRIPT_FILENAME"], 5);
 }
 
-define('JPATH_BASE', $path);
+\define('JPATH_BASE', $path);
 require_once JPATH_BASE . '/includes/defines.php';
 require_once JPATH_BASE . '/includes/framework.php';
 
@@ -144,7 +144,7 @@ class DPCalendarEventSync extends CliApplication
 	public function getUserState(string $key, mixed $default = null): mixed
 	{
 		$this->session = $this->session->get('registry');
-		if (!is_null($this->session)) {
+		if (!\is_null($this->session)) {
 			return $this->session->get($key, $default);
 		}
 

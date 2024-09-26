@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -273,7 +273,7 @@ class EventsModel extends ListModel
 
 		// Filter by id
 		$ids = $this->getState('filter.ids', []);
-		if (is_array($ids) && $ids !== []) {
+		if (\is_array($ids) && $ids !== []) {
 			$query->where('a.id IN (' . implode(',', ArrayHelper::toInteger($ids)) . ')');
 		}
 
@@ -296,7 +296,7 @@ class EventsModel extends ListModel
 		// Filter by a single or group of categories.
 		$baselevel = 1;
 		$calendars = array_filter((array)$this->getState('filter.calendars', []), static fn ($c): bool => !empty($c));
-		if (count($calendars) === 1) {
+		if (\count($calendars) === 1) {
 			$cat_tbl = $this->bootComponent('categories')->getMVCFactory()->createTable('Category', 'Administrator');
 			$cat_tbl->load(reset($calendars));
 			$rgt       = $cat_tbl->rgt;
@@ -304,7 +304,7 @@ class EventsModel extends ListModel
 			$baselevel = (int)$cat_tbl->level;
 			$query->where('c.lft >= ' . (int)$lft);
 			$query->where('c.rgt <= ' . (int)$rgt);
-		} elseif (count($calendars) > 1) {
+		} elseif (\count($calendars) > 1) {
 			$calendars = ArrayHelper::toInteger($calendars);
 			$calendars = implode(',', $calendars);
 			$query->where('a.catid IN (' . $calendars . ')');
@@ -438,7 +438,7 @@ class EventsModel extends ListModel
 			}
 
 			if (!empty($data->filter['calendars'])) {
-				$data->filter['cat_id'] = is_array($data->filter['calendars']) ? reset($data->filter['calendars']) : $data->filter['calendars'];
+				$data->filter['cat_id'] = \is_array($data->filter['calendars']) ? reset($data->filter['calendars']) : $data->filter['calendars'];
 			}
 		}
 

@@ -1,5 +1,4 @@
 <?php
-use Joomla\CMS\HTML\Helpers\StringHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -10,8 +9,8 @@ defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Location;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
+use Joomla\CMS\HTML\Helpers\StringHelper;
 
 if (!$this->tickets) {
 	return;
@@ -29,14 +28,14 @@ $hasPrice = array_filter(
 		<thead>
 		<tr>
 			<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?></th>
-			<th><?php echo $this->translate('COM_DPCALENDAR_ACTION'); ?></th>
+			<th class="dp-table__cell dp-table__cell_center"><?php echo $this->translate('COM_DPCALENDAR_ACTION'); ?></th>
 			<th><?php echo $this->translate('COM_DPCALENDAR_EVENT'); ?></th>
 			<th><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?></th>
 			<th><?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?></th>
 			<th><?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?></th>
 			<th><?php echo $this->translate('COM_DPCALENDAR_CREATED_DATE'); ?></th>
 			<?php if ($hasPrice !== []) { ?>
-				<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></th>
+				<th class="dp-table__cell dp-table__cell_center"><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></th>
 			<?php } ?>
 			<?php foreach ($this->tickets[0]->jcfields as $field) { ?>
 				<th><?php echo $field->label; ?></th>
@@ -51,7 +50,7 @@ $hasPrice = array_filter(
 						<?php echo $ticket->price_label ?: StringHelper::abridge($ticket->uid, 15, 5); ?>
 					</a>
 				</td>
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_ACTION'); ?>">
+				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_ACTION'); ?>" class="dp-table__cell dp-table__cell_center">
 					<?php $this->ticket = $ticket; ?>
 					<?php echo $this->loadTemplate('content_action'); ?>
 				</td>
@@ -83,9 +82,9 @@ $hasPrice = array_filter(
 					<?php echo $this->dateHelper->getDate($ticket->created)->format($format); ?>
 				</td>
 				<?php if ($hasPrice !== []) { ?>
-					<td class="dp-cell-price dp-ticket__price"
+					<td class="dp-table__cell dp-table__cell_right dp-ticket__price"
 						data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?>">
-						<?php echo \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::renderPrice($ticket->price, $this->params->get('currency_symbol', '$')); ?>
+						<?php echo DPCalendarHelper::renderPrice($ticket->price); ?>
 					</td>
 				<?php } ?>
 				<?php foreach ($ticket->jcfields as $field) { ?>

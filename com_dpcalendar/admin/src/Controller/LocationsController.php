@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Controller;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Language\Text;
@@ -27,7 +27,7 @@ class LocationsController extends AdminController
 		parent::publish();
 
 		if ($this->app->getInput()->get('ajax') != 0) {
-			$text = Text::plural($this->text_prefix . '_N_ITEMS_TRASHED', is_countable($this->app->getInput()->get('cid', [], 'array')) ? count($this->app->getInput()->get('cid', [], 'array')) : 0);
+			$text = Text::plural($this->text_prefix . '_N_ITEMS_TRASHED', is_countable($this->app->getInput()->get('cid', [], 'array')) ? \count($this->app->getInput()->get('cid', [], 'array')) : 0);
 			if ($this->message == $text) {
 				DPCalendarHelper::sendMessage($this->message, false);
 			} else {

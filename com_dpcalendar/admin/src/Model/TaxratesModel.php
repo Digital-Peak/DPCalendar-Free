@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
@@ -75,12 +75,12 @@ class TaxratesModel extends ListModel
 		$taxrates = parent::getItems();
 
 		foreach ($taxrates as $taxRate) {
-			if (!is_string($taxRate->countries)) {
+			if (!\is_string($taxRate->countries)) {
 				continue;
 			}
 			$taxRate->countries = json_decode($taxRate->countries);
 
-			$taxRate->rate = sprintf('%g', $taxRate->rate);
+			$taxRate->rate = \sprintf('%g', $taxRate->rate);
 		}
 
 		return $taxrates;

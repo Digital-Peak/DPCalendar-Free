@@ -8,7 +8,7 @@
 defined('_JEXEC') or die();
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/cpanel/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/adminlist/default.js');
+$this->dpdocument->loadScriptFile('dpcalendar/views/cpanel/default.js');
 ?>
 <div class="com-dpcalendar-cpanel">
 	<div id="j-main-container">

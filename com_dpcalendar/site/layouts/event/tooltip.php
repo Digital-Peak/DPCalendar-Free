@@ -76,7 +76,7 @@ $user = empty($displayData['user']) ? Factory::getApplication()->getIdentity() :
 			<a href="<?php echo $displayData['router']->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-event-tooltip__action dp-link">
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
-					['icon' => Icon::PLUS, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_BOOK')]
+					['icon' => Icon::BOOK, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_BOOK')]
 				); ?>
 			</a>
 		<?php } ?>

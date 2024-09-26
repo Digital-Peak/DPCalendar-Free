@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Service;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Router\Rules\DPCalendarRules;
@@ -96,7 +96,7 @@ class Router extends RouterView
 		$active = $this->app->getInput()->get('view');
 
 		// When active is event details view, it should act as parent of the tickets and bookings view
-		if ($active === 'event' && !empty($query['view']) && in_array($query['view'], ['tickets', 'bookings'])) {
+		if ($active === 'event' && !empty($query['view']) && \in_array($query['view'], ['tickets', 'bookings'])) {
 			$this->views[$query['view']]->setParent($this->views['event'], 'e_id');
 		}
 
@@ -108,7 +108,7 @@ class Router extends RouterView
 		$active = $this->menu->getActive();
 
 		// Set the active as parent for the event view when it contains calendars
-		if (count($segments) === 1 && !empty($active->query['view']) && in_array($active->query['view'], ['calendar', 'list', 'map'])) {
+		if (\count($segments) === 1 && !empty($active->query['view']) && \in_array($active->query['view'], ['calendar', 'list', 'map'])) {
 			$this->views['event']->setParent($this->views[$active->query['view']], 'calid');
 		}
 
@@ -132,7 +132,7 @@ class Router extends RouterView
 		$item = reset($items);
 
 		// Check if the item can fit as parent
-		if (!in_array($item->query['view'], ['calendar', 'list', 'map'])) {
+		if (!\in_array($item->query['view'], ['calendar', 'list', 'map'])) {
 			return;
 		}
 
@@ -299,7 +299,7 @@ class Router extends RouterView
 		}
 
 		// Load also the external calendars when all are fetched
-		if ((is_countable($calIds) ? count($calIds) : 0) === 1 && $calIds[0] == -1) {
+		if ((is_countable($calIds) ? \count($calIds) : 0) === 1 && $calIds[0] == -1) {
 			// Fetch external calendars
 			PluginHelper::importPlugin('dpcalendar');
 			$tmp = $this->app->triggerEvent('onCalendarsFetch');
@@ -327,7 +327,7 @@ class Router extends RouterView
 			->from('#__dpcalendar_events')
 			->where('(alias = ' . $db->quote($segment) . (is_numeric($segment) ? ' or id = ' . (int)$segment : '') . ')');
 
-		if ($calIds && !in_array('-1', $calIds)) {
+		if ($calIds && !\in_array('-1', $calIds)) {
 			// Loop over the calids, they can be string as with DB cache of external events
 			$condition = 'catid in (';
 			foreach ($calIds as $calId) {

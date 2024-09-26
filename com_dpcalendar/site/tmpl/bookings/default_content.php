@@ -10,6 +10,7 @@ defined('_JEXEC') or die();
 use Joomla\CMS\HTML\Helpers\StringHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 
 if (!$this->bookings) {
 	return;
@@ -60,13 +61,13 @@ $hasPrice = array_filter(
 					<?php echo $this->dateHelper->getDate($booking->book_date)->format($format, true); ?>
 				</td>
 				<?php if ($hasPrice !== []) { ?>
-					<td class="dp-cell-price dp-booking__price"
+					<td class="dp-table__cell dp-table__cell_right dp-booking__price"
 						data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?>">
-						<?php echo DPCalendarHelper::renderPrice($booking->price, $this->params->get('currency_symbol', '$')); ?>
+						<?php echo DPCalendarHelper::renderPrice($booking->price); ?>
 					</td>
 				<?php } ?>
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_TICKETS_LABEL'); ?>">
-					<a href="<?php echo \DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getTicketsRoute($booking->id); ?>" class="'dp-link dp-booking__tickets-link">
+				<td class="dp-table__cell dp-table__cell_center" data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_TICKETS_LABEL'); ?>">
+					<a href="<?php echo RouteHelper::getTicketsRoute($booking->id); ?>" class="dp-link dp-booking__tickets-link">
 						<?php echo $booking->amount_tickets; ?>
 					</a>
 				</td>

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -89,7 +89,7 @@ class CalendarModel extends ListModel implements FormFactoryAwareInterface
 
 					$this->allItems[$item->getId()] = $item;
 
-					if (!empty($filters) && !in_array($item->getId(), $filters)) {
+					if (!empty($filters) && !\in_array($item->getId(), $filters)) {
 						continue;
 					}
 					$this->items[$item->getId()] = $item;
@@ -100,7 +100,7 @@ class CalendarModel extends ListModel implements FormFactoryAwareInterface
 			PluginHelper::importPlugin('dpcalendar');
 			$tmp = Factory::getApplication()->triggerEvent(
 				'onCalendarsFetch',
-				[null, in_array('-1', (array)$this->getState('filter.parentIds', ['root'])) ? null : 'cd']
+				[null, \in_array('-1', (array)$this->getState('filter.parentIds', ['root'])) ? null : 'cd']
 			);
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {

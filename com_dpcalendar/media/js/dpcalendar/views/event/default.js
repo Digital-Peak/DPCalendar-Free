@@ -31,7 +31,7 @@
 			if (!document.querySelector('.com-dpcalendar-event__booking-form')) {
 				return;
 			}
-			document.querySelector('.com-dpcalendar-event__cta .dp-button_cta').addEventListener('click', (e) => {
+			document.querySelector('.com-dpcalendar-event__cta .dp-link_cta').addEventListener('click', (e) => {
 				e.preventDefault();
 				DPCalendar.slideToggle(document.querySelector('.com-dpcalendar-event__booking-form'), (show, element) => {
 					if (show) {

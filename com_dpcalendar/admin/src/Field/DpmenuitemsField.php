@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Field;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use Joomla\CMS\Factory;
@@ -88,7 +88,7 @@ class DpmenuItemsField extends ListField
 				}
 			}
 
-			if (!in_array($id, $ids)) {
+			if (!\in_array($id, $ids)) {
 				continue;
 			}
 

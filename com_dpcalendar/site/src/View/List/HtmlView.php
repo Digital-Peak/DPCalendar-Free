@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\List;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Location;
@@ -89,7 +89,7 @@ class HtmlView extends BaseView
 		try {
 			// Override the date from the input, eg. navigation link
 			if ($startFromInput = $this->input->get('date-start')) {
-				$dateStart = $this->dateHelper->getDate($startFromInput);
+				$dateStart = $this->dateHelper->getDate($startFromInput, \strlen((string)$startFromInput) === 10);
 			}
 
 			// Define the start date by the request data
@@ -126,7 +126,7 @@ class HtmlView extends BaseView
 			}
 
 			// If the start date is today reset the active filters, so the form is hidden
-			if (array_key_exists('start-date', $this->activeFilters)
+			if (\array_key_exists('start-date', $this->activeFilters)
 				&& $this->dateHelper->getDate()->format('Ymd') === $dateStart->format('Ymd')) {
 				unset($this->activeFilters['start-date']);
 			}
@@ -147,15 +147,15 @@ class HtmlView extends BaseView
 			$this->app->setUserState($context . '.list', $listRequestData);
 		}
 
-		if (array_key_exists('radius', $this->activeFilters) && 50 == $this->activeFilters['radius']) {
+		if (\array_key_exists('radius', $this->activeFilters) && 50 == $this->activeFilters['radius']) {
 			unset($this->activeFilters['radius']);
 		}
 
-		if (array_key_exists('length-type', $this->activeFilters) && 'm' === $this->activeFilters['length-type']) {
+		if (\array_key_exists('length-type', $this->activeFilters) && 'm' === $this->activeFilters['length-type']) {
 			unset($this->activeFilters['length-type']);
 		}
 
-		if (array_key_exists('calendars', $this->activeFilters) && array_filter($this->activeFilters['calendars'], static fn ($c): bool => !empty($c)) === []) {
+		if (\array_key_exists('calendars', $this->activeFilters) && array_filter($this->activeFilters['calendars'], static fn ($c): bool => !empty($c)) === []) {
 			unset($this->activeFilters['calendars']);
 		}
 
@@ -171,14 +171,14 @@ class HtmlView extends BaseView
 			$dateEnd->setTime(0, 0, 0);
 		}
 
+		if (empty($overrideEndDate) && !$this->params->get('list_date_end')) {
+			// End date is exclusive, so show day before
+			$dateEnd->modify('-1 second');
+		}
+
 		// The dates for the view
 		$this->startDate = clone $dateStart;
 		$this->endDate   = clone $dateEnd;
-
-		if (empty($overrideEndDate) && !$this->params->get('list_date_end')) {
-			// End date is exclusive, so show day before
-			$this->endDate->modify('-1 second');
-		}
 
 		// Normalize the dates
 		$dateStart->setTimezone(new \DateTimeZone('UTC'));

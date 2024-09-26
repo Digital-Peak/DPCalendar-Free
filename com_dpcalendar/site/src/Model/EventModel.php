@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -123,6 +123,10 @@ class EventModel extends ItemModel
 					'#__dpcalendar_events AS ser on (ser.original_id = a.original_id and a.original_id > 0) or ser.original_id = a.id'
 				);
 
+				// Join over the original
+				$query->select('o.title as original_title, o.rrule as original_rrule');
+				$query->join('LEFT', '#__dpcalendar_events AS o ON o.id = a.original_id');
+
 				// Join to tickets to check if the event has waiting list tickets
 				$query->select('count(DISTINCT wl.id) as waiting_list_count');
 				$query->join('LEFT', '#__dpcalendar_tickets AS wl ON (wl.event_id = a.id or wl.event_id = a.original_id) and wl.state = 8');
@@ -211,10 +215,12 @@ class EventModel extends ItemModel
 				$registry->loadString($data->metadata ?: '');
 				$data->metadata = $registry;
 
-				$data->price            = $data->price ? json_decode((string)$data->price) : [];
+				$data->price            = $data->price ? json_decode((string)$data->price) : null;
 				$data->earlybird        = $data->earlybird ? json_decode((string)$data->earlybird) : [];
 				$data->user_discount    = $data->user_discount ? json_decode((string)$data->user_discount) : [];
-				$data->booking_options  = $data->booking_options ? json_decode((string)$data->booking_options) : [];
+				$data->events_discount  = $data->events_discount ? json_decode((string)$data->events_discount) : [];
+				$data->tickets_discount = $data->tickets_discount ? json_decode((string)$data->tickets_discount) : [];
+				$data->booking_options  = $data->booking_options ? json_decode((string)$data->booking_options) : null;
 				$data->schedule         = $data->schedule ? json_decode((string)$data->schedule) : [];
 				$data->rooms            = $data->rooms ? explode(',', (string)$data->rooms) : [];
 				$data->payment_provider = $data->payment_provider ? explode(',', (string)$data->payment_provider) : [];
@@ -260,7 +266,7 @@ class EventModel extends ItemModel
 		}
 
 		// Implement View Level Access
-		if (!$user->authorise('core.admin', 'com_dpcalendar') && !in_array($item->access_content, $user->getAuthorisedViewLevels())) {
+		if (!$user->authorise('core.admin', 'com_dpcalendar') && !\in_array($item->access_content, $user->getAuthorisedViewLevels())) {
 			$item->title               = Text::_('COM_DPCALENDAR_EVENT_BUSY');
 			$item->location            = '';
 			$item->locations           = [];
@@ -296,7 +302,7 @@ class EventModel extends ItemModel
 			'send-tickets-mail',
 			is_numeric($item->catid) &&
 			// Allow to send mails when user is author, host or global admin
-			((!$user->guest && ($item->created_by == $user->id || in_array($user->id, explode(',', (string)($item->host_ids ?: '')))))
+			((!$user->guest && ($item->created_by == $user->id || \in_array($user->id, explode(',', (string)($item->host_ids ?: '')))))
 				|| $user->authorise('dpcalendar.admin.book', 'com_dpcalendar.category.' . $item->catid))
 		);
 
@@ -310,7 +316,7 @@ class EventModel extends ItemModel
 		);
 
 		$item->color = str_replace('#', '', $item->color ?? '');
-		if (is_array($item->color)) {
+		if (\is_array($item->color)) {
 			$item->color = implode('', $item->color);
 		}
 
@@ -324,7 +330,7 @@ class EventModel extends ItemModel
 			$item->color = '3366CC';
 		}
 
-		if (is_string($item->exdates)) {
+		if (\is_string($item->exdates)) {
 			$item->exdates = ArrayHelper::getColumn((array)json_decode($item->exdates), 'date');
 		}
 

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\View\Event;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -107,7 +107,7 @@ class JsonView extends BaseView
 		DPCalendarHelper::sendMessage(
 			'',
 			false,
-			['message' => $message, 'count' => is_countable($events) ? count($events) : 0]
+			['message' => $message, 'count' => is_countable($events) ? \count($events) : 0]
 		);
 	}
 }

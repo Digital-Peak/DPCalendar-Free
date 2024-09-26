@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Router\Rules;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Site\Service\Router;
@@ -21,7 +21,7 @@ class DPCalendarRules extends MenuRules
 		parent::parse($segments, $vars);
 
 		// When tickets or bookings should be shown as part of the event details view
-		if ($this->router instanceof Router && count($segments) === 2 && in_array($segments[1], ['tickets', 'bookings'])) {
+		if ($this->router instanceof Router && \count($segments) === 2 && \in_array($segments[1], ['tickets', 'bookings'])) {
 			$vars['view'] = $segments[1];
 			$vars['e_id'] = $this->router->getEventId($segments[0]);
 			unset($segments[0]);
@@ -29,7 +29,7 @@ class DPCalendarRules extends MenuRules
 		}
 
 		// When tickets or bookings should be shown as part of the event details menu item view
-		if ((is_countable($segments) ? count($segments) : 0) === 1 && in_array($segments[0], ['tickets', 'bookings'])) {
+		if ((is_countable($segments) ? \count($segments) : 0) === 1 && \in_array($segments[0], ['tickets', 'bookings'])) {
 			$vars['view'] = $segments[0];
 			unset($segments[0]);
 
@@ -42,7 +42,7 @@ class DPCalendarRules extends MenuRules
 
 	public function preprocess(&$query): void
 	{
-		if (!empty($query['view']) && in_array($query['view'], ['tickets', 'bookings']) && !empty($query['e_id'])) {
+		if (!empty($query['view']) && \in_array($query['view'], ['tickets', 'bookings']) && !empty($query['e_id'])) {
 			return;
 		}
 
@@ -68,7 +68,7 @@ class DPCalendarRules extends MenuRules
 		$values[]     = [$language, '*'];
 
 		$menuItems = $this->router->menu->getItems($attributes, $values);
-		if (!is_array($menuItems)) {
+		if (!\is_array($menuItems)) {
 			$menuItems = [$menuItems];
 		}
 
@@ -86,7 +86,7 @@ class DPCalendarRules extends MenuRules
 			foreach ($ids as $id) {
 				$this->lookup[$language][$menuItem->query['view']][$id] = $menuItem->id;
 
-				if (!in_array($menuItem->query['view'], ['calendar', 'list', 'map'])) {
+				if (!\in_array($menuItem->query['view'], ['calendar', 'list', 'map'])) {
 					continue;
 				}
 
@@ -114,7 +114,7 @@ class DPCalendarRules extends MenuRules
 				continue;
 			}
 
-			if (!is_array($this->lookup[$language][$menuItem->query['view']])) {
+			if (!\is_array($this->lookup[$language][$menuItem->query['view']])) {
 				$this->lookup[$language][$menuItem->query['view']] = (array)$this->lookup[$language][$menuItem->query['view']];
 			}
 
@@ -146,21 +146,21 @@ class DPCalendarRules extends MenuRules
 			$id = empty($query['id']) ? (empty($query['l_id']) ? 0 : $query['l_id']) : ($query['id']);
 
 			// If the location exists in a location menu item, do nothing
-			if (!empty($items['location']) && array_key_exists($id, $items['location'])) {
+			if (!empty($items['location']) && \array_key_exists($id, $items['location'])) {
 				$query['Itemid'] = $items['location'][$id];
 
 				return;
 			}
 
 			// If the location exists in a locations menu item, do nothing
-			if (!empty($items['locations']) && array_key_exists($id, $items['locations'])) {
+			if (!empty($items['locations']) && \array_key_exists($id, $items['locations'])) {
 				$query['Itemid'] = $items['locations'][$id];
 
 				return;
 			}
 
 			// Search in the lookup for a passable menu item
-			if (!empty($items['locations']) && array_key_exists(-1, $items['locations'])) {
+			if (!empty($items['locations']) && \array_key_exists(-1, $items['locations'])) {
 				$query['Itemid'] = $items['locations'][-1];
 
 				return;
@@ -189,7 +189,7 @@ class DPCalendarRules extends MenuRules
 		// Check if a direct menu item is available
 		foreach ($this->lookup as $items) {
 			// If there is menu item for the event use it
-			if (!empty($items['event']) && array_key_exists($query['id'], $items['event'])) {
+			if (!empty($items['event']) && \array_key_exists($query['id'], $items['event'])) {
 				// Ensure the correct item ID is set, can happen when a single event menu item exists and a calendar menu item
 				// which has a different calendar selected
 				$query['Itemid'] = $items['event'][$query['id']];
@@ -220,7 +220,7 @@ class DPCalendarRules extends MenuRules
 		// If we have no default item but the active fits as a parent for the event view use it as id
 		// This means we do not have unique ids, but the event is always shown below the actual menu item
 		if ($active && $active->component == 'com_dpcalendar'
-			&& in_array($active->query['view'], ['calendar', 'list', 'map'])) {
+			&& \in_array($active->query['view'], ['calendar', 'list', 'map'])) {
 			$selectedCalendars = [];
 			foreach ($active->getParams()->get('ids', []) as $selectedCalendar) {
 				$selectedCalendars[] = $selectedCalendar;
@@ -270,14 +270,14 @@ class DPCalendarRules extends MenuRules
 			$id = empty($query['calid']) ? 0 : $query['calid'];
 
 			// If the location exists in a location menu item, do nothing
-			if (!empty($items['form']) && array_key_exists($id, $items['form'])) {
+			if (!empty($items['form']) && \array_key_exists($id, $items['form'])) {
 				$query['Itemid'] = $items['form'][$id];
 
 				return;
 			}
 
 			// Search in the lookup for a passable menu item
-			if (!empty($items['form']) && array_key_exists(-1, $items['form'])) {
+			if (!empty($items['form']) && \array_key_exists(-1, $items['form'])) {
 				$query['Itemid'] = $items['form'][-1];
 
 				return;

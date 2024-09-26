@@ -12,7 +12,7 @@ use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 class FieldsOrder
 {

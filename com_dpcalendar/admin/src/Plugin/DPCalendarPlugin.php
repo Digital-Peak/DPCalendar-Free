@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Plugin;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendar;
@@ -114,7 +114,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		}
 
 		$start = null;
-		if (strlen($s) === 8) {
+		if (\strlen($s) === 8) {
 			$start = DPCalendarHelper::getDate(
 				substr($s, 0, 4) . '-' . substr($s, 4, 2) . '-' . substr($s, 6, 2) . ' 00:00',
 				true,
@@ -360,8 +360,8 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			}
 		);
 
-		if (!empty($limit) && count($events) >= $limit) {
-			return array_slice($events, 0, $limit);
+		if (!empty($limit) && \count($events) >= $limit) {
+			return \array_slice($events, 0, $limit);
 		}
 
 		return $events;
@@ -388,7 +388,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		$calendars = [];
 		foreach ($this->extCalendarsCache as $calendarObject) {
-			if ($calendarIds !== [] && !in_array($calendarObject->id, $calendarIds)) {
+			if ($calendarIds !== [] && !\in_array($calendarObject->id, $calendarIds)) {
 				continue;
 			}
 
@@ -479,7 +479,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		// Sometimes it changes the id
 		$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $eventId);
 		$id      = explode('-', str_replace($this->identifier . '-', '', (string)$eventId), 2);
-		if (count($id) < 2 || !is_numeric($id[0])) {
+		if (\count($id) < 2 || !is_numeric($id[0])) {
 			return null;
 		}
 
@@ -552,7 +552,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		$ids = [];
 		if (!empty($calendarIds)) {
-			if (!is_array($calendarIds)) {
+			if (!\is_array($calendarIds)) {
 				$calendarIds = [$calendarIds];
 			}
 			foreach ($calendarIds as $calendarId) {
@@ -613,7 +613,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			$eventId = $data['id'];
 			$eventId = str_replace($this->identifier . ':', $this->identifier . '-', (string)$eventId);
 			$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
-			if (count($id) < 2) {
+			if (\count($id) < 2) {
 				return false;
 			}
 
@@ -642,7 +642,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		$eventId = str_replace($this->identifier . ':', $this->identifier . '-', $eventId);
 		$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
-		if (count($id) < 2) {
+		if (\count($id) < 2) {
 			return false;
 		}
 
@@ -726,7 +726,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		if (!empty($data->id)) {
 			$id      = str_replace($this->identifier . ':', $this->identifier . '-', (string)$data->id);
 			$id      = explode('-', str_replace($this->identifier . '-', '', $id), 2);
-			$eventId = count($id) == 2 ? $id[1] : $eventId;
+			$eventId = \count($id) == 2 ? $id[1] : $eventId;
 		}
 
 		$id = str_replace($this->identifier . '-', '', (string)$catId);
@@ -775,7 +775,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		$event->all_day                           = 0;
 		$event->color                             = '';
 		$event->url                               = '';
-		$event->price                             = [];
+		$event->price                             = null;
 		$event->locations                         = [];
 		$event->rooms                             = [];
 		$event->roomTitles                        = [];
@@ -789,6 +789,10 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		$event->booking_opening_date              = null;
 		$event->booking_closing_date              = null;
 		$event->event_booking_cancel_closing_date = null;
+		$event->earlybird                         = null;
+		$event->user_discount                     = null;
+		$event->events_discount                   = null;
+		$event->tickets_discount                  = null;
 		$event->description                       = '';
 		$event->schedule                          = '';
 		$event->state                             = 1;
@@ -835,7 +839,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		if ($event->DURATION != null) {
 			$endDate  = clone $startDate;
 			$duration = DateTimeParser::parseDuration($event->DURATION, true);
-			$endDate->modify(is_string($duration) ? $duration : '');
+			$endDate->modify(\is_string($duration) ? $duration : '');
 			if ($allDay) {
 				$endDate->modify('-1 day');
 			}
@@ -1029,7 +1033,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		if ($event->ATTACH) {
 			foreach ($event->ATTACH as $attachment) {
-				if (!$attachment->parameters || !array_key_exists('FMTTYPE', $attachment->parameters)) {
+				if (!$attachment->parameters || !\array_key_exists('FMTTYPE', $attachment->parameters)) {
 					continue;
 				}
 
@@ -1149,17 +1153,17 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		$model = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator');
 
 		if (!$locationFilterData->latitude
-			&& is_string($location) && str_contains($location, 'latitude=') && str_contains($location, 'longitude=')) {
+			&& \is_string($location) && str_contains($location, 'latitude=') && str_contains($location, 'longitude=')) {
 			[$latitude, $longitude]        = explode(';', $location);
 			$locationFilterData->latitude  = str_replace('latitude=', '', $latitude);
 			$locationFilterData->longitude = str_replace('longitude=', '', $longitude);
-		} elseif (!$locationFilterData->latitude && !empty($location) && is_string($location)) {
+		} elseif (!$locationFilterData->latitude && !empty($location) && \is_string($location)) {
 			$locationFilterData = $model->getLocation($location);
 		}
 
 		$within = false;
 		foreach ($event->locations as $loc) {
-			if (!in_array($loc->id, $locationIds)
+			if (!\in_array($loc->id, $locationIds)
 				&& !$model->within($loc, $locationFilterData->latitude, $locationFilterData->longitude, $radius)) {
 				continue;
 			}
@@ -1180,7 +1184,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		foreach ($hideFieldsets as $group => $name) {
 			foreach ($form->getFieldset($name) as $field) {
-				if (!is_string($group)) {
+				if (!\is_string($group)) {
 					$group = null;
 				}
 

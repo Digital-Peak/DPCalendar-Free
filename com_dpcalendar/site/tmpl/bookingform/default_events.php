@@ -49,33 +49,34 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 				</div>
 			<?php } ?>
 			<table class="dp-event__tickets dp-table">
-				<tbody class="dp-table__thead">
+				<thead class="dp-table__thead">
 				<tr class="dp-ticket">
 					<th class="dp-ticket__title" <?php echo $this->needsPayment ? '' : 'colspan="2"'; ?>>
 						<?php echo $this->translate('COM_DPCALENDAR_TICKET'); ?>
 					</th>
 					<?php if ($this->needsPayment) { ?>
-						<th class="dp-ticket__price"><?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL'); ?></th>
+						<th class="dp-ticket__price dp-table__cell dp-table__cell_center"><?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL'); ?></th>
 					<?php } ?>
 					<th class="dp-ticket__amount"><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL'); ?></th>
-					<th class="dp-ticket__calculated-price">
+					<th class="dp-ticket__calculated-price dp-table__cell dp-table__cell_center">
 						<?php if ($this->needsPayment) { ?>
 							<?php echo $this->translate('COM_DPCALENDAR_VIEW_BOOKING_TOTAL'); ?>
 						<?php } ?>
 					</th>
 				</tr>
-				</tbody>
+				</thead>
 				<tbody>
-				<?php foreach ($instance->price->value as $key => $value) { ?>
+				<?php foreach ($instance->price as $key => $price) { ?>
+					<?php $key = preg_replace('/\D/', '', (string)$key); ?>
 					<tr class="dp-ticket" data-ticket-price="<?php echo $key; ?>">
 						<td class="dp-ticket__title" <?php echo $this->needsPayment ? '' : 'colspan="2"'; ?>
 							data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET'); ?>">
-							<?php echo $instance->price->label[$key]?: '&nbsp;'; ?>
+							<?php echo $price->label?: '&nbsp;'; ?>
 						</td>
 						<?php if ($this->needsPayment) { ?>
-							<td class="dp-ticket__price"
+							<td class="dp-ticket__price dp-table__cell dp-table__cell_right"
 								data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL'); ?>">
-								<?php echo DPCalendarHelper::renderPrice($value); ?>
+								<?php echo DPCalendarHelper::renderPrice($price->value); ?>
 							</td>
 						<?php } ?>
 						<td class="dp-ticket__amount" data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL'); ?>">
@@ -85,14 +86,14 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 							<?php } else { ?>
 								<select name="<?php echo $name; ?>" class="dp-select dp-select_plain">
 									<?php for ($i = 0; $i <= $instance->ticket_count; $i++) { ?>
-										<?php $selected = (is_countable($instance->price->value) ? count($instance->price->value) : 0) == 1 && $i == 1 && $instance->id == $this->event->id ? 'selected="selected"' : ''; ?>
+										<?php $selected = ($instance->price instanceof \stdClass ? count(get_object_vars($instance->price)) : 0) == 1 && $i == 1 && $instance->id == $this->event->id ? 'selected="selected"' : ''; ?>
 										<?php $selected = !empty($this->selection[$instance->id]) && !empty($this->selection[$instance->id]['tickets']) &&$this->selection[$instance->id]['tickets'][$key] && $this->selection[$instance->id]['tickets'][$key] == $i ? 'selected="selected"' : $selected; ?>
 										<option value="<?php echo $i; ?>"<?php echo $selected; ?>><?php echo $i; ?></option>
 									<?php } ?>
 								</select>
 							<?php } ?>
 						</td>
-						<td class="dp-ticket__calculated-price dp-price"
+						<td class="dp-ticket__calculated-price dp-price dp-table__cell dp-table__cell_right"
 							data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_BOOKING_TOTAL'); ?>">
 							<?php if ($this->needsPayment) { ?>
 								<div class="dp-price__info dp-price_hidden">
@@ -109,20 +110,20 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 					<tbody class="dp-table__thead">
 					<tr class="dp-ticket">
 						<th class="dp-ticket__title"><?php echo $this->translate('COM_DPCALENDAR_OPTION'); ?></th>
-						<th class="dp-ticket__price"><?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL'); ?></th>
+						<th class="dp-ticket__price dp-table__cell dp-table__cell_center"><?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL'); ?></th>
 						<th class="dp-ticket__amount"><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL'); ?></th>
-						<th class="dp-ticket__calculated-price"><?php echo $this->translate('COM_DPCALENDAR_VIEW_BOOKING_TOTAL'); ?></th>
+						<th class="dp-ticket__calculated-price dp-table__cell dp-table__cell_center"><?php echo $this->translate('COM_DPCALENDAR_VIEW_BOOKING_TOTAL'); ?></th>
 					</tr>
 					</tbody>
 					<tbody>
 					<?php foreach ($instance->booking_options as $key => $option) { ?>
-						<?php $key = preg_replace('/\D/', '', (string) $key); ?>
+						<?php $key = preg_replace('/\D/', '', (string)$key); ?>
 						<tr class="dp-option" data-option-price="<?php echo $key; ?>">
 							<td class="dp-option__title" data-column="<?php echo $this->translate('COM_DPCALENDAR_OPTION'); ?>">
 								<?php echo $option->label; ?>
 							</td>
-							<td class="dp-option__price" data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL'); ?>">
-								<?php echo DPCalendarHelper::renderPrice($option->price); ?>
+							<td class="dp-option__price dp-table__cell dp-table__cell_right" data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL'); ?>">
+								<?php echo DPCalendarHelper::renderPrice($option->value); ?>
 							</td>
 							<td class="dp-option__amount" data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL'); ?>">
 								<?php $name = $this->form->getFormControl() . '[event_id][' . $instance->id . '][options][' . $key . ']'; ?>
@@ -133,7 +134,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 									<?php } ?>
 								</select>
 							</td>
-							<td class="dp-option__calculated-price dp-price"
+							<td class="dp-option__calculated-price dp-price dp-table__cell dp-table__cell_right"
 								data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_BOOKING_TOTAL'); ?>">
 								<div class="dp-price__live"><?php echo DPCalendarHelper::renderPrice('0.00'); ?></div>
 								<div class="dp-price__original dp-price_hidden"></div>

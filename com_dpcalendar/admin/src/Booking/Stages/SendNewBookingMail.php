@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -43,12 +43,12 @@ class SendNewBookingMail implements StageInterface, UserFactoryAwareInterface
 		}
 
 		// Never send a mail when we have been active, cancelled or refunded before
-		if ($payload->oldItem && in_array($payload->oldItem->state, [1, 4, 6, 7])) {
+		if ($payload->oldItem && \in_array($payload->oldItem->state, [1, 4, 6, 7])) {
 			return $payload;
 		}
 
 		// Never send a mail when we are before or after activation process
-		if (in_array($payload->item->state, [0, 2, 3, 5, 6, 7, 8])) {
+		if (\in_array($payload->item->state, [0, 2, 3, 5, 6, 7, 8])) {
 			return $payload;
 		}
 

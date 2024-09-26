@@ -635,6 +635,18 @@ $files = [
 
 // From 8.19.1 to case 10938
 '/media/com_dpcalendar/js/polyfill',
+
+// From 9.2.0 to case 11051
+'/administrator/components/com_dpcalendar/forms/event_userdiscount.xml',
+'/components/com_dpcalendar/tmpl/bookingform/default_coupon.php',
+'/components/com_dpcalendar/tmpl/event/default_bookings_earlybird.php',
+'/components/com_dpcalendar/tmpl/event/default_bookings_user.php',
+
+// From v9.2.0 to case 11074
+'/administrator/components/com_dpcalendar/forms/event_userdiscount.xml',
+'/components/com_dpcalendar/tmpl/bookingform/default_coupon.php',
+'/components/com_dpcalendar/tmpl/event/default_bookings_earlybird.php',
+'/components/com_dpcalendar/tmpl/event/default_bookings_user.php',
 ];
 
 foreach ($files as $file) {

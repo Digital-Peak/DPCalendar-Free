@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Field;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Factory;
@@ -19,8 +19,12 @@ use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 
 class DpcfieldsField extends ListField
 {
-	public $element;
 	public $type = 'DPCFields';
+
+	public function getFields(): array
+	{
+		return $this->getOptions();
+	}
 
 	protected function getOptions(): array
 	{
@@ -30,11 +34,16 @@ class DpcfieldsField extends ListField
 
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/forms');
 
-		$hide = explode(',', $this->element['hide'] ?: '');
+		$hide = array_filter(explode(',', $this->element['hide'] ?: ''));
 
 		// @phpstan-ignore-next-line
 		$form = Form::getInstance('com_dpcalendar.' . $this->element['section'], $this->element['section'], ['control' => 'jform']);
 		foreach ($form->getFieldset() as $field) {
+			// Ignore spacers
+			if ($field->type === 'Spacer') {
+				continue;
+			}
+
 			$fieldName = $field->fieldname;
 
 			// When no filter form use the compiled field name
@@ -42,21 +51,13 @@ class DpcfieldsField extends ListField
 				$fieldName = DPCalendarHelper::getFieldName($field);
 			}
 
-			$isHidden = false;
-			foreach ($hide as $toHide) {
-				if (!fnmatch($toHide, $fieldName) && $field->type != 'Spacer') {
-					continue;
-				}
-
-				$isHidden = true;
-				break;
-			}
-
-			if ($isHidden) {
+			// Ignore when hidden
+			if ($hide && array_filter($hide, fn ($toHide): bool => fnmatch($toHide, $fieldName))) {
 				continue;
 			}
 
-			$options[] = HTMLHelper::_('select.option', $fieldName, Text::_($field->getTitle()));
+			$field->hidden = false;
+			$options[]     = HTMLHelper::_('select.option', $fieldName, Text::_($field->getTitle()));
 		}
 
 		$fields = FieldsHelper::getFields('com_dpcalendar.' . $this->element['section']);
@@ -65,6 +66,6 @@ class DpcfieldsField extends ListField
 		}
 
 		// Merge any additional options in the XML definition.
-		return array_merge(parent::getOptions(), $options);
+		return array_merge($options, parent::getOptions());
 	}
 }

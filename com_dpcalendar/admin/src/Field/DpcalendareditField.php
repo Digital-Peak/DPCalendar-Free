@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Field;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendarInterface;
@@ -69,7 +69,7 @@ class DPCalendareditField extends CategoryField
 		if ($filter !== '') {
 			$filter = explode(',', $filter);
 			foreach ($options as $key => $cal) {
-				if (in_array($cal->value, $filter)) {
+				if (\in_array($cal->value, $filter)) {
 					continue;
 				}
 				unset($options[$key]);
@@ -79,17 +79,17 @@ class DPCalendareditField extends CategoryField
 		}
 
 		$toMove  = [];
-		$counter = count($options);
+		$counter = \count($options);
 		for ($i = 0; $i < $counter; $i++) {
 			$option = $options[$i];
 
-			if (!in_array($option->value, $ids)) {
+			if (!\in_array($option->value, $ids)) {
 				continue;
 			}
 
 			$toMove[$i] = $option;
 			// Move subitems as well
-			$counter = count($options);
+			$counter = \count($options);
 
 			// Move subitems as well
 			for ($j = $i + 1; $j < $counter; $j++) {

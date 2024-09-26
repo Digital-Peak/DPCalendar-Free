@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Plugin\Content\DPCalendar\Extension;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Extension\DPCalendarComponent;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
@@ -60,8 +60,12 @@ class DPCalendar extends CMSPlugin
 			preg_match('/{{#events\s*.*?}}/i', (string)$item->text, $starts, PREG_OFFSET_CAPTURE);
 			preg_match('/{{\/events}}/i', (string)$item->text, $ends, PREG_OFFSET_CAPTURE);
 
+			if ($starts === [] || $ends === []) {
+				continue;
+			}
+
 			// Extract the parameters
-			$start  = $starts[0][1] + strlen($starts[0][0]);
+			$start  = $starts[0][1] + \strlen($starts[0][0]);
 			$end    = $ends[0][1];
 			$params = explode(' ', str_replace(['{{#events', '}}'], '', $starts[0][0]));
 
@@ -90,7 +94,7 @@ class DPCalendar extends CMSPlugin
 				$paramValue = '';
 				$parts      = explode('=', $string);
 				$paramKey   = $parts[0];
-				if (count($parts) > 1) {
+				if (\count($parts) > 1) {
 					$paramValue = $parts[1];
 				}
 

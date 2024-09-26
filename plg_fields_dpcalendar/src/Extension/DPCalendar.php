@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Plugin\Fields\DPCalendar\Extension;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Form\Form;
@@ -24,6 +24,7 @@ class DPCalendar extends FieldsPlugin
 
 		if ($field->type === 'dpcalendar') {
 			$fieldNode->setAttribute('extension', 'com_dpcalendar');
+			$fieldNode->setAttribute('addfieldprefix', 'DigitalPeak\\Component\\DPCalendar\\Administrator\\Field');
 		}
 
 		if ($field->type === 'dpevent') {

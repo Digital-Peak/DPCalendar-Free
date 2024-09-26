@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Dispatcher;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Dispatcher\ComponentDispatcher;
 use Joomla\CMS\Plugin\PluginHelper;

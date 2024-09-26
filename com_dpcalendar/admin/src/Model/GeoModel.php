@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\ThinHTTP\CurlClient;
@@ -137,7 +137,7 @@ class GeoModel extends BaseDatabaseModel
 		if ($fill) {
 			try {
 				$coordinates = explode(',', $location);
-				if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+				if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 					$this->locationCache->setState('filter.latitude', $coordinates[0]);
 					$this->locationCache->setState('filter.longitude', $coordinates[1]);
 					$this->locationCache->setState('filter.xreference', null);
@@ -210,7 +210,7 @@ class GeoModel extends BaseDatabaseModel
 
 		// Reset coordinates, so we have them always the same. Providers can shift them
 		$coordinates = explode(',', $location);
-		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+		if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 			$locObject->latitude  = $coordinates[0];
 			$locObject->longitude = $coordinates[1];
 		}
@@ -284,11 +284,11 @@ class GeoModel extends BaseDatabaseModel
 
 	public function getCountryForIp(): ?\stdClass
 	{
-		$geoDBDirectory = Factory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
+		$geoDBDirectory = JPATH_CACHE . '/com_dpcalendar-geodb';
 		$files          = is_dir($geoDBDirectory) ? scandir($geoDBDirectory) : [];
 
 		// Check if the data is available
-		if ((is_countable($files) ? count($files) : 0) < 3) {
+		if ((is_countable($files) ? \count($files) : 0) < 3) {
 			return null;
 		}
 
@@ -334,11 +334,11 @@ class GeoModel extends BaseDatabaseModel
 		$url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?key=' . trim((string)DPCalendarHelper::getComponentParameter('map_api_google_key')) . '&';
 
 		$lang = DPCalendarHelper::getFrLanguage();
-		if (!in_array($lang, $this->googleLanguages)) {
+		if (!\in_array($lang, $this->googleLanguages)) {
 			$lang = substr($lang, 0, strpos($lang, '-') ?: 0);
 		}
 
-		if (!in_array($lang, $this->googleLanguages)) {
+		if (!\in_array($lang, $this->googleLanguages)) {
 			$url .= 'language=' . $lang . '&';
 		}
 
@@ -374,7 +374,7 @@ class GeoModel extends BaseDatabaseModel
 		$url->setVar('limit', '5');
 
 		$coordinates = explode(',', $address);
-		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+		if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 			$url->setPath('/reverse');
 			$url->setVar('lat', urlencode($coordinates[0]));
 			$url->setVar('lon', urlencode($coordinates[1]));
@@ -384,11 +384,11 @@ class GeoModel extends BaseDatabaseModel
 		}
 
 		$lang = DPCalendarHelper::getFrLanguage();
-		if (!in_array($lang, $this->nominatimLanguages)) {
+		if (!\in_array($lang, $this->nominatimLanguages)) {
 			$lang = substr($lang, 0, strpos($lang, '-') ?: 0);
 		}
 
-		if (in_array($lang, $this->nominatimLanguages)) {
+		if (\in_array($lang, $this->nominatimLanguages)) {
 			$url->setVar('accept-language', $lang);
 		}
 
@@ -452,11 +452,11 @@ class GeoModel extends BaseDatabaseModel
 		$url = 'https://maps.google.com/maps/api/geocode/json?key=' . trim((string)DPCalendarHelper::getComponentParameter('map_api_google_key')) . '&';
 
 		$lang = DPCalendarHelper::getFrLanguage();
-		if (!in_array($lang, $this->googleLanguages)) {
+		if (!\in_array($lang, $this->googleLanguages)) {
 			$lang = substr($lang, 0, strpos($lang, '-') ?: 0);
 		}
 
-		if (!in_array($lang, $this->googleLanguages)) {
+		if (!\in_array($lang, $this->googleLanguages)) {
 			$url .= 'language=' . $lang . '&';
 		}
 
@@ -518,7 +518,7 @@ class GeoModel extends BaseDatabaseModel
 		$url->setVar('limit', '1');
 
 		$coordinates = explode(',', $location);
-		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+		if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 			$url->setPath($url->getPath() . '/reverse');
 			$url->setVar('lat', urlencode($coordinates[0]));
 			$url->setVar('lon', urlencode($coordinates[1]));
@@ -531,11 +531,11 @@ class GeoModel extends BaseDatabaseModel
 		}
 
 		$lang = DPCalendarHelper::getFrLanguage();
-		if (!in_array($lang, $this->nominatimLanguages)) {
+		if (!\in_array($lang, $this->nominatimLanguages)) {
 			$lang = substr($lang, 0, strpos($lang, '-') ?: 0);
 		}
 
-		if (in_array($lang, $this->nominatimLanguages)) {
+		if (\in_array($lang, $this->nominatimLanguages)) {
 			$url->setVar('accept-language', $lang);
 		}
 
@@ -549,7 +549,7 @@ class GeoModel extends BaseDatabaseModel
 			return;
 		}
 
-		if (!empty($tmp->data) && is_array($tmp->data)) {
+		if (!empty($tmp->data) && \is_array($tmp->data)) {
 			$tmp = $tmp->data[0];
 		}
 
@@ -597,7 +597,7 @@ class GeoModel extends BaseDatabaseModel
 	private function fillObjectFromMapbox(string $location, \stdClass $locObject): void
 	{
 		$coordinates = explode(',', $location);
-		if (count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+		if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 			$location = $coordinates[1] . ',' . $coordinates[0];
 		}
 

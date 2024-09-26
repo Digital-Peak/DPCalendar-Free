@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\BookingModel;
@@ -33,7 +33,7 @@ class SetupForUpdate implements StageInterface
 			unset($payload->data['price']);
 		}
 
-		if (!array_key_exists('coupon_id', $payload->data)) {
+		if (!\array_key_exists('coupon_id', $payload->data)) {
 			$payload->data['coupon_id'] = 0;
 		}
 

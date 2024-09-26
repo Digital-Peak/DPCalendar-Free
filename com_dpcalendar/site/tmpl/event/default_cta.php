@@ -35,9 +35,11 @@ if ((int)$this->event->waiting_list_count > 0) {
 <?php if ($this->params->get('event_show_booking_form') != 2) { ?>
 	<div class="com-dpcalendar-event__cta dp-event-cta dp-print-hide">
 		<a href="<?php echo $this->router->getBookingFormRouteFromEvent($this->event, Uri::getInstance()->toString()); ?>"
-		   class="dp-button dp-button_cta">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::PLUS]); ?>
-			<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_TO_BOOK_TEXT' . ($waiting ? '_WAITING' : '')); ?>
+		   class="dp-link dp-link_cta">
+			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::BOOK]); ?>
+			<span class="dp-link__text">
+				<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_TO_BOOK_TEXT' . ($waiting ? '_WAITING' : '')); ?>
+			</span>
 		</a>
 		<div class="dp-event-cta__end-date">
 			<?php $endDate = Booking::getRegistrationEndDate($this->event); ?>

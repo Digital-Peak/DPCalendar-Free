@@ -7,13 +7,14 @@
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 
-$this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_REVIEW_BUTTON');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_CONFIRM_BUTTON');
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_GO_REVIEW_BUTTON');
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_GO_CONFIRM_BUTTON');
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_GO_CONFIRM_PAYMENT_BUTTON');
 
-$buttonText = $this->bookingId ? 'JSAVE' : 'COM_DPCALENDAR_VIEW_BOOKINGFORM_REVIEW_BUTTON';
+$buttonText = $this->bookingId ? 'JSAVE' : 'COM_DPCALENDAR_VIEW_BOOKINGFORM_GO_REVIEW_BUTTON';
 if ($this->event->capacity !== null && $this->event->capacity_used >= $this->event->capacity && $this->event->booking_waiting_list
 	&& ((is_countable($this->events) ? count($this->events) : 0) == 1 || $this->event->booking_series != 2) && !$this->bookingId) {
 	$buttonText = 'COM_DPCALENDAR_VIEW_BOOKINGFORM_WAITING_BUTTON';
@@ -26,7 +27,8 @@ if ((int)$this->event->waiting_list_count > 0) {
 <div class="com-dpcalendar-bookingform__actions dp-button-bar">
 	<button type="button" class="dp-button dp-button-action dp-button-save" data-task="save"
 		data-waiting="<?php echo $buttonText === 'COM_DPCALENDAR_VIEW_BOOKINGFORM_WAITING_BUTTON' ? 1 : 0; ?>"
-		data-review="<?php echo $this->bookingId ? '' : DPCalendarHelper::getComponentParameter('booking_review_step', 2); ?>">
+		data-review="<?php echo $this->bookingId ? '' : $this->params->get('booking_review_step', 2); ?>"
+		data-confirm="<?php echo $this->bookingId ? '' : $this->params->get('booking_confirm_step', 1); ?>">
 		<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::NEXT]); ?>
 		<span class="dp-button-save__text"><?php echo $this->translate($buttonText); ?></span>
 	</button>

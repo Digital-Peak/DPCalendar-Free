@@ -4,8 +4,10 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
+
 defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 ?>
 <div class="com-dpcalendar-cpanel__checks">
 	<h3 class="dp-heading">
@@ -31,7 +33,19 @@ defined('_JEXEC') or die();
 		<div class="dp-information dp-grid">
 			<span class="dp-information__label"><?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_CHECKS_VERSION'); ?>: </span>
 			<span class="dp-information__content">
-				<?php echo $this->input->getString('DPCALENDAR_VERSION', ''); ?>
+				<span class="dp-information__version-current">
+					<?php echo $this->input->getString('DPCALENDAR_VERSION', ''); ?>
+				</span>
+				<span class="dp-information__version-actual"></span>
+				<span class="dp-information__version-update">
+					<a href="index.php?option=com_installer&view=update">
+					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::DOWNLOAD]); ?>
+						<?php echo $this->translate('COM_DPCALENDAR_VIEW_CPANEL_UPDATE_EXTENSION'); ?>
+					</a>
+				</span>
+				<span class="dp-information__version-no-update">
+					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::OK]); ?>
+				</span>
 			</span>
 		</div>
 		<?php if ($this->extensionsWithDifferentVersion) { ?>

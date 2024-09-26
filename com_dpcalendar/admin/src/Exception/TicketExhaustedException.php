@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Exception;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 class TicketExhaustedException extends \Exception
 {

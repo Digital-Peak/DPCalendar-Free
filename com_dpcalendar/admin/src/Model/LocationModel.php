@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BasicTable;
@@ -241,7 +241,7 @@ class LocationModel extends AdminModel
 			$data = $this->getItem();
 		}
 
-		if (is_array($data)) {
+		if (\is_array($data)) {
 			$data = (object)$data;
 		}
 

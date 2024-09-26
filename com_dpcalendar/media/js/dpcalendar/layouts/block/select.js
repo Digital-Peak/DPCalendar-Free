@@ -268,7 +268,7 @@
 			return options[index < 0 ? options.length - 1 : 0];
 		}
 		updateInputWidth() {
-			this.input.style.width = (this.input.value ? this.input.value.length : this.langInputPlaceholder.length) + 'ch';
+			this.input.style.width = (this.input.value ? this.input.value.length + 1 : this.langInputPlaceholder.length + 1) + 'ch';
 		}
 	}
 	[].slice.call(document.querySelectorAll('select.dp-select:not(.dp-select_plain)')).forEach((select) => {

@@ -7,7 +7,6 @@
 
 defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 
 $reviewStep = $this->params->get('booking_review_step', 2);

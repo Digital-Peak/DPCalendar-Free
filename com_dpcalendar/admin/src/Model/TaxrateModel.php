@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BasicTable;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
@@ -42,7 +42,7 @@ class TaxrateModel extends AdminModel
 			return null;
 		}
 
-		$taxRate->rate = sprintf('%g', $taxRate->rate);
+		$taxRate->rate = \sprintf('%g', $taxRate->rate);
 
 		return $taxRate;
 	}
@@ -58,7 +58,7 @@ class TaxrateModel extends AdminModel
 			$item->countries = json_decode((string)$item->countries);
 		}
 
-		$item->rate = sprintf('%g', $item->rate);
+		$item->rate = \sprintf('%g', $item->rate);
 
 		return $item;
 	}

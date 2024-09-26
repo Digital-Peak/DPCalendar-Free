@@ -88,7 +88,7 @@ class DPCalendar extends PDO
 
 	public function getMultipleCalendarObjects($calendarId, array $uris)
 	{
-		if (!is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
+		if (!\is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
 			return parent::getMultipleCalendarObjects($calendarId, $uris);
 		}
 
@@ -108,7 +108,7 @@ class DPCalendar extends PDO
 
 		$data = [];
 		foreach ($model->getItems() as $event) {
-			if (array_key_exists($event->uid, $data) || $event->original_id > 0) {
+			if (\array_key_exists($event->uid, $data) || $event->original_id > 0) {
 				continue;
 			}
 			$data[$event->uid] = $this->toSabreArray($event);
@@ -120,7 +120,7 @@ class DPCalendar extends PDO
 
 	public function getCalendarObject($calendarId, $objectUri)
 	{
-		if (!is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
+		if (!\is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
 			return parent::getCalendarObject([$calendarId, ''], $objectUri);
 		}
 
@@ -147,7 +147,7 @@ class DPCalendar extends PDO
 
 	public function getCalendarObjects($calendarId)
 	{
-		if (!is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
+		if (!\is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
 			return parent::getCalendarObjects($calendarId);
 		}
 
@@ -167,7 +167,7 @@ class DPCalendar extends PDO
 
 		$data = [];
 		foreach ($model->getItems() as $event) {
-			if (array_key_exists($event->uid, $data) || $event->original_id > 0) {
+			if (\array_key_exists($event->uid, $data) || $event->original_id > 0) {
 				continue;
 			}
 			$data[$event->uid] = $this->toSabreArray($event);
@@ -178,7 +178,7 @@ class DPCalendar extends PDO
 
 	public function calendarQuery($calendarId, array $filters)
 	{
-		if (!is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
+		if (!\is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
 			return parent::calendarQuery($calendarId, $filters);
 		}
 
@@ -190,15 +190,15 @@ class DPCalendar extends PDO
 		$model->setState('filter.ongoing', 1);
 		$model->setState('filter.state', 1);
 
-		if ((is_countable($filters['comp-filters']) ? count($filters['comp-filters']) : 0) > 0 && !$filters['comp-filters'][0]['is-not-defined']) {
+		if ((is_countable($filters['comp-filters']) ? \count($filters['comp-filters']) : 0) > 0 && !$filters['comp-filters'][0]['is-not-defined']) {
 			$componentType = $filters['comp-filters'][0]['name'];
 
 			if ($componentType == 'VEVENT' && !empty($filters['comp-filters'][0]['time-range'])) {
 				$timeRange = $filters['comp-filters'][0]['time-range'];
-				if (is_array($timeRange) && array_key_exists('start', $timeRange) && !empty($timeRange['start'])) {
+				if (\is_array($timeRange) && \array_key_exists('start', $timeRange) && !empty($timeRange['start'])) {
 					$model->setState('list.start-date', $timeRange['start']->getTimeStamp());
 				}
-				if (is_array($timeRange) && array_key_exists('end', $timeRange) && !empty($timeRange['end'])) {
+				if (\is_array($timeRange) && \array_key_exists('end', $timeRange) && !empty($timeRange['end'])) {
 					$model->setState('list.end-date', $timeRange['end']->getTimeStamp());
 				}
 			}
@@ -225,7 +225,7 @@ class DPCalendar extends PDO
 
 	public function createCalendarObject($calendarId, $objectUri, $calendarData)
 	{
-		if (!is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
+		if (!\is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
 			return parent::createCalendarObject($calendarId, $objectUri, $calendarData);
 		}
 
@@ -260,7 +260,7 @@ class DPCalendar extends PDO
 
 	public function updateCalendarObject($calendarId, $objectUri, $calendarData)
 	{
-		if (!is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
+		if (!\is_string($calendarId) || !str_contains($calendarId, 'dp-')) {
 			return parent::updateCalendarObject($calendarId, $objectUri, $calendarData);
 		}
 
@@ -331,7 +331,7 @@ class DPCalendar extends PDO
 			return;
 		}
 
-		if (is_string($calendarId) && str_contains($calendarId, 'dp-')) {
+		if (\is_string($calendarId) && str_contains($calendarId, 'dp-')) {
 			Log::add('Deleting calendar object ' . $objectUri . ' on calendar ' . $calendarId, Log::INFO, 'com_dpcalendar-caldav-backend');
 
 			$calendar = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar(str_replace('dp-', '', $calendarId));
@@ -376,7 +376,7 @@ class DPCalendar extends PDO
 
 	public function updateCalendar($calendarId, PropPatch $propPatch): void
 	{
-		if (is_string($calendarId) && !str_contains($calendarId, 'dp-')) {
+		if (\is_string($calendarId) && !str_contains($calendarId, 'dp-')) {
 			Log::add('Update calendar ' . $calendarId . 'with propatch', Log::INFO, 'com_dpcalendar-caldav-backend');
 			$this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->increaseEtag(str_replace('dp-', '', $calendarId));
 
@@ -408,7 +408,7 @@ class DPCalendar extends PDO
 		if (!empty($vEvent->DESCRIPTION) && $vEvent->DESCRIPTION !== null) {
 			$dpEvent->description = $vEvent->DESCRIPTION->getValue();
 		}
-		$dpEvent->all_day = strlen($vEvent->DTSTART->getValue()) > 10 ? 0 : 1;
+		$dpEvent->all_day = \strlen($vEvent->DTSTART->getValue()) > 10 ? 0 : 1;
 
 		$start = $vEvent->DTSTART->getDateTime() ;
 		$start = $dpEvent->all_day !== 0 ? $start->setTime(0, 0, 0) : $start->setTimezone(new \DateTimeZone('UTC'));
@@ -453,7 +453,7 @@ class DPCalendar extends PDO
 			$location = null;
 			if (isset($vEvent->GEO) && $vEvent->GEO->getValue()) {
 				$parts = explode(';', (string)$vEvent->GEO->getValue());
-				if (count($parts) == 2) {
+				if (\count($parts) == 2) {
 					$model = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
 					$model->getState();
 					$model->setState('list.limit', 1);
@@ -515,7 +515,7 @@ class DPCalendar extends PDO
 			'uri'          => $event->uid,
 			'lastmodified' => DPCalendarHelper::getDate($event->modified)->format('U'),
 			'calendarid'   => 'dp-' . $event->catid,
-			'size'         => strlen((string)$ical),
+			'size'         => \strlen((string)$ical),
 			'etag'         => '"' . md5((string)$ical) . '"',
 			'calendardata' => $ical
 		];

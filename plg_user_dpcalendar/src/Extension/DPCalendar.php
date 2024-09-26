@@ -7,8 +7,10 @@
 
 namespace DigitalPeak\Plugin\User\DPCalendar\Extension;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Model\BookingModel;
+use DigitalPeak\Component\DPCalendar\Administrator\Table\BookingTable;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Form\Form;
@@ -98,7 +100,7 @@ class DPCalendar extends CMSPlugin
 		// If the booking was added as guest user and now he registered, assign the booking to the attendee
 		if ($isNew) {
 			$model = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Booking', 'Administrator', ['ignore_request' => true]);
-			if ($booking = $model->assign($user)) {
+			if ($model instanceof BookingModel && ($booking = $model->assign($user)) instanceof BookingTable) {
 				$loginUrl = Route::_(
 					'index.php?option=com_users&view=login&return=' . base64_encode(RouteHelper::getBookingRoute((object)$booking->getData()))
 				);

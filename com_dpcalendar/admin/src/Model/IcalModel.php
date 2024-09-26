@@ -7,11 +7,10 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-use DigitalPeak\Component\DPCalendar\Administrator\Table\EventTable;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use DigitalPeak\Component\DPCalendar\Site\Model\EventsModel;
 use Joomla\CMS\Factory;
@@ -47,7 +46,7 @@ class IcalModel extends BaseDatabaseModel
 		// ini_set('memory_limit', '512M');
 
 		$items = $eventsModel->getItems();
-		if (!is_array($items)) {
+		if (!\is_array($items)) {
 			$items = [];
 		}
 
@@ -86,7 +85,7 @@ class IcalModel extends BaseDatabaseModel
 				unset($events[$key]);
 			}
 
-			if (array_key_exists($event->catid, $calendars) || empty($event->catid)) {
+			if (\array_key_exists($event->catid, $calendars) || empty($event->catid)) {
 				continue;
 			}
 
@@ -132,7 +131,7 @@ class IcalModel extends BaseDatabaseModel
 		return str_replace(';', '\;', $newText);
 	}
 
-	private function addEventData(\stdClass|EventTable $event, ?EventsModel $eventsModel = null): array
+	private function addEventData(\stdClass $event, ?EventsModel $eventsModel = null): array
 	{
 		$childsToAdd = [];
 		$text        = [];
@@ -261,7 +260,7 @@ class IcalModel extends BaseDatabaseModel
 		}
 
 		if (!empty($event->original_id) && $event->original_id != -1) {
-			if (strlen((string)$event->recurrence_id) <= 8) {
+			if (\strlen((string)$event->recurrence_id) <= 8) {
 				$text[] = 'RECURRENCE-ID;VALUE=DATE:' . $event->recurrence_id;
 			} else {
 				$text[] = 'RECURRENCE-ID:' . $event->recurrence_id;
@@ -370,7 +369,7 @@ class IcalModel extends BaseDatabaseModel
 		$transitions = $tz->getTransitions($from - $year, $to + $year);
 
 		// Some parsers do need components like standard or daylight
-		if (count($transitions) <= 1) {
+		if (\count($transitions) <= 1) {
 			return null;
 		}
 
@@ -410,8 +409,8 @@ class IcalModel extends BaseDatabaseModel
 				$offset = $trans['offset'] / 3600;
 
 				$cmp->DTSTART      = $dt->format('Ymd\THis');
-				$cmp->TZOFFSETFROM = sprintf('%+03d%02d', ($tzfrom >= 0 ? '+' : '') . floor($tzfrom), ($tzfrom - floor($tzfrom)) * 60);
-				$cmp->TZOFFSETTO   = sprintf('%+03d%02d', ($offset >= 0 ? '+' : '') . floor($offset), ($offset - floor($offset)) * 60);
+				$cmp->TZOFFSETFROM = \sprintf('%+03d%02d', ($tzfrom >= 0 ? '+' : '') . floor($tzfrom), ($tzfrom - floor($tzfrom)) * 60);
+				$cmp->TZOFFSETTO   = \sprintf('%+03d%02d', ($offset >= 0 ? '+' : '') . floor($offset), ($offset - floor($offset)) * 60);
 
 				// add abbreviated timezone name if available
 				if (!empty($trans['abbr'])) {
@@ -437,7 +436,7 @@ class IcalModel extends BaseDatabaseModel
 		// add X-MICROSOFT-CDO-TZID if available
 		// @phpstan-ignore-next-line
 		$microsoftExchangeMap = array_flip(TimeZoneUtil::$microsoftExchangeMap);
-		if (array_key_exists($tz->getName(), $microsoftExchangeMap)) {
+		if (\array_key_exists($tz->getName(), $microsoftExchangeMap)) {
 			$vt->add('X-MICROSOFT-CDO-TZID', $microsoftExchangeMap[$tz->getName()]);
 		}
 

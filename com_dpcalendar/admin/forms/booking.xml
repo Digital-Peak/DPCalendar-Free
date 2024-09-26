@@ -6,6 +6,8 @@
 		addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
 		<field name="id" default="0" type="text" readonly="true" class="readonly"
 			label="JGLOBAL_FIELD_ID_LABEL" description="JGLOBAL_FIELD_ID_DESC"/>
+		<field name="uid" type="hidden" readonly="true" default="0"
+			label="COM_DPCALENDAR_UID"/>
 		<field name="event_id" type="event"
 			label="COM_DPCALENDAR_TICKET_FIELD_EVENT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_EVENT_DESC"/>
 		<field name="user_id" type="user"
@@ -57,11 +59,17 @@
 		<field name="amount" type="integer" first="0" last="1" step="1" default="0"
 			label="COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_DESC">
 		</field>
+		<field name="book_date" type="hidden" disabled="true"
+			label="COM_DPCALENDAR_CREATED_DATE"/>
 
 		<field name="coupon_id" type="text" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_COUPON_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_COUPON_DESC"/>
 		<field name="coupon_rate" type="text" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_COUPON_RATE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_COUPON_RATE_DESC"/>
+		<field name="events_discount" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_FIELD_EVENTS_DISCOUNT_LABEL" description="COM_DPCALENDAR_FIELD_EVENTS_DISCOUNT_DESC"/>
+		<field name="tickets_discount" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_FIELD_TICKETS_DISCOUNT_LABEL" description="COM_DPCALENDAR_FIELD_TICKETS_DISCOUNT_DESC"/>
 
 		<field name="series" type="dpradio" class="dp-form-radio" default="0"
 			label="COM_DPCALENDAR_BOOKING_FIELD_SERIES_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_SERIES_DESC">
@@ -71,10 +79,12 @@
 
 		<field name="transaction_id" type="text"
 			label="COM_DPCALENDAR_BOOKING_FIELD_INVOICE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_INVOICE_DESC"/>
+		<field name="net_amount" type="hidden" readonly="true" default="0"
+			label="COM_DPCALENDAR_BOOKING_FIELD_NET_AMOUNT_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NET_AMOUNT_DESC"/>
 		<field name="type" type="text" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_TYPE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_TYPE_DESC"/>
 		<field name="options" type="text" class="dp-form-input"
-			label="COM_DPCALENDAR_BOOKING_FIELD_OPTIONS_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_OPTIONS_DESC"/>
+			label="COM_DPCALENDAR_OPTIONS"/>
 		<field name="payer_email" type="email" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
 

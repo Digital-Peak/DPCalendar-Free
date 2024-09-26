@@ -43,6 +43,7 @@
 	background-color: var(--body-bg, #fff);
 	color: var(--body-color, #565656);
 	border: 1px solid rgba(0, 0, 0, 0.02);
+	text-transform: uppercase;
 	font-size: 0.75rem;
 	font-weight: bold;
 	box-shadow: 0 0 2px rgba(52, 58, 67, 0.1), 0 2px 5px rgba(52, 58, 67, 0.08), 0 5px 15px rgba(52, 58, 67, 0.08);

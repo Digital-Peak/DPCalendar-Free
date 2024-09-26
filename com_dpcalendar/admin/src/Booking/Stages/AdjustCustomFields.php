@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use League\Pipeline\StageInterface;

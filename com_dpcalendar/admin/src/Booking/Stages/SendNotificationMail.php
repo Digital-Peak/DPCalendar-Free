@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -32,7 +32,7 @@ class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 	public function __invoke($payload)
 	{
 		// Abort when we are in the creation process
-		if (\in_array($payload->item->state, [0, 2])) {
+		if (in_array($payload->item->state, [0, 2])) {
 			return $payload;
 		}
 
@@ -81,7 +81,7 @@ class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 		$authors = [];
 		foreach ($payload->eventsWithTickets as $e) {
 			// Ignore already sent out mails
-			if (\array_key_exists($e->created_by, $emails)) {
+			if (array_key_exists($e->created_by, $emails)) {
 				continue;
 			}
 

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
@@ -60,7 +60,7 @@ class SetupForMail implements StageInterface
 			'sitename'           => $this->application->get('sitename'),
 			'user'               => $payload->item->name,
 			'tickets'            => $payload->tickets,
-			'countTickets'       => $payload->tickets ? \count($payload->tickets) : 0,
+			'countTickets'       => $payload->tickets ? count($payload->tickets) : 0,
 			'acceptUrl'          => RouteHelper::getInviteChangeRoute($payload->item, true, true),
 			'declineUrl'         => RouteHelper::getInviteChangeRoute($payload->item, false, true)
 		];

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Service;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use Joomla\CMS\Categories\Categories;
 

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Plugin\Privacy\DPCalendar\Extension;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use Joomla\CMS\User\User;
 use Joomla\Component\Privacy\Administrator\Plugin\PrivacyPlugin;

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Controller;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -73,15 +73,15 @@ class EventController extends FormController implements CurrentUserInterface
 			$data['all_day'] = '1';
 		}
 
-		if (!\array_key_exists('all_day', $data)) {
+		if (!array_key_exists('all_day', $data)) {
 			$data['all_day'] = 0;
 		}
 
-		if (!\array_key_exists('color', $data)) {
+		if (!array_key_exists('color', $data)) {
 			$data['color'] = '';
 		}
 
-		if (!\array_key_exists('payment_provider', $data)) {
+		if (!array_key_exists('payment_provider', $data)) {
 			$data['payment_provider'] = '';
 		}
 
@@ -104,7 +104,7 @@ class EventController extends FormController implements CurrentUserInterface
 
 		if (DPCalendarHelper::isFree()) {
 			foreach (DPCalendarHelper::$DISABLED_FREE_FIELDS as $field) {
-				if (\array_key_exists($field, $data)) {
+				if (array_key_exists($field, $data)) {
 					unset($data[$field]);
 				}
 			}
@@ -125,7 +125,7 @@ class EventController extends FormController implements CurrentUserInterface
 			$form      = $model->getForm($data, false);
 			$validData = $model->validate($form, $data);
 
-			if (!\is_array($validData)) {
+			if (!is_array($validData)) {
 				throw new \Exception('Data coulöd npt be validated');
 			}
 

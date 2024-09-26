@@ -16,12 +16,10 @@ if (!$this->params->get('list_show_booking', 1) || !Booking::openForBooking($eve
 	return;
 }
 ?>
-<a href="<?php echo $this->router->getBookingFormRouteFromEvent($event, $this->returnPage); ?>" class="dp-link dp-link_cta">
+<a href="<?php echo $this->router->getBookingFormRouteFromEvent($event, $this->returnPage); ?>" class="dp-link dp-link_cta dp-button">
 	<?php echo $this->layoutHelper->renderLayout(
 		'block.icon',
-		['icon' => Icon::BOOK, 'title' => $this->translate('COM_DPCALENDAR_BOOK')]
+		['icon' => Icon::PLUS, 'title' => $this->translate('COM_DPCALENDAR_BOOK')]
 	); ?>
-	<span class="dp-link__text">
-		<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_TO_BOOK_TEXT'); ?>
-	</span>
+	<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_TO_BOOK_TEXT'); ?>
 </a>

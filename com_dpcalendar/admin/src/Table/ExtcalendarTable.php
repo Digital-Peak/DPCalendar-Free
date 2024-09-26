@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Table;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Access\Rules;
@@ -93,16 +93,16 @@ class ExtcalendarTable extends BasicTable
 
 	public function bind($data, $ignore = '')
 	{
-		$data = \is_object($data) ? get_object_vars($data) : $data;
+		$data = is_object($data) ? get_object_vars($data) : $data;
 
-		if (isset($data['params']) && \is_array($data['params'])) {
+		if (isset($data['params']) && is_array($data['params'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['params']);
 			$data['params'] = (string)$registry;
 		}
 
 		// Bind the rules.
-		if (isset($data['rules']) && \is_array($data['rules'])) {
+		if (isset($data['rules']) && is_array($data['rules'])) {
 			$rules = new Rules($data['rules']);
 			$this->setRules($rules);
 		}

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BasicTable;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\ExtcalendarTable;

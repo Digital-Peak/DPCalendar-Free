@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Plugin;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendar;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendarInterface;
@@ -51,11 +51,11 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 		$http     = HttpFactory::getHttp();
 		$response = $http->head($uri);
 
-		if (\array_key_exists('ETag', $response->headers)) {
+		if (array_key_exists('ETag', $response->headers)) {
 			return $response->headers['ETag'];
 		}
 
-		if (\array_key_exists('Last-Modified', $response->headers)) {
+		if (array_key_exists('Last-Modified', $response->headers)) {
 			return $response->headers['Last-Modified'];
 		}
 
@@ -146,7 +146,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 			$events = $this->fetchEvents($calendarId, $options, $syncDateStart, $syncDateEnd);
 			foreach ($events as $event) {
 				// Check if we have processed the event already, mainly on recurring events
-				if (\array_key_exists($event->id, $processedEvents)) {
+				if (array_key_exists($event->id, $processedEvents)) {
 					continue;
 				}
 
@@ -246,7 +246,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 
 		// Loop through the calendars to sync
 		foreach ($this->fetchCalendars() as $calendar) {
-			if ($ids && !\in_array(str_replace($this->identifier . '-', '', (string)$calendar->getId()), $ids)) {
+			if ($ids && !in_array(str_replace($this->identifier . '-', '', (string)$calendar->getId()), $ids)) {
 				continue;
 			}
 			$this->sync($calendar, true);

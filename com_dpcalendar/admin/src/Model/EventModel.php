@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -163,18 +163,14 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			}
 
 			if ($colorValues !== '' && $colorValues !== '0') {
-				$colorValues = substr($colorValues, 0, \strlen($colorValues) - 1);
+				$colorValues = substr($colorValues, 0, strlen($colorValues) - 1);
 			}
 
 			$form->setFieldAttribute('color', 'colors', $colorValues);
 		}
 
-		// Cleanup the series fields on an instance
 		if ($eventId && $item && $item->original_id > 0) {
 			$form->removeField('booking_series');
-			$form->removeField('events_discount');
-
-			// Only the whole series can be booked so remove the booking options from the instance
 			if ($item->booking_series == 1) {
 				foreach ($form->getFieldset('booking') as $field) {
 					$form->removeField(DPCalendarHelper::getFieldName($field));
@@ -207,16 +203,16 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			// Prime some default values.
 			if ($eventId == '0' && $app instanceof CMSWebApplicationInterface) {
 				$catId       = $app->getUserState('com_dpcalendar.events.filter.calendars');
-				$data->catid = $app->getInput()->getCmd('catid', \is_array($catId) ? reset($catId) : $catId);
+				$data->catid = $app->getInput()->getCmd('catid', is_array($catId) ? reset($catId) : $catId);
 
 				$requestParams = $app->getInput()->get('jform', [], 'array');
-				if (!$data->catid && \array_key_exists('catid', $requestParams)) {
+				if (!$data->catid && array_key_exists('catid', $requestParams)) {
 					$data->catid = $requestParams['catid'];
 				}
 			}
 		}
 
-		if (\is_array($data)) {
+		if (is_array($data)) {
 			$data = (object)$data;
 		}
 
@@ -264,11 +260,54 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 
 		$this->preprocessData('com_dpcalendar.event', $data);
 
-		if (!empty($data->payment_provider) && \is_string($data->payment_provider)) {
+		// Migrate subform data to old repeatable format
+		if (isset($data->price) && is_string($data->price) && $data->price) {
+			$obj     = json_decode($data->price);
+			$newData = [];
+			foreach ($obj->value as $index => $value) {
+				$newData['price' . ($index + 1)] = [
+					'value'       => $value,
+					'label'       => $obj->label[$index],
+					'description' => $obj->description[$index]
+				];
+			}
+			$data->price = json_encode($newData);
+		}
+		if (isset($data->earlybird) && is_string($data->earlybird) && $data->earlybird) {
+			$obj     = json_decode($data->earlybird);
+			$newData = [];
+			foreach ($obj->value as $index => $value) {
+				$newData['price' . ($index + 1)] = [
+					'value'       => $value,
+					'type'        => $obj->type[$index],
+					'date'        => $obj->date[$index],
+					'label'       => $obj->label[$index],
+					'description' => $obj->description[$index]
+				];
+			}
+			$data->earlybird = json_encode($newData);
+		}
+		if (isset($data->user_discount) && is_string($data->user_discount) && $data->user_discount) {
+			$obj     = json_decode($data->user_discount);
+			$newData = [];
+			foreach ($obj->value as $index => $value) {
+				$newData['price' . ($index + 1)] = [
+					'value'           => $value,
+					'type'            => $obj->type[$index],
+					'date'            => $obj->date[$index],
+					'label'           => $obj->label[$index],
+					'description'     => $obj->description[$index],
+					'discount_groups' => $obj->discount_groups[$index]
+				];
+			}
+			$data->user_discount = json_encode($newData);
+		}
+
+		if (!empty($data->payment_provider) && is_string($data->payment_provider)) {
 			$data->payment_provider = explode(',', $data->payment_provider);
 		}
 
-		if (!empty($data->booking_assign_user_groups) && \is_string($data->booking_assign_user_groups)) {
+		if (!empty($data->booking_assign_user_groups) && is_string($data->booking_assign_user_groups)) {
 			$data->booking_assign_user_groups = explode(',', $data->booking_assign_user_groups);
 		}
 
@@ -326,12 +365,8 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 				}
 				$item->tickets = $this->getTickets($item->id ?? '');
 
-				if ($item->rooms && \is_string($item->rooms)) {
+				if ($item->rooms && is_string($item->rooms)) {
 					$item->rooms = explode(',', $item->rooms);
-				}
-
-				if ($item->price && \is_string($item->price)) {
-					$item->price = json_decode($item->price);
 				}
 			}
 		}
@@ -366,53 +401,95 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			$data['end_date']   = DPCalendarHelper::getDate($data['end_date'], $data['all_day'])->toSql(true);
 		}
 
-		if (isset($data['exdates']) && \is_array($data['exdates'])) {
+		if (isset($data['exdates']) && is_array($data['exdates'])) {
 			$data['exdates'] = $data['exdates'] !== [] ? json_encode($data['exdates']) : '';
 		}
 
-		if (isset($data['images']) && \is_array($data['images'])) {
+		if (isset($data['images']) && is_array($data['images'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['images']);
 			$data['images'] = (string)$registry;
 		}
 
-		if (isset($data['earlybird']) && \is_array($data['earlybird'])) {
-			$data['earlybird'] = json_encode($data['earlybird']);
+		$app = Factory::getApplication();
+
+		// Migrate subform data to old repeatable format
+		if (isset($data['price']) && is_array($data['price'])) {
+			$obj              = new \stdClass();
+			$obj->value       = [];
+			$obj->label       = [];
+			$obj->description = [];
+			foreach ($data['price'] as $p) {
+				$obj->value[]       = $p['value'];
+				$obj->label[]       = $p['label'];
+				$obj->description[] = $p['description'];
+			}
+			$data['price'] = json_encode($obj);
+		}
+		if (isset($data['earlybird']) && is_array($data['earlybird'])) {
+			$obj              = new \stdClass();
+			$obj->value       = [];
+			$obj->type        = [];
+			$obj->date        = [];
+			$obj->label       = [];
+			$obj->description = [];
+			foreach ($data['earlybird'] as $p) {
+				$obj->value[]       = $p['value'];
+				$obj->type[]        = $p['type'];
+				$obj->date[]        = $p['date'];
+				$obj->label[]       = $p['label'];
+				$obj->description[] = $p['description'];
+			}
+			$data['earlybird'] = json_encode($obj);
+		}
+		if (isset($data['user_discount']) && is_array($data['user_discount'])) {
+			$obj                  = new \stdClass();
+			$obj->value           = [];
+			$obj->type            = [];
+			$obj->date            = [];
+			$obj->label           = [];
+			$obj->description     = [];
+			$obj->discount_groups = [];
+			foreach ($data['user_discount'] as $p) {
+				$obj->value[]           = $p['value'];
+				$obj->type[]            = $p['type'];
+				$obj->date[]            = $p['date'];
+				$obj->label[]           = $p['label'];
+				$obj->description[]     = $p['description'];
+				$obj->discount_groups[] = $p['discount_groups'];
+			}
+			$data['user_discount'] = json_encode($obj);
 		}
 
-		if (isset($data['user_discount']) && \is_array($data['user_discount'])) {
-			$data['user_discount'] = json_encode($data['user_discount']);
+		if (!empty($data['price']) && is_string($data['price'])) {
+			$prices = json_decode($data['price']);
+
+			$hasprice = false;
+			foreach ($prices->value as $index => $value) {
+				if ($value || $prices->label[$index] || $prices->description[$index]) {
+					$hasprice = true;
+					break;
+				}
+			}
+
+			if (!$hasprice) {
+				$data['price'] = '';
+			}
 		}
 
-		if (isset($data['events_discount']) && \is_array($data['events_discount'])) {
-			$data['events_discount'] = json_encode($data['events_discount']);
-		}
-
-		if (isset($data['tickets_discount']) && \is_array($data['tickets_discount'])) {
-			$data['tickets_discount'] = json_encode($data['tickets_discount']);
-		}
-
-		if (isset($data['price']) && \is_array($data['price'])) {
-			$data['price'] = json_encode($data['price']);
-		}
-
-		if (!empty($data['price']) && \is_string($data['price'])) {
-			$data['price'] = array_filter((array)json_decode($data['price']), fn ($p): bool => $p->value || $p->label || $p->description) !== [] ? $data['price'] : '';
-		}
-
-		if (isset($data['booking_options']) && \is_array($data['booking_options'])) {
+		if (isset($data['booking_options']) && is_array($data['booking_options'])) {
 			$data['booking_options'] = $data['booking_options'] !== [] ? json_encode($data['booking_options']) : '';
 		}
 
-		if (isset($data['schedule']) && \is_array($data['schedule'])) {
+		if (isset($data['schedule']) && is_array($data['schedule'])) {
 			$data['schedule'] = $data['schedule'] !== [] ? json_encode($data['schedule']) : '';
 		}
 
-		if (isset($data['payment_provider']) && \is_array($data['payment_provider'])) {
+		if (isset($data['payment_provider']) && is_array($data['payment_provider'])) {
 			$data['payment_provider'] = $data['payment_provider'] !== [] ? implode(',', $data['payment_provider']) : '';
 		}
 
-		if (isset($data['booking_assign_user_groups']) && \is_array($data['booking_assign_user_groups'])) {
+		if (isset($data['booking_assign_user_groups']) && is_array($data['booking_assign_user_groups'])) {
 			$data['booking_assign_user_groups'] = $data['booking_assign_user_groups'] !== [] ? implode(',', $data['booking_assign_user_groups']) : '';
 		}
 
@@ -436,7 +513,6 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			throw new \Exception('Event is not created');
 		}
 
-		$app = Factory::getApplication();
 		if ($app instanceof CMSWebApplicationInterface) {
 			$app->setUserState('dpcalendar.event.id', $id);
 		}
@@ -461,7 +537,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 				$hostsValues .= '(' . (int)$tmp->id . ',' . (int)$host . '),';
 			}
 
-			if (\array_key_exists($tmp->id, $oldEventIds)) {
+			if (array_key_exists($tmp->id, $oldEventIds)) {
 				unset($oldEventIds[$tmp->id]);
 			}
 
@@ -471,7 +547,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			}
 
 			// When modified events should not be updated and the modified date is different than the original event, ignore it
-			if (\array_key_exists('update_modified', $data)
+			if (array_key_exists('update_modified', $data)
 				&& (int)$data['update_modified'] === 0
 				&& $tmp->modified
 				&& $tmp->modified !== $event->modified) {
@@ -481,12 +557,12 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			// Save the values on the child events
 			foreach ($fields as $field) {
 				$value = $field->value;
-				if (isset($data['com_fields']) && \array_key_exists($field->name, $data['com_fields'])) {
+				if (isset($data['com_fields']) && array_key_exists($field->name, $data['com_fields'])) {
 					$value = $data['com_fields'][$field->name];
 				}
 
 				// The media field needs the data encoded
-				if ($field->type === 'media' && \is_array($value)) {
+				if ($field->type === 'media' && is_array($value)) {
 					$value = json_encode($value);
 				}
 
@@ -541,7 +617,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		$this->sendMail($this->getState($this->getName() . '.new') ? 'create' : 'edit', [$event]);
 
 		// Notify the ticket holders
-		if (\array_key_exists('notify_changes', $data) && $data['notify_changes']) {
+		if (array_key_exists('notify_changes', $data) && $data['notify_changes']) {
 			$langs   = [$app->getLanguage()->getTag() => $app->getLanguage()];
 			$tickets = $this->getTickets($event->id);
 			foreach ($tickets as $ticket) {
@@ -549,7 +625,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 				if ($ticket->user_id) {
 					$language = $this->getUserFactory()->loadUserById($ticket->user_id)->getParam('language') ?: $language;
 
-					if (!\array_key_exists($language, $langs)) {
+					if (!array_key_exists($language, $langs)) {
 						// @phpstan-ignore-next-line
 						$l = Language::getInstance($language, $app->get('debug_lang'));
 						$l->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
@@ -593,7 +669,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		}
 
 		$data = Factory::getApplication()->getInput()->post->get('jform', [], 'array');
-		if (\array_key_exists('update_modified', $data)) {
+		if (array_key_exists('update_modified', $data)) {
 			$table->_update_modified = $data['update_modified'];
 		}
 	}

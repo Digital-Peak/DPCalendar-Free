@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Plugin\Fields\DPCalendar\Field;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;

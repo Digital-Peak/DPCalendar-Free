@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Factory;
@@ -105,7 +105,7 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 				}
 
 				foreach (Folder::files($folder . '/language', '.', true, true) as $file) {
-					if (str_starts_with(basename((string)$file), basename(\dirname((string)$file)))) {
+					if (str_starts_with(basename((string)$file), basename(dirname((string)$file)))) {
 						unlink($file);
 					}
 				}

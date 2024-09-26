@@ -7,8 +7,9 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Plugin;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
@@ -107,7 +108,7 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 		$rootURL    = rtrim(Uri::base(), '/');
 		$subpathURL = Uri::base(true);
 		if (!empty($subpathURL) && ($subpathURL != '/')) {
-			$rootURL = substr($rootURL, 0, -1 * \strlen($subpathURL));
+			$rootURL = substr($rootURL, 0, -1 * strlen($subpathURL));
 		}
 
 		$tmpl = '';
@@ -124,7 +125,7 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 		// The payment parameters
 		$purchaseParameters             = [];
 		$purchaseParameters['amount']   = $booking->price;
-		$purchaseParameters['currency'] = $booking->currency;
+		$purchaseParameters['currency'] = strtoupper((string)DPCalendarHelper::getComponentParameter('currency', 'USD'));
 
 		// The urls for call back actions
 		$purchaseParameters['returnUrl'] = Route::_('index.php?option=com_dpcalendar&task=booking.pay&b_id=' . $booking->id . $tmpl, false);

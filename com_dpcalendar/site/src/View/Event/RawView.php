@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Event;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
 use Joomla\CMS\Factory;

@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Extension\DPCalendarComponent;
 use Joomla\CMS\Categories\CategoryFactoryInterface;

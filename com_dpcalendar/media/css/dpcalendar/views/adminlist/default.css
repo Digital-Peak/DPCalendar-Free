@@ -14,7 +14,7 @@
 	cursor: pointer;
 	vertical-align: middle;
 	user-select: none;
-	border-radius: 0.2rem;
+	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 .com-dpcalendar-adminlist .dp-button:disabled,
@@ -66,19 +66,15 @@
 	margin: 0;
 	padding: 0.7em 1em;
 	border-bottom: rgb(206, 206, 206) solid 1px;
-	text-align: left;
+	text-align: center;
 	font-size: inherit;
-	box-sizing: border-box;
 }
 .com-dpcalendar-adminlist .dp-table__thead, .com-dpcalendar-adminlist .dp-table thead {
 	text-align: left;
 	vertical-align: bottom;
 }
-.com-dpcalendar-adminlist .dp-table .dp-table__cell_right {
+.com-dpcalendar-adminlist .dp-table .dp-cell-price {
 	text-align: right;
-}
-.com-dpcalendar-adminlist .dp-table .dp-table__cell_center {
-	text-align: center;
 }
 @media screen and (width <= 767px) {
 	.com-dpcalendar-adminlist .dp-table,
@@ -100,6 +96,7 @@
 	.com-dpcalendar-adminlist .dp-table td {
 		position: relative;
 		padding-left: 50%;
+		text-align: left;
 	}
 	.com-dpcalendar-adminlist .dp-table td::before {
 		content: attr(data-column);
@@ -107,6 +104,15 @@
 		left: 0.5rem;
 		padding-right: 0.5rem;
 		font-weight: bold;
+	}
+	.com-dpcalendar-adminlist .dp-table td,
+	.com-dpcalendar-adminlist .dp-table th {
+		text-align: left !important;
+		box-sizing: border-box;
+	}
+	.com-dpcalendar-adminlist .dp-table td > div,
+	.com-dpcalendar-adminlist .dp-table th > div {
+		text-align: left;
 	}
 }
 .com-dpcalendar-adminlist .js-stools {

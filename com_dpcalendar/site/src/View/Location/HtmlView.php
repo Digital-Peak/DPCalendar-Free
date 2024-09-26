@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Location;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
@@ -93,7 +93,7 @@ class HtmlView extends BaseView
 
 		$menu = $this->app->getMenu()->getActive();
 
-		$id = $menu && \array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
+		$id = $menu && array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
 		if ($menu && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] != 'location' || $id != $this->location->id)) {
 			$this->app->getPathway()->addItem($this->location->title, '');
 		}

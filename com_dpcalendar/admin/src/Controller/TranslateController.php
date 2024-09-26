@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Controller;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\ToolsModel;
@@ -78,7 +78,7 @@ class TranslateController extends BaseController
 			}
 
 			// Check if the code is ok and if we have the language installed locally
-			if (!\array_key_exists($tr->code, $localLanguages)) {
+			if (!array_key_exists($tr->code, $localLanguages)) {
 				continue;
 			}
 
@@ -115,8 +115,8 @@ class TranslateController extends BaseController
 			$path .= '.ini';
 
 			// When the file doesn't exist, ignore it
-			if (!is_dir(\dirname($path))) {
-				mkdir(\dirname($path), 0777, true);
+			if (!is_dir(dirname($path))) {
+				mkdir(dirname($path), 0777, true);
 			}
 
 			// Write the content

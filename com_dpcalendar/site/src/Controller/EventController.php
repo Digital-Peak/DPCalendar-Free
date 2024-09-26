@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Controller;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendarInterface;
@@ -186,9 +186,9 @@ class EventController extends FormController implements CurrentUserInterface
 
 	public function edit($key = 'id', $urlVar = 'e_id')
 	{
-		$context  = \sprintf('%s.edit.%s', $this->option, $this->context);
+		$context  = sprintf('%s.edit.%s', $this->option, $this->context);
 		$cid      = $this->input->get('cid', [], 'post');
-		$recordId = (\count($cid) > 0 ? $cid[0] : $this->input->getString($urlVar, ''));
+		$recordId = (count($cid) > 0 ? $cid[0] : $this->input->getString($urlVar, ''));
 
 		if (!$this->allowEdit([$key => $recordId], $key)) {
 			$this->setMessage(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
@@ -306,7 +306,7 @@ class EventController extends FormController implements CurrentUserInterface
 
 		$data = ArrayHelper::fromObject($event);
 
-		if (!empty($data['tags']) && \array_key_exists('tags', $data['tags'])) {
+		if (!empty($data['tags']) && array_key_exists('tags', $data['tags'])) {
 			$data['tags'] = explode(',', (string)$data['tags']['tags']);
 		}
 
@@ -404,19 +404,19 @@ class EventController extends FormController implements CurrentUserInterface
 			$data['all_day'] = '1';
 		}
 
-		if (!\array_key_exists('all_day', $data)) {
+		if (!array_key_exists('all_day', $data)) {
 			$data['all_day'] = 0;
 		}
 
-		if (!\array_key_exists('color', $data)) {
+		if (!array_key_exists('color', $data)) {
 			$data['color'] = '';
 		}
 
-		if (!\array_key_exists('payment_provider', $data)) {
+		if (!array_key_exists('payment_provider', $data)) {
 			$data['payment_provider'] = '';
 		}
 
-		if (!\array_key_exists('capacity', $data)) {
+		if (!array_key_exists('capacity', $data)) {
 			$data['capacity'] = $params->get('event_form_capacity', '0');
 		}
 
@@ -487,13 +487,13 @@ class EventController extends FormController implements CurrentUserInterface
 
 		if (DPCalendarHelper::isFree()) {
 			foreach (DPCalendarHelper::$DISABLED_FREE_FIELDS as $field) {
-				if (\array_key_exists($field, $data)) {
+				if (array_key_exists($field, $data)) {
 					unset($data[$field]);
 				}
 			}
 
 			// Unset also the capacity
-			if (\array_key_exists('capacity', $data)) {
+			if (array_key_exists('capacity', $data)) {
 				unset($data['capacity']);
 			}
 		}
@@ -512,7 +512,7 @@ class EventController extends FormController implements CurrentUserInterface
 			$form      = $model->getForm($data, true);
 			$validData = $model->validate($form, $data);
 
-			if (!\is_array($validData)) {
+			if (!is_array($validData)) {
 				// @phpstan-ignore-next-line
 				foreach ($model->getErrors() as $error) {
 					$this->setMessage($error instanceof \Exception ? $error->getMessage() : $error, 'error');

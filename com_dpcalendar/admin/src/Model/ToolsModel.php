@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\ThinHTTP\CurlClient;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;

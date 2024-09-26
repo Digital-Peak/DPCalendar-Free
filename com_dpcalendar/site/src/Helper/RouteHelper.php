@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Helper;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
@@ -29,7 +29,7 @@ class RouteHelper
 	{
 		// Check if we come from com_tags where the link is generated id:alias
 		$parts = $id ? explode(':', (string)$id) : [];
-		if (\count($parts) == 2 && is_numeric($parts[0])) {
+		if (count($parts) == 2 && is_numeric($parts[0])) {
 			$id = (int)$id;
 		}
 
@@ -388,7 +388,7 @@ class RouteHelper
 
 			$component = ComponentHelper::getComponent('com_dpcalendar');
 			$items     = $menus->getItems('component_id', $component->id);
-			if (!\is_array($items)) {
+			if (!is_array($items)) {
 				$items = [$items];
 			}
 
@@ -411,7 +411,7 @@ class RouteHelper
 					}
 
 					$ids = $item->getParams()->get('ids');
-					if (!\is_array($ids) && $ids) {
+					if (!is_array($ids) && $ids) {
 						$ids = [$ids];
 					}
 

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\View\Events;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
 use Joomla\CMS\Helper\ContentHelper;
@@ -59,7 +59,7 @@ class HtmlView extends BaseView
 		$canDo = ContentHelper::getActions('com_dpcalendar');
 		$user  = $this->getCurrentUser();
 
-		if (\count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) > 0) {
+		if (count($user->getAuthorisedCategories('com_dpcalendar', 'core.create')) > 0) {
 			ToolbarHelper::addNew('event.add');
 		}
 		if ($canDo->get('core.edit')) {

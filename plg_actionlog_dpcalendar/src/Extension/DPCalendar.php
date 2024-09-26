@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Plugin\Actionlog\DPCalendar\Extension;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use Joomla\Component\Actionlogs\Administrator\Plugin\ActionLogPlugin;
 

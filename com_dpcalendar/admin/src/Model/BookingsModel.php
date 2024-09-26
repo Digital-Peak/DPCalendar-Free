@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
@@ -139,7 +139,7 @@ class BookingsModel extends ListModel
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} elseif (\is_array($published)) {
+		} elseif (is_array($published)) {
 			$query->where('a.state IN (' . implode(',', ArrayHelper::toInteger($published)) . ')');
 		} elseif ($published === '') {
 			$query->where('a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8)');
@@ -156,24 +156,18 @@ class BookingsModel extends ListModel
 		if ($eventId && is_numeric($eventId)) {
 			$eventId = [$eventId];
 		}
-		if (\is_array($eventId)) {
+		if (is_array($eventId)) {
 			$eventId = ArrayHelper::toInteger($eventId);
 
-			// Also search in original events and instances
+			// Also search in original events
 			$this->getDatabase()->setQuery(
-				'select id,original_id from #__dpcalendar_events where (id in (' . implode(',', $eventId) . ') and original_id > 0) or original_id in (' . implode(',', $eventId) . ')'
+				'select original_id from #__dpcalendar_events where id in (' . implode(',', $eventId) . ') and original_id > 0'
 			);
-			foreach ($this->getDatabase()->loadObjectList() as $e) {
-				if ($e->original_id > 0 && \in_array($e->id, $eventId)) {
-					$eventId[] = $e->original_id;
-				}
-
-				if ($e->id > 0 && \in_array($e->original_id, $eventId)) {
-					$eventId[] = $e->id;
-				}
+			foreach ($this->getDatabase()->loadObjectList() as $orig) {
+				$eventId[] = $orig->original_id;
 			}
 
-			$query->where('t.event_id in (' . implode(',', array_unique($eventId)) . ')');
+			$query->where('t.event_id in (' . implode(',', $eventId) . ')');
 		}
 
 		// Access rights

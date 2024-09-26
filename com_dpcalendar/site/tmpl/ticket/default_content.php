@@ -1,15 +1,11 @@
 <?php
-
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
-
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
 $ticket = $this->ticket;
 $event  = $this->event;
@@ -58,7 +54,7 @@ $event  = $this->event;
 		<dl class="dp-description">
 			<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></dt>
 			<dd class="dp-description__description">
-				<?php echo DPCalendarHelper::renderPrice($ticket->price); ?>
+				<?php echo \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::renderPrice($ticket->price, $this->params->get('currency_symbol', '$')); ?>
 			</dd>
 		</dl>
 		<dl class="dp-description">

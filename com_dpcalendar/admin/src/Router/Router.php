@@ -37,7 +37,7 @@ class Router
 
 	public function getEventFormRoute(?string $id, ?string $return = null, ?string $append = null, ?bool $xhtml = true): string
 	{
-		return Route::_(RouteHelper::getFormRoute($id, $return, $append), \is_bool($xhtml) ? $xhtml : true);
+		return Route::_(RouteHelper::getFormRoute($id, $return, $append), is_bool($xhtml) ? $xhtml : true);
 	}
 
 	public function getEventDeleteRoute(string $id, ?string $return = null): string

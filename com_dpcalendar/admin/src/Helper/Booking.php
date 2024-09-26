@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Helper;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use chillerlan\QRCode\QRCode;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
@@ -214,7 +214,7 @@ class Booking
 
 			$series = $model->getItems();
 			foreach ($series as $e) {
-				if (!self::openForBooking($e) || \array_key_exists($e->id, $events)) {
+				if (!self::openForBooking($e) || array_key_exists($e->id, $events)) {
 					continue;
 				}
 				$events[$e->id] = $e;
@@ -226,7 +226,7 @@ class Booking
 
 	public static function paymentRequired(\stdClass $event): bool
 	{
-		return $event->price != '0.00' && !empty($event->price);
+		return $event->price != '0.00' && !empty($event->price) && !empty($event->price->value);
 	}
 
 	public static function openForCancel(\stdClass $booking, array $states = [1, 4, 8]): bool
@@ -236,7 +236,7 @@ class Booking
 			return true;
 		}
 
-		if (!\in_array($booking->state, $states)) {
+		if (!in_array($booking->state, $states)) {
 			return false;
 		}
 
@@ -336,26 +336,24 @@ class Booking
 
 	/**
 	 * Returns the discounted price if there are discounts to apply.
-	 * If the early bird key is set, only the early bird with that key is used.
-	 * If the user group key is set, only the user group discount with that key is used.
+	 * If the early bird index is set, only the early bird with that index is used.
+	 * If the user group index is set, only the user group discount with that index is used.
 	 */
-	public static function getPriceWithDiscount(float $price, \stdClass $event, string $earlyBirdKey = '', string $userGroupKey = ''): float
+	public static function getPriceWithDiscount(float $price, \stdClass $event, int $earlyBirdIndex = -1, int $userGroupIndex = -1): float
 	{
 		if ($price === 0.0) {
 			return 0;
 		}
-
 		$newPrice = $price;
 
 		$now = DPCalendarHelper::getDate();
 
-		if ($event->earlybird instanceof \stdClass) {
-			foreach ((array)$event->earlybird as $key => $discount) {
-				if (!$discount->value || ($earlyBirdKey !== '' && $earlyBirdKey !== $key)) {
+		if ($event->earlybird instanceof \stdClass && isset($event->earlybird->value) && is_array($event->earlybird->value)) {
+			foreach ($event->earlybird->value as $index => $value) {
+				if (!$value || $earlyBirdIndex == -2 || ($earlyBirdIndex >= 0 && $earlyBirdIndex != $index)) {
 					continue;
 				}
-
-				$limit = $discount->date;
+				$limit = $event->earlybird->date[$index];
 				$date  = DPCalendarHelper::getDate($event->start_date);
 				if (str_starts_with((string)$limit, '-') || str_starts_with((string)$limit, '+')) {
 					// Relative date
@@ -367,12 +365,11 @@ class Booking
 						$date->setTime(23, 59, 59);
 					}
 				}
-
 				if ($date->format('U') < $now->format('U')) {
 					continue;
 				}
 
-				$newPrice = $discount->type == 'value' ? $newPrice - $discount->value : $newPrice - (($newPrice / 100) * $discount->value);
+				$newPrice = $event->earlybird->type[$index] == 'value' ? $newPrice - $value : $newPrice - (($newPrice / 100) * $value);
 
 				if ($newPrice < 0) {
 					$newPrice = 0;
@@ -384,18 +381,18 @@ class Booking
 
 		// @phpstan-ignore-next-line
 		$userGroups = Access::getGroupsByUser(Factory::getUser()->id);
-		if ($event->user_discount instanceof \stdClass) {
-			foreach ((array)$event->user_discount as $key => $discount) {
-				if (!$discount->value || ($userGroupKey !== '' && $userGroupKey !== $key)) {
+		if ($event->user_discount instanceof \stdClass && isset($event->user_discount->value) && is_array($event->user_discount->value)) {
+			foreach ($event->user_discount->value as $index => $value) {
+				if (!$value || $userGroupIndex == -2 || ($userGroupIndex >= 0 && $userGroupIndex != $index)) {
 					continue;
 				}
 
-				$groups = $discount->groups ?? [];
-				if (!$groups || array_intersect($userGroups, $groups) === []) {
+				$groups = $event->user_discount->discount_groups[$index];
+				if (array_intersect($userGroups, $groups) === []) {
 					continue;
 				}
 
-				$newPrice = $discount->type == 'value' ? $newPrice - $discount->value : $newPrice - (($newPrice / 100) * $discount->value);
+				$newPrice = $event->user_discount->type[$index] == 'value' ? $newPrice - $value : $newPrice - (($newPrice / 100) * $value);
 
 				if ($newPrice < 0) {
 					$newPrice = 0;

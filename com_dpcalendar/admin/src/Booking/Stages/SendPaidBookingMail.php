@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -35,7 +35,7 @@ class SendPaidBookingMail implements StageInterface, UserFactoryAwareInterface
 		}
 
 		// Never send a mail when we have been active or cancelled/refunded before
-		if (\in_array($payload->oldItem->state, [1, 6, 7])) {
+		if (in_array($payload->oldItem->state, [1, 6, 7])) {
 			return $payload;
 		}
 

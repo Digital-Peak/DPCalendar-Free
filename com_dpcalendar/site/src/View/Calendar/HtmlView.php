@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Calendar;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\Calendar;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;

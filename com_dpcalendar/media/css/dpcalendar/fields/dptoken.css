@@ -15,7 +15,7 @@
 	cursor: pointer;
 	vertical-align: middle;
 	user-select: none;
-	border-radius: 0.2rem;
+	border-radius: 0.1rem;
 	transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 

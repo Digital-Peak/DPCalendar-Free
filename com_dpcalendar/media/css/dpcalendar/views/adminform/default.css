@@ -1,7 +1,4 @@
 @charset "UTF-8";
-.com-dpcalendar-adminform {
-	--dp-default-color: #2D9EDE;
-}
 .com-dpcalendar-adminform .dp-form-radio {
 	display: flex;
 	flex-wrap: wrap;
@@ -158,7 +155,6 @@
 	width: 100%;
 	padding: 0.2rem;
 	border: 1px solid #ced4da;
-	background: none;
 	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.075);
 	box-sizing: border-box;
 	cursor: pointer;

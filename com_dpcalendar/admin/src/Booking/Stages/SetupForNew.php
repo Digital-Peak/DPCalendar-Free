@@ -7,14 +7,14 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Exception\TicketExhaustedException;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\CouponModel;
-use DigitalPeak\Component\DPCalendar\Administrator\Model\CurrencyModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\TaxrateModel;
+use DigitalPeak\Component\DPCalendar\Administrator\Table\EventTable;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\User;
@@ -28,7 +28,6 @@ class SetupForNew implements StageInterface
 		private readonly User $user,
 		private readonly TaxrateModel $taxRateModel,
 		private readonly CouponModel $couponModel,
-		private readonly CurrencyModel $currencyModel,
 		private readonly Registry $params,
 		private readonly bool $autoAssignUser
 	) {
@@ -45,15 +44,7 @@ class SetupForNew implements StageInterface
 		$payload->data['tax']           = 0.00;
 		$payload->data['tax_rate']      = 0;
 		$payload->data['id']            = 0;
-		$payload->data['currency']      = $this->currencyModel->getActualCurrency()->currency;
-		$payload->discounts             = [
-			'events_discount_amount'  => 0,
-			'events_discount_title'   => '',
-			'events_discount_value'   => 0,
-			'tickets_discount_amount' => 0,
-			'tickets_discount_title'  => '',
-			'tickets_discount_value'  => 0
-		];
+		$payload->data['currency']      = $this->params->get('currency', 'USD');
 
 		// On front we force the user id to the logged in user
 		if ($this->autoAssignUser) {
@@ -62,84 +53,16 @@ class SetupForNew implements StageInterface
 
 		// Collect the data
 		$amountTickets            = 0;
-		$amountEvents             = 0;
 		$payload->data['options'] = [];
 		foreach ($payload->events as $event) {
-			$this->currencyModel->setupCurrencyPrices($event);
-
 			$this->handleOptions($payload, $event);
-			$eventTickets = $this->handleTickets($payload, $event, $amountTickets);
-
-			if ($eventTickets > 0) {
-				$amountEvents++;
-			}
-
-			$amountTickets += $eventTickets;
+			$amountTickets += $this->handleTickets($payload, $event, $amountTickets);
 		}
 		$payload->data['options'] = implode(',', $payload->data['options']);
 
 		// When no amount is found, then abort
-		if ($amountTickets === 0 && !$payload->data['price_options']) {
+		if ($amountTickets == 0) {
 			throw new TicketExhaustedException(Text::_('COM_DPCALENDAR_BOOK_ERROR_NEEDS_TICKETS'));
-		}
-
-		if ($amountEvents && !empty($payload->original_event) && !empty($payload->original_event->events_discount)) {
-			$savedDiscount = null;
-			$newPrice      = (int)$payload->data['price_tickets'];
-			foreach ($payload->original_event->events_discount as $discount) {
-				$amount = (int)$discount->amount;
-				if ($amountEvents < $amount || ($savedDiscount !== null && (int)$savedDiscount->amount > $amount)) {
-					continue;
-				}
-
-				$savedDiscount = $discount;
-
-				// @phpstan-ignore-next-line
-				$payload->discounts['events_discount_title']  = $discount->label ?? '';
-				$payload->discounts['events_discount_amount'] = $amount;
-				$payload->discounts['events_discount_value']  = $discount->type === 'value' ? DPCalendarHelper::renderPrice($discount->value) : $discount->value . '%';
-				$payload->data['events_discount']             = (int)$discount->value;
-
-				if ($discount->type !== 'percentage') {
-					$newPrice = $payload->data['price_tickets'] - (int)$discount->value;
-					continue;
-				}
-
-				$newPrice                         = $payload->data['price_tickets'] - (($payload->data['price_tickets'] / 100) * (int)$discount->value);
-				$newPrice                         = $newPrice < 0 ? 0 : $newPrice;
-				$payload->data['events_discount'] = $payload->data['price_tickets'] - $newPrice;
-			}
-
-			$payload->data['price_tickets'] = $newPrice;
-		}
-
-		if (!empty($event->tickets_discount)) {
-			$savedDiscount = null;
-			$newPrice      = (int)$payload->data['price_tickets'];
-			foreach ($event->tickets_discount as $discount) {
-				$amount = (int)$discount->amount;
-				if ($amountTickets < $amount || ($savedDiscount !== null && (int)$savedDiscount->amount > $amount)) {
-					continue;
-				}
-
-				$savedDiscount = $discount;
-
-				$payload->discounts['tickets_discount_title']  = $discount->label ?? '';
-				$payload->discounts['tickets_discount_amount'] = $amount;
-				$payload->discounts['tickets_discount_value']  = $discount->type === 'value' ? DPCalendarHelper::renderPrice($discount->value) : $discount->value . '%';
-				$payload->data['tickets_discount']             = (int)$discount->value;
-
-				if ($discount->type !== 'percentage') {
-					$newPrice = $payload->data['price_tickets'] - (int)$discount->value;
-					continue;
-				}
-
-				$newPrice                          = $payload->data['price_tickets'] - (($payload->data['price_tickets'] / 100) * (int)$discount->value);
-				$newPrice                          = $newPrice < 0 ? 0 : $newPrice;
-				$payload->data['tickets_discount'] = $payload->data['price_tickets'] - $newPrice;
-			}
-
-			$payload->data['price_tickets'] = $newPrice;
 		}
 
 		// The prices for the different
@@ -155,9 +78,7 @@ class SetupForNew implements StageInterface
 		);
 
 		// Set the coupon attributes
-		$payload->data['coupon_id']   = 0;
-		$payload->data['coupon_area'] = 0;
-		$payload->data['coupon_rate'] = 0;
+		$payload->data['coupon_id'] = 0;
 		if ($coupon instanceof \stdClass && $coupon->id) {
 			$payload->data['coupon_id']   = $coupon->id;
 			$payload->data['coupon_area'] = $coupon->area;
@@ -195,7 +116,7 @@ class SetupForNew implements StageInterface
 
 		// Do not force state when not on front and is available
 		if (!$this->application->isClient('administrator') || empty($payload->data['state'])) {
-			if (!\array_key_exists('state', $payload->data)) {
+			if (!array_key_exists('state', $payload->data)) {
 				$payload->data['state'] = 0;
 			}
 
@@ -222,7 +143,7 @@ class SetupForNew implements StageInterface
 
 			// When tickets are reviewed and capacity is full and waiting list is active, put it on the waiting list
 			$event = reset($payload->events);
-			if ($payload->data['state'] == 2 && ((is_countable($payload->events) ? \count($payload->events) : 0) == 1 || $event->booking_series != 2)
+			if ($payload->data['state'] == 2 && ((is_countable($payload->events) ? count($payload->events) : 0) == 1 || $event->booking_series != 2)
 				&& $event->capacity != null && $event->capacity_used >= $event->capacity && $event->booking_waiting_list) {
 				$payload->data['state'] = 8;
 			}
@@ -248,20 +169,20 @@ class SetupForNew implements StageInterface
 	private function handleOptions(\stdClass $payload, \stdClass $event): void
 	{
 		// The booking options
-		if (empty($payload->data['event_id'][$event->id]['options']) || !$event->booking_options) {
+		if (empty($payload->data['event_id'][$event->id]['options'])) {
 			return;
 		}
 
 		$amount = $payload->data['event_id'][$event->id]['options'];
 		foreach ($event->booking_options as $key => $option) {
-			$key = (int)preg_replace('/\D/', '', (string)$key);
-			if (empty($amount[$key])) {
+			$key = preg_replace('/\D/', '', (string)$key);
+			if (!array_key_exists(empty($key) && $key !== '0' ? '' : $key, $amount) || empty($amount[$key])) {
 				continue;
 			}
 
 			$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key];
 
-			$priceOriginal = $option->value * $amount[$key];
+			$priceOriginal = $option->price * $amount[$key];
 			$priceDiscount = $priceOriginal;
 
 			$payload->data['price_details'][$event->id]['options'][$key] = [
@@ -275,15 +196,12 @@ class SetupForNew implements StageInterface
 	}
 
 	/**
-	 * Determine the price for the tickets of the event.
+	 * Determine the price for the options of the event.
 	 */
-	private function handleTickets(\stdClass $payload, \stdClass $event, int $amountTickets): int
+	private function handleTickets(\stdClass $payload, \stdClass|EventTable $event, int $amountTickets): int
 	{
 		// The tickets to process
 		$amount = $payload->data['event_id'][$event->id]['tickets'];
-		if (empty($amount)) {
-			return 0;
-		}
 
 		// Free event
 		if (!$event->price) {
@@ -302,32 +220,26 @@ class SetupForNew implements StageInterface
 		$newTickets    = false;
 
 		// Loop over the prices
-		foreach ($event->price as $key => $price) {
-			$key = (int)preg_replace('/\D/', '', (string)$key);
-
+		foreach ($event->price->value as $index => $value) {
 			// Get the amount of tickets
-			$event->amount_tickets[$key] = $this->getAmountTickets($event, $payload, $amount, $key, $amountTickets);
-			$amountTickets += $event->amount_tickets[$key];
+			$event->amount_tickets[$index] = $this->getAmountTickets($event, $payload, $amount, $index, $amountTickets);
+			$amountTickets += $event->amount_tickets[$index];
 
 			// Initialize the price details
-			$payload->data['price_details'][$event->id]['tickets'][$key] = [
-				'discount' => DPCalendarHelper::renderPrice('0.00'),
-				'original' => DPCalendarHelper::renderPrice('0.00')
-			];
+			$payload->data['price_details'][$event->id]['tickets'][$index] = ['discount' => '0.00', 'original' => '0.00'];
 
 			// Determine the price
 			$paymentRequired = Booking::paymentRequired($event);
 
 			// Load the price
-			if ($event->amount_tickets[$key] && $paymentRequired) {
+			if ($event->amount_tickets[$index] && $paymentRequired) {
 				// Set the original price
-				$priceOriginal = $price->value * $event->amount_tickets[$key];
-
+				$priceOriginal = $value * $event->amount_tickets[$index];
 				// Get the price with a discount
-				$priceDiscount = Booking::getPriceWithDiscount($price->value, $event) * $event->amount_tickets[$key];
+				$priceDiscount = Booking::getPriceWithDiscount($value, $event) * $event->amount_tickets[$index];
 
 				// Set the price details
-				$payload->data['price_details'][$event->id]['tickets'][$key] = [
+				$payload->data['price_details'][$event->id]['tickets'][$index] = [
 					'discount' => DPCalendarHelper::renderPrice(number_format($priceDiscount, 2, '.', '')),
 					'original' => DPCalendarHelper::renderPrice(number_format($priceOriginal, 2, '.', '')),
 					'raw'      => number_format($priceOriginal, 2, '.', '')
@@ -336,16 +248,13 @@ class SetupForNew implements StageInterface
 				// Add the real price to the full price for tickets
 				$payload->data['price_tickets'] += $priceDiscount;
 			}
-
 			// Ensure there are new tickets
 			if ($newTickets) {
 				continue;
 			}
-
-			if ($event->amount_tickets[$key] === 0) {
+			if ($event->amount_tickets[$index] === 0) {
 				continue;
 			}
-
 			$newTickets = true;
 		}
 
@@ -361,12 +270,12 @@ class SetupForNew implements StageInterface
 	/**
 	 * Determine the price for the options of the event.
 	 */
-	private function getAmountTickets(\stdClass $event, \stdClass $payload, array $amount, int $key, int $alreadyCollected): int
+	private function getAmountTickets(\stdClass|EventTable $event, \stdClass $payload, array $amount, int $index, int $alreadyCollected): int
 	{
 		// Check if the user or email address has already tickets booked
 		$bookedTickets = 0;
 		foreach ($event->tickets as $ticket) {
-			if (($ticket->email !== $payload->data['email'] && ($this->user->guest || $ticket->user_id != $payload->data['user_id'])) || $ticket->type != $key) {
+			if (($ticket->email !== $payload->data['email'] && ($this->user->guest || $ticket->user_id != $payload->data['user_id'])) || $ticket->type != $index) {
 				continue;
 			}
 			$bookedTickets++;
@@ -378,7 +287,7 @@ class SetupForNew implements StageInterface
 		}
 
 		// If there are already booked tickets and the limit is hit, reduce the amount
-		$amountTickets = $amount[$key] > ($event->max_tickets - $bookedTickets) ? $event->max_tickets - $bookedTickets : $amount[$key];
+		$amountTickets = $amount[$index] > ($event->max_tickets - $bookedTickets) ? $event->max_tickets - $bookedTickets : $amount[$index];
 
 		// If the amount is bigger than the available space, reduce it when waiting list is not activated
 		if ($event->capacity !== null && $amountTickets > ($event->capacity - $event->capacity_used - $alreadyCollected) && !$event->booking_waiting_list) {
@@ -386,12 +295,12 @@ class SetupForNew implements StageInterface
 		}
 
 		// If the amount of tickets is 0 raise a warning
-		if ($amountTickets < 1 && $amount[$key] > 0) {
+		if ($amountTickets < 1 && $amount[$index] > 0) {
 			$amountTickets = 0;
 			$this->application->enqueueMessage(
 				Text::sprintf(
 					'COM_DPCALENDAR_BOOK_ERROR_CAPACITY_EXHAUSTED_USER',
-					$event->price ? $event->price->{'price' . $key}->label : '',
+					$event->price ? $event->price->label[$index] : '',
 					$event->title
 				),
 				'warning'

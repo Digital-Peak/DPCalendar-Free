@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Controller;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
@@ -19,7 +19,7 @@ class CaldavController extends BaseController
 	{
 		$users = $this->getModel()->syncUsers();
 
-		$msg = \sprintf(Text::_('COM_DPCALENDAR_CONTROLLER_CALDAV_SYNC_SUCCESS'), $users);
+		$msg = sprintf(Text::_('COM_DPCALENDAR_CONTROLLER_CALDAV_SYNC_SUCCESS'), $users);
 
 		$this->setRedirect(Route::_('index.php?option=com_dpcalendar&view=tools', false), $msg);
 

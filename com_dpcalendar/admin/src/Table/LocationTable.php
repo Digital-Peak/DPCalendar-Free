@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Table;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\ApplicationHelper;
@@ -82,27 +82,27 @@ class LocationTable extends BasicTable implements TaggableTableInterface, Versio
 
 	public function bind($data, $ignore = '')
 	{
-		$data = \is_object($data) ? get_object_vars($data) : $data;
+		$data = is_object($data) ? get_object_vars($data) : $data;
 
-		if (isset($data['params']) && \is_array($data['params'])) {
+		if (isset($data['params']) && is_array($data['params'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['params']);
 			$data['params'] = (string)$registry;
 		}
 
-		if (isset($data['metadata']) && \is_array($data['metadata'])) {
+		if (isset($data['metadata']) && is_array($data['metadata'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['metadata']);
 			$data['metadata'] = (string)$registry;
 		}
 
-		if (isset($data['images']) && \is_array($data['images'])) {
+		if (isset($data['images']) && is_array($data['images'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['images']);
 			$data['images'] = (string)$registry;
 		}
 
-		if (isset($data['rooms']) && \is_array($data['rooms'])) {
+		if (isset($data['rooms']) && is_array($data['rooms'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['rooms']);
 			$data['rooms'] = (string)$registry;
@@ -255,7 +255,7 @@ class LocationTable extends BasicTable implements TaggableTableInterface, Versio
 		$this->getDatabase()->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in
-		if ($checkin && \count($pks) === $this->getDatabase()->getAffectedRows()) {
+		if ($checkin && count($pks) === $this->getDatabase()->getAffectedRows()) {
 			// Checkin the rows
 			foreach ($pks as $pk) {
 				$this->checkin($pk);
@@ -263,7 +263,7 @@ class LocationTable extends BasicTable implements TaggableTableInterface, Versio
 		}
 
 		// If the JTable instance value is in the list of primary keys that were set, set the instance.
-		if (\in_array($this->$k, $pks)) {
+		if (in_array($this->$k, $pks)) {
 			$this->state = $state;
 		}
 

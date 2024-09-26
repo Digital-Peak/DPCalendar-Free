@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Helper;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
@@ -122,7 +122,7 @@ class DPCalendarHelper
 	 */
 	public static function parseImages($event): void
 	{
-		if (\is_string($event->images)) {
+		if (is_string($event->images)) {
 			$event->images = json_decode($event->images);
 		}
 
@@ -393,7 +393,7 @@ class DPCalendarHelper
 			if (isset($event->locations) && !empty($event->locations)) {
 				$variables['location'] = $event->locations;
 				foreach ($event->locations as $location) {
-					if (\array_key_exists($location->id, $locationCache)) {
+					if (array_key_exists($location->id, $locationCache)) {
 						$location = $locationCache[$location->id];
 					} else {
 						$tmp                          = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->format($location);
@@ -540,13 +540,16 @@ class DPCalendarHelper
 		return '';
 	}
 
-	public static function renderPrice(string $price = ''): string
+	public static function renderPrice(string $price = '', ?string $currencySymbol = null, ?string $separator = null, ?string $thousandSeparator = null): string
 	{
 		if ($price === '') {
 			return $price;
 		}
 
-		return self::renderLayout('format.price', ['price' => $price]);
+		return self::renderLayout(
+			'format.price',
+			['price' => $price, 'currency' => $currencySymbol, 'separator' => $separator, 'thousands_separator' => $thousandSeparator]
+		);
 	}
 
 	public static function renderLayout(string $layout, array $data = []): string
@@ -693,10 +696,10 @@ class DPCalendarHelper
 			'zh-TW'
 		];
 		$lang = self::getFrLanguage();
-		if (!\in_array($lang, $languages)) {
+		if (!in_array($lang, $languages)) {
 			$lang = substr($lang, 0, strpos($lang, '-') ?: 0);
 		}
-		if (!\in_array($lang, $languages)) {
+		if (!in_array($lang, $languages)) {
 			return 'en';
 		}
 
@@ -707,7 +710,7 @@ class DPCalendarHelper
 	{
 		// @phpstan-ignore-next-line
 		$user   = Factory::getUser();
-		$canAdd = $user->authorise('core.create', 'com_dpcalendar') || \count($user->getAuthorisedCategories('com_dpcalendar', 'core.create'));
+		$canAdd = $user->authorise('core.create', 'com_dpcalendar') || count($user->getAuthorisedCategories('com_dpcalendar', 'core.create'));
 
 		if (!$canAdd) {
 			PluginHelper::importPlugin('dpcalendar');
@@ -765,7 +768,7 @@ class DPCalendarHelper
 	{
 		$groups = self::getComponentParameter($parameter);
 
-		if (!\is_array($groups)) {
+		if (!is_array($groups)) {
 			$groups = [$groups];
 		}
 
@@ -835,7 +838,7 @@ class DPCalendarHelper
 	 */
 	public static function endsWith($haystack, $needle): bool
 	{
-		$length = \strlen($needle);
+		$length = strlen($needle);
 		if ($length == 0) {
 			return true;
 		}
@@ -900,7 +903,7 @@ class DPCalendarHelper
 		$order = (array)$order;
 
 		// Move captcha to bottom
-		if (!\in_array('captcha', $order)) {
+		if (!in_array('captcha', $order)) {
 			foreach ($fields as $index => $field) {
 				if (!$field instanceof FormField || $field->fieldname != 'captcha') {
 					continue;
@@ -928,8 +931,8 @@ class DPCalendarHelper
 			$fields,
 			static function ($f1, $f2) use ($order, $keys) {
 				$fieldName = property_exists($f1, 'fieldname') ? 'fieldname' : 'name';
-				$k1        = \in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order, true) : -1;
-				$k2        = \in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order, true) : -1;
+				$k1        = in_array($f1->{$fieldName}, $order) ? array_search($f1->{$fieldName}, $order, true) : -1;
+				$k2        = in_array($f2->{$fieldName}, $order) ? array_search($f2->{$fieldName}, $order, true) : -1;
 
 				if ($k1 >= 0 && $k2 < 0) {
 					return -1;
@@ -1061,9 +1064,9 @@ class DPCalendarHelper
 
 	public static function increaseMemoryLimit(int $limit): bool
 	{
-		$memMax = trim(@\ini_get('memory_limit'));
+		$memMax = trim(@ini_get('memory_limit'));
 		if ($memMax !== '' && $memMax !== '0') {
-			$last = strtolower($memMax[\strlen($memMax) - 1]);
+			$last = strtolower($memMax[strlen($memMax) - 1]);
 			switch ($last) {
 				case 'g':
 					$memMax = (int)$memMax * 1024;
@@ -1083,7 +1086,7 @@ class DPCalendarHelper
 			@ini_set('memory_limit', $limit);
 		}
 
-		return trim(@\ini_get('memory_limit')) == $limit;
+		return trim(@ini_get('memory_limit')) == $limit;
 	}
 
 	public static function getOppositeBWColor(string $color): string

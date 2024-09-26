@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Map;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
@@ -55,7 +55,7 @@ class RawView extends BaseView
 
 		$this->params->merge($params ?? new Registry());
 
-		if ($this->user->authorise('core.admin', 'com_dpcalendar') || \in_array((int)$access, $this->user->getAuthorisedViewLevels())) {
+		if ($this->user->authorise('core.admin', 'com_dpcalendar') || in_array((int)$access, $this->user->getAuthorisedViewLevels())) {
 			$this->getModel()->setState('parameters.menu', $this->params);
 		} else {
 			$this->app->enqueueMessage($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'), 'error');
@@ -97,7 +97,7 @@ class RawView extends BaseView
 		$items = $this->get('Items');
 
 		// Check for errors
-		if ((is_countable($errors = $this->get('Errors')) ? \count($errors = $this->get('Errors')) : 0) !== 0) {
+		if ((is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) !== 0) {
 			throw new \Exception(implode("\n", $errors));
 		}
 

@@ -1,22 +1,18 @@
 <?php
+use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
 defined('_JEXEC') or die();
-
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
-use Joomla\CMS\Language\Text;
 
 if (!$this->params->get('event_show_bookings', '1')) {
 	return;
 }
 
 $event = $this->event;
-if (($event->capacity !== null && (int)$event->capacity === 0) || DPCalendarHelper::isFree()) {
+if (($event->capacity !== null && (int)$event->capacity === 0) || \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::isFree()) {
 	return;
 }
 
@@ -33,7 +29,7 @@ foreach ($event->tickets as $t) {
 
 if ($tickets !== []) {
 	$this->app->enqueueMessage(
-		Text::plural('COM_DPCALENDAR_VIEW_EVENT_BOOKED_TEXT', count($tickets), RouteHelper::getTicketsRoute(null, $event->id, true))
+		Text::plural('COM_DPCALENDAR_VIEW_EVENT_BOOKED_TEXT', count($tickets), \DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getTicketsRoute(null, $event->id, true))
 	);
 }
 ?>
@@ -43,10 +39,8 @@ if ($tickets !== []) {
 	</h<?php echo $this->heading + 2; ?>>
 	<?php if ($this->params->get('event_show_price', '1') && $event->price) { ?>
 		<div class="dp-booking-info__discount">
-			<?php echo $this->loadtemplate('bookings_earlybird_discount'); ?>
-			<?php echo $this->loadtemplate('bookings_user_discount'); ?>
-			<?php echo $this->loadtemplate('bookings_events_discount'); ?>
-			<?php echo $this->loadtemplate('bookings_tickets_discount'); ?>
+			<?php echo $this->loadtemplate('bookings_earlybird'); ?>
+			<?php echo $this->loadtemplate('bookings_user'); ?>
 		</div>
 		<?php echo $this->loadtemplate('bookings_prices'); ?>
 	<?php } ?>

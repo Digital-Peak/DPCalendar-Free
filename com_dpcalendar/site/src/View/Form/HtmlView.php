@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Form;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
@@ -81,7 +81,7 @@ class HtmlView extends BaseView
 				$this->form->setValue(
 					'start_date',
 					null,
-					$requestParams['start_date'] . (\array_key_exists('start_date_time', $requestParams) ? ' ' . $requestParams['start_date_time'] : '')
+					$requestParams['start_date'] . (array_key_exists('start_date_time', $requestParams) ? ' ' . $requestParams['start_date_time'] : '')
 				);
 				continue;
 			}
@@ -92,12 +92,12 @@ class HtmlView extends BaseView
 				$this->form->setValue(
 					'end_date',
 					null,
-					$requestParams['end_date'] . (\array_key_exists('end_date_time', $requestParams) ? ' ' . $requestParams['end_date_time'] : '')
+					$requestParams['end_date'] . (array_key_exists('end_date_time', $requestParams) ? ' ' . $requestParams['end_date_time'] : '')
 				);
 				continue;
 			}
 
-			if (!\is_array($value)) {
+			if (!is_array($value)) {
 				$this->form->setValue($key, null, $value);
 				continue;
 			}
@@ -151,7 +151,7 @@ class HtmlView extends BaseView
 			$parts = explode(':', (string)$tabName);
 			$name  = $parts[0];
 			$group = null;
-			if (\count($parts) > 1) {
+			if (count($parts) > 1) {
 				$name  = $parts[1];
 				$group = $parts[0];
 			}
@@ -170,13 +170,13 @@ class HtmlView extends BaseView
 				continue;
 			}
 
-			if (\in_array($fieldName, ['catid', 'all_day'])) {
+			if (in_array($fieldName, ['catid', 'all_day'])) {
 				$this->form->setFieldAttribute($fieldName, 'type', 'hidden');
 				continue;
 			}
 
 			$parts = explode(':', (string)$fieldName);
-			if (\count($parts) > 1) {
+			if (count($parts) > 1) {
 				$this->form->removeField($parts[1], $parts[0]);
 			} else {
 				$this->form->removeField($parts[0]);

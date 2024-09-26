@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Api\View\Locations;
 
-\defined('_JEXEC') or die;
+defined('_JEXEC') or die;
 
 use DigitalPeak\Component\DPCalendar\Api\Serializer\DPCalendar;
 use Joomla\CMS\Factory;
@@ -83,7 +83,7 @@ class JsonapiView extends BaseApiView
 
 	public function __construct($config = [])
 	{
-		if (\array_key_exists('contentType', $config)) {
+		if (array_key_exists('contentType', $config)) {
 			$this->serializer = new DPCalendar($config['contentType']);
 		}
 

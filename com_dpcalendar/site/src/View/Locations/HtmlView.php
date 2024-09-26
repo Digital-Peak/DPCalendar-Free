@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Locations;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
@@ -42,7 +42,7 @@ class HtmlView extends BaseView
 	protected function init(): void
 	{
 		$ids = $this->params->get('ids');
-		if ($ids && !\in_array(-1, $ids)) {
+		if ($ids && !in_array(-1, $ids)) {
 			$this->getModel()->setState('filter.search', 'ids:' . implode(',', $ids));
 		}
 
@@ -58,7 +58,7 @@ class HtmlView extends BaseView
 			// Set the grouping id
 			$id = $this->params->get('locations_output_grouping', 0) ? $location->{$this->params->get('locations_output_grouping', 0)} : 0;
 			$id = ApplicationHelper::stringURLSafe($id);
-			if (!\array_key_exists($id, $locationGroups)) {
+			if (!array_key_exists($id, $locationGroups)) {
 				$locationGroups[$id] = [];
 			}
 			$locationGroups[$id][] = $location;

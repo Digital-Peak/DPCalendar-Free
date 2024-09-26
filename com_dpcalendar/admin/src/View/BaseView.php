@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\View;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
@@ -119,7 +119,6 @@ class BaseView extends HtmlView
 
 		// The display data
 		$this->displayData = [
-			'app'          => $this->app,
 			'document'     => $this->dpdocument,
 			'layoutHelper' => $this->layoutHelper,
 			'dateHelper'   => $this->dateHelper,

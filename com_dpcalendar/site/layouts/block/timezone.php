@@ -38,15 +38,23 @@ foreach ($regions as $name => $mask) {
 
 $actualTimezone = $displayData['dateHelper']->getDate()->getTimezone()->getName();
 ?>
-<form action="<?php echo Uri::base(); ?>" method="get" class="dp-timezone dp-form">
+<form action="<?php
+echo Uri::base();
+?>" method="get" class="dp-timezone dp-form">
 	<label class="dp-timezone__label" for="dp-timezone__select">
-		<?php echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_CHOOSE_TIMEZONE'); ?>:
+		<?php
+echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_CHOOSE_TIMEZONE');
+?>:
 	</label>
 	<select name="tz" class="dp-select dp-timezone__select dp-select-container_unstyled" id="dp-timezone__select">
-		<option value="UTC">
-			<?php echo $displayData['translator']->translate('JLIB_FORM_VALUE_TIMEZONE_UTC'); ?>
+		<option value="UTC"<?php
+?>>
+			<?php
+echo $displayData['translator']->translate('JLIB_FORM_VALUE_TIMEZONE_UTC');
+?>
 		</option>
-		<?php foreach ($timezones as $region => $list) { ?>
+		<?php
+foreach ($timezones as $region => $list) { ?>
 			<optgroup label="<?php echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_REGION_' . $region); ?>">
 			<?php foreach ($list as $timezone => $name) { ?>
 				<option value="<?php echo $timezone; ?>"<?php echo $actualTimezone == $timezone ? ' selected' : ''; ?>>
@@ -54,15 +62,25 @@ $actualTimezone = $displayData['dateHelper']->getDate()->getTimezone()->getName(
 				</option>
 			<?php } ?>
 			</optgroup>
-		<?php } ?>
+		<?php }
+?>
 	</select>
 	<span class="dp-timezone__info dp-timezone__info_hidden">
-		<?php echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_DIFFERENT_TIMEZONE'); ?>
-		<a href="/" class="dp-link dp-link_confirm"><?php echo $displayData['translator']->translate('JYES');?></a>
-		<a href="/" class="dp-link dp-link_close"><?php echo $displayData['translator']->translate('COM_DPCALENDAR_CLOSE'); ?></a>
+		<?php
+echo $displayData['translator']->translate('COM_DPCALENDAR_LAYOUT_TIMEZONE_DIFFERENT_TIMEZONE');
+?>
+		<a href="/" class="dp-link dp-link_confirm"><?php
+echo $displayData['translator']->translate('JYES');
+?></a>
+		<a href="/" class="dp-link dp-link_close"><?php
+echo $displayData['translator']->translate('COM_DPCALENDAR_CLOSE');
+?></a>
 	</span>
 	<input type="hidden" name="task" value="profile.tz" class="dp-input dp-input-hidden">
 	<input type="hidden" name="option" value="com_dpcalendar" class="dp-input dp-input-hidden">
 	<input type="hidden" name="view" value="profile" class="dp-input dp-input-hidden">
-	<input type="hidden" name="return" value="<?php echo base64_encode(Uri::getInstance()->toString());?>" class="dp-input dp-input-hidden">
+	<input type="hidden" name="return" value="<?php
+echo base64_encode(Uri::getInstance()->toString());
+?>" class="dp-input dp-input-hidden">
 </form>
+<?php

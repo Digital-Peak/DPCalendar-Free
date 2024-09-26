@@ -4,9 +4,6 @@
  * @copyright Copyright (C) 2020 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-
 defined('_JEXEC') or die();
 
 ?>
@@ -30,10 +27,10 @@ defined('_JEXEC') or die();
 		<dl class="dp-description">
 			<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></dt>
 			<dd class="dp-description__description">
-				<?php echo DPCalendarHelper::renderPrice($this->booking->price); ?>
+				<?php echo \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::renderPrice($this->booking->price, $this->params->get('currency_symbol', '$')); ?>
 				<?php if ($this->booking->tax && $this->booking->tax != '0.00') { ?>
 					(<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL'); ?>
-					<?php echo DPCalendarHelper::renderPrice($this->booking->tax); ?>)
+					<?php echo \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::renderPrice($this->booking->tax, $this->params->get('currency_symbol', '$')); ?>)
 				<?php } ?>
 			</dd>
 		</dl>

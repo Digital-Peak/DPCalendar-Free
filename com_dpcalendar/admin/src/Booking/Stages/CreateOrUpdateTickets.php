@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -38,7 +38,7 @@ class CreateOrUpdateTickets implements StageInterface
 					$ticket->state = $ticket->state == 9 ? $ticket->state : $payload->item->state;
 					$saveTicket    = true;
 
-					if (!\in_array($payload->item->state, [1, 4]) && \in_array($payload->oldItem->state, [1, 4])) {
+					if (!in_array($payload->item->state, [1, 4]) && in_array($payload->oldItem->state, [1, 4])) {
 						foreach ($payload->events as $event) {
 							if ($event->id != $ticket->event_id) {
 								continue;
@@ -47,7 +47,7 @@ class CreateOrUpdateTickets implements StageInterface
 						}
 					}
 
-					if (\in_array($payload->item->state, [1, 4]) && !\in_array($payload->oldItem->state, [1, 4])) {
+					if (in_array($payload->item->state, [1, 4]) && !in_array($payload->oldItem->state, [1, 4])) {
 						foreach ($payload->events as $event) {
 							if ($event->id != $ticket->event_id) {
 								continue;
@@ -70,24 +70,23 @@ class CreateOrUpdateTickets implements StageInterface
 		$payload->tickets = [];
 		/** @var EventTable $event */
 		foreach ($payload->events as $event) {
-			$prices = \is_string($event->price) ? json_decode((string)$event->price) : $event->price;
+			$prices = is_string($event->price) ? json_decode((string)$event->price) : $event->price;
 
 			if (!$prices) {
 				// Free event
-				$prices = [(object)['value' => 0]];
+				$prices = (object)['value' => [0 => 0]];
 			}
 
-			foreach ($prices as $key => $price) {
-				$key = preg_replace('/\D/', '', (string)$key);
-				for ($i = 0; $i < $event->amount_tickets[$key]; $i++) {
+			foreach ($prices->value as $index => $value) {
+				for ($i = 0; $i < $event->amount_tickets[$index]; $i++) {
 					$ticket             = (object)$payload->data;
 					$ticket->id         = 0;
 					$ticket->uid        = 0;
 					$ticket->booking_id = $payload->item->id;
-					$ticket->price      = Booking::getPriceWithDiscount($price->value, (object)$event->getData());
+					$ticket->price      = Booking::getPriceWithDiscount($value, (object)$event->getData());
 					$ticket->state      = $payload->item->state;
 					$ticket->created    = DPCalendarHelper::getDate()->toSql();
-					$ticket->type       = $key;
+					$ticket->type       = $index;
 
 					if ($payload->item->jcfields) {
 						$ticket->com_fields = [];

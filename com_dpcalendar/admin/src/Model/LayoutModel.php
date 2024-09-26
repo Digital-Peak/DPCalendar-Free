@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-\defined('_JEXEC') or die();
+defined('_JEXEC') or die();
 
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\MVC\Model\BaseModel;
@@ -16,7 +16,7 @@ class LayoutModel extends BaseModel
 {
 	public function renderLayout(string $layout, array  $data = []): string
 	{
-		if (\is_array($data) && !\array_key_exists('layoutHelper', $data) && !str_starts_with($layout, 'joomla.')) {
+		if (is_array($data) && !array_key_exists('layoutHelper', $data) && !str_starts_with($layout, 'joomla.')) {
 			$data['layoutHelper'] = $this;
 		}
 

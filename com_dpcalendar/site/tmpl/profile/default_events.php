@@ -28,7 +28,7 @@ $params = $this->params;
 						aria-label="<?php echo $this->translate('COM_DPCALENDAR_BOOK'); ?>">
 						<?php echo $this->layoutHelper->renderLayout(
 							'block.icon',
-							['icon' => Icon::BOOK, 'title' => $this->translate('COM_DPCALENDAR_BOOK')]
+							['icon' => Icon::PLUS, 'title' => $this->translate('COM_DPCALENDAR_BOOK')]
 						); ?>
 					</a>
 				<?php } ?>

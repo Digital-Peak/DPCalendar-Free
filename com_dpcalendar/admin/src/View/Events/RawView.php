@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\View\Events;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
@@ -18,11 +18,9 @@ use Joomla\Registry\Registry;
 
 class RawView extends BaseView
 {
-	/** @var array */
-	protected $items;
+	protected array $items = [];
 
-	/** @var int */
-	protected $compactMode;
+	protected bool $compactMode = false;
 
 	public function display($tpl = null): void
 	{
@@ -58,7 +56,7 @@ class RawView extends BaseView
 			$this->getModel()->setState('list.end-date', $end);
 		}
 
-		if (($id = $this->input->getString('module-id', '')) !== '' && ($id = $this->input->getString('module-id', '')) !== '0') {
+		if (($id = $this->input->getString('module_id', '')) !== '' && ($id = $this->input->getString('module_id', '')) !== '0') {
 			$moduleParams = new Registry(ModuleHelper::getModuleById($id)->params);
 
 			/** @var EventsModel $model */
@@ -74,10 +72,7 @@ class RawView extends BaseView
 			$this->app->close();
 		}
 
-		$this->compactMode = $this->input->getInt('compact', 0);
-		if ($this->compactMode == 1) {
-			$this->setLayout('compact');
-		}
+		$this->compactMode = $this->getLayout() === 'compact';
 	}
 
 	protected function handleError(): void

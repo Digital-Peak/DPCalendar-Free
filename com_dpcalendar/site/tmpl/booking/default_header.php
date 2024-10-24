@@ -5,13 +5,15 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 
 $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
+
+$return = $this->input->getInt('Itemid', 0) ? '&return=' . base64_encode('index.php?Itemid=' . $this->input->getInt('Itemid', 0)) : '';
 ?>
 <div class="com-dpcalendar-booking__actions dp-button-bar dp-print-hide">
 	<?php if ($this->booking->state == 5) { ?>
@@ -60,7 +62,6 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 		<?php echo $this->translate('COM_DPCALENDAR_RECEIPT'); ?>
 	</button>
 	<?php if ($this->booking->params->get('access-delete') && $this->booking->state != 5) { ?>
-		<?php $return = '&return=' . base64_encode('index.php?Itemid=' . $this->input->getInt('Itemid', 0)); ?>
 		<button type="button" class="dp-button dp-button-action dp-button-delete dp-action-delete"
 			data-href="<?php echo $this->router->route('index.php?option=com_dpcalendar&task=bookingform.delete&b_id=' . $this->booking->id . $return . $this->tmpl); ?>">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::DELETE]); ?>
@@ -68,7 +69,6 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 		</button>
 	<?php } ?>
 	<?php if ($this->booking->price && $this->booking->state != 6 && Booking::openForCancel($this->booking)) { ?>
-		<?php $return = '&return=' . base64_encode('index.php?Itemid=' . $this->input->getInt('Itemid', 0)); ?>
 		<button type="button" class="dp-button dp-button-action dp-button-cancel dp-action-delete"
 			data-confirmtext="<?php echo $this->translate('COM_DPCALENDAR_VIEW_BOOKING_CANCEL_TICKET_CONFIRMATION'); ?>"
 			data-href="<?php echo $this->router->route('index.php?option=com_dpcalendar&task=booking.cancel&b_id=' . $this->booking->id . $return . $this->tmpl); ?>">

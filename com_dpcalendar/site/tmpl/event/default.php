@@ -1,11 +1,13 @@
 <?php
-use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
+
+use Joomla\CMS\HTML\HTMLHelper;
 
 if ($this->params->get('event_show_map', '1')
 	&& $this->event->locations
@@ -14,7 +16,7 @@ if ($this->params->get('event_show_map', '1')
 }
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/event/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/event/default.js');
+$this->dpdocument->loadScriptFile('views/event/default.js');
 $this->dpdocument->addStyle($this->params->get('event_custom_css', ''));
 
 $contentClass = '';
@@ -58,8 +60,13 @@ if ($locationsContent = $this->loadTemplate('locations')) {
 <div class="com-dpcalendar-event <?php echo $this->pageclass_sfx ? ' com-dpcalendar-event-' . $this->pageclass_sfx : ''; ?> <?php echo $contentClass; ?>">
 	<?php echo $this->loadTemplate('heading'); ?>
 	<div class="com-dpcalendar-event__header">
-		<?php echo $this->loadTemplate('title'); ?>
-		<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
+		<?php if ($this->event->prices) { ?>
+			<?php echo $this->layoutHelper->renderLayout('block.currency', $this->displayData); ?>
+		<?php } ?>
+			<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
+		<div class="com-dpcalendar-event__header-title">
+			<?php echo $this->loadTemplate('title'); ?>
+		</div>
 		<div class="com-dpcalendar-event__custom-text com-dpcalendar-event__custom-text-before">
 			<?php echo HTMLHelper::_('content.prepare', $this->translate($this->params->get('event_textbefore', ''))); ?>
 		</div>

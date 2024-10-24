@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Field;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
 use Joomla\CMS\Factory;
@@ -21,7 +21,7 @@ class DptokenField extends TextField
 	protected function getInput(): string
 	{
 		$doc = new HtmlDocument();
-		$doc->loadScriptFile('dpcalendar/fields/dptoken.js');
+		$doc->loadScriptFile('fields/dptoken.js');
 		$doc->loadStyleFile('dpcalendar/fields/dptoken.css');
 
 		// Load the language

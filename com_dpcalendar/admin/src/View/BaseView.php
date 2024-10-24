@@ -7,16 +7,18 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\View;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Extension\DPCalendarComponent;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\LayoutModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Router\Router;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
-use Exception;
-use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Application\CMSApplicationInterface;
+use Joomla\CMS\Document\RawDocument;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
@@ -24,6 +26,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\MVC\Model\FormModel;
+use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\MVC\View\HtmlView;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Router\Route;
@@ -119,18 +122,21 @@ class BaseView extends HtmlView
 
 		// The display data
 		$this->displayData = [
+			'app'          => $this->app,
 			'document'     => $this->dpdocument,
 			'layoutHelper' => $this->layoutHelper,
 			'dateHelper'   => $this->dateHelper,
 			'translator'   => $this->translator,
 			'router'       => $this->router,
 			'input'        => $this->input,
-			'params'       => $this->params
+			'params'       => $this->params,
+			'user'         => $this->user
 		];
 
-		if ($this->app instanceof AdministratorApplication) {
-			$this->filterForm    = $this->get('FilterForm');
-			$this->activeFilters = $this->get('ActiveFilters');
+		$model = $this->getModel();
+		if ($model instanceof ListModel && $form = $model->getFilterForm()) {
+			$this->filterForm    = $form;
+			$this->activeFilters = $model->getActiveFilters();
 		}
 
 		try {
@@ -141,6 +147,10 @@ class BaseView extends HtmlView
 				$this->app->setHeader('status', $exception->getCode(), true);
 			}
 
+			if ($this->getDocument() instanceof RawDocument) {
+				DPCalendarHelper::sendMessage(null, true);
+			}
+
 			return;
 		}
 
@@ -149,7 +159,7 @@ class BaseView extends HtmlView
 			throw new \Exception(implode("\n", $errors), 500);
 		}
 
-		if ($this->getModel() instanceof FormModel) {
+		if ($model instanceof FormModel) {
 			HTMLHelper::_('behavior.keepalive');
 			HTMLHelper::_('behavior.formvalidator');
 
@@ -300,5 +310,15 @@ class BaseView extends HtmlView
 		}
 
 		return $title;
+	}
+
+	protected function getDPCalendar(): DPCalendarComponent
+	{
+		$app = $this->app;
+		if (!$app instanceof CMSApplicationInterface) {
+			throw new \Exception('App not set in ' . self::class);
+		}
+
+		return $app->bootComponent('dpcalendar');
 	}
 }

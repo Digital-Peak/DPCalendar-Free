@@ -1,11 +1,13 @@
 <?php
-use Joomla\CMS\Session\Session;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
+
+use Joomla\CMS\Session\Session;
 
 if (!$this->params->get('profile_show_sharing', '1')) {
 	return;

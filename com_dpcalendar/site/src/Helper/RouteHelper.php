@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Helper;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
@@ -29,7 +29,7 @@ class RouteHelper
 	{
 		// Check if we come from com_tags where the link is generated id:alias
 		$parts = $id ? explode(':', (string)$id) : [];
-		if (count($parts) == 2 && is_numeric($parts[0])) {
+		if (\count($parts) == 2 && is_numeric($parts[0])) {
 			$id = (int)$id;
 		}
 
@@ -79,10 +79,7 @@ class RouteHelper
 		return $link;
 	}
 
-	/**
-	 * @param \stdClass $location
-	 */
-	public static function getLocationRoute(object $location, ?bool $full = false): string
+	public static function getLocationRoute(\stdClass $location, ?bool $full = false): string
 	{
 		// Create the link
 		$link = ($full === true ? Uri::root() : '') . 'index.php?option=com_dpcalendar&view=location&id=' . $location->id;
@@ -113,10 +110,7 @@ class RouteHelper
 		return $link;
 	}
 
-	/**
-	 * @param \stdClass $booking
-	 */
-	public static function getBookingRoute(object $booking, ?bool $full = false): string
+	public static function getBookingRoute(\stdClass $booking, ?bool $full = false): string
 	{
 		$args         = [];
 		$args['view'] = 'booking';
@@ -149,10 +143,7 @@ class RouteHelper
 		return self::getUrl($args, true);
 	}
 
-	/**
-	 * @param \stdClass $event
-	 */
-	public static function getInviteRoute(object $event, ?string $return = null): string
+	public static function getInviteRoute(\stdClass $event, ?string $return = null): string
 	{
 		$args         = [];
 		$args['view'] = 'invite';
@@ -165,10 +156,7 @@ class RouteHelper
 		return self::getUrl($args, true);
 	}
 
-	/**
-	 * @param \stdClass $booking
-	 */
-	public static function getInviteChangeRoute(object $booking, ?bool $accept, ?bool $full): string
+	public static function getInviteChangeRoute(\stdClass $booking, ?bool $accept, ?bool $full): string
 	{
 		$args           = [];
 		$args['task']   = 'booking.invite';
@@ -190,10 +178,7 @@ class RouteHelper
 		return str_replace('/administrator/', '/', $url);
 	}
 
-	/**
-	 * @param \stdClass $booking
-	 */
-	public static function getBookingFormRoute(object $booking, ?string $return = null): string
+	public static function getBookingFormRoute(\stdClass $booking, ?string $return = null): string
 	{
 		$args         = [];
 		$args['task'] = 'bookingform.edit';
@@ -211,10 +196,7 @@ class RouteHelper
 		return self::getUrl($args, true);
 	}
 
-	/**
-	 * @param \stdClass $event
-	 */
-	public static function getBookingFormRouteFromEvent(object $event, ?string $return = null, ?bool $autoRoute = true, ?int $defaultItemId = 0): string
+	public static function getBookingFormRouteFromEvent(\stdClass $event, ?string $return = null, ?bool $autoRoute = true, ?int $defaultItemId = 0): string
 	{
 		$args         = [];
 		$args['task'] = 'bookingform.add';
@@ -232,10 +214,7 @@ class RouteHelper
 		return self::getUrl($args, $autoRoute ?? true, $needles, $defaultItemId ?? 0);
 	}
 
-	/**
-	 * @param \stdClass $ticket
-	 */
-	public static function getTicketRoute(object $ticket, ?bool $full = false): string
+	public static function getTicketRoute(\stdClass $ticket, ?bool $full = false): string
 	{
 		$args         = [];
 		$args['view'] = 'ticket';
@@ -253,10 +232,7 @@ class RouteHelper
 		return $url;
 	}
 
-	/**
-	 * @param \stdClass $ticket
-	 */
-	public static function getTicketCheckinRoute(object $ticket, ?bool $full = false): string
+	public static function getTicketCheckinRoute(\stdClass $ticket, ?bool $full = false): string
 	{
 		$args         = [];
 		$args['uid']  = $ticket->uid;
@@ -388,7 +364,7 @@ class RouteHelper
 
 			$component = ComponentHelper::getComponent('com_dpcalendar');
 			$items     = $menus->getItems('component_id', $component->id);
-			if (!is_array($items)) {
+			if (!\is_array($items)) {
 				$items = [$items];
 			}
 
@@ -411,12 +387,16 @@ class RouteHelper
 					}
 
 					$ids = $item->getParams()->get('ids');
-					if (!is_array($ids) && $ids) {
+					if (!\is_array($ids) && $ids) {
 						$ids = [$ids];
 					}
 
 					if (!$ids && isset($item->query['id'])) {
 						$ids = [$item->query['id']];
+					}
+
+					if ($view === 'event' && isset($item->query['id'])) {
+						self::$lookup[$view][$item->query['id']] = $item->id;
 					}
 
 					if (empty($ids)) {

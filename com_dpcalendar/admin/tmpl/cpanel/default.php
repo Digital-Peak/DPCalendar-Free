@@ -5,10 +5,10 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/cpanel/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/cpanel/default.js');
+$this->dpdocument->loadScriptFile('views/cpanel/default.js');
 ?>
 <div class="com-dpcalendar-cpanel">
 	<div id="j-main-container">

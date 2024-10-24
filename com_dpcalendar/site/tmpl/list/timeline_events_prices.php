@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 
@@ -31,7 +31,7 @@ if ($event->capacity == 0) {
 <div class="dp-event__price">
 	<?php echo $this->layoutHelper->renderLayout(
 		'block.icon',
-		['icon' => Icon::MONEY, 'title' => $this->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL')]
+		['icon' => Icon::MONEY, 'title' => $this->translate('COM_DPCALENDAR_FIELD_PRICES_LABEL')]
 	); ?>
-	<?php echo $this->translate($event->price ? 'COM_DPCALENDAR_VIEW_BLOG_PAID_EVENT' : 'COM_DPCALENDAR_VIEW_BLOG_FREE_EVENT'); ?>
+	<?php echo $this->translate($event->prices ? 'COM_DPCALENDAR_VIEW_BLOG_PAID_EVENT' : 'COM_DPCALENDAR_VIEW_BLOG_FREE_EVENT'); ?>
 </div>

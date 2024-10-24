@@ -7,26 +7,24 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Calendar;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Calendar\Calendar;
-use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\CalendarModel;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
+use DigitalPeak\Component\DPCalendar\Site\View\CalendarViewTrait;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 
 class HtmlView extends BaseView
 {
+	use CalendarViewTrait;
+
 	/** @var array */
 	protected $items;
 
 	/** @var array */
-	protected $selectedCalendars;
-
-	/** @var array */
-	protected $doNotListCalendars;
+	protected $visibleCalendars;
 
 	/** @var Form */
 	protected $quickaddForm;
@@ -46,37 +44,33 @@ class HtmlView extends BaseView
 		}
 
 		$this->items = $items;
-
-		$selectedCalendars = [];
 		foreach ($items as $calendar) {
-			$selectedCalendars[] = $calendar->getId();
 			$this->fillCalendar($calendar);
 		}
-		$this->selectedCalendars = $selectedCalendars;
 
 		/** @var CalendarModel $calendarModel */
-		$calendarModel = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator');
+		$calendarModel = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Administrator');
 
-		$doNotListCalendars = [];
+		$visibleCalendars = [];
 		foreach ($this->params->get('idsdnl', []) as $id) {
 			$parent = $calendarModel->getCalendar($id);
-			if ($parent == null) {
+			if ($parent === null) {
 				continue;
 			}
+
 			$this->fillCalendar($parent);
 
 			if ($parent->getId() !== 'root') {
-				$doNotListCalendars[$parent->getId()] = $parent;
+				$visibleCalendars[$parent->getId()] = $parent;
 			}
 
 			foreach ($parent->getChildren(true) as $child) {
-				$doNotListCalendars[$child->getId()] = $child;
-				$this->fillCalendar($child);
+				$visibleCalendars[$child->getId()] = $child;
 			}
 		}
 
-		// If none are selected, use selected calendars
-		$this->doNotListCalendars = $doNotListCalendars === [] ? $this->items : $doNotListCalendars;
+		// If none are selected, use the calendars from the menu item
+		$this->visibleCalendars = $visibleCalendars === [] ? $this->items : $visibleCalendars;
 
 		$this->quickaddForm = $this->getModel()->getQuickAddForm($this->params);
 
@@ -86,7 +80,7 @@ class HtmlView extends BaseView
 			&& $this->getLayout() == 'default'
 			&& !DPCalendarHelper::isFree()) {
 			// Load the model
-			$model = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
+			$model = $this->getDPCalendar()->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
 			$model->getState();
 			$model->setState('list.limit', 10000);
 			$model->setState('filter.search', 'ids:' . implode(',', $this->params->get('calendar_filter_locations')));
@@ -101,54 +95,29 @@ class HtmlView extends BaseView
 			}
 		}
 
+		// Prepare the resources for the timeline
 		if (str_contains($this->getLayout(), 'timeline')) {
 			$this->resources = [];
-			foreach ($this->doNotListCalendars as $calendar) {
+			foreach ($this->visibleCalendars as $calendar) {
 				$this->resources[] = (object)['id' => $calendar->getId() , 'title' => $calendar->getTitle()];
 			}
 		}
 
 		$this->returnPage = $this->input->getInt('Itemid', 0) !== 0 ? 'index.php?Itemid=' . $this->input->getInt('Itemid', 0) : '';
 
+		$this->prepareForm($items);
+
+		if (\array_key_exists('start-date', $this->activeFilters)) {
+			unset($this->activeFilters['start-date']);
+		}
+
+		if (\array_key_exists('end-date', $this->activeFilters)) {
+			unset($this->activeFilters['end-date']);
+		}
+
+		$this->filterForm->setFieldAttribute('start-date', 'type', 'hidden', 'list');
+		$this->filterForm->setFieldAttribute('end-date', 'type', 'hidden', 'list');
+
 		parent::init();
-	}
-
-	private function fillCalendar(CalendarInterface $calendar): void
-	{
-		if (property_exists($calendar, 'event') && $calendar->event !== null || !$calendar instanceof Calendar) {
-			return;
-		}
-
-		// @phpstan-ignore-next-line
-		$calendar->event = new \stdClass();
-
-		// For some plugins
-		$calendar->text = $calendar->getDescription();
-
-		$this->app->triggerEvent('onContentPrepare', ['com_dpcalendar.categories', $calendar, $calendar->getParams(), 0]);
-
-		$results = $this->app->triggerEvent(
-			'onContentAfterTitle',
-			['com_dpcalendar.categories', &$calendar, &$this->params, 0]
-		);
-		$calendar->event->afterDisplayTitle = trim(implode("\n", $results));
-
-		$results = $this->app->triggerEvent(
-			'onContentBeforeDisplay',
-			['com_dpcalendar.categories', &$calendar, &$this->params, 0]
-		);
-		$calendar->event->beforeDisplayContent = trim(implode("\n", $results));
-
-		$results = $this->app->triggerEvent(
-			'onContentAfterDisplay',
-			['com_dpcalendar.categories', &$calendar, &$this->params, 0]
-		);
-		$calendar->event->afterDisplayContent = trim(implode("\n", $results));
-
-		if ($calendar->text === '' || $calendar->text === '0') {
-			return;
-		}
-
-		$calendar->setDescription($calendar->text);
 	}
 }

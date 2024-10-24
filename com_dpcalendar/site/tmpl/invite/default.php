@@ -4,10 +4,11 @@
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/invite/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/invite/default.js');
+$this->dpdocument->loadScriptFile('views/invite/default.js');
 
 $this->translator->translateJS('COM_DPCALENDAR_OPTIONS');
 ?>

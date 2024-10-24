@@ -7,17 +7,39 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Events;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
+use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Factory;
 use Joomla\CMS\Helper\ModuleHelper;
 use Joomla\Registry\Registry;
 
 class RawView extends BaseView
 {
-	protected array $items;
-	protected int $compactMode;
+	protected array $items = [];
+
+	protected bool $compactMode = false;
+
+	public function display($tpl = null): void
+	{
+		/** @var SiteApplication $app */
+		$app = Factory::getApplication();
+
+		// Add the models
+		$module = $app->getInput()->getInt('module_id', 0);
+		$model  = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel(
+			'Events',
+			'Site',
+			// Set the name for the state from the current view or module
+			['name' => ($app->getMenu()->getActive()?->query['view'] ?? 'calendar') . '.'
+				. ($module !== 0 ? 'module.' . $module : $app->getInput()->getInt('Itemid', 0))]
+		);
+		$this->setModel($model, true);
+
+		parent::display($tpl);
+	}
 
 	protected function init(): void
 	{
@@ -29,39 +51,55 @@ class RawView extends BaseView
 
 		$this->app->setHeader('Cache-Control', 'no-cache');
 
+		$model = $this->getModel();
+
 		// Set some defaults
 		$this->input->set('list.limit', 1000);
-		$this->get('State')->set('filter.state', [1, 3]);
-		$this->get('State')->set('filter.state_owner', true);
-		$this->get('State')->set('filter.search', '');
+		$this->state->set('filter.state', [1, 3]);
+		$this->state->set('filter.state_owner', true);
 
 		// Convert the dates from the user timezone into normal
 		$tz    = DPCalendarHelper::getDate()->getTimezone()->getName();
-		$start = $this->app->getInput()->get('date-start');
+		$start = $this->app->getInput()->get('date-start', $model->getState('list.start-date'));
 		if ($start) {
 			$start = DPCalendarHelper::getDate($start, false, $tz);
-			$this->getModel()->setState('list.start-date', $start);
+			$model->setState('list.start-date', $start);
 		}
 
-		$end = $this->app->getInput()->get('date-end');
+		$end = $this->app->getInput()->get('date-end', $model->getState('list.end-date'));
 		if ($end) {
 			$end = DPCalendarHelper::getDate($end, false, $tz);
-			$this->getModel()->setState('list.end-date', $end);
+			$model->setState('list.end-date', $end);
 		}
 
-		$id = $this->input->getString('module-id', '');
+		$id = $this->input->getString('module_id', '');
 		if ($id !== '' && $id !== '0') {
 			$moduleParams = new Registry(ModuleHelper::getModuleById($id)->params);
-			$this->getModel()->setStateFromParams($moduleParams);
+			$model->setStateFromParams($moduleParams);
 			$this->params->merge($moduleParams);
+
+			if ($moduleParams->get('compact_events', 2) == 1) {
+				$this->setLayout('compact');
+			}
+
+			$this->compactMode = $moduleParams->get('compact_events', 2) != '0';
+
+			// Author state must be set explicit, otherwise it inherits from global config
+			$model->setState('filter.author', $moduleParams->get('calendar_filter_author', 0));
+			$model->setState('filter.calendars', $moduleParams->get('ids', []));
+		}
+
+		// Set the calendars
+		$model->setState('category.id', array_filter($this->state->get('filter.calendars', [])));
+
+		if ($location = $model->getState('filter.location')) {
+			$model->setState(
+				'filter.location',
+				$this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location, false)
+			);
 		}
 
 		$this->items = $this->get('Items');
-
-		$this->compactMode = $this->input->getInt('compact', 0);
-		if ($this->compactMode == 1) {
-			$this->setLayout('compact');
-		}
 	}
 
 	protected function handleError(): void

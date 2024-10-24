@@ -8,50 +8,31 @@
 namespace DigitalPeak\Component\DPCalendar\Administrator\Helper;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
+use DigitalPeak\Component\DPCalendar\Administrator\Field\DpcfieldsField;
+use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
+use Joomla\CMS\Form\Field\SubformField;
+use Joomla\CMS\Form\FormFactoryAwareTrait;
 use Joomla\CMS\MVC\Model\ListModel;
-use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\CMS\Plugin\CMSPlugin;
+use Joomla\CMS\User\UserFactoryAwareTrait;
 
 trait ExportTrait
 {
+	use UserFactoryAwareTrait;
+	use FormFactoryAwareTrait;
+
 	public function getEventData(array $events = []): array
 	{
-		$fields = [
-			(object)['id' => 'id', 'name' => 'id', 'label' => Text::_('JGRID_HEADING_ID')],
-			(object)['id' => 'title', 'name' => 'title', 'label' => Text::_('JGLOBAL_TITLE')],
-			(object)['id' => 'calendar', 'name' => 'calendar', 'label' => Text::_('COM_DPCALENDAR_CALENDAR')],
-			(object)['id' => 'color', 'name' => 'color', 'label' => Text::_('COM_DPCALENDAR_FIELD_COLOR_LABEL')],
-			(object)['id' => 'url', 'name' => 'url', 'label' => Text::_('COM_DPCALENDAR_FIELD_URL_LABEL')],
-			(object)['id' => 'start_date', 'name' => 'start_date', 'label' => Text::_('COM_DPCALENDAR_FIELD_START_DATE_LABEL')],
-			(object)['id' => 'end_date', 'name' => 'end_date', 'label' => Text::_('COM_DPCALENDAR_FIELD_END_DATE_LABEL')],
-			(object)['id' => 'all_day', 'name' => 'all_day', 'label' => Text::_('COM_DPCALENDAR_FIELD_ALL_DAY_LABEL')],
-			(object)['id' => 'rrule', 'name' => 'rrule', 'label' => Text::_('COM_DPCALENDAR_FIELD_SCHEDULING_RRULE_LABEL')],
-			(object)['id' => 'description', 'name' => 'description', 'label' => Text::_('JGLOBAL_DESCRIPTION')],
-			(object)['id' => 'locations', 'name' => 'locations', 'label' => Text::_('COM_DPCALENDAR_LOCATIONS')],
-			(object)['id' => 'alias', 'name' => 'alias', 'label' => Text::_('JFIELD_ALIAS_LABEL')],
-			(object)['id' => 'featured', 'name' => 'featured', 'label' => Text::_('JFEATURED')],
-			(object)['id' => 'status', 'name' => 'status', 'label' => Text::_('JSTATUS')],
-			(object)['id' => 'access', 'name' => 'access', 'label' => Text::_('JFIELD_ACCESS_LABEL')],
-			(object)['id' => 'access_content', 'name' => 'access_content', 'label' => Text::_('COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL')],
-			(object)['id' => 'language', 'name' => 'language', 'label' => Text::_('JFIELD_LANGUAGE_LABEL')],
-			(object)['id' => 'created', 'name' => 'created', 'label' => Text::_('JGLOBAL_FIELD_CREATED_LABEL')],
-			(object)['id' => 'created_by', 'name' => 'created_by', 'label' => Text::_('JGLOBAL_FIELD_CREATED_BY_LABEL')],
-			(object)['id' => 'modified', 'name' => 'modified', 'label' => Text::_('JGLOBAL_FIELD_MODIFIED_LABEL')],
-			(object)['id' => 'modified_by', 'name' => 'modified_by', 'label' => Text::_('JGLOBAL_FIELD_MODIFIED_BY_LABEL')],
-			(object)['id' => 'uid', 'name' => 'uid', 'label' => Text::_('COM_DPCALENDAR_UID')],
-			(object)['id' => 'timezone', 'name' => 'timezone', 'label' => Text::_('COM_DPCALENDAR_TIMEZONE')]
-		];
-
 		$parser = function ($name, $event) {
 			switch ($name) {
-				case 'calendar':
+				case 'catid':
 					$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
 					return $calendar instanceof CalendarInterface ? $calendar->getTitle() : $event->catid;
-				case 'status':
+				case 'state':
 					return Booking::getStatusLabel($event);
-				case 'locations':
+				case 'location_ids':
 					if (empty($event->locations)) {
 						return '';
 					}
@@ -76,41 +57,19 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('event', $fields, $parser, $events);
+		return $this->getData('event', $parser, $events);
 	}
 
 	public function getBookingsData(array $bookings = []): array
 	{
-		$fields = [
-			(object)['id' => 'uid', 'name' => 'uid', 'label' => Text::_('JGRID_HEADING_ID')],
-			(object)['id' => 'status', 'name' => 'status', 'label' => Text::_('JSTATUS')],
-			(object)['id' => 'name', 'name' => 'name', 'label' => Text::_('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL')],
-			(object)['id' => 'email', 'name' => 'email', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL')],
-			(object)['id' => 'telephone', 'name' => 'telephone', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL')],
-			(object)['id' => 'country', 'name' => 'country_code_value', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL')],
-			(object)['id' => 'province', 'name' => 'province', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL')],
-			(object)['id' => 'city', 'name' => 'city', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL')],
-			(object)['id' => 'zip', 'name' => 'zip', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL')],
-			(object)['id' => 'street', 'name' => 'street', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL')],
-			(object)['id' => 'number', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL')],
-			(object)['id' => 'price', 'name' => 'price', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL')],
-			(object)['id' => 'options', 'name' => 'options', 'label' => Text::_('COM_DPCALENDAR_OPTIONS')],
-			(object)['id' => 'net_amount', 'name' => 'net_amount', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL')],
-			(object)['id' => 'processor', 'name' => 'processor', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PAYMENT_PROVIDER_LABEL')],
-			(object)['id' => 'user_name', 'name' => 'user_name', 'label' => Text::_('JGLOBAL_USERNAME')],
-			(object)['id' => 'book_date', 'name' => 'book_date', 'label' => Text::_('COM_DPCALENDAR_CREATED_DATE')],
-			(object)['id' => 'event', 'name' => 'event', 'label' => Text::_('COM_DPCALENDAR_EVENT')],
-			(object)['id' => 'event_author', 'name' => 'event_author', 'label' => Text::_('COM_DPCALENDAR_FIELD_AUTHOR_LABEL')],
-			(object)['id' => 'event_calid', 'name' => 'event_calid', 'label' => Text::_('COM_DPCALENDAR_CALENDAR')],
-			(object)['id' => 'timezone', 'name' => 'timezone', 'label' => Text::_('COM_DPCALENDAR_TIMEZONE')]
-		];
-
 		$parser = function ($name, $booking) {
 			switch ($name) {
-				case 'status':
+				case 'state':
 					return Booking::getStatusLabel($booking);
 				case 'book_date':
 					return DPCalendarHelper::getDate($booking->$name)->format('Y-m-d H:i:s', true);
+				case 'country':
+					return $booking->country_code_value;
 				case 'options':
 					if (empty($booking->tickets) || empty($booking->options)) {
 						return '';
@@ -135,7 +94,9 @@ trait ExportTrait
 					}
 
 					return implode(', ', $buffer);
-				case 'event':
+				case 'tickets_count':
+					return $booking->amount_tickets;
+				case 'event_id':
 					$events = [];
 					foreach ($booking->tickets as $ticket) {
 						$events[] = $ticket->event_title;
@@ -145,6 +106,10 @@ trait ExportTrait
 				case 'event_author':
 					$authors = [];
 					foreach ($booking->tickets as $ticket) {
+						if (empty($ticket->event_author)) {
+							continue;
+						}
+
 						$authors[] = $this->getUserFactory()->loadUserById($ticket->event_author)->name;
 					}
 
@@ -158,7 +123,7 @@ trait ExportTrait
 					return implode(', ', array_unique($calendars));
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
-				case 'user_name':
+				case 'user_id':
 					if (!$booking->user_id) {
 						return '';
 					}
@@ -169,37 +134,14 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('booking', $fields, $parser, $bookings);
+		return $this->getData('booking', $parser, $bookings);
 	}
 
 	public function getTicketsData(array $tickets = []): array
 	{
-		$fields = [
-			(object)['id' => 'uid', 'name' => 'uid', 'label' => Text::_('JGRID_HEADING_ID')],
-			(object)['id' => 'status', 'name' => 'status', 'label' => Text::_('JSTATUS')],
-			(object)['id' => 'name', 'name' => 'name', 'label' => Text::_('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL')],
-			(object)['id' => 'event_title', 'name' => 'event_title', 'label' => Text::_('COM_DPCALENDAR_EVENT')],
-			(object)['id' => 'start_date', 'name' => 'start_date', 'label' => Text::_('COM_DPCALENDAR_FIELD_START_DATE_LABEL')],
-			(object)['id' => 'end_date', 'name' => 'end_date', 'label' => Text::_('COM_DPCALENDAR_FIELD_END_DATE_LABEL')],
-			(object)['id' => 'email', 'name' => 'email', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL')],
-			(object)['id' => 'telephone', 'name' => 'telephone', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_TELEPHONE_LABEL')],
-			(object)['id' => 'country', 'name' => 'country_code_value', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL')],
-			(object)['id' => 'province', 'name' => 'province', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL')],
-			(object)['id' => 'city', 'name' => 'city', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL')],
-			(object)['id' => 'zip', 'name' => 'zip', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL')],
-			(object)['id' => 'street', 'name' => 'street', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL')],
-			(object)['id' => 'number', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL')],
-			(object)['id' => 'price', 'name' => 'price', 'label' => Text::_('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL')],
-			(object)['id' => 'user_name', 'name' => 'user_name', 'label' => Text::_('JGLOBAL_USERNAME')],
-			(object)['id' => 'created', 'name' => 'created', 'label' => Text::_('COM_DPCALENDAR_CREATED_DATE')],
-			(object)['id' => 'type', 'name' => 'type', 'label' => Text::_('COM_DPCALENDAR_TICKET_FIELD_TYPE_LABEL')],
-			(object)['id' => 'event_calid', 'name' => 'event_calid', 'label' => Text::_('COM_DPCALENDAR_CALENDAR')],
-			(object)['id' => 'timezone', 'name' => 'timezone', 'label' => Text::_('COM_DPCALENDAR_TIMEZONE')]
-		];
-
 		$parser = function ($name, $ticket) {
 			switch ($name) {
-				case 'status':
+				case 'state':
 					return Booking::getStatusLabel($ticket);
 				case 'created':
 					return DPCalendarHelper::getDate($ticket->$name)->format('c');
@@ -212,14 +154,16 @@ trait ExportTrait
 					}
 
 					$prices = json_decode((string)$ticket->event_prices);
-					if (!$prices || !array_key_exists($ticket->type, $prices->label)) {
+					if (!$prices || empty($prices->{'prices' . $ticket->type})) {
 						return '';
 					}
 
-					return $prices->label[$ticket->type];
+					return $prices->{'prices' . $ticket->type}->label;
+				case 'country':
+					return $ticket->country_code_value;
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
-				case 'user_name':
+				case 'user_id':
 					if (!$ticket->user_id) {
 						return '';
 					}
@@ -230,41 +174,16 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('ticket', $fields, $parser, $tickets);
+		return $this->getData('ticket', $parser, $tickets);
 	}
 
 	public function getLocationData(array $locations = []): array
 	{
-		$fields = [
-			(object)['id' => 'id', 'name' => 'id', 'label' => Text::_('JGRID_HEADING_ID')],
-			(object)['id' => 'title', 'name' => 'title', 'label' => Text::_('JGLOBAL_TITLE')],
-			(object)['id' => 'alias', 'name' => 'alias', 'label' => Text::_('JFIELD_ALIAS_LABEL')],
-			(object)['id' => 'country', 'name' => 'country_code_value', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL')],
-			(object)['id' => 'province', 'name' => 'province', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_PROVINCE_LABEL')],
-			(object)['id' => 'city', 'name' => 'city', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_CITY_LABEL')],
-			(object)['id' => 'zip', 'name' => 'zip', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_ZIP_LABEL')],
-			(object)['id' => 'street', 'name' => 'street', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL')],
-			(object)['id' => 'number', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_NUMBER_LABEL')],
-			(object)['id' => 'rooms', 'name' => 'rooms', 'label' => Text::_('COM_DPCALENDAR_ROOMS')],
-			(object)['id' => 'latitude', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_LATITUDE_LABEL')],
-			(object)['id' => 'longitude', 'name' => 'number', 'label' => Text::_('COM_DPCALENDAR_LOCATION_FIELD_LONGITUDE_LABEL')],
-			(object)['id' => 'url', 'name' => 'url', 'label' => Text::_('COM_DPCALENDAR_FIELD_URL_LABEL')],
-			(object)['id' => 'description', 'name' => 'description', 'label' => Text::_('JGLOBAL_DESCRIPTION')],
-			(object)['id' => 'color', 'name' => 'color', 'label' => Text::_('COM_DPCALENDAR_FIELD_COLOR_LABEL')],
-			(object)['id' => 'state', 'name' => 'status', 'label' => Text::_('JSTATUS')],
-			(object)['id' => 'language', 'name' => 'language', 'label' => Text::_('JFIELD_LANGUAGE_LABEL')],
-			(object)['id' => 'created', 'name' => 'created', 'label' => Text::_('JGLOBAL_FIELD_CREATED_LABEL')],
-			(object)['id' => 'created_by', 'name' => 'created_by', 'label' => Text::_('JGLOBAL_FIELD_CREATED_BY_LABEL')],
-			(object)['id' => 'modified', 'name' => 'modified', 'label' => Text::_('JGLOBAL_FIELD_MODIFIED_LABEL')],
-			(object)['id' => 'modified_by', 'name' => 'modified_by', 'label' => Text::_('JGLOBAL_FIELD_MODIFIED_BY_LABEL')],
-			(object)['id' => 'xreference', 'name' => 'xreference', 'label' => Text::_('COM_DPCALENDAR_FIELD_XREFERENCE_LABEL')]
-		];
-
 		$parser = function ($name, $location) {
 			switch ($name) {
 				case 'rooms':
 					return implode(', ', array_map(static fn ($room) => $room->title, (array)$location->rooms));
-				case 'status':
+				case 'state':
 					return Booking::getStatusLabel($location);
 				case 'created':
 				case 'modified':
@@ -280,10 +199,10 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('location', $fields, $parser, $locations);
+		return $this->getData('location', $parser, $locations);
 	}
 
-	private function getData(string $name, array $fields, callable $valueParser, array $items): array
+	private function getData(string $name, callable $valueParser, array $items): array
 	{
 		$app = $this->getApplication();
 		if (!$app instanceof CMSApplicationInterface) {
@@ -297,49 +216,90 @@ trait ExportTrait
 			$model = $this->getDPCalendar()->getMVCFactory()->createModel(ucfirst($name) . 's', 'Administrator', ['ignore_request' => false]);
 			$model->setState('list.limit', 1000);
 			$items = $model->getItems();
-			if (!$items) {
-				return [];
+		}
+
+		// Load the plugin form
+		$form = $this->getFormFactory()->createForm($this->_name);
+
+		if ($this instanceof CMSPlugin) {
+			$form->loadFile(JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/' . $this->_name . '.xml', false, '//config');
+		}
+
+		if ($this instanceof BaseView) {
+			$form->loadFile(JPATH_SITE . '/components/com_dpcalendar/tmpl/' . $this->getName() . '/default.xml', false, '//metadata');
+		}
+
+		// Get the available options
+		$formField = $form->getField(($this instanceof CMSPlugin ? 'export_' : '') . $name . 's_fields', 'params');
+		if (!$formField instanceof SubformField) {
+			return [];
+		}
+
+		$formField = $formField->loadSubForm()->getField('field');
+		if (!$formField instanceof DpcfieldsField) {
+			return [];
+		}
+
+		// The selected fields from the params where the field value is reduced
+		$formFields = $formField->getFields();
+		$fields     = [];
+		foreach (array_column((array)$this->params->get(($this instanceof CMSPlugin ? 'export_' : '') . $name . 's_fields', []), 'field') as $fieldName) {
+			foreach ($formFields as $field) {
+				if ($field->value !== $fieldName) {
+					continue;
+				}
+
+				$fields[] = $field;
+				break;
 			}
 		}
 
-		$order = $this->params->get('export_' . $name . 's_order', new \stdClass());
-		foreach ($order as $index => $field) {
-			if ($field->field == 'country') {
-				$order->{$index}->field = 'country_code_value';
-			}
-		}
+		// Define the data array with the labels as first column
+		$data = [array_map(static fn ($field) => $field->text ?? $field->label, $fields)];
 
-		$fields = array_merge($fields, FieldsHelper::getFields('com_dpcalendar.' . $name));
-		DPCalendarHelper::sortFields($fields, $order);
-		$fields = array_filter($fields, fn ($field): bool => !in_array($field->name, $this->params->get('export_' . $name . 's_fields_hide', [])));
-
-		$data   = [];
-		$data[] = array_map(static fn ($field) => $field->label, $fields);
-
+		// Loop over the array
 		foreach ($items as $item) {
+			// Normalize for prepare event
 			if (empty($item->text)) {
 				$item->text = $item->description ?? '';
 			}
 
 			$app->triggerEvent('onContentPrepare', ['com_dpcalendar.' . $name, &$item, &$item->params, 0]);
+
+			// The line array
 			$line = [];
+
+			// Loop over the fields
 			foreach ($fields as $field) {
-				if (!isset($item->jcfields) || !array_key_exists($field->id, $item->jcfields)) {
-					$line[] = html_entity_decode($valueParser($field->name, $item) ?? '');
+				$customField = array_filter($item->jcfields, fn ($f): bool => $f->name === $field->value);
+
+				// Check if it is a custom field
+				if ($customField === []) {
+					// Add the value to the cell
+					$line[] = html_entity_decode($valueParser($field->value, $item) ?? '');
 					continue;
 				}
 
-				$value = $item->jcfields[$field->id]->{$this->params->get('export_value_type', 'value') === 'value' ? 'value' : 'rawvalue'};
-				if (is_array($value)) {
+				// Get either the value or raw one
+				$value = reset($customField)->{$this->params->get('export_value_type', 'value') === 'value' ? 'value' : 'rawvalue'};
+
+				// Implode the array to have only one value
+				if (\is_array($value)) {
 					$value = implode(',', $value);
 				}
 
+				// Create the cell, either with or without tags
 				$line[] = html_entity_decode(trim($this->params->get('export_strip_html') ? strip_tags((string)$value) : $value));
 			}
 
+			// Set a property as well
+			$item->preparedData = $line;
+
+			// Add the line to the data
 			$data[] = $line;
 		}
 
+		// Return the data
 		return $data;
 	}
 }

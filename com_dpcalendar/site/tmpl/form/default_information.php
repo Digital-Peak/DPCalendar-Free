@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 if ($this->event->original_id == '0') {
 	return;
@@ -15,21 +15,21 @@ if ($this->event->original_id == '0') {
 	<?php if ($this->event->original_id == '-1') {
 	?>
 		<h4 class="com-dpcalendar-eventform__original-warning  dp-info-box">
-			<?php 
+			<?php
 	echo $this->translate('COM_DPCALENDAR_VIEW_EVENT_ORIGINAL_WARNING');
 	?>
 		</h4>
-	<?php 
+	<?php
 } elseif (!empty($this->event->original_id)) {
 	?>
 		<h4 class="dp-info-box">
-			<?php 
+			<?php
 	echo sprintf(
  				$this->translate('COM_DPCALENDAR_VIEW_EVENT_GOTO_ORIGINAL'),
  				$this->router->getEventFormRoute($this->event->original_id, base64_decode((string) $this->returnPage))
  			);
 	?>
 		</h4>
-	<?php 
+	<?php
 } ?>
 </div>

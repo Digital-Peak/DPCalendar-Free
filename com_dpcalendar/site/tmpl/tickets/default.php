@@ -1,15 +1,17 @@
 <?php
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2015 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
+
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\HTML\HTMLHelper;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/tickets/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/tickets/default.js');
+$this->dpdocument->loadScriptFile('views/tickets/default.js');
 $this->dpdocument->addStyle($this->params->get('tickets_custom_css', ''));
 
 if ($this->event) {
@@ -27,7 +29,7 @@ if ($this->booking) {
 	<div class="com-dpcalendar-tickets__custom-text">
 		<?php echo HTMLHelper::_('content.prepare', $this->translate($this->params->get('tickets_textbefore', ''))); ?>
 	</div>
-	<?php echo $this->loadTemplate('header'); ?>
+	<?php echo $this->loadTemplate('form'); ?>
 	<?php echo $this->loadTemplate('content'); ?>
 	<?php echo $this->loadTemplate('footer'); ?>
 	<div class="com-dpcalendar-tickets__custom-text">

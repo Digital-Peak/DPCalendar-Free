@@ -5,73 +5,47 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\HTML\Helpers\StringHelper;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-
-if (!$this->bookings) {
-	return;
-}
 
 $format = $this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params->get('event_time_format', 'H:i');
-
-$hasPrice = array_filter(
-	$this->bookings,
-	static fn($booking): bool => $booking->price > 0
-);
+$fields = array_column((array)$this->params->get('bookings_fields', []), 'field') ;
 ?>
 <div class="com-dpcalendar-bookings__table">
 	<table class="dp-table">
 		<thead>
 		<tr>
-			<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?></th>
-			<th><?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?></th>
-			<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?></th>
-			<th><?php echo $this->translate($hasPrice !== [] ? 'COM_DPCALENDAR_INVOICE_DATE' : 'COM_DPCALENDAR_CREATED_DATE'); ?></th>
-			<?php if ($hasPrice !== []) { ?>
-				<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></th>
-			<?php } ?>
-			<th><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_TICKETS_LABEL'); ?></th>
-			<?php if ($this->bookings) { ?>
-				<?php foreach ($this->bookings[0]->jcfields as $field) { ?>
-					<th><?php echo $field->label; ?></th>
-				<?php } ?>
+			<?php foreach ($this->headers as $index => $header) { ?>
+				<th class="dp-table__cell<?php echo $fields[$index] === 'price' ? ' dp-table__cell_center' : ''; ?>">
+					<?php echo $header; ?>
+				</th>
 			<?php } ?>
 		</tr>
 		</thead>
 		<tbody>
 		<?php foreach ($this->bookings as $booking) { ?>
 			<tr class="dp-booking">
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_ID_LABEL'); ?>">
-					<a href="<?php echo $this->router->getBookingRoute($booking); ?>" class="dp-link dp-booking__link">
-						<?php echo StringHelper::abridge($booking->uid, 15, 5); ?>
-					</a>
-				</td>
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_MODAL_COLUMN_STATE'); ?>" class="dp-booking__state">
-					<?php echo Booking::getStatusLabel($booking); ?>
-				</td>
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL'); ?>" class="dp-booking__name">
-					<?php echo $booking->name; ?>
-				</td>
-				<td data-column="<?php echo $this->translate($hasPrice !== [] ? 'COM_DPCALENDAR_INVOICE_DATE' : 'COM_DPCALENDAR_CREATED_DATE'); ?>"
-					class="dp-booking__date">
-					<?php echo $this->dateHelper->getDate($booking->book_date)->format($format, true); ?>
-				</td>
-				<?php if ($hasPrice !== []) { ?>
-					<td class="dp-cell-price dp-booking__price"
-						data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?>">
-						<?php echo DPCalendarHelper::renderPrice($booking->price, $this->params->get('currency_symbol', '$')); ?>
+				<?php foreach ($booking->preparedData as $index => $value) { ?>
+					<td data-column="<?php echo $this->headers[$index]; ?>" class="dp-booking__<?php echo $fields[$index]; ?> dp-table__cell
+						<?php echo $fields[$index] === 'tickets_count' ? ' dp-table__cell_center' : ''; ?>
+						<?php echo $fields[$index] === 'price' ? ' dp-table__cell_right' : ''; ?>
+						">
+						<?php if ($fields[$index] === 'uid') { ?>
+							<a href="<?php echo $this->router->getBookingRoute($booking); ?>" class="dp-link dp-booking__link">
+								<?php echo StringHelper::abridge($value, 15, 5); ?>
+							</a>
+						<?php } elseif ($fields[$index] === 'tickets_count') { ?>
+							<a href="<?php echo RouteHelper::getTicketsRoute($booking->id); ?>" class="dp-link dp-booking__tickets-link">
+								<?php echo $value; ?>
+							</a>
+						<?php } elseif ($fields[$index] === 'book_date') { ?>
+							<?php echo $this->dateHelper->getDate($value)->format($format, true); ?>
+						<?php } else { ?>
+							<?php echo $value; ?>
+						<?php } ?>
 					</td>
-				<?php } ?>
-				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_TICKETS_LABEL'); ?>">
-					<a href="<?php echo \DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getTicketsRoute($booking->id); ?>" class="'dp-link dp-booking__tickets-link">
-						<?php echo $booking->amount_tickets; ?>
-					</a>
-				</td>
-				<?php foreach ($booking->jcfields as $field) { ?>
-					<td data-column="<?php echo $field->label; ?>" class="dp-booking__field"><?php echo $field->value; ?></td>
 				<?php } ?>
 			</tr>
 		<?php } ?>

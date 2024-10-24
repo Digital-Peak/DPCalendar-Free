@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\SiteApplication;
@@ -36,7 +36,8 @@ class TicketsModel extends ListModel
 				'a.state',
 				'booking_name',
 				'event_title',
-				'event_id'
+				'event_id',
+				'e.start_date'
 			];
 		}
 
@@ -81,7 +82,7 @@ class TicketsModel extends ListModel
 					);
 				}
 
-				if (!array_key_exists($item->country, $countryCache)) {
+				if (!\array_key_exists($item->country, $countryCache)) {
 					$countryCache[$item->country] = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Country', 'Administrator')->getItem($item->country);
 				}
 
@@ -96,10 +97,10 @@ class TicketsModel extends ListModel
 			}
 
 			$item->type_label = '';
-			if (!empty($item->event_prices)) {
+			if (!empty($item->event_prices) && \is_string($item->event_prices)) {
 				$prices = json_decode((string)$item->event_prices);
-				if (!empty($prices->label) && !empty($prices->label[$item->type])) {
-					$item->type_label = $prices->label[$item->type];
+				if (!empty($prices->{'prices' . $item->type})) {
+					$item->type_label = $prices->{'prices' . $item->type}->label;
 				}
 			}
 
@@ -124,7 +125,7 @@ class TicketsModel extends ListModel
 		$query->join('LEFT', '#__dpcalendar_bookings AS b ON b.id = a.booking_id');
 
 		// Join over the events
-		$query->select('e.catid AS event_calid, e.title as event_title, e.start_date, e.end_date, e.all_day, e.show_end_time, e.price as event_prices, e.booking_options as event_options, e.payment_provider as event_payment_provider, e.terms as event_terms, e.created_by as event_author, e.original_id as event_original_id, e.rrule as event_rrule, e.booking_cancel_closing_date as event_booking_cancel_closing_date');
+		$query->select('e.catid AS event_calid, e.title as event_title, e.start_date, e.end_date, e.all_day, e.show_end_time, e.prices as event_prices, e.booking_options as event_options, e.payment_provider as event_payment_provider, e.terms as event_terms, e.created_by as event_author, e.original_id as event_original_id, e.rrule as event_rrule, e.booking_cancel_closing_date as event_booking_cancel_closing_date');
 		$query->join('LEFT', '#__dpcalendar_events AS e ON e.id = a.event_id');
 
 		// Join over the hosts
@@ -164,7 +165,7 @@ class TicketsModel extends ListModel
 		$published = $this->getState('filter.state');
 		if (is_numeric($published)) {
 			$query->where('a.state = ' . (int)$published);
-		} elseif (is_array($published)) {
+		} elseif (\is_array($published)) {
 			$query->where('(a.state IN (' . implode(',', ArrayHelper::toInteger($published)) . '))');
 		} elseif ($published === '') {
 			$query->where('a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)');
@@ -204,18 +205,24 @@ class TicketsModel extends ListModel
 		if ($eventId && is_numeric($eventId)) {
 			$eventId = [$eventId];
 		}
-		if (is_array($eventId)) {
+		if (\is_array($eventId)) {
 			$eventId = ArrayHelper::toInteger($eventId);
 
-			// Also search in original events
+			// Also search in original events and instances
 			$this->getDatabase()->setQuery(
-				'select original_id from #__dpcalendar_events where id in (' . implode(',', $eventId) . ') and original_id > 0'
+				'select id,original_id from #__dpcalendar_events where (id in (' . implode(',', $eventId) . ') and original_id > 0) or original_id in (' . implode(',', $eventId) . ')'
 			);
-			foreach ($this->getDatabase()->loadObjectList() as $orig) {
-				$eventId[] = $orig->original_id;
+			foreach ($this->getDatabase()->loadObjectList() as $e) {
+				if ($e->original_id > 0 && \in_array($e->id, $eventId)) {
+					$eventId[] = $e->original_id;
+				}
+
+				if ($e->id > 0 && \in_array($e->original_id, $eventId)) {
+					$eventId[] = $e->id;
+				}
 			}
 
-			$query->where('e.id in (' . implode(',', $eventId) . ')');
+			$query->where('e.id in (' . implode(',', array_unique($eventId)) . ')');
 		}
 
 		if ($this->getState('filter.my', 0) == 1) {

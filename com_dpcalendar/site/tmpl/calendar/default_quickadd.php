@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Uri\Uri;
@@ -15,7 +15,7 @@ if (!DPCalendarHelper::canCreateEvent()) {
 	return;
 }
 
-$this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
+$this->dpdocument->loadScriptFile('views/calendar/default.js');
 ?>
 <div class="com-dpcalendar-calendar__quickadd dp-quickadd">
 	<form action="<?php echo $this->router->getEventFormRoute(0, Uri::getInstance()->toString()); ?>" method="post" class="dp-form form-validate">

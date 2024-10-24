@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -76,7 +76,7 @@ $user = empty($displayData['user']) ? Factory::getApplication()->getIdentity() :
 			<a href="<?php echo $displayData['router']->getBookingFormRouteFromEvent($event, $return); ?>" class="dp-event-tooltip__action dp-link">
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
-					['icon' => Icon::PLUS, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_BOOK')]
+					['icon' => Icon::BOOK, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_BOOK')]
 				); ?>
 			</a>
 		<?php } ?>
@@ -123,9 +123,9 @@ $user = empty($displayData['user']) ? Factory::getApplication()->getIdentity() :
 			<span class="dp-event-tooltip__price">
 				<?php echo $displayData['layoutHelper']->renderLayout(
 					'block.icon',
-					['icon' => Icon::MONEY, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_FIELD_PRICE_LABEL')]
+					['icon' => Icon::MONEY, 'title' => $displayData['translator']->translate('COM_DPCALENDAR_FIELD_PRICES_LABEL')]
 				); ?>
-				<?php echo $displayData['translator']->translate('COM_DPCALENDAR_VIEW_CALENDAR_' . ($event->price ? 'PAID' : 'FREE') . '_EVENT'); ?>
+				<?php echo $displayData['translator']->translate('COM_DPCALENDAR_VIEW_CALENDAR_' . ($event->prices ? 'PAID' : 'FREE') . '_EVENT'); ?>
 			</span>
 		<?php } ?>
 	</div>

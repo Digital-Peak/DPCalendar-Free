@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
@@ -131,11 +131,11 @@ class LocationsModel extends ListModel
 			}
 
 			// When cached items, then this method is called again
-			if (is_array($location->rooms) || is_object($location->rooms)) {
+			if (\is_array($location->rooms) || \is_object($location->rooms)) {
 				continue;
 			}
 
-			if (!is_string($location->rooms) || $location->rooms === '{}') {
+			if (!\is_string($location->rooms) || $location->rooms === '{}') {
 				$location->rooms = [];
 				continue;
 			}
@@ -229,7 +229,7 @@ class LocationsModel extends ListModel
 		$location = $this->getState('filter.location');
 		$radius   = (int)$this->getState('filter.radius');
 		if (!empty($location)) {
-			if (is_object($location)) {
+			if (\is_object($location)) {
 				$data = $location;
 			} elseif (str_contains((string)$location, 'latitude=') && str_contains((string)$location, 'longitude=')) {
 				[$latitude, $longitude] = explode(';', (string)$location);

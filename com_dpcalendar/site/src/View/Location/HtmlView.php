@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Location;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
@@ -54,7 +54,7 @@ class HtmlView extends BaseView
 		$this->location->tags = new TagsHelper();
 		$this->location->tags->getItemTags('com_dpcalendar.location', $this->location->id);
 
-		$model = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Site');
+		$model = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Site');
 		$model->getState();
 		$model->setState('filter.parentIds', ['root']);
 
@@ -63,7 +63,7 @@ class HtmlView extends BaseView
 			$this->ids[] = $calendar->getId();
 		}
 
-		$model = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Events', 'Site', ['ignore_request' => true]);
+		$model = $this->getDPCalendar()->getMVCFactory()->createModel('Events', 'Site', ['ignore_request' => true]);
 		$model->setState('list.limit', 25);
 		$model->setState('list.start-date', DPCalendarHelper::getDate());
 		$model->setState('list.ordering', 'start_date');
@@ -93,7 +93,7 @@ class HtmlView extends BaseView
 
 		$menu = $this->app->getMenu()->getActive();
 
-		$id = $menu && array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
+		$id = $menu && \array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
 		if ($menu && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] != 'location' || $id != $this->location->id)) {
 			$this->app->getPathway()->addItem($this->location->title, '');
 		}

@@ -4,7 +4,8 @@
  * @copyright Copyright (C) 2017 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
@@ -39,10 +40,10 @@ use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 				<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'); ?>
 			</button>
 		<?php } ?>
-		<?php if ($this->params->get('list_manage_search_form', 1)) { ?>
+		<?php if ($this->params->get('list_filter_form', 1)) { ?>
 			<button type="button" class="dp-button dp-button-search">
-				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::SEARCH]); ?>
-				<?php echo $this->translate('JSEARCH_FILTER'); ?>
+				<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::FILTER]); ?>
+				<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FILTER'); ?>
 			</button>
 		<?php } ?>
 	</div>

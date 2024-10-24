@@ -4,7 +4,8 @@
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
 
 $params = $this->params;
 if (!$params->get('locations_show_map', 1) || $params->get('map_provider', 'openstreetmap') == 'none') {

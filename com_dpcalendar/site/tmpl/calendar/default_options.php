@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\Utilities\ArrayHelper;
@@ -34,6 +34,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_TODAY');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_SHOW_DATEPICKER');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD');
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FILTER');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_OPEN');
 
 $this->translator->translateJS('JCANCEL');
@@ -53,8 +54,7 @@ $params = $this->params;
 // The options which will be passed to the js library
 $options                         = [];
 $options['requestUrlRoot']       = 'view=events&format=raw&limit=0&Itemid=' . $this->input->getInt('Itemid', 0);
-$options['calendarIds']          = $this->selectedCalendars;
-$options['singleCalendarsFetch'] = $this->params->get('show_selection', 1) == 2;
+$options['calendarIds']          = array_keys($this->items);
 
 // Set the default view
 $options['initialView'] = $params->get('default_view', 'month');
@@ -129,6 +129,9 @@ if ($params->get('header_show_create', 1) && DPCalendarHelper::canCreateEvent())
 if ($params->get('header_show_fullscreen', 1)) {
 	$options['headerToolbar']['left'][] = 'fullscreen_open';
 	$options['headerToolbar']['left'][] = 'fullscreen_close';
+}
+if ($params->get('calendar_filter_form', 1)) {
+	$options['headerToolbar']['left'][] = 'filter';
 }
 if ($params->get('header_show_title', 1)) {
 	$options['headerToolbar']['center'][] = 'title';

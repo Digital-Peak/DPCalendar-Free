@@ -122,7 +122,7 @@ class Calendar extends \stdClass implements CalendarInterface
 
 	public function setColor(string $color): void
 	{
-		$this->color = $color;
+		$this->color = str_replace('#', '', $color);
 	}
 
 	public function getAccess(): int

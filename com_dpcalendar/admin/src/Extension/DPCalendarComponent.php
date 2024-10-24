@@ -7,11 +7,6 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Extension;
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\FieldsOrder;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Location;
-use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 use Joomla\CMS\Categories\CategoryServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceTrait;
 use Joomla\CMS\Component\Router\RouterServiceInterface;
@@ -44,13 +39,6 @@ class DPCalendarComponent extends MVCComponent implements
 
 	public function boot(ContainerInterface $container): void
 	{
-		class_alias(Icon::class, '\\DPCalendar\\HTML\\Block\\Icon');
-		class_alias(Booking::class, '\\DPCalendar\\Helper\\Booking');
-		class_alias(DPCalendarHelper::class, '\\DPCalendar\\Helper\\DPCalendarHelper');
-		class_alias(DPCalendarHelper::class, '\\DPCalendarHelper');
-		class_alias(Location::class, '\\DPCalendar\\Helper\\Location');
-		class_alias(FieldsOrder::class, '\\DPCalendar\\Helper\\FieldsOrder');
-
 		// Register the file itself for lazy class loading
 		// @phpstan-ignore-next-line
 		\JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');

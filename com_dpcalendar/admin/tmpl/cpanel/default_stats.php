@@ -1,12 +1,13 @@
 <?php
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
 
+\defined('_JEXEC') or die();
+
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 ?>
 <div class="com-dpcalendar-cpanel__stats">
 	<h3 class="dp-heading">

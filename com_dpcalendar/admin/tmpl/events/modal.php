@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
@@ -14,7 +14,7 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminlist/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/adminlist/default.js');
+$this->dpdocument->loadScriptFile('views/adminlist/default.js');
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));

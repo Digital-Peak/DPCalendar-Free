@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\ThinHTTP\CurlClient;
@@ -42,20 +42,20 @@ class ImportModel extends BaseDatabaseModel
 
 		$msgs = [];
 		foreach ($calendars as $cal) {
-			if (!in_array($cal->id, $calendarsToimport)) {
+			if (!\in_array($cal->id, $calendarsToimport)) {
 				continue;
 			}
 
 			$events = $app->triggerEvent('onEventsFetch', [$cal->id, $start, $end, new Registry(['expand' => false])]);
 			$events = array_merge(...(array)$events);
 			if ($events === []) {
-				$msgs[] = sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_CREATED'), 0, $cal->title);
+				$msgs[] = \sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_CREATED'), 0, $cal->title);
 				continue;
 			}
 
 			$category = array_filter($existingCalendars, static fn ($e): bool => $e->title == $cal->title);
 
-			if (is_array($category)) {
+			if (\is_array($category)) {
 				$category = reset($category);
 			}
 
@@ -129,8 +129,8 @@ class ImportModel extends BaseDatabaseModel
 
 				empty($eventData['id']) ? $counter++ : $counterUpdated++;
 			}
-			$msgs[] = sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_CREATED'), $counter, $cal->title);
-			$msgs[] = sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_UPDATED'), $counterUpdated, $cal->title);
+			$msgs[] = \sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_CREATED'), $counter, $cal->title);
+			$msgs[] = \sprintf(Text::_('COM_DPCALENDAR_N_ITEMS_UPDATED'), $counterUpdated, $cal->title);
 		}
 		$this->setState('messages', $msgs);
 	}
@@ -138,7 +138,7 @@ class ImportModel extends BaseDatabaseModel
 	public function importGeoDB(): void
 	{
 		// The folder with the data
-		$geoDBDirectory = Factory::getApplication()->get('tmp_path') . '/DPCalendar-Geodb';
+		$geoDBDirectory = JPATH_CACHE . '/com_dpcalendar-geodb';
 
 		// Only update when we are not in free mode
 		if (DPCalendarHelper::isFree()) {
@@ -200,7 +200,7 @@ class ImportModel extends BaseDatabaseModel
 
 			// Parse the line
 			$data = explode("\t", $line);
-			if (count($data) < 3 || $data[2] === 'None') {
+			if (\count($data) < 3 || $data[2] === 'None') {
 				continue;
 			}
 

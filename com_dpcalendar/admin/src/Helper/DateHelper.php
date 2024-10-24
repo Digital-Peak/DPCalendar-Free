@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Helper;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
@@ -140,7 +140,7 @@ class DateHelper
 			$options['dayNames'][]      = DPCalendarHelper::dayToString($i, false);
 			$options['dayNamesShort'][] = DPCalendarHelper::dayToString($i, true);
 
-			if (function_exists('mb_substr')) {
+			if (\function_exists('mb_substr')) {
 				$options['dayNamesMin'][] = mb_substr(DPCalendarHelper::dayToString($i, true), 0, 2);
 			} else {
 				$options['dayNamesMin'][] = substr(DPCalendarHelper::dayToString($i, true), 0, 2);

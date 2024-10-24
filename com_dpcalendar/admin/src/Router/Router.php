@@ -37,7 +37,7 @@ class Router
 
 	public function getEventFormRoute(?string $id, ?string $return = null, ?string $append = null, ?bool $xhtml = true): string
 	{
-		return Route::_(RouteHelper::getFormRoute($id, $return, $append), is_bool($xhtml) ? $xhtml : true);
+		return Route::_(RouteHelper::getFormRoute($id, $return, $append), \is_bool($xhtml) ? $xhtml : true);
 	}
 
 	public function getEventDeleteRoute(string $id, ?string $return = null): string
@@ -45,10 +45,7 @@ class Router
 		return Route::_('index.php?option=com_dpcalendar&task=event.delete&e_id=' . $id . '&return=' . base64_encode($return !== null && $return !== '' && $return !== '0' ? $return : ''));
 	}
 
-	/**
-	 * @param \stdClass $location
-	 */
-	public function getLocationRoute(object $location): string
+	public function getLocationRoute(\stdClass $location): string
 	{
 		return RouteHelper::getLocationRoute($location);
 	}
@@ -58,34 +55,22 @@ class Router
 		return RouteHelper::getLocationFormRoute($id, $return);
 	}
 
-	/**
-	 * @param \stdClass $booking
-	 */
-	public static function getBookingRoute(object $booking, ?bool $full = false): string
+	public static function getBookingRoute(\stdClass $booking, ?bool $full = false): string
 	{
 		return RouteHelper::getBookingRoute($booking, $full);
 	}
 
-	/**
-	 * @param \stdClass $booking
-	 */
-	public static function getBookingFormRoute(object $booking, ?string $return = null): string
+	public static function getBookingFormRoute(\stdClass $booking, ?string $return = null): string
 	{
 		return RouteHelper::getBookingFormRoute($booking, $return);
 	}
 
-	/**
-	 * @param \stdClass $event
-	 */
-	public function getBookingFormRouteFromEvent(object $event, ?string $return = null, ?bool $autoRoute = true, ?int $defaultItemId = 0): string
+	public function getBookingFormRouteFromEvent(\stdClass $event, ?string $return = null, ?bool $autoRoute = true, ?int $defaultItemId = 0): string
 	{
 		return RouteHelper::getBookingFormRouteFromEvent($event, $return, $autoRoute, $defaultItemId);
 	}
 
-	/**
-	 * @param \stdClass $ticket
-	 */
-	public static function getTicketRoute(object $ticket, ?bool $full = false): string
+	public static function getTicketRoute(\stdClass $ticket, ?bool $full = false): string
 	{
 		return RouteHelper::getTicketRoute($ticket, $full);
 	}

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\EventModel;
@@ -59,9 +59,10 @@ class FormModel extends EventModel implements UserFactoryAwareInterface
 			}
 
 			$amount = [];
-			if ($event->price) {
-				foreach ($event->price->value as $index => $value) {
-					$amount[$index] = 1;
+			if ($event->prices) {
+				foreach ($event->prices as $key => $price) {
+					$key               = preg_replace('/\D/', '', (string)$key);
+					$amount[(int)$key] = 1;
 				}
 			} else {
 				$amount[0] = 1;
@@ -108,7 +109,7 @@ class FormModel extends EventModel implements UserFactoryAwareInterface
 		}
 
 		foreach ($event->tickets as $ticket) {
-			if ($ticketIds && !in_array($ticket->id, $ticketIds) && !$onlyAuthor) {
+			if ($ticketIds && !\in_array($ticket->id, $ticketIds) && !$onlyAuthor) {
 				continue;
 			}
 

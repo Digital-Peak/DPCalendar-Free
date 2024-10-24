@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\View\Event;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
@@ -32,8 +32,8 @@ class HtmlView extends BaseView
 	protected function init(): void
 	{
 		// Set the default model
-		$this->setModel($this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Event', 'Administrator'), true);
-		$this->setModel($this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Events', 'Administrator'));
+		$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Event', 'Administrator'), true);
+		$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Events', 'Administrator'));
 
 		$this->event        = $this->get('Item');
 		$this->form         = $this->get('Form');

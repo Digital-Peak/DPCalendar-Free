@@ -5,14 +5,14 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Toolbar\Toolbar;
 
-$this->dpdocument->loadScriptFile('dpcalendar/views/extcalendars/default.js');
+$this->dpdocument->loadScriptFile('views/extcalendars/default.js');
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminlist/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/adminlist/default.js');
+$this->dpdocument->loadScriptFile('views/adminlist/default.js');
 $this->dpdocument->addScriptOptions('adminlist', ['listOrder' => $this->state->get('list.ordering')]);
 
 if ($this->input->get('tmpl', '') === 'component') {

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\HTML\Block;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 /**
  * Icon constants
@@ -20,6 +20,13 @@ class Icon
 	 * @var string
 	 */
 	public const BACK = 'angle-left';
+
+	/**
+	 * The book icon.
+	 *
+	 * @var string
+	 */
+	public const BOOK = 'ticket';
 
 	/**
 	 * The bullseye icon.
@@ -139,6 +146,13 @@ class Icon
 	 * @var string
 	 */
 	public const FILE = 'file';
+
+	/**
+	 * The filter icon.
+	 *
+	 * @var string
+	 */
+	public const FILTER = 'filter';
 
 	/**
 	 * The invoice icon.

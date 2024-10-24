@@ -5,14 +5,14 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\HTML\HTMLHelper;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminform/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/extcalendar/default.js');
+$this->dpdocument->loadScriptFile('views/extcalendar/default.js');
 
 if ($this->input->get('tmpl', '') === 'component') {
 	$bar = Toolbar::getInstance('toolbar');

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\View\ExtCalendars;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
 use Joomla\CMS\Helper\ContentHelper;
@@ -38,7 +38,7 @@ class HtmlView extends BaseView
 			$this->pluginParams->loadString($plugin->params);
 		}
 
-		if ((is_countable($errors = $this->get('Errors')) ? count($errors = $this->get('Errors')) : 0) !== 0) {
+		if ((is_countable($errors = $this->get('Errors')) ? \count($errors = $this->get('Errors')) : 0) !== 0) {
 			throw new \Exception(implode("\n", $errors));
 		}
 	}

@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
@@ -28,7 +28,7 @@ $params = $this->params;
 						aria-label="<?php echo $this->translate('COM_DPCALENDAR_BOOK'); ?>">
 						<?php echo $this->layoutHelper->renderLayout(
 							'block.icon',
-							['icon' => Icon::PLUS, 'title' => $this->translate('COM_DPCALENDAR_BOOK')]
+							['icon' => Icon::BOOK, 'title' => $this->translate('COM_DPCALENDAR_BOOK')]
 						); ?>
 					</a>
 				<?php } ?>

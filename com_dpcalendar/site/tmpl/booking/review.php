@@ -5,12 +5,12 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/booking/review.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/booking/review.js');
+$this->dpdocument->loadScriptFile('views/booking/review.js');
 $this->dpdocument->addStyle($this->params->get('booking_custom_css', ''));
 ?>
 <div class="com-dpcalendar-booking com-dpcalendar-booking-review<?php echo $this->pageclass_sfx ? ' com-dpcalendar-booking-' . $this->pageclass_sfx : ''; ?>">

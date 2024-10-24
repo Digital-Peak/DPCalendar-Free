@@ -2,8 +2,8 @@
 <form>
 	<fields name="filter" addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field"
 		addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
-		<field name="search" type="text" label="" description="" hint="JSEARCH_FILTER" />
-		<field name="state" type="list" onchange="this.form.submit();"
+		<field name="search" type="text" class="dp-input" label="" description="" hint="JSEARCH_FILTER" />
+		<field name="state" type="list" class="dp-input"
 			label="COM_CONTENT_FILTER_PUBLISHED" description="COM_CONTENT_FILTER_PUBLISHED_DESC">
 			<option value="">JOPTION_SELECT_PUBLISHED</option>
 			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
@@ -18,15 +18,15 @@
 			<option value="9">COM_DPCALENDAR_TICKET_FIELD_STATE_CHECKIN</option>
 			<option value="-2">JTRASHED</option>
 		</field>
-		<field name="ticket_holder" type="dpauthor" onchange="this.form.submit();" table_name="dpcalendar_tickets" author_field="user_id"
+		<field name="ticket_holder" type="dpauthor" table_name="dpcalendar_tickets" author_field="user_id" class="dp-select"
 			label="COM_CONTENT_FILTER_AUTHOR" description="COM_CONTENT_FILTER_AUTHOR_DESC">
 			<option value="">JOPTION_SELECT_AUTHOR</option>
 		</field>
-		<field name="event_id" type="event" onchange="this.form.submit();"
+		<field name="event_id" type="event" class="dp-input"
 			label="COM_DPCALENDAR_TICKET_FIELD_EVENT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_EVENT_DESC"/>
 	</fields>
 	<fields name="list">
-		<field name="fullordering" class="js-select-submit-on-change" type="list"  onchange="this.form.submit();" default="a.id DESC"
+		<field name="fullordering" class="js-select-submit-on-change dp-select" type="list"  default="a.id DESC"
 			label="COM_CONTENT_LIST_FULL_ORDERING" description="COM_CONTENT_LIST_FULL_ORDERING_DESC">
 			<option value="">JGLOBAL_SORT_BY</option>
 			<option value="a.uid ASC">COM_DPCALENDAR_VIEWS_FILTERS_UID_ASC</option>
@@ -46,7 +46,7 @@
 			<option value="a.id ASC">JGRID_HEADING_ID_ASC</option>
 			<option value="a.id DESC">JGRID_HEADING_ID_DESC</option>
 		</field>
-		<field name="limit" type="limitbox" class="input-mini js-select-submit-on-change" default="25"
+		<field name="limit" type="limitbox" class="input-mini js-select-submit-on-change dp-select" default="25"
 			label="COM_CONTENT_LIST_LIMIT" description="COM_CONTENT_LIST_LIMIT_DESC"/>
 	</fields>
 </form>

@@ -52,16 +52,16 @@
 				<option value="desc">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_DESCE</option>
 				<option value="adaptive">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_ADAPTIVE</option>
 			</field>
-			<field name="list_manage_search_form" type="list" useglobal="true"
+			<field name="list_filter_form" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_DESC">
 				<option value="1">JSHOW</option>
 				<option value="2">COM_DPCALENDAR_EXPAND</option>
 				<option value="0">JHIDE</option>
 			</field>
-			<field name="list_search_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-				layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,state,access,language,tag,limit,fullordering"
-				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
+			<field name="list_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
+				layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,state,access,language,limit,fullordering"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC"/>
 			<field name="list_show_hits" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_DESC">
 				<option value="1">JYES</option>
@@ -109,7 +109,7 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
-			<field name="list_autocomplete" type="list" useglobal="true"
+			<field name="list_filter_form_location_autocomplete" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
@@ -283,10 +283,22 @@
 			</field>
 			<field name="event_form_date_format" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC"/>
+				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_DATE_FORMAT_DESC">
+				<option value="d.m.Y">d.m.Y [14.6.2024]</option>
+				<option value="d/m/Y">d/m/Y [14/6/2024]</option>
+				<option value="m.d.Y">m.d.Y [6.14.2024]</option>
+				<option value="m/d/Y">m/d/Y [6/14/2024]</option>
+				<option value="Y.m.d">Y.m.d [2024.6.14]</option>
+				<option value="Y/m/d">Y/m/d [2024/6/14]</option>
+				<option value="Y-m-d">Y-m-d [2024-6-14]</option>
+			</field>
 			<field name="event_form_time_format" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_DESC"/>
+				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_FORMAT_DESC">
+				<option value="H:i">H:i [14:30]</option>
+				<option value="g:i A">g:i A [2:30 AM]</option>
+				<option value="g:i a">g:i a [2:30 am]</option>
+			</field>
 			<field name="event_form_time_step" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_FORM_TIME_STEP_DESC"/>
@@ -357,9 +369,11 @@
 				<option value="booking_cancel_closing_date">COM_DPCALENDAR_FIELD_BOOKING_CANCEL_CLOSING_DATE_LABEL</option>
 				<option value="booking_series">COM_DPCALENDAR_FIELD_BOOKING_SERIES_LABEL</option>
 				<option value="booking_waiting_list">COM_DPCALENDAR_FIELD_BOOKING_WAITING_LIST_LABEL</option>
-				<option value="price">COM_DPCALENDAR_FIELD_PRICE_LABEL</option>
-				<option value="earlybird">COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL</option>
+				<option value="price">COM_DPCALENDAR_FIELD_PRICES_LABEL</option>
+				<option value="earlybird_discount">COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL</option>
 				<option value="user_discount">COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL</option>
+				<option value="events_discount">COM_DPCALENDAR_FIELD_EVENTS_DISCOUNT_LABEL</option>
+				<option value="tickets_discount">COM_DPCALENDAR_FIELD_TICKETS_DISCOUNT_LABEL</option>
 				<option value="booking_options">COM_DPCALENDAR_OPTIONS</option>
 				<option value="payment_provider">COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL</option>
 				<option value="terms">COM_DPCALENDAR_FIELD_BOOKING_TERMS_LABEL</option>

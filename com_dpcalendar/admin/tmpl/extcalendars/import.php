@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Factory;
@@ -13,7 +13,7 @@ use Joomla\CMS\Form\Form;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Language\Text;
 
-$this->dpdocument->loadScriptFile('dpcalendar/views/extcalendars/default.js');
+$this->dpdocument->loadScriptFile('views/extcalendars/default.js');
 
 $plugin = $this->input->getCmd('dpplugin');
 $this->app->getLanguage()->load('plg_dpcalendar_' . $plugin, JPATH_PLUGINS . '/dpcalendar/' . $plugin);

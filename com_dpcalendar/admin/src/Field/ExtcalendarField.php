@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Field;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
@@ -29,7 +29,7 @@ class ExtcalendarField extends FormField
 
 		$app->getSession()->set('com_dpcalendar.extcalendar.origin', Uri::getInstance()->toString());
 
-		(new HtmlDocument())->loadScriptFile('dpcalendar/fields/extcalendar.js');
+		(new HtmlDocument())->loadScriptFile('fields/extcalendar.js');
 		$app->getDocument()->getWebAssetManager()->addInlineStyle('#general .controls {margin-left: 0} #general .control-label {width: 0}');
 
 		$url = 'index.php?option=com_dpcalendar&view=extcalendars';

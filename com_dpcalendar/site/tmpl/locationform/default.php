@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
 
@@ -14,7 +14,7 @@ if ($this->params->get('location_form_show_map', 1) && $this->params->get('map_p
 }
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/locationform/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/locationform/default.js');
+$this->dpdocument->loadScriptFile('views/locationform/default.js');
 $this->dpdocument->addStyle($this->params->get('location_form_custom_css', ''));
 
 $this->translator->translateJS('COM_DPCALENDAR_OPTIONS');

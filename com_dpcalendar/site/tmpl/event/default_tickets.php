@@ -1,15 +1,14 @@
 <?php
-use Joomla\CMS\HTML\Helpers\StringHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Location;
+use Joomla\CMS\HTML\Helpers\StringHelper;
 
 if (!$this->params->get('event_show_tickets', 0) || !isset($this->event->tickets) || !$this->event->tickets) {
 	return;

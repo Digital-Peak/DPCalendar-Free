@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
 
@@ -14,7 +14,7 @@ if ($this->params->get('show_map', 1) == 1) {
 }
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/calendar/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/calendar/default.js');
+$this->dpdocument->loadScriptFile('views/calendar/default.js');
 $this->dpdocument->addStyle($this->params->get('calendar_custom_css', ''));
 
 $this->params->set('header_show_print', false);

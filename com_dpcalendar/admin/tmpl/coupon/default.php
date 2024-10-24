@@ -11,7 +11,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminform/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/couponform/default.js');
+$this->dpdocument->loadScriptFile('views/couponform/default.js');
 
 $action = $this->router->route('index.php?option=com_dpcalendar&view=coupon&co_id=' . (int)$this->coupon->id . $this->tmpl);
 ?>

@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
@@ -126,5 +126,14 @@ if (DPCalendarHelper::canCreateEvent()) {
 
 $this->dpdocument->addScriptOptions('view.location.' . $this->input->getInt('Itemid', 0) . '.options', $options);
 ?>
+<div class="dp-filter">
+	<form class="dp-form">
+		<?php foreach ($this->ids as $id) { ?>
+			<input type="hidden" name="filter[calendars][]" value="<?php echo $id; ?>">
+		<?php } ?>
+		<input type="hidden" name="list[start-date]">
+		<input type="hidden" name="list[end-date]">
+	</form>
+</div>
 <div class="com-dpcalendar-location__resource dp-calendar"
 	data-options="DPCalendar.view.location.<?php echo $this->input->getInt('Itemid', 0); ?>.options"></div>

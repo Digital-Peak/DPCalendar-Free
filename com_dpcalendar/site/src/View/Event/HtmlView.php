@@ -8,7 +8,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Event;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
@@ -86,6 +86,8 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 			throw new \Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
 
+		$this->getDPCalendar()->getMVCFactory()->createModel('Currency', 'Administrator')->setupCurrencyPrices($event);
+
 		// Use the options from the event
 		$this->params->merge($event->params);
 
@@ -99,8 +101,8 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		// Check the access to the event
 		$levels = $this->getCurrentUser()->getAuthorisedViewLevels();
 
-		if (!in_array($event->access, $levels) ||
-			((in_array($event->access, $levels) && (isset($event->category_access) && !in_array($event->category_access, $levels))))
+		if (!\in_array($event->access, $levels) ||
+			((\in_array($event->access, $levels) && (isset($event->category_access) && !\in_array($event->category_access, $levels))))
 		) {
 			throw new \Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'));
 		}
@@ -191,7 +193,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 			if (is_dir(JPATH_ROOT . '/components/com_dpusers')) {
 				$component = ComponentHelper::getComponent('com_dpusers');
 				$items     = $this->app->getMenu()->getItems('component_id', $component->id);
-				if (!is_array($items)) {
+				if (!\is_array($items)) {
 					$items = [$items];
 				}
 
@@ -244,7 +246,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 			$seriesModel->setState('list.limit', (int)$this->params->get('event_series_max', 5));
 			$this->seriesEvents      = $seriesModel->getItems();
 			$this->seriesEventsTotal = $seriesModel->getTotal();
-			$this->originalEvent     = $model->getItem($event->original_id) ?: $this->originalEvent;
+			$this->originalEvent     = $event->original_id != '-1' ? $model->getItem($event->original_id) : $this->event;
 		}
 
 		$this->noBookingMessage = $this->getBookingMessage($event);
@@ -260,9 +262,9 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		}
 
 		// Taxes stuff
-		$this->country = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->getCountryForIp();
+		$this->country = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getCountryForIp();
 		if ($this->country instanceof \stdClass) {
-			$model         = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Taxrate', 'Administrator', ['ignore_request' => true]);
+			$model         = $this->getDPCalendar()->getMVCFactory()->createModel('Taxrate', 'Administrator', ['ignore_request' => true]);
 			$this->taxRate = $model->getItemByCountry($this->country->id);
 
 			$this->app->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
@@ -275,17 +277,19 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		foreach ($event->tickets as $ticket) {
 			// Try to find the label of the ticket type
 			$ticket->price_label = '';
-			if (!$event->price) {
+			if (!$event->prices) {
 				continue;
 			}
-			if (!(array_key_exists($ticket->type, $event->price->label) && $event->price->label[$ticket->type])) {
+
+			if (empty($event->prices->{'prices' . $ticket->type}) || empty($event->prices->{'prices' . $ticket->type}->label)) {
 				continue;
 			}
-			$ticket->price_label = $event->price->label[$ticket->type];
+
+			$ticket->price_label = $event->prices->{'prices' . $ticket->type}->label;
 		}
 
 		if ($this->getLayout() === 'mailtickets') {
-			$this->setModel($this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Form', 'Site'));
+			$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Form', 'Site'));
 			$this->returnPage = $this->get('ReturnPage');
 
 			$this->mailTicketsForm = $this->getFormFactory()->createForm('com_dpcalendar.mailtickets', ['control' => 'jform']);
@@ -404,7 +408,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 
 		$menu = $this->app->getMenu()->getActive();
 
-		$id = $menu && array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
+		$id = $menu && \array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
 		if ($menu && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] != 'event' || $id != $this->event->id)) {
 			$this->app->getPathway()->addItem(strip_tags((string)$this->event->title), '');
 		}
@@ -472,7 +476,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 	protected function getDocumentTitle(): string
 	{
 		$menu = $this->app->getMenu()->getActive();
-		$id   = $menu && array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
+		$id   = $menu && \array_key_exists('id', $menu->query) ? (int)$menu->query['id'] : 0;
 
 		// If this is not a single event menu item, set the page title to the event title
 		if ($menu && ($menu->query['option'] != 'com_dpcalendar' || $menu->query['view'] != 'event' || $id != $this->event->id)) {

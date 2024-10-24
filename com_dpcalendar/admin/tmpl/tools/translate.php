@@ -5,12 +5,12 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Language\Text;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/tools/translate.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/tools/translate.js');
+$this->dpdocument->loadScriptFile('views/tools/translate.js');
 
 $this->app->enqueueMessage($this->translate('COM_DPCALENDAR_VIEW_TOOLS_TRANSLATE_TEXT'), 'warning');
 ?>

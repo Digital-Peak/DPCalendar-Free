@@ -9,13 +9,17 @@
 	    addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field"
 	    addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
 		<fieldset name="basic">
-			<field name="bookings_order_dir" type="list" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGS_ORDER_DIRECTION_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGS_ORDER_DIRECTION_DESC">
-				<option value="a.name ASC">COM_DPCALENDAR_VIEWS_FILTERS_NAME_ASC</option>
-				<option value="a.name DESC">COM_DPCALENDAR_VIEWS_FILTERS_NAME_DESC</option>
-				<option value="a.book_date ASC">JDATE_ASC</option>
-				<option value="a.book_date DESC">JDATE_DESC</option>
+			<field name="bookings_fields" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
+				label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGS_FIELDS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGS_FIELDS_DESC">
+				<form>
+					<field name="field" type="dpcfields" section="booking" layout="joomla.form.field.list-fancy-select"
+						label="COM_DPCALENDAR_FIELD">
+						<option value="tickets_count">COM_DPCALENDAR_TICKETS</option>
+						<option value="event_author">COM_DPCALENDAR_FIELD_AUTHOR_LABEL</option>
+						<option value="event_calid">COM_DPCALENDAR_CALENDAR</option>
+						<option value="timezone">COM_DPCALENDAR_TIMEZONE</option>
+					</field>
+				</form>
 			</field>
 			<field name="bookings_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 			    label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>

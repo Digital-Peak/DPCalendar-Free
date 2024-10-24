@@ -1,14 +1,16 @@
 <?php
-use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
-use Joomla\CMS\HTML\Helpers\StringHelper;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Location;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
+
+use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
+use Joomla\CMS\HTML\Helpers\StringHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
 $format = $this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params->get('event_time_format', 'H:i');
 ?>
@@ -56,7 +58,7 @@ $format = $this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params
 				<?php if ($ticket->price) { ?>
 					<dl class="dp-description">
 						<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></dt>
-						<dd class="dp-description__description"><?php echo \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::renderPrice($ticket->price); ?></dd>
+						<dd class="dp-description__description"><?php echo DPCalendarHelper::renderPrice($ticket->price); ?></dd>
 					</dl>
 				<?php } ?>
 			</div>
@@ -67,7 +69,7 @@ $format = $this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params
 					<dl class="dp-description">
 						<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_OPTION'); ?></dt>
 						<dd class="dp-description__description">
-							<?php echo \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::renderPrice($option['price']); ?>
+							<?php echo DPCalendarHelper::renderPrice($option['value']); ?>
 							<?php echo $option['amount']; ?>
 							<?php echo $option['label']; ?>
 						</dd>

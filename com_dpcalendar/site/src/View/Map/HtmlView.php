@@ -7,55 +7,51 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\Map;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
+use DigitalPeak\Component\DPCalendar\Site\View\CalendarViewTrait;
 use Joomla\CMS\Factory;
 
 class HtmlView extends BaseView
 {
-	/** @var \DateTime */
-	protected $startDate;
+	use CalendarViewTrait;
 
-	/** @var \DateTime */
-	protected $endDate;
+	protected array $calendars = [];
 
 	public function display($tpl = null): void
 	{
-		$this->setModel(Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Events', 'Site'), true);
+		$model = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel(
+			'Events',
+			'Site',
+			['name' => $this->getName() . '.' . Factory::getApplication()->getInput()->getInt('Itemid', 0)]
+		);
+		$this->setModel($model, true);
 
 		parent::display($tpl);
 	}
 
 	protected function init(): void
 	{
-		$this->displayData['format'] = $this->params->get('map_date_format', 'd.m.Y');
+		// Get the calendars and their childs
+		$model = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Site', ['ignore_request' => true]);
+		$model->getState();
+		$model->setState('filter.parentIds', $this->params->get('ids', '-1'));
 
-		$context = 'com_dpcalendar.map.';
-
-		$this->state->set('filter.search', $this->app->getUserStateFromRequest($context . 'search', 'search'));
-		$this->state->set('filter.location', $this->app->getUserStateFromRequest($context . 'location', 'location'));
-		$this->state->set(
-			'filter.radius',
-			$this->app->getUserStateFromRequest($context . 'radius', 'radius', $this->params->get('map_view_radius', 20))
-		);
-		$this->state->set(
-			'filter.length-type',
-			$this->app->getUserStateFromRequest($context . 'length-type', 'length-type', $this->params->get('map_view_length_type', 'm'))
-		);
-
-		$this->state->set('list.start-date', $this->app->getUserStateFromRequest($context . 'start-date', 'start-date'));
-		$this->state->set('list.end-date', $this->app->getUserStateFromRequest($context . 'end-date', 'end-date'));
-
-
-		$this->startDate = $this->app->getUserStateFromRequest($context . 'start-date', 'start-date');
-		if ($this->startDate) {
-			$this->startDate = $this->dateHelper->getDate($this->startDate, true);
+		// The calendar ids
+		$this->calendars = $model->getItems();
+		foreach ($this->calendars as $calendar) {
+			$this->fillCalendar($calendar);
 		}
 
-		$this->endDate = $this->app->getUserStateFromRequest($context . 'end-date', 'end-date');
-		if ($this->endDate) {
-			$this->endDate = $this->dateHelper->getDate($this->endDate, true);
+		$this->prepareForm($this->calendars);
+
+		if (!$this->filterForm->getValue('radius', 'filter')) {
+			$this->filterForm->setValue('radius', 'filter', $this->params->get('map_view_radius', 20));
+		}
+
+		if (!$this->filterForm->getValue('length-type', 'filter')) {
+			$this->filterForm->setValue('length-type', 'filter', $this->params->get('map_view_length_type', 'm'));
 		}
 	}
 }

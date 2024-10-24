@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -25,12 +25,16 @@ class CalendarModel extends ListModel implements FormFactoryAwareInterface
 {
 	use FormFactoryAwareTrait;
 
+	protected $filterFormName = 'filter_events';
+
 	private ?array $items    = null;
 	private ?array $allItems = null;
 
 	protected function populateState($ordering = null, $direction = null)
 	{
 		$app = Factory::getApplication();
+
+		parent::populateState($ordering, $direction);
 
 		$this->setState('filter.extension', 'com_dpcalendar');
 
@@ -64,12 +68,13 @@ class CalendarModel extends ListModel implements FormFactoryAwareInterface
 			$this->items    = [];
 			$this->allItems = [];
 
+			$model = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator');
 			foreach ((array)$this->getState('filter.parentIds', ['root']) as $calendar) {
 				if ($calendar == '-1') {
 					$calendar = 'root';
 				}
 
-				$parent = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($calendar);
+				$parent = $model->getCalendar($calendar);
 				if ($parent == null) {
 					continue;
 				}
@@ -82,14 +87,14 @@ class CalendarModel extends ListModel implements FormFactoryAwareInterface
 				$tmp     = $parent->getChildren(true);
 				$filters = $this->getState('filter.categories');
 				foreach ($tmp as $child) {
-					$item = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($child->getId());
+					$item = $model->getCalendar($child->getId());
 					if (!$item instanceof CalendarInterface) {
 						continue;
 					}
 
 					$this->allItems[$item->getId()] = $item;
 
-					if (!empty($filters) && !in_array($item->getId(), $filters)) {
+					if (!empty($filters) && !\in_array($item->getId(), $filters)) {
 						continue;
 					}
 					$this->items[$item->getId()] = $item;
@@ -100,7 +105,7 @@ class CalendarModel extends ListModel implements FormFactoryAwareInterface
 			PluginHelper::importPlugin('dpcalendar');
 			$tmp = Factory::getApplication()->triggerEvent(
 				'onCalendarsFetch',
-				[null, in_array('-1', (array)$this->getState('filter.parentIds', ['root'])) ? null : 'cd']
+				[null, \in_array('-1', (array)$this->getState('filter.parentIds', ['root'])) ? null : 'cd']
 			);
 			if (!empty($tmp)) {
 				foreach ($tmp as $tmpCalendars) {

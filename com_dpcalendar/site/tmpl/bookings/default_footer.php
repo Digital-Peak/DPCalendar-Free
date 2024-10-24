@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 ?>
 <div class="com-dpcalendar-bookings__footer dp-pagination dp-print-hide pagination">
 	<div class="dp-pagination__counter"><?php echo $this->pagination->getPagesCounter(); ?></div>

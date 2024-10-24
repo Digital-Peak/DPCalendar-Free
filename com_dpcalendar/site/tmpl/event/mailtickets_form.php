@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use Joomla\CMS\HTML\HTMLHelper;
@@ -28,7 +28,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 			</div>
 		</div>
 	<?php } ?>
-	<input type="hidden" name="task" class="dp-input dp-input-hidden">
-	<input type="hidden" name="return" value="<?php echo $this->returnPage; ?>" class="dp-input dp-input-hidden">
-	<?php echo HTMLHelper::_('form.token'); ?>
+	<div class="com-dpcalendar-event-mailtickets__hidden">
+		<input type="hidden" name="task" class="dp-input dp-input-hidden">
+		<input type="hidden" name="return" value="<?php echo $this->returnPage; ?>" class="dp-input dp-input-hidden">
+		<?php echo HTMLHelper::_('form.token'); ?>
+	</div>
 </form>

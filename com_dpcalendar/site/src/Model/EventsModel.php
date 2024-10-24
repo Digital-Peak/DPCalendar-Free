@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendarInterface;
@@ -15,10 +15,13 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Plugin\PluginHelper;
+use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\Database\QueryInterface;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
@@ -29,7 +32,7 @@ class EventsModel extends ListModel
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = [
-				'id', 'a.id', 'title', 'a.title', 'search', 'location', 'length-type', 'radius', 'calendars', 'created_by'
+				'id', 'a.id', 'title', 'a.title', 'search', 'location', 'length-type', 'radius', 'calendars', 'created_by', 'com_fields', 'tags'
 			];
 		}
 
@@ -40,7 +43,7 @@ class EventsModel extends ListModel
 	{
 		$items       = [];
 		$categoryIds = $this->getState('category.id');
-		if (!is_array($categoryIds)) {
+		if (!\is_array($categoryIds)) {
 			$categoryIds = [$categoryIds];
 		}
 		$options = new Registry();
@@ -63,7 +66,7 @@ class EventsModel extends ListModel
 
 		$containsExternalEvents = false;
 
-		if (in_array('root', $categoryIds)) {
+		if (\in_array('root', $categoryIds)) {
 			PluginHelper::importPlugin('dpcalendar');
 			$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 			if (!empty($tmp)) {
@@ -85,11 +88,11 @@ class EventsModel extends ListModel
 			}
 
 			$startDate = null;
-			if ($this->getState('list.start-date', null) !== null) {
+			if (!empty($this->getState('list.start-date'))) {
 				$startDate = DPCalendarHelper::getDate($this->getState('list.start-date'));
 			}
 			$endDate = null;
-			if ($this->getState('list.end-date', null) !== null) {
+			if (!empty($this->getState('list.end-date', null))) {
 				$endDate = DPCalendarHelper::getDate($this->getState('list.end-date'));
 			}
 
@@ -116,7 +119,7 @@ class EventsModel extends ListModel
 			$items = array_merge($dbItems, $items);
 			usort($items, fn ($event1, $event2): int => $this->compareEvent($event1, $event2));
 			if ($this->getState('list.limit') > 0) {
-				$items = array_slice($items, 0, $this->getState('list.limit'));
+				$items = \array_slice($items, 0, $this->getState('list.limit'));
 			}
 		} else {
 			$items = parent::getItems();
@@ -152,7 +155,7 @@ class EventsModel extends ListModel
 			// Set up the rooms
 			$item->roomTitles = [];
 			if (!empty($item->rooms)) {
-				$item->rooms = is_array($item->rooms) ? $item->rooms : explode(',', (string)$item->rooms);
+				$item->rooms = \is_array($item->rooms) ? $item->rooms : explode(',', (string)$item->rooms);
 
 				if ($item->locations) {
 					/** @var \stdClass $location */
@@ -179,7 +182,7 @@ class EventsModel extends ListModel
 			}
 
 			$item->color = str_replace('#', '', $item->color ?? '');
-			if (is_array($item->color)) {
+			if (\is_array($item->color)) {
 				$item->color = implode('', $item->color);
 			}
 
@@ -194,15 +197,31 @@ class EventsModel extends ListModel
 				$item->color = '3366CC';
 			}
 
-			if (is_string($item->exdates)) {
+			if (\is_string($item->exdates)) {
 				$item->exdates = ArrayHelper::getColumn((array)json_decode($item->exdates), 'date');
 			}
 
-			if (is_string($item->price)) {
-				$item->price = json_decode($item->price);
+			if (\is_string($item->prices)) {
+				$item->prices = json_decode($item->prices);
 			}
 
-			if (is_string($item->booking_options)) {
+			if (\is_string($item->earlybird_discount)) {
+				$item->earlybird_discount = json_decode($item->earlybird_discount);
+			}
+
+			if (\is_string($item->user_discount)) {
+				$item->user_discount = json_decode($item->user_discount);
+			}
+
+			if (\is_string($item->events_discount)) {
+				$item->events_discount = json_decode($item->events_discount);
+			}
+
+			if (\is_string($item->tickets_discount)) {
+				$item->tickets_discount = json_decode($item->tickets_discount);
+			}
+
+			if (\is_string($item->booking_options)) {
 				$item->booking_options = json_decode($item->booking_options);
 
 				// Ensure min amount is properly set
@@ -216,14 +235,14 @@ class EventsModel extends ListModel
 			}
 			$item->booking_options = $item->booking_options ?: null;
 
-			if (is_string($item->schedule)) {
+			if (\is_string($item->schedule)) {
 				$item->schedule = json_decode($item->schedule);
 			}
 			$item->schedule = $item->schedule ?: null;
 
 			// Implement View Level Access
 			if (!$this->getCurrentUser()->authorise('core.admin', 'com_dpcalendar')
-				&& !in_array($item->access_content, $this->getCurrentUser()->getAuthorisedViewLevels())
+				&& !\in_array($item->access_content, $this->getCurrentUser()->getAuthorisedViewLevels())
 			) {
 				$item->title               = Text::_('COM_DPCALENDAR_EVENT_BUSY');
 				$item->location            = '';
@@ -234,7 +253,7 @@ class EventsModel extends ListModel
 				$item->description         = '';
 				$item->images              = null;
 				$item->schedule            = [];
-				$item->price               = null;
+				$item->prices              = null;
 				$item->capacity            = 0;
 				$item->capacity_used       = 0;
 				$item->booking_information = '';
@@ -307,10 +326,10 @@ class EventsModel extends ListModel
 
 		// Filter by category
 		if ($categoryIds = $this->getState('category.id', 0)) {
-			if (!is_array($categoryIds)) {
+			if (!\is_array($categoryIds)) {
 				$categoryIds = [$categoryIds];
 			}
-			if (in_array('root', $categoryIds)) {
+			if (\in_array('root', $categoryIds)) {
 				PluginHelper::importPlugin('dpcalendar');
 				$tmp = Factory::getApplication()->triggerEvent('onCalendarsFetch');
 				if (!empty($tmp)) {
@@ -364,7 +383,7 @@ class EventsModel extends ListModel
 		$stateOwner = $user->id && $this->getState('filter.state_owner') ? ' or a.created_by = ' . $user->id : '';
 		if (is_numeric($state)) {
 			$query->where('(a.state = ' . (int)$state . $stateOwner . ')');
-		} elseif (is_array($state)) {
+		} elseif (\is_array($state)) {
 			$state = ArrayHelper::toInteger($state);
 			$query->where('(a.state in (' . implode(',', $state) . ')' . $stateOwner . ')');
 		}
@@ -382,7 +401,7 @@ class EventsModel extends ListModel
 
 		$startDate     = $db->quote(DPCalendarHelper::getDate($this->getState('list.start-date'))->toSql());
 		$dateCondition = 'a.start_date  >= ' . $startDate;
-		if ($this->getState('list.end-date', null) !== null) {
+		if (!empty($this->getState('list.end-date', null))) {
 			$endDate       = $db->quote(DPCalendarHelper::getDate($this->getState('list.end-date'))->toSql());
 			$dateCondition = '(a.end_date between ' . $startDate . ' and ' . $endDate . ' or a.start_date between ' . $startDate . ' and ' . $endDate .
 				' or (a.start_date < ' . $startDate . ' and a.end_date > ' . $endDate . '))';
@@ -527,7 +546,7 @@ class EventsModel extends ListModel
 		// If we have a location filter apply it
 		if ($locationsFilter) {
 			$query->where(
-				$locationsFilter != '-1' && (!is_array($locationsFilter) || !in_array('-1', $locationsFilter))
+				$locationsFilter != '-1' && (!\is_array($locationsFilter) || !\in_array('-1', $locationsFilter))
 				? 'v.id in (' . implode(',', ArrayHelper::toInteger($locationsFilter)) . ')'
 				: 'v.id is not null'
 			);
@@ -555,15 +574,15 @@ class EventsModel extends ListModel
 		}
 
 		if ($author = $this->getState('filter.author', 0)) {
-			$author = is_array($author) ? ArrayHelper::toInteger($author) : [$author];
-			if (in_array(-1, $author)) {
+			$author = \is_array($author) ? ArrayHelper::toInteger($author) : [$author];
+			if (\in_array(-1, $author)) {
 				$author[] = $user->id;
 				$author   = array_filter($author, static fn ($a): bool => $a != '-1');
 			}
 			// My events when author is -1
 			$cond = 'a.created_by in (' . implode(',', $author) . ')';
 
-			if (!in_array(-1, $author) && $user->id > 0 && !DPCalendarHelper::isFree()) {
+			if (!\in_array(-1, $author) && $user->id > 0 && !DPCalendarHelper::isFree()) {
 				$cond .= ' or t.id is not null';
 			}
 
@@ -571,13 +590,15 @@ class EventsModel extends ListModel
 		}
 
 		if ($hosts = $this->getState('filter.hosts')) {
-			$hosts = is_array($hosts) ? $hosts : [$hosts];
+			$hosts = \is_array($hosts) ? $hosts : [$hosts];
 			$query->where('relh.user_id in (' . implode(',', ArrayHelper::toInteger($hosts)) . ')');
 		}
 
 		if ($this->getState('filter.children', 0) > 0) {
 			$query->where('a.original_id = ' . (int)$this->getState('filter.children', 0));
 		}
+
+		$this->searchInFields($query);
 
 		// Add the list ordering clause.
 		$query->order($db->escape($this->getState('list.ordering', 'a.start_date')) . ' ' . $db->escape($this->getState('list.direction', 'ASC')));
@@ -625,7 +646,7 @@ class EventsModel extends ListModel
 			}
 			$searchQuery .= ')';
 
-			if ($termsKey < count($terms) - 1) {
+			if ($termsKey < \count($terms) - 1) {
 				$searchQuery .= ' ' . $termOperator . ' ';
 			}
 			$searchQuery .= PHP_EOL;
@@ -638,7 +659,7 @@ class EventsModel extends ListModel
 	{
 		// Filter for author
 		$author = $params->get('calendar_filter_author', $params->get('list_filter_author'));
-		if ($author !== null) {
+		if ((int)$author !== 0) {
 			$this->setState('filter.author', $author);
 		}
 
@@ -672,13 +693,13 @@ class EventsModel extends ListModel
 		$this->setState('list.start', $limitstart);
 
 		$orderCol = $app->getInput()->getCmd('filter_order', 'start_date');
-		if (!in_array($orderCol, $this->filter_fields)) {
+		if (!\in_array($orderCol, $this->filter_fields)) {
 			$orderCol = 'start_date';
 		}
 		$this->setState('list.ordering', $orderCol);
 
 		$listOrder = $app->getInput()->getCmd('filter_order_dir', 'ASC');
-		if (!in_array(strtoupper((string)$listOrder), ['ASC', 'DESC', ''])) {
+		if (!\in_array(strtoupper((string)$listOrder), ['ASC', 'DESC', ''])) {
 			$listOrder = 'ASC';
 		}
 		$this->setState('list.direction', $listOrder);
@@ -730,6 +751,28 @@ class EventsModel extends ListModel
 		}
 	}
 
+	protected function preprocessForm(Form $form, $data, $group = 'content')
+	{
+		parent::preprocessForm($form, $data, $group);
+
+		FieldsHelper::prepareForm('com_dpcalendar.event', $form, new \stdClass());
+
+		foreach ($form->getGroup('com_fields') as $field) {
+			if ($field->type === 'Text') {
+				$form->setFieldAttribute($field->fieldname, 'disabled', false, $field->group);
+				$form->setFieldAttribute($field->fieldname, 'readonly', false, $field->group);
+
+				if (!$field->hint) {
+					$form->setFieldAttribute($field->fieldname, 'hint', trim(strip_tags($field->label)), $field->group);
+				}
+
+				continue;
+			}
+
+			$form->removeField($field->fieldname, $field->group);
+		}
+	}
+
 	public function getActiveFilters()
 	{
 		$filters = parent::getActiveFilters();
@@ -742,7 +785,108 @@ class EventsModel extends ListModel
 			$filters['end-date'] = $endDate;
 		}
 
+		if (\array_key_exists('com_fields', $filters)) {
+			$filters['com_fields'] = array_filter($filters['com_fields']);
+		}
+
 		return $filters;
+	}
+
+	protected function loadFormData()
+	{
+		$data = parent::loadFormData();
+		if ($data instanceof \stdClass && !empty($data->filter) && \array_key_exists('com_fields', $data->filter)) {
+			$data->com_fields = $data->filter['com_fields'];
+		}
+
+		return $data;
+	}
+
+	private function searchInFields(QueryInterface $mainQuery): void
+	{
+		$fields = $this->getState('filter.com_fields');
+		if (!$fields) {
+			return;
+		}
+
+		$customFields = array_filter(FieldsHelper::getFields('com_dpcalendar.event'), fn ($f): bool => \array_key_exists($f->name, $fields));
+		if ($customFields === []) {
+			return;
+		}
+
+		$params   = $this->getState('params') ?: new Registry();
+		$fieldIds = array_map(fn ($f) => $f->id, $customFields);
+
+		$db    = $this->getDatabase();
+		$query = $db->getQuery(true);
+		$query->select('item_id')->from('#__fields_values');
+
+		$conditions = [];
+		foreach ($fields as $value) {
+			// When no search value, then ignore
+			if (!$value) {
+				continue;
+			}
+
+			// Ensure value is an array
+			if (!\is_array($value)) {
+				$value = [$value];
+			}
+
+			// Search in value column
+			$condition = 'field_id in (' . implode(',', $fieldIds) . ')';
+
+			// The search for the actual value
+			$fieldConditions = [];
+			foreach ($value as $v) {
+				$c = '(value like ' . $db->quote('%' . $v . '%');
+
+				// Is needed for subform search which is stored in ASCI
+				// Umlauts like ä are stored like \u00e4 so the value needs to be converted into this format
+				$c .= ' or value like ' . $db->quote('%' . str_replace('\\', '\\\\', trim(json_encode($v) ?: '', '"')) . '%') . ')';
+
+				$fieldConditions[] = $c;
+			}
+
+			// When or combined then do normal in
+			if ($params->get('conditions_glue_lists', 'or') === 'or') {
+				$condition .= ' and ' . implode(' or ', $fieldConditions);
+			} else {
+				// And combined needs a subquery
+				foreach ($fieldConditions as $c) {
+					$c .= ' and field_id in (' . implode(',', $fieldIds) . ')';
+					$condition .= ' and item_id in (SELECT item_id FROM #__fields_values where ' . $c . ')';
+				}
+			}
+
+			// Create the values array
+			$conditions[] = '(' . $condition . ')';
+		}
+
+		if ($conditions !== []) {
+			// When or combined then do normal in
+			if ($params->get('conditions_glue_fields', 'or') === 'or') {
+				$query->where(implode(' or ', $conditions));
+			} else {
+				// And combined needs a subquery
+				foreach ($conditions as $condition) {
+					$query->where('item_id in (SELECT item_id FROM #__fields_values where ' . $condition . ')');
+				}
+			}
+
+			// Group them for unique values
+			$query->group('item_id');
+
+			$db->setQuery($query);
+
+			// Get the article ids
+			$tmp = array_values(ArrayHelper::flatten($db->loadAssocList()));
+			if ($tmp === []) {
+				$tmp = [-1];
+			}
+
+			$mainQuery->where('a.id in (' . implode(',', $tmp) . ')');
+		}
 	}
 
 	private function compareEvent(\stdClass $event1, \stdClass $event2): int

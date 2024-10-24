@@ -5,7 +5,7 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
@@ -82,7 +82,7 @@ foreach ($this->items as $event) {
 	// Add the data
 	$eventData = [
 		'id'              => $event->id,
-		'title'           => $this->compactMode == 0 ? htmlspecialchars_decode((string)$event->title) : mb_convert_encoding(chr(160), 'UTF-8', 'ISO-8859-1'),
+		'title'           => $this->compactMode ? ' ' : htmlspecialchars_decode((string)$event->title),
 		'start'           => $this->dateHelper->getDate($event->start_date, $event->all_day)->format($format, true),
 		'editable'        => $calendar->canEdit() || ($calendar->canEditOwn() && $event->created_by == $this->user->id),
 		'backgroundColor' => '#' . $event->color,
@@ -91,8 +91,8 @@ foreach ($this->items as $event) {
 		'allDay'          => (bool)$event->all_day,
 		'description'     => $description,
 		'location'        => $locations,
-		'capacity'        => $this->compactMode == 0 ? $event->capacity : 0,
-		'capacity_used'   => $this->compactMode == 0 ? $event->capacity_used : 0,
+		'capacity'        => $this->compactMode ? 0 : $event->capacity,
+		'capacity_used'   => $this->compactMode ? 0 : $event->capacity_used,
 		'classNames'      => [
 			'dp-event',
 			'dp-event-' . $event->id,
@@ -105,10 +105,10 @@ foreach ($this->items as $event) {
 		$eventData['url'] = $this->router->getEventRoute($event->id, $event->catid);
 	}
 
-	if ($event->state == 3 && $this->compactMode == 0) {
+	if ($event->state == 3 && !$this->compactMode) {
 		$eventData['title'] = '[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ' . $eventData['title'];
 	}
-	if ($event->state == 0 && $this->compactMode == 0) {
+	if ($event->state == 0 && !$this->compactMode) {
 		$eventData['title'] = '[' . $this->translate('JUNPUBLISHED') . '] ' . $eventData['title'];
 	}
 
@@ -120,25 +120,6 @@ foreach ($this->items as $event) {
 	$data[] = $eventData;
 }
 
-$messages = $this->app->getMessageQueue();
-
-// Build the sorted messages list
-$lists = [];
-if (is_array($messages) && count($messages)) {
-	foreach ($messages as $message) {
-		if (!isset($message['type'])) {
-			continue;
-		}
-		if (!isset($message['message'])) {
-			continue;
-		}
-		$lists[$message['type']][] = $message['message'];
-	}
-}
-
 // Echo the data
 ob_clean();
-DPCalendarHelper::sendMessage('', false, $data);
-
-// Close the request
-$this->app->close();
+DPCalendarHelper::sendMessage('', false, ['events' => $data, 'location' => $this->state->get('filter.location')]);

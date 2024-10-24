@@ -1,16 +1,14 @@
 <?php
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Location;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
-use Joomla\CMS\Factory;
 
 $this->document->setMimeEncoding('application/json');
 
@@ -46,25 +44,6 @@ foreach ($this->items as $event) {
 	];
 }
 
-$messages = $this->app->getMessageQueue();
-
-// Build the sorted messages list
-$lists = [];
-if (is_array($messages) && count($messages)) {
-	foreach ($messages as $message) {
-		if (!isset($message['type'])) {
-			continue;
-		}
-		if (!isset($message['message'])) {
-			continue;
-		}
-		$lists[$message['type']][] = $message['message'];
-	}
-}
-
 // Echo the data
 ob_clean();
-echo json_encode(['data' => ['events' => $data, 'location' => $this->state->get('filter.location')], 'messages' => $lists]);
-
-// Close the request
-$this->app->close();
+DPCalendarHelper::sendMessage('', false, ['events' => $data, 'location' => $this->state->get('filter.location')]);

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\User\UserHelper;
 use League\Pipeline\StageInterface;
@@ -33,7 +33,7 @@ class AssignUserGroups implements StageInterface
 				continue;
 			}
 
-			$groups = array_merge($groups, is_string($assignedGroups) ? explode(',', $assignedGroups) : $assignedGroups);
+			$groups = array_merge($groups, \is_string($assignedGroups) ? explode(',', $assignedGroups) : $assignedGroups);
 		}
 
 		foreach (array_unique($groups) as $group) {

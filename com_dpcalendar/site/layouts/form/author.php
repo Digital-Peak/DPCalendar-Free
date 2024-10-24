@@ -5,6 +5,6 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 echo "select id as value, name as text from #__users union all select '', '' order by text";

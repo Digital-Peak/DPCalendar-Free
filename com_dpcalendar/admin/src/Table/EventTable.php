@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Table;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\ApplicationHelper;
@@ -82,7 +82,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 	public $exdates;
 
 	/** @var \stdClass|string */
-	public $price;
+	public $prices;
 
 	/** @var string */
 	public $booking_options;
@@ -142,10 +142,16 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 	public $booking_waiting_list;
 
 	/** @var string */
-	public $earlybird;
+	public $earlybird_discount;
 
 	/** @var string */
 	public $user_discount;
+
+	/** @var string */
+	public $events_discount;
+
+	/** @var string */
+	public $tickets_discount;
 
 	/** @var string */
 	public $booking_information;
@@ -216,21 +222,21 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 
 	public function bind($data, $ignore = '')
 	{
-		$data = is_object($data) ? get_object_vars($data) : $data;
+		$data = \is_object($data) ? get_object_vars($data) : $data;
 
-		if (isset($data['params']) && is_array($data['params'])) {
+		if (isset($data['params']) && \is_array($data['params'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['params']);
 			$data['params'] = (string)$registry;
 		}
 
-		if (isset($data['metadata']) && is_array($data['metadata'])) {
+		if (isset($data['metadata']) && \is_array($data['metadata'])) {
 			$registry = new Registry();
 			$registry->loadArray($data['metadata']);
 			$data['metadata'] = (string)$registry;
 		}
 
-		if (isset($data['rooms']) && is_array($data['rooms'])) {
+		if (isset($data['rooms']) && \is_array($data['rooms'])) {
 			$data['rooms'] = implode(',', $data['rooms']);
 		}
 
@@ -315,7 +321,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 
 			$tagsChanged = empty($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
-			if ($this->price != $oldEvent->price || $this->booking_options != $oldEvent->booking_options || ($hardReset && $this->rrule && $this->booking_series != 1)) {
+			if ($this->prices != $oldEvent->prices || $this->booking_options != $oldEvent->booking_options || ($hardReset && $this->rrule && $this->booking_series != 1)) {
 				// Check for tickets
 				$query = $this->getDatabase()->getQuery(true);
 				$query->select('t.id')
@@ -330,7 +336,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 					$this->end_date        = $oldEvent->end_date;
 					$this->rrule           = $oldEvent->rrule;
 					$this->exdates         = $oldEvent->exdates;
-					$this->price           = $oldEvent->price;
+					$this->prices          = $oldEvent->prices;
 					$this->booking_options = $oldEvent->booking_options;
 					$hardReset             = false;
 
@@ -514,7 +520,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		$query = $this->getDatabase()->getQuery(true);
 		$query->update('#__dpcalendar_events');
 
-		if (is_array($this->rooms)) {
+		if (\is_array($this->rooms)) {
 			$this->rooms = json_encode($this->rooms) ?: '';
 		}
 
@@ -535,9 +541,11 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 			'booking_cancel_closing_date = ' . $this->getDatabase()->quote($this->booking_cancel_closing_date),
 			'booking_series = ' . $this->getDatabase()->quote($this->booking_series),
 			'booking_waiting_list = ' . $this->getDatabase()->quote($this->booking_waiting_list),
-			'price = ' . $this->getDatabase()->quote($this->price instanceof \stdClass ? (json_encode($this->price) ?: '') : $this->price),
-			'earlybird = ' . $this->getDatabase()->quote($this->earlybird),
+			'prices = ' . $this->getDatabase()->quote($this->prices instanceof \stdClass ? (json_encode($this->prices) ?: '') : $this->prices),
+			'earlybird_discount = ' . $this->getDatabase()->quote($this->earlybird_discount),
 			'user_discount = ' . $this->getDatabase()->quote($this->user_discount),
+			'events_discount = ' . $this->getDatabase()->quote($this->events_discount),
+			'tickets_discount = ' . $this->getDatabase()->quote($this->tickets_discount),
 			'booking_information = ' . $this->getDatabase()->quote($this->booking_information),
 			'terms = ' . $this->getDatabase()->quote($this->terms),
 			'state = ' . (int)$this->state,
@@ -750,7 +758,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		$this->getDatabase()->execute();
 
 		// If checkin is supported and all rows were adjusted, check them in.
-		if ($checkin && count($pks) == $this->getDatabase()->getAffectedRows()) {
+		if ($checkin && \count($pks) == $this->getDatabase()->getAffectedRows()) {
 			// Checkin the rows.
 			foreach ($pks as $pk) {
 				$this->checkin($pk);
@@ -759,7 +767,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 
 		// If the JTable instance value is in the list of primary keys that were
 		// set, set the instance.
-		if (in_array($this->$k, $pks)) {
+		if (\in_array($this->$k, $pks)) {
 			$this->state = $state;
 		}
 
@@ -810,7 +818,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 	private function replaceLastInString(string $search, string $replace, string $str): string
 	{
 		if (($pos = strrpos($str, $search)) !== false) {
-			$search_length = strlen($search);
+			$search_length = \strlen($search);
 			$str           = substr_replace($str, $replace, $pos, $search_length);
 		}
 

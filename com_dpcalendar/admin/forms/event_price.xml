@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <form>
-	<fields>
-		<field name="value" type="text" validate="decimal" label="COM_DPCALENDAR_FIELD_PRICE_PRICE_LABEL"/>
-		<field name="label" type="text" label="COM_DPCALENDAR_FIELD_PRICE_LABEL_LABEL"/>
+	<fields addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field">
+		<field name="value" type="text" validate="decimal" label="COM_DPCALENDAR_FIELD_PRICES_PRICE_LABEL"/>
+		<field name="currency" type="dpcurrency" default="EUR" label="COM_DPCALENDAR_FIELD_PRICES_CURRENCY_LABEL"/>
+		<field name="label" type="text" label="COM_DPCALENDAR_FIELD_PRICES_LABEL_LABEL"/>
 		<field name="description" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
-			label="COM_DPCALENDAR_FIELD_PRICE_DESCRIPTION_LABEL"/>
+			label="COM_DPCALENDAR_FIELD_PRICES_DESCRIPTION_LABEL"/>
 	</fields>
 </form>

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BasicTable;
@@ -38,8 +38,8 @@ class CouponModel extends AdminModel
 			return $item;
 		}
 
-		$item->calendars = $item->calendars && is_string($item->calendars) ? explode(',', $item->calendars) : [];
-		$item->users     = $item->users && is_string($item->users) ? explode(',', $item->users) : [];
+		$item->calendars = $item->calendars && \is_string($item->calendars) ? explode(',', $item->calendars) : [];
+		$item->users     = $item->users && \is_string($item->users) ? explode(',', $item->users) : [];
 
 		return $item;
 	}
@@ -56,17 +56,17 @@ class CouponModel extends AdminModel
 		}
 
 		// Check calendars
-		if ($item->calendars && !in_array($calid, $item->calendars)) {
+		if ($item->calendars && !\in_array($calid, $item->calendars)) {
 			return null;
 		}
 
 		// Check mail
-		if ($item->emails && !in_array($email, explode(PHP_EOL, (string)$item->emails))) {
+		if ($item->emails && !\in_array($email, explode(PHP_EOL, (string)$item->emails))) {
 			return null;
 		}
 
 		// Check users
-		if ($item->users && !in_array($userId, $item->users)) {
+		if ($item->users && !\in_array($userId, $item->users)) {
 			return null;
 		}
 

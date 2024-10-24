@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Field;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -49,7 +49,10 @@ class DatetimechooserField extends FormField
 		} elseif ($this->value && $formatted) {
 			$date = DPCalendarHelper::getDateFromString($this->value, null, $allDay, $dateFormat, $timeFormat);
 		} elseif ($this->value) {
-			$date = $dateHelper->getDate($this->value, $allDay);
+			try {
+				$date = $dateHelper->getDate($this->value, $allDay);
+			} catch (\Exception) {
+			}
 		}
 
 		$layoutHelper = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Layout', 'Administrator');

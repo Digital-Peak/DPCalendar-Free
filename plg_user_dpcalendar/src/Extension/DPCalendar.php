@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Plugin\User\DPCalendar\Extension;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Model\BookingModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BookingTable;

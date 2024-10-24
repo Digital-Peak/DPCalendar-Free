@@ -1,14 +1,16 @@
 <?php
-use Joomla\CMS\HTML\HTMLHelper;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2014 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
+
+use Joomla\CMS\HTML\HTMLHelper;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminlist/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/adminlist/default.js');
+$this->dpdocument->loadScriptFile('views/adminlist/default.js');
 $this->dpdocument->addScriptOptions('adminlist', ['listOrder' => $this->state->get('list.ordering')]);
 ?>
 <div class="com-dpcalendar-events com-dpcalendar-adminlist">

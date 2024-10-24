@@ -1,13 +1,14 @@
 <?php
-use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
-use Joomla\CMS\Uri\Uri;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2018 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
 
+\defined('_JEXEC') or die();
+
+use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
+use Joomla\CMS\Uri\Uri;
 ?>
 <div class="com-dpcalendar-locations__details com-dpcalendar-locations-limited__details">
 	<?php foreach ($this->locationGroups as $id => $locations) { ?>

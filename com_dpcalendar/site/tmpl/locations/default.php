@@ -4,14 +4,15 @@
  * @copyright Copyright (C) 2016 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
 
 if ($this->params->get('locations_show_map', 1) && $this->params->get('map_provider', 'openstreetmap') != 'none') {
 	$this->layoutHelper->renderLayout('block.map', $this->displayData);
 }
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/locations/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/locations/default.js');
+$this->dpdocument->loadScriptFile('views/locations/default.js');
 $this->dpdocument->addStyle($this->params->get('locations_custom_css', ''));
 ?>
 <div class="com-dpcalendar-locations dp-location<?php echo $this->pageclass_sfx ? ' com-dpcalendar-locations-' . $this->pageclass_sfx : ''; ?>s">

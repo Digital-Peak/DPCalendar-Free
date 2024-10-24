@@ -5,13 +5,13 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\HTML\HTMLHelper;
 
 $this->layoutHelper->renderLayout('block.map', $this->displayData);
 $this->dpdocument->loadStyleFile('dpcalendar/views/locationform/default.css');
-$this->dpdocument->loadScriptFile('dpcalendar/views/locationform/default.js');
+$this->dpdocument->loadScriptFile('views/locationform/default.js');
 
 $action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id . $this->tmpl);
 ?>

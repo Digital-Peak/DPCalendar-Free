@@ -5,8 +5,9 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\Language\Text;
 
 if ($this->bookingId) {
@@ -37,7 +38,7 @@ if ($bookings === []) {
 		<?php echo Text::Sprintf(
 			'COM_DPCALENDAR_VIEW_BOOKINGFORM_AVAILABLE_BOOKING',
 			$booking->event_title,
-			\DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getBookingRoute($booking)
+			RouteHelper::getBookingRoute($booking)
 		); ?>
 	<?php } ?>
 </div>

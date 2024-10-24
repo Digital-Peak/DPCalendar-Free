@@ -4,7 +4,8 @@
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
 
 if (!$this->event->schedule || !$this->params->get('event_show_schedule', 1)) {
 	return;

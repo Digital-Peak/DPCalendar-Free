@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Field;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
 use Joomla\CMS\Factory;
@@ -25,7 +25,7 @@ class DPCalendarField extends CategoryField
 		$this->element['extension'] = 'com_dpcalendar';
 
 		$doc = new HtmlDocument();
-		$doc->loadScriptFile('dpcalendar/fields/dpcalendar.js');
+		$doc->loadScriptFile('fields/dpcalendar.js');
 		$doc->loadStyleFile('dpcalendar/fields/dpcalendar.css');
 
 		$options = parent::getOptions();
@@ -56,7 +56,7 @@ class DPCalendarField extends CategoryField
 			return array_values(
 				array_filter(
 					$options,
-					static fn ($o): bool => $o->value === '' || in_array($o->value, $ids) || in_array('-1', $ids)
+					static fn ($o): bool => $o->value === '' || \in_array($o->value, $ids) || \in_array('-1', $ids)
 				)
 			);
 		}

@@ -7,7 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\View\Cpanel;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
@@ -73,11 +73,11 @@ class HtmlView extends BaseView
 			}
 		}
 
-		$geoDBDirectory = $this->app->get('tmp_path') . '/DPCalendar-Geodb';
+		$geoDBDirectory = JPATH_CACHE . '/com_dpcalendar-geodb';
 
 		// Don't update when the file was fetched 10 days ago
 		$files                  = is_dir($geoDBDirectory) ? (scandir($geoDBDirectory) ?: []) : [];
-		$this->needsGeoDBUpdate = (count($files) <= 2 || (time() - filemtime($geoDBDirectory . '/' . $files[2]) > (60 * 60 * 24 * 10))) && !DPCalendarHelper::isFree();
+		$this->needsGeoDBUpdate = (\count($files) <= 2 || (time() - filemtime($geoDBDirectory . '/' . $files[2]) > (60 * 60 * 24 * 10))) && !DPCalendarHelper::isFree();
 
 		// If no taxes are available no geo DB update is needed
 		if (!$model->getTotalTaxRates()) {

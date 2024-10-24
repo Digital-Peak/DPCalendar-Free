@@ -7,14 +7,13 @@
 
 namespace DigitalPeak\Component\DPCalendar\Site\View\List;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Location;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
+use DigitalPeak\Component\DPCalendar\Site\View\CalendarViewTrait;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Form\Form;
 use Joomla\CMS\HTML\Helpers\StringHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
@@ -23,6 +22,8 @@ use Joomla\Registry\Registry;
 
 class HtmlView extends BaseView
 {
+	use CalendarViewTrait;
+
 	/**
 	 * Public variable, also used outside like in YOOtheme.
 	 *
@@ -48,10 +49,17 @@ class HtmlView extends BaseView
 	/** @var string */
 	protected $increment;
 
+	/** @var array */
+	protected $calendars;
+
 	public function display($tpl = null): void
 	{
 		// Add the models
-		$model = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Events', 'Site', ['name' => 'listview']);
+		$model = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel(
+			'Events',
+			'Site',
+			['name' => $this->getName() . '.' . Factory::getApplication()->getInput()->getInt('Itemid', 0)]
+		);
 		$this->setModel($model, true);
 
 		parent::display($tpl);
@@ -74,7 +82,7 @@ class HtmlView extends BaseView
 		// The request data as array
 		$listRequestData   = $this->app->getUserStateFromRequest($context . '.list', 'list', '', 'array') ?: [];
 		$filterRequestData = $this->app->getUserStateFromRequest($context . '.filter', 'filter', '', 'array') ?: [];
-		$formShown         = $this->params->get('list_manage_search_form', 1);
+		$formShown         = $this->params->get('list_filter_form', 1);
 
 		// Ensure there is no filter left when the form is not shown
 		if (!$formShown) {
@@ -89,7 +97,7 @@ class HtmlView extends BaseView
 		try {
 			// Override the date from the input, eg. navigation link
 			if ($startFromInput = $this->input->get('date-start')) {
-				$dateStart = $this->dateHelper->getDate($startFromInput, strlen((string)$startFromInput) === 10);
+				$dateStart = $this->dateHelper->getDate($startFromInput, \strlen((string)$startFromInput) === 10);
 			}
 
 			// Define the start date by the request data
@@ -126,7 +134,7 @@ class HtmlView extends BaseView
 			}
 
 			// If the start date is today reset the active filters, so the form is hidden
-			if (array_key_exists('start-date', $this->activeFilters)
+			if (\array_key_exists('start-date', $this->activeFilters)
 				&& $this->dateHelper->getDate()->format('Ymd') === $dateStart->format('Ymd')) {
 				unset($this->activeFilters['start-date']);
 			}
@@ -145,18 +153,6 @@ class HtmlView extends BaseView
 
 			// Set an empty user state
 			$this->app->setUserState($context . '.list', $listRequestData);
-		}
-
-		if (array_key_exists('radius', $this->activeFilters) && 50 == $this->activeFilters['radius']) {
-			unset($this->activeFilters['radius']);
-		}
-
-		if (array_key_exists('length-type', $this->activeFilters) && 'm' === $this->activeFilters['length-type']) {
-			unset($this->activeFilters['length-type']);
-		}
-
-		if (array_key_exists('calendars', $this->activeFilters) && array_filter($this->activeFilters['calendars'], static fn ($c): bool => !empty($c)) === []) {
-			unset($this->activeFilters['calendars']);
 		}
 
 		// When no end date, use the start date with the increment
@@ -211,22 +207,20 @@ class HtmlView extends BaseView
 		$this->prevLink = $this->router->route($this->prevLink);
 
 		// Get the calendars and their childs
-		$model = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Site', ['ignore_request' => true]);
+		$model = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Site', ['ignore_request' => true]);
 		$model->getState();
-
-		$calendars = array_filter($this->state->get('filter.calendars', []), static fn ($c): bool => !empty($c));
-		if ($calendars === []) {
-			$calendars = $this->params->get('ids', '-1');
-		}
-		$model->setState('filter.parentIds', $calendars);
+		$model->setState('filter.parentIds', $this->params->get('ids', '-1'));
 
 		// The calendar ids
-		$ids = array_keys($model->getItems());
+		$this->calendars = $model->getItems();
+		foreach ($this->calendars as $calendar) {
+			$this->fillCalendar($calendar);
+		}
+
+		$ids = array_filter($this->state->get('filter.calendars', [])) !== [] ? array_filter($this->state->get('filter.calendars', [])) : array_keys($this->calendars);
 
 		// The model to fetch the events
 		$model = $this->getModel();
-
-		// Initialize variables
 
 		// Set the dates on the model
 		$model->setState('list.start-date', $dateStart);
@@ -258,61 +252,37 @@ class HtmlView extends BaseView
 
 		// Location filters
 		if ($formShown && $location = $filterRequestData['location'] ?? '') {
-			$model->setState('filter.location', $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location, false));
+			$model->setState('filter.location', $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location, false));
 			$model->setState('filter.radius', $filterRequestData['radius'] ?? 50);
 			$model->setState('filter.length-type', $filterRequestData['length-type'] ?? 'm');
 		}
 
-		// Load the filter form
-		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/forms');
-		$this->filterForm = $this->get('FilterForm');
+		// Set the new state
+		$this->state = $model->getState();
 
-		// Remove not needed fields
-		$this->filterForm->removeField('event_type', 'filter');
-		$this->filterForm->removeField('state', 'filter');
-		$this->filterForm->removeField('access', 'filter');
-		$this->filterForm->removeField('tag', 'filter');
-		$this->filterForm->removeField('language', 'filter');
-		$this->filterForm->removeField('level', 'filter');
-		$this->filterForm->removeField('fullordering', 'list');
-		$this->filterForm->removeField('limit', 'list');
+		if ($overrideStartDate === null && \array_key_exists('start-date', $this->activeFilters)) {
+			unset($this->activeFilters['start-date']);
+		}
 
-		// Enable autocomplete when configured
-		$this->filterForm->setFieldAttribute('location', 'data-dp-autocomplete', $this->params->get('list_autocomplete', 1), 'filter');
+		if ($overrideStartDate === null && \array_key_exists('end-date', $this->activeFilters)) {
+			unset($this->activeFilters['end-date']);
+		}
+
+		$this->prepareForm($this->calendars);
 
 		// Set the dates
 		$this->filterForm->setValue('start-date', 'list', $overrideStartDate ? $dateStart : null);
 		$this->filterForm->setValue('end-date', 'list', $overrideEndDate ? $dateEnd : null);
 
-		// Set the date formats
-		$this->filterForm->setFieldAttribute('start-date', 'format', $this->params->get('event_form_date_format', 'd.m.Y'), 'list');
-		$this->filterForm->setFieldAttribute('end-date', 'format', $this->params->get('event_form_date_format', 'd.m.Y'), 'list');
-
-		$this->filterForm->setFieldAttribute('calendars', 'ids', implode(',', (array)$this->params->get('ids', ['-1'])), 'filter');
-
-		// Remove the not needed fields
-		foreach ($this->params->get('list_search_form_hidden_fields', []) as $field) {
-			$this->filterForm->removeField($field, 'filter');
-			$this->filterForm->removeField($field, 'list');
-
-			if ($field === 'location') {
-				$this->filterForm->removeField('radius', 'filter');
-				$this->filterForm->removeField('length-type', 'filter');
+		// Location filters
+		if ($location = $this->state->get('filter.location')) {
+			if (!$location instanceof \stdClass) {
+				$location = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location, false);
 			}
-		}
 
-		if ($this->params->get('list_filter_author', 0)) {
-			$this->filterForm->removeField('created_by', 'filter');
+			$this->filterForm->setFieldAttribute('location', 'data-latitude', $location->latitude, 'filter');
+			$this->filterForm->setFieldAttribute('location', 'data-longitude', $location->longitude, 'filter');
 		}
-
-		// When there is a location set, use the proper coordinates
-		if ($loc = $this->state->get('filter.location')) {
-			$this->filterForm->setFieldAttribute('location', 'data-latitude', $loc->latitude, 'filter');
-			$this->filterForm->setFieldAttribute('location', 'data-longitude', $loc->longitude, 'filter');
-		}
-
-		// Set the new state
-		$this->state = $model->getState();
 
 		// Load the events
 		$items = $this->get('Items');
@@ -404,11 +374,5 @@ class HtmlView extends BaseView
 
 		// Set the items
 		$this->events = $items;
-
-		// Cleanup the filter form data and set the active filters from the form, so the layout files do work only on them
-		$data = clone $this->filterForm->getData();
-		$data->remove('list.limit');
-
-		$this->activeFilters = array_filter($data->flatten());
 	}
 }

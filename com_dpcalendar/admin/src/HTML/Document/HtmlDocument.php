@@ -7,9 +7,10 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\HTML\Document;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\CMSWebApplicationInterface;
+use Joomla\CMS\Document\HtmlDocument as DocumentHtmlDocument;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 
@@ -35,24 +36,14 @@ class HtmlDocument
 
 	public function loadScriptFile(string $path, string $extension = 'com_dpcalendar'): void
 	{
-		if (str_starts_with($path, '//') || str_starts_with($path, 'https://')) {
-			$this->app->getDocument()->getWebAssetManager()->registerAndUseScript($path, $path, [], ['defer' => true]);
-
-			return;
-		}
-
-		static $coreLoaded = false;
-		if (!$coreLoaded) {
-			$coreLoaded = true;
-			// Load core
-			HTMLHelper::_('behavior.core');
-
-			// Load DPCalendar loader
-			$this->loadScriptFile('dpcalendar/loader.js');
-		}
-
-		$path = str_replace('.js', '.min.js', $path);
-		HTMLHelper::_('script', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto'], ['defer' => true]);
+		/** @var DocumentHtmlDocument $doc */
+		$doc = $this->app->getDocument();
+		$doc->getWebAssetManager()->registerAndUseScript(
+			$extension . '/' . str_replace('.js', '', $path),
+			$extension . '/' . str_replace('.js', '.min.js', $path),
+			['relative' => true, 'version' => JDEBUG ? false : 'auto'],
+			['type'     => 'module']
+		);
 	}
 
 	public function addScriptOptions(string $key, mixed $options): void

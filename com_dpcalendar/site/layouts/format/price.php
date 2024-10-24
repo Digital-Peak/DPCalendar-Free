@@ -5,36 +5,23 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+use Joomla\CMS\Factory;
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+\defined('_JEXEC') or die();
 
 $price = $displayData['price'];
 if (!$price) {
 	$price = '0';
 }
 
-$separator = DPCalendarHelper::getComponentParameter('currency_separator', '.');
-if (array_key_exists('separator', $displayData) && $displayData['separator']) {
-	$separator = $displayData['separator'];
-}
+$currency = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Currency', 'Administrator')->getActualCurrency();
 
-$thousandSeparator = DPCalendarHelper::getComponentParameter('currency_thousands_separator', "'");
-if (array_key_exists('thousands_separator', $displayData) && $displayData['thousands_separator']) {
-	$thousandSeparator = $displayData['thousands_separator'];
-}
+$price = number_format((float)trim((string) $price), 2, $currency->separator, $currency->thousands_separator);
 
-$price = number_format((float)trim((string) $price), 2, $separator, $thousandSeparator);
-
-$currency = DPCalendarHelper::getComponentParameter('currency_symbol', '$');
-if (array_key_exists('currency', $displayData) && $displayData['currency']) {
-	$currency = $displayData['currency'];
-}
-
-if ($currency == '$' || $currency == '£') {
-	echo htmlentities($currency . ' ' . $price, ENT_COMPAT, 'UTF-8');
+if ($currency->symbol === '$' || $currency->symbol === '£') {
+	echo htmlentities($currency->symbol . ' ' . $price, ENT_COMPAT, 'UTF-8');
 
 	return;
 }
 
-echo htmlentities($price . ' ' . $currency, ENT_COMPAT, 'UTF-8');
+echo htmlentities($price . ' ' . $currency->symbol, ENT_COMPAT, 'UTF-8');

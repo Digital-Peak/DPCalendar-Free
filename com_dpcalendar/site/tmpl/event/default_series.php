@@ -1,11 +1,13 @@
 <?php
-use Joomla\CMS\Language\Text;
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
-defined('_JEXEC') or die();
+
+\defined('_JEXEC') or die();
+
+use Joomla\CMS\Language\Text;
 
 if (!$this->seriesEvents || !$this->params->get('event_show_series', 1) || empty($this->event->series_min_start_date)) {
 	return;

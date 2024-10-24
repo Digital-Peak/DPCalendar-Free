@@ -33,7 +33,7 @@
 		<field name="search" type="text" class="dp-input" hint="JSEARCH_FILTER" label="JSEARCH_FILTER"/>
 		<field name="location" type="text" class="dp-input dp-input_location" autocomplete="off" hint="COM_DPCALENDAR_LOCATION"
 			label="COM_DPCALENDAR_LOCATION"/>
-		<field name="radius" type="list" class="dp-select dp-select_plain" default="50">
+		<field name="radius" type="list" class="dp-select dp-select_plain" default="20">
 			<option value="5">5</option>
 			<option value="10">10</option>
 			<option value="20">20</option>
@@ -66,9 +66,8 @@
 			<option value="">JOPTION_SELECT_LANGUAGE</option>
 			<option value="*">JALL</option>
 		</field>
-		<field name="tag" type="tag" mode="nested">
-			<option value="">JOPTION_SELECT_TAG</option>
-		</field>
+		<field name="tags" type="tag" mode="nested" multiple="true" custom="false" class="dp-select"
+			label="JTAG"/>
 		<field name="created_by" type="dpauthor"  class="dp-select dp-select_plain" table_name="dpcalendar_events"
 			label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL" >
 			<option value="">JOPTION_SELECT_AUTHOR</option>

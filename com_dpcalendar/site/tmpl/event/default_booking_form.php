@@ -7,7 +7,7 @@
 
 use DigitalPeak\Component\DPCalendar\Site\Controller\BookingformController;
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 if (!$this->params->get('event_show_booking_form')) {
 	return;

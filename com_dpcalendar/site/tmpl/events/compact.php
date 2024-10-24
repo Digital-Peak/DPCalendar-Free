@@ -5,9 +5,10 @@
  * @license   https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL
  */
 
-defined('_JEXEC') or die();
+\defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 
 $this->document->setMimeEncoding('application/json');
 
@@ -40,10 +41,10 @@ foreach ($tmp as $date => $events) {
 		$needles             = ['event' => [(int)$event->id]];
 		$needles['calendar'] = [(int)$event->catid];
 		$needles['list']     = [(int)$event->catid];
-		if (($item = \DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::findItem($needles)) === '') {
+		if (($item = RouteHelper::findItem($needles)) === '') {
 			continue;
 		}
-		if (($item = \DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::findItem($needles)) === '0') {
+		if (($item = RouteHelper::findItem($needles)) === '0') {
 			continue;
 		}
 		$itemId = '&Itemid=' . $item;
@@ -78,7 +79,7 @@ foreach ($tmp as $date => $events) {
 
 	$data[] = [
 		'id'              => $date,
-		'title'           => mb_convert_encoding(chr(160), 'UTF-8', 'ISO-8859-1'), // Space only works in IE, empty only in Chrome
+		'title'           => ' ',
 		'start'           => DPCalendarHelper::getDate($date)->format('Y-m-d'),
 		'end'             => DPCalendarHelper::getDate($date)->format('Y-m-d'),
 		'url'             => $url,
@@ -94,6 +95,6 @@ foreach ($tmp as $date => $events) {
 }
 
 ob_clean();
-DPCalendarHelper::sendMessage('', false, $data);
+DPCalendarHelper::sendMessage('', false, ['events' => $data]);
 
 $this->app->close();

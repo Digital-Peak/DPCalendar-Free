@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>

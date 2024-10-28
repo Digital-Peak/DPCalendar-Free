@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package   DPCalendar
  * @copyright Copyright (C) 2019 Digital Peak GmbH. <https://www.digital-peak.com>
@@ -12,7 +11,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Controller;
 
 use Joomla\CMS\MVC\Controller\AdminController;
 
-class Taxrates extends AdminController
+class TaxratesController extends AdminController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_TAXRATE';
 

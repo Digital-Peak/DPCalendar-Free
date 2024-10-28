@@ -105,6 +105,10 @@ trait CalendarViewTrait
 				$this->filterForm->removeField('radius', 'filter');
 				$this->filterForm->removeField('length-type', 'filter');
 			}
+
+			if (\array_key_exists($field, $this->activeFilters)) {
+				unset($this->activeFilters[$field]);
+			}
 		}
 
 

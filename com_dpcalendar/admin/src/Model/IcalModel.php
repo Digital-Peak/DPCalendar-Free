@@ -274,8 +274,10 @@ class IcalModel extends BaseDatabaseModel
 		$text[]  = 'URL:' . ($event->url ?: RouteHelper::getEventRoute($event->id, $event->catid, true, true));
 
 		if ($event->description) {
-			$text[] = 'DESCRIPTION:' . InputFilter::getInstance()->clean(preg_replace('/\r\n|\r|\n/', "\N", (string)$event->description));
-			$text[] = 'X-ALT-DESC;FMTTYPE=text/html:' . preg_replace('/\r\n|\r|\n/', "", (string)$event->description);
+			$description = (empty($event->introText) ? '' : $event->introText . '<hr id="system-readmore">') . $event->description;
+			$description = preg_replace('/\r\n|\r|\n/', "\N", $description);
+			$text[]      = 'DESCRIPTION:' . InputFilter::getInstance()->clean($description);
+			$text[]      = 'X-ALT-DESC;FMTTYPE=text/html:' . $description;
 		}
 
 		if ($event->modified) {

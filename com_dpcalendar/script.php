@@ -202,7 +202,7 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 
 			$db->setQuery('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"')->execute();
 
-			$fields = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createTable('Event', 'Administrator')->getFields();
+			$fields = $db->getTableColumns('#__dpcalendar_events');
 			if (!\array_key_exists('events_discount', $fields)) {
 				$db->setQuery('ALTER TABLE `#__dpcalendar_events` ADD `events_discount` TEXT NULL AFTER `user_discount`')->execute();
 			}
@@ -216,7 +216,7 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 				$db->setQuery('ALTER TABLE `#__dpcalendar_events` CHANGE `price` `prices` TEXT NULL DEFAULT NULL')->execute();
 			}
 
-			$fields = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createTable('Booking', 'Administrator')->getFields();
+			$fields = $db->getTableColumns('#__dpcalendar_bookings');
 			if (!\array_key_exists('events_discount', $fields)) {
 				$db->setQuery('ALTER TABLE `#__dpcalendar_bookings` ADD `events_discount` DECIMAL(10, 5) DEFAULT NULL AFTER `coupon_rate`')->execute();
 			}

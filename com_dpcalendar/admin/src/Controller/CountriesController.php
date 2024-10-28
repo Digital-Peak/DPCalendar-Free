@@ -11,7 +11,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Controller;
 
 use Joomla\CMS\MVC\Controller\AdminController;
 
-class Countries extends AdminController
+class CountriesController extends AdminController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_COUNTRY';
 

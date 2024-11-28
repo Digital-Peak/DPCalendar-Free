@@ -62,11 +62,6 @@ class BookingsModel extends ListModel
 		$this->setState('params', $params);
 
 		parent::populateState('a.book_date', 'desc');
-
-		if ($app->isClient('site')) {
-			$value = $app->getInput()->get('start', 0, 'uint');
-			$this->setState('list.start', $value);
-		}
 	}
 
 	protected function _getList($query, $limitstart = 0, $limit = 0)

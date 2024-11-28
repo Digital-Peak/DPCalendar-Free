@@ -11,6 +11,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\View\Event;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
+use Joomla\CMS\Form\Field\SubformField;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Toolbar\ToolbarHelper;
@@ -23,9 +24,6 @@ class HtmlView extends BaseView
 	/** @var Form */
 	protected $form;
 
-	/** @var string */
-	protected $returnPage;
-
 	/** @var array */
 	protected $seriesEvents;
 
@@ -35,9 +33,8 @@ class HtmlView extends BaseView
 		$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Event', 'Administrator'), true);
 		$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Events', 'Administrator'));
 
-		$this->event        = $this->get('Item');
-		$this->form         = $this->get('Form');
-		$this->returnPage   = $this->get('ReturnPage');
+		$this->event        = $this->getModel()->getItem() ?: new \stdClass();
+		$this->form         = $this->getModel()->getForm();
 		$this->seriesEvents = [];
 
 		if ($this->event->original_id == -1) {
@@ -71,12 +68,14 @@ class HtmlView extends BaseView
 
 		// Set the date format on existing subforms
 		$exdates = $this->form->getField('exdates');
-		$exdates->__get('input');
-		$exdates->loadSubForm()->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
-		foreach (array_keys(array_filter((array)$exdates->__get('value'))) as $key) {
-			// @phpstan-ignore-next-line
-			$form = Form::getInstance('subform.' . $key);
-			$form->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
+		if ($exdates instanceof SubformField) {
+			$exdates->__get('input');
+			$exdates->loadSubForm()->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
+			foreach (array_keys(array_filter((array)$exdates->__get('value'))) as $key) {
+				// @phpstan-ignore-next-line
+				$form = Form::getInstance('subform.' . $key);
+				$form->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
+			}
 		}
 
 		if ($this->event->original_id > '0') {

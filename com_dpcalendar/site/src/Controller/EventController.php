@@ -355,6 +355,7 @@ class EventController extends FormController implements CurrentUserInterface
 
 			if ($event && $event->start_date == $data['start_date'] && $event->end_date == $data['end_date']) {
 				$displayData = [
+					'app'          => $this->app,
 					'router'       => new Router(),
 					'layoutHelper' => $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Layout', 'Administrator'),
 					'translator'   => new Translator(),

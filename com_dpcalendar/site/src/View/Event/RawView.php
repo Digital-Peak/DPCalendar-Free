@@ -16,7 +16,7 @@ class RawView extends BaseView
 {
 	public function display($tpl = null): void
 	{
-		$event = $this->get('Item');
+		$event = $this->getModel()->getItem();
 		if (!$event || !$event->id) {
 			return;
 		}

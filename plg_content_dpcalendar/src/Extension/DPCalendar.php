@@ -49,25 +49,15 @@ class DPCalendar extends CMSPlugin
 			return true;
 		}
 
-		// Count how many times we need to process events
-		$count = substr_count((string)$item->text, '{{#events');
-		if ($count === 0) {
-			return true;
-		}
+		$content = (string)$item->text;
 
-		for ($i = 0; $i < $count; $i++) {
-			// Check for parameters
-			preg_match('/{{#events\s*.*?}}/i', (string)$item->text, $starts, PREG_OFFSET_CAPTURE);
-			preg_match('/{{\/events}}/i', (string)$item->text, $ends, PREG_OFFSET_CAPTURE);
+		// Get the {{#events}} tag
+		preg_match_all('/{{#events\s*([^}]*)}}/', $content, $matches, PREG_SET_ORDER | PREG_OFFSET_CAPTURE);
 
-			if ($starts === [] || $ends === []) {
-				continue;
-			}
-
-			// Extract the parameters
-			$start  = $starts[0][1] + \strlen($starts[0][0]);
-			$end    = $ends[0][1];
-			$params = explode(' ', str_replace(['{{#events', '}}'], '', $starts[0][0]));
+		// Looping through the matches in reverse order, so we do not replace the offset for replacement
+		foreach (array_reverse($matches) as $match) {
+			// Extract individual key-value pairs
+			preg_match_all('/(\w+)=["\']?([^"\']+)["\']?(?=\s|$)/', $match[1][0], $params, PREG_SET_ORDER);
 
 			/** @var EventsModel $model */
 			$model = $component->getMVCFactory()->createModel('Events', 'Site', ['ignore_request' => true]);
@@ -84,21 +74,9 @@ class DPCalendar extends CMSPlugin
 			$model->setState('list.end-date', $now->format('U'));
 
 			// Loop through the params and set them on the model
-			foreach ($params as $string) {
-				$string = trim($string);
-				if ($string === '' || $string === '0') {
-					continue;
-				}
-
-				$paramKey   = null;
-				$paramValue = '';
-				$parts      = explode('=', $string);
-				$paramKey   = $parts[0];
-				if (\count($parts) > 1) {
-					$paramValue = $parts[1];
-				}
-
-				switch ($paramKey) {
+			foreach ($params as $kv) {
+				$paramValue = $kv[2];
+				switch ($kv[1]) {
 					case 'calid':
 						$model->setState('category.id', explode(',', $paramValue));
 						break;
@@ -129,10 +107,16 @@ class DPCalendar extends CMSPlugin
 						$model->setState('filter.featured', $paramValue);
 						break;
 					case 'startdate':
-						$model->setState('list.start-date', DPCalendarHelper::getDate($paramValue));
+						try {
+							$model->setState('list.start-date', DPCalendarHelper::getDate($paramValue));
+						} catch (\Exception) {
+						}
 						break;
 					case 'enddate':
-						$model->setState('list.end-date', DPCalendarHelper::getDate($paramValue));
+						try {
+							$model->setState('list.end-date', DPCalendarHelper::getDate($paramValue));
+						} catch (\Exception) {
+						}
 						break;
 					case 'locationid':
 						$model->setState('filter.locations', ArrayHelper::toInteger(explode(',', $paramValue)));
@@ -156,12 +140,21 @@ class DPCalendar extends CMSPlugin
 			$params = new Registry(ComponentHelper::getParams('com_dpcalendar'));
 			$params->set('description_length', 0);
 
-			// Render the output
-			$output = DPCalendarHelper::renderEvents($events, '{{#events}}' . substr((string)$item->text, $start, $end - $start) . '{{/events}}', $params);
+			// The start is the position of the match plus its length
+			$start = $match[0][1] + \strlen($match[0][0]);
 
-			// Set the output on the item
-			$item->text = substr_replace((string)$item->text, $output, $starts[0][1], $end + 11 - $starts[0][1]);
+			// The end is the position of the closing tag
+			$end = strpos($content, '{{/events}}', $start);
+
+			// Render the output while removing the arguments
+			$output = DPCalendarHelper::renderEvents($events, '{{#events}}' . substr($content, $start, $end - $start) . '{{/events}}', $params);
+
+			// Replace the tag with the generated output
+			$content = substr_replace($content, $output, $match[0][1], $end + 11 - $match[0][1]);
 		}
+
+		// Set the new content
+		$item->text = $content;
 
 		return true;
 	}

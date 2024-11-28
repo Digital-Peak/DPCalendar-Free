@@ -29,7 +29,7 @@ class HtmlView extends BaseView
 
 		// Set some defaults
 		$this->input->set('list.limit', 1000);
-		$this->get('State')->set('filter.state', [1, 3]);
+		$this->getModel()->getState()->set('filter.state', [1, 3]);
 
 		if (($id = $this->input->getInt('module_id', 0)) !== 0) {
 			foreach (ModuleHelper::getModuleList() as $module) {
@@ -42,7 +42,7 @@ class HtmlView extends BaseView
 			}
 		}
 
-		$this->items = $this->get('Items');
+		$this->items = $this->getModel()->getItems();
 
 		$this->compactMode = $this->getLayout() === 'compact';
 	}

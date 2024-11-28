@@ -39,8 +39,8 @@ class RawView extends BaseView
 
 		// Set some defaults
 		$this->input->set('list.limit', 1000);
-		$this->get('State')->set('filter.state', [1, 3]);
-		$this->get('State')->set('filter.state_owner', true);
+		$this->getModel()->getState()->set('filter.state', [1, 3]);
+		$this->getModel()->getState()->set('filter.state_owner', true);
 
 		// Convert the dates from the user timezone into normal
 		$tz    = DPCalendarHelper::getDate()->getTimezone()->getName();
@@ -65,7 +65,7 @@ class RawView extends BaseView
 			$this->params->merge($moduleParams);
 		}
 
-		$this->items = $this->get('Items');
+		$this->items = $this->getModel()->getItems();
 
 		if ($this->getModel()->getError() !== '' && $this->getModel()->getError() !== '0') {
 			DPCalendarHelper::sendMessage($this->getModel()->getError(), true);

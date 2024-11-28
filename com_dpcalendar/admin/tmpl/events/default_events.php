@@ -49,7 +49,7 @@ $return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 				|| $item->checked_out == $this->user->get('id') || $item->checked_out == 0;
 			$canChange  = $this->user->authorise('core.edit.state', 'com_dpcalendar.category.' . $item->catid) && $canCheckin;
 			?>
-			<tr sortable-group-id="<?php echo $item->catid ?>" class="dp-event">
+			<tr sortable-group-id="<?php echo $item->catid ?>" class="dp-event row0">
 				<td data-column=""><?php echo HTMLHelper::_('grid.id', $i, $item->id); ?></td>
 				<td data-column="<?php echo $this->translate('JSTATUS'); ?>" class="dp-event__state">
 					<div class="btn-group">

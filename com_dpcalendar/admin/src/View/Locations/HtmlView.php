@@ -24,14 +24,14 @@ class HtmlView extends BaseView
 
 	protected function init(): void
 	{
-		$this->state      = $this->get('State');
-		$this->items      = $this->get('Items');
-		$this->pagination = $this->get('Pagination');
+		$this->state      = $this->getModel()->getState();
+		$this->items      = $this->getModel()->getItems();
+		$this->pagination = $this->getModel()->getPagination();
 	}
 
 	protected function addToolbar(): void
 	{
-		$state = $this->get('State');
+		$state = $this->getModel()->getState();
 		$canDo = ContentHelper::getActions('com_dpcalendar');
 
 		if ($canDo->get('core.create')) {

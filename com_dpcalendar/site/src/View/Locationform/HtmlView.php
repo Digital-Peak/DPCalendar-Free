@@ -15,10 +15,10 @@ use Joomla\CMS\Form\Form;
 
 class HtmlView extends BaseView
 {
-	/** @var string */
+	/** @var \stdClass */
 	protected $location;
 
-	/** @var string */
+	/** @var Form */
 	protected $form;
 
 	/** @var string */
@@ -37,9 +37,9 @@ class HtmlView extends BaseView
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/forms');
 		$this->app->getLanguage()->load('', JPATH_ADMINISTRATOR);
 
-		$this->location   = $this->get('Item');
-		$this->form       = $this->get('Form');
-		$this->returnPage = $this->get('ReturnPage');
+		$this->location   = $this->getModel('Location')->getItem() ?: new \stdClass();
+		$this->form       = $this->getModel('Location')->getForm();
+		$this->returnPage = $this->getModel('Location')->getReturnPage();
 
 		if ($this->location->id && $this->location->params->get('access-edit')) {
 			return;

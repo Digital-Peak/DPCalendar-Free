@@ -102,7 +102,7 @@ class BaseView extends HtmlView
 		$this->user  = $this->getCurrentUser();
 		$this->tmpl  = $this->input->get('tmpl') ? '&tmpl=' . $this->input->get('tmpl', '') : '';
 
-		$state = $this->get('State');
+		$state = $this->getModel()->getState();
 
 		if ($state === null) {
 			$state = new Registry();
@@ -134,8 +134,8 @@ class BaseView extends HtmlView
 		];
 
 		$model = $this->getModel();
-		if ($model instanceof ListModel && $form = $model->getFilterForm()) {
-			$this->filterForm    = $form;
+		if ($model instanceof ListModel) {
+			$this->filterForm    = $model->getFilterForm();
 			$this->activeFilters = $model->getActiveFilters();
 		}
 

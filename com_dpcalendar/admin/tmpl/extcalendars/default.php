@@ -15,6 +15,8 @@ $this->dpdocument->loadStyleFile('dpcalendar/views/adminlist/default.css');
 $this->dpdocument->loadScriptFile('views/adminlist/default.js');
 $this->dpdocument->addScriptOptions('adminlist', ['listOrder' => $this->state->get('list.ordering')]);
 
+$this->getDocument()->getWebAssetManager()->useScript('multiselect');
+
 if ($this->input->get('tmpl', '') === 'component') {
 	echo Toolbar::getInstance('toolbar')->render();
 }

@@ -9,6 +9,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\View\ExtCalendars;
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Model\ExtcalendarsModel;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Pagination\Pagination;
@@ -29,8 +30,11 @@ class HtmlView extends BaseView
 
 	protected function init(): void
 	{
-		$this->items        = $this->get('Items');
-		$this->pagination   = $this->get('Pagination');
+		/** @var ExtcalendarsModel $model */
+		$model = $this->getModel();
+
+		$this->items        = $model->getItems();
+		$this->pagination   = $model->getPagination();
 		$this->pluginParams = new Registry();
 
 		$plugin = PluginHelper::getPlugin('dpcalendar', $this->input->getWord('dpplugin'));
@@ -38,7 +42,7 @@ class HtmlView extends BaseView
 			$this->pluginParams->loadString($plugin->params);
 		}
 
-		if ((is_countable($errors = $this->get('Errors')) ? \count($errors = $this->get('Errors')) : 0) !== 0) {
+		if ($errors = $model->getErrors()) {
 			throw new \Exception(implode("\n", $errors));
 		}
 	}

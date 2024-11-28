@@ -7,12 +7,14 @@
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
+use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
@@ -21,8 +23,13 @@ if (!$event) {
 	return;
 }
 
-$calendar = \Joomla\CMS\Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
-if (!$calendar instanceof \DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface) {
+$app = $displayData['app'];
+if (!$app instanceof CMSApplicationInterface) {
+	return;
+}
+
+$calendar = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
+if (!$calendar instanceof CalendarInterface) {
 	return;
 }
 
@@ -39,7 +46,15 @@ if (!empty($return)) {
 	$return = $uri . $displayData['router']->route('index.php?Itemid=' . $return, false);
 }
 
-$user = empty($displayData['user']) ? Factory::getApplication()->getIdentity() : $displayData['user'];
+$user = empty($displayData['user']) ? $app->getIdentity() : $displayData['user'];
+
+try {
+	PluginHelper::importPlugin('content');
+	$event->text = $event->description ?: '';
+	$app->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$event->params, 0]);
+	$event->description = $event->text;
+} catch (\Throwable) {
+}
 ?>
 <div class="dp-event-tooltip">
 	<div class="dp-event-tooltip__date">

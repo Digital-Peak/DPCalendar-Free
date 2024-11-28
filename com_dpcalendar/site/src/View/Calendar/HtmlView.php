@@ -26,6 +26,9 @@ class HtmlView extends BaseView
 	/** @var array */
 	protected $visibleCalendars;
 
+	/** @var array */
+	protected $hiddenCalendars;
+
 	/** @var Form */
 	protected $quickaddForm;
 
@@ -37,9 +40,8 @@ class HtmlView extends BaseView
 
 	protected function init(): void
 	{
-		$items = $this->get('AllItems');
-
-		if ($items === false) {
+		$items = $this->getModel()->getAllItems();
+		if (!$items) {
 			throw new \Exception(Text::_('JGLOBAL_CATEGORY_NOT_FOUND'));
 		}
 
@@ -71,6 +73,7 @@ class HtmlView extends BaseView
 
 		// If none are selected, use the calendars from the menu item
 		$this->visibleCalendars = $visibleCalendars === [] ? $this->items : $visibleCalendars;
+		$this->hiddenCalendars  = array_udiff($this->items, $this->visibleCalendars, fn ($c1, $c2) => $c1->getId() === $c2->getId() ? 0 : -1);
 
 		$this->quickaddForm = $this->getModel()->getQuickAddForm($this->params);
 
@@ -98,7 +101,7 @@ class HtmlView extends BaseView
 		// Prepare the resources for the timeline
 		if (str_contains($this->getLayout(), 'timeline')) {
 			$this->resources = [];
-			foreach ($this->visibleCalendars as $calendar) {
+			foreach (array_merge($this->hiddenCalendars, $this->visibleCalendars) as $calendar) {
 				$this->resources[] = (object)['id' => $calendar->getId() , 'title' => $calendar->getTitle()];
 			}
 		}

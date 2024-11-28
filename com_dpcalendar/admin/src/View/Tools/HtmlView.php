@@ -32,7 +32,7 @@ class HtmlView extends BaseView
 	protected function init(): void
 	{
 		if (str_contains($this->getLayout(), 'translate')) {
-			$this->resources = $this->get('ResourcesFromTranslation');
+			$this->resources = $this->getModel()->getResourcesFromTranslation();
 
 			$this->languages = LanguageHelper::getKnownLanguages();
 			foreach ($this->languages as $language) {

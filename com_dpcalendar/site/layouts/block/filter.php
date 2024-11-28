@@ -15,6 +15,7 @@ use Joomla\Registry\Registry;
 
 /**
  * @var array $calendars
+ * @var array $hidden_calendars
  * @var \DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator $translator
  * @var \DigitalPeak\Component\DPCalendar\Administrator\Router\Router $router
  * @var \DigitalPeak\Component\DPCalendar\Administrator\Model\LayoutModel $layoutHelper
@@ -23,6 +24,8 @@ use Joomla\Registry\Registry;
  * @var \Joomla\Registry\Registry $params
  */
 extract($displayData);
+
+$hidden_calendars = !empty($hidden_calendars) ? array_map(fn($c) => (int)$c->getId(), $hidden_calendars) : [-2];
 ?>
 <div class="dp-filter<?php echo $params->get('form_state', 1) == 2 ? '' : ' dp-filter_hidden'; ?>">
 	<?php if (count($calendars ?: []) >= 10) { ?>
@@ -100,6 +103,8 @@ extract($displayData);
 			<?php echo $displayData['buttons']?? ''; ?>
 		</div>
 		<input type="hidden" name="Itemid" value="<?php echo $displayData['input']->getInt('Itemid', 0); ?>" class="dp-input dp-input-hidden">
-		<input type="hidden" name="filter[calendars][]" value="-2">
+		<?php foreach ($hidden_calendars as $calendar) { ?>
+			<input type="hidden" id="cal-<?php echo $calendar; ?>" class="dp-input dp-input-hidden" name="filter[calendars][]" value="<?php echo $calendar; ?>">
+		<?php } ?>
 	</form>
 </div>

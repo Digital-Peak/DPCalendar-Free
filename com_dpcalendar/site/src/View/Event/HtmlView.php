@@ -80,8 +80,8 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 
 		$this->state->set('filter.state_owner', true);
 
-		$event = $this->get('Item');
-		if (!$event || !$event->id) {
+		$event = $this->getModel()->getItem() ?: new \stdClass();
+		if (!$event->id) {
 			throw new \Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
 
@@ -245,7 +245,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 			$seriesModel->setState('list.limit', (int)$this->params->get('event_series_max', 5));
 			$this->seriesEvents      = $seriesModel->getItems();
 			$this->seriesEventsTotal = $seriesModel->getTotal();
-			$this->originalEvent     = $event->original_id != '-1' ? $model->getItem($event->original_id) : $this->event;
+			$this->originalEvent     = $event->original_id != '-1' ? ($model->getItem($event->original_id) ?: null) : $this->event;
 		}
 
 		$this->noBookingMessage = $this->getBookingMessage($event);
@@ -288,8 +288,8 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		}
 
 		if ($this->getLayout() === 'mailtickets') {
-			$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Form', 'Site'));
-			$this->returnPage = $this->get('ReturnPage');
+			$model            = $this->getDPCalendar()->getMVCFactory()->createModel('Form', 'Site');
+			$this->returnPage = $model->getReturnPage();
 
 			$this->mailTicketsForm = $this->getFormFactory()->createForm('com_dpcalendar.mailtickets', ['control' => 'jform']);
 			$this->mailTicketsForm->loadFile(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/forms/mailtickets.xml');

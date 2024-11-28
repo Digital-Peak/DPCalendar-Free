@@ -24,9 +24,9 @@ class HtmlView extends BaseView
 
 	protected function init(): void
 	{
-		$this->state = $this->get('State');
-		$this->item  = $this->get('Item');
-		$this->form  = $this->get('Form');
+		$this->state = $this->getModel()->getState();
+		$this->item  = $this->getModel()->getItem() ?: new \stdClass();
+		$this->form  = $this->getModel()->getForm();
 
 		$this->form->removeField('alias');
 		$this->form->removeField('ordering');

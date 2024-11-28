@@ -266,10 +266,10 @@
 			<field name="first_hour" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_DESC"/>
-			<field name="min_time" type="text" useglobal="true" pattern="\d*\:?\d*"
+			<field name="min_time" type="text" useglobal="true" pattern="\d*:?\d*"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-			<field name="max_time" type="text" useglobal="true" pattern="\d*\:?\d*"
+			<field name="max_time" type="text" useglobal="true" pattern="\d*:?\d*"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 			<field name="current_time_indicator" type="list" useglobal="true"
@@ -361,7 +361,7 @@
 				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_FILTER_EXPAND
 				</option>
 			</field>
 			<field name="event_show_url" type="list" useglobal="true"
@@ -420,14 +420,8 @@
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_TICKETS_LIMITED</option>
 			</field>
 			<field name="event_show_print" type="list" useglobal="true"
-					default="1" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_LABEL"
+				default="1" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-			</field>
-			<field name="event_show_mail" type="list" useglobal="true"
-					default="1" label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>

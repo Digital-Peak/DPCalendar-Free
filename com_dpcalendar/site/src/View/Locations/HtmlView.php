@@ -54,7 +54,7 @@ class HtmlView extends BaseView
 
 		$this->resources = [];
 		$locationGroups  = [];
-		foreach ($this->get('Items') as $location) {
+		foreach ($this->getModel()->getItems() as $location) {
 			// Set the grouping id
 			$id = $this->params->get('locations_output_grouping', 0) ? $location->{$this->params->get('locations_output_grouping', 0)} : 0;
 			$id = ApplicationHelper::stringURLSafe($id);

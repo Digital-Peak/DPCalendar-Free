@@ -29,9 +29,9 @@ class HtmlView extends BaseView
 	protected function init(): void
 	{
 		$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Events', 'Administrator'), true);
-		$this->items      = $this->get('Items');
-		$this->pagination = $this->get('Pagination');
-		$this->authors    = $this->get('Authors');
+		$this->items      = $this->getModel()->getItems();
+		$this->pagination = $this->getModel()->getPagination();
+		$this->authors    = $this->getModel()->getAuthors();
 
 		$this->filterForm->removeField('location', 'filter');
 		$this->filterForm->removeField('length-type', 'filter');
@@ -55,7 +55,7 @@ class HtmlView extends BaseView
 
 	protected function addToolbar(): void
 	{
-		$state = $this->get('State');
+		$state = $this->getModel()->getState();
 		$canDo = ContentHelper::getActions('com_dpcalendar');
 		$user  = $this->getCurrentUser();
 

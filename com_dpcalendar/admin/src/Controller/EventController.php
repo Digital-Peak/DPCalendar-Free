@@ -110,8 +110,9 @@ class EventController extends FormController implements CurrentUserInterface
 			}
 		}
 
-		if ($this->getTask() == 'save2copy') {
+		if ($this->getTask() === 'save2copy') {
 			$data['capacity_used'] = null;
+			$data['uid']           = null;
 		}
 
 		$this->input->post->set('jform', $data);

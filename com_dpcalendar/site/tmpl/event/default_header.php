@@ -21,11 +21,6 @@ $event      = $this->event;
 $eventRoute = $this->router->getEventRoute($event->id, $event->catid, false, false);
 
 $mailtoUrl = '';
-if (file_exists(JPATH_SITE . '/components/com_mailto/helpers/mailto.php')) {
-	require_once JPATH_SITE . '/components/com_mailto/helpers/mailto.php';
-	$uri       = Uri::getInstance()->toString(['scheme', 'host', 'port']);
-	$mailtoUrl = 'index.php?option=com_mailto&tmpl=component&link=' . MailToHelper::addLink($uri . $this->router->route($eventRoute));
-}
 
 // Compile the Google url
 $startDate  = $this->dateHelper->getDate($event->start_date, $event->all_day);
@@ -66,12 +61,6 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 		<button type="button" class="dp-button dp-button-action dp-button-print" data-selector=".com-dpcalendar-event">
 			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::PRINTING]); ?>
 			<?php echo $this->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT'); ?>
-		</button>
-	<?php } ?>
-	<?php if ($mailtoUrl && $this->params->get('event_show_mail', 1)) { ?>
-		<button type="button" class="dp-button dp-button-action dp-button-mail" data-mailtohref="<?php echo $mailtoUrl; ?>">
-			<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::MAIL]); ?>
-			<?php echo $this->translate('JGLOBAL_EMAIL'); ?>
 		</button>
 	<?php } ?>
 	<?php if ($this->params->get('event_show_copy', '1')) { ?>

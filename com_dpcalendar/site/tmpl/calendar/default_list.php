@@ -13,7 +13,8 @@ if ($this->activeFilters) {
 }
 $this->params->set('hidden_fields', $this->params->get('calendar_filter_form_hidden_fields', []));
 
-$this->displayData['calendars'] = $this->visibleCalendars;
-$this->displayData['form']      = $this->filterForm;
+$this->displayData['calendars']        = $this->visibleCalendars;
+$this->displayData['hidden_calendars'] = $this->hiddenCalendars;
+$this->displayData['form']             = $this->filterForm;
 
 echo $this->layoutHelper->renderLayout('block.filter', $this->displayData);

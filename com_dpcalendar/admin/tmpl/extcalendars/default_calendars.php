@@ -7,7 +7,6 @@
 
 \defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Router\Route;
@@ -51,7 +50,7 @@ if ($saveOrder) {
 			<?php $canCreate = $this->user->authorise('core.create', 'com_dpcalendar'); ?>
 			<?php $canEdit = $this->user->authorise('core.edit', 'com_dpcalendar'); ?>
 			<?php $canChange = $this->user->authorise('core.edit.state', 'com_dpcalendar'); ?>
-			<tr sortable-group-id="" data-draggable-group="0">
+			<tr sortable-group-id="" class="row0" data-draggable-group="0">
 				<td data-column="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"><?php echo HTMLHelper::_('grid.id', $i, $item->id); ?></td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ORDERING'); ?>">
 					<?php if ($canChange) { ?>

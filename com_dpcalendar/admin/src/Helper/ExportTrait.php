@@ -69,7 +69,7 @@ trait ExportTrait
 				case 'book_date':
 					return DPCalendarHelper::getDate($booking->$name)->format('Y-m-d H:i:s', true);
 				case 'country':
-					return $booking->country_code_value;
+					return $booking->country_code_value ?? '';
 				case 'options':
 					if (empty($booking->tickets) || empty($booking->options)) {
 						return '';

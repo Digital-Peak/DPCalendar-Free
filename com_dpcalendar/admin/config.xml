@@ -252,10 +252,10 @@
 		<field name="first_hour" type="text" default="6"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FIRST_HOUR_DESC"/>
-		<field name="min_time" type="text" default="0" pattern="\d*\:?\d*"
+		<field name="min_time" type="text" default="0" pattern="\d*:?\d*"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-		<field name="max_time" type="text" default="24" pattern="\d*\:?\d*"
+		<field name="max_time" type="text" default="24" pattern="\d*:?\d*"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 		<field name="current_time_indicator" type="radio" default="1" class="btn-group"
@@ -533,7 +533,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
-			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_FILTER_EXPAND</option>
 		</field>
 		<field name="event_show_url" type="radio" default="1" class="btn-group"
 			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_DESC">
@@ -586,11 +586,6 @@
 		<field name="event_show_print" type="radio" default="1" class="btn-group"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
-		<field name="event_show_mail" type="radio" default="1" class="btn-group"
-			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
@@ -1231,7 +1226,7 @@
 			description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
-			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
+			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_FILTER_EXPAND</option>
 		</field>
 		<field name="locations_show_upcoming_events" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LOCATION_SHOW_UPCOMING_EVENTS_LABEL"
@@ -1317,10 +1312,10 @@
 		<field name="locations_axisformat_day" type="text" default="H:i" showon="locations_show_resource_view:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_DESC"/>
-		<field name="locations_min_time" type="text" default="0" pattern="\d*\:?\d*" showon="locations_show_resource_view:1"
+		<field name="locations_min_time" type="text" default="0" pattern="\d*:?\d*" showon="locations_show_resource_view:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-		<field name="locations_max_time" type="text" default="24" pattern="\d*\:?\d*" showon="locations_show_resource_view:1"
+		<field name="locations_max_time" type="text" default="24" pattern="\d*:?\d*" showon="locations_show_resource_view:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 		<field name="locations_filter_author" type="dpauthor" default="0" table_name="dpcalendar_locations"
@@ -1457,10 +1452,10 @@
 		<field name="location_axisformat_day" type="text" default="H:i" showon="location_show_resource_view:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_AXIS_FORMAT_DAY_DESC"/>
-		<field name="location_min_time" type="text" default="0" pattern="\d*\:?\d*" showon="location_show_resource_view:1"
+		<field name="location_min_time" type="text" default="0" pattern="\d*:?\d*" showon="location_show_resource_view:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MIN_TIME_DESC"/>
-		<field name="location_max_time" type="text" default="24" pattern="\d*\:?\d*" showon="location_show_resource_view:1"
+		<field name="location_max_time" type="text" default="24" pattern="\d*:?\d*" showon="location_show_resource_view:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAX_TIME_DESC"/>
 		<field name="location_show_page_heading" type="list" default="0"

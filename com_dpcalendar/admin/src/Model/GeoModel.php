@@ -12,14 +12,19 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\ThinHTTP\CurlClient;
 use Joomla\CMS\Application\ApplicationHelper;
+use Joomla\CMS\Cache\CacheControllerFactoryAwareInterface;
+use Joomla\CMS\Cache\CacheControllerFactoryAwareTrait;
+use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
-class GeoModel extends BaseDatabaseModel
+class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareInterface
 {
+	use CacheControllerFactoryAwareTrait;
+
 	private ?LocationsModel $locationCache = null;
 	private array $nominatimLanguages      = ['en', 'de', 'it', 'fr'];
 	private array $googleLanguages         = [
@@ -169,6 +174,15 @@ class GeoModel extends BaseDatabaseModel
 			} catch (\Exception $e) {
 				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 			}
+		} else {
+			/** @var OutputController $cache */
+			$cache = $this->getCacheControllerFactory()->createCacheController('output', ['defaultgroup' => 'com_dpcalendar_locations']);
+			$cache->setCaching(true);
+			// Cache for a year
+			$cache->setLifeTime(31536000);
+			if ($cache->contains($location)) {
+				return $cache->get($location);
+			}
 		}
 
 		if ($title === null || $title === '' || $title === '0') {
@@ -227,6 +241,8 @@ class GeoModel extends BaseDatabaseModel
 			}
 
 			$this->locationCache = $factory->createModel('Locations', 'Administrator', ['ignore_request' => true]);
+		} elseif ($cache instanceof OutputController) {
+			$cache->store($locObject, $location);
 		}
 
 		return $locObject;

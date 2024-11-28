@@ -57,7 +57,7 @@ if ($saveOrder) {
 			<?php $canCheckin = $this->user->authorise('core.manage', 'com_checkin')
 				|| $item->checked_out == $this->user->get('id') || $item->checked_out == 0; ?>
 			<?php $canChange = $this->user->authorise('core.edit.state', 'com_dpcalendar') && $canCheckin; ?>
-			<tr sortable-group-id="" data-draggable-group="0" data-draggable-group="0" class="dp-location">
+			<tr sortable-group-id="" data-draggable-group="0" data-draggable-group="0" class="dp-location row0">
 				<td data-column="<?php echo $this->translate('JGLOBAL_CHECK_ALL'); ?>"><?php echo HTMLHelper::_('grid.id', $i, $item->id); ?></td>
 				<td class="order" data-column="<?php echo $this->translate('JGRID_HEADING_ORDERING'); ?>">
 					<?php if ($canChange) { ?>

@@ -11,6 +11,7 @@ namespace DigitalPeak\Component\DPCalendar\Site\View\List;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
+use DigitalPeak\Component\DPCalendar\Site\Model\EventsModel;
 use DigitalPeak\Component\DPCalendar\Site\View\CalendarViewTrait;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
@@ -73,11 +74,14 @@ class HtmlView extends BaseView
 		// Compile the return page url
 		$this->returnPage = $this->input->getInt('Itemid', 0) !== 0 ? 'index.php?Itemid=' . $this->input->getInt('Itemid', 0) : '';
 
+		/** @var EventsModel $model */
+		$model = $this->getModel();
+
 		// Create the context
 		$context             = 'com_dpcalendar.listview';
 		$this->params        = $this->state->get('params');
 		$this->increment     = $this->params->get('list_increment', '1 month');
-		$this->activeFilters = $this->get('ActiveFilters');
+		$this->activeFilters = $model->getActiveFilters();
 
 		// The request data as array
 		$listRequestData   = $this->app->getUserStateFromRequest($context . '.list', 'list', '', 'array') ?: [];
@@ -86,7 +90,7 @@ class HtmlView extends BaseView
 
 		// Ensure there is no filter left when the form is not shown
 		if (!$formShown) {
-			$this->getModel()->setState('filter.search', '');
+			$model->setState('filter.search', '');
 		}
 
 		$dateStart         = null;
@@ -207,20 +211,17 @@ class HtmlView extends BaseView
 		$this->prevLink = $this->router->route($this->prevLink);
 
 		// Get the calendars and their childs
-		$model = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Site', ['ignore_request' => true]);
-		$model->getState();
-		$model->setState('filter.parentIds', $this->params->get('ids', '-1'));
+		$calendarModel = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Site', ['ignore_request' => true]);
+		$calendarModel->getState();
+		$calendarModel->setState('filter.parentIds', $this->params->get('ids', '-1'));
 
 		// The calendar ids
-		$this->calendars = $model->getItems();
+		$this->calendars = $calendarModel->getItems();
 		foreach ($this->calendars as $calendar) {
 			$this->fillCalendar($calendar);
 		}
 
 		$ids = array_filter($this->state->get('filter.calendars', [])) !== [] ? array_filter($this->state->get('filter.calendars', [])) : array_keys($this->calendars);
-
-		// The model to fetch the events
-		$model = $this->getModel();
 
 		// Set the dates on the model
 		$model->setState('list.start-date', $dateStart);
@@ -285,7 +286,7 @@ class HtmlView extends BaseView
 		}
 
 		// Load the events
-		$items = $this->get('Items');
+		$items = $model->getItems();
 		if ($items === false) {
 			throw new \Exception(Text::_('JGLOBAL_CATEGORY_NOT_FOUND'));
 		}

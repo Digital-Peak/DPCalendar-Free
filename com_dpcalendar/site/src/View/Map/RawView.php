@@ -10,7 +10,7 @@ namespace DigitalPeak\Component\DPCalendar\Site\View\Map;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
-use Joomla\CMS\Application\SiteApplication;
+use DigitalPeak\Component\DPCalendar\Site\Model\EventsModel;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\Registry\Registry;
@@ -21,7 +21,6 @@ class RawView extends BaseView
 
 	public function display($tpl = null): void
 	{
-		/** @var SiteApplication $app */
 		$app = Factory::getApplication();
 
 		$module = $app->getInput()->getInt('module_id', 0);
@@ -41,9 +40,12 @@ class RawView extends BaseView
 		$access = 0;
 		$params = null;
 
+		/** @var EventsModel $model */
+		$model = $this->getModel();
+
 		if ($this->input->getInt('module_id', 0) !== 0) {
-			$model  = $this->app->bootComponent('modules')->getMVCFactory()->createModel('Module', 'Administrator', ['ignore_request' => true]);
-			$module = $model->getItem($this->input->getInt('module_id', 0));
+			$moduleModel = $this->app->bootComponent('modules')->getMVCFactory()->createModel('Module', 'Administrator', ['ignore_request' => true]);
+			$module      = $moduleModel->getItem($this->input->getInt('module_id', 0));
 
 			if ($module !== null && $module->id) {
 				$params = new Registry($module->params);
@@ -63,7 +65,7 @@ class RawView extends BaseView
 		$this->params->merge($params ?? new Registry());
 
 		if ($this->user->authorise('core.admin', 'com_dpcalendar') || \in_array((int)$access, $this->user->getAuthorisedViewLevels())) {
-			$this->getModel()->setState('parameters.menu', $this->params);
+			$model->setState('parameters.menu', $this->params);
 		} else {
 			$this->app->enqueueMessage($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'), 'error');
 
@@ -71,28 +73,28 @@ class RawView extends BaseView
 		}
 
 		// Set the calendars
-		$this->getModel()->setState('category.id', array_filter($this->state->get('filter.calendars', [])));
+		$model->setState('category.id', array_filter($this->state->get('filter.calendars', [])));
 
-		$this->getModel()->setState('list.limit', 1000);
-		$this->getModel()->setState('filter.expand', $this->params->get('map_expand', 1));
-		$this->getModel()->setState('filter.ongoing', $this->params->get('map_include_ongoing', 0));
+		$model->setState('list.limit', 1000);
+		$model->setState('filter.expand', $this->params->get('map_expand', 1));
+		$model->setState('filter.ongoing', $this->params->get('map_include_ongoing', 0));
 
 		if ($author = $this->params->get('map_filter_author', 0)) {
-			$this->getModel()->setState('filter.author', $author);
+			$model->setState('filter.author', $author);
 		}
 
-		$location = $this->getModel()->getState('filter.location');
+		$location = $model->getState('filter.location');
 		if (empty($location)) {
 			$location = $this->params->get('map_view_lat', 47) . ',' . $this->params->get('map_view_long', 4);
 		}
 
-		$this->getModel()->setState('filter.location', $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location, false));
+		$model->setState('filter.location', $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location, false));
 
 		// Initialize variables
-		$items = $this->get('Items');
+		$items = $model->getItems();
 
 		// Check for errors
-		if ((is_countable($errors = $this->get('Errors')) ? \count($errors = $this->get('Errors')) : 0) !== 0) {
+		if ($errors = $model->getErrors()) {
 			throw new \Exception(implode("\n", $errors));
 		}
 

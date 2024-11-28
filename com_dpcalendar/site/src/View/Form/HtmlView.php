@@ -36,9 +36,9 @@ class HtmlView extends BaseView
 
 		$this->app->getLanguage()->load('', JPATH_ADMINISTRATOR);
 
-		$this->event      = $this->get('Item');
-		$this->form       = $this->get('Form');
-		$this->returnPage = $this->get('ReturnPage');
+		$this->event      = $this->getModel()->getItem() ?: new \stdClass();
+		$this->form       = $this->getModel()->getForm();
+		$this->returnPage = $this->getModel()->getReturnPage();
 
 		$authorised = true;
 		if (empty($this->event->id)) {

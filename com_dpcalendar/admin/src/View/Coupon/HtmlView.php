@@ -24,8 +24,8 @@ class HtmlView extends BaseView
 
 	protected function init(): void
 	{
-		$this->coupon = $this->get('Item');
-		$this->form   = $this->get('Form');
+		$this->coupon = $this->getModel()->getItem() ?: new \stdClass();
+		$this->form   = $this->getModel()->getForm();
 	}
 
 	protected function addToolbar(): void

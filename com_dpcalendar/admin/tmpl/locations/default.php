@@ -12,6 +12,8 @@ use Joomla\CMS\HTML\HTMLHelper;
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminlist/default.css');
 $this->dpdocument->loadScriptFile('views/adminlist/default.js');
 $this->dpdocument->addScriptOptions('adminlist', ['listOrder' => $this->state->get('list.ordering')]);
+
+$this->getDocument()->getWebAssetManager()->useScript('multiselect');
 ?>
 <div class="com-dpcalendar-locations com-dpcalendar-adminlist">
 	<form action="<?php echo $this->router->route('index.php?option=com_dpcalendar&view=locations'); ?>"

@@ -59,12 +59,7 @@ trait CalendarViewTrait
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/forms');
 
 		// Load the form
-		$form = $model->getFilterForm();
-		if (!$form) {
-			return;
-		}
-
-		$this->filterForm = $form;
+		$this->filterForm = $model->getFilterForm();
 
 		// Set the passed calendars as default value to the form
 		if (empty($this->filterForm->getValue('calendars', 'filter'))) {

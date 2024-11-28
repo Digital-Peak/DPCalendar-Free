@@ -86,11 +86,11 @@ class RawView extends BaseView
 
 			// Author state must be set explicit, otherwise it inherits from global config
 			$model->setState('filter.author', $moduleParams->get('calendar_filter_author', 0));
-			$model->setState('filter.calendars', $moduleParams->get('ids', []));
 		}
 
 		// Set the calendars
-		$model->setState('category.id', array_filter($this->state->get('filter.calendars', [])));
+		$model->setState('filter.calendars', array_filter($this->state->get('filter.calendars', []), fn ($c) => !empty($c) && $c !== -2));
+		$model->setState('category.id', $this->state->get('filter.calendars', []));
 
 		if ($location = $model->getState('filter.location')) {
 			$model->setState(
@@ -99,7 +99,7 @@ class RawView extends BaseView
 			);
 		}
 
-		$this->items = $this->get('Items');
+		$this->items = $this->getModel()->getItems();
 	}
 
 	protected function handleError(): void

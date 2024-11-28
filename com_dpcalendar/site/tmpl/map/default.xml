@@ -120,7 +120,7 @@
 				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_CALENDARS_EXPAND</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_FILTER_EXPAND</option>
 			</field>
 			<field name="event_show_url" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_URL_LABEL"
@@ -180,12 +180,6 @@
 			<field name="event_show_print" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-			</field>
-			<field name="event_show_mail" type="list" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_MAIL_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>

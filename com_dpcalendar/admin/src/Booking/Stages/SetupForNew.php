@@ -15,11 +15,11 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\CouponModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\CurrencyModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\TaxrateModel;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\User;
 use Joomla\Registry\Registry;
-use League\Pipeline\StageInterface;
 
 class SetupForNew implements StageInterface
 {
@@ -34,7 +34,7 @@ class SetupForNew implements StageInterface
 	) {
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Default some data
 		$event                          = null;

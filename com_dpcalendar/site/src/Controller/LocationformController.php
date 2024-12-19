@@ -138,6 +138,7 @@ class LocationformController extends LocationController implements CurrentUserIn
 			throw new \Exception(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));
 		}
 
+		$recordId = [$recordId];
 		$this->getModel('Location')->publish($recordId, -2);
 		if (!$this->getModel('Location')->delete($recordId)) {
 			throw new \Exception(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'));

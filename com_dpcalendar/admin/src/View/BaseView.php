@@ -17,7 +17,6 @@ use DigitalPeak\Component\DPCalendar\Administrator\Model\LayoutModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Router\Router;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 use Joomla\CMS\Application\CMSApplication;
-use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Document\RawDocument;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
@@ -259,8 +258,6 @@ class BaseView extends HtmlView
 
 	/**
 	 * Function to initialize the view. Can throw an Exception to abort the display.
-	 *
-	 * @throws \Exception
 	 */
 	protected function init(): void
 	{
@@ -314,11 +311,6 @@ class BaseView extends HtmlView
 
 	protected function getDPCalendar(): DPCalendarComponent
 	{
-		$app = $this->app;
-		if (!$app instanceof CMSApplicationInterface) {
-			throw new \Exception('App not set in ' . self::class);
-		}
-
-		return $app->bootComponent('dpcalendar');
+		return $this->app->bootComponent('dpcalendar');
 	}
 }

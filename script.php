@@ -57,7 +57,10 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 9.0.0 running. Please install the latest release from version 9 first.',
 				'error'
 			);
-			$app->redirect('index.php?option=com_installer&view=install');
+
+			if ($app->getInput()->get('task') !== 'ajax_upload') {
+				$app->redirect('index.php?option=com_installer&view=install');
+			}
 
 			return false;
 		}

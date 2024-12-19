@@ -21,6 +21,7 @@ use Joomla\CMS\Tag\TaggableTableInterface;
 use Joomla\CMS\Tag\TaggableTableTrait;
 use Joomla\CMS\Versioning\VersionableTableInterface;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Database\ParameterType;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
@@ -657,12 +658,12 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		}
 
 		// Images can be an empty json string
-		if (!$this->id && (!property_exists($this, 'images') || $this->images === null)) {
+		if (!$this->id && $this->images === null) {
 			$this->images = '{}';
 		}
 
 		// Strict mode adjustments
-		if (!is_numeric($this->capacity_used)) {
+		if (empty($this->capacity_used)) {
 			$this->capacity_used = 0;
 		}
 
@@ -707,11 +708,10 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 
 		$success = parent::delete($pk);
 		if ($success && $pk > 0) {
-			$this->getDatabase()->setQuery('delete from #__dpcalendar_events where original_id = ' . (int)$pk);
-			$this->getDatabase()->execute();
-			$this->getDatabase()->setQuery('delete from #__dpcalendar_tickets where event_id = ' . (int)$pk);
-			$this->getDatabase()->execute();
+			$this->getDatabase()->setQuery('delete from #__dpcalendar_events where original_id = ' . (int)$pk)->execute();
+			$this->getDatabase()->setQuery('delete from #__dpcalendar_tickets where event_id = ' . (int)$pk)->execute();
 		}
+
 		if ($success && $this->catid) {
 			Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->increaseEtag($this->catid);
 		}
@@ -721,53 +721,51 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 
 	public function publish($pks = null, $state = 1, $userId = 0): bool
 	{
-		// Initialize variables.
-		$k = $this->_tbl_key;
+		// Sanitize input
+		$pks   = ArrayHelper::toInteger($pks);
+		$state = (int)$state;
 
-		// Sanitize input.
-		$pks    = ArrayHelper::toInteger($pks);
-		$userId = (int)$userId;
-		$state  = (int)$state;
-
-		// If there are no primary keys set check to see if the instance key is set.
-		if (empty($pks) && !$this->$k) {
+		// If there are no primary keys set check to see if the instance key is set
+		if (empty($pks) && !$this->id) {
 			throw new \Exception(Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
 		}
 
 		if (empty($pks)) {
-			$pks = [$this->$k];
+			$pks = [$this->id];
 		}
 
-		// Build the WHERE clause for the primary keys.
-		$where = $k . '=' . implode(' OR ' . $k . '=', $pks);
+		$now = DPCalendarHelper::getDate()->toSql();
+
+		$query = $this->getDatabase()->getQuery(true);
+		$query->update($this->_tbl);
+		$query->set('state = :state')->bind(':state', $state, ParameterType::INTEGER);
+		$query->set('modified = :modified')->bind(':modified', $now);
+		$query->where('(checked_out = 0 OR checked_out = :user)')->bind(':user', $userId, ParameterType::INTEGER);
+
+		// Build the WHERE clause for the primary keys
+		$where = 'id = ' . implode(' OR id = ', $pks);
 
 		// Add child events
 		$where .= ' or original_id = ' . implode(' OR original_id =', $pks);
 
-		// Determine if there is checkin support for the table.
-		if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
-			$checkin = '';
-		} else {
-			$checkin = ' AND (checked_out = 0 OR checked_out = ' . $userId . ')';
+		$query->where('(' . $where . ')');
+		$this->getDatabase()->setQuery($query)->execute();
+
+		$model = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator');
+		foreach ($this->getDatabase()->setQuery('select distinct catid from #__dpcalendar_events where ' . $where)->loadColumn() as $calId) {
+			$model->increaseEtag($calId);
 		}
 
-		// Update the publishing state for rows with the given primary keys.
-		$this->getDatabase()->setQuery(
-			'UPDATE ' . $this->_tbl . ' SET state = ' . $state . ' WHERE (' . $where . ')' . $checkin
-		);
-		$this->getDatabase()->execute();
-
-		// If checkin is supported and all rows were adjusted, check them in.
-		if ($checkin && \count($pks) == $this->getDatabase()->getAffectedRows()) {
-			// Checkin the rows.
+		// If checkin is supported and all rows were adjusted, check them in
+		if (\count($pks) === $this->getDatabase()->getAffectedRows()) {
+			// Checkin the rows
 			foreach ($pks as $pk) {
 				$this->checkin($pk);
 			}
 		}
 
-		// If the JTable instance value is in the list of primary keys that were
-		// set, set the instance.
-		if (\in_array($this->$k, $pks)) {
+		// If the Table instance value is in the list of primary keys that were set, set the instance
+		if (\in_array($this->id, $pks)) {
 			$this->state = $state;
 		}
 

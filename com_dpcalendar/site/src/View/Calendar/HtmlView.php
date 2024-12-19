@@ -73,7 +73,7 @@ class HtmlView extends BaseView
 
 		// If none are selected, use the calendars from the menu item
 		$this->visibleCalendars = $visibleCalendars === [] ? $this->items : $visibleCalendars;
-		$this->hiddenCalendars  = array_udiff($this->items, $this->visibleCalendars, fn ($c1, $c2) => $c1->getId() === $c2->getId() ? 0 : -1);
+		$this->hiddenCalendars  = array_udiff($this->items, $this->visibleCalendars, fn ($c1, $c2): int => $c1->getId() === $c2->getId() ? 0 : -1);
 
 		$this->quickaddForm = $this->getModel()->getQuickAddForm($this->params);
 

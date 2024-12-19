@@ -18,7 +18,6 @@ use DigitalPeak\ThinHTTP\ClientFactoryAwareInterface;
 use DigitalPeak\ThinHTTP\ClientFactoryAwareTrait;
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Application\CMSApplicationInterface;
-use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Cache\CacheControllerFactoryAwareInterface;
 use Joomla\CMS\Cache\CacheControllerFactoryAwareTrait;
 use Joomla\CMS\Cache\Controller\CallbackController;
@@ -1052,7 +1051,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			if ($geo !== '' && $geo !== '0' && str_contains($geo, ';')) {
 				static $locationModel = null;
 				$app                  = $this->getApplication();
-				if ($locationModel === null && $app instanceof CMSWebApplicationInterface) {
+				if ($locationModel === null && $app instanceof CMSApplicationInterface) {
 					$locationModel = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
 					$locationModel->getState();
 					$locationModel->setState('list.limit', 1);

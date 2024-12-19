@@ -57,7 +57,7 @@ class TicketsModel extends ListModel
 		$this->setState('filter.event_id', $eventId ?: Factory::getApplication()->getInput()->get('e_id'));
 
 		$app = Factory::getApplication();
-		$this->setState('params', $app instanceof SiteApplication && $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('params', $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 
 		parent::populateState($ordering, $direction);
 	}

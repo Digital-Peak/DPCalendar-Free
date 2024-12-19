@@ -29,8 +29,6 @@ class HtmlView extends BaseView
 
 	protected function init(): void
 	{
-		// Set the default model
-		$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Event', 'Administrator'), true);
 		$this->setModel($this->getDPCalendar()->getMVCFactory()->createModel('Events', 'Administrator'));
 
 		$this->event        = $this->getModel()->getItem() ?: new \stdClass();
@@ -72,9 +70,13 @@ class HtmlView extends BaseView
 			$exdates->__get('input');
 			$exdates->loadSubForm()->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
 			foreach (array_keys(array_filter((array)$exdates->__get('value'))) as $key) {
-				// @phpstan-ignore-next-line
-				$form = Form::getInstance('subform.' . $key);
-				$form->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
+				try {
+					// @phpstan-ignore-next-line
+					$form = Form::getInstance('subform.' . $key, '');
+					$form->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
+				} catch (\InvalidArgumentException) {
+					// Ignore as it can happen when an exdate is removed
+				}
 			}
 		}
 

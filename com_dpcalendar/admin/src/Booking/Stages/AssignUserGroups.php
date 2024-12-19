@@ -9,12 +9,12 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\User\UserHelper;
-use League\Pipeline\StageInterface;
 
 class AssignUserGroups implements StageInterface
 {
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Do not assign when state is not active and previous state was active as well
 		if ($payload->item->state != 1 || ($payload->oldItem && $payload->oldItem->state == 1)) {

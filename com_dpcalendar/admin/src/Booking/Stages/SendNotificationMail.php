@@ -11,6 +11,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Mail\Mail;
@@ -18,7 +19,6 @@ use Joomla\CMS\Mail\MailerInterface;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\User\UserFactoryInterface;
-use League\Pipeline\StageInterface;
 
 class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 {
@@ -29,7 +29,7 @@ class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 		$this->setUserFactory($factory);
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Abort when we are in the creation process
 		if (\in_array($payload->item->state, [0, 2])) {

@@ -17,7 +17,6 @@ use Joomla\CMS\Tag\TaggableTableInterface;
 use Joomla\CMS\Tag\TaggableTableTrait;
 use Joomla\CMS\Versioning\VersionableTableInterface;
 use Joomla\Registry\Registry;
-use Joomla\Utilities\ArrayHelper;
 
 class LocationTable extends BasicTable implements TaggableTableInterface, VersionableTableInterface
 {
@@ -213,59 +212,6 @@ class LocationTable extends BasicTable implements TaggableTableInterface, Versio
 			$this->color = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->getColor($this);
 		}
 		$this->color = str_replace('#', '', (string)$this->color);
-
-		return true;
-	}
-
-	public function publish($pks = null, $state = 1, $userId = 0): bool
-	{
-		$k = $this->_tbl_key;
-
-		// Sanitize input.
-		$pks    = ArrayHelper::toInteger($pks);
-		$userId = (int)$userId;
-		$state  = (int)$state;
-
-		// If there are no primary keys set check to see if the instance key is
-		// set.
-		if (empty($pks)) {
-			if ($this->$k) {
-				$pks = [$this->$k];
-			} else {
-				throw new \Exception(Text::_('JLIB_DATABASE_ERROR_NO_ROWS_SELECTED'));
-			}
-		}
-
-		// Build the WHERE clause for the primary keys.
-		$where = $k . '=' . implode(' OR ' . $k . '=', $pks);
-
-		// Determine if there is checkin support for the table.
-		if (!property_exists($this, 'checked_out') || !property_exists($this, 'checked_out_time')) {
-			$checkin = '';
-		} else {
-			$checkin = ' AND (checked_out = 0 OR checked_out = ' . $userId . ')';
-		}
-
-		// Update the publishing state for rows with the given primary keys.
-		$this->getDatabase()->setQuery(
-			'UPDATE ' . $this->_tbl . ' SET state = ' . $state . ' WHERE (' . $where .
-			')' . $checkin
-		);
-
-		$this->getDatabase()->execute();
-
-		// If checkin is supported and all rows were adjusted, check them in
-		if ($checkin && \count($pks) === $this->getDatabase()->getAffectedRows()) {
-			// Checkin the rows
-			foreach ($pks as $pk) {
-				$this->checkin($pk);
-			}
-		}
-
-		// If the JTable instance value is in the list of primary keys that were set, set the instance.
-		if (\in_array($this->$k, $pks)) {
-			$this->state = $state;
-		}
 
 		return true;
 	}

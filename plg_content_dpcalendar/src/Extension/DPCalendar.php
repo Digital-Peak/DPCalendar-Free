@@ -9,7 +9,6 @@ namespace DigitalPeak\Plugin\Content\DPCalendar\Extension;
 
 \defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Extension\DPCalendarComponent;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
@@ -45,9 +44,6 @@ class DPCalendar extends CMSPlugin
 		}
 
 		$component = $app->bootComponent('dpcalendar');
-		if (!$component instanceof DPCalendarComponent) {
-			return true;
-		}
 
 		$content = (string)$item->text;
 
@@ -57,7 +53,7 @@ class DPCalendar extends CMSPlugin
 		// Looping through the matches in reverse order, so we do not replace the offset for replacement
 		foreach (array_reverse($matches) as $match) {
 			// Extract individual key-value pairs
-			preg_match_all('/(\w+)=["\']?([^"\']+)["\']?(?=\s|$)/', $match[1][0], $params, PREG_SET_ORDER);
+			preg_match_all('/(\w+)=["\']([^"\']*)["\']|(\w+)=([^"\s]+)/', $match[1][0], $params, PREG_SET_ORDER);
 
 			/** @var EventsModel $model */
 			$model = $component->getMVCFactory()->createModel('Events', 'Site', ['ignore_request' => true]);
@@ -75,8 +71,8 @@ class DPCalendar extends CMSPlugin
 
 			// Loop through the params and set them on the model
 			foreach ($params as $kv) {
-				$paramValue = $kv[2];
-				switch ($kv[1]) {
+				$paramValue = $kv[\count($kv) - 1];
+				switch ($kv[\count($kv) - 2]) {
 					case 'calid':
 						$model->setState('category.id', explode(',', $paramValue));
 						break;
@@ -146,6 +142,12 @@ class DPCalendar extends CMSPlugin
 			// The end is the position of the closing tag
 			$end = strpos($content, '{{/events}}', $start);
 
+			// Check if there is an else block
+			if (substr($content, $end + 11, 11) === '{{^events}}') {
+				// Reset the end to the end position of the else block
+				$end = strpos($content, '{{/events}}', $end + 11);
+			}
+
 			// Render the output while removing the arguments
 			$output = DPCalendarHelper::renderEvents($events, '{{#events}}' . substr($content, $start, $end - $start) . '{{/events}}', $params);
 
@@ -167,9 +169,6 @@ class DPCalendar extends CMSPlugin
 		}
 
 		$component = $app->bootComponent('dpcalendar');
-		if (!$component instanceof DPCalendarComponent) {
-			return '';
-		}
 
 		$buffer = '';
 		$layout = '';
@@ -254,13 +253,8 @@ class DPCalendar extends CMSPlugin
 			return;
 		}
 
-		$component = $app->bootComponent('dpcalendar');
-		if (!$component instanceof DPCalendarComponent) {
-			return;
-		}
-
 		/** @var FormModel $model */
-		$model = $component->getMVCFactory()->createModel('Form', 'Site', ['ignore_request' => true]);
+		$model = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Form', 'Site', ['ignore_request' => true]);
 
 		// Select all events which do belong to the category
 		$query = $this->getDatabase()->getQuery(true);

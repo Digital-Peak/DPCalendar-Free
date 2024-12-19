@@ -12,8 +12,8 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\TicketModel;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\EventTable;
-use League\Pipeline\StageInterface;
 
 class CreateOrUpdateTickets implements StageInterface
 {
@@ -21,7 +21,7 @@ class CreateOrUpdateTickets implements StageInterface
 	{
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Creating the tickets
 		if ($payload->oldItem) {

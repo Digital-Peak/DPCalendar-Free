@@ -406,22 +406,20 @@ class IcalModel extends BaseDatabaseModel
 				$cmp   = $std;
 			}
 
-			if ($cmp !== null) {
-				$dt     = new \DateTime($trans['time']);
-				$offset = $trans['offset'] / 3600;
+			$dt     = new \DateTime($trans['time']);
+			$offset = $trans['offset'] / 3600;
 
-				$cmp->DTSTART      = $dt->format('Ymd\THis');
-				$cmp->TZOFFSETFROM = \sprintf('%+03d%02d', ($tzfrom >= 0 ? '+' : '') . floor($tzfrom), ($tzfrom - floor($tzfrom)) * 60);
-				$cmp->TZOFFSETTO   = \sprintf('%+03d%02d', ($offset >= 0 ? '+' : '') . floor($offset), ($offset - floor($offset)) * 60);
+			$cmp->DTSTART      = $dt->format('Ymd\THis');
+			$cmp->TZOFFSETFROM = \sprintf('%+03d%02d', ($tzfrom >= 0 ? '+' : '') . floor($tzfrom), ($tzfrom - floor($tzfrom)) * 60);
+			$cmp->TZOFFSETTO   = \sprintf('%+03d%02d', ($offset >= 0 ? '+' : '') . floor($offset), ($offset - floor($offset)) * 60);
 
-				// add abbreviated timezone name if available
-				if (!empty($trans['abbr'])) {
-					$cmp->TZNAME = $trans['abbr'];
-				}
-
-				$tzfrom = $offset;
-				$vt->add($cmp);
+			// add abbreviated timezone name if available
+			if (!empty($trans['abbr'])) {
+				$cmp->TZNAME = $trans['abbr'];
 			}
+
+			$tzfrom = $offset;
+			$vt->add($cmp);
 
 			// We covered the entire date range
 			if ($std === null || $dst === null) {

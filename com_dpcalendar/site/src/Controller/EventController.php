@@ -153,7 +153,8 @@ class EventController extends FormController implements CurrentUserInterface
 		}
 
 		if ($event && is_numeric($event->id)) {
-			$this->getModel()->getTable('Event', 'Administrator')->publish([$recordId], -2, $this->getCurrentUser()->id);
+			$recordId = [$recordId];
+			$this->getModel()->getTable('Event', 'Administrator')->publish($recordId, -2, $this->getCurrentUser()->id);
 			if (!$this->getModel('Form')->delete($recordId)) {
 				$this->setMessage(Text::_('JLIB_APPLICATION_ERROR_EDIT_NOT_PERMITTED'), 'error');
 
@@ -208,7 +209,7 @@ class EventController extends FormController implements CurrentUserInterface
 			$this->editCalendar = $event->catid;
 		}
 
-		if ($event !== null && !is_numeric($recordId)) {
+		if (!$event instanceof \stdClass && !is_numeric($recordId)) {
 			$values = (array)$this->app->getUserState($context . '.id');
 
 			$values[] = $recordId;

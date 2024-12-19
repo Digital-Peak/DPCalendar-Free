@@ -9,13 +9,13 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\User\UserHelper;
 use Joomla\Component\Users\Site\Model\RegistrationModel;
 use Joomla\Database\DatabaseInterface;
-use League\Pipeline\StageInterface;
 
 class CreateUser implements StageInterface
 {
@@ -26,7 +26,7 @@ class CreateUser implements StageInterface
 	) {
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		$data = [];
 		// Do not create when state is not active and previous state was active as well

@@ -360,7 +360,8 @@ class DPCalendar extends PDO
 				'Site',
 				['event_before_delete' => 'nooperationtocatch', 'event_after_delete' => 'nooperationtocatch']
 			);
-			$model->delete($event->id);
+			$id = [$event->id];
+			$model->delete($id);
 
 			if ($model->getError()) {
 				throw new BadRequest('Error happened deleting the event: ' . $model->getError());
@@ -388,13 +389,7 @@ class DPCalendar extends PDO
 
 	private function getTable(): EventTable
 	{
-		$table = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createTable('Event', 'Administrator');
-
-		if (!$table instanceof EventTable) {
-			throw new \Exception('Event table class not found');
-		}
-
-		return $table;
+		return $this->app->bootComponent('dpcalendar')->getMVCFactory()->createTable('Event', 'Administrator');
 	}
 
 	private function merge(EventTable $dpEvent, VEvent $vEvent): void
@@ -451,7 +446,7 @@ class DPCalendar extends PDO
 			$locationString = str_replace('\;', ';', $locationString);
 
 			$location = null;
-			if (isset($vEvent->GEO) && $vEvent->GEO->getValue()) {
+			if (property_exists($vEvent, 'GEO') && $vEvent->GEO !== null && $vEvent->GEO->getValue()) {
 				$parts = explode(';', (string)$vEvent->GEO->getValue());
 				if (\count($parts) == 2) {
 					$model = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);

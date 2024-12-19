@@ -245,12 +245,12 @@ class DPCalendarHelper
 		if ($date == null) {
 			$errors = \DateTime::getLastErrors();
 			if ($errors) {
-				throw new \Exception('Could not interprete format: ' . ($dateFormat . ($allDay ? '' : ' ' . $timeFormat)) .
+				throw new \Exception('Could not interpret format: ' . ($dateFormat . ($allDay ? '' : ' ' . $timeFormat)) .
 					' for date string : ' . $string . PHP_EOL .
 					'Error was: ' . implode(',', $errors['warnings']) . ' ' . implode(',', $errors['errors']));
 			}
 
-			throw new \Exception('Could not interprete format: ' . ($dateFormat . ($allDay ? '' : ' ' . $timeFormat)) . ' for date string : ' . $string);
+			throw new \Exception('Could not interpret format: ' . ($dateFormat . ($allDay ? '' : ' ' . $timeFormat)) . ' for date string : ' . $string);
 		}
 
 		return self::getDate($date->format('U'), $allDay);
@@ -585,7 +585,7 @@ class DPCalendarHelper
 		$jomsocial = JPATH_ROOT . '/components/com_community/libraries/core.php';
 		$easy      = JPATH_ADMINISTRATOR . '/components/com_easysocial/includes/foundry.php';
 		if ((($avatarProvider == 1 && !file_exists($jomsocial)) || $avatarProvider == 4) && file_exists($cbLoader)) {
-			include_once $cbLoader;
+			require_once $cbLoader;
 			// @phpstan-ignore-next-line
 			$cbUser = \CBuser::getInstance($userId);
 			if ($cbUser !== null) {
@@ -1025,7 +1025,7 @@ class DPCalendarHelper
 		$url_replace = '$1$4$7$10$13<a href="$2$5$8$11$14">$2$5$8$11$14</a>$3$6$9$12';
 
 		$string = preg_replace($url_pattern, $url_replace, $text);
-		return $string !== '' && $string !== '0' && $string !== [] && $string !== null ? $string : '';
+		return $string !== '' && $string !== '0' && $string !== null ? $string : '';
 	}
 
 	public static function linkifyHtmlCallback(array $matches): string
@@ -1049,7 +1049,7 @@ class DPCalendarHelper
 			}
 		}
 
-		return $buffer !== '' && $buffer !== '0' && $buffer !== [] && $buffer !== null ? $buffer : '';
+		return $buffer !== '' && $buffer !== '0' && $buffer !== null ? $buffer : '';
 	}
 
 	public static function increaseMemoryLimit(int $limit): bool

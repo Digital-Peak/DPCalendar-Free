@@ -320,6 +320,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 		try {
 			// Read the data from the file
 			$data = require $fileName;
+			// @phpstan-ignore-next-line
 		} catch (\Throwable|\Exception) {
 			return null;
 		}

@@ -46,7 +46,7 @@ class DpradioField extends FormField
 
 			$name   = preg_replace('/[^a-zA-Z0-9_\-]/', '_', $this->fieldname);
 			$html[] = '<label for="' . $this->id . $i . '"' . $class . '>' .
-				Text::alt($option->text, $name !== '' && $name !== '0' && $name !== [] && $name !== null ? $name : '') . '</label>';
+				Text::alt($option->text, $name !== '' && $name !== '0' && $name !== null ? $name : '') . '</label>';
 		}
 
 		// End the radio field output.

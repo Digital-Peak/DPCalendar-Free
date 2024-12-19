@@ -24,7 +24,10 @@ class RawView extends BaseView
 
 	public function display($tpl = null): void
 	{
-		$this->setModel(Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Events', 'Site'), true);
+		$this->setModel(
+			Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Events', 'Site', ['name' => 'calendar']),
+			true
+		);
 
 		parent::display($tpl);
 	}

@@ -9,12 +9,12 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
-use League\Pipeline\StageInterface;
 
 class AdjustCustomFields implements StageInterface
 {
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		if (empty($payload->item) || empty($payload->eventsWithTickets)) {
 			return $payload;

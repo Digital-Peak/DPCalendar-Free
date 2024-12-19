@@ -83,7 +83,7 @@ class EventsModel extends ListModel
 			}
 
 			$calendar = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($catId);
-			if (!$calendar instanceof ExternalCalendarInterface || (is_numeric($catId) && $catId !== 'root')) {
+			if (!$calendar instanceof ExternalCalendarInterface) {
 				continue;
 			}
 

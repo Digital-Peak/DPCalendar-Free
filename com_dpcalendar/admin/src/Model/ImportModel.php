@@ -205,9 +205,10 @@ class ImportModel extends BaseDatabaseModel
 			}
 
 			// Filename contains the first part of the IP
-			$fileName = current(explode('.', long2ip((int)$data[0]) ?: '')) . '.php';
+			$ip       = long2ip((int)$data[0]);
+			$fileName = ($ip === '' || $ip === '0' || $ip === false ? 'undefined' : current(explode('.', $ip))) . '.php';
 
-			// Teh files array with the IP data file names
+			// The files array with the IP data file names
 			$files[$fileName] = $geoDBDirectory . '/' . $fileName;
 
 			// The buffer which contains the PHP code for the data array

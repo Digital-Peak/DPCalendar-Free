@@ -11,8 +11,8 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Model\CountryModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\GeoModel;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\Utilities\ArrayHelper;
-use League\Pipeline\StageInterface;
 
 class FetchLocationData implements StageInterface
 {
@@ -20,7 +20,7 @@ class FetchLocationData implements StageInterface
 	{
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Convert the country id to string
 		$locationData = ArrayHelper::toObject($payload->data);

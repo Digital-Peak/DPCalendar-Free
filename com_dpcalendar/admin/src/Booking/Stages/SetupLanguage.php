@@ -9,13 +9,13 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Language\Language;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\User\UserFactoryInterface;
-use League\Pipeline\StageInterface;
 
 class SetupLanguage implements StageInterface, UserFactoryAwareInterface
 {
@@ -26,7 +26,7 @@ class SetupLanguage implements StageInterface, UserFactoryAwareInterface
 		$this->setUserFactory($factory);
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		$payload->language = $this->application->getLanguage();
 

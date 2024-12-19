@@ -11,7 +11,6 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Plugin;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendar;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendarInterface;
-use DigitalPeak\Component\DPCalendar\Administrator\Extension\DPCalendarComponent;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\ExtcalendarTable;
 use Joomla\CMS\Application\CMSApplicationInterface;
@@ -74,9 +73,6 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 		}
 
 		$component = $app->bootComponent('dpcalendar');
-		if (!$component instanceof DPCalendarComponent) {
-			return;
-		}
 
 		$calendarId = str_replace($this->identifier . '-', '', $calendar->getId());
 		$db         = $this->getDatabase();
@@ -183,7 +179,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 				}
 
 				$event->id           = $table->id;
-				$event->publish_down = null;
+				$event->publish_down = '';
 
 				$event->location_ids = [];
 				foreach ($event->locations as $location) {
@@ -239,7 +235,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 		}
 
 		// If only a specific plugins needs to be synced return
-		if ($plugin && str_replace('dpcalendar_', '', $this->_name) != $plugin) {
+		if ($plugin && str_replace('dpcalendar_', '', $this->_name) !== $plugin) {
 			return;
 		}
 

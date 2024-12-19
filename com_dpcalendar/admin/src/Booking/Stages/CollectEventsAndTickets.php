@@ -12,9 +12,9 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\BookingModel;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Language\Text;
-use League\Pipeline\StageInterface;
 
 class CollectEventsAndTickets implements StageInterface
 {
@@ -22,7 +22,7 @@ class CollectEventsAndTickets implements StageInterface
 	{
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		if ($payload->oldItem) {
 			$payload->tickets = $payload->oldItem->tickets;

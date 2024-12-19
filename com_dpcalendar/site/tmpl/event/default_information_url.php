@@ -18,8 +18,8 @@ if (!$this->event->url || !$this->params->get('event_show_url', '1')) {
 	<dd class="dp-description__description">
 		<?php $u = Uri::getInstance($this->event->url); ?>
 		<a href="<?php echo $this->event->url; ?>" class="dp-link"
-		   target="<?php echo $u->getHost() && Uri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
-			<?php echo $this->event->url; ?>
+			target="<?php echo $u->getHost() && Uri::getInstance()->getHost() != $u->getHost() ? '_blank' : ''; ?>">
+			<?php echo $u->toString(['host', 'port', 'path', 'query', 'fragment']); ?>
 		</a>
 	</dd>
 </dl>

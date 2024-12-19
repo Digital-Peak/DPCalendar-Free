@@ -352,7 +352,7 @@ class LocationModel extends AdminModel
 		$success = parent::delete($pks);
 		if ($success) {
 			// Delete associations
-			$pks = ArrayHelper::toInteger((array)$pks);
+			$pks = ArrayHelper::toInteger($pks);
 			$this->getDatabase()->setQuery('delete from #__dpcalendar_events_location where location_id in (' . implode(',', $pks) . ')');
 			$this->getDatabase()->execute();
 		}

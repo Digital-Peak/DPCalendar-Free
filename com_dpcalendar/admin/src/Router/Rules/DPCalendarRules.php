@@ -29,7 +29,7 @@ class DPCalendarRules extends MenuRules
 		}
 
 		// When tickets or bookings should be shown as part of the event details menu item view
-		if ((is_countable($segments) ? \count($segments) : 0) === 1 && \in_array($segments[0], ['tickets', 'bookings'])) {
+		if (\count($segments) === 1 && \in_array($segments[0], ['tickets', 'bookings'])) {
 			$vars['view'] = $segments[0];
 			unset($segments[0]);
 

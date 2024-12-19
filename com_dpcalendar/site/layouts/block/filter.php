@@ -25,7 +25,7 @@ use Joomla\Registry\Registry;
  */
 extract($displayData);
 
-$hidden_calendars = !empty($hidden_calendars) ? array_map(fn($c) => (int)$c->getId(), $hidden_calendars) : [-2];
+$hidden_calendars = empty($hidden_calendars) ? [-2] : array_map(fn($c): int => (int)$c->getId(), $hidden_calendars);
 ?>
 <div class="dp-filter<?php echo $params->get('form_state', 1) == 2 ? '' : ' dp-filter_hidden'; ?>">
 	<?php if (count($calendars ?: []) >= 10) { ?>

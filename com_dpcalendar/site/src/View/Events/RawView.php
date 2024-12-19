@@ -89,7 +89,7 @@ class RawView extends BaseView
 		}
 
 		// Set the calendars
-		$model->setState('filter.calendars', array_filter($this->state->get('filter.calendars', []), fn ($c) => !empty($c) && $c !== -2));
+		$model->setState('filter.calendars', array_filter($this->state->get('filter.calendars', []), fn ($c): bool => !empty($c) && $c !== -2));
 		$model->setState('category.id', $this->state->get('filter.calendars', []));
 
 		if ($location = $model->getState('filter.location')) {

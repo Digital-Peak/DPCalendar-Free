@@ -10,6 +10,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
 use Joomla\CMS\Mail\Mail;
@@ -17,7 +18,6 @@ use Joomla\CMS\Mail\MailerInterface;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\User\UserFactoryInterface;
-use League\Pipeline\StageInterface;
 
 class SendWaitingListMail implements StageInterface, UserFactoryAwareInterface
 {
@@ -28,7 +28,7 @@ class SendWaitingListMail implements StageInterface, UserFactoryAwareInterface
 		$this->setUserFactory($factory);
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Never send a mail when we have been on the waiting list before
 		if ($payload->oldItem && $payload->oldItem->state == 8) {

@@ -172,6 +172,13 @@ $files = [
 '/media/com_dpcalendar/js/modules/block/loader.min.js',
 '/media/com_dpcalendar/js/vendor/popperjs/core/index.min.js',
 '/media/mod_dpcalendar/upcoming/js/modules/block',
+
+// From v10.1.0 to case 11304
+'/administrator/components/com_dpcalendar/vendor/doctrine/deprecations/lib',
+'/administrator/components/com_dpcalendar/vendor/league',
+'/plugins/dpcalendar/spreadsheet/vendor/phpoffice/phpspreadsheet/.readthedocs.yaml',
+'/plugins/dpcalendar/spreadsheet/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Style/ColorMap.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/scripts/ha_NE.php',
 ];
 
 foreach ($files as $file) {

@@ -11,12 +11,12 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Mail\Mail;
 use Joomla\CMS\Mail\MailerInterface;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\User\UserFactoryInterface;
-use League\Pipeline\StageInterface;
 
 class SendPaidBookingMail implements StageInterface, UserFactoryAwareInterface
 {
@@ -27,7 +27,7 @@ class SendPaidBookingMail implements StageInterface, UserFactoryAwareInterface
 		$this->setUserFactory($factory);
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Never send when disabled, is new booking or has no price
 		if (!$payload->mailParams->get('booking_send_mail_paid', 2) || !$payload->oldItem || !$payload->item->price) {

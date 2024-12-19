@@ -12,11 +12,11 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DateHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\Registry\Registry;
-use League\Pipeline\StageInterface;
 
 class SetupForMail implements StageInterface
 {
@@ -24,7 +24,7 @@ class SetupForMail implements StageInterface
 	{
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		$this->application->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 

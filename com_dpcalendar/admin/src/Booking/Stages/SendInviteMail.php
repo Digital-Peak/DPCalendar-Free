@@ -10,11 +10,11 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
 use Joomla\CMS\Mail\Mail;
 use Joomla\CMS\Mail\MailerInterface;
-use League\Pipeline\StageInterface;
 
 class SendInviteMail implements StageInterface
 {
@@ -22,7 +22,7 @@ class SendInviteMail implements StageInterface
 	{
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Never send a mail when we have been invited before
 		if ($payload->oldItem && $payload->oldItem->state == 5) {

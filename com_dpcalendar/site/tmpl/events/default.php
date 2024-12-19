@@ -84,7 +84,7 @@ foreach ($this->items as $event) {
 		'id'              => $event->id,
 		'title'           => $this->compactMode ? ' ' : htmlspecialchars_decode((string)$event->title),
 		'start'           => $this->dateHelper->getDate($event->start_date, $event->all_day)->format($format, true),
-		'editable'        => $calendar->canEdit() || ($calendar->canEditOwn() && $event->created_by == $this->user->id),
+		'editable'        => $calendar && ($calendar->canEdit() || ($calendar->canEditOwn() && $event->created_by == $this->user->id)),
 		'backgroundColor' => '#' . $event->color,
 		'borderColor'     => '#' . $event->color,
 		'textColor'       => $fgcolor,

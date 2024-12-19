@@ -90,6 +90,17 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		// Use the options from the event
 		$this->params->merge($event->params);
 
+		// Check if it is an external url
+		if ($event->url && preg_match(
+			'/^(http(s)?:\/\/)?(www.)?([a-zA-Z0-9])+([\-\.]{1}[a-zA-Z0-9]+)*\.[a-zA-Z]{2,5}(:[0-9]{1,5})?(\/[^\s]*)?$/m',
+			$event->url,
+			$matches
+		)) {
+			// Add scheme when required
+			$event->url = str_starts_with($event->url, 'http') ? $event->url : 'https://' . $event->url;
+		}
+
+		// Redirect to event url when option is configured
 		if ($this->params->get('event_redirect_to_url', 0) && $event->url) {
 			$this->app->redirect($event->url);
 		}
@@ -179,7 +190,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 
 			if (file_exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php')) {
 				// Set the community builder username as content
-				include_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php';
+				require_once JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php';
 				// @phpstan-ignore-next-line
 				$cbUser = \CBuser::getInstance($event->created_by);
 				if ($cbUser) {

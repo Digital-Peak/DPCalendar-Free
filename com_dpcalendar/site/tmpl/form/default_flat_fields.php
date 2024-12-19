@@ -14,7 +14,7 @@ DPCalendarHelper::sortFields($fields, $this->params->get('event_form_fields_orde
 ?>
 <div class="com-dpcalendar-eventform__flat-fields">
 	<?php foreach ($fields as $field) { ?>
-		<?php echo $field->renderField(['class' => \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::getFieldName($field, true)]); ?>
+		<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 		<?php if ($field->fieldname === (in_array('rooms', $this->params->get('event_form_hidden_fields', [])) ? 'location_ids' : 'rooms')
 			&& !in_array('location_ids', $this->params->get('event_form_hidden_fields', []))
 			&& !in_array('location', $this->params->get('event_form_hidden_tabs', []))) { ?>

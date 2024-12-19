@@ -205,6 +205,7 @@ trait ExportTrait
 	private function getData(string $name, callable $valueParser, array $items): array
 	{
 		$app = $this->getApplication();
+		// @phpstan-ignore-next-line
 		if (!$app instanceof CMSApplicationInterface) {
 			return [];
 		}

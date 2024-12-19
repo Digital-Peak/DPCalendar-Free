@@ -11,6 +11,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
@@ -19,7 +20,6 @@ use Joomla\CMS\Mail\MailerInterface;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\User\UserFactoryInterface;
-use League\Pipeline\StageInterface;
 
 class SendNewBookingMail implements StageInterface, UserFactoryAwareInterface
 {
@@ -30,7 +30,7 @@ class SendNewBookingMail implements StageInterface, UserFactoryAwareInterface
 		$this->setUserFactory($factory);
 	}
 
-	public function __invoke($payload)
+	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Never send when disabled
 		if (!$payload->mailParams->get('booking_send_mail_new', 2)) {

@@ -183,7 +183,7 @@ class EventsModel extends ListModel
 		foreach ($items as $item) {
 			// Add the locations
 			$item->locations = [];
-			if (!empty($item->location_ids) && $item->locations === []) {
+			if (!empty($item->location_ids)) {
 				$model->setState('filter.search', 'ids:' . $item->location_ids);
 				$item->locations = $model->getItems();
 			}

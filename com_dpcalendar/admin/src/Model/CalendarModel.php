@@ -66,9 +66,7 @@ class CalendarModel extends BaseDatabaseModel
 		$params = new Registry($calendar->getParams());
 		$params->set('etag', $params->get('etag', 1) + 1);
 
-		// @phpstan-ignore-next-line
 		$db = $this->getDatabase();
-		// @phpstan-ignore-next-line
 		$db->setQuery('update #__categories set params = ' . $db->quote($params->toString()) . ' where id = ' . $db->quote($calendar->getId()));
 		$db->execute();
 	}

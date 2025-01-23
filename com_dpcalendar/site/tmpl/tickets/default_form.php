@@ -15,6 +15,7 @@ foreach (['Itemid', 'e_id', 'b_id'] as $key) {
 }
 
 $this->params->set('form_state', 2);
+$this->params->set('hidden_fields', $this->params->get('tickets_filter_form_hidden_fields', []));
 
 $this->displayData['calendars'] = [];
 $this->displayData['buttons']   = $this->afterButtonEventOutput;

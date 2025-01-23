@@ -446,9 +446,9 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 	/**
 	 * Dummy placeholder for plugins which do not support event editing.
 	 */
-	public function saveEvent(string $eventId, string $calendarId, array $data): bool
+	public function saveEvent(string $eventId, string $calendarId, array $data): string
 	{
-		return false;
+		return '';
 	}
 
 	/**
@@ -573,39 +573,39 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 	 * This function is dependant when a calendar has canEdit or
 	 * canCreate set to true.
 	 */
-	public function onEventSave(array $data): bool
+	public function onEventSave(array $data): string
 	{
 		if (!str_starts_with((string)$data['catid'], $this->identifier . '-')) {
-			return false;
+			return '';
 		}
 
 		$app = $this->getApplication();
 		if (!$app instanceof CMSApplicationInterface) {
-			return false;
+			return '';
 		}
 
 		$calendarId = str_replace($this->identifier . '-', '', (string)$data['catid']);
 
 		$calendar = $this->getDbCal($calendarId);
 		if (!$calendar instanceof ExternalCalendarInterface) {
-			return false;
+			return '';
 		}
 
 		if ((!isset($data['id']) || empty($data['id'])) && !$calendar->canCreate()) {
 			// No create permission
 			$app->enqueueMessage(Text::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), 'error');
 
-			return false;
+			return '';
 		}
 
 		if (isset($data['id']) && $data['id'] && !$calendar->canEdit()) {
 			// No edit permission
 			$app->enqueueMessage(Text::_('JLIB_APPLICATION_ERROR_SAVE_NOT_PERMITTED'), 'error');
 
-			return false;
+			return '';
 		}
 
-		$newEventId = false;
+		$newEventId = '';
 		if (!isset($data['id']) || empty($data['id'])) {
 			$newEventId = $this->saveEvent('', $calendarId, $data);
 		} else {
@@ -613,12 +613,13 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			$eventId = str_replace($this->identifier . ':', $this->identifier . '-', (string)$eventId);
 			$id      = explode('-', str_replace($this->identifier . '-', '', $eventId), 2);
 			if (\count($id) < 2) {
-				return false;
+				return '';
 			}
 
 			$newEventId = $this->saveEvent($id[1], $id[0], $data);
 		}
-		if ($newEventId != false) {
+
+		if ($newEventId !== '') {
 			/** @var CallbackController $cache */
 			$cache = $this->getCacheControllerFactory()->createCacheController('callback', ['defaultgroup' => 'plg_' . $this->_type . '_' . $this->_name]);
 			$cache->clean();

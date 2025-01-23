@@ -85,8 +85,8 @@
 			<field name="map_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
 				layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,state,access,language,limit,fullordering"
 				showon="list_filter_form:1[OR]list_filter_form:2"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 			<field name="map_filter_form_location_autocomplete" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
@@ -145,6 +145,7 @@
 				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_EXPAND</option>
 			</field>
 			<field name="event_show_bookings" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL"

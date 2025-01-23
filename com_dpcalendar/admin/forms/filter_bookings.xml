@@ -2,9 +2,8 @@
 <form>
 	<fields name="filter" addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field"
 		addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
-		<field name="search" type="text" class="dp-input" label="" description="" hint="JSEARCH_FILTER"/>
-		<field name="state" type="list" class="dp-input" label="COM_CONTENT_FILTER_PUBLISHED"
-		    description="COM_CONTENT_FILTER_PUBLISHED_DESC">
+		<field name="search" type="text" class="dp-input" label="JSEARCH_FILTER" description="" hint="JSEARCH_FILTER"/>
+		<field name="state" type="list" class="dp-input" label="JSTATUS">
 			<option value="">JOPTION_SELECT_PUBLISHED</option>
 			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
 			<option value="1">COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED</option>
@@ -18,7 +17,7 @@
 			<option value="-2">JTRASHED</option>
 		</field>
 		<field name="created_by" type="dpauthor" class="dp-select" table_name="dpcalendar_bookings" author_field="user_id"
-			label="COM_CONTENT_FILTER_AUTHOR" description="COM_CONTENT_FILTER_AUTHOR_DESC">
+			label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL">
 			<option value="">JOPTION_SELECT_AUTHOR</option>
 		</field>
 		<field name="event_id" type="event"

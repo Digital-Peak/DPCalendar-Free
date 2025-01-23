@@ -21,6 +21,10 @@
 					</field>
 				</form>
 			</field>
+			<field name="bookings_filter_form_hidden_fields" type="dpcfields" section="filter_bookings" multiple="true"
+				layout="joomla.form.field.list-fancy-select" hide="event_id,limit,fullordering"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 			<field name="bookings_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 			    label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 			<field name="bookings_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
@@ -65,6 +69,7 @@
 				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKING_FORM_EXPAND</option>
 			</field>
 			<field name="event_show_bookings" type="list" useglobal="true"
 			    label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_BOOKINGS_DESC">

@@ -746,7 +746,8 @@ class EventsModel extends ListModel
 
 		parent::populateState($ordering, $direction);
 
-		if ($calendars = $this->getUserStateFromRequest($this->context . '.filter.calendars', 'filter_calendars')) {
+		$calendars = (array)$this->getUserStateFromRequest($this->context . '.filter.calendars', 'filter_calendars');
+		if ($calendars !== []) {
 			$this->setState('filter.calendars', array_filter($calendars, static fn ($c): bool => !empty($c)));
 		}
 	}

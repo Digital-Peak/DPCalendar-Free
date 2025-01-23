@@ -68,7 +68,7 @@
 		</field>
 		<field name="tags" type="tag" mode="nested" multiple="true" custom="false" class="dp-select"
 			label="JTAG"/>
-		<field name="created_by" type="dpauthor"  class="dp-select dp-select_plain" table_name="dpcalendar_events"
+		<field name="created_by" type="dpauthor" class="dp-select dp-select_plain" table_name="dpcalendar_events"
 			label="COM_DPCALENDAR_FIELD_AUTHOR_LABEL" >
 			<option value="">JOPTION_SELECT_AUTHOR</option>
 		</field>

@@ -209,7 +209,7 @@ class EventController extends FormController implements CurrentUserInterface
 			$this->editCalendar = $event->catid;
 		}
 
-		if (!$event instanceof \stdClass && !is_numeric($recordId)) {
+		if ($event instanceof \stdClass && !is_numeric($recordId)) {
 			$values = (array)$this->app->getUserState($context . '.id');
 
 			$values[] = $recordId;
@@ -336,7 +336,7 @@ class EventController extends FormController implements CurrentUserInterface
 			}
 			$tmp = $this->app->triggerEvent('onEventSave', [$data]);
 			foreach ($tmp as $newEventId) {
-				if ($newEventId === false) {
+				if ($newEventId === '') {
 					continue;
 				}
 
@@ -508,6 +508,11 @@ class EventController extends FormController implements CurrentUserInterface
 			PluginHelper::importPlugin('dpcalendar');
 			$data['id'] = $this->input->getString($urlVar, '');
 
+			// Unset the uid when empty so it will correctly be created for a new event
+			if ($data['uid'] === '0') {
+				unset($data['uid']);
+			}
+
 			$this->app->setUserState('com_dpcalendar.edit.event.data', $data);
 
 			$model     = $this->getModel('Form');
@@ -549,7 +554,7 @@ class EventController extends FormController implements CurrentUserInterface
 			$this->setMessage(Text::_('COM_DPCALENDAR_SAVE_SUCCESS'));
 
 			foreach ($tmp as $newEventId) {
-				if ($newEventId === false) {
+				if ($newEventId === '') {
 					continue;
 				}
 

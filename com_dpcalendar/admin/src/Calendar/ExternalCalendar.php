@@ -8,6 +8,7 @@
 namespace DigitalPeak\Component\DPCalendar\Administrator\Calendar;
 
 use Joomla\CMS\User\User;
+use Joomla\Registry\Registry;
 
 class ExternalCalendar extends Calendar implements ExternalCalendarInterface
 {
@@ -24,9 +25,8 @@ class ExternalCalendar extends Calendar implements ExternalCalendarInterface
 	{
 		parent::__construct($id, $title, $user);
 
-		$this->setCanCreate($this->canCreate() && (bool)$this->getParams()->get('action-create', 'false'));
-		$this->setCanEdit($this->canEdit() && (bool)$this->getParams()->get('action-edit', 'false'));
-		$this->setCanDelete($this->canDelete() && (bool)$this->getParams()->get('action-delete', 'false'));
+		$this->setCanBook(false);
+		$this->setCanEditOwn(false);
 	}
 
 	public function getPluginName(): string
@@ -91,5 +91,14 @@ class ExternalCalendar extends Calendar implements ExternalCalendarInterface
 	public function setForceColor(bool $forceColor): void
 	{
 		$this->forceColor = $forceColor;
+	}
+
+	public function setParams(Registry $params): void
+	{
+		parent::setParams($params);
+
+		$this->setCanCreate($this->canCreate() && (bool)$this->getParams()->get('action-create', false));
+		$this->setCanEdit($this->canEdit() && (bool)$this->getParams()->get('action-edit', false));
+		$this->setCanDelete($this->canDelete() && (bool)$this->getParams()->get('action-delete', false));
 	}
 }

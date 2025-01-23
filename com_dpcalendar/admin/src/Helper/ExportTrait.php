@@ -160,7 +160,7 @@ trait ExportTrait
 
 					return $prices->{'prices' . $ticket->type}->label;
 				case 'country':
-					return $ticket->country_code_value;
+					return $ticket->country_code_value ?? '';
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
 				case 'user_id':

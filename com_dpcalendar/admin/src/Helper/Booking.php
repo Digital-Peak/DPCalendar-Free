@@ -226,7 +226,7 @@ class Booking
 
 	public static function paymentRequired(\stdClass $event): bool
 	{
-		return $event->prices != '0.00' && !empty($event->prices);
+		return !empty($event->prices) || !empty($event->booking_options);
 	}
 
 	public static function openForCancel(\stdClass $booking, array $states = [1, 4, 8]): bool

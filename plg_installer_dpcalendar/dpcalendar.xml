@@ -2,12 +2,12 @@
 <extension type="plugin" group="installer" method="upgrade">
 	<name>plg_installer_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>2024-12-19</creationDate>
+	<creationDate>2025-01-23</creationDate>
 	<copyright>(C) 2022 Digital Peak GmbH</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>10.1.1</version>
+	<version>10.1.2</version>
 	<description>PLG_INSTALLER_DPCALENDAR_XML_DESCRIPTION</description>
 	<namespace path="src">DigitalPeak\Plugin\Installer\DPCalendar</namespace>
 	<files>

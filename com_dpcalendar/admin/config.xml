@@ -386,8 +386,8 @@
 		<field name="map_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
 			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,state,access,language,limit,fullordering"
 			showon="list_filter_form:1[OR]list_filter_form:2"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 		<field name="map_filter_form_location_autocomplete" type="radio" default="1" class="btn-group"
 			label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
@@ -440,8 +440,8 @@
 		<field name="list_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
 			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,state,access,language,limit,fullordering"
 			showon="list_filter_form:1[OR]list_filter_form:2"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 		<field name="list_show_hits" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_DESC">
 			<option value="0">JNO</option>
@@ -838,6 +838,10 @@
 				</field>
 			</form>
 		</field>
+		<field name="bookings_filter_form_hidden_fields" type="dpcfields" section="filter_bookings" multiple="true"
+			layout="joomla.form.field.list-fancy-select" hide="event_id,limit,fullordering"
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 		<field name="bookings_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="bookings_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
@@ -988,6 +992,10 @@
 				</field>
 			</form>
 		</field>
+		<field name="tickets_filter_form_hidden_fields" type="dpcfields" section="filter_tickets" multiple="true"
+			layout="joomla.form.field.list-fancy-select" hide="event_id,limit,fullordering"
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 		<field name="tickets_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="tickets_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"

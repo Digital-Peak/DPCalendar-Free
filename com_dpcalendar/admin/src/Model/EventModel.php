@@ -29,6 +29,7 @@ use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\User\User;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
+use Joomla\CMS\Versioning\VersionableModelTrait;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
@@ -37,6 +38,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 {
 	use MailerFactoryAwareTrait;
 	use UserFactoryAwareTrait;
+	use VersionableModelTrait;
 
 	public $typeAlias      = 'com_dpcalendar.event';
 	protected $text_prefix = 'COM_DPCALENDAR';

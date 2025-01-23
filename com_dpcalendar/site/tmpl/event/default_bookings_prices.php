@@ -12,7 +12,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 ?>
 <div class="dp-booking-info__prices">
 	<?php foreach ($this->event->prices as $price) { ?>
-		<?php $discounted = Booking::getPriceWithDiscount($price->value, $this->event); ?>
+		<?php $discounted = Booking::getPriceWithDiscount((float)$price->value, $this->event); ?>
 		<dl class="dp-description dp-booking-info__price">
 			<dt class="dp-description__label">
 				<?php echo $price->label ?: $this->translate('COM_DPCALENDAR_FIELD_PRICES_LABEL'); ?>

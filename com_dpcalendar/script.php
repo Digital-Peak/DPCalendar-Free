@@ -156,7 +156,7 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 					]
 				];
 
-				$params = json_decode($plugin->params);
+				$params = json_decode((string)$plugin->params);
 				if (!empty($params->export_events_fields_hide)) {
 					foreach ($data['export_events_fields'] as $key => $field) {
 						if (\in_array($field['field'], $params->export_events_fields_hide)) {

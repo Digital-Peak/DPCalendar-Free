@@ -20,11 +20,13 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\User\CurrentUserInterface;
 use Joomla\CMS\User\CurrentUserTrait;
+use Joomla\CMS\Versioning\VersionableControllerTrait;
 use Joomla\Utilities\ArrayHelper;
 
 class EventController extends FormController implements CurrentUserInterface
 {
 	use CurrentUserTrait;
+	use VersionableControllerTrait;
 
 	protected string $urlVar = 'e_id';
 
@@ -127,7 +129,7 @@ class EventController extends FormController implements CurrentUserInterface
 			$validData = $model->validate($form, $data);
 
 			if (!\is_array($validData)) {
-				throw new \Exception('Data coulöd npt be validated');
+				throw new \Exception('Data could not be validated');
 			}
 
 			if ($validData['all_day'] == 1) {
@@ -137,7 +139,7 @@ class EventController extends FormController implements CurrentUserInterface
 
 			$tmp = $this->app->triggerEvent('onEventSave', [$validData]);
 			foreach ($tmp as $newEventId) {
-				if ($newEventId === false) {
+				if ($newEventId === '') {
 					continue;
 				}
 

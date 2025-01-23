@@ -110,20 +110,25 @@ class HtmlView extends BaseView
 			ToolbarHelper::apply('event.apply');
 			ToolbarHelper::save('event.save');
 		}
+
 		if (!$checkedOut && $cats) {
 			ToolbarHelper::save2new('event.save2new');
 		}
+
 		if (!$isNew && $cats) {
 			ToolbarHelper::save2copy('event.save2copy');
 		}
-		if ($this->params->get('save_history', 1) && $this->user->authorise('core.edit')) {
+
+		if ($this->params->get('save_history', 0) && $this->user->authorise('core.edit')) {
 			ToolbarHelper::versions('com_dpcalendar.event', $this->event->id);
 		}
+
 		if (empty($this->event->id)) {
 			ToolbarHelper::cancel('event.cancel');
 		} else {
 			ToolbarHelper::cancel('event.cancel', 'JTOOLBAR_CLOSE');
 		}
+
 		parent::addToolbar();
 	}
 }

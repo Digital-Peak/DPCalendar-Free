@@ -108,7 +108,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 				</tbody>
 				<?php if ($instance->booking_options) { ?>
 					<tbody class="dp-table__thead">
-					<tr class="dp-ticket">
+					<tr class="dp-option">
 						<th class="dp-ticket__title"><?php echo $this->translate('COM_DPCALENDAR_OPTION'); ?></th>
 						<th class="dp-ticket__price dp-table__cell dp-table__cell_center"><?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICES_PRICE_LABEL'); ?></th>
 						<th class="dp-ticket__amount"><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL'); ?></th>

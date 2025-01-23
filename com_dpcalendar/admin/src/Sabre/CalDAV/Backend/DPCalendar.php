@@ -10,7 +10,6 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Sabre\CalDAV\Backend;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\InternalCalendar;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Ical;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\EventTable;
 use Joomla\CMS\Application\ApplicationHelper;
 use Joomla\CMS\Application\CMSApplicationInterface;
@@ -392,7 +391,7 @@ class DPCalendar extends PDO
 		return $this->app->bootComponent('dpcalendar')->getMVCFactory()->createTable('Event', 'Administrator');
 	}
 
-	private function merge(EventTable $dpEvent, VEvent $vEvent): void
+	private function merge(\stdClass $dpEvent, VEvent $vEvent): void
 	{
 		if (!$vEvent->DTSTART instanceof DateTime) {
 			return;

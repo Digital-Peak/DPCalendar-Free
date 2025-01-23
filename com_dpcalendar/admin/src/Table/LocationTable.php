@@ -15,10 +15,9 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Tag\TaggableTableInterface;
 use Joomla\CMS\Tag\TaggableTableTrait;
-use Joomla\CMS\Versioning\VersionableTableInterface;
 use Joomla\Registry\Registry;
 
-class LocationTable extends BasicTable implements TaggableTableInterface, VersionableTableInterface
+class LocationTable extends BasicTable implements TaggableTableInterface
 {
 	use TaggableTableTrait;
 

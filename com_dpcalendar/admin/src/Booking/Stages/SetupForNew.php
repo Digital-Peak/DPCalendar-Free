@@ -185,7 +185,7 @@ class SetupForNew implements StageInterface
 
 		// Determine tax
 		$taxRate = empty($payload->data['country']) ? null : $this->taxRateModel->getItemByCountry($payload->data['country']);
-		if ($taxRate !== null) {
+		if ($taxRate instanceof \stdClass) {
 			$payload->data['tax'] = $taxRate->inclusive ? $payload->data['price'] - ($payload->data['price'] / (1 + ($taxRate->rate / 100))) : ($payload->data['price'] / 100) * $taxRate->rate;
 			$payload->data['price'] += $taxRate->inclusive ? 0 : $payload->data['tax'];
 			$payload->data['tax_rate']      = $taxRate->rate;

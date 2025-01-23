@@ -74,11 +74,11 @@ abstract class CalDAVPlugin extends SyncPlugin
 		return true;
 	}
 
-	public function saveEvent(string $eventId, string $calendarId, array $data): bool
+	public function saveEvent(string $eventId, string $calendarId, array $data): string
 	{
 		$app = $this->getApplication();
 		if (!$app instanceof CMSApplicationInterface) {
-			return false;
+			return '';
 		}
 
 		try {
@@ -212,7 +212,7 @@ abstract class CalDAVPlugin extends SyncPlugin
 		} catch (\Exception $exception) {
 			$app->enqueueMessage($exception->getMessage(), 'warning');
 
-			return false;
+			return '';
 		}
 	}
 }

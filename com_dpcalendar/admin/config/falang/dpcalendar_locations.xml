@@ -2,23 +2,23 @@
 <falang type="contentelement">
   <name>DPCalendar Event</name>
   <author>Digital Peak</author>
-  <version>10.1.1</version>
+  <version>10.1.2</version>
   <description>Definition for the DPCalendar event.</description>
   <copyright>joomla.digital-peak.com</copyright>
   <reference>
   	<table name="dpcalendar_locations">
   		<field type="referenceid" name="id" translate="0">ID</field>
-  		<field type="titletext" name="title"  length="50" maxlength="250" translate="1">Title</field>
-  		<field type="text" name="title"  length="50" maxlength="250" translate="0">Title Alias</field>
-  		<field type="text" name="country"  length="50" maxlength="250" translate="0">Country</field>
-  		<field type="text" name="province"  length="50" maxlength="250" translate="0">Province</field>
-  		<field type="text" name="city"  length="50" maxlength="250" translate="0">City</field>
-  		<field type="text" name="zip"  length="50" maxlength="250" translate="0">Zip</field>
-  		<field type="text" name="street"  length="50" maxlength="250" translate="0">Street</field>
-  		<field type="text" name="number"  length="50" maxlength="250" translate="0">Number</field>
+  		<field type="titletext" name="title" length="50" maxlength="250" translate="1">Title</field>
+  		<field type="text" name="title" length="50" maxlength="250" translate="0">Title Alias</field>
+  		<field type="text" name="country" length="50" maxlength="250" translate="0">Country</field>
+  		<field type="text" name="province" length="50" maxlength="250" translate="0">Province</field>
+  		<field type="text" name="city" length="50" maxlength="250" translate="0">City</field>
+  		<field type="text" name="zip" length="50" maxlength="250" translate="0">Zip</field>
+  		<field type="text" name="street" length="50" maxlength="250" translate="0">Street</field>
+  		<field type="text" name="number" length="50" maxlength="250" translate="0">Number</field>
   		<field type="text" name="rooms" translate="0">Rooms</field>
-  		<field type="text" name="url"  length="50" maxlength="250" translate="0">Url</field>
-  		<field type="text" name="alias"  length="50" maxlength="250" translate="1" posthandler="filterTitle">Alias</field>
+  		<field type="text" name="url" length="50" maxlength="250" translate="0">Url</field>
+  		<field type="text" name="alias" length="50" maxlength="250" translate="1" posthandler="filterTitle">Alias</field>
   		<field type="htmltext" name="description" translate="1">Event Description</field>
   		<field type="created_date" name="created" translate="0">Created</field>
   		<field type="modified_date" name="modified" translate="0">Modified</field>

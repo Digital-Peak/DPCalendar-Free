@@ -12,7 +12,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 $reviewStep = $this->params->get('booking_review_step', 2);
 $counter = 1;
 ?>
-<div class="com-dpcalendar-bookingform__step dp-steps">
+<div class="com-dpcalendar-booking__step dp-steps">
 	<span class="dp-step dp-step-choose">
 		<span class="dp-step__number"><?php echo $counter++; ?></span>
 	</span>

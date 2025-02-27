@@ -115,32 +115,34 @@ class HtmlView extends BaseView
 			$this->form->setValue($key, null, $value);
 		}
 
-		if ($this->event->original_id > '0') {
+		$hiddenFields = $this->params->get('event_form_hidden_fields', []);
+
+		if ($this->event->original_id > '0' || \in_array('scheduling', $hiddenFields)) {
 			// Hide the scheduling fields
-			$this->form->removeField('rrule');
-			$this->form->removeField('exdates');
-			$this->form->removeField('scheduling');
-			$this->form->removeField('scheduling_end_date');
-			$this->form->removeField('scheduling_interval');
-			$this->form->removeField('scheduling_repeat_count');
-			$this->form->removeField('scheduling_daily_weekdays');
-			$this->form->removeField('scheduling_weekly_days');
-			$this->form->removeField('scheduling_monthly_options');
-			$this->form->removeField('scheduling_monthly_week');
-			$this->form->removeField('scheduling_monthly_week_days');
-			$this->form->removeField('scheduling_monthly_days');
+			$hiddenFields[] = 'rrule';
+			$hiddenFields[] = 'exdates';
+			$hiddenFields[] = 'scheduling';
+			$hiddenFields[] = 'scheduling_end_date';
+			$hiddenFields[] = 'scheduling_interval';
+			$hiddenFields[] = 'scheduling_repeat_count';
+			$hiddenFields[] = 'scheduling_daily_weekdays';
+			$hiddenFields[] = 'scheduling_weekly_days';
+			$hiddenFields[] = 'scheduling_monthly_options';
+			$hiddenFields[] = 'scheduling_monthly_week';
+			$hiddenFields[] = 'scheduling_monthly_week_days';
+			$hiddenFields[] = 'scheduling_monthly_days';
 		}
 
 		if (!$this->params->get('save_history', 0)) {
 			// Save is not activated
-			$this->form->removeField('version_note');
+			$hiddenFields[] = 'version_note';
 		}
 
 		if ((!$this->event->id && !$user->authorise('core.edit.state', 'com_dpcalendar'))
 			|| ($this->event->id && !$user->authorise('core.edit.state', 'com_dpcalendar.category.' . $this->event->catid))
 		) {
 			// Changing state is not allowed
-			$this->form->removeField('state');
+			$hiddenFields[] = 'state';
 		}
 
 		foreach ($this->params->get('event_form_hidden_tabs', []) as $tabName) {
@@ -157,15 +159,15 @@ class HtmlView extends BaseView
 			}
 
 			if ($group == 'metadata') {
-				$this->form->removeField('xreference');
+				$hiddenFields[] = 'xreference';
 			}
 
 			foreach ($this->form->getFieldset($name) as $field) {
-				$this->form->removeField(DPCalendarHelper::getFieldName($field), $group);
+				$hiddenFields[] = ($group !== null ? $group . ':' : '') . DPCalendarHelper::getFieldName($field);
 			}
 		}
 
-		foreach ($this->params->get('event_form_hidden_fields', []) as $fieldName) {
+		foreach ($hiddenFields as $fieldName) {
 			if (empty($fieldName)) {
 				continue;
 			}
@@ -177,9 +179,9 @@ class HtmlView extends BaseView
 
 			$parts = explode(':', (string)$fieldName);
 			if (\count($parts) > 1) {
-				$this->form->removeField($parts[1], $parts[0]);
+				$hiddenFields[] = $this->form->removeField($parts[1], $parts[0]);
 			} else {
-				$this->form->removeField($parts[0]);
+				$hiddenFields[] = $this->form->removeField($parts[0]);
 			}
 		}
 

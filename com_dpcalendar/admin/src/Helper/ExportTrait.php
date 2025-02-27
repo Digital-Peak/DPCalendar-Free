@@ -272,7 +272,7 @@ trait ExportTrait
 
 			// Loop over the fields
 			foreach ($fields as $field) {
-				$customField = array_filter($item->jcfields, fn ($f): bool => $f->name === $field->value);
+				$customField = array_filter($item->jcfields ?? [], fn ($f): bool => $f->name === $field->value);
 
 				// Check if it is a custom field
 				if ($customField === []) {

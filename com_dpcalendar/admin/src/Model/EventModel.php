@@ -115,6 +115,12 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 
 		$item = $this->getItem($data['id'] ?? null);
 
+		// Item can be empty on save as copy but catid is needed for calendar permissions
+		// for edit state when global ones are disabled
+		if ($item instanceof \stdClass && empty($item->catid) && !empty($data['catid'])) {
+			$item->catid = $data['catid'];
+		}
+
 		// Modify the form based on access controls.
 		if ($item instanceof \stdClass && !$this->canEditState($item)) {
 			// Disable fields for display.
@@ -490,6 +496,10 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 				// The media field needs the data encoded
 				if ($field->type === 'media' && \is_array($value)) {
 					$value = json_encode($value);
+				}
+
+				if (\is_array($value) ? $value === [] : (string)$value === '') {
+					$value = null;
 				}
 
 				$fieldModel->setFieldValue($field->id, $tmp->id, $value);

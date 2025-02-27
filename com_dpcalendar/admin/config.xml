@@ -970,6 +970,18 @@
 		</field>
 		<field name="booking_form_default_country" type="dpcountries" class="dp-form-input dp-select"
 			label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"/>
+		<field name="booking_form_show_price_description" type="radio" class="btn-group" default="0"
+			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_SHOW_PRICE_DESCRIPTION_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_SHOW_PRICE_DESCRIPTION_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="booking_form_show_option_description" type="radio" class="btn-group" default="0"
+			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_SHOW_OPTION_DESCRIPTION_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_SHOW_OPTION_DESCRIPTION_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="booking_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
@@ -1687,6 +1699,12 @@
 		<field name="receipt_include_tickets" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_RECEIPT_INCLUDE_TICKETS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_RECEIPT_INCLUDE_TICKETS_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="receipt_include_options" type="radio" class="btn-group" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_RECEIPT_INCLUDE_OPTIONS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_RECEIPT_INCLUDE_OPTIONS_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>

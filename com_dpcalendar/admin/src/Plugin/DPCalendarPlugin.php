@@ -903,9 +903,10 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		$tmpEvent->start_date = $startDate->toSql();
 		$tmpEvent->end_date   = $endDate instanceof Date ? $endDate->toSql() : $tmpEvent->start_date;
 
-		$title           = (string)$event->SUMMARY;
-		$title           = str_replace('\n', ' ', $title);
-		$title           = str_replace('\N', ' ', $title);
+		$title = (string)$event->SUMMARY;
+		$title = str_replace('\n', ' ', $title);
+		$title = str_replace('\N', ' ', $title);
+
 		$tmpEvent->title = $this->getDPCalendar()->getMVCFactory()->createModel('Ical', 'Administrator')->icalDecode($title);
 
 		$tmpEvent->alias       = ApplicationHelper::stringURLSafe($tmpEvent->title);
@@ -998,29 +999,40 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		$tmpEvent->images = new \stdClass();
 		$tmpImageData     = (string)$event->{'x-image'};
+		if (str_starts_with($tmpImageData, '{') && $images = json_decode($tmpImageData)) {
+			$tmpEvent->images = $images;
+			$tmpImageData     = '';
+		}
+
 		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_full = $tmpImageData;
 		}
+
 		$tmpImageData = (string)$event->{'x-image-full'};
 		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_full = $tmpImageData;
 		}
+
 		$tmpImageData = (string)$event->{'x-image-full-alt'};
 		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_full_alt = $tmpImageData;
 		}
+
 		$tmpImageData = (string)$event->{'x-image-full-caption'};
 		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_full_caption = $tmpImageData;
 		}
+
 		$tmpImageData = (string)$event->{'x-image-intro'};
 		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_intro = $tmpImageData;
 		}
+
 		$tmpImageData = (string)$event->{'x-image-intro-alt'};
 		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_intro_alt = $tmpImageData;
 		}
+
 		$tmpImageData = (string)$event->{'x-image-intro-caption'};
 		if ($tmpImageData !== '' && $tmpImageData !== '0') {
 			$tmpEvent->images->image_intro_caption = $tmpImageData;

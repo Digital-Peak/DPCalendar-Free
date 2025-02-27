@@ -71,7 +71,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 					<tr class="dp-ticket" data-ticket-price="<?php echo $key; ?>">
 						<td class="dp-ticket__title" <?php echo $this->needsPayment ? '' : 'colspan="2"'; ?>
 							data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET'); ?>">
-							<?php echo $price->label?: '&nbsp;'; ?>
+							<?php echo ($price->label ?: '&nbsp;') . ($this->params->get('booking_form_show_price_description', 0) ? ' ' . $price->description : ''); ?>
 						</td>
 						<?php if ($this->needsPayment) { ?>
 							<td class="dp-ticket__price dp-table__cell dp-table__cell_right"
@@ -120,7 +120,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 						<?php $key = preg_replace('/\D/', '', (string)$key); ?>
 						<tr class="dp-option" data-option-price="<?php echo $key; ?>">
 							<td class="dp-option__title" data-column="<?php echo $this->translate('COM_DPCALENDAR_OPTION'); ?>">
-								<?php echo $option->label; ?>
+								<?php echo $option->label . ($this->params->get('booking_form_show_option_description', 0) ? ' ' . $option->description : '') ; ?>
 							</td>
 							<td class="dp-option__price dp-table__cell dp-table__cell_right" data-column="<?php echo $this->translate('COM_DPCALENDAR_FIELD_PRICES_PRICE_LABEL'); ?>">
 								<?php echo DPCalendarHelper::renderPrice($option->value); ?>

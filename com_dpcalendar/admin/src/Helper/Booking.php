@@ -471,8 +471,7 @@ class Booking
 		$dompdf->setBasePath(JPATH_ROOT);
 		$dompdf->render();
 
-		/** @deprecated when footer exists */
-		if (str_starts_with($details, '<footer') || !str_contains($details, '<footer')) {
+		if (!str_contains($details, '<footer')) {
 			$dompdf->getCanvas()->page_script(static function (int $pageNumber, int $pageCount, Canvas $canvas, FontMetrics $fontMetrics): void {
 				$format = DPCalendarHelper::getComponentParameter('event_date_format', 'd.m.Y')
 					. ' ' . DPCalendarHelper::getComponentParameter('event_time_format', 'H:i');

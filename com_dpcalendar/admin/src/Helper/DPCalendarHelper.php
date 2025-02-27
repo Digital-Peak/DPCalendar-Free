@@ -135,7 +135,8 @@ class DPCalendarHelper
 		$event->images->image_intro_height  = $images->image_intro_height ?? null;
 		$event->images->image_intro_alt     = $images->image_intro_alt ?? null;
 		$event->images->image_intro_caption = $images->image_intro_caption ?? null;
-		$dimensions                         = $event->images->image_intro_width ? ' width="' . $event->images->image_intro_width . '"' : '';
+
+		$dimensions = $event->images->image_intro_width ? ' width="' . $event->images->image_intro_width . '"' : '';
 		$dimensions .= $event->images->image_intro_height ? ' height="' . $event->images->image_intro_height . '"' : '';
 		$event->images->image_intro_dimensions = trim($dimensions);
 
@@ -144,7 +145,8 @@ class DPCalendarHelper
 		$event->images->image_full_height  = $images->image_full_height ?? null;
 		$event->images->image_full_alt     = $images->image_full_alt ?? null;
 		$event->images->image_full_caption = $images->image_full_caption ?? null;
-		$dimensions                        = $event->images->image_full_width ? ' width="' . $event->images->image_full_width . '"' : '';
+
+		$dimensions = $event->images->image_full_width ? ' width="' . $event->images->image_full_width . '"' : '';
 		$dimensions .= $event->images->image_full_height ? ' height="' . $event->images->image_full_height . '"' : '';
 		$event->images->image_full_dimensions = trim($dimensions);
 
@@ -815,7 +817,7 @@ class DPCalendarHelper
 	 */
 	public static function startsWith($haystack, $needle): bool
 	{
-		return (str_starts_with($haystack, $needle));
+		return str_starts_with($haystack, $needle);
 	}
 
 	/**

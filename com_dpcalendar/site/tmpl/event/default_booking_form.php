@@ -13,6 +13,8 @@ if (!$this->params->get('event_show_booking_form')) {
 	return;
 }
 
+$this->app->getInput()->set('set_page_title', false);
+
 $controller = new BookingformController([],$this->app->bootComponent('dpcalendar')->getMVCFactory(), $this->app, $this->app->getInput());
 if (!$controller->canAdd([['event_id' => $this->event->id]])) {
 	return;

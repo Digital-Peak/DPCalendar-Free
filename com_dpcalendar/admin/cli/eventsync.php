@@ -66,8 +66,9 @@ class DPCalendarEventSync extends CliApplication
 		// Run as super admin
 		$user        = new User();
 		$user->guest = 0;
-		$reflection  = new ReflectionClass($user);
-		$property    = $reflection->getProperty('isRoot');
+
+		$reflection = new ReflectionClass($user);
+		$property   = $reflection->getProperty('isRoot');
 		$property->setAccessible(true);
 		$property->setValue($user, true);
 

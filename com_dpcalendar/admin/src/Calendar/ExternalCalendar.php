@@ -97,8 +97,9 @@ class ExternalCalendar extends Calendar implements ExternalCalendarInterface
 	{
 		parent::setParams($params);
 
-		$this->setCanCreate($this->canCreate() && (bool)$this->getParams()->get('action-create', false));
-		$this->setCanEdit($this->canEdit() && (bool)$this->getParams()->get('action-edit', false));
-		$this->setCanDelete($this->canDelete() && (bool)$this->getParams()->get('action-delete', false));
+		// We need to validate as it can also be a string false
+		$this->setCanCreate($this->canCreate() && filter_var($this->getParams()->get('action-create', false), FILTER_VALIDATE_BOOLEAN));
+		$this->setCanEdit($this->canEdit() && filter_var($this->getParams()->get('action-edit', false), FILTER_VALIDATE_BOOLEAN));
+		$this->setCanDelete($this->canDelete() && filter_var($this->getParams()->get('action-delete', false), FILTER_VALIDATE_BOOLEAN));
 	}
 }

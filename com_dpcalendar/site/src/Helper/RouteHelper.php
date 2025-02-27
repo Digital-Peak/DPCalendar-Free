@@ -61,7 +61,9 @@ class RouteHelper
 			$link = 'index.php?option=com_dpcalendar&view=form&e_id=0';
 		}
 
-		$itemId = Factory::getApplication()->getInput()->get('Itemid', null);
+		$input = Factory::getApplication()->getInput();
+
+		$itemId = $input->get('Itemid', null);
 		if (!empty($itemId)) {
 			$link .= '&Itemid=' . $itemId;
 		}
@@ -69,9 +71,15 @@ class RouteHelper
 		if ($append !== null && $append !== '' && $append !== '0') {
 			$link .= '&' . $append;
 		}
-		if (Factory::getApplication()->getInput()->getWord('tmpl')) {
-			$link .= '&tmpl=' . Factory::getApplication()->getInput()->getWord('tmpl');
+
+		if ($tmpl = $input->getWord('tmpl')) {
+			$link .= '&tmpl=' . $tmpl;
 		}
+
+		if ($request = $input->getInt('ignore_request')) {
+			$link .= '&ignore_request=' . $request;
+		}
+
 		if ($return !== null && $return !== '' && $return !== '0') {
 			$link .= '&return=' . base64_encode($return);
 		}

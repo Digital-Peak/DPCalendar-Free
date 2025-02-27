@@ -23,36 +23,49 @@ class CreateOrUpdateTickets implements StageInterface
 
 	public function __invoke(\stdClass $payload): \stdClass
 	{
+		// The original event to book
+		$originalEventToBook = null;
+
 		// Creating the tickets
 		if ($payload->oldItem) {
 			// Update the tickets from the booking
 			foreach ($payload->tickets as $ticket) {
 				$saveTicket = false;
 
+				// Assign the user id when not set
 				if (!$ticket->user_id && $payload->item->user_id) {
 					$ticket->user_id = $payload->item->user_id;
 					$saveTicket      = true;
 				}
 
+				// Update booking count when state differs
 				if ($payload->oldItem->state != $payload->item->state) {
 					$ticket->state = $ticket->state == 9 ? $ticket->state : $payload->item->state;
 					$saveTicket    = true;
 
+					// Unbook the event when it gets from active to not
 					if (!\in_array($payload->item->state, [1, 4]) && \in_array($payload->oldItem->state, [1, 4])) {
 						foreach ($payload->events as $event) {
 							if ($event->id != $ticket->event_id) {
 								continue;
 							}
+
 							$event->book(false);
 						}
 					}
 
+					// Book the event when it gets from not active to active
 					if (\in_array($payload->item->state, [1, 4]) && !\in_array($payload->oldItem->state, [1, 4])) {
 						foreach ($payload->events as $event) {
 							if ($event->id != $ticket->event_id) {
 								continue;
 							}
+
 							$event->book(true);
+
+							if ($event->original_id > 0 && $event->booking_series == 2) {
+								$originalEventToBook = $event;
+							}
 						}
 					}
 				}
@@ -64,10 +77,16 @@ class CreateOrUpdateTickets implements StageInterface
 				$this->model->getTable('Ticket')->save($ticket);
 			}
 
+			if ($originalEventToBook instanceof EventTable) {
+				$originalEventToBook->book(true, (int)$originalEventToBook->original_id);
+			}
+
 			return $payload;
 		}
 
+		// The new tickets
 		$payload->tickets = [];
+
 		/** @var EventTable $event */
 		foreach ($payload->events as $event) {
 			$prices = \is_string($event->prices) ? json_decode((string)$event->prices) : $event->prices;
@@ -120,9 +139,17 @@ class CreateOrUpdateTickets implements StageInterface
 
 					if ($ticket->state == 1 || $ticket->state == 4) {
 						$event->book(true);
+
+						if ($event->original_id > 0 && $event->booking_series == 2) {
+							$originalEventToBook = $event;
+						}
 					}
 				}
 			}
+		}
+
+		if ($originalEventToBook instanceof EventTable) {
+			$originalEventToBook->book(true, (int)$originalEventToBook->original_id);
 		}
 
 		return $payload;

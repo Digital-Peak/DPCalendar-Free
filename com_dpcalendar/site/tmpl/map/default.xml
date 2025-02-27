@@ -505,6 +505,18 @@
 			</field>
 			<field name="booking_form_default_country" type="dpcountries" class="dp-form-input dp-select"
 				label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL"/>
+			<field name="booking_form_show_price_description" type="radio" class="btn-group" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_SHOW_PRICE_DESCRIPTION_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_SHOW_PRICE_DESCRIPTION_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
+			<field name="booking_form_show_option_description" type="radio" class="btn-group" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_SHOW_OPTION_DESCRIPTION_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_SHOW_OPTION_DESCRIPTION_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+			</field>
 			<field name="booking_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>

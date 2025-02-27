@@ -90,7 +90,8 @@ class JsonView extends BaseView
 		$event->end_date      = $endDate->toSql();
 		$event->all_day       = $data['all_day'];
 		$event->show_end_time = true;
-		$date                 = strip_tags(DPCalendarHelper::getDateStringFromEvent($event));
+
+		$date = strip_tags(DPCalendarHelper::getDateStringFromEvent($event));
 
 		$this->translator = new Translator($app->getLanguage());
 		$calendar         = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($data['catid']);

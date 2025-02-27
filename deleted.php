@@ -179,6 +179,20 @@ $files = [
 '/plugins/dpcalendar/spreadsheet/vendor/phpoffice/phpspreadsheet/.readthedocs.yaml',
 '/plugins/dpcalendar/spreadsheet/vendor/phpoffice/phpspreadsheet/src/PhpSpreadsheet/Writer/Xls/Style/ColorMap.php',
 '/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/scripts/ha_NE.php',
+
+// From v10.1.3 to update dependencies
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.0.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.1.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.11.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.15.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.2.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.2.4.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.3.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.4.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.5.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.6.0.sql',
+'/administrator/components/com_dpcalendar/sql/updates/mysql/8.9.0.sql',
+'/plugins/dpcalendarpay/braintree/vendor/braintree/braintree_php/BTStandard/Sniffs/PreferIsSetSniff.php',
 ];
 
 foreach ($files as $file) {

@@ -201,7 +201,9 @@ class BaseView extends HtmlView
 			$title = Text::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
 		}
 
-		$this->getDocument()->setTitle($title);
+		if ($title !== '') {
+			$this->getDocument()->setTitle($title);
+		}
 
 		if ($this->params->get('menu-meta_description')) {
 			$this->getDocument()->setDescription($this->params->get('menu-meta_description'));
@@ -300,6 +302,10 @@ class BaseView extends HtmlView
 
 	protected function getDocumentTitle(): string
 	{
+		if (!$this->app->getInput()->get('set_page_title', 1)) {
+			return '';
+		}
+
 		$title = $this->params->get('page_title', '');
 
 		if (empty($title)) {

@@ -9,6 +9,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Plugin;
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
@@ -114,8 +115,8 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 		if ($t = $app->getInput()->get('tmpl')) {
 			$tmpl = '&tmpl=' . $t;
 		}
-		if ($t = $app->getInput()->get('token')) {
-			$tmpl = '&token=' . $t;
+		if ($t = $app->getInput()->get('dptoken', $app->getInput()->get('token', $booking->token))) {
+			$tmpl = '&dptoken=' . $t;
 		}
 		if ($t = $app->getInput()->getInt('Itemid', 0)) {
 			$tmpl .= '&Itemid=' . $t;
@@ -141,9 +142,27 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 	 */
 	public function onDPPaymentNew(\stdClass $booking): false|string
 	{
+		$app = $this->getApplication();
+		if (!$app instanceof CMSWebApplicationInterface) {
+			return false;
+		}
+
 		$provider = array_filter($this->onDPPaymentProviders(), static fn ($p): bool => $p->id == $booking->processor);
 		if ($provider === []) {
 			return false;
+		}
+
+		// Ensure we have a token
+		if ($booking->token === null) {
+			$booking->token = md5($this->_name . uniqid('', true));
+
+			// Get the booking table
+			$bookingTable = $app->bootComponent('dpcalendar')->getMVCFactory()->createTable('Booking', 'Administrator');
+
+			// Load the booking so we can store the transaction id
+			$bookingTable->load($booking->id);
+			$bookingTable->token = $booking->token;
+			$bookingTable->store();
 		}
 
 		return $this->startTransaction($booking, reset($provider));
@@ -188,7 +207,7 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 		}
 
 		if ($data['state'] == 6) {
-			$this->cancelPayment([], '');
+			$this->cancelPayment($booking, '');
 
 			return false;
 		}
@@ -208,6 +227,19 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 		// Save the data and make sure no valid event is triggered
 		$app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Booking', 'Administrator', ['event_after_save' => 'dontusethisevent'])
 			->save($data);
+
+		// Remove the token when in the system not enabled
+		if ($booking->token !== null && !DPCalendarHelper::getComponentParameter('bookingsys_enable_token')) {
+			$booking->token = null;
+
+			// Get the booking table
+			$bookingTable = $app->bootComponent('dpcalendar')->getMVCFactory()->createTable('Booking', 'Administrator');
+
+			// Load the booking so we can store the transaction id
+			$bookingTable->load($booking->id);
+			$bookingTable->token = $booking->token;
+			$bookingTable->store(true);
+		}
 
 		return true;
 	}
@@ -249,16 +281,11 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 	/**
 	 * Canceling the payment will delete the booking.
 	 */
-	protected function cancelPayment(array $data, ?string $msg = null): void
+	private function cancelPayment(\stdClass $booking, ?string $msg = null): void
 	{
 		$app = $this->getApplication();
 		if (!$app instanceof CMSWebApplicationInterface) {
 			return;
-		}
-
-		// Make sure we have a booking to cancel
-		if (!isset($data['b_id'])) {
-			$data['b_id'] = $app->getInput()->getInt('b_id', 0);
 		}
 
 		// Display the message and set it as failure
@@ -266,7 +293,9 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 			$app->enqueueMessage($msg, 'error');
 		}
 
-		// Redirect to pay.cancel task
-		$app->redirect(Route::_('index.php?option=com_dpcalendar&task=booking.paycancel&b_id=' . $data['b_id'], false));
+		$params = $this->getPurchaseParameters($booking);
+
+		// Redirect to pay.paycancel task
+		$app->redirect(str_replace('booking.pay&', 'booking.paycancel&', $params['cancelUrl']));
 	}
 }

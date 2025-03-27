@@ -69,12 +69,15 @@ trait CalendarViewTrait
 		// Remove not needed fields
 		$this->filterForm->removeField('calendars', 'filter');
 		$this->filterForm->removeField('event_type', 'filter');
-		$this->filterForm->removeField('state', 'filter');
 		$this->filterForm->removeField('access', 'filter');
 		$this->filterForm->removeField('language', 'filter');
 		$this->filterForm->removeField('level', 'filter');
 		$this->filterForm->removeField('fullordering', 'list');
 		$this->filterForm->removeField('limit', 'list');
+
+		if (!$this->getCurrentUser()->authorise('core.edit.state', 'com_dpcalendar')) {
+			$this->filterForm->removeField('state', 'filter');
+		}
 
 		// Enable autocomplete when configured
 		$this->filterForm->setFieldAttribute('location', 'data-dp-autocomplete', $this->params->get($name . '_filter_form_location_autocomplete', 1), 'filter');

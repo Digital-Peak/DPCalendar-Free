@@ -108,8 +108,26 @@ foreach ($this->items as $event) {
 	if ($event->state == 3 && !$this->compactMode) {
 		$eventData['title'] = '[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ' . $eventData['title'];
 	}
-	if ($event->state == 0 && !$this->compactMode) {
-		$eventData['title'] = '[' . $this->translate('JUNPUBLISHED') . '] ' . $eventData['title'];
+	if ($event->state != 1 && !$this->compactMode) {
+		$prefix = '';
+		switch ($event->state) {
+			case 0:
+				$prefix='[' . $this->translate('JUNPUBLISHED') . '] ';
+				break;
+			case 2:
+				$prefix='[' . $this->translate('JARCHIVED') . '] ';
+				break;
+			case 3:
+				$prefix='[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ';
+				break;
+			case 4:
+				$prefix='[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_REPORTED') . '] ';
+				break;
+			case -2:
+				$prefix='[' . $this->translate('JTRASHED') . '] ';
+				break;
+		}
+		$eventData['title'] = $prefix . $eventData['title'];
 	}
 
 	if ($event->show_end_time || $event->all_day) {

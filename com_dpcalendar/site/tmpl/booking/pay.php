@@ -7,13 +7,16 @@
 
 \defined('_JEXEC') or die();
 
-use Joomla\CMS\Plugin\PluginHelper;
-
+$this->dpdocument->loadStyleFile('dpcalendar/views/booking/pay.css');
 $this->dpdocument->addStyle($this->params->get('booking_custom_css', ''));
 
-PluginHelper::importPlugin('dpcalendarpay');
-
 $button = $this->app->triggerEvent('onDPPaymentNew', [$this->booking]);
-foreach ($button as $b) {
-	echo $b;
-}
+?>
+<div class="com-dpcalendar-booking com-dpcalendar-booking-pay<?php echo $this->pageclass_sfx ? ' com-dpcalendar-booking-' . $this->pageclass_sfx : ''; ?>">
+	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
+	<?php echo $this->loadTemplate('heading'); ?>
+	<?php echo $this->loadTemplate('steps'); ?>
+	<?php foreach ($button as $button) { ?>
+		<div class="com-dpcalendar-booking__payment"><?php echo $button; ?></div>
+	<?php } ?>
+</div>

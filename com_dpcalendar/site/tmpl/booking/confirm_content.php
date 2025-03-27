@@ -9,6 +9,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
 \defined('_JEXEC') or die();
 
+$this->translator->translateJS('COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL');
 ?>
 <div class="com-dpcalendar-booking__content">
 	<dl class="dp-description">
@@ -29,11 +30,18 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 	<?php if ($this->booking->price) { ?>
 		<dl class="dp-description">
 			<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_PRICE_LABEL'); ?></dt>
-			<dd class="dp-description__description">
-				<?php echo DPCalendarHelper::renderPrice($this->booking->price); ?>
+			<dd class="dp-description__description dp-price">
+				<span class="dp-price__original">
+					<?php echo DPCalendarHelper::renderPrice($this->booking->price); ?>
+				</span>
 				<?php if ($this->booking->tax && $this->booking->tax != '0.00') { ?>
-					(<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL'); ?>
-					<?php echo DPCalendarHelper::renderPrice($this->booking->tax); ?>)
+					<span class="dp-price__tax">
+						<?php echo sprintf(
+							$this->translator->translate('COM_DPCALENDAR_LAYOUT_RECEIPT_TAX_TEXT'),
+							round($this->booking->tax_rate ?? 0, 2),
+							DPCalendarHelper::renderPrice($this->booking->tax)
+						); ?>
+					</span>
 				<?php } ?>
 			</dd>
 		</dl>

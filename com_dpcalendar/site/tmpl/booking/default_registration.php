@@ -21,7 +21,7 @@ if (!$this->user->guest
 $data = $this->app->setUserState(
 	'com_users.registration.data',
 	[
-		'name'     => $this->booking->name,
+		'name'     => $this->booking->first_name . ' ' . $this->booking->name,
 		'username' => preg_replace('/([^@]*).*/', '$1', (string) $this->booking->email),
 		'email1'   => $this->booking->email,
 		'email2'   => $this->booking->email

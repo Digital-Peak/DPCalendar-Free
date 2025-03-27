@@ -17,7 +17,6 @@ use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
-use Joomla\CMS\Factory;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\FormController;
@@ -52,7 +51,7 @@ class EventController extends FormController implements CurrentUserInterface
 
 	protected function allowAdd($data = [])
 	{
-		$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar(ArrayHelper::getValue(
+		$calendar = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar(ArrayHelper::getValue(
 			$data,
 			'catid',
 			$this->input->getString('id', ''),
@@ -75,7 +74,7 @@ class EventController extends FormController implements CurrentUserInterface
 		}
 
 		if ($event != null) {
-			$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
+			$calendar = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
 
 			return $calendar instanceof CalendarInterface && ($calendar->canEdit() || ($calendar->canEditOwn() && $event->created_by == $this->getCurrentUser()->id));
 		}
@@ -88,12 +87,12 @@ class EventController extends FormController implements CurrentUserInterface
 		$calendar = null;
 		$event    = null;
 		if (isset($data['catid'])) {
-			$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($data['catid']);
+			$calendar = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($data['catid']);
 		}
 		if ($calendar == null) {
 			$recordId = (int)isset($data[$key]) !== 0 ? $data[$key] : 0;
 			$event    = $this->getModel()->getItem($recordId);
-			$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event ? $event->catid : 0);
+			$calendar = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event ? $event->catid : 0);
 		}
 
 		if ($calendar != null && $event != null) {
@@ -503,7 +502,7 @@ class EventController extends FormController implements CurrentUserInterface
 		$this->input->post->set('jform', $data);
 
 		$result   = false;
-		$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($data['catid']);
+		$calendar = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($data['catid']);
 		if ($calendar instanceof ExternalCalendarInterface) {
 			PluginHelper::importPlugin('dpcalendar');
 			$data['id'] = $this->input->getString($urlVar, '');
@@ -581,8 +580,6 @@ class EventController extends FormController implements CurrentUserInterface
 
 		// If ok, redirect to the return page.
 		if ($result) {
-			$canChangeState = $calendar instanceof ExternalCalendarInterface
-				|| $this->getCurrentUser()->authorise('core.edit.state', 'com_dpcalendar.category.' . $data['catid']);
 			if ($this->getTask() === 'save') {
 				$this->app->setUserState('com_dpcalendar.edit.event.data', null);
 				$return = $this->getReturnPage();
@@ -597,26 +594,22 @@ class EventController extends FormController implements CurrentUserInterface
 					}
 				}
 
-				if ($return === Uri::base() && $canChangeState) {
+				if ($return === Uri::base()) {
 					$return = RouteHelper::getEventRoute($this->app->getUserState('dpcalendar.event.id'), $data['catid']);
 				}
 				$this->setRedirect($return);
 			}
+
 			if ($this->getTask() == 'apply' || $this->getTask() == 'save2copy') {
-				$return = $this->getReturnPage();
-				if ($canChangeState) {
-					$return = RouteHelper::getFormRoute($this->app->getUserState('dpcalendar.event.id'), $this->getReturnPage());
-				}
-				$this->setRedirect($return);
+				$this->setRedirect(RouteHelper::getFormRoute($this->app->getUserState('dpcalendar.event.id'), $this->getReturnPage()));
 			}
+
 			if ($this->getTask() == 'save2new') {
 				$this->app->setUserState('com_dpcalendar.edit.event.data', null);
 				$this->setRedirect(RouteHelper::getFormRoute('0', $this->getReturnPage()));
 			}
 		} elseif ($this->redirect === '' || $this->redirect === '0') {
-			$this->setRedirect(
-				RouteHelper::getEventRoute($this->app->getUserState('dpcalendar.event.id'), $data['catid'])
-			);
+			$this->setRedirect(RouteHelper::getEventRoute($this->app->getUserState('dpcalendar.event.id'), $data['catid']));
 		}
 
 		return $result;
@@ -746,7 +739,7 @@ class EventController extends FormController implements CurrentUserInterface
 		$data->id = empty($formData['id']) ? 0 : $formData['id'];
 
 		// Reset the color when equal to calendar
-		$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($data->catid);
+		$calendar = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($data->catid);
 		if ($calendar instanceof CalendarInterface && $data->color === $calendar->getColor()) {
 			$data->color = '';
 		}

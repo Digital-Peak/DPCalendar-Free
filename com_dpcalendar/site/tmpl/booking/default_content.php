@@ -30,8 +30,11 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 				<dd class="dp-description__description">
 					<?php echo DPCalendarHelper::renderPrice($this->booking->price); ?>
 					<?php if ($this->booking->tax && $this->booking->tax != '0.00') { ?>
-						(<?php echo $this->translate('COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL'); ?>
-						<?php echo DPCalendarHelper::renderPrice($this->booking->tax); ?>)
+						<?php echo sprintf(
+							$this->translator->translate('COM_DPCALENDAR_LAYOUT_RECEIPT_TAX_TEXT'),
+							round($this->booking->tax_rate ?? 0, 2),
+							DPCalendarHelper::renderPrice($this->booking->tax)
+						); ?>
 					<?php } ?>
 				</dd>
 			</dl>
@@ -41,7 +44,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 					<?php if ($this->paymentProvider) { ?>
 						<?php echo $this->translate('PLG_DPCALENDARPAY_' . $this->paymentProvider->plugin_name . '_TITLE'); ?>
 					<?php } else { ?>
-						<?php echo $this->booking->processor; ?>
+						<?php echo $this->booking->payment_provider; ?>
 					<?php } ?>
 				</dd>
 			</dl>

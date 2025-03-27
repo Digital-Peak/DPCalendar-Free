@@ -114,7 +114,7 @@ class JsonapiView extends BaseApiView
 			$this->fieldsToRenderList[] = $field->id;
 		}
 
-		return parent::displayList();
+		return parent::displayList($items);
 	}
 
 	public function displayItem($item = null)
@@ -125,7 +125,7 @@ class JsonapiView extends BaseApiView
 			$this->fieldsToRenderItem[] = $field->name;
 		}
 
-		return parent::displayItem();
+		return parent::displayItem($item);
 	}
 
 	/**
@@ -155,6 +155,8 @@ class JsonapiView extends BaseApiView
 
 			$item->tags = array_combine($tagsIds, $tagsNames);
 		}
+
+		$item->location_ids = empty($item->location_ids) ? [] : (\is_string($item->location_ids) ? explode(',', $item->location_ids) : $item->location_ids);
 
 		return parent::prepareItem($item);
 	}

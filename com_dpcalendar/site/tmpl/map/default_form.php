@@ -8,9 +8,10 @@
 \defined('_JEXEC') or die();
 
 $this->params->set('form_state', 2);
+$this->params->set('hidden_fields', $this->params->get('map_filter_form_hidden_fields', []));
 
 $this->displayData['calendars']     = $this->calendars;
 $this->displayData['form']          = $this->filterForm;
-$this->displayData['action']        = $this->router->route('index.php?option=com_dpcalendar&view=map&layout=events&format=raw&Itemid=' . $this->input->getInt('Itemid', 0) . $this->tmpl);
+$this->displayData['action']        = $this->router->route('index.php?option=com_dpcalendar&view=map&layout=events&format=raw' . $this->tmpl);
 
 echo $this->layoutHelper->renderLayout('block.filter', $this->displayData);

@@ -26,7 +26,7 @@
 				<option value="0">JHIDE</option>
 			</field>
 			<field name="calendar_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-				layout="joomla.form.field.list-fancy-select" hide="calendars,start-date,end-date,length-type,radius,event_type,state,access,language,limit,fullordering"
+				layout="joomla.form.field.list-fancy-select" hide="start-date,end-date,length-type,radius,event_type,access,language,limit,fullordering"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 			<field name="calendar_filter_form_location_autocomplete" type="list" useglobal="true" showon="calendar_filter_form:1[OR]calendar_filter_form:2"
@@ -634,7 +634,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-							hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
+							hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -691,7 +691,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-							hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
+							hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>

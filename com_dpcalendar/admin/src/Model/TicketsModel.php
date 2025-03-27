@@ -96,6 +96,10 @@ class TicketsModel extends ListModel
 				$item->price = 0;
 			}
 
+			$item->events_discount = str_starts_with((string)$item->events_discount, '{') ? json_decode((string)$item->events_discount) : [];
+
+			$item->tickets_discount = str_starts_with((string)$item->tickets_discount, '{') ? json_decode((string)$item->tickets_discount) : [];
+
 			$item->type_label = '';
 			if (!empty($item->event_prices) && \is_string($item->event_prices)) {
 				$prices = json_decode((string)$item->event_prices);
@@ -125,7 +129,7 @@ class TicketsModel extends ListModel
 		$query->join('LEFT', '#__dpcalendar_bookings AS b ON b.id = a.booking_id');
 
 		// Join over the events
-		$query->select('e.catid AS event_calid, e.title as event_title, e.start_date, e.end_date, e.all_day, e.show_end_time, e.prices as event_prices, e.booking_options as event_options, e.payment_provider as event_payment_provider, e.terms as event_terms, e.created_by as event_author, e.original_id as event_original_id, e.rrule as event_rrule, e.booking_cancel_closing_date as event_booking_cancel_closing_date');
+		$query->select('e.catid AS event_calid, e.title as event_title, e.start_date, e.end_date, e.all_day, e.show_end_time, e.prices as event_prices, e.booking_options as event_options, e.payment_provider as event_payment_provider, e.terms as event_terms, e.created_by as event_author, e.original_id as event_original_id, e.rrule as event_rrule, e.booking_cancel_closing_date as event_booking_cancel_closing_date, e.events_discount, e.tickets_discount');
 		$query->join('LEFT', '#__dpcalendar_events AS e ON e.id = a.event_id');
 
 		// Join over the hosts

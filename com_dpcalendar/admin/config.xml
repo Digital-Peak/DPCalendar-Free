@@ -11,7 +11,7 @@
 			<option value="0">JHIDE</option>
 		</field>
 		<field name="calendar_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-			layout="joomla.form.field.list-fancy-select" hide="calendars,start-date,end-date,length-type,radius,event_type,state,access,language,limit,fullordering"
+			layout="joomla.form.field.list-fancy-select" hide="start-date,end-date,length-type,radius,event_type,access,language,limit,fullordering"
 			showon="calendar_filter_form:1[OR]calendar_filter_form:2"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
@@ -384,7 +384,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC">
 		</field>
 		<field name="map_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,state,access,language,limit,fullordering"
+			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
 			showon="list_filter_form:1[OR]list_filter_form:2"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
@@ -438,7 +438,7 @@
 			<option value="0">JHIDE</option>
 		</field>
 		<field name="list_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,state,access,language,limit,fullordering"
+			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
 			showon="list_filter_form:1[OR]list_filter_form:2"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
@@ -649,7 +649,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="event" hide="id,scheduling*,notify_changes,update_modified,checked_out*,options"
-				label="COM_DPCALENDAR_FIELD"/>
+					label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
 		<field name="event_form_date_format" type="list" default="d.m.Y"
@@ -826,7 +826,7 @@
 	<fieldset name="bookings" label="COM_DPCALENDAR_BOOKINGS"
 		description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
 		<field name="bookings_fields" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
-			default="{&quot;export_bookings_fields0&quot;:{&quot;field&quot;:&quot;uid&quot;},&quot;export_bookings_fields1&quot;:{&quot;field&quot;:&quot;state&quot;},&quot;export_bookings_fields2&quot;:{&quot;field&quot;:&quot;name&quot;},&quot;export_bookings_fields3&quot;:{&quot;field&quot;:&quot;book_date&quot;},&quot;export_bookings_fields4&quot;:{&quot;field&quot;:&quot;price&quot;},&quot;export_bookings_fields5&quot;:{&quot;field&quot;:&quot;tickets_count&quot;}}"
+			default="{&quot;export_bookings_fields0&quot;:{&quot;field&quot;:&quot;uid&quot;},&quot;export_bookings_fields1&quot;:{&quot;field&quot;:&quot;state&quot;},&quot;export_bookings_fields2&quot;:{&quot;field&quot;:&quot;first_name&quot;},&quot;export_bookings_fields3&quot;:{&quot;field&quot;:&quot;name&quot;},&quot;export_bookings_fields4&quot;:{&quot;field&quot;:&quot;book_date&quot;},&quot;export_bookings_fields5&quot;:{&quot;field&quot;:&quot;price&quot;},&quot;export_bookings_fields6&quot;:{&quot;field&quot;:&quot;tickets_count&quot;}}"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGS_FIELDS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGS_FIELDS_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="booking" layout="joomla.form.field.list-fancy-select"
@@ -857,7 +857,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="booking"
-					hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
+					hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
 				label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
@@ -915,7 +915,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="booking"
-					hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
+					hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
 				label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
@@ -989,7 +989,7 @@
 	<fieldset name="tickets" label="COM_DPCALENDAR_TICKETS"
 		description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
 		<field name="tickets_fields" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
-			default="{&quot;tickets_fields0&quot;:{&quot;field&quot;:&quot;uid&quot;},&quot;tickets_fields1&quot;:{&quot;field&quot;:&quot;action&quot;},&quot;tickets_fields2&quot;:{&quot;field&quot;:&quot;event_title&quot;},&quot;tickets_fields3&quot;:{&quot;field&quot;:&quot;state&quot;},&quot;tickets_fields4&quot;:{&quot;field&quot;:&quot;name&quot;},&quot;tickets_fields5&quot;:{&quot;field&quot;:&quot;location&quot;},&quot;tickets_fields6&quot;:{&quot;field&quot;:&quot;created&quot;},&quot;tickets_fields7&quot;:{&quot;field&quot;:&quot;price&quot;}}"
+			default="{&quot;tickets_fields0&quot;:{&quot;field&quot;:&quot;uid&quot;},&quot;tickets_fields1&quot;:{&quot;field&quot;:&quot;action&quot;},&quot;tickets_fields2&quot;:{&quot;field&quot;:&quot;event_title&quot;},&quot;tickets_fields3&quot;:{&quot;field&quot;:&quot;state&quot;},&quot;tickets_fields4&quot;:{&quot;field&quot;:&quot;first_name&quot;},&quot;tickets_fields5&quot;:{&quot;field&quot;:&quot;name&quot;},&quot;tickets_fields6&quot;:{&quot;field&quot;:&quot;location&quot;},&quot;tickets_fields7&quot;:{&quot;field&quot;:&quot;created&quot;},&quot;tickets_fields8&quot;:{&quot;field&quot;:&quot;price&quot;}}"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGS_FIELDS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGS_FIELDS_DESC">
 			<form>
 				<field name="field" type="dpcfields" section="ticket" layout="joomla.form.field.list-fancy-select"
@@ -1676,6 +1676,9 @@
 				description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_SEPARATOR_THOUSANDS_DESC"/>
 			</form>
 		</field>
+		<field name="bookingsys_tax_free_custom_field" type="dpcfields" section="event" hide="*" value_type="id"
+			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_TAX_FREE_CUSTOM_FIELD_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_TAX_FREE_CUSTOM_FIELD_DESC"/>
 		<field name="bookingsys_exchangeratesapi_api_key" type="text" model="all"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_EXCHANGERATESAPI_API_KEY_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_EXCHANGERATESAPI_API_KEY_DESC"/>
@@ -1724,10 +1727,7 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCEL_PAID_TEXT_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCEL_PAID_TEXT_DESC"/>
 	</fieldset>
-	<fieldset name="component" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_LABEL">
-		<field name="downloadid" type="text"
-			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_DOWNLOAD_ID_DESC"/>
+	<fieldset name="component" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_LABEL">^
 		<field name="notification_groups_create" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
 			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_DESC"/>

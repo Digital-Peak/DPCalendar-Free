@@ -88,47 +88,49 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 					'export_bookings_fields' => [
 						'export_bookings_fields0'  => ['field' => 'uid'],
 						'export_bookings_fields1'  => ['field' => 'state'],
-						'export_bookings_fields2'  => ['field' => 'name'],
-						'export_bookings_fields3'  => ['field' => 'email'],
-						'export_bookings_fields4'  => ['field' => 'telephone'],
-						'export_bookings_fields5'  => ['field' => 'country'],
-						'export_bookings_fields6'  => ['field' => 'province'],
-						'export_bookings_fields7'  => ['field' => 'city'],
-						'export_bookings_fields8'  => ['field' => 'zip'],
-						'export_bookings_fields9'  => ['field' => 'street'],
-						'export_bookings_fields10' => ['field' => 'number'],
-						'export_bookings_fields11' => ['field' => 'price'],
-						'export_bookings_fields12' => ['field' => 'options'],
-						'export_bookings_fields13' => ['field' => 'net_amount'],
-						'export_bookings_fields14' => ['field' => 'processor'],
-						'export_bookings_fields15' => ['field' => 'user_id'],
-						'export_bookings_fields16' => ['field' => 'book_date'],
-						'export_bookings_fields17' => ['field' => 'event_id'],
-						'export_bookings_fields18' => ['field' => 'event_author'],
-						'export_bookings_fields19' => ['field' => 'event_calid'],
-						'export_bookings_fields20' => ['field' => 'timezone']
+						'export_bookings_fields2'  => ['field' => 'first_name'],
+						'export_bookings_fields3'  => ['field' => 'name'],
+						'export_bookings_fields4'  => ['field' => 'email'],
+						'export_bookings_fields5'  => ['field' => 'telephone'],
+						'export_bookings_fields6'  => ['field' => 'country'],
+						'export_bookings_fields7'  => ['field' => 'province'],
+						'export_bookings_fields8'  => ['field' => 'city'],
+						'export_bookings_fields9'  => ['field' => 'zip'],
+						'export_bookings_fields10' => ['field' => 'street'],
+						'export_bookings_fields11' => ['field' => 'number'],
+						'export_bookings_fields12' => ['field' => 'price'],
+						'export_bookings_fields13' => ['field' => 'options'],
+						'export_bookings_fields14' => ['field' => 'net_amount'],
+						'export_bookings_fields15' => ['field' => 'payment_provider'],
+						'export_bookings_fields16' => ['field' => 'user_id'],
+						'export_bookings_fields17' => ['field' => 'book_date'],
+						'export_bookings_fields18' => ['field' => 'event_id'],
+						'export_bookings_fields19' => ['field' => 'event_author'],
+						'export_bookings_fields20' => ['field' => 'event_calid'],
+						'export_bookings_fields21' => ['field' => 'timezone']
 					],
 					'export_tickets_fields' => [
 						'export_tickets_fields0'  => ['field' => 'uid'],
 						'export_tickets_fields1'  => ['field' => 'state'],
-						'export_tickets_fields2'  => ['field' => 'name'],
-						'export_tickets_fields3'  => ['field' => 'event_title'],
-						'export_tickets_fields4'  => ['field' => 'start_date'],
-						'export_tickets_fields5'  => ['field' => 'end_date'],
-						'export_tickets_fields6'  => ['field' => 'email'],
-						'export_tickets_fields7'  => ['field' => 'telephone'],
-						'export_tickets_fields8'  => ['field' => 'country'],
-						'export_tickets_fields9'  => ['field' => 'province'],
-						'export_tickets_fields10' => ['field' => 'city'],
-						'export_tickets_fields11' => ['field' => 'zip'],
-						'export_tickets_fields12' => ['field' => 'street'],
-						'export_tickets_fields13' => ['field' => 'number'],
-						'export_tickets_fields14' => ['field' => 'price'],
-						'export_tickets_fields15' => ['field' => 'user_id'],
-						'export_tickets_fields16' => ['field' => 'created'],
-						'export_tickets_fields17' => ['field' => 'type'],
-						'export_tickets_fields18' => ['field' => 'event_calid'],
-						'export_tickets_fields19' => ['field' => 'timezone']
+						'export_tickets_fields2'  => ['field' => 'first_name'],
+						'export_tickets_fields3'  => ['field' => 'name'],
+						'export_tickets_fields4'  => ['field' => 'event_title'],
+						'export_tickets_fields5'  => ['field' => 'start_date'],
+						'export_tickets_fields6'  => ['field' => 'end_date'],
+						'export_tickets_fields7'  => ['field' => 'email'],
+						'export_tickets_fields8'  => ['field' => 'telephone'],
+						'export_tickets_fields9'  => ['field' => 'country'],
+						'export_tickets_fields10' => ['field' => 'province'],
+						'export_tickets_fields11' => ['field' => 'city'],
+						'export_tickets_fields12' => ['field' => 'zip'],
+						'export_tickets_fields13' => ['field' => 'street'],
+						'export_tickets_fields14' => ['field' => 'number'],
+						'export_tickets_fields15' => ['field' => 'price'],
+						'export_tickets_fields16' => ['field' => 'user_id'],
+						'export_tickets_fields17' => ['field' => 'created'],
+						'export_tickets_fields18' => ['field' => 'type'],
+						'export_tickets_fields19' => ['field' => 'event_calid'],
+						'export_tickets_fields20' => ['field' => 'timezone']
 					],
 					'export_locations_fields' => [
 						'export_locations_fields0'  => ['field' => 'id'],
@@ -303,6 +305,68 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 
 				$new = json_encode($new);
 				$db->setQuery('update #__dpcalendar_events set user_discount = ' . ($new ? $db->quote($new) : 'null') . ' where user_discount = ' . $db->quote($event['user_discount']))->execute();
+			}
+		}
+
+		if (version_compare($version, '10.3.0') == -1) {
+			$db->setQuery("select * from #__extensions where name = 'plg_dpcalendar_csv' OR name = 'plg_dpcalendar_spreadsheet'");
+			foreach ($db->loadObjectList() as $plugin) {
+				$params = json_decode((string)$plugin->params);
+				if (!empty($params->export_configurations)) {
+					continue;
+				}
+
+				$params->export_configurations = ['export_configurations0' => [
+					'title'            => 'PLG_DPCALENDAR_' . strtoupper((string)$plugin->element) . '_FIELD_EXPORT_TITLE_DEFAULT',
+					'value_type'       => $params->export_value_type,
+					'strip_html'       => $params->export_strip_html,
+					'separator'        => $params->export_separator ?? '',
+					'events_fields'    => $params->export_events_fields,
+					'bookings_fields'  => $params->export_bookings_fields,
+					'tickets_fields'   => $params->export_tickets_fields,
+					'locations_fields' => $params->export_locations_fields
+				]];
+
+				unset(
+					$params->export_value_type,
+					$params->export_strip_html,
+					$params->export_separator,
+					$params->export_events_fields,
+					$params->export_bookings_fields,
+					$params->export_tickets_fields,
+					$params->export_locations_fields
+				);
+
+				$db->setQuery('update #__extensions set params = ' . $db->quote(json_encode($params) ?: '{}') . ' where extension_id = ' . $plugin->extension_id);
+				$db->execute();
+			}
+
+			if (!\array_key_exists('first_name', $db->getTableColumns('#__dpcalendar_bookings'))) {
+				$this->run('ALTER TABLE `#__dpcalendar_bookings` ADD `first_name` VARCHAR(255) NULL AFTER `longitude`');
+			}
+
+			$db->setQuery("select * from #__dpcalendar_bookings where name like '% %' and first_name is null");
+			foreach ($db->loadObjectList() as $booking) {
+				[$first_name, $name] = explode(' ', (string)$booking->name, 2);
+				$this->run('update #__dpcalendar_bookings set first_name = ' . $db->quote($first_name) . ', name = ' . $db->quote($name) . ' where id = ' . $booking->id);
+			}
+
+			if (!\array_key_exists('first_name', $db->getTableColumns('#__dpcalendar_tickets'))) {
+				$this->run('ALTER TABLE `#__dpcalendar_tickets` ADD `first_name` VARCHAR(255) NULL AFTER `email`');
+			}
+
+			$db->setQuery("select * from #__dpcalendar_tickets where name like '% %' and first_name is null");
+			foreach ($db->loadObjectList() as $ticket) {
+				[$first_name, $name] = explode(' ', (string)$ticket->name, 2);
+				$this->run('update #__dpcalendar_tickets set first_name = ' . $db->quote($first_name) . ', name = ' . $db->quote($name) . ' where id = ' . $ticket->id);
+			}
+
+			if ($id = ComponentHelper::getParams('com_dpcalendar')->get('downloadid')) {
+				$this->run('update #__update_sites set extra_query = ' . $db->quote('dlid=' . $id) . " where name = 'DPCalendar Core'");
+			}
+
+			if (!\array_key_exists('payment_provider_fee', $db->getTableColumns('#__dpcalendar_bookings'))) {
+				$this->run('ALTER TABLE `#__dpcalendar_bookings` ADD `payment_provider_fee` DECIMAL(10,5) NULL DEFAULT NULL');
 			}
 		}
 	}

@@ -140,21 +140,23 @@ class Booking
 	 */
 	public static function createCertificate(\stdClass $ticket, Registry $params, bool $toFile = false, ?\stdClass $booking = null): ?string
 	{
-		try {
-			Factory::getApplication()->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		$app = Factory::getApplication();
 
-			$model = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Event', 'Site', ['ignore_request' => true]);
+		try {
+			$app->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+
+			$model = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Event', 'Site', ['ignore_request' => true]);
 			$event = $model->getItem($ticket->event_id);
 			if (!$event) {
 				return null;
 			}
 
 			$event->text = $event->description;
-			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$params, 0]);
+			$app->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$params, 0]);
 			$event->description = $event->text;
 
 			if (!$booking instanceof \stdClass) {
-				$model   = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Booking', 'Administrator', ['ignore_request' => true]);
+				$model   = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Booking', 'Administrator', ['ignore_request' => true]);
 				$booking = $model->getItem($ticket->booking_id);
 			}
 
@@ -163,11 +165,11 @@ class Booking
 			}
 
 			$booking->text = '';
-			Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.booking', &$booking, &$params, 0]);
+			$app->triggerEvent('onContentPrepare', ['com_dpcalendar.booking', &$booking, &$params, 0]);
 
 			if (!isset($ticket->jcfields)) {
 				$ticket->text = '';
-				Factory::getApplication()->triggerEvent('onContentPrepare', ['com_dpcalendar.ticket', &$ticket, &$params, 0]);
+				$app->triggerEvent('onContentPrepare', ['com_dpcalendar.ticket', &$ticket, &$params, 0]);
 			}
 
 			$details = DPCalendarHelper::renderLayout(
@@ -178,14 +180,14 @@ class Booking
 					'event'        => $event,
 					'translator'   => new Translator(),
 					'dateHelper'   => new DateHelper(),
-					'layoutHelper' => Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Layout', 'Administrator'),
+					'layoutHelper' => $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Layout', 'Administrator'),
 					'params'       => $params
 				]
 			);
 
 			return self::createPDF($details, $ticket->uid, $toFile);
 		} catch (\Exception $exception) {
-			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'warning');
+			$app->enqueueMessage($exception->getMessage(), 'warning');
 
 			return null;
 		}

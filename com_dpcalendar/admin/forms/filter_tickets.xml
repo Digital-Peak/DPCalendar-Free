@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form>
-	<fields name="filter" addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field"
-		addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
-		<field name="search" type="text" class="dp-input" label="JSEARCH_FILTER" description="" hint="JSEARCH_FILTER" />
-		<field name="state" type="list" class="dp-input"
+<form addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
+	<fields name="filter">
+		<field name="search" type="text" hint="JSEARCH_FILTER" class="dp-input"/>
+		<field name="state" type="list" class="dp-input js-select-submit-on-change"
 			label="JSTATUS">
 			<option value="">JOPTION_SELECT_PUBLISHED</option>
 			<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
@@ -26,8 +25,8 @@
 			label="COM_DPCALENDAR_TICKET_FIELD_EVENT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_EVENT_DESC"/>
 	</fields>
 	<fields name="list">
-		<field name="fullordering" class="js-select-submit-on-change dp-select" type="list" default="a.id DESC"
-			label="COM_CONTENT_LIST_FULL_ORDERING" description="COM_CONTENT_LIST_FULL_ORDERING_DESC">
+		<field name="fullordering" type="list" default="a.id DESC" class="dp-select js-select-submit-on-change"
+			label="JGLOBAL_SORT_BY">
 			<option value="">JGLOBAL_SORT_BY</option>
 			<option value="a.uid ASC">COM_DPCALENDAR_VIEWS_FILTERS_UID_ASC</option>
 			<option value="a.uid DESC">COM_DPCALENDAR_VIEWS_FILTERS_UID_DESC</option>
@@ -46,7 +45,7 @@
 			<option value="a.id ASC">JGRID_HEADING_ID_ASC</option>
 			<option value="a.id DESC">JGRID_HEADING_ID_DESC</option>
 		</field>
-		<field name="limit" type="limitbox" class="input-mini js-select-submit-on-change dp-select" default="25"
-			label="COM_CONTENT_LIST_LIMIT" description="COM_CONTENT_LIST_LIMIT_DESC"/>
+		<field name="limit" type="limitbox" default="25" class="dp-select input-mini js-select-submit-on-change"
+			label="JGLOBAL_LIST_LIMIT"/>
 	</fields>
 </form>

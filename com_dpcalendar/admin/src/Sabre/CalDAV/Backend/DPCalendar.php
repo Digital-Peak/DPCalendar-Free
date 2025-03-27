@@ -425,7 +425,7 @@ class DPCalendar extends PDO
 		 *     $dpEvent->description = $vEvent->{'X-ALT-DESC'}->getValue();
 		 * }
 		 */
-		if (!empty($vEvent->{'LAST-MODIFIED'}) && $vEvent->{'LAST-MODIFIED'}->getDateTime()) {
+		if (!empty($vEvent->{'LAST-MODIFIED'}) && $vEvent->{'LAST-MODIFIED'} instanceof DateTime) {
 			$dpEvent->modified = $vEvent->{'LAST-MODIFIED'}->getDateTime()->format('Y-m-d H:i:s');
 		}
 		if (!empty($vEvent->{'X-COLOR'}) && $vEvent->{'X-COLOR'}->getValue()) {

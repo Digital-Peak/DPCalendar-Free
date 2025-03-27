@@ -181,7 +181,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 	/** @var ?string */
 	public $publish_down;
 
-	/** @var string */
+	/** @var ?string */
 	public $payment_provider;
 
 	/** @var int */
@@ -524,55 +524,56 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		if (\is_array($this->rooms)) {
 			$this->rooms = json_encode($this->rooms) ?: '';
 		}
+		$db = $this->getDatabase();
 
 		// Fields to update
 		$files = [
-			'catid = ' . $this->getDatabase()->quote($this->catid),
-			'title = ' . $this->getDatabase()->quote($this->title),
-			'color = ' . $this->getDatabase()->quote($this->color),
-			'show_end_time = ' . $this->getDatabase()->quote($this->show_end_time),
-			'url = ' . $this->getDatabase()->quote($this->url),
-			'images = ' . $this->getDatabase()->quote($this->images instanceof \stdClass ? (json_encode($this->images) ?: '') : $this->images),
-			'description = ' . $this->getDatabase()->quote($this->description),
-			'schedule = ' . $this->getDatabase()->quote($this->schedule),
-			'capacity = ' . ($this->capacity === null ? 'NULL' : $this->getDatabase()->quote($this->capacity)),
-			'max_tickets = ' . $this->getDatabase()->quote($this->max_tickets),
-			'booking_opening_date = ' . $this->getDatabase()->quote($this->booking_opening_date),
-			'booking_closing_date = ' . $this->getDatabase()->quote($this->booking_closing_date),
-			'booking_cancel_closing_date = ' . $this->getDatabase()->quote($this->booking_cancel_closing_date),
-			'booking_series = ' . $this->getDatabase()->quote($this->booking_series),
-			'booking_waiting_list = ' . $this->getDatabase()->quote($this->booking_waiting_list),
-			'prices = ' . $this->getDatabase()->quote($this->prices instanceof \stdClass ? (json_encode($this->prices) ?: '') : $this->prices),
-			'earlybird_discount = ' . $this->getDatabase()->quote($this->earlybird_discount),
-			'user_discount = ' . $this->getDatabase()->quote($this->user_discount),
-			'events_discount = ' . $this->getDatabase()->quote($this->events_discount),
-			'tickets_discount = ' . $this->getDatabase()->quote($this->tickets_discount),
-			'booking_information = ' . $this->getDatabase()->quote($this->booking_information),
-			'terms = ' . $this->getDatabase()->quote($this->terms),
+			'catid = ' . $db->quote($this->catid),
+			'title = ' . $db->quote($this->title),
+			'color = ' . $db->quote($this->color),
+			'show_end_time = ' . $db->quote($this->show_end_time),
+			'url = ' . $db->quote($this->url),
+			'images = ' . $db->quote($this->images instanceof \stdClass ? (json_encode($this->images) ?: '') : $this->images),
+			'description = ' . $db->quote($this->description),
+			'schedule = ' . $db->quote($this->schedule),
+			'capacity = ' . ($this->capacity === null ? 'NULL' : $db->quote($this->capacity)),
+			'max_tickets = ' . $db->quote($this->max_tickets),
+			'booking_opening_date = ' . $db->quote($this->booking_opening_date),
+			'booking_closing_date = ' . $db->quote($this->booking_closing_date),
+			'booking_cancel_closing_date = ' . $db->quote($this->booking_cancel_closing_date),
+			'booking_series = ' . $db->quote($this->booking_series),
+			'booking_waiting_list = ' . $db->quote($this->booking_waiting_list),
+			'prices = ' . $db->quote($this->prices instanceof \stdClass ? (json_encode($this->prices) ?: '') : $this->prices),
+			'earlybird_discount = ' . $db->quote($this->earlybird_discount),
+			'user_discount = ' . $db->quote($this->user_discount),
+			'events_discount = ' . $db->quote($this->events_discount),
+			'tickets_discount = ' . $db->quote($this->tickets_discount),
+			'booking_information = ' . $db->quote($this->booking_information),
+			'terms = ' . $db->quote($this->terms),
 			'state = ' . (int)$this->state,
 			'checked_out = 0',
 			'checked_out_time = null',
-			'access = ' . $this->getDatabase()->quote($this->access),
-			'access_content = ' . $this->getDatabase()->quote($this->access_content),
-			'params = ' . $this->getDatabase()->quote($this->params),
-			'rooms = ' . $this->getDatabase()->quote($this->rooms ?: ''),
-			'language = ' . $this->getDatabase()->quote($this->language),
-			'modified = ' . ($this->modified ? $this->getDatabase()->quote($this->modified) : 'null'),
+			'access = ' . $db->quote($this->access),
+			'access_content = ' . $db->quote($this->access_content),
+			'params = ' . $db->quote($this->params),
+			'rooms = ' . $db->quote($this->rooms ?: ''),
+			'language = ' . $db->quote($this->language),
+			'modified = ' . ($this->modified ? $db->quote($this->modified) : 'null'),
 			'modified_by = ' . (int)$user->id,
 			'created_by = ' . (int)$this->created_by,
-			'metakey = ' . $this->getDatabase()->quote($this->metakey ?: ''),
-			'metadesc = ' . $this->getDatabase()->quote($this->metadesc ?: ''),
-			'metadata = ' . $this->getDatabase()->quote($this->metadata),
-			'featured = ' . $this->getDatabase()->quote($this->featured),
-			'publish_up = ' . ($this->publish_up ? $this->getDatabase()->quote($this->publish_up) : 'null'),
-			'publish_down = ' . ($this->publish_down ? $this->getDatabase()->quote($this->publish_down) : 'null'),
-			'payment_provider = ' . $this->getDatabase()->quote($this->payment_provider)
+			'metakey = ' . $db->quote($this->metakey ?: ''),
+			'metadesc = ' . $db->quote($this->metadesc ?: ''),
+			'metadata = ' . $db->quote($this->metadata),
+			'featured = ' . $db->quote($this->featured),
+			'publish_up = ' . ($this->publish_up ? $db->quote($this->publish_up) : 'null'),
+			'publish_down = ' . ($this->publish_down ? $db->quote($this->publish_down) : 'null'),
+			'payment_provider = ' . ($this->payment_provider ? $db->quote($this->payment_provider) : 'null')
 		];
 
 		// If the xreference does exist, then we need to create it with the proper scheme
 		if ($this->xreference) {
 			// Replacing the _0 with the start date
-			$files[] = 'xreference = concat(' . $this->getDatabase()->quote($this->replaceLastInString('_0', '_', $this->xreference)) .
+			$files[] = 'xreference = concat(' . $db->quote($this->replaceLastInString('_0', '_', $this->xreference)) .
 				", DATE_FORMAT(start_date, CASE WHEN all_day = '1' THEN '%Y%m%d' ELSE '%Y%m%d%H%i' END))";
 		} else {
 			$files[] = 'xreference = null';
@@ -587,12 +588,12 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		$query->where('original_id = ' . (int)$this->id);
 
 		if ($oldEvent->modified && $this->_update_modified !== null && $this->_update_modified == 0) {
-			$query->where('(modified = ' . $this->getDatabase()->quote($oldEvent->modified)
+			$query->where('(modified = ' . $db->quote($oldEvent->modified)
 				. ' or modified is null)');
 		}
 
-		$this->getDatabase()->setQuery($query);
-		$this->getDatabase()->execute();
+		$db->setQuery($query);
+		$db->execute();
 
 		return $success;
 	}
@@ -691,6 +692,10 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		}
 		if (empty($this->created_by)) {
 			$this->created_by = 0;
+		}
+
+		if (empty($this->payment_provider)) {
+			$this->payment_provider = null;
 		}
 
 		if ($this->color) {

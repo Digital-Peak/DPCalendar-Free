@@ -58,7 +58,7 @@ class SetupForMail implements StageInterface
 			'bookingUid'         => $payload->item->uid,
 			'bookingStatusLabel' => Booking::getStatusLabel($payload->item),
 			'sitename'           => $this->application->get('sitename'),
-			'user'               => $payload->item->name,
+			'user'               => $payload->item->first_name . ' ' . $payload->item->name,
 			'tickets'            => $payload->tickets,
 			'countTickets'       => $payload->tickets ? \count($payload->tickets) : 0,
 			'acceptUrl'          => RouteHelper::getInviteChangeRoute($payload->item, true, true),

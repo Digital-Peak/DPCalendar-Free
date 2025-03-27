@@ -50,6 +50,7 @@ class SetupForUpdate implements StageInterface
 				throw new \Exception('Booking can not be cancelled');
 			}
 		}
+
 		return $payload;
 	}
 }

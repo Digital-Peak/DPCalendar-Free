@@ -9,6 +9,8 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
@@ -62,6 +64,46 @@ class BookingsModel extends ListModel
 		$this->setState('params', $params);
 
 		parent::populateState('a.book_date', 'desc');
+
+		$format          = $params->get('event_form_date_format', 'd.m.Y');
+		$listRequestData = $this->getUserStateFromRequest($this->context . 'list', 'list', null, 'array', false);
+		if (empty($listRequestData)) {
+			$listRequestData = [];
+		}
+
+		// Joomla resets the start and end date
+		$search = $listRequestData['date_start'] ?? '';
+		try {
+			DPCalendarHelper::getDateFromString($search, null, true, $format);
+		} catch (\Exception $exception) {
+			if ($search) {
+				$app->enqueueMessage($exception->getMessage(), 'warning');
+			}
+			$search                        = '';
+			$listRequestData['date_start'] = '';
+
+			if ($app instanceof CMSWebApplicationInterface) {
+				$app->setUserState($this->context . '.filter', $listRequestData);
+			}
+		}
+		$this->setState('list.date_start', $search);
+
+		$search = $listRequestData['date_end'] ?? '';
+		if ($search) {
+			try {
+				DPCalendarHelper::getDateFromString($search, null, true, $format);
+			} catch (\Exception $e) {
+				$app->enqueueMessage($e->getMessage(), 'warning');
+				$search = '';
+
+				$listRequestData['date_end'] = '';
+
+				if ($app instanceof CMSWebApplicationInterface) {
+					$app->setUserState($this->context . '.filter', $listRequestData);
+				}
+			}
+		}
+		$this->setState('list.date_end', $search);
 	}
 
 	protected function _getList($query, $limitstart = 0, $limit = 0)
@@ -78,6 +120,9 @@ class BookingsModel extends ListModel
 			$ticketsModel->setState('filter.booking_id', $item->id);
 			$ticketsModel->setState('list.limit', 10000);
 			$item->tickets = $ticketsModel->getItems();
+
+			// @deprecated
+			$item->processor = $item->payment_provider;
 
 			if (!$item->country) {
 				continue;
@@ -183,8 +228,8 @@ class BookingsModel extends ListModel
 			$query->where('a.user_id = ' . (int)$user->id);
 		}
 
-		if ($processor = $this->getState('filter.processor')) {
-			$query->where('a.processor like ' . $this->getDatabase()->quote($processor . '%'));
+		if ($payment_provider = $this->getState('filter.payment_provider')) {
+			$query->where('a.payment_provider like ' . $this->getDatabase()->quote($payment_provider . '%'));
 		}
 
 		$catId = 0;
@@ -200,7 +245,6 @@ class BookingsModel extends ListModel
 			}
 		}
 
-
 		// On front end if we are not an admin only bookings are visible where we are the author of the event
 		if ($this->getState('filter.my', 0) != 1
 			&& Factory::getApplication()->isClient('site')
@@ -210,6 +254,31 @@ class BookingsModel extends ListModel
 			// Join over the events
 			$query->join('LEFT', '#__dpcalendar_events AS e ON e.id = t.event_id');
 			$query->where('e.created_by = ' . (int)$user->id);
+		}
+
+		$search = $this->getState('list.date_start');
+		if (!empty($search)) {
+			$search = DPCalendarHelper::getDateFromString(
+				$search,
+				null,
+				true,
+				DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
+			);
+			$search->setTime(0, 0);
+			$search = $db->quote($db->escape($search->toSql(), true));
+			$query->where('a.book_date >= ' . $search);
+		}
+
+		$search = $this->getState('list.date_end');
+		if (!empty($search)) {
+			$search = DPCalendarHelper::getDateFromString(
+				$search,
+				null,
+				true,
+				DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y')
+			);
+			$search = $db->quote($db->escape($search->toSql(), true));
+			$query->where('a.book_date <= ' . $search);
 		}
 
 		// Add the list ordering clause.
@@ -235,5 +304,20 @@ class BookingsModel extends ListModel
 		$this->getDatabase()->setQuery($query);
 
 		return (int)$this->getDatabase()->loadResult();
+	}
+
+	public function updateFirstNameFromField(int $fieldId): int
+	{
+		$values = $this->getDatabase()
+			->setQuery("select * from #__fields_values where value > '' and field_id = " . $fieldId)->loadObjectList();
+		foreach ($values as $value) {
+			$this->getDatabase()->setQuery(
+				"update #__dpcalendar_bookings set name = trim(concat(COALESCE(first_name, ''), ' ', name)), first_name = " . $this->getDatabase()->quote($value->value)
+				. ' where id = ' . $value->item_id
+			)->execute();
+			$this->getDatabase()->setQuery('delete from #__fields_values where field_id = ' . $value->field_id . ' and item_id = ' . $value->item_id)->execute();
+		}
+
+		return \count($values);
 	}
 }

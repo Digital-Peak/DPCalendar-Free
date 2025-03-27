@@ -47,8 +47,8 @@ class SendNewBookingMail implements StageInterface, UserFactoryAwareInterface
 			return $payload;
 		}
 
-		// Never send a mail when we are before or after activation process
-		if (\in_array($payload->item->state, [0, 2, 3, 5, 6, 7, 8])) {
+		// Never send a mail when we are before or after activation process or trashed
+		if (\in_array($payload->item->state, [0, 2, 3, 5, 6, 7, 8, -2])) {
 			return $payload;
 		}
 

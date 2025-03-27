@@ -13,7 +13,7 @@ $this->layoutHelper->renderLayout('block.map', $this->displayData);
 $this->dpdocument->loadStyleFile('dpcalendar/views/locationform/default.css');
 $this->dpdocument->loadScriptFile('views/locationform/default.js');
 
-$action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id . $this->tmpl);
+$action = $this->router->route('index.php?option=com_dpcalendar&view=locationform&l_id=' . (int)$this->location->id);
 ?>
 <div class="com-dpcalendar-locationform">
 	<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>

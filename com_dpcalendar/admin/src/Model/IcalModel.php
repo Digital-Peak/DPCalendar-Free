@@ -413,10 +413,8 @@ class IcalModel extends BaseDatabaseModel
 			$cmp->TZOFFSETFROM = \sprintf('%+03d%02d', ($tzfrom >= 0 ? '+' : '') . floor($tzfrom), ($tzfrom - floor($tzfrom)) * 60);
 			$cmp->TZOFFSETTO   = \sprintf('%+03d%02d', ($offset >= 0 ? '+' : '') . floor($offset), ($offset - floor($offset)) * 60);
 
-			// add abbreviated timezone name if available
-			if (!empty($trans['abbr'])) {
-				$cmp->TZNAME = $trans['abbr'];
-			}
+			// Add abbreviated timezone name if available
+			$cmp->TZNAME = $trans['abbr'];
 
 			$tzfrom = $offset;
 			$vt->add($cmp);

@@ -37,16 +37,21 @@ class SetupForNew implements StageInterface
 	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Default some data
-		$event                          = null;
-		$payload->data['price']         = 0;
-		$payload->data['price_details'] = [];
-		$payload->data['price_tickets'] = 0.0;
-		$payload->data['price_options'] = 0.0;
-		$payload->data['tax']           = 0.00;
-		$payload->data['tax_rate']      = 0;
-		$payload->data['id']            = 0;
-		$payload->data['currency']      = $this->currencyModel->getActualCurrency()->currency;
-		$payload->discounts             = [
+		$event                             = null;
+		$payload->data['price']            = 0;
+		$payload->data['price_details']    = [];
+		$payload->data['price_tickets']    = 0.0;
+		$payload->data['price_options']    = 0.0;
+		$payload->data['events_discount']  = 0.0;
+		$payload->data['tickets_discount'] = 0.0;
+		$payload->data['tax']              = 0.0;
+		$payload->data['tax_rate']         = 0.0;
+		$payload->data['coupon_id']        = empty($payload->data['coupon_id']) ? 0 : $payload->data['coupon_id'];
+		$payload->data['coupon_area']      = 0;
+		$payload->data['coupon_rate']      = 0.0;
+		$payload->data['id']               = 0;
+		$payload->data['currency']         = $this->currencyModel->getActualCurrency()->currency;
+		$payload->discounts                = [
 			'events_discount_amount'  => 0,
 			'events_discount_title'   => '',
 			'events_discount_value'   => 0,
@@ -154,10 +159,10 @@ class SetupForNew implements StageInterface
 			$payload->data['user_id']
 		);
 
+		// Reset here to ensure an integer
+		$payload->data['coupon_id'] = 0;
+
 		// Set the coupon attributes
-		$payload->data['coupon_id']   = 0;
-		$payload->data['coupon_area'] = 0;
-		$payload->data['coupon_rate'] = 0;
 		if ($coupon instanceof \stdClass && $coupon->id) {
 			$payload->data['coupon_id']   = $coupon->id;
 			$payload->data['coupon_area'] = $coupon->area;
@@ -185,6 +190,30 @@ class SetupForNew implements StageInterface
 
 		// Determine tax
 		$taxRate = empty($payload->data['country']) ? null : $this->taxRateModel->getItemByCountry($payload->data['country']);
+
+		// Check if there is a tax free custom field
+		if ($fieldName = $this->params->get('bookingsys_tax_free_custom_field')) {
+			foreach ($payload->events as $event) {
+				// Ensure fields are loaded
+				if (empty($event->jcfields)) {
+					$this->application->triggerEvent('onContentPrepare', ['com_dpcalendar.event', $event, $this->params, 0]);
+				}
+
+				// Still no fields
+				if (empty($event->jcfields)) {
+					continue;
+				}
+
+				// Loop over the fields
+				foreach ($event->jcfields as $field) {
+					// If the field is the one we are looking for and the value resolves to true, unset the tax
+					if ($field->name == $fieldName && filter_var($field->value, FILTER_VALIDATE_BOOLEAN)) {
+						$taxRate = null;
+					}
+				}
+			}
+		}
+
 		if ($taxRate instanceof \stdClass) {
 			$payload->data['tax'] = $taxRate->inclusive ? $payload->data['price'] - ($payload->data['price'] / (1 + ($taxRate->rate / 100))) : ($payload->data['price'] / 100) * $taxRate->rate;
 			$payload->data['price'] += $taxRate->inclusive ? 0 : $payload->data['tax'];

@@ -30,6 +30,7 @@ class FieldsOrderModel extends BaseModel
 
 		// Set up the fields
 		$bookingFields   = [];
+		$bookingFields[] = (object)['id' => 'first_name', 'name' => 'first_name'];
 		$bookingFields[] = (object)['id' => 'name', 'name' => 'name'];
 		$bookingFields[] = (object)['id' => 'email', 'name' => 'email'];
 		$bookingFields[] = (object)['id' => 'telephone', 'name' => 'telephone'];
@@ -105,6 +106,7 @@ class FieldsOrderModel extends BaseModel
 		}
 
 		$ticketFields   = [];
+		$ticketFields[] = (object)['id' => 'first_name', 'name' => 'first_name', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_FIRST_NAME_LABEL'];
 		$ticketFields[] = (object)['id' => 'name', 'name' => 'name', 'label' => 'COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'];
 		$ticketFields[] = (object)['id' => 'email', 'name' => 'email'];
 		$ticketFields[] = (object)[

@@ -7,12 +7,7 @@
 
 \defined('_JEXEC') or die();
 
-$url = 'index.php?option=com_dpcalendar&view=bookings';
-foreach (['Itemid', 'e_id'] as $key) {
-	if ($value = $this->input->getInt($key, 0)) {
-		$url .= '&' . $key . '=' . $value;
-	}
-}
+$url = 'index.php?option=com_dpcalendar&view=bookings' . ($this->input->getInt('e_id', 0) ? '&e_id=' . $this->input->getInt('e_id', 0) : '');
 
 $this->params->set('form_state', 2);
 $this->params->set('hidden_fields', $this->params->get('bookings_filter_form_hidden_fields', []));

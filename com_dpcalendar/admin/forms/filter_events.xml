@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<form
-	addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
+<form addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
 	<fields name="list">
 		<field name="start-date" type="datetimechooser" all_day="1" show_time="0" hint="COM_DPCALENDAR_FIELD_START_DATE_LABEL"
 			label="COM_DPCALENDAR_FIELD_START_DATE_LABEL"/>
 		<field name="end-date" type="datetimechooser" all_day="1" show_time="0" hint="COM_DPCALENDAR_FIELD_END_DATE_LABEL"
 			label="COM_DPCALENDAR_FIELD_END_DATE_LABEL"/>
-		<field name="fullordering" class="js-select-submit-on-change" type="list" default="a.start_date ASC">
+		<field name="fullordering" type="list" default="a.start_date ASC" class="js-select-submit-on-change">
 			<option value="">JGLOBAL_SORT_BY</option>
 			<option value="a.state ASC">JSTATUS_ASC</option>
 			<option value="a.state DESC">JSTATUS_DESC</option>

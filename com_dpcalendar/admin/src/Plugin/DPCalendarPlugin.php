@@ -871,7 +871,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		}
 
 		// Find the override in the originals
-		if (!empty($event->{'RECURRENCE-ID'})) {
+		if (!empty($event->{'RECURRENCE-ID'}) && $event->{'RECURRENCE-ID'} instanceof DateTime) {
 			$recurrenceDate = $event->{'RECURRENCE-ID'}->getDateTime()->format('U');
 			foreach ($originals as $o) {
 				if ($recurrenceDate != $o->DTSTART->getDateTime()->format('U')) {
@@ -948,13 +948,12 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 						$booking->name = (string)$param;
 					}
 				}
+
 				// A name is at least required
-				if ($booking->name === '') {
+				if ($booking->name === '' || $booking->name === '0') {
 					continue;
 				}
-				if ($booking->name === '0') {
-					continue;
-				}
+
 				$tmpEvent->bookings[] = $booking;
 			}
 		}

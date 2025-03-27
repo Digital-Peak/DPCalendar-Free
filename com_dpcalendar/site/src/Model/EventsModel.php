@@ -32,7 +32,7 @@ class EventsModel extends ListModel
 	{
 		if (empty($config['filter_fields'])) {
 			$config['filter_fields'] = [
-				'id', 'a.id', 'title', 'a.title', 'search', 'location', 'length-type', 'radius', 'calendars', 'created_by', 'com_fields', 'tags'
+				'id', 'a.id', 'title', 'a.title', 'search', 'location', 'length-type', 'radius', 'calendars', 'created_by', 'com_fields', 'tags', 'state'
 			];
 		}
 
@@ -379,16 +379,18 @@ class EventsModel extends ListModel
 		$query->join('LEFT', '#__users AS uam ON uam.id = a.modified_by');
 
 		// Filter by state
-		$state      = $this->getState('filter.state');
-		$stateOwner = $user->id && $this->getState('filter.state_owner') ? ' or a.created_by = ' . $user->id : '';
-		if (is_numeric($state)) {
-			$query->where('(a.state = ' . (int)$state . $stateOwner . ')');
-		} elseif (\is_array($state)) {
-			$state = ArrayHelper::toInteger($state);
-			$query->where('(a.state in (' . implode(',', $state) . ')' . $stateOwner . ')');
+		$state = $this->getState('filter.state', []);
+		if (!\is_array($state) && !empty($state)) {
+			$state = [$state];
 		}
-		// Do not show trashed events on the front-end
-		$query->where('a.state != -2');
+		$stateOwner = $user->id && $this->getState('filter.state_owner') ? ' or a.created_by = ' . $user->id : '';
+
+		if (!empty($state)) {
+			$query->where('(a.state in (' . implode(',', ArrayHelper::toInteger($state)) . ')' . $stateOwner . ')');
+		} else {
+			// Do not show trashed events on the front-end
+			$query->where('a.state != -2');
+		}
 
 		// Filter by start and end dates
 		$date    = Factory::getDate();
@@ -788,6 +790,10 @@ class EventsModel extends ListModel
 
 		if (\array_key_exists('com_fields', $filters)) {
 			$filters['com_fields'] = array_filter($filters['com_fields']);
+		}
+
+		if (\array_key_exists('state', $filters) && $filters['state'] === [1, 3]) {
+			unset($filters['state']);
 		}
 
 		return $filters;

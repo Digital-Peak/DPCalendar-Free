@@ -8,7 +8,7 @@
 \defined('_JEXEC') or die();
 
 $url = 'index.php?option=com_dpcalendar&view=tickets';
-foreach (['Itemid', 'e_id', 'b_id'] as $key) {
+foreach (['e_id', 'b_id'] as $key) {
 	if ($value = $this->input->getInt($key, 0)) {
 		$url .= '&' . $key . '=' . $value;
 	}

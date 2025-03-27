@@ -55,8 +55,12 @@ class RawView extends BaseView
 
 		// Set some defaults
 		$this->input->set('list.limit', 1000);
-		$this->state->set('filter.state', [1, 3]);
-		$this->state->set('filter.state_owner', true);
+
+		// When no state permission, then show from owner and ensure a state
+		if (!$this->getCurrentUser()->authorise('core.edit.state', 'com_dpcalendar')) {
+			$model->setState('filter.state_owner', true);
+			$model->setState('filter.state', $model->getState('filter.state', [1, 3]));
+		}
 
 		// Convert the dates from the user timezone into normal
 		$tz    = DPCalendarHelper::getDate()->getTimezone()->getName();

@@ -25,6 +25,8 @@
 			<option value="8">COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING</option>
 			<option value="-2">JTRASHED</option>
 		</field>
+		<field name="first_name" type="text" required="true" class="dp-form-input"
+			label="COM_DPCALENDAR_BOOKING_FIELD_FIRST_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_FIRST_NAME_DESC"/>
 		<field name="name" type="text" required="true" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NAME_DESC"/>
 		<field name="email" type="email" required="true" class="dp-form-input"
@@ -54,8 +56,10 @@
 			label="COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_TAX_DESC"/>
 		<field name="tax_rate" type="text" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_TAX_RATE_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_TAX_RATE_DESC"/>
-		<field name="processor" type="dppaymentprovider"
+		<field name="payment_provider" type="dppaymentprovider"
 			label="COM_DPCALENDAR_BOOKING_FIELD_PAYMENT_PROVIDER_LABEL"/>
+		<field name="payment_provider_fee" type="text" class="dp-form-input"
+			label="COM_DPCALENDAR_BOOKING_FIELD_PAYMENT_PROVIDER_FEE_LABEL"/>
 		<field name="amount" type="integer" first="0" last="1" step="1" default="0"
 			label="COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_DESC">
 		</field>
@@ -78,7 +82,7 @@
 		</field>
 
 		<field name="transaction_id" type="text"
-			label="COM_DPCALENDAR_INVOICE"/>
+			label="COM_DPCALENDAR_BOOKING_FIELD_TRANSACTION_ID_LABEL"/>
 		<field name="net_amount" type="hidden" readonly="true" default="0"
 			label="COM_DPCALENDAR_BOOKING_FIELD_NET_AMOUNT_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NET_AMOUNT_DESC"/>
 		<field name="options" type="text" class="dp-form-input"

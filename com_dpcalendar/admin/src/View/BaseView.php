@@ -100,6 +100,7 @@ class BaseView extends HtmlView
 		$this->input = $this->app->getInput();
 		$this->user  = $this->getCurrentUser();
 		$this->tmpl  = $this->input->get('tmpl') ? '&tmpl=' . $this->input->get('tmpl', '') : '';
+		$this->tmpl  = $this->tmpl . '&Itemid=' . $this->app->getInput()->getInt('Itemid', 0);
 
 		$state = $this->getModel()->getState();
 

@@ -24,7 +24,7 @@ use Joomla\CMS\HTML\HTMLHelper;
 			<div class="dp-control__input">
 				<input type="checkbox" class="dp-input dp-input-checkbox dp-form-input"
 					value="<?php echo $ticket->id; ?>" name="jform[tickets][]" id="ticket-<?php echo $ticket->id; ?>" checked>
-				<label for="ticket-<?php echo $ticket->id; ?>"><?php echo $ticket->name . ' [' . Booking::getStatusLabel($ticket) . ']'; ?></label>
+				<label for="ticket-<?php echo $ticket->id; ?>"><?php echo $ticket->first_name . ' ' . $ticket->name . ' [' . Booking::getStatusLabel($ticket) . ']'; ?></label>
 			</div>
 		</div>
 	<?php } ?>

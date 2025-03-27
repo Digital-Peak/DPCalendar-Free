@@ -63,7 +63,7 @@ foreach ($this->event->tickets as $ticket) {
 					</td>
 				<?php } ?>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?>">
-					<?php echo $ticket->name; ?>
+					<?php echo $ticket->first_name . ' ' . $ticket->name; ?>
 				</td>
 				<td data-column="<?php echo $this->translate('COM_DPCALENDAR_LOCATION'); ?>">
 					<?php echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo','Administrator')->format([$ticket]) ?: '&nbsp;'; ?>

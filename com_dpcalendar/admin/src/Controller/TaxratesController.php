@@ -15,6 +15,13 @@ class TaxratesController extends AdminController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_TAXRATE';
 
+	public function euvatimport(): void
+	{
+		$this->getModel('Taxrate')->euvatimport();
+
+		$this->setRedirect('index.php?option=com_dpcalendar&view=taxrates');
+	}
+
 	public function getModel($name = 'Taxrate', $prefix = 'Administrator', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);

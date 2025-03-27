@@ -59,7 +59,7 @@ class TaxrateTable extends BasicTable
 	{
 		$date = DPCalendarHelper::getDate();
 		$user = $this->getCurrentUser();
-		if ($this->id !== 0) {
+		if (!empty($this->id)) {
 			// Existing item
 			$this->modified    = $date->toSql();
 			$this->modified_by = $user->id;

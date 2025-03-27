@@ -30,7 +30,7 @@ if ($discounts === []) {
 				<?php echo $discount->label ?: $this->translate('COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL'); ?>
 			</span>
 			<span class="dp-user-discount__content">
-				<?php echo $discount->type == 'value' ? DPCalendarHelper::renderPrice($discount->value) : $value . '%'; ?>
+				<?php echo $discount->type == 'value' ? DPCalendarHelper::renderPrice($discount->value) : $discount->value . '%'; ?>
 			</span>
 			<span class="dp-user-discount__description">
 				<?php echo $discount->description; ?>

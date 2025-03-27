@@ -34,7 +34,7 @@ $counter = 1;
 		</span>
 	<?php } ?>
 	<span class="dp-steps__separator"><?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::NEXT]); ?></span>
-	<span class="dp-step dp-step-pay <?php echo $this->getLayout() === 'order' ? 'dp-step_active' : ''; ?>">
+	<span class="dp-step dp-step-pay <?php echo $this->getLayout() === 'order' || $this->getLayout() === 'pay' ? 'dp-step_active' : ''; ?>">
 		<span class="dp-step__number"><?php echo $counter++; ?></span>
 	</span>
 </div>

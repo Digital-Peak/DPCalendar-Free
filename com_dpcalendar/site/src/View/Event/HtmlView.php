@@ -272,11 +272,19 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		}
 
 		// Taxes stuff
+		$fieldName = $this->params->get('bookingsys_tax_free_custom_field');
+
+		// Get the current country for the IP
 		$this->country = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getCountryForIp();
-		if ($this->country instanceof \stdClass) {
+
+		// If the event is not tax free and a country exists for the iü, then process
+		if (array_filter($event->jcfields ?? [], fn ($f): bool => $f->name == $fieldName && filter_var($f->value, FILTER_VALIDATE_BOOLEAN)) === []
+			&& $this->country instanceof \stdClass) {
+			// Get the tax
 			$model         = $this->getDPCalendar()->getMVCFactory()->createModel('Taxrate', 'Administrator', ['ignore_request' => true]);
 			$this->taxRate = $model->getItemByCountry($this->country->id);
 
+			// Load the languages
 			$this->app->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 		}
 

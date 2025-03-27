@@ -24,7 +24,7 @@ class CollectEventsAndTickets implements StageInterface
 
 	public function __invoke(\stdClass $payload): \stdClass
 	{
-		if ($payload->oldItem) {
+		if (isset($payload->oldItem) && $payload->oldItem instanceof \stdClass) {
 			$payload->tickets = $payload->oldItem->tickets;
 			foreach ($payload->tickets as $ticket) {
 				$payload->events[$ticket->event_id]                     = $this->model->getEvent($ticket->event_id);

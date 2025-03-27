@@ -234,7 +234,12 @@ class HtmlView extends BaseView
 		}
 		$model->setState('filter.expand', $this->params->get('list_expand', 1));
 		$model->setState('filter.ongoing', $this->params->get('list_include_ongoing', 0));
-		$model->setState('filter.state_owner', true);
+
+		// When no state permission, then show from owner and ensure a state
+		if (!$this->getCurrentUser()->authorise('core.edit.state', 'com_dpcalendar')) {
+			$model->setState('filter.state_owner', true);
+			$model->setState('filter.state', $model->getState('filter.state', [1, 3]));
+		}
 
 		// The current start of the day
 		$now = $this->dateHelper->getDate();

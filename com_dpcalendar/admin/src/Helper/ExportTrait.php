@@ -17,15 +17,16 @@ use Joomla\CMS\Form\FormFactoryAwareTrait;
 use Joomla\CMS\MVC\Model\ListModel;
 use Joomla\CMS\Plugin\CMSPlugin;
 use Joomla\CMS\User\UserFactoryAwareTrait;
+use Joomla\Registry\Registry;
 
 trait ExportTrait
 {
 	use UserFactoryAwareTrait;
 	use FormFactoryAwareTrait;
 
-	public function getEventData(array $events = []): array
+	public function getEventData(array $events, Registry $config): array
 	{
-		$parser = function ($name, $event) {
+		$parser = function ($name, $event) use ($config) {
 			switch ($name) {
 				case 'catid':
 					$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
@@ -51,16 +52,16 @@ trait ExportTrait
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
 				case 'description':
-					return $this->params->get('export_strip_html') ? strip_tags((string)$event->description) : $event->description;
+					return $config->get('strip_html') ? strip_tags((string)$event->description) : $event->description;
 				default:
 					return $event->$name ?? '';
 			}
 		};
 
-		return $this->getData('event', $parser, $events);
+		return $this->getData('event', $parser, $events, $config);
 	}
 
-	public function getBookingsData(array $bookings = []): array
+	public function getBookingsData(array $bookings, Registry $config): array
 	{
 		$parser = function ($name, $booking) {
 			switch ($name) {
@@ -134,10 +135,10 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('booking', $parser, $bookings);
+		return $this->getData('booking', $parser, $bookings, $config);
 	}
 
-	public function getTicketsData(array $tickets = []): array
+	public function getTicketsData(array $tickets, Registry $config): array
 	{
 		$parser = function ($name, $ticket) {
 			switch ($name) {
@@ -174,12 +175,12 @@ trait ExportTrait
 			}
 		};
 
-		return $this->getData('ticket', $parser, $tickets);
+		return $this->getData('ticket', $parser, $tickets, $config);
 	}
 
-	public function getLocationData(array $locations = []): array
+	public function getLocationData(array $locations, Registry $config): array
 	{
-		$parser = function ($name, $location) {
+		$parser = function ($name, $location) use ($config) {
 			switch ($name) {
 				case 'rooms':
 					return implode(', ', array_map(static fn ($room) => $room->title, (array)$location->rooms));
@@ -193,16 +194,16 @@ trait ExportTrait
 
 					return DPCalendarHelper::getDate($location->$name)->format('Y-m-d H:i:s', true);
 				case 'description':
-					return $this->params->get('export_strip_html') ? strip_tags((string)$location->description) : $location->description;
+					return $config->get('strip_html') ? strip_tags((string)$location->description) : $location->description;
 				default:
 					return $location->$name ?? '';
 			}
 		};
 
-		return $this->getData('location', $parser, $locations);
+		return $this->getData('location', $parser, $locations, $config);
 	}
 
-	private function getData(string $name, callable $valueParser, array $items): array
+	private function getData(string $name, callable $valueParser, array $items, Registry $config): array
 	{
 		$app = $this->getApplication();
 		// @phpstan-ignore-next-line
@@ -224,6 +225,14 @@ trait ExportTrait
 
 		if ($this instanceof CMSPlugin) {
 			$form->loadFile(JPATH_PLUGINS . '/' . $this->_type . '/' . $this->_name . '/' . $this->_name . '.xml', false, '//config');
+
+			// Get the config field
+			$formField = $form->getField('export_configurations', 'params');
+			if (!$formField instanceof SubformField) {
+				return [];
+			}
+
+			$form = $formField->loadSubForm();
 		}
 
 		if ($this instanceof BaseView) {
@@ -231,7 +240,7 @@ trait ExportTrait
 		}
 
 		// Get the available options
-		$formField = $form->getField(($this instanceof CMSPlugin ? 'export_' : '') . $name . 's_fields', 'params');
+		$formField = $form->getField($name . 's_fields', $this instanceof CMSPlugin ? '' : 'params');
 		if (!$formField instanceof SubformField) {
 			return [];
 		}
@@ -244,7 +253,7 @@ trait ExportTrait
 		// The selected fields from the params where the field value is reduced
 		$formFields = $formField->getFields();
 		$fields     = [];
-		foreach (array_column((array)$this->params->get(($this instanceof CMSPlugin ? 'export_' : '') . $name . 's_fields', []), 'field') as $fieldName) {
+		foreach (array_column((array)$config->get($name . 's_fields', []), 'field') as $fieldName) {
 			foreach ($formFields as $field) {
 				if ($field->value !== $fieldName) {
 					continue;
@@ -282,7 +291,7 @@ trait ExportTrait
 				}
 
 				// Get either the value or raw one
-				$value = reset($customField)->{$this->params->get('export_value_type', 'value') === 'value' ? 'value' : 'rawvalue'};
+				$value = reset($customField)->{$config->get('value_type', 'value') === 'value' ? 'value' : 'rawvalue'};
 
 				// Implode the array to have only one value
 				if (\is_array($value)) {
@@ -290,7 +299,7 @@ trait ExportTrait
 				}
 
 				// Create the cell, either with or without tags
-				$line[] = html_entity_decode(trim($this->params->get('export_strip_html') ? strip_tags((string)$value) : $value));
+				$line[] = html_entity_decode(trim($config->get('strip_html') ? strip_tags((string)$value) : $value));
 			}
 
 			// Set a property as well

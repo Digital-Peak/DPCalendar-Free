@@ -59,7 +59,7 @@
 				<option value="0">JHIDE</option>
 			</field>
 			<field name="list_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-				layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,state,access,language,limit,fullordering"
+				layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 			<field name="list_show_hits" type="list" useglobal="true"
@@ -423,7 +423,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-						hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
+						hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -480,7 +480,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-						hide="id,event_id,user_id,price,processor,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
+						hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>

@@ -10,6 +10,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BasicTable;
+use DigitalPeak\ThinHTTP\CurlClientFactory;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
@@ -21,20 +22,44 @@ class TaxrateModel extends AdminModel
 {
 	protected $text_prefix = 'COM_DPCALENDAR_TAXRATE';
 
-	protected function canDelete($record)
+	public function euvatimport(): void
 	{
-		if (!empty($record->state) && $record->state != -2) {
-			return false;
+		$data = (new CurlClientFactory())->create()->get('https://raw.githubusercontent.com/DavidAnderson684/euvatrates.com/refs/heads/master/rates.json');
+		if (empty($data->rates)) {
+			return;
 		}
 
-		return parent::canDelete($record);
+		foreach ($data->rates as $code => $rate) {
+			$country = $this->bootComponent('dpcalendar')->getMVCFactory()
+				->createModel('Country', 'Administrator', ['ignore_request' => true])->getItem(['short_code' => $code]);
+			if (!$country instanceof \stdClass) {
+				continue;
+			}
+
+			$item = $this->getItemByCountry($country->id);
+
+			// If the rate exists, update it
+			if (!$item instanceof \stdClass) {
+				$item            = new \stdClass();
+				$item->title     = $rate->country;
+				$item->countries = ['countries0' => ['country' => $country->id]];
+				$item->state     = 1;
+			}
+
+			$item->rate = $rate->standard_rate;
+
+			$this->save((array)$item);
+			$this->setState($this->getName() . '.id', null);
+		}
 	}
 
 	public function getItemByCountry(string $countryId): ?\stdClass
 	{
 		$query = $this->getDatabase()->getQuery(true)
 			->select('*')
-			->from('#__dpcalendar_taxrates')->where('countries like\'%"country":"' . $countryId . '"%\'')->where('state = 1');
+			->from('#__dpcalendar_taxrates')
+			->where('(countries like \'%{"country":"' . $countryId . '"}%\' or countries like \'%{"country":' . $countryId . "}%')")
+			->where('state = 1');
 		$this->getDatabase()->setQuery($query);
 
 		$taxRate = $this->getDatabase()->loadObject();
@@ -119,6 +144,15 @@ class TaxrateModel extends AdminModel
 		$this->setState('return_page', base64_decode((string)$return));
 
 		$this->setState('params', $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
+	}
+
+	protected function canDelete($record)
+	{
+		if (!empty($record->state) && $record->state != -2) {
+			return false;
+		}
+
+		return parent::canDelete($record);
 	}
 
 	public function getReturnPage(): string

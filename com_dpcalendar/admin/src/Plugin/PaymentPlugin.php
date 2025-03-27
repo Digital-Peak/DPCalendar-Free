@@ -147,7 +147,7 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 			return false;
 		}
 
-		$provider = array_filter($this->onDPPaymentProviders(), static fn ($p): bool => $p->id == $booking->processor);
+		$provider = array_filter($this->onDPPaymentProviders(), static fn ($p): bool => $p->id == $booking->payment_provider);
 		if ($provider === []) {
 			return false;
 		}
@@ -173,7 +173,7 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 	 */
 	public function onDPCalendarLoadInvoice(\stdClass $booking): ?array
 	{
-		$provider = array_filter($this->onDPPaymentProviders(), static fn ($p): bool => $p->id == $booking->processor);
+		$provider = array_filter($this->onDPPaymentProviders(), static fn ($p): bool => $p->id == $booking->payment_provider);
 		if ($provider === []) {
 			return null;
 		}
@@ -192,7 +192,7 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 		}
 
 		try {
-			$provider = array_filter($this->onDPPaymentProviders(), static fn ($p): bool => $p->id == $booking->processor);
+			$provider = array_filter($this->onDPPaymentProviders(), static fn ($p): bool => $p->id == $booking->payment_provider);
 			if ($provider === []) {
 				return false;
 			}
@@ -268,8 +268,17 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 			if (empty($provider->icon)) {
 				$provider->icon = 'media/plg_' . $provider->plugin_type . '_' . $provider->plugin_name . '/images/' . $provider->plugin_name . '.svg';
 			}
+
 			if (!empty($provider->icon) && strpos((string)$provider->icon, '.svg') > 0) {
 				$provider->icon = JPATH_ROOT . '/' . $provider->icon;
+			}
+
+			if (empty($provider->fee_amount)) {
+				$provider->fee_amount = 0;
+			}
+
+			if (empty($provider->fee_type)) {
+				$provider->fee_type = 'percentage';
 			}
 
 			$providers[] = $provider;

@@ -47,7 +47,7 @@ $format = $this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params
 				</dl>
 				<dl class="dp-description">
 					<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL'); ?></dt>
-					<dd class="dp-description__description"><?php echo $ticket->name; ?></dd>
+					<dd class="dp-description__description"><?php echo $ticket->first_name . ' ' . $ticket->name; ?></dd>
 				</dl>
 				<?php if ($location = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo','Administrator')->format([$ticket])) { ?>
 					<dl class="dp-description">

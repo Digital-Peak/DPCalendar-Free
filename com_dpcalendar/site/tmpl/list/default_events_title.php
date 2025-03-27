@@ -14,10 +14,19 @@ $event = $this->displayData['event'];
 	<a href="<?php echo $this->router->getEventRoute($event->id, $event->catid); ?>" class="dp-event__link dp-link" target="_parent">
 		<?php echo $event->title; ?>
 	</a>
+	<?php if ($event->state == 0) { ?>
+		<span class="dp-event__title_unpublished"><?php echo $this->translate('JUNPUBLISHED'); ?></span>
+	<?php } ?>
+	<?php if ($event->state == 2) { ?>
+		<span class="dp-event__title_archived"><?php echo $this->translate('JARCHIVED'); ?></span>
+	<?php } ?>
 	<?php if ($event->state == 3) { ?>
 		<span class="dp-event__title_canceled"><?php echo $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?></span>
 	<?php } ?>
-	<?php if ($event->state == 0) { ?>
-		<span class="dp-event__title_unpublished"><?php echo $this->translate('JUNPUBLISHED'); ?></span>
+	<?php if ($event->state == 4) { ?>
+		<span class="dp-event__title_reported"><?php echo $this->translate('COM_DPCALENDAR_FIELD_VALUE_REPORTED'); ?></span>
+	<?php } ?>
+	<?php if ($event->state == -2) { ?>
+		<span class="dp-event__title_trashed"><?php echo $this->translate('JTRASHED'); ?></span>
 	<?php } ?>
 </h2>

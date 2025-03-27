@@ -756,64 +756,64 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		if ($params->get('event_form_all_day') != '' && (!isset($item->all_day) || $item->all_day === null)) {
 			$data['all_day'] = $params->get('event_form_all_day');
 		}
-		if (empty($item->color)) {
+		if (!isset($item->color) || $item->color === null) {
 			$data['color'] = $params->get('event_form_color');
 		}
-		if (empty($item->url)) {
+		if (!isset($item->url) || $item->url === null) {
 			$data['url'] = $params->get('event_form_url');
 		}
-		if (empty($item->description)) {
+		if (!isset($item->description) || $item->description === null) {
 			$data['description'] = $params->get('event_form_description');
 		}
-		if (empty($item->capacity) && $params->get('event_form_capacity', 0) > 0) {
+		if ((!isset($item->capacity) || $item->capacity === null) && $params->get('event_form_capacity', 0) > 0) {
 			$data['capacity'] = $params->get('event_form_capacity');
 		}
-		if (empty($item->max_tickets)) {
+		if (!isset($item->max_tickets) || $item->max_tickets === null) {
 			$data['max_tickets'] = $params->get('event_form_max_tickets');
 		}
-		if (empty($item->booking_opening_date)) {
+		if (!isset($item->booking_opening_date) || $item->booking_opening_date === null) {
 			$data['booking_opening_date'] = $params->get('event_form_booking_opening_date');
 		}
-		if (empty($item->booking_closing_date)) {
+		if (!isset($item->booking_closing_date) || $item->booking_closing_date === null) {
 			$data['booking_closing_date'] = $params->get('event_form_booking_closing_date');
 		}
-		if (empty($item->booking_cancel_closing_date)) {
+		if (!isset($item->booking_cancel_closing_date) || $item->booking_cancel_closing_date === null) {
 			$data['booking_cancel_closing_date'] = $params->get('event_form_booking_cancel_closing_date');
 		}
-		if (empty($item->booking_series)) {
+		if (!isset($item->booking_series) || $item->booking_series === null) {
 			$data['booking_series'] = $params->get('event_form_booking_series');
 		}
-		if (empty($item->booking_waiting_list)) {
+		if (!isset($item->booking_waiting_list) || $item->booking_waiting_list === null) {
 			$data['booking_waiting_list'] = $params->get('event_form_booking_waiting_list');
 		}
-		if (empty($item->payment_provider)) {
+		if (!isset($item->payment_provider) || $item->payment_provider === null) {
 			$data['payment_provider'] = $params->get('event_form_payment_provider');
 		}
-		if (empty($item->terms)) {
+		if (!isset($item->terms) || $item->terms === null) {
 			$data['terms'] = $params->get('event_form_terms');
 		}
-		if (empty($item->booking_information)) {
+		if (!isset($item->booking_information) || $item->booking_information === null) {
 			$data['booking_information'] = $params->get('event_form_booking_information');
 		}
-		if (empty($item->access)) {
+		if (!isset($item->access) || $item->access === null) {
 			$data['access'] = $params->get('event_form_access');
 		}
-		if (empty($item->access_content)) {
+		if (!isset($item->access_content) || $item->access_content === null) {
 			$data['access_content'] = $params->get('event_form_access_content');
 		}
-		if (empty($item->featured)) {
+		if (!isset($item->featured) || $item->featured === null) {
 			$data['featured'] = $params->get('event_form_featured');
 		}
-		if (empty($item->location_ids)) {
+		if (!isset($item->location_ids) || $item->location_ids === null) {
 			$data['location_ids'] = $params->get('event_form_location_ids', []);
 		}
-		if (empty($item->language)) {
+		if (!isset($item->language) || $item->language === null) {
 			$data['language'] = $params->get('event_form_language');
 		}
-		if (empty($item->metakey)) {
+		if (!isset($item->metakey) || $item->metakey === null) {
 			$data['metakey'] = $params->get('menu-meta_keywords');
 		}
-		if (empty($item->metadesc)) {
+		if (!isset($item->metadesc) || $item->metadesc === null) {
 			$data['metadesc'] = $params->get('menu-meta_description');
 		}
 

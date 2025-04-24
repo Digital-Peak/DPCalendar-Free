@@ -32,11 +32,7 @@ class DPCalendar extends CMSPlugin
 		$query->where('location = :location')->bind(':location', $url);
 
 		$this->getDatabase()->setQuery($query);
-<<<<<<< HEAD
-		if (!str_contains($this->getDatabase()->loadResult(), 'DPCalendar')) {
-=======
 		if (!str_contains((string)$this->getDatabase()->loadResult(), 'DPCalendar')) {
->>>>>>> main
 			return;
 		}
 

@@ -21,6 +21,6 @@
 	</files>
 	<scriptfile>script.php</scriptfile>
 	<updateservers>
-		<server type="extension" priority="1" name="DPCalendar Free"><![CDATA[https://cdn.digital-peak.com/update/stream.php?id=4&project=dpcalendar]]></server>
+		<server type="extension" priority="1" name="DPCalendar Free"><![CDATA[https://cdn.digital-peak.com/update/stream.php?id=4]]></server>
 	</updateservers>
 </extension>

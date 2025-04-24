@@ -23,7 +23,16 @@ class DPCalendar extends CMSPlugin
 	public function onInstallerBeforeUpdateSiteDownload(BeforeUpdateSiteDownloadEvent $event): void
 	{
 		$url = $event->getUrl();
-		if ($url !== '' || !str_contains($url, '&project=dpcalendar')) {
+		if ($url !== '' || !str_contains($url, 'digital-peak.com')) {
+			return;
+		}
+
+		$query = $this->getDatabase()->getQuery(true);
+		$query->select('name')->from('#__update_sites');
+		$query->where('location = :location')->bind(':location', $url);
+
+		$this->getDatabase()->setQuery($query);
+		if (!str_contains($this->getDatabase()->loadResult(), 'DPCalendar')) {
 			return;
 		}
 

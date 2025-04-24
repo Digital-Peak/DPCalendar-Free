@@ -34,7 +34,7 @@ class DPCalendar extends CMSPlugin
 
 	public function onContentPrepare(string $context, mixed $item): bool
 	{
-		if (!$item->text) {
+		if (empty($item->text)) {
 			return true;
 		}
 

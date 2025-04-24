@@ -148,7 +148,7 @@ class JsonapiView extends BaseApiView
 			$item->{$field->name} = $field->apivalue ?? $field->rawvalue;
 		}
 
-		$item->tags = $item->tags ?: [];
+		$item->tags ??= [];
 		if (!empty($item->tags->tags)) {
 			$tagsIds   = explode(',', (string)$item->tags->tags);
 			$tagsNames = $item->tagsHelper->getTagNames($tagsIds);

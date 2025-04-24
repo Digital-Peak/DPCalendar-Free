@@ -129,7 +129,7 @@ class TicketsModel extends ListModel
 		$query->join('LEFT', '#__dpcalendar_bookings AS b ON b.id = a.booking_id');
 
 		// Join over the events
-		$query->select('e.catid AS event_calid, e.title as event_title, e.start_date, e.end_date, e.all_day, e.show_end_time, e.prices as event_prices, e.booking_options as event_options, e.payment_provider as event_payment_provider, e.terms as event_terms, e.created_by as event_author, e.original_id as event_original_id, e.rrule as event_rrule, e.booking_cancel_closing_date as event_booking_cancel_closing_date, e.events_discount, e.tickets_discount');
+		$query->select('e.catid AS event_calid, e.title as event_title, e.start_date, e.end_date, e.all_day, e.show_end_time, e.prices as event_prices, e.booking_options as event_options, e.payment_provider as event_payment_provider, e.terms as event_terms, e.created_by as event_author, e.original_id as event_original_id, e.rrule as event_rrule, e.booking_cancel_closing_date as event_booking_cancel_closing_date, e.events_discount, e.tickets_discount, e.booking_assign_user_groups');
 		$query->join('LEFT', '#__dpcalendar_events AS e ON e.id = a.event_id');
 
 		// Join over the hosts
@@ -269,6 +269,21 @@ class TicketsModel extends ListModel
 		}
 
 		return $activeFilters;
+	}
+
+	public function updateFirstNameFromField(int $fieldId): int
+	{
+		$values = $this->getDatabase()
+			->setQuery("select * from #__fields_values where value > '' and field_id = " . $fieldId)->loadObjectList();
+		foreach ($values as $value) {
+			$this->getDatabase()->setQuery(
+				"update #__dpcalendar_tickets set name = trim(concat(COALESCE(first_name, ''), ' ', name)), first_name = " . $this->getDatabase()->quote($value->value)
+				. ' where id = ' . $value->item_id
+			)->execute();
+			$this->getDatabase()->setQuery('delete from #__fields_values where field_id = ' . $value->field_id . ' and item_id = ' . $value->item_id)->execute();
+		}
+
+		return \count($values);
 	}
 
 	protected function getStoreId($id = '')

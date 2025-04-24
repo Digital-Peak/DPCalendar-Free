@@ -362,6 +362,7 @@ class EventController extends FormController implements CurrentUserInterface
 					'input'        => $this->input,
 					'params'       => $this->app->getMenu() ? ($this->app->getMenu()->getActive() ? $this->app->getMenu()->getActive()->getParams() : new Registry()) : new Registry()
 				];
+				DPCalendarHelper::parseReadMore($event);
 				$displayData['event'] = $event;
 				$description          = trim((string)$displayData['layoutHelper']->renderLayout('event.tooltip', $displayData));
 				$description          = DPCalendarHelper::fixImageLinks($description);
@@ -665,7 +666,7 @@ class EventController extends FormController implements CurrentUserInterface
 		$model->setState('category.id', $formData['catid']);
 		$model->setState('filter.ongoing', false);
 		$model->setState('filter.expand', true);
-		$model->setState('filter.language', $formData['language']);
+		$model->setState('filter.language', $formData['language'] ?? null);
 		$model->setState('list.start-date', 0);
 		$model->setState('filter.search.columns', ['a.title']);
 		$model->setState('filter.search', '+' . str_replace(' ', " +", strtolower((string)$formData['title'])));

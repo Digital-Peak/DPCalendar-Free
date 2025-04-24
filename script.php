@@ -95,6 +95,10 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 				"UPDATE `#__update_sites` SET location=replace(location,'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=','https://cdn.digital-peak.com/update/stream.php?id=') where location like 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=%'"
 			);
 		}
+
+		if (version_compare($version, '10.3.1') == -1) {
+			$this->run("UPDATE `#__update_sites` SET location = CONCAT(location, '&project=dpcalendar') WHERE name LIKE '%dpcalendar%' AND location NOT LIKE '%&project=dpcalendar%'");
+		}
 	}
 
 	public function postflight(string $type): void

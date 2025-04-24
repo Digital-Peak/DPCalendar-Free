@@ -43,8 +43,8 @@
 			<option value="-1">JALL</option>
 		</field>
 		<field name="length-type" type="list" class="dp-select dp-select_plain" default="m">
-			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_METER</option>
-			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_MILE</option>
+			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_METER</option>
+			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_MILE</option>
 		</field>
 		<field name="event_type" type="list" class="dp-select dp-select_plain">
 			<option value="1">COM_DPCALENDAR_VIEW_EVENTS_SELECT_ORIGIONAL_EVENTS</option>

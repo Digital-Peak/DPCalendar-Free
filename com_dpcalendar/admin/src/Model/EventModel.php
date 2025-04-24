@@ -369,7 +369,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			}
 		}
 
-		if ($data['all_day'] == 1 && !isset($data['date_range_correct'])) {
+		if (!empty($data['all_day']) && $data['all_day'] == 1 && !isset($data['date_range_correct'])) {
 			$data['start_date'] = DPCalendarHelper::getDate($data['start_date'], $data['all_day'])->toSql(true);
 			$data['end_date']   = DPCalendarHelper::getDate($data['end_date'], $data['all_day'])->toSql(true);
 		}

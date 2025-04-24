@@ -105,9 +105,6 @@ foreach ($this->items as $event) {
 		$eventData['url'] = $this->router->getEventRoute($event->id, $event->catid);
 	}
 
-	if ($event->state == 3 && !$this->compactMode) {
-		$eventData['title'] = '[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ' . $eventData['title'];
-	}
 	if ($event->state != 1 && !$this->compactMode) {
 		$prefix = '';
 		switch ($event->state) {

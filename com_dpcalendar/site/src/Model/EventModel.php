@@ -179,7 +179,7 @@ class EventModel extends ItemModel
 					$data->params = $registry;
 				}
 
-				if (!DPCalendarHelper::isFree()) {
+				if (!empty($data->id) && !DPCalendarHelper::isFree()) {
 					$ticketsModel = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Tickets', 'Administrator', ['ignore_request' => true]);
 					$ticketsModel->getState();
 					$ticketsModel->setState('filter.event_id', $data->id);
@@ -190,12 +190,12 @@ class EventModel extends ItemModel
 					$data->tickets = $ticketsModel->getItems();
 				}
 
-				$model = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
-				$model->getState();
-				$model->setState('list.ordering', 'ordering');
-				$model->setState('list.direction', 'asc');
 				$data->locations = [];
 				if (!empty($data->location_ids)) {
+					$model = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
+					$model->getState();
+					$model->setState('list.ordering', 'ordering');
+					$model->setState('list.direction', 'asc');
 					$model->setState('filter.search', 'ids:' . $data->location_ids);
 					$data->locations = $model->getItems();
 				}

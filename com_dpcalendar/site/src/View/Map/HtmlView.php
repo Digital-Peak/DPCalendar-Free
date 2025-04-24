@@ -45,13 +45,5 @@ class HtmlView extends BaseView
 		}
 
 		$this->prepareForm($this->calendars);
-
-		if (!$this->filterForm->getValue('radius', 'filter')) {
-			$this->filterForm->setValue('radius', 'filter', $this->params->get('map_view_radius', 20));
-		}
-
-		if (!$this->filterForm->getValue('length-type', 'filter')) {
-			$this->filterForm->setValue('length-type', 'filter', $this->params->get('map_view_length_type', 'm'));
-		}
 	}
 }

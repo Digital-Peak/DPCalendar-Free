@@ -4,23 +4,6 @@
 	addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
 	<fieldset name="calendar" label="COM_DPCALENDAR_CALENDAR"
 		description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
-		<field name="calendar_filter_form" type="list" default="1"
-			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_DESC">
-			<option value="1">JSHOW</option>
-			<option value="2">COM_DPCALENDAR_EXPAND</option>
-			<option value="0">JHIDE</option>
-		</field>
-		<field name="calendar_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-			layout="joomla.form.field.list-fancy-select" hide="start-date,end-date,length-type,radius,event_type,access,language,limit,fullordering"
-			showon="calendar_filter_form:1[OR]calendar_filter_form:2"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
-		<field name="calendar_filter_form_location_autocomplete" type="radio" default="1" class="btn-group" showon="calendar_filter_form:1[OR]calendar_filter_form:2"
-			label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
 		<field name="default_view" type="list" default="month"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DESC">
@@ -297,6 +280,49 @@
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SCREEN_SIZE_LIST_VIEW_DESC"/>
         <field name="calendar_start_date" type="text"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DATE_START_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DATE_START_DESC"/>
+		<field name="calendar_resource_views" type="list" multiple="true" layout="joomla.form.field.list-fancy-select" showon="calendar_filter_locations!:"
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_DESC">
+			<option value=""></option>
+			<option value="week">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
+			<option value="day">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
+		</field>
+		<field name="calendar_filter_form" type="list" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_DESC">
+			<option value="1">JSHOW</option>
+			<option value="2">COM_DPCALENDAR_EXPAND</option>
+			<option value="0">JHIDE</option>
+		</field>
+		<field name="calendar_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
+			layout="joomla.form.field.list-fancy-select" hide="start-date,end-date,length-type,radius,event_type,access,language,limit,fullordering"
+			showon="calendar_filter_form:1[OR]calendar_filter_form:2"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_DESC"/>
+		<field name="calendar_filter_radius" type="list" default="20" showon="calendar_filter_form:1[OR]calendar_filter_form:2"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_DESC">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="15">15</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="500">500</option>
+			<option value="1000">1000</option>
+			<option value="-1">JALL</option>
+		</field>
+		<field name="calendar_filter_length_type" type="radio" class="btn-group" default="m" showon="calendar_filter_form:1[OR]calendar_filter_form:2"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_DESC">
+			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_METER</option>
+			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_MILE</option>
+		</field>
+		<field name="calendar_filter_form_location_autocomplete" type="radio" default="1" class="btn-group"
+			showon="calendar_filter_form:1[OR]calendar_filter_form:2"
+			label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="calendar_filter_author" type="dpauthor" default="0" table_name="dpcalendar_events"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_DESC">
@@ -306,13 +332,6 @@
 		<field name="calendar_filter_locations" type="location" multiple="true" layout="joomla.form.field.list-fancy-select"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_DESC"/>
-		<field name="calendar_resource_views" type="list" multiple="true" layout="joomla.form.field.list-fancy-select" showon="calendar_filter_locations!:"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_RESOURCES_VIEWS_DESC">
-			<option value=""></option>
-			<option value="week">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_WEEK</option>
-			<option value="day">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DEFAULT_VIEW_DAY</option>
-		</field>
 		<field name="calendar_filter_tags" type="tag" multiple="true"
 			mode="nested" label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC"/>
@@ -344,24 +363,6 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_WIDTH_DESC"/>
 		<field name="map_view_height" type="text" default="600px"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_HEIGHT_DESC"/>
-		<field name="map_view_radius" type="list" default="20"
-			label="COM_DPCALENDAR_FIELD_CONFIG_MAP_RADIUS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_MAP_RADIUS_DESC">
-			<option value="5">5</option>
-			<option value="10">10</option>
-			<option value="15">15</option>
-			<option value="20">20</option>
-			<option value="30">30</option>
-			<option value="50">50</option>
-			<option value="100">100</option>
-			<option value="500">500</option>
-			<option value="1000">1000</option>
-			<option value="-1">JALL</option>
-		</field>
-		<field name="map_view_length_type" type="radio" class="btn-group" default="m"
-			label="COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_DESC">
-			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_METER</option>
-			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_MAP_LENGTH_TYPE_MILE</option>
-		</field>
 		<field name="map_show_event_as_popup" type="list" default="0"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_DESC">
 			<option value="0">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_FULL</option>
@@ -374,6 +375,34 @@
 		<field name="map_popup_height" type="text" showon="map_show_event_as_popup:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
+		<field name="map_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
+			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_DESC"/>
+		<field name="map_filter_radius" type="list" default="20"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_DESC">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="15">15</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="500">500</option>
+			<option value="1000">1000</option>
+			<option value="-1">JALL</option>
+		</field>
+		<field name="map_filter_length_type" type="radio" class="btn-group" default="m"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_DESC">
+			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_METER</option>
+			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_MILE</option>
+		</field>
+		<field name="map_filter_form_location_autocomplete" type="radio" default="1" class="btn-group"
+			label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="map_filter_author" type="dpauthor" default="0" table_name="dpcalendar_events"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_DESC">
@@ -382,17 +411,6 @@
 		</field>
 		<field name="map_filter_tags" type="tag" multiple="true" layout="joomla.form.field.list-fancy-select" mode="nested"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_TAGS_DESC">
-		</field>
-		<field name="map_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
-			showon="list_filter_form:1[OR]list_filter_form:2"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
-		<field name="map_filter_form_location_autocomplete" type="radio" default="1" class="btn-group"
-			label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
 		</field>
 		<field name="map_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
@@ -431,17 +449,6 @@
 			<option value="desc">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_DESCE</option>
 			<option value="adaptive">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_ADAPTIVE</option>
 		</field>
-		<field name="list_filter_form" type="list" default="1"
-			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_DESC">
-			<option value="1">JSHOW</option>
-			<option value="2">COM_DPCALENDAR_EXPAND</option>
-			<option value="0">JHIDE</option>
-		</field>
-		<field name="list_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
-			showon="list_filter_form:1[OR]list_filter_form:2"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
 		<field name="list_show_hits" type="radio" class="btn-group" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_DESC">
 			<option value="0">JNO</option>
@@ -483,13 +490,42 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LATITUDE_DESC"/>
 		<field name="list_map_long" type="text" default="4" validate="decimal" showon="list_show_map:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-		<field name="list_filter_featured" type="radio" class="btn-group" default="0"
-			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
+		<field name="list_filter_form" type="list" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_DESC">
+			<option value="1">JSHOW</option>
+			<option value="2">COM_DPCALENDAR_EXPAND</option>
+			<option value="0">JHIDE</option>
+		</field>
+		<field name="list_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
+			layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
+			showon="list_filter_form:1[OR]list_filter_form:2"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_DESC"/>
+		<field name="list_filter_radius" type="list" default="20"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_DESC">
+			<option value="5">5</option>
+			<option value="10">10</option>
+			<option value="15">15</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+			<option value="500">500</option>
+			<option value="1000">1000</option>
+			<option value="-1">JALL</option>
+		</field>
+		<field name="list_filter_length_type" type="radio" class="btn-group" default="m"
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_DESC">
+			<option value="m">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_METER</option>
+			<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_MILE</option>
 		</field>
 		<field name="list_filter_form_location_autocomplete" type="radio" default="1" class="btn-group"
 			label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
+		<field name="list_filter_featured" type="radio" class="btn-group" default="0"
+			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_DESC">
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
@@ -834,14 +870,15 @@
 					<option value="tickets_count">COM_DPCALENDAR_TICKETS</option>
 					<option value="event_author">COM_DPCALENDAR_FIELD_AUTHOR_LABEL</option>
 					<option value="event_calid">COM_DPCALENDAR_CALENDAR</option>
+					<option value="event_caltitle">COM_DPCALENDAR_CALENDAR_TITLE</option>
 					<option value="timezone">COM_DPCALENDAR_TIMEZONE</option>
 				</field>
 			</form>
 		</field>
 		<field name="bookings_filter_form_hidden_fields" type="dpcfields" section="filter_bookings" multiple="true"
 			layout="joomla.form.field.list-fancy-select" hide="event_id,limit,fullordering"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_DESC"/>
 		<field name="bookings_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="bookings_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
@@ -998,6 +1035,7 @@
 						<option value="start_date">COM_DPCALENDAR_FIELD_START_DATE_LABEL</option>
 						<option value="end_date">COM_DPCALENDAR_FIELD_END_DATE_LABEL</option>
 						<option value="event_calid">COM_DPCALENDAR_CALENDAR</option>
+						<option value="event_caltitle">COM_DPCALENDAR_CALENDAR_TITLE</option>
 						<option value="timezone">COM_DPCALENDAR_TIMEZONE</option>
 						<option value="location">COM_DPCALENDAR_LOCATION</option>
 						<option value="action">COM_DPCALENDAR_ACTION</option>
@@ -1006,8 +1044,8 @@
 		</field>
 		<field name="tickets_filter_form_hidden_fields" type="dpcfields" section="filter_tickets" multiple="true"
 			layout="joomla.form.field.list-fancy-select" hide="event_id,limit,fullordering"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
+			label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_DESC"/>
 		<field name="tickets_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 		<field name="tickets_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
@@ -1678,7 +1716,9 @@
 		</field>
 		<field name="bookingsys_tax_free_custom_field" type="dpcfields" section="event" hide="*" value_type="id"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_TAX_FREE_CUSTOM_FIELD_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_TAX_FREE_CUSTOM_FIELD_DESC"/>
+			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_TAX_FREE_CUSTOM_FIELD_DESC">
+			<option value=""></option>
+		</field>
 		<field name="bookingsys_exchangeratesapi_api_key" type="text" model="all"
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_EXCHANGERATESAPI_API_KEY_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_EXCHANGERATESAPI_API_KEY_DESC"/>

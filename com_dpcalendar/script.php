@@ -369,6 +369,11 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 				$this->run('ALTER TABLE `#__dpcalendar_bookings` ADD `payment_provider_fee` DECIMAL(10,5) NULL DEFAULT NULL');
 			}
 		}
+
+		if (version_compare($version, '10.3.1') == -1) {
+			$db->setQuery("update #__extensions set params = replace(params, 'catid', 'caltitle') where name = 'plg_dpcalendar_csv' OR name = 'plg_dpcalendar_spreadsheet'");
+			$db->execute();
+		}
 	}
 
 	public function preflight($type, $parent): bool

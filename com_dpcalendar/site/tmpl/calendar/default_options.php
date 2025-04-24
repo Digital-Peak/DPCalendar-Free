@@ -36,6 +36,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRINT');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ADD');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FILTER');
 $this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_OPEN');
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_FULLSCREEN_CLOSE');
 
 $this->translator->translateJS('JCANCEL');
 $this->translator->translateJS('COM_DPCALENDAR_CLOSE');

@@ -12,7 +12,7 @@
 			label="COM_DPCALENDAR_TICKET_FIELD_FIRST_NAME_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_FIRST_NAME_DESC"/>
 		<field name="name" type="text" class="dp-form-input" required="true"
 			label="COM_DPCALENDAR_TICKET_FIELD_NAME_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_NAME_DESC"/>
-		<field name="email" type="email" class="dp-form-input" required="true"
+		<field name="email" type="email" class="dp-form-input" required="true" validate="email" validDomains="true"
 			label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
 		<field name="user_id" type="user"
 			label="COM_DPCALENDAR_BOOKING_FIELD_USER_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_USER_DESC"/>

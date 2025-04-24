@@ -314,6 +314,10 @@ class LocationModel extends AdminModel
 				$table->modified_by = $user->id;
 			}
 
+			if (empty($table->version)) {
+				$table->version = 0;
+			}
+
 			// Increment the content version number.
 			$table->version++;
 		}

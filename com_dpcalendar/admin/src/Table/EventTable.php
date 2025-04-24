@@ -476,7 +476,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 			$cal = $cal->expand(new \DateTime($start->modify('-2 days')->format('Ymd')), $untilDate ?: new \DateTime('2038-01-01'));
 
 			// @phpstan-ignore-next-line
-			foreach ($cal->VEVENT as $vevent) {
+			foreach ($cal->VEVENT ?? [] as $vevent) {
 				$startDate = DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), (bool)$this->all_day);
 				$endDate   = DPCalendarHelper::getDate($vevent->DTEND->getDateTime()->format('U'), (bool)$this->all_day);
 
@@ -792,6 +792,10 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		}
 		$this->getDatabase()->setQuery($query);
 		$this->getDatabase()->execute();
+
+		if ($this->capacity_used === null) {
+			$this->capacity_used = 0;
+		}
 
 		if ($increment) {
 			$this->capacity_used++;

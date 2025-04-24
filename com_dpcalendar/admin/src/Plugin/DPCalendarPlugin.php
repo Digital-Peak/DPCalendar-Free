@@ -419,7 +419,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		try {
 			$content = $this->fetchContent(
-				str_replace('webcal://', 'https://', (string)$calendar->getParams()->get('uri')),
+				trim(str_replace('webcal://', 'https://', (string)$calendar->getParams()->get('uri'))),
 				[
 					CURLOPT_SSL_VERIFYHOST => $calendar->getParams()->get('ssl_verify') ? 2 : 0,
 					CURLOPT_SSL_VERIFYPEER => $calendar->getParams()->get('ssl_verify') ? 1 : 0

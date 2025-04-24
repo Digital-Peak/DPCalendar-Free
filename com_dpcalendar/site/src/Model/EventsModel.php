@@ -380,12 +380,12 @@ class EventsModel extends ListModel
 
 		// Filter by state
 		$state = $this->getState('filter.state', []);
-		if (!\is_array($state) && !empty($state)) {
+		if (!\is_array($state) && $state !== '' && $state !== null) {
 			$state = [$state];
 		}
 		$stateOwner = $user->id && $this->getState('filter.state_owner') ? ' or a.created_by = ' . $user->id : '';
 
-		if (!empty($state)) {
+		if ($state !== [] && $state !== '' && $state !== null) {
 			$query->where('(a.state in (' . implode(',', ArrayHelper::toInteger($state)) . ')' . $stateOwner . ')');
 		} else {
 			// Do not show trashed events on the front-end

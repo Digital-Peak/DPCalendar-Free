@@ -11,7 +11,6 @@ use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Field\DpcfieldsField;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
 use Joomla\CMS\Application\CMSApplicationInterface;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\SubformField;
 use Joomla\CMS\Form\FormFactoryAwareTrait;
 use Joomla\CMS\MVC\Model\ListModel;
@@ -28,8 +27,8 @@ trait ExportTrait
 	{
 		$parser = function ($name, $event) use ($config) {
 			switch ($name) {
-				case 'catid':
-					$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
+				case 'caltitle':
+					$calendar = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid);
 					return $calendar instanceof CalendarInterface ? $calendar->getTitle() : $event->catid;
 				case 'state':
 					return Booking::getStatusLabel($event);
@@ -122,6 +121,18 @@ trait ExportTrait
 					}
 
 					return implode(', ', array_unique($calendars));
+				case 'event_caltitle':
+					$calendars = [];
+					foreach ($booking->tickets as $ticket) {
+						if (\array_key_exists($ticket->event_calid, $calendars)) {
+							continue;
+						}
+
+						$calendar                        = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($ticket->event_calid);
+						$calendars[$ticket->event_calid] = $calendar instanceof CalendarInterface ? $calendar->getTitle() : $ticket->event_calid;
+					}
+
+					return implode(', ', $calendars);
 				case 'timezone':
 					return DPCalendarHelper::getDate()->getTimezone()->getName();
 				case 'user_id':
@@ -170,6 +181,9 @@ trait ExportTrait
 					}
 
 					return $ticket->user_name . ' [' . $this->getUserFactory()->loadUserById($ticket->user_id)->username . ']';
+				case 'event_caltitle':
+					$calendar = $this->getDPCalendar()->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($ticket->event_calid);
+					return $calendar instanceof CalendarInterface ? $calendar->getTitle() : $ticket->event_calid;
 				default:
 					return $ticket->$name ?? '';
 			}

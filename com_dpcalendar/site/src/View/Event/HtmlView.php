@@ -81,7 +81,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		$this->state->set('filter.state_owner', true);
 
 		$event = $this->getModel()->getItem() ?: new \stdClass();
-		if (!$event->id) {
+		if (empty($event->id)) {
 			throw new \Exception($this->translate('COM_DPCALENDAR_ERROR_EVENT_NOT_FOUND'), 404);
 		}
 
@@ -278,7 +278,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		$this->country = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getCountryForIp();
 
 		// If the event is not tax free and a country exists for the iü, then process
-		if (array_filter($event->jcfields ?? [], fn ($f): bool => $f->name == $fieldName && filter_var($f->value, FILTER_VALIDATE_BOOLEAN)) === []
+		if (array_filter($event->jcfields ?? [], fn ($f): bool => $f->name == $fieldName && filter_var($f->rawvalue, FILTER_VALIDATE_BOOLEAN)) === []
 			&& $this->country instanceof \stdClass) {
 			// Get the tax
 			$model         = $this->getDPCalendar()->getMVCFactory()->createModel('Taxrate', 'Administrator', ['ignore_request' => true]);

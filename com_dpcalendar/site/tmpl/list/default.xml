@@ -52,21 +52,6 @@
 				<option value="desc">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_DESCE</option>
 				<option value="adaptive">COM_DPCALENDAR_FIELD_CONFIG_LIST_ORDERING_ADAPTIVE</option>
 			</field>
-			<field name="list_filter_form" type="list" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SEARCH_FORM_DESC">
-				<option value="1">JSHOW</option>
-				<option value="2">COM_DPCALENDAR_EXPAND</option>
-				<option value="0">JHIDE</option>
-			</field>
-			<field name="list_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
-				layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
-			<field name="list_show_hits" type="list" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
 			<field name="list_show_print" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_HEADER_SHOW_PRINT_DESC">
@@ -104,15 +89,48 @@
 			<field name="list_map_long" type="text" useglobal="true" validate="decimal"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_MAP_LONGITUDE_DESC"/>
-			<field name="list_filter_featured" type="list" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_DESC">
+			<field name="list_show_hits" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_SHOW_HITS_DESC">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
+			</field>
+			<field name="list_filter_form" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_DESC">
+				<option value="1">JSHOW</option>
+				<option value="2">COM_DPCALENDAR_EXPAND</option>
+				<option value="0">JHIDE</option>
+			</field>
+			<field name="list_filter_form_hidden_fields" type="dpcfields" section="filter_events" multiple="true"
+				layout="joomla.form.field.list-fancy-select" hide="length-type,radius,event_type,access,language,limit,fullordering"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_DESC"/>
+			<field name="list_filter_radius" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_DESC">
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="15">15</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="500">500</option>
+				<option value="1000">1000</option>
+				<option value="-1">JALL</option>
+			</field>
+			<field name="list_filter_length_type" type="radio" class="btn-group" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_DESC">
+				<option value="m">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_METER</option>
+				<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_MILE</option>
 			</field>
 			<field name="list_filter_form_location_autocomplete" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
+			</field>
+			<field name="list_filter_featured" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_FEATURED_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
 			</field>
 			<field name="list_filter_locations" type="location" multiple="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_LOCATIONS_LABEL"
@@ -131,6 +149,13 @@
 			<field name="event_time_format" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_TIME_FORMAT_DESC"/>
+			<field name="event_show_calendar" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_DESC">
+				<option value="0">JNO</option>
+				<option value="1">JYES</option>
+				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_CALENDAR_LINK_MONTH</option>
+			</field>
 			<field name="event_show_date" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_DATE_DESC">
@@ -257,19 +282,6 @@
 				<option value="1">JYES</option>
 				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_EMPTY</option>
 			</field>
-			<field name="event_show_page_heading" type="list" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_PAGE_HEADING_LABEL" description="COM_DPCALENDAR_FIELD_PAGE_HEADING_DESC">
-				<option value="2">JGLOBAL_INHERIT</option>
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-			</field>
-			<field name="event_prefix_meta_description" type="list" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_DESC">
-				<option value="0">JNO</option>
-				<option value="1">JYES</option>
-				<option value="2">COM_DPCALENDAR_FIELD_CONFIG_EVENT_PREFIX_META_DESCRIPTION_EMPTY</option>
-			</field>
 			<field name="event_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
@@ -280,8 +292,7 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
-			<field name="event_form_fields_order_" type="subform" multiple="true"
-				layout="joomla.form.field.subform.repeatable-table"
+			<field name="event_form_fields_order_" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="event" hide="id,scheduling*,notify_changes,update_modified,checked_out*,options"
@@ -406,8 +417,8 @@
 			</field>
 			<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true"
 				label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
-			<field name="event_form_featured" type="list" useglobal="true"
-				label="JFEATURED" description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
+			<field name="event_form_featured" type="list" useglobal="true" label="JFEATURED"
+				description="COM_DPCALENDAR_FIELD_FEATURED_DESC">
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
@@ -419,7 +430,8 @@
 				class="input-xlarge" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 				label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
 			<field name="event_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
 			<field name="booking_fields_order" type="subform" multiple="true"
@@ -556,7 +568,7 @@
 				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="ticket" label="COM_DPCALENDAR_TICKET"
-				description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+			description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
 			<field name="ticket_fields_order" type="subform" multiple="true"
 				layout="joomla.form.field.subform.repeatable-table"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
@@ -614,10 +626,10 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="ticket_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
-		<field name="ticket_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
-			label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		<fieldset name="ticket_form"
 			label="COM_DPCALENDAR_FIELD_CONFIG_TICKETFORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
 			<field name="ticket_form_fields_order_" type="subform" multiple="true"

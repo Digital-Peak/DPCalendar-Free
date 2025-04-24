@@ -40,6 +40,7 @@ $options['requestUrlRoot'] = 'view=events&format=raw&limit=0&l=1&Itemid=' . $thi
 $options['calendarIds']    = $this->ids;
 
 $options['initialView'] = $this->params->get('locations_default_view', 'resday');
+$options['firstDay']    = (int)$this->params->get('weekstart', 1);
 
 // Set up the header
 $options['headerToolbar']           = ['left' => [], 'center' => [], 'right' => []];

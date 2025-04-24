@@ -32,7 +32,7 @@ class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Abort when we are in the creation process
-		if (\in_array($payload->item->state, [0, 2])) {
+		if (\in_array($payload->item->state, [0, 2]) || empty($payload->eventsWithTickets)) {
 			return $payload;
 		}
 

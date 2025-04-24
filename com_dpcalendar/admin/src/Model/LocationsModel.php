@@ -83,7 +83,7 @@ class LocationsModel extends ListModel
 	{
 		// Compile the store id
 		$id .= ':' . $this->getState('filter.search');
-		$id .= ':' . $this->getState('filter.state');
+		$id .= ':' . serialize((array)$this->getState('filter.state'));
 		$id .= ':' . $this->getState('filter.language');
 		$id .= ':' . $this->getState('filter.latitude');
 		$id .= ':' . $this->getState('filter.longitude');

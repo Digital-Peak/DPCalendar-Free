@@ -207,7 +207,7 @@ class SetupForNew implements StageInterface
 				// Loop over the fields
 				foreach ($event->jcfields as $field) {
 					// If the field is the one we are looking for and the value resolves to true, unset the tax
-					if ($field->name == $fieldName && filter_var($field->value, FILTER_VALIDATE_BOOLEAN)) {
+					if ($field->name == $fieldName && filter_var($field->rawvalue, FILTER_VALIDATE_BOOLEAN)) {
 						$taxRate = null;
 					}
 				}

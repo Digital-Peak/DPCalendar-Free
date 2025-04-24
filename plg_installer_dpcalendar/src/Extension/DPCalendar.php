@@ -20,12 +20,10 @@ class DPCalendar extends CMSPlugin
 {
 	use DatabaseAwareTrait;
 
-	// @phpstan-ignore-next-line
 	public function onInstallerBeforeUpdateSiteDownload(BeforeUpdateSiteDownloadEvent $event): void
 	{
-		// @phpstan-ignore-next-line
 		$url = $event->getUrl();
-		if (!str_contains($url, 'digital-peak.com')) {
+		if ($url !== '' || !str_contains($url, '&project=dpcalendar')) {
 			return;
 		}
 
@@ -40,11 +38,10 @@ class DPCalendar extends CMSPlugin
 			$uri->setVar('v', $manifest instanceof \SimpleXMLElement ? (string)$manifest->version : '');
 		}
 
-		if ($uri->getVar('v') !== 'DP_DEPLOY_VERSION') {
+		if ($uri->getVar('v') === 'DP_DEPLOY_VERSION') {
 			return;
 		}
 
-		// @phpstan-ignore-next-line
 		$event->updateUrl($uri->toString());
 	}
 

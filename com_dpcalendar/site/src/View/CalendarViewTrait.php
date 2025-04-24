@@ -46,12 +46,12 @@ trait CalendarViewTrait
 		}
 
 		// Remove radius when default
-		if (\array_key_exists('radius', $this->activeFilters) && $this->activeFilters['radius'] == $this->params->get($name . '_view_radius', 20)) {
+		if (\array_key_exists('radius', $this->activeFilters) && $this->activeFilters['radius'] == $this->params->get($name . '_filter_radius', 20)) {
 			unset($this->activeFilters['radius']);
 		}
 
 		// Remove length type when default
-		if (\array_key_exists('length-type', $this->activeFilters) && $this->activeFilters['length-type'] == $this->params->get($name . '_view_length_type', 'm')) {
+		if (\array_key_exists('length-type', $this->activeFilters) && $this->activeFilters['length-type'] == $this->params->get($name . '_filter_length_type', 'm')) {
 			unset($this->activeFilters['length-type']);
 		}
 
@@ -109,6 +109,13 @@ trait CalendarViewTrait
 			}
 		}
 
+		if (!$this->filterForm->getValue('radius', 'filter')) {
+			$this->filterForm->setValue('radius', 'filter', $this->params->get($name . '_filter_radius', 20));
+		}
+
+		if (!$this->filterForm->getValue('length-type', 'filter')) {
+			$this->filterForm->setValue('length-type', 'filter', $this->params->get($name . '_filter_length_type', 'm'));
+		}
 
 		// Set the date formats
 		$this->filterForm->setFieldAttribute('start-date', 'format', $this->params->get('event_form_date_format', 'd.m.Y'), 'list');

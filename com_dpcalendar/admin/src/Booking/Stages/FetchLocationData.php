@@ -35,10 +35,13 @@ class FetchLocationData implements StageInterface
 			$payload->data['latitude']  = null;
 			$payload->data['longitude'] = null;
 
-			$location = $this->geoModel->getLocation($location, false);
-			if ($location->latitude) {
-				$payload->data['latitude']  = $location->latitude;
-				$payload->data['longitude'] = $location->longitude;
+			try {
+				$location = $this->geoModel->getLocation($location, false);
+				if ($location->latitude) {
+					$payload->data['latitude']  = $location->latitude;
+					$payload->data['longitude'] = $location->longitude;
+				}
+			} catch (\Exception) {
 			}
 		}
 

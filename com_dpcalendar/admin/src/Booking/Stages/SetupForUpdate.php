@@ -44,7 +44,7 @@ class SetupForUpdate implements StageInterface
 			$payload->data['coupon_id'] = 0;
 		}
 
-		if ($payload->data['state'] == 6 && $payload->data['id']) {
+		if (!empty($payload->data['state']) && $payload->data['state'] == 6 && $payload->data['id']) {
 			$booking = $this->bookingModel->getItem($payload->data['id']);
 			if (!$booking || !Booking::openForCancel($booking)) {
 				throw new \Exception('Booking can not be cancelled');

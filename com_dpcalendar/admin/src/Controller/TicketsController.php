@@ -15,6 +15,17 @@ class TicketsController extends AdminController
 {
 	protected $text_prefix = 'COM_DPCALENDAR_TICKET';
 
+	public function firstname(): void
+	{
+		$fieldId = $this->input->getInt('id', 0);
+		if (!$fieldId) {
+			throw new \Exception('Custom field id not set!');
+		}
+
+		$count = $this->getModel('Tickets')->updateFirstNameFromField($fieldId);
+		$this->setRedirect('index.php?option=com_dpcalendar&view=tickets', 'Successfully moved ' . $count . ' first_names from custom field to ticket!');
+	}
+
 	public function getModel($name = 'Ticket', $prefix = 'Administrator', $config = ['ignore_request' => true])
 	{
 		return parent::getModel($name, $prefix, $config);

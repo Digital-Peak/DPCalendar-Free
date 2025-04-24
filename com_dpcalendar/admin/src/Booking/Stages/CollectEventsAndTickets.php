@@ -33,7 +33,7 @@ class CollectEventsAndTickets implements StageInterface
 					static fn ($t): bool => $t->state == 8
 				));
 			}
-			$payload->eventsWithTickets = $payload->events;
+			$payload->eventsWithTickets = $payload->events ?? [];
 
 			return $payload;
 		}

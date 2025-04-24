@@ -193,6 +193,11 @@ $files = [
 '/administrator/components/com_dpcalendar/sql/updates/mysql/8.6.0.sql',
 '/administrator/components/com_dpcalendar/sql/updates/mysql/8.9.0.sql',
 '/plugins/dpcalendarpay/braintree/vendor/braintree/braintree_php/BTStandard/Sniffs/PreferIsSetSniff.php',
+
+// From v10.3.0 to case 11540
+'/media/com_dpcalendar/css/leaflet',
+'/media/com_dpcalendar/js/vendor/leaflet-fullscreen',
+'/media/mod_dpcalendar/upcoming/js/vendor/leaflet-fullscreen',
 ];
 
 foreach ($files as $file) {

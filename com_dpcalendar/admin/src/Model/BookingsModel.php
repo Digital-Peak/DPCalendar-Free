@@ -83,7 +83,7 @@ class BookingsModel extends ListModel
 			$listRequestData['date_start'] = '';
 
 			if ($app instanceof CMSWebApplicationInterface) {
-				$app->setUserState($this->context . '.filter', $listRequestData);
+				$app->setUserState($this->context . '.list', $listRequestData);
 			}
 		}
 		$this->setState('list.date_start', $search);
@@ -99,7 +99,7 @@ class BookingsModel extends ListModel
 				$listRequestData['date_end'] = '';
 
 				if ($app instanceof CMSWebApplicationInterface) {
-					$app->setUserState($this->context . '.filter', $listRequestData);
+					$app->setUserState($this->context . '.list', $listRequestData);
 				}
 			}
 		}

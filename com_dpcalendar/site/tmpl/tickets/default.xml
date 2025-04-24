@@ -18,6 +18,7 @@
 							<option value="start_date">COM_DPCALENDAR_FIELD_START_DATE_LABEL</option>
 							<option value="end_date">COM_DPCALENDAR_FIELD_END_DATE_LABEL</option>
 							<option value="event_calid">COM_DPCALENDAR_CALENDAR</option>
+							<option value="event_caltitle">COM_DPCALENDAR_CALENDAR_TITLE</option>
 							<option value="timezone">COM_DPCALENDAR_TIMEZONE</option>
 							<option value="location">COM_DPCALENDAR_LOCATION</option>
 							<option value="action">COM_DPCALENDAR_ACTION</option>
@@ -26,8 +27,8 @@
 			</field>
 			<field name="tickets_filter_form_hidden_fields" type="dpcfields" section="filter_tickets" multiple="true"
 				layout="joomla.form.field.list-fancy-select" hide="event_id,limit,fullordering"
-				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_LABEL"
-				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SEARCH_FORM_HIDDEN_FIELDS_DESC"/>
+				label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_DESC"/>
 			<field name="tickets_textbefore" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 			    label="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_BEFORE_DESC"/>
 			<field name="tickets_textafter" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"

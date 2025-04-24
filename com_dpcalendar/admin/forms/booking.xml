@@ -29,7 +29,7 @@
 			label="COM_DPCALENDAR_BOOKING_FIELD_FIRST_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_FIRST_NAME_DESC"/>
 		<field name="name" type="text" required="true" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_NAME_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NAME_DESC"/>
-		<field name="email" type="email" required="true" class="dp-form-input"
+		<field name="email" type="email" required="true" class="dp-form-input" validate="email" validDomains="true"
 			label="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_EMAIL_DESC"/>
 		<field name="country" type="dpcountries" class="dp-form-input dp-select"
 			label="COM_DPCALENDAR_LOCATION_FIELD_COUNTRY_LABEL" description=""/>

@@ -18,7 +18,7 @@ if ($this->noBookingMessage === '') {
 }
 
 $waiting = $this->event->capacity !== null && $this->event->capacity_used >= $this->event->capacity && $this->event->booking_waiting_list;
-if ($this->originalEvent && $this->originalEvent->booking_series == 2) {
+if ($this->originalEvent && ($this->originalEvent->booking_series == 2 || $this->originalEvent->capacity_used < $this->originalEvent->capacity || !$this->event->booking_waiting_list)) {
 	$waiting = false;
 }
 // Reset for waiting list
@@ -42,7 +42,7 @@ if ((int)$this->event->waiting_list_count > 0) {
 			</span>
 		</a>
 		<div class="dp-event-cta__end-date">
-			<?php $endDate = Booking::getRegistrationEndDate($this->event); ?>
+		<?php $endDate = Booking::getRegistrationEndDate($this->originalEvent && $this->originalEvent->booking_series == 1 ? $this->originalEvent : $this->event); ?>
 			<?php echo Text::sprintf(
 				'COM_DPCALENDAR_VIEW_EVENT_REGISTRATION_END_TEXT',
 				$endDate->format($this->params->get('event_date_format', 'd.m.Y'), true),

@@ -83,7 +83,7 @@ $hidden_calendars = empty($hidden_calendars) ? [-2] : array_map(fn($c): int => (
 		<?php } ?>
 		<div class="dp-filter__form-container">
 			<?php foreach ($form->getFieldset() as $field) { ?>
-				<?php echo str_replace('com_fields[','filter[com_fields][', $field->input); ?>
+				<?php echo str_replace('com_fields[','filter[com_fields][', $field->renderField(['hiddenLabel' => true, 'class' => 'dp-form-control ' . DPCalendarHelper::getFieldName($field, true)])); ?>
 			<?php } ?>
 		</div>
 		<div class="dp-filter__button-bar dp-button-bar">

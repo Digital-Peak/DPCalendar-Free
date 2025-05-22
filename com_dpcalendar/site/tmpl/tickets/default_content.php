@@ -34,9 +34,9 @@ $fields = array_column((array)$this->params->get('tickets_fields', []), 'field')
 						">
 						<?php if ($fields[$index] === 'uid') { ?>
 							<a href="<?php echo $this->router->getTicketRoute($ticket); ?>" class="dp-link dp-ticket__link">
-								<?php echo $ticket->price_label ?: StringHelper::abridge($value, 15, 5); ?>
+								<?php echo StringHelper::abridge($value, 15, 5) . ($ticket->price_label ? ' ' . $ticket->price_label: ''); ?>
 							</a>
-						<?php } elseif ($fields[$index] === 'event_id') { ?>
+						<?php } elseif ($fields[$index] === 'event_id' || $fields[$index] === 'event_title') { ?>
 							<a href="<?php echo $this->router->getEventRoute($ticket->event_id, $ticket->event_calid); ?>"
 								class="dp-link dp-ticket__event-link">
 								<?php echo $ticket->event_title; ?>

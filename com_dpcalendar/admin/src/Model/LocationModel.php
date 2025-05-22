@@ -123,7 +123,7 @@ class LocationModel extends AdminModel
 			$form->removeField('captcha');
 		}
 
-		if (Factory::getApplication()->isClient('site')) {
+		if (Factory::getApplication() instanceof SiteApplication) {
 			$form->setFieldAttribute('id', 'type', 'hidden');
 		}
 

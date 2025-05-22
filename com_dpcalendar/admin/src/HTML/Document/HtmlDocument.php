@@ -42,7 +42,8 @@ class HtmlDocument
 			$extension . '/' . str_replace('.js', '', $path),
 			$extension . '/' . str_replace('.js', '.min.js', $path),
 			['relative' => true, 'version' => JDEBUG ? false : 'auto'],
-			['type'     => 'module']
+			['type'     => 'module'],
+			['core', 'messages']
 		);
 	}
 

@@ -311,6 +311,24 @@
 				layout="joomla.form.field.list-fancy-select" hide="start-date,end-date,length-type,radius,event_type,access,language,limit,fullordering"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_FORM_HIDDEN_FIELDS_DESC"/>
+			<field name="calendar_filter_radius" type="list" useglobal="true" showon="calendar_filter_form:1[OR]calendar_filter_form:2"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_RADIUS_DESC">
+				<option value="5">5</option>
+				<option value="10">10</option>
+				<option value="15">15</option>
+				<option value="20">20</option>
+				<option value="30">30</option>
+				<option value="50">50</option>
+				<option value="100">100</option>
+				<option value="500">500</option>
+				<option value="1000">1000</option>
+				<option value="-1">JALL</option>
+			</field>
+			<field name="calendar_filter_length_type" type="list" useglobal="true" showon="calendar_filter_form:1[OR]calendar_filter_form:2"
+				label="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_DESC">
+				<option value="m">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_METER</option>
+				<option value="mile">COM_DPCALENDAR_FIELD_CONFIG_FILTER_LENGTH_TYPE_MILE</option>
+			</field>
 			<field name="calendar_filter_form_location_autocomplete" type="list" useglobal="true" showon="calendar_filter_form:1[OR]calendar_filter_form:2"
 				label="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_AUTOCOMPLETE_DESC">

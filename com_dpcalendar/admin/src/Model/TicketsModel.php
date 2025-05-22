@@ -200,7 +200,7 @@ class TicketsModel extends ListModel
 				$query->where('public = 1');
 			}
 
-			if (Factory::getApplication()->isClient('site')) {
+			if (Factory::getApplication() instanceof SiteApplication) {
 				$query->where('(e.created_by = ' . (int)$user->id . ' or a.user_id = ' . (int)$user->id . ' or h.user_id = ' . (int)$user->id . ')');
 			}
 		}

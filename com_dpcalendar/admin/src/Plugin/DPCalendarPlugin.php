@@ -385,6 +385,10 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			$this->extCalendarsCache = $model->getItems();
 		}
 
+		if ($this->extCalendarsCache === null || $this->extCalendarsCache === []) {
+			return [];
+		}
+
 		$calendars = [];
 		foreach ($this->extCalendarsCache as $calendarObject) {
 			if ($calendarIds !== [] && !\in_array($calendarObject->id, $calendarIds)) {

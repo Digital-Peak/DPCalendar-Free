@@ -12,6 +12,7 @@ namespace DigitalPeak\Plugin\User\DPCalendar\Extension;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\BookingModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BookingTable;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
+use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
@@ -182,7 +183,7 @@ class DPCalendar extends CMSPlugin
 		}
 
 		if ($form->getName() !== 'com_users.profile' && $form->getName() !== 'com_admin.profile'
-			&& !($app->isClient('administrator') && $form->getName() === 'com_users.user')) {
+			&& !($app instanceof AdministratorApplication && $form->getName() === 'com_users.user')) {
 			return true;
 		}
 

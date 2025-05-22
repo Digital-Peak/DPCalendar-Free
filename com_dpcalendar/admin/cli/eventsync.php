@@ -75,10 +75,12 @@ class DPCalendarEventSync extends CliApplication
 		$this->session = new Registry();
 		$this->session->set('user', $user);
 
-		$ids = array_filter(explode(',', $this->input->getString('calids', '')));
+		// @phpstan-ignore-next-line
+		$ids = array_filter(explode(',', $this->getInput()->getString('calids', '')));
 
 		try {
 			PluginHelper::importPlugin('dpcalendar');
+			// @phpstan-ignore-next-line
 			$this->triggerEvent('onEventsSync', [null, $ids]);
 
 			Log::add('Finished with the DPCalendar event sync', Log::DEBUG, 'com_dpcalendar');
@@ -144,9 +146,9 @@ class DPCalendarEventSync extends CliApplication
 
 	public function getUserState(string $key, mixed $default = null): mixed
 	{
-		$this->session = $this->session->get('registry');
-		if (!\is_null($this->session)) {
-			return $this->session->get($key, $default);
+		$data = $this->session->get('registry');
+		if ($data instanceof Registry) {
+			return $data->get($key, $default);
 		}
 
 		return $default;
@@ -155,7 +157,8 @@ class DPCalendarEventSync extends CliApplication
 	public function getUserStateFromRequest(string $key, string $request, mixed $default = null, string $type = 'none'): mixed
 	{
 		$cur_state = $this->getUserState($key, $default);
-		$new_state = $this->input->get($request, null, $type);
+		// @phpstan-ignore-next-line
+		$new_state = $this->getInput()->get($request, null, $type);
 
 		// Save the new value only if it was set in this request.
 		if ($new_state !== null) {
@@ -180,4 +183,5 @@ class DPCalendarEventSync extends CliApplication
 
 $app                  = new DPCalendarEventSync();
 Factory::$application = $app;
+// @phpstan-ignore-next-line
 $app->execute();

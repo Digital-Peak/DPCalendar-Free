@@ -247,7 +247,7 @@ class BookingsModel extends ListModel
 
 		// On front end if we are not an admin only bookings are visible where we are the author of the event
 		if ($this->getState('filter.my', 0) != 1
-			&& Factory::getApplication()->isClient('site')
+			&& Factory::getApplication() instanceof SiteApplication
 			&& !$user->authorise('dpcalendar.admin.book', 'com_dpcalendar' . ($catId ? '.category.' . $catId : ''))
 			&& $this->getState('ignore.access') !== true
 		) {

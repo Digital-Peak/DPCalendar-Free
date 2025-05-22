@@ -16,7 +16,9 @@ use DigitalPeak\Component\DPCalendar\Administrator\HTML\Document\HtmlDocument;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\LayoutModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Router\Router;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
+use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\CMSApplication;
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Document\RawDocument;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
@@ -164,14 +166,14 @@ class BaseView extends HtmlView
 			HTMLHelper::_('behavior.formvalidator');
 
 
-			if ($this->app->isClient('administrator')) {
+			if ($this->app instanceof AdministratorApplication) {
 				HTMLHelper::_('jquery.framework');
 				HTMLHelper::_('behavior.polyfill', ['filter', 'xpath']);
 				HTMLHelper::_('script', 'legacy/tabs-state.js', ['version' => 'auto', 'relative' => true]);
 			}
 		}
 
-		if ($this->app->isClient('site')) {
+		if ($this->app instanceof SiteApplication) {
 			$this->prepareDocument();
 		} else {
 			$this->addToolbar();

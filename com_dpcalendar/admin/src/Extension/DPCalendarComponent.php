@@ -7,6 +7,7 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Extension;
 
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Categories\CategoryServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceTrait;
 use Joomla\CMS\Component\Router\RouterServiceInterface;
@@ -48,7 +49,7 @@ class DPCalendarComponent extends MVCComponent implements
 
 	public function validateSection($section, $item = null)
 	{
-		if (Factory::getApplication()->isClient('site')) {
+		if (Factory::getApplication() instanceof SiteApplication) {
 			// On the front end we need to map some sections
 			$section = match ($section) {
 				'form'  => 'event',

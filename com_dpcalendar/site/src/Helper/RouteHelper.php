@@ -10,7 +10,9 @@ namespace DigitalPeak\Component\DPCalendar\Site\Helper;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
+use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Document\HtmlDocument;
 use Joomla\CMS\Factory;
@@ -55,7 +57,7 @@ class RouteHelper
 	{
 		if ($id !== null && $id !== '' && $id !== '0') {
 			$link = 'index.php?option=com_dpcalendar&task=event.edit&e_id=' . $id;
-		} elseif (Factory::getApplication()->isClient('administrator')) {
+		} elseif (Factory::getApplication() instanceof AdministratorApplication) {
 			$link = 'index.php?option=com_dpcalendar&task=event.add&e_id=0';
 		} else {
 			$link = 'index.php?option=com_dpcalendar&view=form&e_id=0';
@@ -471,7 +473,7 @@ class RouteHelper
 		}
 
 		$uri = clone Uri::getInstance();
-		if (!$app->getDocument() instanceof HtmlDocument || $app->isClient('site')) {
+		if (!$app->getDocument() instanceof HtmlDocument || $app instanceof SiteApplication) {
 			$uri = Uri::getInstance('index.php');
 		}
 

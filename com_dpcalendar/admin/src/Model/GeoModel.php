@@ -136,7 +136,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 		$location = trim($location);
 
 		if (!$this->locationCache instanceof LocationsModel) {
-			$this->locationCache = $factory->createModel('Locations', 'Administrator', ['ignore_request' => true]);
+			$this->locationCache = $factory->createModel('Locations', 'Administrator', ['ignore_request' => true]) ;
 		}
 
 		if ($fill) {

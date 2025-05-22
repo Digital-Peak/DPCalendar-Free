@@ -473,13 +473,13 @@ class DPCalendar extends PDO
 						break;
 					}
 				}
+
 				if (!$location) {
 					$location = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($locationString);
 				}
 			}
-			if ($location) {
-				$dpEvent->location_ids = [$location->id];
-			}
+
+			$dpEvent->location_ids = [$location->id];
 		}
 
 		$model = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel(

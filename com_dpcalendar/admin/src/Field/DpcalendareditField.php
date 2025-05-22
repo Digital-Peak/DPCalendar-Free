@@ -11,6 +11,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Field;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\ExternalCalendarInterface;
+use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\CategoryField;
@@ -29,7 +30,7 @@ class DPCalendareditField extends CategoryField
 		$app = Factory::getApplication();
 
 		$calendar = null;
-		$id       = $app->isClient('administrator') ? 0 : $app->getInput()->get('id');
+		$id       = $app instanceof AdministratorApplication ? 0 : $app->getInput()->get('id');
 		if (!empty($id) && $this->value) {
 			$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($this->value);
 		}

@@ -14,6 +14,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\Model\BookingModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\CouponModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Application\CMSApplicationInterface;
+use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\User\User;
 
 class SetupForUpdate implements StageInterface
@@ -29,7 +30,7 @@ class SetupForUpdate implements StageInterface
 	public function __invoke(\stdClass $payload): \stdClass
 	{
 		// Unset some variables, that it can't be changed afterwards through some form hacking
-		if ($this->application->isClient('site') && !$this->user->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
+		if ($this->application instanceof SiteApplication && !$this->user->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
 			unset($payload->data['price']);
 		}
 

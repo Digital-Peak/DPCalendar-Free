@@ -76,7 +76,7 @@ if ($bd && !((is_countable($bd) ? count($bd) : 0) == 1 && !$bd[0])) {
 
 $options['firstDay']              = (int)$params->get('weekstart', 1);
 $options['hiddenDays']            = ArrayHelper::toInteger($this->params->get('hidden_days', []));
-$options['scrollTime']            = $params->get('first_hour', 6) . ':00:00';
+$options['scrollTime']            = $params->get('first_hour', 6) === 'now' ? 'now' : $params->get('first_hour', 6) . ':00:00';
 $options['weekNumberCalculation'] = 'ISO';
 $options['displayEventEnd']       = true;
 $options['navLinks']              = true;

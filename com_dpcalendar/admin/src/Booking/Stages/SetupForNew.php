@@ -16,6 +16,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\Model\CouponModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\CurrencyModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\TaxrateModel;
 use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
+use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\User\User;
@@ -223,7 +224,7 @@ class SetupForNew implements StageInterface
 		}
 
 		// Do not force state when not on front and is available
-		if (!$this->application->isClient('administrator') || empty($payload->data['state'])) {
+		if (!$this->application instanceof AdministratorApplication || empty($payload->data['state'])) {
 			if (!\array_key_exists('state', $payload->data)) {
 				$payload->data['state'] = 0;
 			}

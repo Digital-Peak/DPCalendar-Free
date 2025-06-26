@@ -198,6 +198,15 @@ $files = [
 '/media/com_dpcalendar/css/leaflet',
 '/media/com_dpcalendar/js/vendor/leaflet-fullscreen',
 '/media/mod_dpcalendar/upcoming/js/vendor/leaflet-fullscreen',
+
+// From main to case 11623
+'/plugins/dpcalendarpay/qr/vendor/endroid/qr-code/assets/noto_sans.otf',
+'/plugins/dpcalendarpay/qr/vendor/endroid/qr-code/src/Label/Font/NotoSans.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/timezones/en_AU.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/intl/Resources/data/transliterator',
+'/plugins/dpcalendarpay/qr/vendor/symfony/validator/Constraints/ExpressionLanguageSyntax.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/validator/Constraints/ExpressionLanguageSyntaxValidator.php',
+'/plugins/dpcalendarpay/qr/vendor/symfony/validator/Mapping/Loader/AnnotationLoader.php',
 ];
 
 foreach ($files as $file) {

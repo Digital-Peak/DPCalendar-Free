@@ -9,6 +9,7 @@ namespace DigitalPeak\Component\DPCalendar\Site\View\Map;
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
 use DigitalPeak\Component\DPCalendar\Site\Model\EventsModel;
 use Joomla\CMS\Component\ComponentHelper;
@@ -89,6 +90,28 @@ class RawView extends BaseView
 		}
 
 		$model->setState('filter.location', $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location, false));
+
+		if ($start = $model->getState('list.start-date')) {
+			try {
+				$model->setState(
+					'list.start-date',
+					DPCalendarHelper::getDateFromString($start, null, true, $this->params->get('map_date_format', 'd.m.Y'))
+				);
+			} catch (\Exception) {
+
+			}
+		}
+
+		if ($end = $model->getState('list.end-date')) {
+			try {
+				$model->setState(
+					'list.end-date',
+					DPCalendarHelper::getDateFromString($end, null, true, $this->params->get('map_date_format', 'd.m.Y'))
+				);
+			} catch (\Exception) {
+
+			}
+		}
 
 		// Initialize variables
 		$items = $model->getItems();

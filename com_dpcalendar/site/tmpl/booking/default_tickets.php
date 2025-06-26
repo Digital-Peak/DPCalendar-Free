@@ -69,7 +69,7 @@ $format = $this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params
 					<dl class="dp-description">
 						<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_OPTION'); ?></dt>
 						<dd class="dp-description__description">
-							<?php echo DPCalendarHelper::renderPrice($option['value']); ?>
+							<?php echo DPCalendarHelper::renderPrice($option['price']); ?>
 							<?php echo $option['amount']; ?>
 							<?php echo $option['label']; ?>
 						</dd>

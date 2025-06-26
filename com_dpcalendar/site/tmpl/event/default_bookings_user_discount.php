@@ -16,7 +16,7 @@ if (empty($this->event->user_discount)) {
 
 $discounts = array_filter(
 	(array)$this->event->user_discount,
-	fn($d, $k): float => Booking::getPriceWithDiscount(1000, $this->event, '', $k) != 1000,
+	fn($d, $k): float => Booking::getPriceWithDiscount(1000, $this->event, '', $k, 'ticket') != 1000,
 	ARRAY_FILTER_USE_BOTH
 );
 if ($discounts === []) {
@@ -24,7 +24,7 @@ if ($discounts === []) {
 }
 ?>
 <div class="dp-booking-info__discount-user dp-info-box">
-	<?php foreach ($this->event->user_discount as $discount) { ?>
+	<?php foreach ($discounts as $discount) { ?>
 		<div class="dp-user-discount">
 			<span class="dp-user-discount__label">
 				<?php echo $discount->label ?: $this->translate('COM_DPCALENDAR_FIELD_USER_DISCOUNT_LABEL'); ?>

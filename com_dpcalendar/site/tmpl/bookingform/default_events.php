@@ -136,6 +136,9 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 							</td>
 							<td class="dp-option__calculated-price dp-price dp-table__cell dp-table__cell_right"
 								data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_BOOKING_TOTAL'); ?>">
+								<div class="dp-price__info dp-price_hidden">
+									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::INFO]); ?>
+								</div>
 								<div class="dp-price__live"><?php echo DPCalendarHelper::renderPrice('0.00'); ?></div>
 								<div class="dp-price__original dp-price_hidden"></div>
 							</td>

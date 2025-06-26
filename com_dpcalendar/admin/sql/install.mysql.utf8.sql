@@ -158,6 +158,8 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_bookings` (
   `coupon_rate` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
   `events_discount` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
   `tickets_discount` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
+  `user_group_discount` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
+  `earlybird_discount` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
   `payment_provider` VARCHAR(255) DEFAULT NULL,
   `payment_provider_fee` DECIMAL(10, 2) NULL DEFAULT NULL,
   `net_amount` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',

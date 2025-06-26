@@ -95,7 +95,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 		$extCalendarTable = $component->getMVCFactory()->createTable('Extcalendar', 'Administrator');
 		$extCalendarTable->load(
 			[
-				'plugin' => str_replace('dpcalendar_', '', $this->_name),
+				'plugin' => $this->_name,
 				'id'     => str_replace($this->identifier . '-', '', $calendar->getId())
 			]
 		);
@@ -235,7 +235,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 		}
 
 		// If only a specific plugins needs to be synced return
-		if ($plugin && str_replace('dpcalendar_', '', $this->_name) !== $plugin) {
+		if ($plugin && $this->_name !== $plugin) {
 			return;
 		}
 
@@ -250,7 +250,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 
 	public function onCalendarAfterDelete(ExtcalendarTable $calendar): void
 	{
-		if ('dpcalendar_' . $calendar->plugin != $this->_name) {
+		if ($calendar->plugin !== $this->_name) {
 			return;
 		}
 

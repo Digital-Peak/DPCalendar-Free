@@ -2,16 +2,22 @@
 <form>
 	<fields>
 		<field name="value" type="text" validate="decimal"
-		    label="COM_DPCALENDAR_FIELD_EARLYBIRD_VALUE_LABEL" description="COM_DPCALENDAR_FIELD_EARLYBIRD_VALUE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_EARLYBIRD_VALUE_LABEL" description="COM_DPCALENDAR_FIELD_EARLYBIRD_VALUE_DESC"/>
 		<field name="type" type="list" default="value"
-		    label="COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_LABEL">
+			label="COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_LABEL">
 			<option value="value">COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_VALUE</option>
 			<option value="percentage">COM_DPCALENDAR_FIELD_EARLYBIRD_TYPE_PERCENTAGE</option>
 		</field>
 		<field name="groups" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-		    label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_GROUP_LABEL"/>
+			label="COM_DPCALENDAR_FIELD_USER_DISCOUNT_GROUP_LABEL"/>
+		<field name="area" type="list" default="ticket"
+			label="COM_DPCALENDAR_FIELD_EARLYBIRD_AREA_LABEL">
+			<option value="ticket">COM_DPCALENDAR_FIELD_EARLYBIRD_AREA_TICKET</option>
+			<option value="booking">COM_DPCALENDAR_FIELD_EARLYBIRD_AREA_BOOKING</option>
+			<option value="option">COM_DPCALENDAR_FIELD_EARLYBIRD_AREA_OPTIONS</option>
+		</field>
 		<field name="label" type="text" label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL_LABEL"/>
 		<field name="description" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
-		    label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
+			label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
 	</fields>
 </form>

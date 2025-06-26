@@ -17,7 +17,7 @@ if (empty($this->event->earlybird_discount)) {
 
 $discounts = array_filter(
 	(array)$this->event->earlybird_discount,
-	fn($d, $k): bool => Booking::getPriceWithDiscount(1000, $this->event, $k, '') != 1000,
+	fn($d, $k): bool => Booking::getPriceWithDiscount(1000, $this->event, $k, '', 'ticket') != 1000,
 	ARRAY_FILTER_USE_BOTH
 );
 if ($discounts === []) {

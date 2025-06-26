@@ -42,7 +42,7 @@
 			<option value="YEARLY">COM_DPCALENDAR_FIELD_SCHEDULING_YEARLY</option>
 		</field>
 		<field name="scheduling_end_date" type="datetimechooser" all_day="1" show_time="0" default="+2 Month"
-		    label="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_DESC"/>
+			label="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_END_DATE_DESC"/>
 		<field name="scheduling_interval" type="text" default="1"
 			label="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_LABEL" description="COM_DPCALENDAR_FIELD_SCHEDULING_INTERVAL_DESC"/>
 		<field name="scheduling_repeat_count" type="text"

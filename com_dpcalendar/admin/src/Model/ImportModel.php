@@ -146,9 +146,9 @@ class ImportModel extends BaseDatabaseModel
 		}
 
 		// Fetch the content
-		$content = (new CurlClient())->get('https://iptoasn.com/data/ip2country-v4-u32.tsv.gz')->dp->body;
+		$content = (new CurlClient())->get('https://download.ip2location.com/lite/IP2LOCATION-LITE-DB1.CSV.ZIP')->dp->body;
 		if (empty($content)) {
-			throw new \Exception("Can't download the geolocation database from iptoasn.com. Is the site blocked through a firewall?");
+			throw new \Exception("Can't download the geolocation database from ip2location.com. Is the site blocked through a firewall?");
 		}
 
 		if ($content instanceof \Exception) {
@@ -161,7 +161,7 @@ class ImportModel extends BaseDatabaseModel
 		}
 
 		// Store the downloaded file
-		$ret = file_put_contents($geoDBDirectory . '/tmp.gz', $content);
+		$ret = file_put_contents($geoDBDirectory . '/tmp.zip', $content);
 		if ($ret === false) {
 			throw new \Exception('Could not write the geolocation database to the temp folder. Are the permissions correct?');
 		}
@@ -169,38 +169,28 @@ class ImportModel extends BaseDatabaseModel
 		// Free up some memory
 		unset($content);
 
-		// Decompress the file
-		$uncompressed = '';
-
 		// Create the zip reader
-		$zp = @gzopen($geoDBDirectory . '/tmp.gz', 'rb');
-		if ($zp === false) {
-			@unlink($geoDBDirectory . '/tmp.gz');
+		$zip = new \ZipArchive();
+		$zp  = $zip->open($geoDBDirectory . '/tmp.zip');
+		if ($zp !== true) {
+			@unlink($geoDBDirectory . '/tmp.zip');
 			throw new \Exception("Can't uncompress the geolocation database file, there was a zip error.");
 		}
-		while (!gzeof($zp)) {
-			$uncompressed .= @gzread($zp, 102400);
-		}
-		// Close the zip reader
-		@gzclose($zp);
+
+		$zip->extractTo($geoDBDirectory, 'IP2LOCATION-LITE-DB1.CSV');
+		$zip->close();
+
 		// Delete the zip file
-		@unlink($geoDBDirectory . '/tmp.gz');
+		@unlink($geoDBDirectory . '/tmp.zip');
 
-		$addresses = preg_split("/\r\n|\n|\r/", $uncompressed);
-		if ($addresses === false) {
-			return;
+		$import = fopen($geoDBDirectory . '/IP2LOCATION-LITE-DB1.CSV', 'r');
+		if ($import === false) {
+			throw new \Exception("Can't open the geolocation database file.");
 		}
 
-		// Read the uncompressed content line by line
 		$files = [];
-		foreach ($addresses as $line) {
-			if (str_starts_with($line, '#')) {
-				continue;
-			}
-
-			// Parse the line
-			$data = explode("\t", $line);
-			if (\count($data) < 3 || $data[2] === 'None') {
+		while ($data = fgetcsv($import, null, ',', '"', '\\')) {
+			if ($data[0] == '0') {
 				continue;
 			}
 
@@ -232,6 +222,8 @@ class ImportModel extends BaseDatabaseModel
 		foreach ($files as $file) {
 			file_put_contents($file, '];', FILE_APPEND | LOCK_EX);
 		}
+
+		@unlink($geoDBDirectory . '/IP2LOCATION-LITE-DB1.CSV');
 	}
 
 	public function getTable($type = 'Location', $prefix = 'Administrator', $config = [])

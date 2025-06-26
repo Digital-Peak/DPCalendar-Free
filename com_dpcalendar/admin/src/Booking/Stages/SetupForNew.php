@@ -189,6 +189,16 @@ class SetupForNew implements StageInterface
 			$payload->data['coupon_rate'] = $priceTickets + $priceOptions - $payload->data['price'];
 		}
 
+		if (($userDiscount = Booking::getPriceWithDiscount($payload->data['price'], $event, '-1', '', 'booking')) !== 0.0) {
+			$payload->data['user_group_discount'] = $payload->data['price'] - $userDiscount;
+			$payload->data['price']               = $userDiscount;
+		}
+
+		if (($earlybirdDiscount = Booking::getPriceWithDiscount($payload->data['price'], $event, '', '-1', 'booking')) !== 0.0) {
+			$payload->data['earlybird_discount'] = $payload->data['price'] - $earlybirdDiscount;
+			$payload->data['price']              = $earlybirdDiscount;
+		}
+
 		// Determine tax
 		$taxRate = empty($payload->data['country']) ? null : $this->taxRateModel->getItemByCountry($payload->data['country']);
 
@@ -289,10 +299,13 @@ class SetupForNew implements StageInterface
 				continue;
 			}
 
-			$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key];
-
+			// Set the original price
 			$priceOriginal = $option->value * $amount[$key];
-			$priceDiscount = $priceOriginal;
+
+			// Get the price with a discount
+			$priceDiscount = Booking::getPriceWithDiscount($option->value, $event, '', '', 'option') * $amount[$key];
+
+			$payload->data['options'][] = $event->id . '-' . $key . '-' . $amount[$key] . '-' . $priceOriginal . '-' . $priceDiscount;
 
 			$payload->data['price_details'][$event->id]['options'][$key] = [
 				'discount' => DPCalendarHelper::renderPrice(number_format($priceDiscount, 2, '.', '')),

@@ -2,12 +2,12 @@
 <form>
 	<fields>
 		<field name="value" type="text" required="true"
-		    label="COM_DPCALENDAR_FIELD_PRICES_PRICE_LABEL"/>
+			label="COM_DPCALENDAR_FIELD_PRICES_PRICE_LABEL"/>
 		<field name="currency" type="dpcurrency" default="EUR" label="COM_DPCALENDAR_FIELD_PRICES_CURRENCY_LABEL"/>
 		<field name="amount" type="text" pattern="\d*" required="true" label="COM_DPCALENDAR_FIELD_BOOKING_OPTIONS_MAX_AMOUNT_LABEL"/>
 		<field name="min_amount" type="text" pattern="\d*" default="0" required="false" label="COM_DPCALENDAR_FIELD_BOOKING_OPTIONS_MIN_AMOUNT_LABEL"/>
 		<field name="label" type="text" required="true" label="COM_DPCALENDAR_FIELD_EARLYBIRD_LABEL_LABEL"/>
 		<field name="description" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
-		    label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
+			label="COM_DPCALENDAR_FIELD_EARLYBIRD_DESCRIPTION_LABEL"/>
 	</fields>
 </form>

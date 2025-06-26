@@ -275,9 +275,8 @@ class IcalModel extends BaseDatabaseModel
 
 		if ($event->description) {
 			$description = (empty($event->introText) ? '' : $event->introText . '<hr id="system-readmore">') . $event->description;
-			$description = preg_replace('/\r\n|\r|\n/', "\N", $description);
-			$text[]      = 'DESCRIPTION:' . InputFilter::getInstance()->clean($description);
-			$text[]      = 'X-ALT-DESC;FMTTYPE=text/html:' . $description;
+			$text[]      = 'DESCRIPTION:' . InputFilter::getInstance()->clean(preg_replace('/\r\n|\r|\n/', "\N", $description));
+			$text[]      = 'X-ALT-DESC;FMTTYPE=text/html:' . preg_replace('/\r\n|\r|\n/', '', $description);
 		}
 
 		if ($event->modified) {

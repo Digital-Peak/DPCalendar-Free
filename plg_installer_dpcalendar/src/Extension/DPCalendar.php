@@ -23,7 +23,7 @@ class DPCalendar extends CMSPlugin
 	public function onInstallerBeforeUpdateSiteDownload(BeforeUpdateSiteDownloadEvent $event): void
 	{
 		$url = $event->getUrl();
-		if ($url !== '' || !str_contains($url, 'digital-peak.com')) {
+		if (!str_contains($url, 'digital-peak.com')) {
 			return;
 		}
 

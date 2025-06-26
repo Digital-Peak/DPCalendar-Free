@@ -337,11 +337,11 @@ class Booking
 	}
 
 	/**
-	 * Returns the discounted price if there are discounts to apply.
+	 * Returns the discounted price if there are discounts to apply for the defined area (ticket, booking, option).
 	 * If the early bird key is set, only the early bird with that key is used.
 	 * If the user group key is set, only the user group discount with that key is used.
 	 */
-	public static function getPriceWithDiscount(float $price, \stdClass $event, string $earlyBirdKey = '', string $userGroupKey = ''): float
+	public static function getPriceWithDiscount(float $price, \stdClass $event, string $earlyBirdKey = '', string $userGroupKey = '', string $area = 'ticket'): float
 	{
 		if ($price === 0.0) {
 			return 0;
@@ -351,9 +351,10 @@ class Booking
 
 		$now = DPCalendarHelper::getDate();
 
-		if ($event->earlybird_discount instanceof \stdClass) {
+		if ($event->earlybird_discount instanceof \stdClass && $earlyBirdKey !== '-1') {
 			foreach ((array)$event->earlybird_discount as $key => $discount) {
-				if (!$discount->value || ($earlyBirdKey !== '' && $earlyBirdKey !== $key)) {
+				$discount->area ??= 'ticket';
+				if (!$discount->value || $discount->area !== $area || ($earlyBirdKey !== '' && $earlyBirdKey !== $key)) {
 					continue;
 				}
 
@@ -386,9 +387,10 @@ class Booking
 
 		// @phpstan-ignore-next-line
 		$userGroups = Access::getGroupsByUser(Factory::getUser()->id);
-		if ($event->user_discount instanceof \stdClass) {
+		if ($event->user_discount instanceof \stdClass && $userGroupKey !== '-1') {
 			foreach ((array)$event->user_discount as $key => $discount) {
-				if (!$discount->value || ($userGroupKey !== '' && $userGroupKey !== $key)) {
+				$discount->area ??= 'ticket';
+				if (!$discount->value || $discount->area !== $area || ($userGroupKey !== '' && $userGroupKey !== $key)) {
 					continue;
 				}
 

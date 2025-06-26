@@ -377,15 +377,15 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		if ($this->extCalendarsCache === null) {
 			$model = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Extcalendars', 'Administrator', ['ignore_request' => true]);
 			$model->getState();
-			$model->setState('filter.plugin', str_replace('dpcalendar_', '', $this->_name));
+			$model->setState('filter.plugin', $this->_name);
 			$model->setState('filter.state', 1);
 			$model->setState('list.limit', -1);
 			$model->setState('list.ordering', 'a.ordering');
 
-			$this->extCalendarsCache = $model->getItems();
+			$this->extCalendarsCache = $model->getItems() ?: [];
 		}
 
-		if ($this->extCalendarsCache === null || $this->extCalendarsCache === []) {
+		if ($this->extCalendarsCache === []) {
 			return [];
 		}
 
@@ -670,7 +670,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 	public function onDPCalendarDoAction(string $action, string $pluginName, mixed $data = null): mixed
 	{
-		if (str_replace('dpcalendar_', '', $this->_name) !== $pluginName) {
+		if ($this->_name !== $pluginName) {
 			return null;
 		}
 
@@ -797,6 +797,8 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		$event->user_discount                     = null;
 		$event->events_discount                   = null;
 		$event->tickets_discount                  = null;
+		$event->user_group_discount               = null;
+		$event->earlybird_discount                = null;
 		$event->description                       = '';
 		$event->schedule                          = '';
 		$event->state                             = 1;

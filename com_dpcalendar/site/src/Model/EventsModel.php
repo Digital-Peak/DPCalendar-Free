@@ -449,8 +449,8 @@ class EventsModel extends ListModel
 		}
 
 		// Filter for featured events
-		if ($this->getState('filter.featured')) {
-			$query->where('a.featured = 1');
+		if ($featured = $this->getState('filter.featured')) {
+			$query->where('a.featured = ' . ($featured === '2' ? '0' : '1'));
 		}
 
 		// Filter by title

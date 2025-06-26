@@ -44,6 +44,11 @@ class HtmlView extends BaseView
 			$this->fillCalendar($calendar);
 		}
 
+		$this->params->set('event_form_date_format', $this->params->get('map_date_format', 'd.m.Y'));
+
 		$this->prepareForm($this->calendars);
+
+		$this->filterForm->setFieldAttribute('start-date', 'formatted', true, 'list');
+		$this->filterForm->setFieldAttribute('end-date', 'formatted', true, 'list');
 	}
 }

@@ -18,13 +18,14 @@ class PluginController extends BaseController
 	public function action(): void
 	{
 		$plugin = $this->input->getWord('dpplugin', $this->input->getWord('plugin', ''));
+		$type   = $this->input->getWord('type', 'dpcalendar');
 
-		PluginHelper::importPlugin('dpcalendar');
+		PluginHelper::importPlugin($type);
 
-		if (!PluginHelper::isEnabled('dpcalendar', $plugin)) {
+		if (!PluginHelper::isEnabled($type, $plugin)) {
 			$pluginData = $this->getModel()->getPluginData($plugin);
 
-			$pluginInstance = $this->app->bootPlugin($plugin, 'dpcalendar');
+			$pluginInstance = $this->app->bootPlugin($plugin, $type);
 			if ($pluginInstance instanceof DPCalendarPlugin) {
 				$pluginInstance->setConfig((array)$pluginData);
 			}

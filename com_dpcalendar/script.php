@@ -374,6 +374,79 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			$db->setQuery("update #__extensions set params = replace(params, 'catid', 'caltitle') where name = 'plg_dpcalendar_csv' OR name = 'plg_dpcalendar_spreadsheet'");
 			$db->execute();
 		}
+
+		if (version_compare($version, '10.4.0') == -1) {
+			$db->setQuery("select * from #__extensions where name = 'plg_dpcalendarpay_qr'");
+			foreach ($db->loadObjectList() as $plugin) {
+				$params = json_decode((string)$plugin->params);
+				if (empty($params->providers)) {
+					continue;
+				}
+
+				foreach ($params->providers as $provider) {
+					$parts                          = explode(' ', (string)$provider->swissqr_street);
+					$provider->swissqr_house_number = array_pop($parts);
+					$provider->swissqr_street       = implode(' ', $parts);
+
+					$parts                  = explode(' ', (string)$provider->swissqr_city);
+					$provider->swissqr_zip  = array_shift($parts);
+					$provider->swissqr_city = implode(' ', $parts);
+				}
+
+				$this->run('update #__extensions set params = ' . $db->quote(json_encode($params) ?: '{}') . ' where extension_id = ' . $plugin->extension_id);
+			}
+
+			$fields = $db->getTableColumns('#__dpcalendar_bookings');
+			if (!\array_key_exists('user_group_discount', $fields)) {
+				$db->setQuery('ALTER TABLE `#__dpcalendar_bookings` ADD `user_group_discount` DECIMAL(10, 5) DEFAULT NULL AFTER `events_discount`')->execute();
+			}
+
+			if (!\array_key_exists('earlybird_discount', $fields)) {
+				$db->setQuery('ALTER TABLE `#__dpcalendar_bookings` ADD `earlybird_discount` DECIMAL(10, 5) DEFAULT NULL AFTER `user_group_discount`')->execute();
+			}
+
+			$events = [];
+			foreach ($db->setQuery('select options from #__dpcalendar_bookings where options is not null and options != "" group by options')->loadAssocList() as $booking) {
+				$bookingOptions = explode(',', (string)$booking['options']);
+				foreach ($bookingOptions as $pos => $option) {
+					$parts = explode('-', $option);
+					if (\count($parts) !== 3) {
+						continue;
+					}
+
+					$options = $events[$parts[0]] ?? null;
+					if ($options === null) {
+						$options = $db->setQuery($db->getQuery(true)->select('booking_options')
+							->from('#__dpcalendar_events')->where('id = ' . (int)$parts[0]))->loadResult();
+						if (!$options) {
+							$events[$parts[0]] = [];
+							continue;
+						}
+
+						$events[$parts[0]] = json_decode((string)$options);
+					}
+
+					foreach ($events[$parts[0]] as $key => $o) {
+						$key = preg_replace('/\D/', '', (string)$key);
+
+						if ($key != $parts[1]) {
+							continue;
+						}
+
+						$parts[3] = $o->value * $parts[2];
+						$parts[4] = $parts[3];
+					}
+
+					if (\count($parts) !== 5) {
+						continue;
+					}
+
+					$bookingOptions[$pos] = implode('-', $parts);
+				}
+
+				$db->setQuery('update #__dpcalendar_bookings set options = ' . $db->quote(implode(',', $bookingOptions)) . ' where options = ' . $db->quote($booking['options']))->execute();
+			}
+		}
 	}
 
 	public function preflight($type, $parent): bool

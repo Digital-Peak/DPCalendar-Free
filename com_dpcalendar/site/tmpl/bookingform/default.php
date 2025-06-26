@@ -40,6 +40,8 @@ $this->translator->translateJS('COM_DPCALENDAR_OPTIONS');
 		<?php echo $this->loadTemplate('total_coupon'); ?>
 		<?php echo $this->loadTemplate('total_events_discount'); ?>
 		<?php echo $this->loadTemplate('total_tickets_discount'); ?>
+		<?php echo $this->loadTemplate('total_user_group_discount'); ?>
+		<?php echo $this->loadTemplate('total_earlybird_discount'); ?>
 		<?php echo $this->loadTemplate('total_tax'); ?>
 		<?php echo $this->loadTemplate('total'); ?>
 		<?php echo $this->loadTemplate('fields'); ?>

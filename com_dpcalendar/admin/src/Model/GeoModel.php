@@ -332,11 +332,6 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 				continue;
 			}
 
-			// Check if a special IP address like localhost
-			if ($range[2] == 'ZZ') {
-				return null;
-			}
-
 			// Get the country by short code
 			$model = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Country', 'Administrator', ['ignore_request' => true]);
 

@@ -311,7 +311,7 @@ class Booking
 		}
 
 		// Absolute date
-		return DPCalendarHelper::getDate($event->booking_opening_date);
+		return DPCalendarHelper::getDate($event->booking_opening_date, \strlen($event->booking_opening_date) === 10);
 	}
 
 	/**
@@ -333,7 +333,7 @@ class Booking
 		}
 
 		// Absolute date
-		return DPCalendarHelper::getDate($event->booking_closing_date);
+		return DPCalendarHelper::getDate($event->booking_closing_date, \strlen($event->booking_closing_date) === 10);
 	}
 
 	/**

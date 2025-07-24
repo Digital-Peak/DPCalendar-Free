@@ -9,7 +9,6 @@
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
-use Joomla\CMS\Language\Text;
 use Joomla\CMS\Uri\Uri;
 
 // Booking is disabled when the message is an empty string
@@ -43,8 +42,8 @@ if ((int)$this->event->waiting_list_count > 0) {
 		</a>
 		<div class="dp-event-cta__end-date">
 		<?php $endDate = Booking::getRegistrationEndDate($this->originalEvent && $this->originalEvent->booking_series == 1 ? $this->originalEvent : $this->event); ?>
-			<?php echo Text::sprintf(
-				'COM_DPCALENDAR_VIEW_EVENT_REGISTRATION_END_TEXT',
+			<?php echo sprintf(
+				$this->translate('COM_DPCALENDAR_VIEW_EVENT_REGISTRATION_END_TEXT'),
 				$endDate->format($this->params->get('event_date_format', 'd.m.Y'), true),
 				$endDate->format('H:i') !== '00:00' ? $endDate->format($this->params->get('event_time_format', 'h:i a'), true) : ''
 			); ?>

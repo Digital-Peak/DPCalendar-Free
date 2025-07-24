@@ -188,7 +188,7 @@ class IcalModel extends BaseDatabaseModel
 					}
 
 					// Add modified events for later
-					if ($e->modified > $event->modified) {
+					if ($e->modified !== $event->modified) {
 						$childsToAdd[$e->id] = $e;
 					}
 				}

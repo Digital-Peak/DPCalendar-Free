@@ -207,6 +207,9 @@ $files = [
 '/plugins/dpcalendarpay/qr/vendor/symfony/validator/Constraints/ExpressionLanguageSyntax.php',
 '/plugins/dpcalendarpay/qr/vendor/symfony/validator/Constraints/ExpressionLanguageSyntaxValidator.php',
 '/plugins/dpcalendarpay/qr/vendor/symfony/validator/Mapping/Loader/AnnotationLoader.php',
+
+// From main to case 11671
+'/plugins/dpcalendar/jcalpro/src/Extension/Model',
 ];
 
 foreach ($files as $file) {

@@ -92,7 +92,7 @@ class CouponTable extends BasicTable
 		}
 
 		// Verify that the alias is unique
-		$table = new self($this->getDbo());
+		$table = new self($this->getDatabase());
 		if ($table->load(['code' => $this->code]) && ($table->id != $this->id || $this->id == 0)) {
 			throw new \Exception(Text::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_CODE') . ': ' . $table->code);
 		}

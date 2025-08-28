@@ -20,7 +20,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Tag\TaggableTableInterface;
 use Joomla\CMS\Tag\TaggableTableTrait;
 use Joomla\CMS\Versioning\VersionableTableInterface;
-use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 use Joomla\Database\ParameterType;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
@@ -211,7 +211,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 	protected string $tableName = 'dpcalendar_events';
 	protected $_columnAlias     = ['published' => 'state'];
 
-	public function __construct(DatabaseDriver $db)
+	public function __construct(DatabaseInterface $db)
 	{
 		parent::__construct($db);
 
@@ -308,7 +308,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 			$this->rrule .= ';UNTIL=' . $until->format('Y') . '0101T000000Z';
 		}
 
-		$oldEvent    = new self($this->getDbo());
+		$oldEvent    = new self($this->getDatabase());
 		$hardReset   = false;
 		$tagsChanged = !empty($this->newTags);
 		if ($this->id > 0) {
@@ -480,7 +480,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 				$startDate = DPCalendarHelper::getDate($vevent->DTSTART->getDateTime()->format('U'), (bool)$this->all_day);
 				$endDate   = DPCalendarHelper::getDate($vevent->DTEND->getDateTime()->format('U'), (bool)$this->all_day);
 
-				$table = new self($this->getDbo());
+				$table = new self($this->getDatabase());
 				$table->bind((array)$this, ['id']);
 
 				$table->alias         = ApplicationHelper::stringURLSafe($table->alias . '-' . $startDate->format('U'));
@@ -810,7 +810,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 	{
 		$this->getDatabase()->setQuery('select * from #__dpcalendar_events where original_id = ' . (int)$this->id);
 		foreach ($this->getDatabase()->loadAssocList() as $child) {
-			$table = new self($this->getDbo());
+			$table = new self($this->getDatabase());
 			$table->bind($child);
 
 			if ($newTags === null) {

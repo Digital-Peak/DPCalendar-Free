@@ -2,12 +2,12 @@
 <extension type="component" method="upgrade">
 	<name>com_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>2025-07-24</creationDate>
+	<creationDate>2025-08-28</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>10.4.1</version>
+	<version>10.4.2</version>
 	<description>COM_DPCALENDAR_XML_DESCRIPTION</description>
 	<namespace path="src">DigitalPeak\Component\DPCalendar</namespace>
 	<install>

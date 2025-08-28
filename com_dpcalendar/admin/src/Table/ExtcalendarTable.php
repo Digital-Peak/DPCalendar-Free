@@ -144,7 +144,7 @@ class ExtcalendarTable extends BasicTable
 		}
 
 		// Verify that the alias is unique
-		$table = new self($this->getDbo());
+		$table = new self($this->getDatabase());
 		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id == 0)) {
 			$this->alias = StringHelper::increment($this->alias);
 		}
@@ -183,7 +183,7 @@ class ExtcalendarTable extends BasicTable
 
 	protected function _getAssetParentId(?Table $table = null, $id = null)
 	{
-		$asset = new Asset($this->getDbo());
+		$asset = new Asset($this->getDatabase());
 		$asset->loadByName('com_dpcalendar');
 
 		return $asset->id;

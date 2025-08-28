@@ -55,20 +55,20 @@ $hidden_calendars = empty($hidden_calendars) ? [-2] : array_map(fn($c): int => (
 				<div class="dp-calendar__links">
 					<?php if ((!empty($calendar->getIcalUrl()) || !$calendar instanceof ExternalCalendarInterface) && $params->get('show_export_links', 1)) { ?>
 						<a href="<?php echo str_replace(['http://', 'https://'], 'webcal://', (string)$icalRoute); ?>"
-						   class="dp-link dp-link-subscribe">
+						   class="dp-link dp-link-subscribe" title="<?php echo $translator->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_SUBSCRIBE'); ?>">
 							[<?php echo $translator->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_SUBSCRIBE'); ?>]
 						</a>
-						<a href="<?php echo $icalRoute; ?>" class="dp-link">
+						<a href="<?php echo $icalRoute; ?>" class="dp-link" title="<?php echo $translator->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ICAL'); ?>">
 							[<?php echo $translator->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_ICAL'); ?>]
 						</a>
 						<?php if (!$user->guest && $token = (new Registry($user->params))->get('token')) { ?>
-							<a href="<?php echo $router->getCalendarIcalRoute($calendar->getId(), $token); ?>" class="dp-link dp-link-ical">
+							<a href="<?php echo $router->getCalendarIcalRoute($calendar->getId(), $token); ?>" class="dp-link dp-link-ical" title="<?php echo $translator->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRIVATE_ICAL'); ?>">
 								[<?php echo $translator->translate('COM_DPCALENDAR_VIEW_CALENDAR_TOOLBAR_PRIVATE_ICAL'); ?>]
 							</a>
 						<?php } ?>
 						<?php if (!$calendar instanceof ExternalCalendarInterface && !DPCalendarHelper::isFree() && !$user->guest) { ?>
 							<?php $url = '/components/com_dpcalendar/caldav.php/calendars/' . $user->username . '/dp-' . $calendar->getId(); ?>
-							<a href="<?php echo trim(Uri::base(), '/') . $url; ?>" class="dp-link dp-link-caldav">
+							<a href="<?php echo trim(Uri::base(), '/') . $url; ?>" class="dp-link dp-link-caldav"title="<?php echo $translator->translate('COM_DPCALENDAR_VIEW_PROFILE_TABLE_CALDAV_URL_LABEL'); ?>">
 								[<?php echo $translator->translate('COM_DPCALENDAR_VIEW_PROFILE_TABLE_CALDAV_URL_LABEL'); ?>]
 							</a>
 						<?php } ?>

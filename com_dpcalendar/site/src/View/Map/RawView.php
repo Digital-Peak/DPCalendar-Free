@@ -84,6 +84,10 @@ class RawView extends BaseView
 			$model->setState('filter.author', $author);
 		}
 
+		if ($tags = $this->params->get('map_filter_tags', 0)) {
+			$model->setState('filter.tags', $tags);
+		}
+
 		$location = $model->getState('filter.location');
 		if (empty($location)) {
 			$location = $this->params->get('map_view_lat', 47) . ',' . $this->params->get('map_view_long', 4);

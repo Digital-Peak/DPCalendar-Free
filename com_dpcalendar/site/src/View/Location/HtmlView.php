@@ -47,7 +47,7 @@ class HtmlView extends BaseView
 		// @phpstan-ignore-next-line
 		$this->location = $this->getModel()->getItem($this->input->getInt('id', 0));
 
-		if (!$this->location || $this->location->id == null) {
+		if (!$this->location || $this->location->id == null || $this->location->state != 1) {
 			throw new \Exception($this->translate('COM_DPCALENDAR_ALERT_NO_AUTH'), 404);
 		}
 

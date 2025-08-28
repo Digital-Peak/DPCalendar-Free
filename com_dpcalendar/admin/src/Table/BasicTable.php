@@ -13,7 +13,7 @@ use Joomla\CMS\Table\Table;
 use Joomla\CMS\User\CurrentUserInterface;
 use Joomla\CMS\User\CurrentUserTrait;
 use Joomla\Database\DatabaseAwareTrait;
-use Joomla\Database\DatabaseDriver;
+use Joomla\Database\DatabaseInterface;
 
 abstract class BasicTable extends Table implements CurrentUserInterface
 {
@@ -28,7 +28,7 @@ abstract class BasicTable extends Table implements CurrentUserInterface
 
 	protected string $tableName = '';
 
-	public function __construct(DatabaseDriver $db)
+	public function __construct(DatabaseInterface $db)
 	{
 		parent::__construct('#__' . $this->tableName, 'id', $db);
 		$this->setDatabase($db);

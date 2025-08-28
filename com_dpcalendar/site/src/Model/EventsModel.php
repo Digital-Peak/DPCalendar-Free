@@ -571,7 +571,6 @@ class EventsModel extends ListModel
 				'#__contentitem_tag_map tagmap ON tagmap.content_item_id = a.id AND tagmap.type_alias = ' . $db->quote('com_dpcalendar.event')
 			);
 
-			;
 			$query->where('tagmap.tag_id in (' . implode(',', ArrayHelper::toInteger($tagIds)) . ')');
 		}
 

@@ -233,7 +233,6 @@ class HtmlView extends BaseView
 			$model->setState('filter.author', $this->params->get('list_filter_author', 0));
 		}
 		$model->setState('filter.expand', $this->params->get('list_expand', 1));
-		$model->setState('filter.ongoing', $this->params->get('list_include_ongoing', 0));
 
 		// When no state permission, then show from owner and ensure a state
 		if (!$this->getCurrentUser()->authorise('core.edit.state', 'com_dpcalendar')) {

@@ -30,11 +30,6 @@
 				<option value="-1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_FILTER_AUTHOR_MY</option>
 				<option value="0">JNONE</option>
 			</field>
-			<field name="list_include_ongoing" type="list" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_DESC">
-				<option value="1">JYES</option>
-				<option value="0">JNO</option>
-			</field>
 			<field name="list_expand" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
 				<option value="1">JYES</option>

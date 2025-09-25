@@ -433,11 +433,6 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_HEADER_DATE_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_HEADER_DATE_DESC"/>
 		<field name="list_increment" type="text" default="1 month"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCREMENT_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCREMENT_DESC"/>
-		<field name="list_include_ongoing" type="radio" default="0" class="btn-group"
-			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_INCLUDE_ONGOING_DESC">
-			<option value="0">JNO</option>
-			<option value="1">JYES</option>
-		</field>
 		<field name="list_expand" type="radio" default="1" class="btn-group"
 			label="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_LIST_EXPAND_DESC">
 			<option value="0">JNO</option>

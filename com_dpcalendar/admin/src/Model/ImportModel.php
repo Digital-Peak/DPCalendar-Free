@@ -54,8 +54,7 @@ class ImportModel extends BaseDatabaseModel
 			}
 
 			$category = array_filter($existingCalendars, static fn ($e): bool => $e->title == $cal->title);
-
-			if (\is_array($category)) {
+			if ($category !== []) {
 				$category = reset($category);
 			}
 

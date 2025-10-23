@@ -479,7 +479,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 			return;
 		}
 
-		if ($tmp->status != 'OK' || empty($tmp->results)) {
+		if (empty($tmp->status) || $tmp->status !== 'OK' || empty($tmp->results)) {
 			return;
 		}
 

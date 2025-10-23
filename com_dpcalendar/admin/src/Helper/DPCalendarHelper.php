@@ -26,6 +26,7 @@ use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
+use Mustache\Engine;
 
 class DPCalendarHelper
 {
@@ -525,7 +526,7 @@ class DPCalendarHelper
 		$configuration['emptyText'] = Text::_('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_NO_EVENT_TEXT');
 
 		try {
-			$m = new \Mustache_Engine();
+			$m = new Engine();
 
 			return $m->render($output, $configuration);
 		} catch (\Exception $exception) {
@@ -913,7 +914,7 @@ class DPCalendarHelper
 		}
 
 		// Get the field names out of the object
-		$order = array_values(array_map(static fn ($f) => $f->field ?? $f['field'], $order));
+		$order = array_values(array_map(static fn (mixed $f) => $f->field ?? $f['field'], $order));
 
 		// get the keys
 		$keys = array_keys($fields);

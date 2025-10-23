@@ -21,8 +21,9 @@ class DPCalendarField extends CategoryField
 
 	protected function getOptions()
 	{
-		// @phpstan-ignore-next-line
-		$this->element['extension'] = 'com_dpcalendar';
+		if (!$this->element['extension']) {
+			$this->element['extension'] = 'com_dpcalendar';
+		}
 
 		$doc = new HtmlDocument();
 		$doc->loadScriptFile('fields/dpcalendar.js');

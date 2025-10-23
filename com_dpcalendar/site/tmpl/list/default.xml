@@ -572,7 +572,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="ticket"
-						hide="id,event_id,series,user_id,price,state,latitude,longitude"
+						hide="id,user_id,price,state,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -635,7 +635,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="ticket"
-						hide="id,event_id,series,user_id,price,state,latitude,longitude"
+						hide="id,user_id,price,state,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>

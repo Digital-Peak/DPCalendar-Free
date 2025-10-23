@@ -650,12 +650,11 @@
 				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
-			<field name="booking_fields_order" type="subform" multiple="true"
-					layout="joomla.form.field.subform.repeatable-table"
+			<field name="booking_fields_order" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-							hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
+						hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -712,7 +711,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-							hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
+						hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -789,8 +788,7 @@
 					layout="joomla.form.field.subform.repeatable-table"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
-					<field name="field" type="dpcfields" section="ticket"
-							hide="id,event_id,series,user_id,price,state,latitude,longitude"
+					<field name="field" type="dpcfields" section="ticket" hide="id,user_id,price,state,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -852,8 +850,7 @@
 					layout="joomla.form.field.subform.repeatable-table"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
-					<field name="field" type="dpcfields" section="ticket"
-							hide="id,event_id,series,user_id,price,state,latitude,longitude"
+					<field name="field" type="dpcfields" section="ticket" hide="id,user_id,price,state,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>

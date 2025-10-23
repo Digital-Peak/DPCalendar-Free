@@ -34,7 +34,7 @@ class HtmlView extends BaseView
 
 		PluginHelper::importPlugin('dpcalendar');
 
-		$this->app->getLanguage()->load('', JPATH_ADMINISTRATOR);
+		$this->app->getLanguage()?->load('', JPATH_ADMINISTRATOR);
 
 		$this->event      = $this->getModel()->getItem() ?: new \stdClass();
 		$this->form       = $this->getModel()->getForm();

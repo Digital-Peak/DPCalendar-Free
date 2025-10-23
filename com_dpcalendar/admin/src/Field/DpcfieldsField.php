@@ -36,33 +36,44 @@ class DpcfieldsField extends ListField
 
 		$hide = array_filter(explode(',', $this->element['hide'] ?: ''));
 
-		// @phpstan-ignore-next-line
-		$form = Form::getInstance('com_dpcalendar.' . $this->element['section'], $this->element['section'], ['control' => 'jform']);
-		foreach ($form->getFieldset() as $field) {
-			// Ignore spacers
-			if ($field->type === 'Spacer') {
-				continue;
-			}
+		$component = 'com_dpcalendar';
+		$section   = (string)$this->element['section'];
 
-			$fieldName = $field->fieldname;
-
-			// When no filter form use the compiled field name
-			if (!str_contains((string)$this->element['section'], 'filter')) {
-				$fieldName = DPCalendarHelper::getFieldName($field);
-			}
-
-			// Ignore when hidden
-			if ($hide && array_filter($hide, fn ($toHide): bool => fnmatch($toHide, $fieldName))) {
-				continue;
-			}
-
-			$field->hidden = false;
-			$options[]     = HTMLHelper::_('select.option', $fieldName, Text::_($field->getTitle()));
+		if (str_starts_with($section, 'com_')) {
+			[$component, $section] = explode('.', $section, 2);
 		}
 
-		$fields = FieldsHelper::getFields('com_dpcalendar.' . str_replace('filter_events', 'event', (string)$this->element['section']));
+		try {
+			// @phpstan-ignore-next-line
+			$form = Form::getInstance($component . '.' . $section, $section, ['control' => 'jform']);
+			foreach ($form->getFieldset() as $field) {
+				// Ignore spacers
+				if ($field->type === 'Spacer') {
+					continue;
+				}
+
+				$fieldName = $field->fieldname;
+
+				// When no filter form use the compiled field name
+				if (!str_contains($section, 'filter')) {
+					$fieldName = DPCalendarHelper::getFieldName($field);
+				}
+
+				// Ignore when hidden
+				if ($hide && array_filter($hide, fn ($toHide): bool => fnmatch($toHide, $fieldName))) {
+					continue;
+				}
+
+				$field->hidden = false;
+				$options[]     = HTMLHelper::_('select.option', $fieldName, Text::_($field->getTitle()));
+			}
+		} catch (\Exception) {
+			// Ignore form loading errors
+		}
+
+		$fields = FieldsHelper::getFields($component . '.' . str_replace('filter_events', 'event', $section));
 		foreach ($fields as $field) {
-			if ((string)$this->element['section'] === 'filter_events' && $field->type !== 'text') {
+			if ($section === 'filter_events' && $field->type !== 'text') {
 				continue;
 			}
 

@@ -307,20 +307,18 @@
 				description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
 				<option value="*">JALL</option>
 			</field>
-			<field name="event_form_description" type="editor" buttons="true"
-				   class="input-xlarge" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
+			<field name="event_form_description" type="editor" buttons="true" class="input-xlarge" filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 				label="JGLOBAL_DESCRIPTION" description="COM_DPCALENDAR_FIELD_DESCRIPTION_DESC"/>
 			<field name="event_form_custom_css" type="textarea" filter="\Joomla\CMS\Component\ComponentHelper::filterText" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 		</fieldset>
 		<fieldset name="booking" label="COM_DPCALENDAR_BOOKING">
-			<field name="booking_fields_order" type="subform" multiple="true"
-				   layout="joomla.form.field.subform.repeatable-table"
+			<field name="booking_fields_order" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-						   hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
+						hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -372,12 +370,11 @@
 		</fieldset>
 		<fieldset name="booking_form" label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGFORM_LABEL"
 				  description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
-			<field name="booking_form_fields_order_" type="subform" multiple="true"
-				   layout="joomla.form.field.subform.repeatable-table"
+			<field name="booking_form_fields_order_" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="booking"
-						   hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
+						hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -455,7 +452,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="ticket"
-						   hide="id,event_id,series,user_id,price,state,latitude,longitude"
+						   hide="id,user_id,price,state,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>
@@ -518,7 +515,7 @@
 				label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 				<form>
 					<field name="field" type="dpcfields" section="ticket"
-						   hide="id,event_id,series,user_id,price,state,latitude,longitude"
+						   hide="id,user_id,price,state,latitude,longitude"
 						label="COM_DPCALENDAR_FIELD"/>
 				</form>
 			</field>

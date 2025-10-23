@@ -899,7 +899,7 @@
 			<form>
 				<field name="field" type="dpcfields" section="booking"
 					hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude"
-				label="COM_DPCALENDAR_FIELD"/>
+					label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
 		<field name="booking_show_country" type="radio" class="btn-group" default="1"
@@ -957,7 +957,7 @@
 			<form>
 				<field name="field" type="dpcfields" section="booking"
 					hide="id,event_id,user_id,price,payment_provider,state,amount,transaction_id,type,options,payer_email,latitude,longitude,options"
-				label="COM_DPCALENDAR_FIELD"/>
+					label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
 		<field name="booking_form_country" type="list" default="1"
@@ -1058,13 +1058,11 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 	</fieldset>
 	<fieldset name="ticket" label="COM_DPCALENDAR_TICKET"
-			  description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
-		<field name="ticket_fields_order" type="subform" multiple="true"
-				layout="joomla.form.field.subform.repeatable-table"
+			description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="ticket_fields_order" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
 			label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
-				<field name="field" type="dpcfields" section="ticket"
-						hide="id,event_id,series,user_id,price,state,latitude,longitude"
+				<field name="field" type="dpcfields" section="ticket" hide="id,user_id,price,state,latitude,longitude"
 					label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>
@@ -1121,14 +1119,11 @@
 			description="COM_DPCALENDAR_FIELD_CONFIG_CUSTOM_CSS_DESC"/>
 	</fieldset>
 
-	<fieldset name="ticket_form" label="COM_DPCALENDAR_FIELD_CONFIG_TICKETFORM_LABEL"
-			  description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
-		<field name="ticket_form_fields_order_" type="subform" multiple="true"
-				layout="joomla.form.field.subform.repeatable-table"
+	<fieldset name="ticket_form" label="COM_DPCALENDAR_FIELD_CONFIG_TICKETFORM_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_TEXT_SET_INFO_DESC">
+		<field name="ticket_form_fields_order_" type="subform" multiple="true" layout="joomla.form.field.subform.repeatable-table"
 			label="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_FIELD_ORDER_DESC">
 			<form>
-				<field name="field" type="dpcfields" section="ticket"
-						hide="id,event_id,series,user_id,price,state,latitude,longitude"
+				<field name="field" type="dpcfields" section="ticket" hide="id,user_id,price,state,latitude,longitude"
 					label="COM_DPCALENDAR_FIELD"/>
 			</form>
 		</field>

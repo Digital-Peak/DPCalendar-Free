@@ -121,7 +121,9 @@ class EventController extends FormController implements CurrentUserInterface
 			$article = $this->app->bootComponent('content')->getMVCFactory()->createTable('Article', 'Administrator');
 			$article->load($redirect);
 
-			if (!empty($article->id) && !empty($article->catid)) {
+			$app = $this->app;
+			if (!empty($article->id) && !empty($article->catid) && $article->state == 1 &&
+				$app instanceof SiteApplication && ($article->language == '*' || $article->language === DPCalendarHelper::getFrLanguage())) {
 				$return = Route::_('index.php?option=com_content&view=article&id=' . $article->id . '&catid=' . $article->catid);
 			}
 		}
@@ -485,6 +487,7 @@ class EventController extends FormController implements CurrentUserInterface
 
 		if ($this->getTask() == 'save2copy') {
 			$data['capacity_used'] = null;
+			$data['uid']           = null;
 		}
 
 		if (DPCalendarHelper::isFree()) {
@@ -590,7 +593,9 @@ class EventController extends FormController implements CurrentUserInterface
 					$article = $this->app->bootComponent('content')->getMVCFactory()->createTable('Article', 'Administrator');
 					$article->load($redirect);
 
-					if (!empty($article->id) && !empty($article->catid)) {
+					$app = $this->app;
+					if (!empty($article->id) && !empty($article->catid) && $article->state == 1 &&
+						$app instanceof SiteApplication && ($article->language == '*' || $article->language === DPCalendarHelper::getFrLanguage())) {
 						$return = Route::_('index.php?option=com_content&view=article&id=' . $article->id . '&catid=' . $article->catid);
 					}
 				}

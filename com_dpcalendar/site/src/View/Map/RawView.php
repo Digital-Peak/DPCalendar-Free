@@ -48,14 +48,14 @@ class RawView extends BaseView
 			$moduleModel = $this->app->bootComponent('modules')->getMVCFactory()->createModel('Module', 'Administrator', ['ignore_request' => true]);
 			$module      = $moduleModel->getItem($this->input->getInt('module_id', 0));
 
-			if ($module !== null && $module->id) {
-				$params = new Registry($module->params);
+			if (!empty($module->id)) {
+				$params = new Registry($module->params ?? '');
 				$params->set('map_view_lat', $params->get('lat'));
 				$params->set('map_view_long', $params->get('long'));
 				$params->set('map_date_format', $params->get('date_format', 'd.m.Y'));
 				$params->set('map_expand', $params->get('expand', 1));
 				$params->set('map_include_ongoing', $params->get('include_ongoing', 0));
-				$access = $module->access;
+				$access = $module->access ?? 1;
 			}
 		} else {
 			$menu   = $this->app->getMenu()->getItem($this->input->getInt('Itemid', 0));

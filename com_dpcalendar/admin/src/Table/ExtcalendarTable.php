@@ -243,7 +243,7 @@ class ExtcalendarTable extends BasicTable
 		if (!empty($this->metakey)) {
 			$bad_characters = ["\n", "\r", '"', "<", ">"];
 
-			$after_clean = utf8_ireplace($bad_characters, "", $this->metakey);
+			$after_clean = StringHelper::str_ireplace($bad_characters, '', $this->metakey);
 			$keys        = explode(',', $after_clean);
 			$clean_keys  = [];
 			foreach ($keys as $key) {

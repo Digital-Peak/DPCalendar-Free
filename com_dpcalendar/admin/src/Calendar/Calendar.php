@@ -45,7 +45,8 @@ class Calendar extends \stdClass implements CalendarInterface
 		$this->setTitle($title);
 		$this->setParams(new Registry());
 
-		$asset = 'com_dpcalendar' . ($this->getId() !== 'root' ? '.' . $this->assetName . '.' . $this->getId() : '');
+		// Remove characters from id as the external calendars asset names are stored with the id only
+		$asset = 'com_dpcalendar' . ($this->getId() !== 'root' ? '.' . $this->assetName . '.' . preg_replace('/\D/', '', $this->getId()) : '');
 		$this->setCanCreate($user->authorise('core.create', $asset));
 		$this->setCanEdit($user->authorise('core.edit', $asset));
 		$this->setCanEditOwn($user->authorise('core.edit.own', $asset));

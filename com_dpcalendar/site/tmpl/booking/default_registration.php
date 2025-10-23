@@ -52,7 +52,7 @@ Form::addFormPath($com . '/models/forms');
 Form::addFieldPath($com . '/models/fields');
 
 // Load the language file
-$this->app->getLanguage()->load('com_users', JPATH_SITE);
+$this->app->getLanguage()?->load('com_users', JPATH_SITE);
 ?>
 <div class="com-dpcalendar-booking__registration dp-registration">
 	<div class="dp-registration__info dp-info-box">

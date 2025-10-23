@@ -22,7 +22,6 @@ class AdjustCustomFields implements StageInterface
 
 		// Clear the cache, doggy
 		$reflection = new \ReflectionProperty(FieldsHelper::class, 'fieldsCache');
-		$reflection->setAccessible(true);
 		$reflection->setValue(null, null);
 
 		$event                   = reset($payload->eventsWithTickets);

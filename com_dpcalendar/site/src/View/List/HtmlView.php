@@ -69,7 +69,7 @@ class HtmlView extends BaseView
 	protected function init(): void
 	{
 		// Load admin language for filters
-		$this->app->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+		$this->app->getLanguage()?->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 
 		// Compile the return page url
 		$this->returnPage = $this->input->getInt('Itemid', 0) !== 0 ? 'index.php?Itemid=' . $this->input->getInt('Itemid', 0) : '';

@@ -399,7 +399,7 @@ class DPCalendar extends PDO
 
 		$dpEvent->title = empty($vEvent->SUMMARY) ? '(no title)' : $vEvent->SUMMARY->getValue();
 
-		if (!empty($vEvent->DESCRIPTION) && $vEvent->DESCRIPTION !== null) {
+		if (!empty($vEvent->DESCRIPTION)) {
 			$dpEvent->description = $vEvent->DESCRIPTION->getValue();
 		}
 		$dpEvent->all_day = \strlen($vEvent->DTSTART->getValue()) > 10 ? 0 : 1;
@@ -437,7 +437,7 @@ class DPCalendar extends PDO
 		if (!empty($vEvent->RRULE) && $vEvent->RRULE->getValue()) {
 			$dpEvent->rrule = $vEvent->RRULE->getValue();
 		}
-		if (!empty($vEvent->LOCATION) && $vEvent->LOCATION !== null && $vEvent->LOCATION->getValue()) {
+		if (!empty($vEvent->LOCATION) && $vEvent->LOCATION->getValue()) {
 			$locationString = $vEvent->LOCATION->getValue();
 
 			// The ical creator escapes , and ; so we need to turn them back

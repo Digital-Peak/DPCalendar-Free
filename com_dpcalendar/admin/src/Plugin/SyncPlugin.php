@@ -15,7 +15,6 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\ExtcalendarTable;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Date\Date;
-use Joomla\CMS\Http\HttpFactory;
 use Joomla\Database\DatabaseAwareInterface;
 use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Registry\Registry;
@@ -47,15 +46,14 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 			return (string)(filemtime($uri) ?: random_int(0, mt_getrandmax()));
 		}
 
-		$http     = HttpFactory::getHttp();
-		$response = $http->head($uri);
+		$response = $this->getClientFactory()->create()->request($uri, '', null, null, [], [CURLOPT_NOBODY => true], 'head');
 
-		if (\array_key_exists('ETag', $response->headers)) {
-			return $response->headers['ETag'];
+		if (\array_key_exists('etag', $response->dp->headers)) {
+			return implode(', ', $response->dp->headers['etag']);
 		}
 
-		if (\array_key_exists('Last-Modified', $response->headers)) {
-			return $response->headers['Last-Modified'];
+		if (\array_key_exists('last-modified', $response->dp->headers)) {
+			return implode(', ', $response->dp->headers['last-modified']);
 		}
 
 		return (string)random_int(0, mt_getrandmax());

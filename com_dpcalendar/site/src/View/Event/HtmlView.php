@@ -285,7 +285,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 			$this->taxRate = $model->getItemByCountry($this->country->id);
 
 			// Load the languages
-			$this->app->getLanguage()->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
+			$this->app->getLanguage()?->load('com_dpcalendar.countries', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
 		}
 
 		if (!isset($event->tickets)) {

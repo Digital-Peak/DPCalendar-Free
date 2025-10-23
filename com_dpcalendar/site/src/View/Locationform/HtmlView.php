@@ -35,7 +35,7 @@ class HtmlView extends BaseView
 	protected function init(): void
 	{
 		Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/forms');
-		$this->app->getLanguage()->load('', JPATH_ADMINISTRATOR);
+		$this->app->getLanguage()?->load('', JPATH_ADMINISTRATOR);
 
 		$this->location   = $this->getModel('Location')->getItem() ?: new \stdClass();
 		$this->form       = $this->getModel('Location')->getForm();

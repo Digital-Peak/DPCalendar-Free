@@ -30,6 +30,7 @@ class PluginController extends BaseController
 				$pluginInstance->setConfig((array)$pluginData);
 			}
 
+			// @phpstan-ignore-next-line
 			$pluginInstance->registerListeners();
 		}
 

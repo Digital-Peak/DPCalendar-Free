@@ -57,7 +57,7 @@ class HtmlView extends BaseView
 
 			$this->plugins = PluginHelper::getPlugin('dpcalendar');
 			foreach ($this->plugins as $plugin) {
-				$this->app->getLanguage()->load('plg_dpcalendar_' . $plugin->name, JPATH_PLUGINS . '/dpcalendar/' . $plugin->name);
+				$this->app->getLanguage()?->load('plg_dpcalendar_' . $plugin->name, JPATH_PLUGINS . '/dpcalendar/' . $plugin->name);
 			}
 		}
 	}

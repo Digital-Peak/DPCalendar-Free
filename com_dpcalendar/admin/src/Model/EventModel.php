@@ -750,70 +750,70 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		if (empty($item->catid)) {
 			$data['catid'] = $params->get('event_form_calid');
 		}
-		if ($params->get('event_form_show_end_time') != '' && (!isset($item->show_end_time) || $item->show_end_time === null)) {
+		if ($params->get('event_form_show_end_time') != '' && !isset($item->show_end_time)) {
 			$data['show_end_time'] = $params->get('event_form_show_end_time');
 		}
-		if ($params->get('event_form_all_day') != '' && (!isset($item->all_day) || $item->all_day === null)) {
+		if ($params->get('event_form_all_day') != '' && !isset($item->all_day)) {
 			$data['all_day'] = $params->get('event_form_all_day');
 		}
-		if (!isset($item->color) || $item->color === null) {
+		if (!isset($item->color)) {
 			$data['color'] = $params->get('event_form_color');
 		}
-		if (!isset($item->url) || $item->url === null) {
+		if (!isset($item->url)) {
 			$data['url'] = $params->get('event_form_url');
 		}
-		if (!isset($item->description) || $item->description === null) {
+		if (!isset($item->description)) {
 			$data['description'] = $params->get('event_form_description');
 		}
-		if ((!isset($item->capacity) || $item->capacity === null) && $params->get('event_form_capacity', 0) > 0) {
+		if (!isset($item->capacity) && $params->get('event_form_capacity', 0) > 0) {
 			$data['capacity'] = $params->get('event_form_capacity');
 		}
-		if (!isset($item->max_tickets) || $item->max_tickets === null) {
+		if (!isset($item->max_tickets)) {
 			$data['max_tickets'] = $params->get('event_form_max_tickets');
 		}
-		if (!isset($item->booking_opening_date) || $item->booking_opening_date === null) {
+		if (!isset($item->booking_opening_date)) {
 			$data['booking_opening_date'] = $params->get('event_form_booking_opening_date');
 		}
-		if (!isset($item->booking_closing_date) || $item->booking_closing_date === null) {
+		if (!isset($item->booking_closing_date)) {
 			$data['booking_closing_date'] = $params->get('event_form_booking_closing_date');
 		}
-		if (!isset($item->booking_cancel_closing_date) || $item->booking_cancel_closing_date === null) {
+		if (!isset($item->booking_cancel_closing_date)) {
 			$data['booking_cancel_closing_date'] = $params->get('event_form_booking_cancel_closing_date');
 		}
-		if (!isset($item->booking_series) || $item->booking_series === null) {
+		if (!isset($item->booking_series)) {
 			$data['booking_series'] = $params->get('event_form_booking_series');
 		}
-		if (!isset($item->booking_waiting_list) || $item->booking_waiting_list === null) {
+		if (!isset($item->booking_waiting_list)) {
 			$data['booking_waiting_list'] = $params->get('event_form_booking_waiting_list');
 		}
-		if (!isset($item->payment_provider) || $item->payment_provider === null) {
+		if (!isset($item->payment_provider)) {
 			$data['payment_provider'] = $params->get('event_form_payment_provider');
 		}
-		if (!isset($item->terms) || $item->terms === null) {
+		if (!isset($item->terms)) {
 			$data['terms'] = $params->get('event_form_terms');
 		}
-		if (!isset($item->booking_information) || $item->booking_information === null) {
+		if (!isset($item->booking_information)) {
 			$data['booking_information'] = $params->get('event_form_booking_information');
 		}
-		if (!isset($item->access) || $item->access === null) {
+		if (!isset($item->access)) {
 			$data['access'] = $params->get('event_form_access');
 		}
-		if (!isset($item->access_content) || $item->access_content === null) {
+		if (!isset($item->access_content)) {
 			$data['access_content'] = $params->get('event_form_access_content');
 		}
-		if (!isset($item->featured) || $item->featured === null) {
+		if (!isset($item->featured)) {
 			$data['featured'] = $params->get('event_form_featured');
 		}
-		if (!isset($item->location_ids) || $item->location_ids === null) {
+		if (!isset($item->location_ids)) {
 			$data['location_ids'] = $params->get('event_form_location_ids', []);
 		}
-		if (!isset($item->language) || $item->language === null) {
+		if (!isset($item->language)) {
 			$data['language'] = $params->get('event_form_language');
 		}
-		if (!isset($item->metakey) || $item->metakey === null) {
+		if (!isset($item->metakey)) {
 			$data['metakey'] = $params->get('menu-meta_keywords');
 		}
-		if (!isset($item->metadesc) || $item->metadesc === null) {
+		if (!isset($item->metadesc)) {
 			$data['metadesc'] = $params->get('menu-meta_description');
 		}
 

@@ -615,10 +615,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 
 		$url = 'https://api.mapbox.com/geocoding/v5/mapbox.places/' . urlencode($location) . '.json?limit=1&access_token=';
 
-		$url .= DPCalendarHelper::getComponentParameter(
-			'map_api_mapbox_token',
-			'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw'
-		);
+		$url .= DPCalendarHelper::getComponentParameter('map_api_mapbox_token', '');
 
 		$lang = DPCalendarHelper::getFrLanguage();
 		$lang = substr($lang, 0, strpos($lang, '-') ?: 0);

@@ -12,13 +12,11 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Table;
 use Joomla\CMS\Table\Table;
 use Joomla\CMS\User\CurrentUserInterface;
 use Joomla\CMS\User\CurrentUserTrait;
-use Joomla\Database\DatabaseAwareTrait;
 use Joomla\Database\DatabaseInterface;
 
 abstract class BasicTable extends Table implements CurrentUserInterface
 {
 	use CurrentUserTrait;
-	use DatabaseAwareTrait;
 
 	/** @var int */
 	public $id;
@@ -42,5 +40,26 @@ abstract class BasicTable extends Table implements CurrentUserInterface
 		}
 
 		return $data;
+	}
+
+	protected function getDatabase(): DatabaseInterface
+	{
+		if (version_compare(JVERSION, '5.4.0', '<')) {
+			// @phpstan-ignore-next-line
+			return $this->getDbo();
+		}
+
+		return parent::getDatabase();
+	}
+
+	public function setDatabase(DatabaseInterface $db): void
+	{
+		if (version_compare(JVERSION, '5.4.0', '<')) {
+			// @phpstan-ignore-next-line
+			$this->_db = $db;
+			return;
+		}
+
+		parent::setDatabase($db);
 	}
 }

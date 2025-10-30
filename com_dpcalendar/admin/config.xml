@@ -1601,7 +1601,6 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_GOOGLE_JSKEY_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_GOOGLE_JSKEY_DESC"/>
 		<field name="map_api_mapbox_token" type="text" showon="map_provider:mapbox"
-			default="pk.eyJ1IjoiZGlnaXRhbHBlYWsiLCJhIjoiY2xoMXZodndxMG5rcDNlb2hxNTBnOW96OSJ9.ezCOCC5uPJPvjI8bLRoCMw"
 			label="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX_ACCESS_TOKEN_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_INTEGRATION_MAP_PROVIDER_MAPBOX_ACCESS_TOKEN_DESC"/>
 		<field name="map_api_openstreetmap_tiles_url" type="text" showon="map_provider:openstreetmap"

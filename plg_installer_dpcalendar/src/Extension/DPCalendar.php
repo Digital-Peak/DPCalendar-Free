@@ -37,6 +37,9 @@ class DPCalendar extends CMSPlugin
 		}
 
 		$uri = Uri::getInstance($url);
+
+		// Set versions, so we get a compact update XML back with only versions greater than whats installed
+		// to prevent timeouts and other network issues
 		$uri->setVar('j', JVERSION);
 		$uri->setVar('p', phpversion());
 		$uri->setVar('m', $this->getDatabase()->getVersion());

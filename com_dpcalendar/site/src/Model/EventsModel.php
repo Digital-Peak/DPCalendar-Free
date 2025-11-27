@@ -241,9 +241,10 @@ class EventsModel extends ListModel
 			$item->schedule = $item->schedule ?: null;
 
 			// Implement View Level Access
-			if (!$this->getCurrentUser()->authorise('core.admin', 'com_dpcalendar')
-				&& !\in_array($item->access_content, $this->getCurrentUser()->getAuthorisedViewLevels())
-			) {
+			$user = $this->getCurrentUser();
+			if (!$user->authorise('core.admin', 'com_dpcalendar') && !\in_array($item->access_content, $user->getAuthorisedViewLevels())
+				// Special access content flag, where only the logged in user can see the content of his own event
+				&& ($item->access_content > -1 || $item->created_by != $user->id)) {
 				$item->title               = Text::_('COM_DPCALENDAR_EVENT_BUSY');
 				$item->location            = '';
 				$item->locations           = [];

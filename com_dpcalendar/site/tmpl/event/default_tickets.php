@@ -15,7 +15,8 @@ if (!$this->params->get('event_show_tickets', 0) || !isset($this->event->tickets
 }
 
 // Permissions
-if (!$this->user->authorise('core.admin', 'com_dpcalendar') && !in_array($this->event->access_content, $this->user->getAuthorisedViewLevels())) {
+if (!$this->user->authorise('core.admin', 'com_dpcalendar') && !in_array($this->event->access_content, $this->user->getAuthorisedViewLevels())
+	&& ($this->event->access_content > -1 || $this->event->created_by != $this->user->id)) {
 	return;
 }
 

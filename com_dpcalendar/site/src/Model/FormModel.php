@@ -236,4 +236,19 @@ class FormModel extends EventModel implements UserFactoryAwareInterface
 			);
 		}
 	}
+
+	public function checkout($pk = null)
+	{
+		if ($this->getCurrentUser()->id === 0) {
+			$table = $this->getTable();
+
+			if (!$table->load($pk)) {
+				return false;
+			}
+
+			return $this->getCurrentUser()->authorise('core.edit', 'com_dpcalendar.category.' . $table->catid);
+		}
+
+		return parent::checkout($pk);
+	}
 }

@@ -199,6 +199,7 @@
 			<option value="0">JDISABLED</option>
 			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_POPUP</option>
 			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_REDIRECT</option>
+			<option value="3">COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_POPUP_FORCE</option>
 		</field>
 		<field name="description_length" type="text" default="100"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_DESC_COUNT_LABEL"
@@ -807,6 +808,7 @@
 		<field name="event_form_access_content" type="accesslevel"
 			label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC">
 			<option value=""></option>
+			<option value="-1">COM_DPCALENDAR_FIELD_ACCESS_CONTENT_AUTHOR</option>
 		</field>
 
 		<field name="event_form_description" type="editor" buttons="true" filter="\Joomla\CMS\Component\ComponentHelper::filterText"

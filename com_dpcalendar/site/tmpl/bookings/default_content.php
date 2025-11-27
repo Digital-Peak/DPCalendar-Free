@@ -41,7 +41,7 @@ $fields = array_column((array)$this->params->get('bookings_fields', []), 'field'
 								<?php echo $value; ?>
 							</a>
 						<?php } elseif ($fields[$index] === 'book_date') { ?>
-							<?php echo $this->dateHelper->getDate($value)->format($format, true); ?>
+							<?php echo $this->dateHelper->getDate($value)->format($format); ?>
 						<?php } else { ?>
 							<?php echo $value; ?>
 						<?php } ?>

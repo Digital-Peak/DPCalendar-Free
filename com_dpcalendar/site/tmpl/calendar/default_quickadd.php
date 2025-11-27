@@ -27,7 +27,7 @@ $this->dpdocument->loadScriptFile('views/calendar/default.js');
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<input type="hidden" name="urlhash" class="dp-input dp-input-hidden">
 		<input type="hidden" name="jform[capacity]" value="0" class="dp-input dp-input-hidden">
-		<?php if ($this->params->get('event_create_form', 1) == '1') { ?>
+		<?php if ($this->params->get('event_create_form', 1) == '1' || $this->params->get('event_create_form', 1) == '3') { ?>
 			<input type="hidden" name="jform[all_day]" value="0" class="dp-input dp-input-hidden">
 		<?php } ?>
 		<input type="hidden" name="layout" value="edit" class="dp-input dp-input-hidden">

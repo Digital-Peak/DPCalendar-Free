@@ -231,8 +231,10 @@
 			<option value="-2">JTRASHED</option>
 		</field>
 		<field name="access" type="accesslevel" default="1" label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>
-		<field name="access_content" type="accesslevel" default="1" label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL"
-			description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"/>
+		<field name="access_content" type="accesslevel" default="1"
+			label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC">
+			<option value="-1">COM_DPCALENDAR_FIELD_ACCESS_CONTENT_AUTHOR</option>
+		</field>
 		<field name="language" type="contentlanguage" label="JFIELD_LANGUAGE_LABEL" description="COM_DPCALENDAR_FIELD_LANGUAGE_DESC">
 			<option value="*">JALL</option>
 		</field>

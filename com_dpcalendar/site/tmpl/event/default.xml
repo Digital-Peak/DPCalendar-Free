@@ -274,7 +274,9 @@
 			<field name="event_form_access" type="accesslevel" useglobal="true"
 				label="JFIELD_ACCESS_LABEL" description="JFIELD_ACCESS_DESC"/>
 			<field name="event_form_access_content" type="accesslevel" useglobal="true"
-				label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC"/>
+				label="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_LABEL" description="COM_DPCALENDAR_FIELD_ACCESS_CONTENT_DESC">
+				<option value="-1">COM_DPCALENDAR_FIELD_ACCESS_CONTENT_AUTHOR</option>
+			</field>
 			<field name="event_form_capacity" type="text" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CAPACITY_LABEL" description="COM_DPCALENDAR_FIELD_CAPACITY_DESC"/>
 			<field name="event_form_max_tickets" type="text" useglobal="true"

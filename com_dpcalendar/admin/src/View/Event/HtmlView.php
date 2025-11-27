@@ -69,13 +69,23 @@ class HtmlView extends BaseView
 		if ($exdates instanceof SubformField) {
 			$exdates->__get('input');
 			$exdates->loadSubForm()->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
-			foreach (array_keys(array_filter((array)$exdates->__get('value'))) as $key) {
+			foreach (array_keys(array_filter((array)$exdates->__get('value'))) as $index => $key) {
+				// Set it per value
 				try {
 					// @phpstan-ignore-next-line
 					$form = Form::getInstance('subform.' . $key, '');
 					$form->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
 				} catch (\InvalidArgumentException) {
-					// Ignore as it can happen when an exdate is removed
+					// Ignore as it can happen when an exdate is removed or index has changed
+				}
+
+				// Set it per index
+				try {
+					// @phpstan-ignore-next-line
+					$form = Form::getInstance('subform.exdates' . $index, '');
+					$form->setFieldAttribute('date', 'format', DPCalendarHelper::getComponentParameter('event_form_date_format', 'd.m.Y'));
+				} catch (\InvalidArgumentException) {
+					// Ignore as it can happen when an exdate is removed or index has changed
 				}
 			}
 		}

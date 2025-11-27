@@ -156,7 +156,7 @@ trait ExportTrait
 				case 'state':
 					return Booking::getStatusLabel($ticket);
 				case 'created':
-					return DPCalendarHelper::getDate($ticket->$name)->format('c');
+					return DPCalendarHelper::getDate($ticket->$name)->format('Y-m-d H:i:s', true);
 				case 'start_date':
 				case 'end_date':
 					return DPCalendarHelper::getDate($ticket->$name)->format($ticket->all_day ? 'Y-m-d' : 'Y-m-d H:i:s', true);

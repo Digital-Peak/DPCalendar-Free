@@ -51,7 +51,7 @@ $fields = array_column((array)$this->params->get('tickets_fields', []), 'field')
 								<?php } ?>
 							</a>
 						<?php } elseif ($fields[$index] === 'created') { ?>
-							<?php echo $this->dateHelper->getDate($ticket->created)->format($format); ?>
+							<?php echo $this->dateHelper->getDate($ticket->created)->format($format, true); ?>
 						<?php } elseif ($fields[$index] === 'location') { ?>
 							<?php echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo','Administrator')->format([$ticket]); ?>
 						<?php } elseif ($fields[$index] === 'action') { ?>

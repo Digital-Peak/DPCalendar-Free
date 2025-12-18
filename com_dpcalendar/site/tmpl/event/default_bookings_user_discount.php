@@ -16,7 +16,7 @@ if (empty($this->event->user_discount)) {
 
 $discounts = array_filter(
 	(array)$this->event->user_discount,
-	fn($d, $k): float => Booking::getPriceWithDiscount(1000, $this->event, '', $k, 'ticket') != 1000,
+	fn($d, string $k): float => Booking::getPriceWithDiscount(1000, $this->event, '', $k, 'ticket') != 1000,
 	ARRAY_FILTER_USE_BOTH
 );
 if ($discounts === []) {

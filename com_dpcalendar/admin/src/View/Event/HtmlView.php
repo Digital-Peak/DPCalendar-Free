@@ -40,8 +40,8 @@ class HtmlView extends BaseView
 			$model->getState();
 			$model->setState('filter.children', $this->event->id);
 			$model->setState('filter.modified', $this->event->modified ?: '0000-00-00');
-			$model->setState('filter.state', null);
-			$model->setState('list.start-date', null);
+			$model->setState('filter.state');
+			$model->setState('list.start-date');
 
 			foreach ($model->getItems() as $event) {
 				$e                 = new \stdClass();

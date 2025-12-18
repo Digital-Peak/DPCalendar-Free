@@ -37,8 +37,8 @@ class ImportModel extends BaseDatabaseModel
 
 		$existingCalendars = $categoriesModel->getItems();
 		$calendarsToimport = $input->get('calendar', []);
-		$start             = DPCalendarHelper::getDate($input->getCmd('filter_search_start', null));
-		$end               = DPCalendarHelper::getDate($input->getCmd('filter_search_end', null));
+		$start             = DPCalendarHelper::getDate($input->getCmd('filter_search_start'));
+		$end               = DPCalendarHelper::getDate($input->getCmd('filter_search_end'));
 
 		$msgs = [];
 		foreach ($calendars as $cal) {
@@ -195,7 +195,7 @@ class ImportModel extends BaseDatabaseModel
 
 			// Filename contains the first part of the IP
 			$ip       = long2ip((int)$data[0]);
-			$fileName = ($ip === '' || $ip === '0' || $ip === false ? 'undefined' : current(explode('.', $ip))) . '.php';
+			$fileName = (\in_array($ip, ['', '0', false], true) ? 'undefined' : current(explode('.', $ip))) . '.php';
 
 			// The files array with the IP data file names
 			$files[$fileName] = $geoDBDirectory . '/' . $fileName;

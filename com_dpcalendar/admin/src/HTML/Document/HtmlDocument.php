@@ -60,7 +60,7 @@ class HtmlDocument
 
 	public function addScript(?string $content = ''): void
 	{
-		if ($content === null || $content === '' || $content === '0') {
+		if (\in_array($content, [null, '', '0'], true)) {
 			return;
 		}
 
@@ -69,7 +69,7 @@ class HtmlDocument
 
 	public function addStyle(?string $content = ''): void
 	{
-		if ($content === null || $content === '' || $content === '0') {
+		if (\in_array($content, [null, '', '0'], true)) {
 			return;
 		}
 

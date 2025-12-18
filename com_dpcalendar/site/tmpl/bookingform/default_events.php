@@ -86,7 +86,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_TICKETS_OVERBOOK
 							<?php } else { ?>
 								<select name="<?php echo $name; ?>" class="dp-select dp-select_plain">
 									<?php for ($i = 0; $i <= $instance->ticket_count; $i++) { ?>
-										<?php $selected = ($instance->prices instanceof \stdClass ? count(get_object_vars($instance->prices)) : 0) == 1 && $i == 1 && $instance->id == $this->event->id ? 'selected="selected"' : ''; ?>
+										<?php $selected = ($instance->prices instanceof \stdClass ? count(get_object_vars($instance->prices)) : 0) === 1 && $i === 1 && $instance->id == $this->event->id ? 'selected="selected"' : ''; ?>
 										<?php $selected = !empty($this->selection[$instance->id]) && !empty($this->selection[$instance->id]['tickets']) &&$this->selection[$instance->id]['tickets'][$key] && $this->selection[$instance->id]['tickets'][$key] == $i ? 'selected="selected"' : $selected; ?>
 										<option value="<?php echo $i; ?>"<?php echo $selected; ?>><?php echo $i; ?></option>
 									<?php } ?>

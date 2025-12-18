@@ -40,9 +40,11 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 	use UserFactoryAwareTrait;
 	use VersionableModelTrait;
 
-	public $typeAlias      = 'com_dpcalendar.event';
+	public $typeAlias = 'com_dpcalendar.event';
+
 	protected $text_prefix = 'COM_DPCALENDAR';
-	protected $name        = 'event';
+
+	protected $name = 'event';
 
 	protected $batch_commands = [
 		'assetgroup_id'     => 'batchAccess',
@@ -427,6 +429,10 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		// Only apply the default values on create
 		if (empty($data['id'])) {
 			$data = array_merge($data, $this->getDefaultValues((object)$data));
+			if (!empty($data['location_ids'])) {
+				$locationIds = array_unique($data['location_ids']);
+				unset($data['location_ids']);
+			}
 		}
 
 		if (DPCalendarHelper::isFree()) {

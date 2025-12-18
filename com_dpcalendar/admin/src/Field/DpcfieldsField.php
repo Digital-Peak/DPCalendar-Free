@@ -60,7 +60,7 @@ class DpcfieldsField extends ListField
 				}
 
 				// Ignore when hidden
-				if ($hide && array_filter($hide, fn ($toHide): bool => fnmatch($toHide, $fieldName))) {
+				if ($hide && array_filter($hide, fn (string $toHide): bool => fnmatch($toHide, $fieldName))) {
 					continue;
 				}
 

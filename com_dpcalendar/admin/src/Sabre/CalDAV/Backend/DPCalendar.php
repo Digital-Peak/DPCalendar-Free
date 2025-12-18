@@ -447,7 +447,7 @@ class DPCalendar extends PDO
 			$location = null;
 			if (property_exists($vEvent, 'GEO') && $vEvent->GEO !== null && $vEvent->GEO->getValue()) {
 				$parts = explode(';', (string)$vEvent->GEO->getValue());
-				if (\count($parts) == 2) {
+				if (\count($parts) === 2) {
 					$model = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
 					$model->getState();
 					$model->setState('list.limit', 1);

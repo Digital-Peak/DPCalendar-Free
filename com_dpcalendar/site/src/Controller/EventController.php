@@ -33,9 +33,12 @@ class EventController extends FormController implements CurrentUserInterface
 {
 	use CurrentUserTrait;
 
-	protected $view_item         = 'form';
-	protected $view_list         = 'calendar';
-	protected $option            = 'com_dpcalendar';
+	protected $view_item = 'form';
+
+	protected $view_list = 'calendar';
+
+	protected $option = 'com_dpcalendar';
+
 	private string $editCalendar = '';
 
 	public function add(): bool
@@ -462,7 +465,7 @@ class EventController extends FormController implements CurrentUserInterface
 
 		if (!empty($data['exdates'])) {
 			foreach ($data['exdates'] as $key => $date) {
-				$date['date']          = DPCalendarHelper::getDateFromString($date['date'], null, true)->toSql(false);
+				$date['date']          = DPCalendarHelper::getDateFromString($date['date'], null, true, $params->get('event_form_date_format', 'd.m.Y'))->toSql(false);
 				$data['exdates'][$key] = $date;
 			}
 		}
@@ -498,9 +501,7 @@ class EventController extends FormController implements CurrentUserInterface
 			}
 
 			// Unset also the capacity
-			if (\array_key_exists('capacity', $data)) {
-				unset($data['capacity']);
-			}
+			unset($data['capacity']);
 		}
 
 		$this->input->post->set('jform', $data);
@@ -571,7 +572,7 @@ class EventController extends FormController implements CurrentUserInterface
 				} else {
 					$result = true;
 					$return = $this->input->getBase64('return');
-					if (!empty($urlVar) && !empty($return) && (isset($data['id']) && ($data['id'] !== '' && $data['id'] !== '0'))) {
+					if (!empty($urlVar) && !empty($return) && $data['id'] !== '' && $data['id'] !== '0') {
 						$uri = base64_decode($return);
 						$uri = str_replace($data['id'], $newEventId, $uri);
 						$this->input->set('return', base64_encode($uri));

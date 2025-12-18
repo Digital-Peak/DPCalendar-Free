@@ -61,7 +61,7 @@ class DavcalendarTable extends BasicTable
 		$this->getDatabase()->setQuery($query);
 
 		$xid = (int)$this->getDatabase()->loadResult();
-		if ($xid && $xid != (int)$this->id) {
+		if ($xid && $xid !== (int)$this->id) {
 			throw new \Exception(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 		}
 

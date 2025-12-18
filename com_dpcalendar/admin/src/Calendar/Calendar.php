@@ -21,18 +21,31 @@ class Calendar extends \stdClass implements CalendarInterface
 	public string $text = '';
 
 	private string $id;
+
 	private string $title       ;
+
 	private string $description = '';
-	private string $icalUrl     = '';
-	private int $level          = 1;
-	private string $color       = '3366CC';
-	private int $access         = 1;
-	private int $accessContent  = 1;
-	private bool $canCreate     = false;
-	private bool $canEdit       = false;
-	private bool $canEditOwn    = false;
-	private bool $canDelete     = false;
-	private bool $canBook       = false;
+
+	private string $icalUrl = '';
+
+	private int $level = 1;
+
+	private string $color = '3366CC';
+
+	private int $access = 1;
+
+	private int $accessContent = 1;
+
+	private bool $canCreate = false;
+
+	private bool $canEdit = false;
+
+	private bool $canEditOwn = false;
+
+	private bool $canDelete = false;
+
+	private bool $canBook = false;
+
 	private Registry $params;
 
 	protected string $assetName = 'category';

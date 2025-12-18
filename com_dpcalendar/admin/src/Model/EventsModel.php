@@ -283,7 +283,7 @@ class EventsModel extends ListModel
 			$published = [$published];
 		}
 
-		if ($published) {
+		if ($published && $published !== '*') {
 			$published = ArrayHelper::toInteger($published);
 			$query->where('a.state in (' . implode(',', $published) . ')');
 		} elseif ($published === '') {

@@ -10,9 +10,14 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Calendar;
 interface ExternalCalendarInterface extends CalendarInterface
 {
 	public function getPluginName(): string;
+
 	public function getSystemName(): string;
+
 	public function getAccessContent(): int;
+
 	public function forceColor(): bool;
+
 	public function getSyncDate(): ?string;
+
 	public function getSyncToken(): ?string;
 }

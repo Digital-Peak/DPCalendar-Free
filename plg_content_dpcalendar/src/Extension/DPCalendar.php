@@ -79,7 +79,7 @@ class DPCalendar extends CMSPlugin
 					case 'eventid':
 						$model->setState('filter.search', 'id:' . $paramValue);
 						$model->setState('list.start-date', 0);
-						$model->setState('list.end-date', null);
+						$model->setState('list.end-date');
 						break;
 					case 'my':
 						$model->setState('filter.author', $paramValue === '1' ? '-1' : '0');

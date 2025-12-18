@@ -136,6 +136,7 @@ class CurrencyModel extends BaseDatabaseModel
 
 		// Loop over the prices
 		foreach ((array)$prices as $index => $price) {
+			/** @var \stdClass $newPrice */
 			$newPrice           = clone $price;
 			$newPrice->currency = $actualCurrency;
 

@@ -46,7 +46,7 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 		// Get the calendar
 		$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($this->input->getCmd('id'));
 		if (!$calendar instanceof CalendarInterface) {
-			throw new \Exception('Invalid calendar!');
+			throw new \Exception('Calendar not found!', 404);
 		}
 
 		// Download the external url
@@ -87,7 +87,7 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 		echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Ical', 'Administrator')->createIcalFromCalendar($calendars, false);
 
 		if ($loggedIn) {
-			$app->getSession()->set('user', null);
+			$app->getSession()->set('user');
 		}
 		$app->close();
 	}

@@ -23,8 +23,10 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 {
 	use DatabaseAwareTrait;
 
-	protected $minimumPhp      = '8.1.0';
-	protected $minimumJoomla   = '4.4.4';
+	protected $minimumPhp = '8.1.0';
+
+	protected $minimumJoomla = '4.4.4';
+
 	protected $allowDowngrades = true;
 
 	public function update(): void
@@ -37,13 +39,13 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			$version  = $manifest instanceof SimpleXMLElement ? (string)$manifest->version : '';
 		}
 
-		if ($version === null || $version === '' || $version === '0' || $version === 'DP_DEPLOY_VERSION') {
+		if (\in_array($version, [null, '', '0', 'DP_DEPLOY_VERSION'], true)) {
 			return;
 		}
 
 		$db = $this->getDatabase();
 
-		if (version_compare($version, '10.0.0') == -1) {
+		if (version_compare($version, '10.0.0') === -1) {
 			// Disable template overrides
 			$rootPath = JPATH_SITE . '/templates';
 			foreach (Folder::folders($rootPath, '.', true, true) as $path) {
@@ -308,7 +310,7 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			}
 		}
 
-		if (version_compare($version, '10.3.0') == -1) {
+		if (version_compare($version, '10.3.0') === -1) {
 			$db->setQuery("select * from #__extensions where name = 'plg_dpcalendar_csv' OR name = 'plg_dpcalendar_spreadsheet'");
 			foreach ($db->loadObjectList() as $plugin) {
 				$params = json_decode((string)$plugin->params);
@@ -370,12 +372,12 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			}
 		}
 
-		if (version_compare($version, '10.3.1') == -1) {
+		if (version_compare($version, '10.3.1') === -1) {
 			$db->setQuery("update #__extensions set params = replace(params, 'catid', 'caltitle') where name = 'plg_dpcalendar_csv' OR name = 'plg_dpcalendar_spreadsheet'");
 			$db->execute();
 		}
 
-		if (version_compare($version, '10.4.0') == -1) {
+		if (version_compare($version, '10.4.0') === -1) {
 			$db->setQuery("select * from #__extensions where name = 'plg_dpcalendarpay_qr'");
 			foreach ($db->loadObjectList() as $plugin) {
 				$params = json_decode((string)$plugin->params);
@@ -471,7 +473,7 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			$version  = $manifest instanceof SimpleXMLElement ? (string)$manifest->version : '';
 		}
 
-		if ($version !== null && $version !== '' && $version !== '0' && $version !== 'DP_DEPLOY_VERSION' && version_compare($version, '9.0.0') < 0) {
+		if (!\in_array($version, [null, '', '0', 'DP_DEPLOY_VERSION'], true) && version_compare($version, '9.0.0') < 0) {
 			$app->enqueueMessage(
 				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 9.0.0 running. Please install the latest release from version 9 first.',
 				'error'

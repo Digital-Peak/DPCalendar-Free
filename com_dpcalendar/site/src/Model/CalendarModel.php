@@ -27,7 +27,8 @@ class CalendarModel extends ListModel implements FormFactoryAwareInterface
 
 	protected $filterFormName = 'filter_events';
 
-	private ?array $items    = null;
+	private ?array $items = null;
+
 	private ?array $allItems = null;
 
 	protected function populateState($ordering = null, $direction = null)

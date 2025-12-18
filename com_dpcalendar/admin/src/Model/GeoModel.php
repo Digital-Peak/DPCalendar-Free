@@ -26,8 +26,10 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 	use CacheControllerFactoryAwareTrait;
 
 	private ?LocationsModel $locationCache = null;
-	private array $nominatimLanguages      = ['en', 'de', 'it', 'fr'];
-	private array $googleLanguages         = [
+
+	private array $nominatimLanguages = ['en', 'de', 'it', 'fr'];
+
+	private array $googleLanguages = [
 		'ar',
 		'eu',
 		'bg',
@@ -142,16 +144,16 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 		if ($fill) {
 			try {
 				$coordinates = explode(',', $location);
-				if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+				if (\count($coordinates) === 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 					$this->locationCache->setState('filter.latitude', $coordinates[0]);
 					$this->locationCache->setState('filter.longitude', $coordinates[1]);
-					$this->locationCache->setState('filter.xreference', null);
-					$this->locationCache->setState('filter.search', null);
+					$this->locationCache->setState('filter.xreference');
+					$this->locationCache->setState('filter.search');
 				} else {
 					$this->locationCache->setState('filter.latitude', 0);
 					$this->locationCache->setState('filter.longitude', 0);
 					$this->locationCache->setState('filter.xreference', $location);
-					$this->locationCache->setState('filter.search', null);
+					$this->locationCache->setState('filter.search');
 				}
 
 				$locations = $this->locationCache->getItems();
@@ -160,7 +162,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 				if (!$locations && $this->locationCache->getState('filter.xreference')) {
 					$this->locationCache->setState('filter.latitude', 0);
 					$this->locationCache->setState('filter.longitude', 0);
-					$this->locationCache->setState('filter.xreference', null);
+					$this->locationCache->setState('filter.xreference');
 					$this->locationCache->setState('filter.search', ApplicationHelper::stringURLSafe($location));
 					$locations = $this->locationCache->getItems();
 				}
@@ -185,7 +187,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 			}
 		}
 
-		if ($title === null || $title === '' || $title === '0') {
+		if (\in_array($title, [null, '', '0'], true)) {
 			$title = $location;
 		}
 
@@ -224,7 +226,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 
 		// Reset coordinates, so we have them always the same. Providers can shift them
 		$coordinates = explode(',', $location);
-		if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+		if (\count($coordinates) === 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 			$locObject->latitude  = $coordinates[0];
 			$locObject->longitude = $coordinates[1];
 		}
@@ -386,7 +388,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 		$url->setVar('limit', '5');
 
 		$coordinates = explode(',', $address);
-		if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+		if (\count($coordinates) === 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 			$url->setPath('/reverse');
 			$url->setVar('lat', urlencode($coordinates[0]));
 			$url->setVar('lon', urlencode($coordinates[1]));
@@ -530,7 +532,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 		$url->setVar('limit', '1');
 
 		$coordinates = explode(',', $location);
-		if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+		if (\count($coordinates) === 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 			$url->setPath($url->getPath() . '/reverse');
 			$url->setVar('lat', urlencode($coordinates[0]));
 			$url->setVar('lon', urlencode($coordinates[1]));
@@ -609,7 +611,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 	private function fillObjectFromMapbox(string $location, \stdClass $locObject): void
 	{
 		$coordinates = explode(',', $location);
-		if (\count($coordinates) == 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
+		if (\count($coordinates) === 2 && is_numeric($coordinates[0]) && is_numeric($coordinates[1])) {
 			$location = $coordinates[1] . ',' . $coordinates[0];
 		}
 

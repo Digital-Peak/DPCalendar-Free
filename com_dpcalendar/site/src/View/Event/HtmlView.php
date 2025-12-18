@@ -185,8 +185,8 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 		$this->authorName          = $event->created_by_alias ?: '';
 		$this->event->contact_link = '';
 		$author                    = $this->getUserFactory()->loadUserById($event->created_by);
-		if (!empty($author->id)) {
-			$this->authorName = $event->created_by_alias ?: $author->name;
+		if (!empty($author->id) && !$this->authorName) {
+			$this->authorName = $author->name;
 
 			if (file_exists(JPATH_ADMINISTRATOR . '/components/com_comprofiler/plugin.foundation.php')) {
 				// Set the community builder username as content
@@ -369,7 +369,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_START',
 				$registrationStartDate->format($this->params->get('event_date_format', 'd.m.Y'), true),
 				$registrationStartDate->format('H:i') !== '00:00' ? $registrationStartDate->format(
-					$this->params->get('event_time_format', 'h:i a'),
+					$this->params->get('event_time_format', 'H:i'),
 					true
 				) : ''
 			);
@@ -383,7 +383,7 @@ class HtmlView extends BaseView implements FormFactoryAwareInterface, UserFactor
 				'COM_DPCALENDAR_VIEW_EVENT_BOOKING_MESSAGE_REGISTRATION_END',
 				$regstrationEndDate->format($this->params->get('event_date_format', 'd.m.Y'), true),
 				$regstrationEndDate->format('H:i') !== '00:00' ? $regstrationEndDate->format(
-					$this->params->get('event_time_format', 'h:i a'),
+					$this->params->get('event_time_format', 'H:i'),
 					true
 				) : ''
 			);

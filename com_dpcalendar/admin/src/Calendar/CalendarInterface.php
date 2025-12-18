@@ -12,18 +12,31 @@ use Joomla\Registry\Registry;
 interface CalendarInterface
 {
 	public function getId(): string;
+
 	public function getTitle(): string;
+
 	public function getDescription(): string;
+
 	public function getIcalUrl(): string;
+
 	public function getLevel(): int;
+
 	public function getColor(): string;
+
 	public function getAccess(): int;
+
 	public function getAccessContent(): int;
+
 	public function canCreate(): bool;
+
 	public function canEdit(): bool;
+
 	public function canEditOwn(): bool;
+
 	public function canDelete(): bool;
+
 	public function canBook(): bool;
+
 	public function getParams(): Registry;
 
 	/**

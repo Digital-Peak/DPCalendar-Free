@@ -11,6 +11,7 @@ namespace DigitalPeak\Component\DPCalendar\Site\View\Form;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
+use Joomla\CMS\Form\Field\SubformField;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Plugin\PluginHelper;
 
@@ -113,6 +114,32 @@ class HtmlView extends BaseView
 			}
 
 			$this->form->setValue($key, null, $value);
+		}
+
+		// Set the date format on existing subforms as the value has changed since the model load
+		$exdates = $this->form->getField('exdates');
+		if ($exdates instanceof SubformField) {
+			$exdates->__get('input');
+			$exdates->loadSubForm()->setFieldAttribute('date', 'format', $this->params->get('event_form_date_format', 'd.m.Y'));
+			foreach (array_keys(array_filter((array)$exdates->__get('value'))) as $index => $key) {
+				// Set it per value
+				try {
+					// @phpstan-ignore-next-line
+					$form = Form::getInstance('subform.' . $key, '');
+					$form->setFieldAttribute('date', 'format', $this->params->get('event_form_date_format', 'd.m.Y'));
+				} catch (\InvalidArgumentException) {
+					// Ignore as it can happen when an exdate is removed or index has changed
+				}
+
+				// Set it per index
+				try {
+					// @phpstan-ignore-next-line
+					$form = Form::getInstance('subform.exdates' . $index, '');
+					$form->setFieldAttribute('date', 'format', $this->params->get('event_form_date_format', 'd.m.Y'));
+				} catch (\InvalidArgumentException) {
+					// Ignore as it can happen when an exdate is removed or index has changed
+				}
+			}
 		}
 
 		$hiddenFields = $this->params->get('event_form_hidden_fields', []);

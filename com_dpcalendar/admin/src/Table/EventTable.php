@@ -209,7 +209,8 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 	public $location_ids;
 
 	protected string $tableName = 'dpcalendar_events';
-	protected $_columnAlias     = ['published' => 'state'];
+
+	protected $_columnAlias = ['published' => 'state'];
 
 	public function __construct(DatabaseInterface $db)
 	{
@@ -561,6 +562,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 			'modified = ' . ($this->modified ? $db->quote($this->modified) : 'null'),
 			'modified_by = ' . (int)$user->id,
 			'created_by = ' . (int)$this->created_by,
+			'created_by_alias = ' . $db->quote($this->created_by_alias),
 			'metakey = ' . $db->quote($this->metakey ?: ''),
 			'metadesc = ' . $db->quote($this->metadesc ?: ''),
 			'metadata = ' . $db->quote($this->metadata),

@@ -20,8 +20,10 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 {
 	use DatabaseAwareTrait;
 
-	protected $minimumPhp      = '8.1.0';
-	protected $minimumJoomla   = '4.4.4';
+	protected $minimumPhp = '8.1.0';
+
+	protected $minimumJoomla = '4.4.4';
+
 	protected $allowDowngrades = true;
 
 	public function preflight($type, $parent): bool
@@ -83,11 +85,11 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			$version  = $manifest instanceof SimpleXMLElement ? (string)$manifest->version : null;
 		}
 
-		if ($version === null || $version === '' || $version === '0' || $version === 'DP_DEPLOY_VERSION') {
+		if (\in_array($version, [null, '', '0', 'DP_DEPLOY_VERSION'], true)) {
 			return;
 		}
 
-		if (version_compare($version, '9.0.5') == -1) {
+		if (version_compare($version, '9.0.5') === -1) {
 			$this->run(
 				"UPDATE `#__update_sites` SET location=replace(location,'&ext=extension.xml','') where location like 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=%'"
 			);

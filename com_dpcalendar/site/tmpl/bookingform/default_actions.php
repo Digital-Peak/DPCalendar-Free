@@ -16,7 +16,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKINGFORM_GO_CONFIRM_PAYME
 
 $buttonText = $this->bookingId ? 'JSAVE' : 'COM_DPCALENDAR_VIEW_BOOKINGFORM_GO_REVIEW_BUTTON';
 if ($this->event->capacity !== null && $this->event->capacity_used >= $this->event->capacity && $this->event->booking_waiting_list
-	&& ((is_countable($this->events) ? count($this->events) : 0) == 1 || $this->event->booking_series != 2) && !$this->bookingId) {
+	&& (is_countable($this->events) ? count($this->events) : 0 === 1 || $this->event->booking_series != 2) && !$this->bookingId) {
 	$buttonText = 'COM_DPCALENDAR_VIEW_BOOKINGFORM_WAITING_BUTTON';
 }
 // Ensure when tickets are on waiting list, that the button state is in waiting mode

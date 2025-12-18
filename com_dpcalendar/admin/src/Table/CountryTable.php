@@ -39,7 +39,8 @@ class CountryTable extends BasicTable
 	public $checked_out_time;
 
 	protected string $tableName = 'dpcalendar_countries';
-	protected $_columnAlias     = ['published' => 'state'];
+
+	protected $_columnAlias = ['published' => 'state'];
 
 	public function store($updateNulls = false)
 	{
@@ -69,7 +70,7 @@ class CountryTable extends BasicTable
 		$this->getDatabase()->setQuery($query);
 
 		$xid = (int)$this->getDatabase()->loadResult();
-		if ($xid && $xid != (int)$this->id) {
+		if ($xid && $xid !== (int)$this->id) {
 			throw new \Exception(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 		}
 

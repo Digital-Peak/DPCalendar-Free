@@ -77,7 +77,8 @@ class ExtcalendarTable extends BasicTable
 	public $ordering;
 
 	protected string $tableName = 'dpcalendar_extcalendars';
-	protected $_columnAlias     = ['published' => 'state'];
+
+	protected $_columnAlias = ['published' => 'state'];
 
 	public function delete($pk = null)
 	{
@@ -145,7 +146,7 @@ class ExtcalendarTable extends BasicTable
 
 		// Verify that the alias is unique
 		$table = new self($this->getDatabase());
-		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id == 0)) {
+		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id === 0)) {
 			$this->alias = StringHelper::increment($this->alias);
 		}
 
@@ -201,7 +202,7 @@ class ExtcalendarTable extends BasicTable
 		$this->getDatabase()->setQuery($query);
 
 		$xid = (int)$this->getDatabase()->loadResult();
-		if ($xid && $xid != (int)$this->id) {
+		if ($xid && $xid !== (int)$this->id) {
 			throw new \Exception(Text::sprintf('COM_DPCALENDAR_EXTCALENDAR_ERR_TABLES_NAME', htmlspecialchars($this->title)));
 		}
 

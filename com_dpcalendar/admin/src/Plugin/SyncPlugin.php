@@ -77,7 +77,7 @@ abstract class SyncPlugin extends DPCalendarPlugin implements DatabaseAwareInter
 
 		// Defining the last sync date
 		$syncDate = $calendar->getSyncDate();
-		if ($syncDate !== null && $syncDate !== '' && $syncDate !== '0') {
+		if (!\in_array($syncDate, [null, '', '0'], true)) {
 			$syncDate = DPCalendarHelper::getDate($syncDate);
 		}
 

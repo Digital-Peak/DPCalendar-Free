@@ -69,8 +69,8 @@ class LocationsModel extends ListModel
 		$language = $this->getUserStateFromRequest($this->context . '.filter.language', 'filter_language', '');
 		$this->setState('filter.language', $language);
 
-		$this->setState('filter.longitude', null);
-		$this->setState('filter.longitude', null);
+		$this->setState('filter.longitude');
+		$this->setState('filter.longitude');
 
 		$app = Factory::getApplication();
 		$this->setState('params', $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));

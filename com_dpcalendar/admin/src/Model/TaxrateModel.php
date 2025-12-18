@@ -49,7 +49,7 @@ class TaxrateModel extends AdminModel
 			$item->rate = $rate->standard_rate;
 
 			$this->save((array)$item);
-			$this->setState($this->getName() . '.id', null);
+			$this->setState($this->getName() . '.id');
 		}
 	}
 

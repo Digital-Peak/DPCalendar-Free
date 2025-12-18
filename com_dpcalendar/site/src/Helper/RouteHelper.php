@@ -31,7 +31,7 @@ class RouteHelper
 	{
 		// Check if we come from com_tags where the link is generated id:alias
 		$parts = $id ? explode(':', (string)$id) : [];
-		if (\count($parts) == 2 && is_numeric($parts[0])) {
+		if (\count($parts) === 2 && is_numeric($parts[0])) {
 			$id = (int)$id;
 		}
 
@@ -55,7 +55,7 @@ class RouteHelper
 
 	public static function getFormRoute(?string $id, ?string $return = null, ?string $append = null): string
 	{
-		if ($id !== null && $id !== '' && $id !== '0') {
+		if (!\in_array($id, [null, '', '0'], true)) {
 			$link = 'index.php?option=com_dpcalendar&task=event.edit&e_id=' . $id;
 		} elseif (Factory::getApplication() instanceof AdministratorApplication) {
 			$link = 'index.php?option=com_dpcalendar&task=event.add&e_id=0';
@@ -65,12 +65,12 @@ class RouteHelper
 
 		$input = Factory::getApplication()->getInput();
 
-		$itemId = $input->get('Itemid', null);
+		$itemId = $input->get('Itemid');
 		if (!empty($itemId)) {
 			$link .= '&Itemid=' . $itemId;
 		}
 
-		if ($append !== null && $append !== '' && $append !== '0') {
+		if (!\in_array($append, [null, '', '0'], true)) {
 			$link .= '&' . $append;
 		}
 
@@ -82,7 +82,7 @@ class RouteHelper
 			$link .= '&ignore_request=' . $request;
 		}
 
-		if ($return !== null && $return !== '' && $return !== '0') {
+		if (!\in_array($return, [null, '', '0'], true)) {
 			$link .= '&return=' . base64_encode($return);
 		}
 
@@ -103,7 +103,7 @@ class RouteHelper
 
 	public static function getLocationFormRoute(?string $id, ?string $return = null): string
 	{
-		if ($id !== null && $id !== '' && $id !== '0') {
+		if (!\in_array($id, [null, '', '0'], true)) {
 			$link = 'index.php?option=com_dpcalendar&task=locationform.edit&l_id=' . $id;
 		} else {
 			$link = 'index.php?option=com_dpcalendar&view=locationform&l_id=0';
@@ -113,7 +113,7 @@ class RouteHelper
 			$link .= '&tmpl=' . Factory::getApplication()->getInput()->getWord('tmpl');
 		}
 
-		if ($return !== null && $return !== '' && $return !== '0') {
+		if (!\in_array($return, [null, '', '0'], true)) {
 			$link .= '&return=' . base64_encode($return);
 		}
 
@@ -146,7 +146,7 @@ class RouteHelper
 		$args         = [];
 		$args['view'] = 'bookings';
 
-		if ($eventId !== null && $eventId !== '' && $eventId !== '0') {
+		if (!\in_array($eventId, [null, '', '0'], true)) {
 			$args['e_id'] = $eventId;
 		}
 
@@ -158,7 +158,7 @@ class RouteHelper
 		$args         = [];
 		$args['view'] = 'invite';
 		$args['id']   = $event->id;
-		if ($return === null || $return === '' || $return === '0') {
+		if (\in_array($return, [null, '', '0'], true)) {
 			$return = Uri::getInstance()->toString();
 		}
 		$args['return'] = base64_encode($return);
@@ -198,7 +198,7 @@ class RouteHelper
 			$args['token'] = $booking->token;
 		}
 
-		if ($return === null || $return === '' || $return === '0') {
+		if (\in_array($return, [null, '', '0'], true)) {
 			$return = Uri::getInstance()->toString();
 		}
 		$args['return'] = base64_encode($return);
@@ -211,7 +211,7 @@ class RouteHelper
 		$args         = [];
 		$args['task'] = 'bookingform.add';
 		$args['e_id'] = $event->id;
-		if ($return === null || $return === '' || $return === '0') {
+		if (\in_array($return, [null, '', '0'], true)) {
 			$return = self::getEventRoute($event->id, $event->catid);
 		}
 		$args['return'] = base64_encode($return);
@@ -264,10 +264,10 @@ class RouteHelper
 		$args         = [];
 		$args['view'] = 'tickets';
 
-		if ($bookingId !== null && $bookingId !== '' && $bookingId !== '0') {
+		if (!\in_array($bookingId, [null, '', '0'], true)) {
 			$args['b_id'] = $bookingId;
 		}
-		if ($eventId !== null && $eventId !== '' && $eventId !== '0') {
+		if (!\in_array($eventId, [null, '', '0'], true)) {
 			$args['e_id'] = $eventId;
 		}
 		if ($my === true) {
@@ -283,7 +283,7 @@ class RouteHelper
 		$args['task'] = 'ticketform.edit';
 		$args['t_id'] = $ticketId;
 
-		if ($return === null || $return === '' || $return === '0') {
+		if (\in_array($return, [null, '', '0'], true)) {
 			$return = Uri::getInstance()->toString();
 		}
 		$args['return'] = base64_encode($return);
@@ -297,7 +297,7 @@ class RouteHelper
 		$args['task'] = 'ticketform.delete';
 		$args['t_id'] = $ticketId;
 
-		if ($return === null || $return === '' || $return === '0') {
+		if (\in_array($return, [null, '', '0'], true)) {
 			$return = Uri::getInstance()->toString();
 		}
 		$args['return'] = base64_encode($return);
@@ -310,7 +310,7 @@ class RouteHelper
 		$url = Uri::base();
 		$url .= 'index.php?option=com_dpcalendar&task=ical.download&id=' . $calId;
 
-		if ($token !== null && $token !== '' && $token !== '0') {
+		if (!\in_array($token, [null, '', '0'], true)) {
 			$url .= '&token=' . $token;
 		}
 
@@ -353,7 +353,7 @@ class RouteHelper
 	public static function getCategoryRoute(?string $catid): string
 	{
 		// Is needed for smart search categories indexing
-		return self::getCalendarRoute($catid !== null && $catid !== '' && $catid !== '0' ? $catid : '');
+		return self::getCalendarRoute(\in_array($catid, [null, '', '0'], true) ? '' : $catid);
 	}
 
 	public static function findItem(array $needles = []): string

@@ -52,7 +52,8 @@ class CouponTable extends BasicTable
 	public $emails;
 
 	protected string $tableName = 'dpcalendar_coupons';
-	protected $_columnAlias     = ['published' => 'state'];
+
+	protected $_columnAlias = ['published' => 'state'];
 
 	public function bind($data, $ignore = '')
 	{
@@ -93,7 +94,7 @@ class CouponTable extends BasicTable
 
 		// Verify that the alias is unique
 		$table = new self($this->getDatabase());
-		if ($table->load(['code' => $this->code]) && ($table->id != $this->id || $this->id == 0)) {
+		if ($table->load(['code' => $this->code]) && ($table->id != $this->id || $this->id === 0)) {
 			throw new \Exception(Text::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_CODE') . ': ' . $table->code);
 		}
 

@@ -51,8 +51,11 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 	use CacheControllerFactoryAwareTrait;
 
 	protected string $identifier;
-	protected bool $cachingEnabled      = true;
-	protected $autoloadLanguage         = true;
+
+	protected bool $cachingEnabled = true;
+
+	protected $autoloadLanguage = true;
+
 	protected ?array $extCalendarsCache = null;
 
 	public function __construct(DispatcherInterface $dispatcher, array $config = [])
@@ -230,7 +233,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		$events       = [];
 		$filter       = strtolower((string)$options->get('filter', ''));
-		$limit        = $options->get('limit', null);
+		$limit        = $options->get('limit');
 		$publishDate  = $options->get('publish_date') ? DPCalendarHelper::getDate()->toSql() : null;
 		$startSQLDate = $startDate->toSql();
 		$endSQLDate   = $endDate->toSql();
@@ -493,7 +496,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		$cache->options['locking'] = false;
 
 		try {
-			$event = $cache->get(fn ($eventId, $calendarId): ?\stdClass => $this->fetchEvent($eventId, $calendarId), [$id[1], $id[0]]);
+			$event = $cache->get(fn (string $eventId, string $calendarId): ?\stdClass => $this->fetchEvent($eventId, $calendarId), [$id[1], $id[0]]);
 			$cache->gc();
 
 			return $event;
@@ -532,7 +535,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		try {
 			// Remove the id, when PHP 8.2.5 is obsolete
 			$events = $cache->get(
-				fn ($calendarId, Registry $options, ?Date $startDate = null, ?Date $endDate = null): array
+				fn (string $calendarId, Registry $options, ?Date $startDate = null, ?Date $endDate = null): array
 					=> $this->fetchEvents($calendarId, $options, $startDate, $endDate),
 				[$id, $options, $startDate, $endDate],
 				md5($id . $startDate . $endDate . serialize($options))
@@ -549,7 +552,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 	public function onCalendarsFetch(mixed $calendarIds = null, ?string $type = null): array
 	{
-		if ($type !== null && $type !== '' && $type !== '0' && $this->identifier !== $type) {
+		if (!\in_array($type, [null, '', '0'], true) && $this->identifier !== $type) {
 			return [];
 		}
 
@@ -659,7 +662,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		}
 
 		$success = $this->deleteEvent($id[1], $id[0]);
-		if ($success != false) {
+		if ($success) {
 			/** @var CallbackController $cache */
 			$cache = $this->getCacheControllerFactory()->createCacheController('callback', ['defaultgroup' => 'plg_' . $this->_type . '_' . $this->_name]);
 			$cache->clean();
@@ -697,7 +700,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		// When there is no calendar, then get it from the form
 		$formField = $form->getField('catid');
 		if (empty($catId) && $formField instanceof FormField) {
-			$catId = $formField->getAttribute('default', null);
+			$catId = $formField->getAttribute('default');
 
 			// Do not print errors
 			$oldErrorHandling = libxml_use_internal_errors(true);
@@ -730,7 +733,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		if (!empty($data->id)) {
 			$id      = str_replace($this->identifier . ':', $this->identifier . '-', (string)$data->id);
 			$id      = explode('-', str_replace($this->identifier . '-', '', $id), 2);
-			$eventId = \count($id) == 2 ? $id[1] : $eventId;
+			$eventId = \count($id) === 2 ? $id[1] : $eventId;
 		}
 
 		$id = str_replace($this->identifier . '-', '', (string)$catId);
@@ -749,7 +752,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 		$calendar = new ExternalCalendar($this->identifier . '-' . $id, $title, $user instanceof User ? $user : new User());
 		$calendar->setDescription($description);
-		$calendar->setColor($color !== null && $color !== '' && $color !== '0' ? $color : '3366CC');
+		$calendar->setColor(\in_array($color, [null, '', '0'], true) ? '3366CC' : $color);
 		$calendar->setPluginName($this->_name);
 		$calendar->setSystemName($this->identifier);
 
@@ -1129,7 +1132,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 	protected function replaceNl(string $text, ?string $replace = ''): string
 	{
-		return str_replace(["\r\n", "\r", "\n"], $replace !== null && $replace !== '' && $replace !== '0' ? $replace : '', $text);
+		return str_replace(["\r\n", "\r", "\n"], \in_array($replace, [null, '', '0'], true) ? '' : $replace, $text);
 	}
 
 	protected function log(string $message): void

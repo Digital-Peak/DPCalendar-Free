@@ -315,9 +315,9 @@ class HtmlView extends BaseView
 			$event->description = $event->text;
 
 			// Truncate the description and add read more
-			$desc = $this->params->get('list_description_length', null) != '0' ? HTMLHelper::_('content.prepare', $event->description) : '';
-			if (!$event->introText && $desc && $this->params->get('list_description_length', null) !== null) {
-				$event->introText = StringHelper::truncateComplex($desc, $this->params->get('list_description_length', null));
+			$desc = $this->params->get('list_description_length') != '0' ? HTMLHelper::_('content.prepare', $event->description) : '';
+			if (!$event->introText && $desc && $this->params->get('list_description_length') !== null) {
+				$event->introText = StringHelper::truncateComplex($desc, $this->params->get('list_description_length'));
 
 				// Move the dots inside the last tag
 				if (DPCalendarHelper::endsWith($event->introText, '...') && $pos = strrpos($event->introText, '</')) {

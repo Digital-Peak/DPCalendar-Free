@@ -27,7 +27,7 @@ class DisplayController extends BaseController
 		$layout = $this->input->getCmd('layout', 'default');
 		$id     = $this->input->getInt('id', 0);
 
-		if ($view != 'event' && $view != 'location' && $view != 'booking') {
+		if (!\in_array($view, ['event', 'location', 'booking'])) {
 			//DPCalendarHelper::addSubmenu($this->input->getCmd('view', 'cpanel'));
 		}
 

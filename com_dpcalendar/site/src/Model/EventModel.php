@@ -24,6 +24,7 @@ use Joomla\Utilities\ArrayHelper;
 class EventModel extends ItemModel
 {
 	protected $_item;
+
 	protected $_context = 'com_dpcalendar.event';
 
 	protected function populateState()
@@ -172,8 +173,10 @@ class EventModel extends ItemModel
 				// Convert parameter fields to objects.
 				$registry = new Registry();
 				$registry->loadString($data->params ?: '');
-				if ($this->getState('params')) {
-					$data->params = clone $this->getState('params');
+
+				$params = $this->getState('params');
+				if ($params instanceof Registry) {
+					$data->params = clone $params;
 					$data->params->merge($registry);
 				} else {
 					$data->params = $registry;
@@ -342,7 +345,7 @@ class EventModel extends ItemModel
 
 	public function hit(?string $id = null): bool
 	{
-		if ($id === null || $id === '' || $id === '0') {
+		if (\in_array($id, [null, '', '0'], true)) {
 			$id = $this->getState('event.id');
 		}
 

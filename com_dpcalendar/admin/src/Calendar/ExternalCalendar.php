@@ -12,12 +12,17 @@ use Joomla\Registry\Registry;
 
 class ExternalCalendar extends Calendar implements ExternalCalendarInterface
 {
-	private string $pluginName  = '';
-	private string $systemName  = '';
+	private string $pluginName = '';
+
+	private string $systemName = '';
+
 	private int $access_content = 1;
-	private ?string $syncDate   = null;
-	private ?string $syncToken  = null;
-	private bool $forceColor    = true;
+
+	private ?string $syncDate = null;
+
+	private ?string $syncToken = null;
+
+	private bool $forceColor = true;
 
 	protected string $assetName = 'extcalendar';
 

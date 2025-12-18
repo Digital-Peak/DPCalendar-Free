@@ -91,7 +91,7 @@ class DPCalendarHelper
 			$tmp = @convert_uudecode(base64_decode($string));
 
 			// Probably not obfuscated
-			if ($tmp === '' || $tmp === '0' || $tmp === false) {
+			if (\in_array($tmp, ['', '0', false], true)) {
 				return $string;
 			}
 
@@ -185,7 +185,7 @@ class DPCalendarHelper
 	public static function getDateFromString(mixed $date, ?string $time, bool $allDay, ?string $dateFormat = null, ?string $timeFormat = null): Date
 	{
 		$string = $date;
-		if ($time !== null && $time !== '' && $time !== '0') {
+		if (!\in_array($time, [null, '', '0'], true)) {
 			$string = $date . ($allDay ? '' : ' ' . $time);
 		}
 
@@ -236,10 +236,10 @@ class DPCalendarHelper
 			$string = str_replace(Text::_($key), $lang->_($key), (string)$string);
 		}
 
-		if ($dateFormat === null || $dateFormat === '' || $dateFormat === '0') {
+		if (\in_array($dateFormat, [null, '', '0'], true)) {
 			$dateFormat = self::getComponentParameter('event_form_date_format', 'd.m.Y');
 		}
-		if ($timeFormat === null || $timeFormat === '' || $timeFormat === '0') {
+		if (\in_array($timeFormat, [null, '', '0'], true)) {
 			$timeFormat = self::getComponentParameter('event_form_time_format', 'H:i');
 		}
 
@@ -295,7 +295,7 @@ class DPCalendarHelper
 		}
 
 		// @phpstan-ignore-next-line
-		return preg_replace($pattern, $replace, $dateString) !== '' && preg_replace($pattern, $replace, $dateString) !== '0' && preg_replace($pattern, $replace, $dateString) !== [] ? preg_replace($pattern, $replace, $dateString) : '';
+		return \in_array(preg_replace($pattern, $replace, $dateString), ['', '0', []], true) ? '' : preg_replace($pattern, $replace, $dateString);
 	}
 
 	public static function renderEvents(?array $events = null, string $output = '', ?Registry $params = null, array $eventParams = []): string
@@ -745,7 +745,7 @@ class DPCalendarHelper
 
 		header('Content-Type: application/json');
 
-		if ($message !== '' && $message !== '0' && $message !== null) {
+		if (!\in_array($message, ['', '0', null], true)) {
 			Factory::getApplication()->enqueueMessage($message, $error ? 'error' : 'message');
 		}
 		echo new JsonResponse($data);
@@ -789,7 +789,7 @@ class DPCalendarHelper
 			// @phpstan-ignore-next-line
 			$mailer = Factory::getMailer();
 
-			if ($fromMail !== null && $fromMail !== '' && $fromMail !== '0') {
+			if (!\in_array($fromMail, [null, '', '0'], true)) {
 				$mailer->setFrom($fromMail);
 			}
 
@@ -832,7 +832,7 @@ class DPCalendarHelper
 	public static function endsWith($haystack, $needle): bool
 	{
 		$length = \strlen($needle);
-		if ($length == 0) {
+		if ($length === 0) {
 			return true;
 		}
 
@@ -849,7 +849,7 @@ class DPCalendarHelper
 		$criteria  = [];
 		$appending = null;
 		foreach ($tmp as $key => $value) {
-			if (self::startsWith($value !== null && $value !== '' && $value !== '0' ? $value : '', '-"')) {
+			if (self::startsWith(\in_array($value, [null, '', '0'], true) ? '' : $value, '-"')) {
 				$criteria[$key] = str_replace('-"', '-', (string)$value);
 				$appending      = $key;
 				continue;
@@ -857,7 +857,7 @@ class DPCalendarHelper
 
 			if ($appending !== null && $appending !== 0) {
 				$criteria[$appending] .= ' ' . str_replace('"', '', (string)$value);
-				if (self::endsWith($value !== null && $value !== '' && $value !== '0' ? $value : '', '"')) {
+				if (self::endsWith(\in_array($value, [null, '', '0'], true) ? '' : $value, '"')) {
 					$appending = null;
 				}
 				continue;
@@ -978,7 +978,7 @@ class DPCalendarHelper
 		</a\s*>                      # </A> closing tag.
 		)                              # End $2:
 		%ix';
-		$text = preg_replace_callback($section_html_pattern, static fn (array $matches): string => DPCalendarHelper::linkifyHtmlCallback($matches), (string)$text);
+		$text = preg_replace_callback($section_html_pattern, DPCalendarHelper::linkifyHtmlCallback(...), (string)$text);
 
 		return nl2br((string)$text);
 	}
@@ -1028,7 +1028,7 @@ class DPCalendarHelper
 		$url_replace = '$1$4$7$10$13<a href="$2$5$8$11$14">$2$5$8$11$14</a>$3$6$9$12';
 
 		$string = preg_replace($url_pattern, $url_replace, $text);
-		return $string !== '' && $string !== '0' && $string !== null ? $string : '';
+		return \in_array($string, ['', '0', null], true) ? '' : $string;
 	}
 
 	public static function linkifyHtmlCallback(array $matches): string
@@ -1052,7 +1052,7 @@ class DPCalendarHelper
 			}
 		}
 
-		return $buffer !== '' && $buffer !== '0' && $buffer !== null ? $buffer : '';
+		return \in_array($buffer, ['', '0', null], true) ? '' : $buffer;
 	}
 
 	public static function increaseMemoryLimit(int $limit): bool

@@ -77,7 +77,8 @@ class LocationTable extends BasicTable implements TaggableTableInterface
 	public $ordering;
 
 	protected string $tableName = 'dpcalendar_locations';
-	protected $_columnAlias     = ['published' => 'state'];
+
+	protected $_columnAlias = ['published' => 'state'];
 
 	public function bind($data, $ignore = '')
 	{
@@ -129,7 +130,7 @@ class LocationTable extends BasicTable implements TaggableTableInterface
 
 		// Verify that the alias is unique
 		$table = new self($this->getDatabase());
-		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id == 0)) {
+		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id === 0)) {
 			throw new \Exception(Text::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_LOCATION') . ': ' . $table->alias);
 		}
 
@@ -149,7 +150,7 @@ class LocationTable extends BasicTable implements TaggableTableInterface
 		$this->getDatabase()->setQuery($query);
 
 		$xid = (int)$this->getDatabase()->loadResult();
-		if ($xid && $xid != (int)$this->id) {
+		if ($xid && $xid !== (int)$this->id) {
 			throw new \Exception(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 		}
 

@@ -66,7 +66,7 @@ $options['weekends']       = (boolean)$params->get('weekend', 1);
 $options['fixedWeekCount'] = (boolean)$params->get('fixed_week_count', 1);
 
 $bd = $params->get('business_hours_days', []);
-if ($bd && !((is_countable($bd) ? count($bd) : 0) == 1 && !$bd[0])) {
+if ($bd && !(is_countable($bd) ? count($bd) : 0 === 1 && !$bd[0])) {
 	$options['businessHours'] = [
 		'startTime'  => $params->get('business_hours_start', ''),
 		'endTime'    => $params->get('business_hours_end', ''),

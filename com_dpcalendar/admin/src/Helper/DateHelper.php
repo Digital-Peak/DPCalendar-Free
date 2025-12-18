@@ -25,7 +25,7 @@ class DateHelper
 
 	public function transformRRuleToString(?string $rrule, ?string $startDate, ?array $exdates = []): string
 	{
-		if ($rrule === null || $rrule === '' || $rrule === '0') {
+		if (\in_array($rrule, [null, '', '0'], true)) {
 			return '';
 		}
 
@@ -60,7 +60,7 @@ class DateHelper
 			if ($exdates !== null && $exdates !== [] && $this->translator instanceof Translator) {
 				$buffer .= PHP_EOL;
 				$buffer .= $this->translator->translate('COM_DPCALENDAR_EXDATES_EXCLUDE_LIST_TEXT');
-				$buffer .= implode(', ', array_map(fn ($d): string => $this->getDate($d)->format('d.m.Y', true), $exdates));
+				$buffer .= implode(', ', array_map(fn (\Joomla\CMS\Date\Date|\DateTime|string|null $d): string => $this->getDate($d)->format('d.m.Y', true), $exdates));
 			}
 		} catch (\Exception) {
 			// Do not crash as some rules are not parseable for the transformator
@@ -101,7 +101,7 @@ class DateHelper
 		}
 
 		// Set the timezone when not an ell day date
-		if ($allDay === false || $allDay === 0 || $allDay === null) {
+		if (\in_array($allDay, [false, 0, null], true)) {
 			$dateObj->setTimezone(new \DateTimeZone($timezone));
 		}
 

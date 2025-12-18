@@ -191,6 +191,8 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 			return false;
 		}
 
+		$factory = $app->bootComponent('dpcalendar')->getMVCFactory();
+
 		try {
 			$provider = array_filter($this->onDPPaymentProviders(), static fn ($p): bool => $p->id == $booking->payment_provider);
 			if ($provider === []) {
@@ -200,6 +202,16 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 			// Get the response from the callback
 			$data = $this->finishTransaction($data, $booking, reset($provider));
 		} catch (\Exception $exception) {
+			// Reset the provider fee
+			if ($booking->payment_provider_fee) {
+				$bookingTable = $factory->createTable('Booking', 'Administrator');
+
+				$bookingTable->load($booking->id);
+				$bookingTable->price -= $booking->payment_provider_fee;
+				$bookingTable->payment_provider_fee = 0;
+				$bookingTable->store(true);
+			}
+
 			$app->enqueueMessage(ucfirst($this->_name) . ': ' . $exception->getMessage(), 'error');
 			$app->redirect(RouteHelper::getBookingRoute($booking) . '&layout=confirm');
 
@@ -216,7 +228,7 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 		$data['id'] = $booking->id;
 
 		// Get the booking table
-		$booking = $app->bootComponent('dpcalendar')->getMVCFactory()->createTable('Booking', 'Administrator');
+		$booking = $factory->createTable('Booking', 'Administrator');
 
 		// Load the booking so we can update only the values from the data array
 		$booking->load($data['id']);
@@ -225,15 +237,14 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 		$data = array_merge($booking->getData(), $data);
 
 		// Save the data and make sure no valid event is triggered
-		$app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Booking', 'Administrator', ['event_after_save' => 'dontusethisevent'])
-			->save($data);
+		$factory->createModel('Booking', 'Administrator', ['event_after_save' => 'dontusethisevent'])->save($data);
 
 		// Remove the token when in the system not enabled
 		if ($booking->token !== null && !DPCalendarHelper::getComponentParameter('bookingsys_enable_token')) {
 			$booking->token = null;
 
 			// Get the booking table
-			$bookingTable = $app->bootComponent('dpcalendar')->getMVCFactory()->createTable('Booking', 'Administrator');
+			$bookingTable = $factory->createTable('Booking', 'Administrator');
 
 			// Load the booking so we can store the transaction id
 			$bookingTable->load($booking->id);
@@ -259,6 +270,7 @@ abstract class PaymentPlugin extends CMSPlugin implements ClientFactoryAwareInte
 				continue;
 			}
 
+			/** @var \stdClass $provider */
 			$provider     = clone $p;
 			$provider->id = $this->_name . '-' . $provider->id;
 

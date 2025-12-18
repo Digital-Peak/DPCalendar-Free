@@ -385,7 +385,7 @@ class IcalModel extends BaseDatabaseModel
 			$cmp = null;
 
 			// Skip the first entry...
-			if ($i == 0) {
+			if ($i === 0) {
 				// ... but remember the offset for the next TZOFFSETFROM value
 				$tzfrom = $trans['offset'] / 3600;
 				continue;

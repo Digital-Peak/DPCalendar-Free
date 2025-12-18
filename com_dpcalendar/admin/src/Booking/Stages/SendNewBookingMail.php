@@ -103,7 +103,7 @@ class SendNewBookingMail implements StageInterface, UserFactoryAwareInterface
 			if ($payload->mailParams->get('booking_include_tickets', 1) && $payload->item->state == 1) {
 				foreach ($payload->tickets as $ticket) {
 					$fileName = Booking::createTicket($ticket, $payload->mailParams, true);
-					if ($fileName !== '' && $fileName !== '0' && $fileName !== null) {
+					if (!\in_array($fileName, ['', '0', null], true)) {
 						$this->mailer->addAttachment($fileName);
 						$files[] = $fileName;
 					}
@@ -112,7 +112,7 @@ class SendNewBookingMail implements StageInterface, UserFactoryAwareInterface
 
 			if ($payload->mailParams->get('booking_include_receipt', 1)) {
 				$fileName = Booking::createReceipt($payload->item, $payload->tickets, $payload->mailParams, true);
-				if ($fileName !== '' && $fileName !== '0' && $fileName !== null) {
+				if (!\in_array($fileName, ['', '0', null], true)) {
 					$this->mailer->addAttachment($fileName);
 					$files[] = $fileName;
 				}

@@ -7,7 +7,7 @@
 
 \defined('_JEXEC') or die();
 
-if ($this->bookingId || (is_countable($this->events) ? count($this->events) : 0) != 1 || !reset($this->events)->booking_information) {
+if ($this->bookingId || is_countable($this->events) ? count($this->events) : 0 !== 1 || !reset($this->events)->booking_information) {
 	return;
 }
 ?>

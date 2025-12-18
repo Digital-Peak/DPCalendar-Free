@@ -59,8 +59,8 @@ class EventsModel extends ListModel
 		$options->set('publish_date', $this->getState('filter.publish_date'));
 
 		// Add location filter
-		$options->set('location', $this->getState('filter.location', null));
-		$options->set('location_ids', $this->getState('filter.locations', null));
+		$options->set('location', $this->getState('filter.location'));
+		$options->set('location_ids', $this->getState('filter.locations'));
 		$options->set('radius', $this->getState('filter.radius', 20));
 		$options->set('length-type', $this->getState('filter.length-type', 'm'));
 
@@ -92,7 +92,7 @@ class EventsModel extends ListModel
 				$startDate = DPCalendarHelper::getDate($this->getState('list.start-date'));
 			}
 			$endDate = null;
-			if (!empty($this->getState('list.end-date', null))) {
+			if (!empty($this->getState('list.end-date'))) {
 				$endDate = DPCalendarHelper::getDate($this->getState('list.end-date'));
 			}
 
@@ -117,14 +117,14 @@ class EventsModel extends ListModel
 				$dbItems = parent::getItems();
 			}
 			$items = array_merge($dbItems, $items);
-			usort($items, fn ($event1, $event2): int => $this->compareEvent($event1, $event2));
+			usort($items, fn (\stdClass $event1, \stdClass $event2): int => $this->compareEvent($event1, $event2));
 			if ($this->getState('list.limit') > 0) {
 				$items = \array_slice($items, 0, $this->getState('list.limit'));
 			}
 		} else {
 			$items = parent::getItems();
 			if ($items && $this->getState('list.ordering', 'a.start_date') == 'a.start_date') {
-				usort($items, fn ($event1, $event2): int => $this->compareEvent($event1, $event2));
+				usort($items, fn (\stdClass $event1, \stdClass $event2): int => $this->compareEvent($event1, $event2));
 			}
 		}
 
@@ -386,7 +386,7 @@ class EventsModel extends ListModel
 		}
 		$stateOwner = $user->id && $this->getState('filter.state_owner') ? ' or a.created_by = ' . $user->id : '';
 
-		if ($state !== [] && $state !== '' && $state !== null) {
+		if (!\in_array($state, [[], '', null], true)) {
 			$query->where('(a.state in (' . implode(',', ArrayHelper::toInteger($state)) . ')' . $stateOwner . ')');
 		} else {
 			// Do not show trashed events on the front-end
@@ -404,7 +404,7 @@ class EventsModel extends ListModel
 
 		$startDate     = $db->quote(DPCalendarHelper::getDate($this->getState('list.start-date'))->toSql());
 		$dateCondition = 'a.start_date  >= ' . $startDate;
-		if (!empty($this->getState('list.end-date', null))) {
+		if (!empty($this->getState('list.end-date'))) {
 			$endDate       = $db->quote(DPCalendarHelper::getDate($this->getState('list.end-date'))->toSql());
 			$dateCondition = '(a.end_date between ' . $startDate . ' and ' . $endDate . ' or a.start_date between ' . $startDate . ' and ' . $endDate .
 				' or (a.start_date < ' . $startDate . ' and a.end_date > ' . $endDate . '))';

@@ -133,6 +133,7 @@ class Booking
 			return null;
 		}
 	}
+
 	/**
 	 * Creates a PDF for the given ticket.
 	 * If to file is set, then the PDF will be written to a file and the file

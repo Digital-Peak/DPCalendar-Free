@@ -42,7 +42,7 @@ class Router
 
 	public function getEventDeleteRoute(string $id, ?string $return = null): string
 	{
-		return Route::_('index.php?option=com_dpcalendar&task=event.delete&e_id=' . $id . '&return=' . base64_encode($return !== null && $return !== '' && $return !== '0' ? $return : ''));
+		return Route::_('index.php?option=com_dpcalendar&task=event.delete&e_id=' . $id . '&return=' . base64_encode(\in_array($return, [null, '', '0'], true) ? '' : $return));
 	}
 
 	public function getLocationRoute(\stdClass $location): string

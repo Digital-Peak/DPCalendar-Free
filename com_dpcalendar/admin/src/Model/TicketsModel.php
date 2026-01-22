@@ -172,7 +172,7 @@ class TicketsModel extends ListModel
 		} elseif (\is_array($published)) {
 			$query->where('(a.state IN (' . implode(',', ArrayHelper::toInteger($published)) . '))');
 		} elseif ($published === '') {
-			$query->where('a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)');
+			$query->where('a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)');
 		}
 
 		$catId = 0;
@@ -264,7 +264,7 @@ class TicketsModel extends ListModel
 		$activeFilters = parent::getActiveFilters();
 
 		// Reset default filters from view
-		if (!empty($activeFilters['state']) && $activeFilters['state'] === [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+		if (!empty($activeFilters['state']) && $activeFilters['state'] === [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]) {
 			unset($activeFilters['state']);
 		}
 

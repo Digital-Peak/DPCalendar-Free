@@ -17,8 +17,11 @@ use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\TagsHelper;
+use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Language;
+use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
 use Joomla\CMS\Mail\Mail;
@@ -46,6 +49,8 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 
 	protected $name = 'event';
 
+	protected $associationsContext = 'com_dpcalendar.item';
+
 	protected $batch_commands = [
 		'assetgroup_id'     => 'batchAccess',
 		'language_id'       => 'batchLanguage',
@@ -59,9 +64,10 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 	{
 		parent::populateState();
 
-		$this->setState($this->getName() . '.id', Factory::getApplication()->getInput()->getInt('e_id', 0));
-
 		$app = Factory::getApplication();
+
+		$this->setState($this->getName() . '.id', $app->getInput()->getInt('e_id', $app->getInput()->getInt('id', 0)));
+
 		$this->setState('params', $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
 	}
 
@@ -342,6 +348,16 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 
 				if ($item->prices && \is_string($item->prices)) {
 					$item->prices = json_decode($item->prices);
+				}
+
+				if (Associations::isEnabled()) {
+					$item->associations = [];
+
+					$associations = Associations::getAssociations('com_dpcalendar', '#__dpcalendar_events', 'com_dpcalendar.item', $item->id, 'id', '', '');
+
+					foreach ($associations as $tag => $association) {
+						$item->associations[$tag] = $association->id;
+					}
 				}
 			}
 		}
@@ -745,6 +761,51 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		$ticketsModel->setState('list.limit', 10000);
 
 		return $ticketsModel->getItems();
+	}
+
+	protected function preprocessForm(Form $form, $data, $group = 'content')
+	{
+		parent::preprocessForm($form, $data, $group);
+
+		if (!Associations::isEnabled()) {
+			return;
+		}
+
+		$languages = LanguageHelper::getContentLanguages([1], false, 'lang_code', 'ordering', 'asc');
+
+		if (\count($languages) < 2) {
+			return;
+		}
+
+		$addform = new \SimpleXMLElement('<form />');
+		$fields  = $addform->addChild('fields');
+		$fields->addAttribute('name', 'associations');
+
+		$fieldset = $fields->addChild('fieldset');
+		$fieldset->addAttribute('name', 'item_associations');
+		$fieldset->addAttribute('label', 'JGLOBAL_FIELDSET_ASSOCIATIONS');
+
+		foreach ($languages as $language) {
+			$field = $fieldset->addChild('field');
+			$field->addAttribute('name', $language->lang_code);
+
+			if ($data instanceof \stdClass && $data->language === $language->lang_code) {
+				$field->addAttribute('type', 'hidden');
+				continue;
+			}
+
+			$field->addAttribute('type', 'event');
+			$field->addAttribute('language', $language->lang_code);
+			$field->addAttribute('label', $language->title);
+			$field->addAttribute('translate_label', 'false');
+			$field->addAttribute('select', 'true');
+			$field->addAttribute('new', 'true');
+			$field->addAttribute('edit', 'true');
+			$field->addAttribute('clear', 'true');
+			$field->addAttribute('propagate', 'true');
+		}
+
+		$form->load($addform, false);
 	}
 
 	private function getDefaultValues(\stdClass $item): array

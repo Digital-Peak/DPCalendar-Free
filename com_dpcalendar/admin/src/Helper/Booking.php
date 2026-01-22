@@ -156,8 +156,8 @@ class Booking
 			$app->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$params, 0]);
 			$event->description = $event->text;
 
+			$model = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Booking', 'Administrator', ['ignore_request' => true]);
 			if (!$booking instanceof \stdClass) {
-				$model   = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Booking', 'Administrator', ['ignore_request' => true]);
 				$booking = $model->getItem($ticket->booking_id);
 			}
 
@@ -173,12 +173,27 @@ class Booking
 				$app->triggerEvent('onContentPrepare', ['com_dpcalendar.ticket', &$ticket, &$params, 0]);
 			}
 
+			$events = [$event];
+
+			// Whole series is booked, include each event
+			if ($event->original_id == -1) {
+				$events = self::getSeriesEvents($event, 100, false);
+				unset($events[$event->id]);
+			}
+
+			$total = array_reduce(
+				$events,
+				fn ($carry, $item): int|float => $carry + max(0, strtotime((string)$item->end_date) - strtotime((string)$item->start_date)),
+				0
+			) / 3600;
+
 			$details = DPCalendarHelper::renderLayout(
 				'ticket.certificate',
 				[
 					'booking'      => $booking,
 					'ticket'       => $ticket,
 					'event'        => $event,
+					'duration'     => $total !== floor($total) ? number_format($total, 2) : $total,
 					'translator'   => new Translator(),
 					'dateHelper'   => new DateHelper(),
 					'layoutHelper' => $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Layout', 'Administrator'),
@@ -198,30 +213,32 @@ class Booking
 	 * Returns the series events. If there are more than the given limit
 	 * an exception is thrown.
 	 */
-	public static function getSeriesEvents(\stdClass $event, int $limit = 40): array
+	public static function getSeriesEvents(\stdClass $event, int $limit = 40, ?bool $checkBookings = true): array
 	{
 		$events = [$event->id => $event];
-		if ($event->original_id != '0') {
-			$model = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Events', 'Site', ['ignore_request' => true]);
+		if ($event->original_id == '0') {
+			return $events;
+		}
 
-			$model->getState();
-			$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
-			$model->setState('list.limit', 10000);
-			$model->setState('filter.state', [1, $event->state]);
-			$model->setState('list.start-date', 0);
-			$model->setState('filter.expand', true);
+		$model = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Events', 'Site', ['ignore_request' => true]);
 
-			if ($model->getTotal() > $limit) {
-				throw new \Exception('Too many series events!', 1);
+		$model->getState();
+		$model->setState('filter.children', $event->original_id == -1 ? $event->id : $event->original_id);
+		$model->setState('list.limit', 10000);
+		$model->setState('filter.state', [1, $event->state]);
+		$model->setState('list.start-date', 0);
+		$model->setState('filter.expand', true);
+
+		if ($model->getTotal() > $limit) {
+			throw new \Exception('Too many series events!', 1);
+		}
+
+		$series = $model->getItems();
+		foreach ($series as $e) {
+			if (($checkBookings && !self::openForBooking($e)) || \array_key_exists($e->id, $events)) {
+				continue;
 			}
-
-			$series = $model->getItems();
-			foreach ($series as $e) {
-				if (!self::openForBooking($e) || \array_key_exists($e->id, $events)) {
-					continue;
-				}
-				$events[$e->id] = $e;
-			}
+			$events[$e->id] = $e;
 		}
 
 		return $events;
@@ -232,7 +249,7 @@ class Booking
 		return !empty($event->prices) || !empty($event->booking_options);
 	}
 
-	public static function openForCancel(\stdClass $booking, array $states = [1, 4, 8]): bool
+	public static function openForCancel(\stdClass $booking, array $states = [1, 4, 8, 10]): bool
 	{
 		// @phpstan-ignore-next-line
 		if (Factory::getUser()->authorise('dpcalendar.admin.book', 'com_dpcalendar')) {
@@ -447,6 +464,9 @@ class Booking
 			case 9:
 				$status = 'COM_DPCALENDAR_TICKET_FIELD_STATE_CHECKIN';
 				break;
+			case 10:
+				$status = 'COM_DPCALENDAR_BOOKING_FIELD_STATE_PARTIALLY_PAID';
+				break;
 			case -2:
 				$status = 'JTRASHED';
 				break;
@@ -463,6 +483,11 @@ class Booking
 				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json'
 			);
 		}
+
+		$oldErrorReporting = error_reporting();
+
+		// Disable deprecation notices till PHP 8.5 bugs are fixed
+		error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 
 		$options = new Options();
 		$options->set('defaultFont', 'DejaVu Sans');
@@ -500,6 +525,8 @@ class Booking
 		} else {
 			$dompdf->stream($fileName);
 		}
+
+		error_reporting($oldErrorReporting);
 
 		return $fileName;
 	}

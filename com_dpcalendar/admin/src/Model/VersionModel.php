@@ -9,7 +9,6 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
 \defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\ThinHTTP\CurlClient;
 use Joomla\CMS\Cache\CacheControllerFactoryAwareInterface;
 use Joomla\CMS\Cache\CacheControllerFactoryAwareTrait;
@@ -41,9 +40,6 @@ class VersionModel extends BaseDatabaseModel implements CacheControllerFactoryAw
 		}
 
 		$url = 'https://cdn.digital-peak.com/update/stream.php?id=19';
-		if ($id = DPCalendarHelper::getComponentParameter('downloadid')) {
-			$url .= '&dlid=' . $id;
-		}
 
 		// Get the current data
 		$response = (new CurlClient())->get(

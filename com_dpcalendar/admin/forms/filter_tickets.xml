@@ -15,6 +15,7 @@
 			<option value="7">COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED</option>
 			<option value="8">COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING</option>
 			<option value="9">COM_DPCALENDAR_TICKET_FIELD_STATE_CHECKIN</option>
+			<option value="10">COM_DPCALENDAR_BOOKING_FIELD_STATE_PARTIALLY_PAID</option>
 			<option value="-2">JTRASHED</option>
 		</field>
 		<field name="ticket_holder" type="dpauthor" table_name="dpcalendar_tickets" author_field="user_id" class="dp-select"

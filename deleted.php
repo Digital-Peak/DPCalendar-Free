@@ -210,6 +210,12 @@ $files = [
 
 // From main to case 11671
 '/plugins/dpcalendar/jcalpro/src/Extension/Model',
+
+// From main to update dependencies
+'/administrator/components/com_dpcalendar/vendor/dompdf/php-font-lib/AUTHORS.md',
+'/plugins/dpcalendar/spreadsheet/vendor/psr/http-client',
+'/plugins/dpcalendar/spreadsheet/vendor/psr/http-factory',
+'/plugins/dpcalendar/spreadsheet/vendor/psr/http-message',
 ];
 
 foreach ($files as $file) {

@@ -97,6 +97,10 @@ class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 
 			if ($payload->mailParams->get('bookingsys_attendee_as_mail_from')) {
 				$mailer->setSender($payload->item->email);
+
+				if ($this->mailer instanceof Mail) {
+					$this->mailer->Sender = $this->mailer->From;
+				}
 			}
 
 			$mailer->setSubject($subject);

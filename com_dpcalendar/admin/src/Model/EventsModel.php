@@ -12,11 +12,13 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BasicTable;
+use DigitalPeak\Component\DPCalendar\Site\Helper\AssociationHelper;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Date\Date;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
@@ -71,8 +73,13 @@ class EventsModel extends ListModel
 				'event_type',
 				'level',
 				'tag',
-				'original_title'
+				'original_title',
+				'association'
 			];
+		}
+
+		if (Associations::isEnabled()) {
+			$config['filter_fields'][] = 'association';
 		}
 
 		parent::__construct($config, $factory);
@@ -200,6 +207,10 @@ class EventsModel extends ListModel
 			if ((\strlen($item->color) !== 6 && \strlen($item->color) !== 3) || !ctype_xdigit($item->color)) {
 				$item->color = '3366CC';
 			}
+
+			if (Associations::isEnabled()) {
+				$item->associations = AssociationHelper::displayAssociations($item->id);
+			}
 		}
 
 		return $items;
@@ -217,7 +228,7 @@ class EventsModel extends ListModel
 		$query->from('#__dpcalendar_events AS a');
 
 		// Join over the language
-		$query->select('l.title AS language_title');
+		$query->select('l.title AS language_title, l.image as language_image');
 		$query->join('LEFT', '#__languages AS l ON l.lang_code = a.language');
 
 		// Join over the users for the checked out user.
@@ -386,6 +397,22 @@ class EventsModel extends ListModel
 					'LEFT',
 					'#__contentitem_tag_map tagmap ON tagmap.content_item_id = a.id AND tagmap.type_alias = ' . $db->quote('com_dpcalendar.event')
 				);
+		}
+
+		// Join over the associations.
+		if (Associations::isEnabled()) {
+			$subQuery = $db->getQuery(true)
+				->select('COUNT(asso1.id) > 1')
+				->from('#__associations as asso1')
+				->join('INNER', '#__associations as asso2', 'asso1.key = asso2.key')
+				->where(
+					[
+						'asso1.id = a.id',
+						'asso1.context = ' . $db->quote('com_dpcalendar.item'),
+					]
+				);
+
+			$query->select('(' . $subQuery . ') AS association');
 		}
 
 		// Add the list ordering clause.

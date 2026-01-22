@@ -449,6 +449,27 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 				$db->setQuery('update #__dpcalendar_bookings set options = ' . $db->quote(implode(',', $bookingOptions)) . ' where options = ' . $db->quote($booking['options']))->execute();
 			}
 		}
+
+		if (version_compare($version, '10.6.0') === -1) {
+			// Remove none minified files
+			foreach (Folder::folders(JPATH_ROOT . '/media', 'dpcalendar', false, true) as $folder) {
+				foreach (Folder::files($folder, '\.js$', true, true, [], ['\.min\.js$']) as $file) {
+					unlink($file);
+				}
+				foreach (Folder::files($folder, '\.css$', true, true, [], ['\.min\.css$']) as $file) {
+					unlink($file);
+				}
+			}
+
+			$db->setQuery("select * from #__dpcalendar_extcalendars where plugin = 'microsoft'");
+			foreach ($db->loadObjectList() as $calendar) {
+				$params                    = json_decode((string)$calendar->params);
+				$params->{'action-create'} = true;
+				$params->{'action-edit'}   = true;
+				$params->{'action-delete'} = true;
+				$this->run('update #__dpcalendar_extcalendars set params = ' . $db->quote(json_encode($params) ?: '{}') . ' where id = ' . $calendar->id);
+			}
+		}
 	}
 
 	public function preflight($type, $parent): bool
@@ -484,6 +505,20 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			}
 
 			return false;
+		}
+
+		// Cleanup assets
+		if (is_dir(JPATH_ROOT . '/media/com_dpcalendar')
+			&& !\in_array($version, [null, '', '0', 'DP_DEPLOY_VERSION'], true)
+			&& version_compare($version, '10.6.0', '<')) {
+			Folder::delete(JPATH_ROOT . '/media/com_dpcalendar');
+		}
+
+		// Cleanup PHP dependencies
+		if (is_dir(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor')
+			&& !\in_array($version, [null, '', '0', 'DP_DEPLOY_VERSION'], true)
+			&& version_compare($version, '10.6.0', '<')) {
+			Folder::delete(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor');
 		}
 
 		return true;

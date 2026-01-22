@@ -28,6 +28,11 @@ class Dispatcher extends ComponentDispatcher
 			$this->input->set('task', 'location.save');
 		}
 
+		$eId = $this->input->getInt('id');
+		if ($eId && !$this->input->getInt('e_id')) {
+			$this->input->set('e_id', $eId);
+		}
+
 		PluginHelper::importPlugin('dpcalendar');
 		$this->app->triggerEvent('onDPCalendarBeforeExecute', [$this->input]);
 

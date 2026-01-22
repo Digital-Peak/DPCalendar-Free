@@ -35,6 +35,8 @@ if (!empty($this->seriesEvents)) {
 	$this->translator->translateJS('JCANCEL');
 	$this->dpdocument->addScriptOptions('event.form.seriesevents',$this->seriesEvents);
 }
+$tmpl = $this->app->input->get('tmpl');
+$tmpl = $tmpl ? '&tmpl=' . $tmpl : '';
 ?>
 <div class="com-dpcalendar-eventform">
 	<div class="com-dpcalendar-eventform__loader">
@@ -59,7 +61,7 @@ if (!empty($this->seriesEvents)) {
 			data-overlapping="<?php echo $this->params->get('event_form_check_overlaping', 0) == '2'; ?>"></div>
 	<?php } ?>
 	<form class="com-dpcalendar-eventform__form dp-form form-validate" method="post" name="adminForm"
-		action="<?php echo $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id); ?>">
+		action="<?php echo $this->router->route('index.php?option=com_dpcalendar&e_id=' . $this->event->id . $tmpl); ?>">
 		<div class="dp-form__title">
 			<?php echo $this->form->getField('title')->renderField(['class' => 'dp-field-title']); ?>
 			<?php if ($this->form->getField('alias')) { ?>

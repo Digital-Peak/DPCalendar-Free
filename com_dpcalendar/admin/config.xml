@@ -193,6 +193,12 @@
 		<field name="popup_height" type="text" showon="show_event_as_popup:1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_OPEN_EVENT_MODAL_HEIGHT_DESC"/>
+		<field name="show_event_tooltip" type="radio" class="btn-group" default="1"
+			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_TOOLTIP_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_TOOLTIP_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="event_create_form" type="list" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_EVENT_QUICK_CREATE_FORM_DESC">

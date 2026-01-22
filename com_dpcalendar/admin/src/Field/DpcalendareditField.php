@@ -46,7 +46,7 @@ class DPCalendareditField extends CategoryField
 			if (!empty($tmp)) {
 				foreach ($tmp as $calendars) {
 					foreach ($calendars as $externalCalendar) {
-						if (!$externalCalendar->canCreate() && !$externalCalendar->canEdit) {
+						if (!$externalCalendar->canCreate() && !$externalCalendar->canEdit()) {
 							continue;
 						}
 						$options[] = HTMLHelper::_('select.option', $externalCalendar->id, $externalCalendar->title);

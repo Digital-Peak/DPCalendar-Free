@@ -11,9 +11,12 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\View\Event;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\View\BaseView;
+use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Document\HtmlDocument;
 use Joomla\CMS\Form\Field\SubformField;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
+use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class HtmlView extends BaseView
@@ -137,6 +140,13 @@ class HtmlView extends BaseView
 			ToolbarHelper::cancel('event.cancel');
 		} else {
 			ToolbarHelper::cancel('event.cancel', 'JTOOLBAR_CLOSE');
+		}
+
+		$document = $this->getDocument();
+		if ($document instanceof HtmlDocument && Associations::isEnabled() && ComponentHelper::isEnabled('com_associations')) {
+			$document->getToolbar()?->standardButton('associations', 'JTOOLBAR_ASSOCIATIONS', 'event.editAssociations')
+				->icon('icon-contract')
+				->listCheck(false);
 		}
 
 		parent::addToolbar();

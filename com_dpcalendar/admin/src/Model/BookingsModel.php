@@ -184,7 +184,7 @@ class BookingsModel extends ListModel
 		} elseif (\is_array($published)) {
 			$query->where('a.state IN (' . implode(',', ArrayHelper::toInteger($published)) . ')');
 		} elseif ($published === '') {
-			$query->where('a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8)');
+			$query->where('a.state IN (0, 1, 2, 3, 4, 5, 6, 7, 8, 10)');
 		}
 
 		// Filter by author

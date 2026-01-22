@@ -30,8 +30,12 @@
 			<option value="7">COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED</option>
 			<option value="8">COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING</option>
 			<option value="9">COM_DPCALENDAR_TICKET_FIELD_STATE_CHECKIN</option>
+			<option value="10">COM_DPCALENDAR_BOOKING_FIELD_STATE_PARTIALLY_PAID</option>
 			<option value="-2">JTRASHED</option>
 		</field>
+		<field name="certificate_send_date" type="calendar" format="%Y-%m-%d %H:%M:%S" filter="user_utc"
+			translateformat="true" showtime="true" class="dp-form-input" showon="state:9"
+			label="COM_DPCALENDAR_TICKET_FIELD_CERTIFICATE_SEND_DATE_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_CERTIFICATE_SEND_DATE_DESC"/>
 	</fieldset>
 	<fieldset name="location" label="COM_DPCALENDAR_LOCATION">
 		<field name="country" type="dpcountries" class="dp-form-input dp-select"

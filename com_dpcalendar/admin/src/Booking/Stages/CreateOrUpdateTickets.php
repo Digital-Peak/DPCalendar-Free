@@ -44,7 +44,7 @@ class CreateOrUpdateTickets implements StageInterface
 					$saveTicket    = true;
 
 					// Unbook the event when it gets from active to not
-					if (!\in_array($payload->item->state, [1, 4]) && \in_array($payload->oldItem->state, [1, 4])) {
+					if (!\in_array($payload->item->state, [1, 4, 10]) && \in_array($payload->oldItem->state, [1, 4, 10])) {
 						foreach ($payload->events as $event) {
 							if ($event->id != $ticket->event_id) {
 								continue;
@@ -55,7 +55,7 @@ class CreateOrUpdateTickets implements StageInterface
 					}
 
 					// Book the event when it gets from not active to active
-					if (\in_array($payload->item->state, [1, 4]) && !\in_array($payload->oldItem->state, [1, 4])) {
+					if (\in_array($payload->item->state, [1, 4, 10]) && !\in_array($payload->oldItem->state, [1, 4, 10])) {
 						foreach ($payload->events as $event) {
 							if ($event->id != $ticket->event_id) {
 								continue;

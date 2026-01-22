@@ -1219,6 +1219,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		$form->removeField('show_end_time');
 		$form->removeField('alias');
 		$form->removeField('state');
+		$form->removeField('extdates');
 		$form->removeField('schedule');
 		$form->removeField('publish_up');
 		$form->removeField('publish_down');

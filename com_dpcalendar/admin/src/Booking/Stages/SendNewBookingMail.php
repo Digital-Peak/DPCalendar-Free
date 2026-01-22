@@ -43,7 +43,7 @@ class SendNewBookingMail implements StageInterface, UserFactoryAwareInterface
 		}
 
 		// Never send a mail when we have been active, cancelled or refunded before
-		if ($payload->oldItem && \in_array($payload->oldItem->state, [1, 4, 6, 7])) {
+		if ($payload->oldItem && \in_array($payload->oldItem->state, [1, 4, 6, 7, 10])) {
 			return $payload;
 		}
 
@@ -77,6 +77,10 @@ class SendNewBookingMail implements StageInterface, UserFactoryAwareInterface
 			if ($payload->mailParams->get('bookingsys_author_as_mail_from')) {
 				foreach ($payload->eventsWithTickets as $event) {
 					$this->mailer->setSender($this->getUserFactory()->loadUserById($event->created_by)->email);
+
+					if ($this->mailer instanceof Mail) {
+						$this->mailer->Sender = $this->mailer->From;
+					}
 				}
 			}
 

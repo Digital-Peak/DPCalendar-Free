@@ -21,6 +21,7 @@ use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
+use Joomla\CMS\Mail\Mail;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Router\Route;
@@ -790,7 +791,8 @@ class DPCalendarHelper
 			$mailer = Factory::getMailer();
 
 			if (!\in_array($fromMail, [null, '', '0'], true)) {
-				$mailer->setFrom($fromMail);
+				$mailer->setSender($fromMail);
+				$mailer->Sender = $fromMail;
 			}
 
 			$mailer->setSubject($subject);

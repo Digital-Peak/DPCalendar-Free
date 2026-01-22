@@ -14,6 +14,7 @@ use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
 
 /**
+ * @var array $displayData
  * @var array $calendars
  * @var array $hidden_calendars
  * @var \DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator $translator
@@ -29,7 +30,7 @@ if (in_array('calendars', $params->get('hidden_fields', []))) {
 	$hidden_calendars = $calendars;
 	$calendars        = [];
 }
-$hidden_calendars = empty($hidden_calendars) ? [-2] : array_map(fn($c): int => (int)$c->getId(), $hidden_calendars);
+$hidden_calendars = empty($hidden_calendars) ? [-2] : array_map(fn($c): string => $c->getId(), $hidden_calendars);
 ?>
 <div class="dp-filter<?php echo $params->get('form_state', 1) == 2 ? '' : ' dp-filter_hidden'; ?>">
 	<?php if (count($calendars ?: []) >= 10) { ?>

@@ -16,6 +16,7 @@ $button = $this->app->triggerEvent('onDPPaymentNew', [$this->booking]);
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>
 	<?php echo $this->loadTemplate('heading'); ?>
 	<?php echo $this->loadTemplate('steps'); ?>
+	<?php echo $this->loadTemplate('content'); ?>
 	<?php foreach ($button as $button) { ?>
 		<div class="com-dpcalendar-booking__payment"><?php echo $button; ?></div>
 	<?php } ?>

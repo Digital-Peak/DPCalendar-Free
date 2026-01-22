@@ -61,9 +61,9 @@ $options['calendarIds']          = array_keys($this->items);
 $options['initialView'] = $params->get('default_view', 'month');
 
 // Some general calendar options
-$options['weekNumbers']    = (boolean)$params->get('week_numbers');
-$options['weekends']       = (boolean)$params->get('weekend', 1);
-$options['fixedWeekCount'] = (boolean)$params->get('fixed_week_count', 1);
+$options['weekNumbers']    = (bool)$params->get('week_numbers');
+$options['weekends']       = (bool)$params->get('weekend', 1);
+$options['fixedWeekCount'] = (bool)$params->get('fixed_week_count', 1);
 
 $bd = $params->get('business_hours_days', []);
 if ($bd && !(is_countable($bd) ? count($bd) : 0 === 1 && !$bd[0])) {
@@ -93,8 +93,8 @@ if (is_numeric($min)) {
 }
 $options['slotMinTime'] = $min;
 
-$options['nowIndicator']     = (boolean)$params->get('current_time_indicator', 1);
-$options['displayEventTime'] = (boolean)$params->get('show_event_time', 1);
+$options['nowIndicator']     = (bool)$params->get('current_time_indicator', 1);
+$options['displayEventTime'] = (bool)$params->get('show_event_time', 1);
 
 if ($params->get('event_limit', '') != '-1') {
 	$options['dayMaxEventRows'] = $params->get('event_limit', '') == '' ? 2 : $params->get('event_limit', '') + 1;
@@ -107,7 +107,7 @@ if ($params->get('calendar_height', 0) > 0) {
 	$options['height'] = 'auto';
 }
 
-$options['slotEventOverlap'] = (boolean)$params->get('overlap_events', 1);
+$options['slotEventOverlap'] = (bool)$params->get('overlap_events', 1);
 
 // Set up the header
 $options['headerToolbar'] = ['left' => [], 'center' => [], 'right' => []];
@@ -201,6 +201,7 @@ $options['views']['list']  = [
 $options['show_event_as_popup']   = $params->get('show_event_as_popup');
 $options['popupWidth']            = $params->get('popup_width');
 $options['popupHeight']           = $params->get('popup_height');
+$options['show_event_tooltip']    = $params->get('show_event_tooltip', 1);
 $options['show_map']              = $params->get('show_map', 1);
 $options['event_create_form']     = (int)$params->get('event_create_form', 1);
 $options['screen_size_list_view'] = $params->get('screen_size_list_view', 500);

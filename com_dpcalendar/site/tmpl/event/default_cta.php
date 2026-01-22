@@ -17,7 +17,8 @@ if ($this->noBookingMessage === '') {
 }
 
 $waiting = $this->event->capacity !== null && $this->event->capacity_used >= $this->event->capacity && $this->event->booking_waiting_list;
-if ($this->originalEvent && ($this->originalEvent->booking_series == 2 || $this->originalEvent->capacity_used < $this->originalEvent->capacity || !$this->event->booking_waiting_list)) {
+if ($this->originalEvent && $this->originalEvent->booking_series == 1 &&
+	($this->originalEvent->capacity_used < $this->originalEvent->capacity || !$this->originalEvent->booking_waiting_list)) {
 	$waiting = false;
 }
 // Reset for waiting list

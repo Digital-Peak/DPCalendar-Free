@@ -10,7 +10,10 @@
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 use Joomla\CMS\HTML\HTMLHelper;
+use Joomla\CMS\Language\Associations;
+use Joomla\CMS\Language\Multilanguage;
 use Joomla\CMS\Language\Text;
+use Joomla\CMS\Layout\LayoutHelper;
 use Joomla\CMS\Uri\Uri;
 
 $listOrder = $this->escape($this->state->get('list.ordering'));
@@ -33,8 +36,13 @@ $return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 				<?php echo HTMLHelper::_('searchtools.sort', 'COM_DPCALENDAR_FIELD_COLOR_LABEL', 'a.color', $listDirn, $listOrder); ?>
 			</th>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ACCESS', 'a.access', $listDirn, $listOrder); ?></th>
+			<?php if (Associations::isEnabled()) { ?>
+				<th><?php echo HTMLHelper::_('searchtools.sort', 'COM_DPCALENDAR_VIEW_EVENTS_HEADING_ASSOCIATION', 'association', $listDirn, $listOrder); ?></th>
+			<?php } ?>
+			<?php if(Multilanguage::isEnabled()){ ?>
+				<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'a.language', $listDirn, $listOrder); ?></th>
+			<?php } ?>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'JAUTHOR', 'a.created_by', $listDirn, $listOrder); ?></th>
-			<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_LANGUAGE', 'a.language', $listDirn, $listOrder); ?></th>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'JGLOBAL_HITS', 'a.hits', $listDirn, $listOrder); ?></th>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'JGRID_HEADING_ID', 'a.id', $listDirn, $listOrder); ?></th>
 			<th><?php echo HTMLHelper::_('searchtools.sort', 'COM_DPCALENDAR_VIEW_EVENTS_ORIGINAL_TITLE', 'original_title', $listDirn, $listOrder); ?></th>
@@ -105,17 +113,26 @@ $return    = '&return=' . base64_encode(Uri::getInstance()->toString());
 					</div>
 				</td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ACCESS'); ?>"><?php echo $this->escape($item->access_level); ?></td>
+				<?php if (Associations::isEnabled()) { ?>
+					<td data-column="<?php echo $this->translate('COM_DPCALENDAR_VIEW_EVENTS_HEADING_ASSOCIATION'); ?>">
+						<?php if ($item->association) { ?>
+							<?php echo HTMLHelper::_('dpcalendaradministrator.association', $item->id); ?>
+						<?php } ?>
+					</td>
+				<?php } ?>
+				<?php if (Multilanguage::isEnabled()) { ?>
+					<td data-column="<?php echo $this->translate('JGRID_HEADING_LANGUAGE'); ?>">
+						<?php if ($item->language == '*') { ?>
+							<?php echo Text::alt('JALL', 'language'); ?>
+						<?php } else { ?>
+							<?php echo LayoutHelper::render('joomla.content.language', $item); ?>
+						<?php } ?>
+					</td>
+				<?php } ?>
 				<td data-column="<?php echo $this->translate('JAUTHOR'); ?>">
 					<a href="<?php echo $this->router->route('index.php?option=com_users&task=user.edit&id=' . $item->created_by . $return); ?>">
 						<?php echo $this->escape($item->author_name); ?>
 					</a>
-				</td>
-				<td data-column="<?php echo $this->translate('JGRID_HEADING_LANGUAGE'); ?>">
-					<?php if ($item->language == '*') { ?>
-						<?php echo Text::alt('JALL', 'language'); ?>
-					<?php } else { ?>
-						<?php echo $item->language_title ? $this->escape($item->language_title) : $this->translate('JUNDEFINED'); ?>
-					<?php } ?>
 				</td>
 				<td data-column="<?php echo $this->translate('JGLOBAL_HITS'); ?>"><?php echo (int)$item->hits; ?></td>
 				<td data-column="<?php echo $this->translate('JGRID_HEADING_ID'); ?>"><?php echo (int)$item->id; ?></td>

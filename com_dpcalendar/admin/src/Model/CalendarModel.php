@@ -22,6 +22,10 @@ class CalendarModel extends BaseDatabaseModel
 
 	public function getCalendar(mixed $id): ?CalendarInterface
 	{
+		if ($id === null || $id === '') {
+			return null;
+		}
+
 		if (isset(self::$calendars[$id])) {
 			return self::$calendars[$id];
 		}

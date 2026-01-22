@@ -60,7 +60,7 @@ class DateHelper
 			if ($exdates !== null && $exdates !== [] && $this->translator instanceof Translator) {
 				$buffer .= PHP_EOL;
 				$buffer .= $this->translator->translate('COM_DPCALENDAR_EXDATES_EXCLUDE_LIST_TEXT');
-				$buffer .= implode(', ', array_map(fn (\Joomla\CMS\Date\Date|\DateTime|string|null $d): string => $this->getDate($d)->format('d.m.Y', true), $exdates));
+				$buffer .= implode(', ', array_map(fn (Date|\DateTime|string|null $d): string => $this->getDate($d)->format('d.m.Y', true), $exdates));
 			}
 		} catch (\Exception) {
 			// Do not crash as some rules are not parseable for the transformator

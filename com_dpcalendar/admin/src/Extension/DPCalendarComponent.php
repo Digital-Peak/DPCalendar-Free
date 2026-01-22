@@ -7,7 +7,10 @@
 
 namespace DigitalPeak\Component\DPCalendar\Administrator\Extension;
 
+use DigitalPeak\Component\DPCalendar\Administrator\Service\HTML\AdministratorService;
 use Joomla\CMS\Application\SiteApplication;
+use Joomla\CMS\Association\AssociationServiceInterface;
+use Joomla\CMS\Association\AssociationServiceTrait;
 use Joomla\CMS\Categories\CategoryServiceInterface;
 use Joomla\CMS\Categories\CategoryServiceTrait;
 use Joomla\CMS\Component\Router\RouterServiceInterface;
@@ -21,6 +24,7 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\Tag\TagServiceInterface;
 use Joomla\CMS\Tag\TagServiceTrait;
 use Joomla\Database\DatabaseAwareTrait;
+use Joomla\Database\DatabaseInterface;
 use Psr\Container\ContainerInterface;
 
 class DPCalendarComponent extends MVCComponent implements
@@ -28,11 +32,13 @@ class DPCalendarComponent extends MVCComponent implements
 	FieldsServiceInterface,
 	RouterServiceInterface,
 	TagServiceInterface,
-	BootableExtensionInterface
+	BootableExtensionInterface,
+	AssociationServiceInterface
 {
 	use RouterServiceTrait;
 	use HTMLRegistryAwareTrait;
 	use DatabaseAwareTrait;
+	use AssociationServiceTrait;
 	use CategoryServiceTrait, TagServiceTrait {
 		CategoryServiceTrait::getTableNameForSection insteadof TagServiceTrait;
 		CategoryServiceTrait::getStateColumnForSection insteadof TagServiceTrait;
@@ -45,6 +51,8 @@ class DPCalendarComponent extends MVCComponent implements
 		\JLoader::register('DPCalendarHelperRoute', JPATH_SITE . '/components/com_dpcalendar/helpers/route.php');
 
 		require_once JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor/autoload.php';
+
+		$this->getRegistry()->register('dpcalendaradministrator', new AdministratorService($container->get(DatabaseInterface::class)));
 	}
 
 	public function validateSection($section, $item = null)

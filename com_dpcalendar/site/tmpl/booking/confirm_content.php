@@ -8,8 +8,6 @@
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 
 \defined('_JEXEC') or die();
-
-$this->translator->translateJS('COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL');
 ?>
 <div class="com-dpcalendar-booking__content">
 	<dl class="dp-description">

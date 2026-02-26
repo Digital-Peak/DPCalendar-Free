@@ -34,6 +34,7 @@ use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\Versioning\VersionableModelTrait;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
+use Joomla\Database\ParameterType;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
@@ -442,8 +443,8 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			$data['booking_assign_user_groups'] = $data['booking_assign_user_groups'] !== [] ? implode(',', $data['booking_assign_user_groups']) : '';
 		}
 
-		// Only apply the default values on create
-		if (empty($data['id'])) {
+		// Only apply the default values on create for events which are not linked to an external one
+		if (empty($data['id']) && empty($data['xreference'])) {
 			$data = array_merge($data, $this->getDefaultValues((object)$data));
 			if (!empty($data['location_ids'])) {
 				$locationIds = array_unique($data['location_ids']);
@@ -471,7 +472,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			$app->setUserState('dpcalendar.event.id', $id);
 		}
 
-		$this->getDatabase()->setQuery('select id, modified from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
+		$this->getDatabase()->setQuery('select id, modified, start_date, end_date, language from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
 		$rows = $this->getDatabase()->loadObjectList();
 
 		$fieldModel = $this->bootComponent('fields')->getMVCFactory()->createModel('Field', 'Administrator', ['ignore_request' => true]);
@@ -508,7 +509,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 				continue;
 			}
 
-			// Save the values on the child events
+			// Save the values on the child event
 			foreach ($fields as $field) {
 				$value = $field->value;
 				if (isset($data['com_fields']) && \array_key_exists($field->name, $data['com_fields'])) {
@@ -525,6 +526,50 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 				}
 
 				$fieldModel->setFieldValue($field->id, $tmp->id, $value);
+			}
+
+			if (Associations::isEnabled() && !empty($data['associations'])) {
+				$db = $this->getDatabase();
+
+				// Remove old associations
+				$result = $db->setQuery('select `key` from #__associations where id = ' . $tmp->id . ' and context = ' . $db->quote('com_dpcalendar.item'))->loadResult();
+				$db->setQuery('delete from #__associations where `key` = ' . $db->quote($result) . ' and context = ' . $db->quote('com_dpcalendar.item'))->execute();
+
+				$query = $db->getQuery(true);
+				$query->select('id, start_date, end_date, language')
+					->from('#__dpcalendar_events')
+					->where('original_id IN (' . implode(',', ArrayHelper::toInteger(array_values($data['associations']))) . ')')
+					->where('original_id > 0')
+					->where('start_date = ' . $db->quote($tmp->start_date))
+					->where('end_date = ' . $db->quote($tmp->end_date));
+				$db->setQuery($query);
+
+				$associatedEvents = $db->loadObjectList();
+				if ($associatedEvents === []) {
+					continue;
+				}
+
+				$query        = $db->getQuery(true)->insert('#__associations');
+				$associations = [$tmp->language => $tmp->id];
+				foreach ($associatedEvents as $associatedEvent) {
+					$associations[$associatedEvent->language] = $associatedEvent->id;
+				}
+
+				$key = md5(json_encode($associations) ?: '');
+
+				foreach ($associations as $id) {
+					$query->values(
+						implode(
+							',',
+							$query->bindArray(
+								[$id, 'com_dpcalendar.item', $key],
+								[ParameterType::INTEGER, ParameterType::STRING, ParameterType::STRING]
+							)
+						)
+					);
+				}
+
+				$db->setQuery($query)->execute();
 			}
 		}
 
@@ -546,19 +591,19 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 			$this->getDatabase()->execute();
 		}
 
-		// Insert the new associations
+		// Insert the new location assignments
 		if ($locationValues !== '' && $locationValues !== '0') {
 			$this->getDatabase()->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $locationValues);
 			$this->getDatabase()->execute();
 		}
 
-		// Delete the hosts associations for the events which do not exist anymore
+		// Delete the hosts assignments for the events which do not exist anymore
 		if (!$this->getState($this->getName() . '.new')) {
 			$this->getDatabase()->setQuery('delete from #__dpcalendar_events_hosts where event_id in (' . implode(',', $allIds) . ')');
 			$this->getDatabase()->execute();
 		}
 
-		// Insert the new associations
+		// Insert the new host assignments
 		if ($hostsValues !== '' && $hostsValues !== '0') {
 			$this->getDatabase()->setQuery('insert into #__dpcalendar_events_hosts (event_id, user_id) values ' . $hostsValues);
 			$this->getDatabase()->execute();

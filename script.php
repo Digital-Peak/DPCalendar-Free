@@ -49,18 +49,14 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			}
 		}
 
-		if ($version && $version != 'DP_DEPLOY_VERSION' && version_compare($version, '9.0.0') < 0) {
+		if (!\in_array($version, [null, '', '0', 'DP_DEPLOY_VERSION'], true) && version_compare($version, '10.6.0', '<')) {
 			$app = Factory::getApplication();
-			if (!$app instanceof CMSWebApplicationInterface) {
-				return false;
-			}
-
 			$app->enqueueMessage(
-				'You have DPCalendar version ' . $version . ' installed. For this version is no automatic update available anymore, you need to have at least version 9.0.0 running. Please install the latest release from version 9 first.',
+				'You have DPCalendar version ' . $version . ' installed. Please install version 10.6.0 first before you upgrade to this package.',
 				'error'
 			);
 
-			if ($app->getInput()->get('task') !== 'ajax_upload') {
+			if ($app instanceof CMSWebApplicationInterface) {
 				$app->redirect('index.php?option=com_installer&view=install');
 			}
 
@@ -89,13 +85,12 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			return;
 		}
 
-		if (version_compare($version, '9.0.5') === -1) {
-			$this->run(
-				"UPDATE `#__update_sites` SET location=replace(location,'&ext=extension.xml','') where location like 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=%'"
-			);
-			$this->run(
-				"UPDATE `#__update_sites` SET location=replace(location,'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=','https://cdn.digital-peak.com/update/stream.php?id=') where location like 'https://joomla.digital-peak.com/index.php?option=com_ars&view=update&task=stream&format=xml&id=%'"
-			);
+		if (version_compare($version, '10.6.1', '<')) {
+			if (PHP_OS_FAMILY !== 'Windows' && file_exists(JPATH_ROOT . '/administrator/manifests/packages/pkg_DPCalendar.xml')) {
+				unlink(JPATH_ROOT . '/administrator/manifests/packages/pkg_DPCalendar.xml');
+			}
+
+			$this->run("update `#__extensions` set element = 'pkg_dpcalendar' where name = 'DPCalendar' and type = 'package'");
 		}
 	}
 

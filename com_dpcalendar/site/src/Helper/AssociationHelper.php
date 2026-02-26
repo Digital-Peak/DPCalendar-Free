@@ -63,7 +63,7 @@ abstract class AssociationHelper extends CategoryAssociationHelper
 			);
 			$return = [];
 			foreach ($associations as $tag => $item) {
-				$return[$tag] = RouteHelper::getEventRoute($item->id, $item->catid, $item->language, $layout);
+				$return[$tag] = RouteHelper::getEventRoute($item->id, ((int)$item->catid) . '', false, false) . '&lang=' . $item->language;
 			}
 			return $return;
 		}

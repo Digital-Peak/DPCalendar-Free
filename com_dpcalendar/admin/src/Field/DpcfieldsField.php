@@ -43,32 +43,34 @@ class DpcfieldsField extends ListField
 			[$component, $section] = explode('.', $section, 2);
 		}
 
-		try {
-			// @phpstan-ignore-next-line
-			$form = Form::getInstance($component . '.' . $section, $section, ['control' => 'jform']);
-			foreach ($form->getFieldset() as $field) {
-				// Ignore spacers
-				if ($field->type === 'Spacer') {
-					continue;
+		if ((string)$this->element['only_custom_fields'] === '' || (string)$this->element['only_custom_fields'] === '0') {
+			try {
+				// @phpstan-ignore-next-line
+				$form = Form::getInstance($component . '.' . $section, $section, ['control' => 'jform']);
+				foreach ($form->getFieldset() as $field) {
+					// Ignore spacers
+					if ($field->type === 'Spacer') {
+						continue;
+					}
+
+					$fieldName = $field->fieldname;
+
+					// When no filter form use the compiled field name
+					if (!str_contains($section, 'filter')) {
+						$fieldName = DPCalendarHelper::getFieldName($field);
+					}
+
+					// Ignore when hidden
+					if ($hide && array_filter($hide, fn (string $toHide): bool => fnmatch($toHide, $fieldName))) {
+						continue;
+					}
+
+					$field->hidden = false;
+					$options[]     = HTMLHelper::_('select.option', $fieldName, Text::_($field->getTitle()));
 				}
-
-				$fieldName = $field->fieldname;
-
-				// When no filter form use the compiled field name
-				if (!str_contains($section, 'filter')) {
-					$fieldName = DPCalendarHelper::getFieldName($field);
-				}
-
-				// Ignore when hidden
-				if ($hide && array_filter($hide, fn (string $toHide): bool => fnmatch($toHide, $fieldName))) {
-					continue;
-				}
-
-				$field->hidden = false;
-				$options[]     = HTMLHelper::_('select.option', $fieldName, Text::_($field->getTitle()));
+			} catch (\Exception) {
+				// Ignore form loading errors
 			}
-		} catch (\Exception) {
-			// Ignore form loading errors
 		}
 
 		$fields = FieldsHelper::getFields($component . '.' . str_replace('filter_events', 'event', $section));

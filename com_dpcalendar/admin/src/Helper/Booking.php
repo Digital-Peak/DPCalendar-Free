@@ -51,7 +51,7 @@ class Booking
 				]
 			);
 
-			return self::createPDF($details, $booking->uid, $toFile);
+			return self::createPDF($details, $booking->uid, $toFile, $booking);
 		} catch (\Exception $exception) {
 			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'warning');
 
@@ -126,7 +126,7 @@ class Booking
 				]
 			);
 
-			return self::createPDF($details, $ticket->uid, $toFile);
+			return self::createPDF($details, $ticket->uid, $toFile, $ticket);
 		} catch (\Exception $exception) {
 			Factory::getApplication()->enqueueMessage($exception->getMessage(), 'warning');
 
@@ -201,7 +201,7 @@ class Booking
 				]
 			);
 
-			return self::createPDF($details, $ticket->uid, $toFile);
+			return self::createPDF($details, $ticket->uid, $toFile, $ticket);
 		} catch (\Exception $exception) {
 			$app->enqueueMessage($exception->getMessage(), 'warning');
 
@@ -475,7 +475,7 @@ class Booking
 		return Text::_($status);
 	}
 
-	public static function createPDF(string $details, string $name, bool $toFile): string
+	public static function createPDF(string $details, string $name, bool $toFile, ?\stdClass $item = null): string
 	{
 		if (!file_exists(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json')) {
 			copy(
@@ -483,11 +483,6 @@ class Booking
 				JPATH_ADMINISTRATOR . '/components/com_dpcalendar/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json'
 			);
 		}
-
-		$oldErrorReporting = error_reporting();
-
-		// Disable deprecation notices till PHP 8.5 bugs are fixed
-		error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 
 		$options = new Options();
 		$options->set('defaultFont', 'DejaVu Sans');
@@ -499,7 +494,11 @@ class Booking
 		$dompdf = new Dompdf($options);
 		$dompdf->loadHtml($details);
 		$dompdf->setBasePath(JPATH_ROOT);
+
+		PluginHelper::importPlugin('dpcalendarpay');
+		Factory::getApplication()->triggerEvent('onDPCalendarBeforeCreatePDF', [$dompdf, $item]);
 		$dompdf->render();
+		Factory::getApplication()->triggerEvent('onDPCalendarAfterCreatePDF', [$dompdf, $item]);
 
 		if (!str_contains($details, '<footer')) {
 			$dompdf->getCanvas()->page_script(static function (int $pageNumber, int $pageCount, Canvas $canvas, FontMetrics $fontMetrics): void {
@@ -518,15 +517,15 @@ class Booking
 			if (file_exists($fileName)) {
 				unlink($fileName);
 			}
-		}
 
-		if ($toFile) {
 			file_put_contents($fileName, $dompdf->output());
-		} else {
-			$dompdf->stream($fileName);
+
+			Factory::getApplication()->triggerEvent('onDPCalendarAfterCreatePDFFile', [$dompdf, $fileName, $item]);
+
+			return $fileName;
 		}
 
-		error_reporting($oldErrorReporting);
+		$dompdf->stream($fileName);
 
 		return $fileName;
 	}

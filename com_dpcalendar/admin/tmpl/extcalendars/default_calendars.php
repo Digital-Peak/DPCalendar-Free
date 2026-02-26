@@ -20,7 +20,7 @@ if ($saveOrder) {
 }
 ?>
 <div class="com-dpcalendar-extcalendars__calendars">
-	<table class="dp-table" id="extcalendarsList">
+	<table class="dp-table" id="extcalendarsList" data-name="external calendars">
 		<thead>
 		<tr>
 			<td class="dp-table__col-check"><?php echo HTMLHelper::_('grid.checkall'); ?></td>

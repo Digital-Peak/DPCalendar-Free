@@ -12,6 +12,9 @@ use Joomla\CMS\HTML\HTMLHelper;
 $this->dpdocument->loadStyleFile('dpcalendar/views/booking/confirm.css');
 $this->dpdocument->loadScriptFile('views/booking/confirm.js');
 $this->dpdocument->addStyle($this->params->get('booking_custom_css', ''));
+
+$this->translator->translateJS('COM_DPCALENDAR_BOOKING_FIELD_TAX_LABEL');
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKING_ABORT_CONFIRM');
 ?>
 <div class="com-dpcalendar-booking com-dpcalendar-booking-confirm<?php echo $this->pageclass_sfx ? ' com-dpcalendar-booking-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->layoutHelper->renderLayout('block.timezone', $this->displayData); ?>

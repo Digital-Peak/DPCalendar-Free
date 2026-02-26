@@ -19,6 +19,7 @@ $this->dpdocument->addScriptOptions(
 	(empty($this->event) ? 0 : $this->event->id) . '&b_id=' . (int)$this->bookingId
 );
 $this->translator->translateJS('COM_DPCALENDAR_OPTIONS');
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKING_ABORT_CONFIRM');
 ?>
 <div class="com-dpcalendar-bookingform<?php echo $this->pageclass_sfx ? ' com-dpcalendar-bookingform-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->loadTemplate('heading'); ?>

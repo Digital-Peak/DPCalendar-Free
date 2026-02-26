@@ -1065,7 +1065,7 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			}
 		}
 
-		$location  = (string)$event->LOCATION;
+		$location  = trim((string)$event->LOCATION, ' ,');
 		$locations = [];
 		if ($location !== '' && $location !== '0') {
 			$geo = (string)$event->GEO;

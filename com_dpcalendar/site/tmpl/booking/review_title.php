@@ -6,7 +6,6 @@
  */
 
 \defined('_JEXEC') or die();
-
 ?>
 <div class="com-dpcalendar-booking__title">
 	<h2 class="dp-page-heading page-header"><?php echo $this->translate('COM_DPCALENDAR_VIEW_BOOKING_REVIEW_TITLE'); ?></h2>

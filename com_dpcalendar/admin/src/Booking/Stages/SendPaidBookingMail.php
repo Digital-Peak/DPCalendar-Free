@@ -12,6 +12,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
+use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Mail\Mail;
 use Joomla\CMS\Mail\MailerInterface;
 use Joomla\CMS\User\UserFactoryAwareInterface;
@@ -22,7 +23,7 @@ class SendPaidBookingMail implements StageInterface, UserFactoryAwareInterface
 {
 	use UserFactoryAwareTrait;
 
-	public function __construct(private readonly MailerInterface $mailer, UserFactoryInterface $factory)
+	public function __construct(private readonly CMSApplicationInterface $app, private readonly MailerInterface $mailer, UserFactoryInterface $factory)
 	{
 		$this->setUserFactory($factory);
 	}
@@ -100,7 +101,9 @@ class SendPaidBookingMail implements StageInterface, UserFactoryAwareInterface
 		}
 
 		try {
+			$this->app->triggerEvent('onDPCalendarBeforeSendMail', ['com_dpcalendar.booking.paid', $this->mailer, $payload->item]);
 			$this->mailer->Send();
+			$this->app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.booking.paid', $this->mailer, $payload->item]);
 			foreach ($files as $file) {
 				if (file_exists($file)) {
 					unlink($file);

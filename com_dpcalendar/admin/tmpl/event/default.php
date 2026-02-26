@@ -68,9 +68,9 @@ $tmpl = $tmpl ? '&tmpl=' . $tmpl : '';
 				<?php echo $this->form->getField('alias')->renderField(['class' => 'dp-field-alias']); ?>
 			<?php } ?>
 		</div>
-		<?php echo HTMLHelper::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
+		<?php echo HTMLHelper::_('uitab.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
-			<?php echo HTMLHelper::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
+			<?php echo HTMLHelper::_('uitab.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<?php foreach ($this->form->getFieldset($name) as $field) { ?>
 				<?php if ($field->fieldname == 'title' || $field->fieldname == 'alias') { ?>
 					<?php continue; ?>
@@ -80,9 +80,9 @@ $tmpl = $tmpl ? '&tmpl=' . $tmpl : '';
 			<?php if ($name == 'location') { ?>
 				<?php echo $this->loadTemplate('map'); ?>
 			<?php } ?>
-			<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
+			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		<?php } ?>
-		<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
+		<?php echo HTMLHelper::_('uitab.endTabSet'); ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<input type="hidden" name="template_event_id" class="dp-input dp-input-hidden">
 		<?php echo HTMLHelper::_('form.token'); ?>

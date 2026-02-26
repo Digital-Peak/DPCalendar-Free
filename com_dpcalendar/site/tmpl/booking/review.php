@@ -7,11 +7,14 @@
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 
 $this->dpdocument->loadStyleFile('dpcalendar/views/booking/review.css');
 $this->dpdocument->loadScriptFile('views/booking/review.js');
 $this->dpdocument->addStyle($this->params->get('booking_custom_css', ''));
+
+$this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKING_ABORT_CONFIRM');
 ?>
 <div class="com-dpcalendar-booking com-dpcalendar-booking-review<?php echo $this->pageclass_sfx ? ' com-dpcalendar-booking-' . $this->pageclass_sfx : ''; ?>">
 	<?php echo $this->loadTemplate('heading'); ?>
@@ -23,7 +26,7 @@ $this->dpdocument->addStyle($this->params->get('booking_custom_css', ''));
 		<?php echo $this->loadTemplate('tickets'); ?>
 		<?php echo $this->loadTemplate('actions'); ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
-		<input type="hidden" name="return" value="<?php echo base64_encode(\DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getBookingRoute($this->booking)); ?>"
+		<input type="hidden" name="return" value="<?php echo base64_encode(RouteHelper::getBookingRoute($this->booking)); ?>"
 			   class="dp-input dp-input-hidden">
 		<input type="hidden" name="tmpl" value="<?php echo $this->input->get('tmpl'); ?>" class="dp-input dp-input-hidden">
 		<?php echo HTMLHelper::_('form.token'); ?>

@@ -19,9 +19,9 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 	<?php echo $this->layoutHelper->renderLayout('block.loader', $this->displayData); ?>
 	<form class="com-dpcalendar-locationform__form dp-form form-validate" method="post" name="adminForm" id="adminForm"
 		  action="<?php echo $action; ?>">
-		<?php echo HTMLHelper::_('bootstrap.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
+		<?php echo HTMLHelper::_('uitab.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
-			<?php echo HTMLHelper::_('bootstrap.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
+			<?php echo HTMLHelper::_('uitab.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<div class="com-dpcalendar-locationform__content dp-grid">
 				<div class="com-dpcalendar-locationform__fields">
 					<?php foreach ($this->form->getFieldset($name) as $field) { ?>
@@ -36,9 +36,9 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=locationfor
 						data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
 				<?php } ?>
 			</div>
-			<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
+			<?php echo HTMLHelper::_('uitab.endTab'); ?>
 		<?php } ?>
-		<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
+		<?php echo HTMLHelper::_('uitab.endTabSet'); ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<?php echo HTMLHelper::_('form.token'); ?>
 	</form>

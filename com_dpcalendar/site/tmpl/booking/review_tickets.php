@@ -7,6 +7,8 @@
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+
 $format = $this->params->get('event_date_format', 'd.m.Y') . ' ' . $this->params->get('event_time_format', 'H:i');
 
 $tickets = [];
@@ -21,7 +23,7 @@ foreach ($this->tickets as $sortedTickets) {
 				<?php echo $ticket->price_label; ?>
 			<?php } ?>
 			<?php if ($ticket->price) { ?>
-				[<?php echo \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::renderPrice($ticket->price); ?>]
+				[<?php echo DPCalendarHelper::renderPrice($ticket->price); ?>]
 			<?php } ?>
 		</h4>
 		<div class="com-dpcalendar-booking__event-info dp-control">
@@ -42,11 +44,11 @@ foreach ($this->tickets as $sortedTickets) {
 		</div>
 		<div class="com-dpcalendar-booking__fields">
 			<?php foreach ($this->ticketFormFields[$ticket->id] as $field) { ?>
-				<?php echo $field->renderField(['class' => \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::getFieldName($field, true)]); ?>
+				<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 			<?php } ?>
 		</div>
 	<?php } ?>
 	<?php if ($this->captchaField) { ?>
-		<?php echo $this->captchaField->renderField(['class' => \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::getFieldName($this->captchaField, true)]); ?>
+		<?php echo $this->captchaField->renderField(['class' => DPCalendarHelper::getFieldName($this->captchaField, true)]); ?>
 	<?php } ?>
 </div>

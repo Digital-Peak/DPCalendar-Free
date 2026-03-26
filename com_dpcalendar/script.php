@@ -38,6 +38,23 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 		}
 
 		if (\in_array($version, [null, '', '0', 'DP_DEPLOY_VERSION'], true)) {
+			return;
+		}
+
+		$db = $this->getDatabase();
+
+		if (version_compare($version, '10.8.0', '<')) {
+			$db->setQuery("select id, raw_data from #__dpcalendar_bookings where payment_provider like 'paypal%'");
+			foreach ($db->loadObjectList() as $booking) {
+				$data = json_decode((string)$booking->raw_data);
+				$id   = $data?->purchase_units[0]?->payments?->captures[0]->id ?? null;
+				if (!$id) {
+					continue;
+				}
+
+				$db->setQuery('UPDATE #__dpcalendar_bookings SET transaction_id = ' . $db->quote($id) . ' WHERE id = ' . (int)$booking->id);
+				$db->execute();
+			}
 		}
 	}
 

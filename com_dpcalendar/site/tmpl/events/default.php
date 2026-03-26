@@ -117,9 +117,6 @@ foreach ($this->items as $event) {
 			case 3:
 				$prefix='[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ';
 				break;
-			case 4:
-				$prefix='[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_REPORTED') . '] ';
-				break;
 			case -2:
 				$prefix='[' . $this->translate('JTRASHED') . '] ';
 				break;

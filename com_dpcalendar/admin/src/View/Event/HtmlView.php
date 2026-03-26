@@ -17,6 +17,7 @@ use Joomla\CMS\Form\Field\SubformField;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\ContentHelper;
 use Joomla\CMS\Language\Associations;
+use Joomla\CMS\Toolbar\Toolbar;
 use Joomla\CMS\Toolbar\ToolbarHelper;
 
 class HtmlView extends BaseView
@@ -144,7 +145,8 @@ class HtmlView extends BaseView
 
 		$document = $this->getDocument();
 		if ($document instanceof HtmlDocument && Associations::isEnabled() && ComponentHelper::isEnabled('com_associations')) {
-			$document->getToolbar()?->standardButton('associations', 'JTOOLBAR_ASSOCIATIONS', 'event.editAssociations')
+			// @phpstan-ignore-next-line
+			Toolbar::getInstance()->standardButton('associations', 'JTOOLBAR_ASSOCIATIONS', 'event.editAssociations')
 				->icon('icon-contract')
 				->listCheck(false);
 		}

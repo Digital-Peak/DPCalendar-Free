@@ -17,6 +17,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\Router\Router;
 use DigitalPeak\Component\DPCalendar\Administrator\Translator\Translator;
 use DigitalPeak\Component\DPCalendar\Site\Model\EventsModel;
 use DigitalPeak\Component\DPCalendar\Site\Model\FormModel;
+use DigitalPeak\Plugin\DPCalendarPay\EInvoice\Extension\EInvoice;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Form\Form;
@@ -276,13 +277,45 @@ class DPCalendar extends CMSPlugin
 		}
 	}
 
-	public function onContentPrepareForm(Form $form): bool
+	public function onContentPrepareForm(Form $form, mixed $data): bool
 	{
-		if ($form->getName() !== 'com_fields.field.com_dpcalendar.event') {
+		if ($form->getName() === 'com_fields.field.com_dpcalendar.event') {
+			$form->loadFile(JPATH_PLUGINS . '/content/dpcalendar/forms/tickets.xml');
 			return true;
 		}
 
-		$form->loadFile(JPATH_PLUGINS . '/content/dpcalendar/forms/tickets.xml');
+		$app = $this->getApplication();
+		if (!$app instanceof CMSApplicationInterface) {
+			return true;
+		}
+
+		if (!PluginHelper::isEnabled('dpcalendarpay', 'einvoice')) {
+			return true;
+		}
+
+		$einvoicePlugin = $app->bootPlugin('einvoice', 'dpcalendarpay');
+		if ($einvoicePlugin instanceof EInvoice) {
+			$einvoicePlugin->onContentPrepareForm($form, $data);
+		}
+
+		return true;
+	}
+
+	public function onExtensionBeforeSave(string $context, mixed $data): bool
+	{
+		$app = $this->getApplication();
+		if (!$app instanceof CMSApplicationInterface) {
+			return true;
+		}
+
+		if (!PluginHelper::isEnabled('dpcalendarpay', 'einvoice')) {
+			return true;
+		}
+
+		$einvoicePlugin = $app->bootPlugin('einvoice', 'dpcalendarpay');
+		if ($einvoicePlugin instanceof EInvoice) {
+			$einvoicePlugin->onExtensionBeforeSave($context, $data);
+		}
 
 		return true;
 	}

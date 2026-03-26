@@ -624,6 +624,11 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 			return false;
 		}
 
+		// Check for valid name
+		if (!$this->catid) {
+			throw new \Exception('No calendar set!');
+		}
+
 		if (empty($this->alias)) {
 			$this->alias = $this->title;
 		}

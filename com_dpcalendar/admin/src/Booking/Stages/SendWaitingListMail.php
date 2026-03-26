@@ -59,10 +59,6 @@ class SendWaitingListMail implements StageInterface, UserFactoryAwareInterface
 		if ($payload->mailParams->get('bookingsys_author_as_mail_from')) {
 			foreach ($payload->eventsWithTickets as $event) {
 				$this->mailer->setSender($this->getUserFactory()->loadUserById($event->created_by)->email);
-
-				if ($this->mailer instanceof Mail) {
-					$this->mailer->Sender = $this->mailer->From;
-				}
 			}
 		}
 

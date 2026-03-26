@@ -445,7 +445,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 
 		// Only apply the default values on create for events which are not linked to an external one
 		if (empty($data['id']) && empty($data['xreference'])) {
-			$data = array_merge($data, $this->getDefaultValues((object)$data));
+			$data = array_merge($this->getDefaultValues((object)$data), $data);
 			if (!empty($data['location_ids'])) {
 				$locationIds = array_unique($data['location_ids']);
 				unset($data['location_ids']);
@@ -496,39 +496,7 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 				unset($oldEventIds[$tmp->id]);
 			}
 
-			// Check if the event is the main event
-			if (!$fields || $tmp->id == $event->id) {
-				continue;
-			}
-
-			// When modified events should not be updated and the modified date is different than the original event, ignore it
-			if (\array_key_exists('update_modified', $data)
-				&& (int)$data['update_modified'] === 0
-				&& $tmp->modified
-				&& $tmp->modified !== $event->modified) {
-				continue;
-			}
-
-			// Save the values on the child event
-			foreach ($fields as $field) {
-				$value = $field->value;
-				if (isset($data['com_fields']) && \array_key_exists($field->name, $data['com_fields'])) {
-					$value = $data['com_fields'][$field->name];
-				}
-
-				// The media field needs the data encoded
-				if ($field->type === 'media' && \is_array($value)) {
-					$value = json_encode($value);
-				}
-
-				if (\is_array($value) ? $value === [] : (string)$value === '') {
-					$value = null;
-				}
-
-				$fieldModel->setFieldValue($field->id, $tmp->id, $value);
-			}
-
-			if (Associations::isEnabled() && !empty($data['associations'])) {
+			if (Associations::isEnabled() && !empty($data['associations']) && $tmp->id != $event->id) {
 				$db = $this->getDatabase();
 
 				// Remove old associations
@@ -570,6 +538,38 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 				}
 
 				$db->setQuery($query)->execute();
+			}
+
+			// Check if the event is the main event
+			if (!$fields || $tmp->id == $event->id) {
+				continue;
+			}
+
+			// When modified events should not be updated and the modified date is different than the original event, ignore it
+			if (\array_key_exists('update_modified', $data)
+				&& (int)$data['update_modified'] === 0
+				&& $tmp->modified
+				&& $tmp->modified !== $event->modified) {
+				continue;
+			}
+
+			// Save the values on the child event
+			foreach ($fields as $field) {
+				$value = $field->value;
+				if (isset($data['com_fields']) && \array_key_exists($field->name, $data['com_fields'])) {
+					$value = $data['com_fields'][$field->name];
+				}
+
+				// The media field needs the data encoded
+				if ($field->type === 'media' && \is_array($value)) {
+					$value = json_encode($value);
+				}
+
+				if (\is_array($value) ? $value === [] : (string)$value === '') {
+					$value = null;
+				}
+
+				$fieldModel->setFieldValue($field->id, $tmp->id, $value);
 			}
 		}
 

@@ -32,6 +32,7 @@ $this->translator->translateJS('COM_DPCALENDAR_VIEW_BOOKING_ABORT_CONFIRM');
 	<form class="com-dpcalendar-booking__form dp-form form-validate" method="post" name="adminForm"
 		  action="<?php echo $this->router->route('index.php?option=com_dpcalendar&b_id=' . (int)$this->booking->id . $this->tmpl); ?>">
 		<?php echo $this->loadTemplate('payment'); ?>
+		<?php echo $this->booking->displayEvent->afterFormContent; ?>
 		<input type="hidden" name="task" class="dp-input dp-input-hidden">
 		<input type="hidden" name="tmpl" value="<?php echo $this->input->get('tmpl'); ?>" class="dp-input dp-input-hidden">
 		<?php echo HTMLHelper::_('form.token'); ?>

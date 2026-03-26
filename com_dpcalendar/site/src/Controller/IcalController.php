@@ -15,6 +15,7 @@ use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Mail\MailHelper;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\User\CurrentUserInterface;
@@ -81,15 +82,23 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 		}
 
 		// Download the ical content
-		header('Content-Type: text/calendar; charset=utf-8');
-		header('Content-disposition: attachment; filename="' . Path::clean($calendar->getTitle()) . '.ics"');
+		$app->setHeader('Content-Type', 'text/calendar; charset=utf-8', true);
+		$app->setHeader('Content-disposition', 'attachment; filename="' . Path::clean($calendar->getTitle()) . '.ics"', true);
 
-		echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Ical', 'Administrator')->createIcalFromCalendar($calendars, false);
+		$buffer = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Ical', 'Administrator')->createIcalFromCalendar($calendars, false);
+		$buffer = MailHelper::convertRelativeToAbsoluteUrls($buffer);
+		echo $buffer;
 
 		if ($loggedIn) {
 			$app->getSession()->set('user');
 		}
-		$app->close();
+
+		/* @deprecated no format is not supported */
+		if ($app->getInput()->get('format') !== 'raw') {
+			header('Content-Type: text/calendar; charset=utf-8');
+			header('Content-disposition: attachment; filename="' . Path::clean($calendar->getTitle()) . '.ics"');
+			$app->close();
+		}
 	}
 
 	private function login(string $token): bool

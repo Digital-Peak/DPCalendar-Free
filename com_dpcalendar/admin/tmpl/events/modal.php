@@ -16,6 +16,11 @@ use Joomla\CMS\Session\Session;
 $this->dpdocument->loadStyleFile('dpcalendar/views/adminlist/default.css');
 $this->dpdocument->loadScriptFile('views/adminlist/default.js');
 
+/** @var Joomla\CMS\WebAsset\WebAssetManager $wa */
+$wa = $this->getDocument()->getWebAssetManager();
+$wa->useScript('core')
+    ->useScript('modal-content-select');
+
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn  = $this->escape($this->state->get('list.direction'));
 

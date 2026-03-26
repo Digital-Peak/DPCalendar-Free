@@ -4,18 +4,20 @@
 	<packager>Digital Peak</packager>
 	<name>DPCalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>2026-02-26</creationDate>
+	<creationDate>2026-03-26</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html GNU/GPL</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>10.7.0</version>
+	<version>10.8.0</version>
 	<files>
 		<file id="plg_actionlog_dpcalendar" type="plugin" group="actionlog" client="site">plg_actionlog_dpcalendar.zip</file>
 		<file id="plg_content_dpcalendar" type="plugin" group="content" client="site">plg_content_dpcalendar.zip</file>
+		<file id="plg_editors-xtd_dpcalendar" type="plugin" group="quickicon" client="site">plg_editors-xtd_dpcalendar.zip</file>
 		<file id="plg_fields_dpcalendar" type="plugin" group="fields" client="site">plg_fields_dpcalendar.zip</file>
 		<file id="plg_installer_dpcalendar" type="plugin" group="installer" client="site">plg_installer_dpcalendar.zip</file>
 		<file id="plg_privacy_dpcalendar" type="plugin" group="privacy" client="site">plg_privacy_dpcalendar.zip</file>
+		<file id="plg_quickicon_dpcalendar" type="plugin" group="quickicon" client="site">plg_quickicon_dpcalendar.zip</file>
 		<file id="plg_user_dpcalendar" type="plugin" group="user" client="site">plg_user_dpcalendar.zip</file>
 		<file id="com_dpcalendar" type="component">com_dpcalendar.zip</file>
 	</files>

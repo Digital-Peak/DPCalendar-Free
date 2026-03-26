@@ -9,14 +9,33 @@ namespace DigitalPeak\Component\DPCalendar\Site\Controller;
 
 \defined('_JEXEC') or die();
 
+use Joomla\CMS\Application\CMSApplicationInterface;
+use Joomla\CMS\Factory;
+use Joomla\CMS\Form\Form;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Controller\BaseController;
+use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\User\CurrentUserInterface;
 use Joomla\CMS\User\CurrentUserTrait;
+use Joomla\Input\Input;
 
 class DisplayController extends BaseController implements CurrentUserInterface
 {
 	use CurrentUserTrait;
+
+	public function __construct($config = [], ?MVCFactoryInterface $factory = null, ?CMSApplicationInterface $app = null, ?Input $input = null)
+	{
+		$input = Factory::getApplication()->getInput();
+
+		if ($input->get('view') === 'events' && $input->get('layout') === 'modal') {
+			// Event frontpage Editor article proxying:
+			$config['base_path'] = JPATH_ADMINISTRATOR . '/components/com_dpcalendar';
+
+			Form::addFormPath(JPATH_ADMINISTRATOR . '/components/com_dpcalendar/forms');
+		}
+
+		parent::__construct($config, $factory, $app, $input);
+	}
 
 	public function display($cachable = false, $urlparams = [])
 	{

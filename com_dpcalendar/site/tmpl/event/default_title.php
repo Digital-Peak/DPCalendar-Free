@@ -24,9 +24,6 @@ $url = str_replace(['?tmpl=component', 'tmpl=component'], '', (string) $this->ro
 	<?php if ($this->event->state == 3) { ?>
 		<span class="com-dpcalendar-event__title_canceled"><?php echo $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?></span>
 	<?php } ?>
-	<?php if ($this->event->state == 4) { ?>
-		<span class="com-dpcalendar-event__title_reported"><?php echo $this->translate('COM_DPCALENDAR_FIELD_VALUE_REPORTED'); ?></span>
-	<?php } ?>
 	<?php if ($this->event->state == -2) { ?>
 		<span class="com-dpcalendar-event__title_trashed"><?php echo $this->translate('JTRASHED'); ?></span>
 	<?php } ?>

@@ -23,9 +23,6 @@ $event = $this->displayData['event'];
 	<?php if ($event->state == 3) { ?>
 		<span class="dp-event__title_canceled"><?php echo $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED'); ?></span>
 	<?php } ?>
-	<?php if ($event->state == 4) { ?>
-		<span class="dp-event__title_reported"><?php echo $this->translate('COM_DPCALENDAR_FIELD_VALUE_REPORTED'); ?></span>
-	<?php } ?>
 	<?php if ($event->state == -2) { ?>
 		<span class="dp-event__title_trashed"><?php echo $this->translate('JTRASHED'); ?></span>
 	<?php } ?>

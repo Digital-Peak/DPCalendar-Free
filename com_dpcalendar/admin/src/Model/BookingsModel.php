@@ -10,6 +10,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
@@ -73,20 +74,22 @@ class BookingsModel extends ListModel
 
 		// Joomla resets the start and end date
 		$search = $listRequestData['date_start'] ?? '';
-		try {
-			DPCalendarHelper::getDateFromString($search, null, true, $format);
-		} catch (\Exception $exception) {
-			if ($search) {
-				$app->enqueueMessage($exception->getMessage(), 'warning');
-			}
-			$search                        = '';
-			$listRequestData['date_start'] = '';
+		if ($search || !$app instanceof AdministratorApplication) {
+			try {
+				DPCalendarHelper::getDateFromString($search, null, true, $format);
+			} catch (\Exception $exception) {
+				if ($search) {
+					$app->enqueueMessage($exception->getMessage(), 'warning');
+				}
+				$search                        = '';
+				$listRequestData['date_start'] = '';
 
-			if ($app instanceof CMSWebApplicationInterface) {
-				$app->setUserState($this->context . '.list', $listRequestData);
+				if ($app instanceof CMSWebApplicationInterface) {
+					$app->setUserState($this->context . '.list', $listRequestData);
+				}
 			}
+			$this->setState('list.date_start', $search);
 		}
-		$this->setState('list.date_start', $search);
 
 		$search = $listRequestData['date_end'] ?? '';
 		if ($search) {

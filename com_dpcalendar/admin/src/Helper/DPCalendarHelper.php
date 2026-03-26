@@ -434,9 +434,6 @@ class DPCalendarHelper
 				case -2:
 					$status = 'JTRASHED';
 					break;
-				case -3:
-					$status = 'COM_DPCALENDAR_FIELD_VALUE_REPORTED';
-					break;
 			}
 			$variables['stateName'] = Text::_($status);
 
@@ -783,7 +780,7 @@ class DPCalendarHelper
 		foreach ($users as $userId) {
 			// @phpstan-ignore-next-line
 			$user = Factory::getUser($userId);
-			if ($user->id == $currentUser->id) {
+			if ($user->id == $currentUser->id || !$user->email) {
 				continue;
 			}
 

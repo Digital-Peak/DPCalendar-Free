@@ -85,12 +85,16 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 			return;
 		}
 
-		if (version_compare($version, '10.6.1', '<')) {
+		if (version_compare($version, '10.7.0', '<')) {
 			if (PHP_OS_FAMILY !== 'Windows' && file_exists(JPATH_ROOT . '/administrator/manifests/packages/pkg_DPCalendar.xml')) {
 				unlink(JPATH_ROOT . '/administrator/manifests/packages/pkg_DPCalendar.xml');
 			}
 
 			$this->run("update `#__extensions` set element = 'pkg_dpcalendar' where name = 'DPCalendar' and type = 'package'");
+		}
+
+		if (version_compare($version, '10.8.0', '<')) {
+			$this->run("update `#__extensions` set enabled = 1 where name = 'plg_quickicon_dpcalendar' or name = 'plg_editors-xtd_dpcalendar'");
 		}
 	}
 

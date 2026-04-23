@@ -573,6 +573,31 @@ INSERT INTO `#__dpcalendar_countries` (`short_code`, `state`) VALUES
 ('ZM', 1),
 ('ZW', 1);
 
+INSERT INTO #__mail_templates (`template_id`, `extension`, `language`, `subject`, `body`, `htmlbody`, `attachments`, `params`) VALUES
+('com_dpcalendar.event.create', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_CREATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_CREATE_BODY', '', ''),
+('com_dpcalendar.event.update', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_UPDATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_UPDATE_BODY', '', ''),
+('com_dpcalendar.event.update.ticket', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_UPDATE_TICKET_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_UPDATE_TICKET_BODY', '', ''),
+('com_dpcalendar.event.delete', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_DELETE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_DELETE_BODY', '', ''),
+('com_dpcalendar.event.author.update', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_UPDATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_UPDATE_BODY', '', ''),
+('com_dpcalendar.event.author.delete', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_DELETE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_DELETE_BODY', '', ''),
+('com_dpcalendar.event.ticketholders', 'com_dpcalendar', '', '{{{subject}}}', '', '{{{body}}}', '', ''),
+('com_dpcalendar.booking.create', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_BOOKING_CREATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_BOOKING_CREATE_BODY', '', ''),
+('com_dpcalendar.booking.update', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_BOOKING_UPDATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_BOOKING_UPDATE_BODY', '', ''),
+('com_dpcalendar.booking.delete', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_BOOKING_DELETE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_BOOKING_DELETE_BODY', '', ''),
+('com_dpcalendar.booking.invoice', 'com_dpcalendar', '', 'COM_DPCALENDAR_BOOK_NOTIFICATION_SEND_SUBJECT', '', 'COM_DPCALENDAR_BOOK_NOTIFICATION_SEND_BODY', '', ''),
+('com_dpcalendar.booking.user.new', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_BODY', '', ''),
+('com_dpcalendar.booking.user.pay', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_PAYED_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_PAYED_BODY', '', ''),
+('com_dpcalendar.booking.user.wait', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_WAITING_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_WAITING_BODY', '', ''),
+('com_dpcalendar.booking.user.invite', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_INVITE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_INVITE_BODY', '', ''),
+('com_dpcalendar.ticket.update', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_TICKET_UPDATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_TICKET_UPDATE_BODY', '', ''),
+('com_dpcalendar.ticket.checkin', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_TICKET_CHECKED_IN_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_TICKET_CHECKED_IN_BODY', '', ''),
+('com_dpcalendar.ticket.receipt', 'com_dpcalendar', '', 'COM_DPCALENDAR_TICKET_NOTIFICATION_SEND_SUBJECT', '', 'COM_DPCALENDAR_TICKET_NOTIFICATION_SEND_BODY', '', ''),
+('com_dpcalendar.location.create', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_LOCATION_CREATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_LOCATION_CREATE_BODY', '', ''),
+('com_dpcalendar.location.update', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_LOCATION_UPDATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_LOCATION_UPDATE_BODY', '', ''),
+('com_dpcalendar.location.delete', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_LOCATION_DELETE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_LOCATION_DELETE_BODY', '', '')
+ON DUPLICATE KEY UPDATE
+`subject` = VALUES(`subject`), `htmlbody` = VALUES(`htmlbody`);
+
 CREATE TABLE #__dpcalendar_caldav_calendarobjects (
     id INT UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
     calendardata MEDIUMBLOB,

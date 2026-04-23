@@ -9,17 +9,19 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 \defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Mail\MustacheMailTemplate;
 use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Mail\Exception\MailDisabledException;
-use Joomla\CMS\Mail\Mail;
-use Joomla\CMS\Mail\MailerInterface;
+use Joomla\CMS\User\UserFactoryAwareTrait;
+use Joomla\CMS\User\UserFactoryInterface;
 
 class SendInviteMail implements StageInterface
 {
-	public function __construct(private readonly MailerInterface $mailer)
+	use UserFactoryAwareTrait;
+
+	public function __construct(UserFactoryInterface $factory)
 	{
+		$this->setUserFactory($factory);
 	}
 
 	public function __invoke(\stdClass $payload): \stdClass
@@ -34,59 +36,18 @@ class SendInviteMail implements StageInterface
 			return $payload;
 		}
 
-		// Send a mail to the booker
-		$subject = DPCalendarHelper::renderEvents(
-			$payload->eventsWithTickets,
-			$payload->language->_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_INVITE_SUBJECT'),
-			null,
-			$payload->mailVariables
-		);
+		$mailer = new MustacheMailTemplate('booking.user.invite', ['events' => $payload->eventsWithTickets] + $payload->mailVariables);
+		$mailer->setCurrentUser($this->getUserFactory()->loadUserById($payload->item->user_id));
+		$mailer->setRecipient($payload->item->email);
 
-		$body = trim(
-			DPCalendarHelper::renderEvents(
-				$payload->eventsWithTickets,
-				$payload->language->_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_USER_INVITE_BODY'),
-				null,
-				$payload->mailVariables
-			)
-		);
-
-		if ($body !== '' && $body !== '0') {
-			$this->mailer->setSubject($subject);
-			$this->mailer->setBody($body);
-			$this->mailer->addRecipient($payload->item->email);
-			if ($this->mailer instanceof Mail) {
-				$this->mailer->IsHTML(true);
-			}
-
-			$files = [];
-			if ($payload->mailParams->get('booking_include_ics', 1)) {
-				$icsFile = JPATH_ROOT . '/tmp/' . $payload->item->uid . '.ics';
-				$content = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Ical', 'Administrator')->createIcalFromEvents($payload->eventsWithTickets, false, true);
-				$result  = file_put_contents($icsFile, $content);
-				if (!$content || $result === 0 || $result === false) {
-					$icsFile = null;
-				} else {
-					$this->mailer->addAttachment($icsFile);
-					$files[] = $icsFile;
-				}
-			}
-
-			try {
-				$this->mailer->Send();
-				foreach ($files as $file) {
-					unlink($file);
-				}
-			} catch (\Exception $e) {
-				foreach ($files as $file) {
-					unlink($file);
-				}
-
-				if (!$e instanceof MailDisabledException) {
-					throw $e;
-				}
+		if ($payload->mailParams->get('booking_include_ics', 1)) {
+			$content = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Ical', 'Administrator')->createIcalFromEvents($payload->eventsWithTickets, false, true);
+			if ($content) {
+				$mailer->addAttachment($payload->item->uid . '.ics', $content);
 			}
 		}
+
+		$mailer->send();
 
 		return $payload;
 	}

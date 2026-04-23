@@ -9,13 +9,9 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Booking\Stages;
 
 \defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Mail\MustacheMailTemplate;
+use DigitalPeak\Component\DPCalendar\Administrator\Mail\NotificationMailTrait;
 use DigitalPeak\Component\DPCalendar\Administrator\Pipeline\StageInterface;
-use Joomla\CMS\Factory;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Mail\Mail;
-use Joomla\CMS\Mail\MailerInterface;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\User\UserFactoryInterface;
@@ -23,14 +19,24 @@ use Joomla\CMS\User\UserFactoryInterface;
 class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 {
 	use UserFactoryAwareTrait;
+	use NotificationMailTrait;
 
-	public function __construct(private readonly MailerInterface $mailer, UserFactoryInterface $factory)
+	public function __construct(UserFactoryInterface $factory)
 	{
 		$this->setUserFactory($factory);
 	}
 
 	public function __invoke(\stdClass $payload): \stdClass
 	{
+		if (!$payload->oldItem) {
+			$this->sendNotificationMail(
+				'booking.create',
+				[$payload->item],
+				['events' => $payload->eventsWithTickets] + $payload->mailVariables,
+				$payload->mailParams->get('bookingsys_attendee_as_mail_from') ? $payload->item->email : ''
+			);
+		}
+
 		// Abort when we are in the creation process
 		if (\in_array($payload->item->state, [0, 2]) || empty($payload->eventsWithTickets)) {
 			return $payload;
@@ -46,36 +52,19 @@ class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 			return $payload;
 		}
 
-		// Send the notification to the groups
-		$subject = DPCalendarHelper::renderEvents(
-			$payload->eventsWithTickets,
-			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_SUBJECT'),
-			null,
-			$payload->mailVariables
-		);
-		$body = DPCalendarHelper::renderEvents(
-			$payload->eventsWithTickets,
-			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_BOOK_BODY'),
-			null,
-			$payload->mailVariables
-		);
-
-		$calendarGroups = [];
-		foreach ($payload->eventsWithTickets as $e) {
-			$calendar       = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($e->catid);
-			$calendarGroups = array_merge($calendarGroups, $calendar instanceof CalendarInterface ? $calendar->getParams()->get('notification_groups_book', []) : []);
-		}
-		$emails = DPCalendarHelper::sendMail(
-			$subject,
-			$body,
-			'notification_groups_book',
-			$calendarGroups,
-			$payload->mailParams->get('bookingsys_attendee_as_mail_from') ? $payload->item->email : null
+		$emails = $this->sendNotificationMail(
+			'booking.update',
+			[$payload->item],
+			['events' => $payload->eventsWithTickets] + $payload->mailVariables,
+			$payload->mailParams->get('bookingsys_attendee_as_mail_from') ? $payload->item->email : ''
 		);
 
 		if (!$payload->mailParams->get('booking_send_mail_author', 1)) {
 			return $payload;
 		}
+
+		$mailer = new MustacheMailTemplate('booking.update', ['events' => $payload->eventsWithTickets] + $payload->mailVariables);
+		$mailer->setCurrentUser($this->getCurrentUser());
 
 		// Send to the authors of the events
 		$authors = [];
@@ -93,22 +82,9 @@ class SendNotificationMail implements StageInterface, UserFactoryAwareInterface
 		}
 
 		foreach ($authors as $authorId) {
-			$mailer = $this->mailer;
-
-			if ($payload->mailParams->get('bookingsys_attendee_as_mail_from')) {
-				$mailer->setSender($payload->item->email);
-			}
-
-			$mailer->setSubject($subject);
-			$mailer->setBody($body);
-			$mailer->addRecipient($this->getUserFactory()->loadUserById($authorId)->email);
-			if ($mailer instanceof Mail) {
-				$mailer->IsHTML(true);
-			}
-			try {
-				$mailer->Send();
-			} catch (\Exception) {
-			}
+			$author = $this->getUserFactory()->loadUserById($authorId);
+			$mailer->setRecipient($author->email);
+			$mailer->send();
 		}
 
 		return $payload;

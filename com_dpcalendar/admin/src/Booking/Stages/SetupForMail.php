@@ -57,7 +57,6 @@ class SetupForMail implements StageInterface
 			'bookingCancelLink'  => RouteHelper::getBookingRoute($payload->item, true) . '&action=cancel',
 			'bookingUid'         => $payload->item->uid,
 			'bookingStatusLabel' => Booking::getStatusLabel($payload->item),
-			'sitename'           => $this->application->get('sitename'),
 			'user'               => $payload->item->first_name . ' ' . $payload->item->name,
 			'tickets'            => $payload->tickets,
 			'countTickets'       => $payload->tickets ? \count($payload->tickets) : 0,
@@ -71,7 +70,7 @@ class SetupForMail implements StageInterface
 			}
 		}
 
-		if ($payload->eventsWithTickets) {
+		if (!empty($payload->eventsWithTickets)) {
 			foreach ($payload->eventsWithTickets as $event) {
 				$event->text = $event->description;
 				$this->application->triggerEvent('onContentPrepare', ['com_dpcalendar.event', &$event, &$params, 0]);

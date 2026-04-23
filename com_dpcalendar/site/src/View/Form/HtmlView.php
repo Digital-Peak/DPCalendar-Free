@@ -190,7 +190,14 @@ class HtmlView extends BaseView
 			}
 
 			foreach ($this->form->getFieldset($name) as $field) {
-				$hiddenFields[] = ($group !== null ? $group . ':' : '') . DPCalendarHelper::getFieldName($field);
+				$fieldName = $field->fieldname;
+
+				// Compile the name normally when not an association field
+				if ($name !== 'item_associations') {
+					$fieldName = DPCalendarHelper::getFieldName($field);
+				}
+
+				$hiddenFields[] = ($group !== null ? $group . ':' : '') . $fieldName;
 			}
 		}
 

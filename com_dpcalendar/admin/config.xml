@@ -769,6 +769,7 @@
 			<option value="images:images">COM_DPCALENDAR_IMAGES</option>
 			<option value="params:jbasic">COM_DPCALENDAR_FIELDSET_OPTIONS</option>
 			<option value="metadata:jmetadata">JGLOBAL_FIELDSET_METADATA_OPTIONS</option>
+			<option value="associations:item_associations">JGLOBAL_FIELDSET_ASSOCIATIONS</option>
 		</field>
 		<field name="event_form_hidden_fields" type="dpcfields" multiple="true" layout="joomla.form.field.list-fancy-select"
 			section="event" hide="id,start_date,end_date,scheduling_*,checked_out*,options,notify_changes,update_modified"
@@ -1775,28 +1776,31 @@
 			label="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCEL_PAID_TEXT_LABEL"
 			description="COM_DPCALENDAR_FIELD_CONFIG_BOOKINGSYS_CANCEL_PAID_TEXT_DESC"/>
 	</fieldset>
-	<fieldset name="component" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_LABEL">^
-		<field name="notification_groups_create" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_CREATE_DESC"/>
-		<field name="notification_groups_edit" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_EDIT_DESC"/>
-		<field name="notification_groups_delete" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_DELETE_DESC"/>
-		<field name="notification_groups_book" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_BOOK_DESC"/>
-		<field name="notification_groups_location_create" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
-			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_NOTIFICATION_LOCATION_CREATE_DESC"/>
-		<field name="notification_author" type="list" default="0"
-			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_LABEL"
-			description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DESC">
-			<option value="0">JNO</option>
-			<option value="1">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DIFFERENT_USER</option>
-			<option value="2">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_ALWAYS</option>
+	<fieldset name="component" label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_LABEL">
+		<field name="component_notifications" type="subform" multiple="true"
+			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_DESC">
+			<form>
+				<field name="action" type="list"
+					label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION">
+					<option value="com_dpcalendar.event.create">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_EVENT_CREATE</option>
+					<option value="com_dpcalendar.event.update">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_EVENT_EDIT</option>
+					<option value="com_dpcalendar.event.delete">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_EVENT_DELETE</option>
+					<option value="com_dpcalendar.booking.create">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_BOOKING_CREATE</option>
+					<option value="com_dpcalendar.booking.update">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_BOOKING_EDIT</option>
+					<option value="com_dpcalendar.booking.delete">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_BOOKING_DELETE</option>
+					<option value="com_dpcalendar.location.create">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_LOCATION_CREATE</option>
+					<option value="com_dpcalendar.location.update">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_LOCATION_UPDATE</option>
+					<option value="com_dpcalendar.location.delete">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_ACTION_LOCATION_DELETE</option>
+				</field>
+				<field name="groups" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select"
+					label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_GROUPS"/>
+				<field name="author" type="list" default="0" showon="action:com_dpcalendar.event.update,com_dpcalendar.event.delete"
+					label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR">
+					<option value="0">JNO</option>
+					<option value="1">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DIFFERENT_USER</option>
+					<option value="2">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_ALWAYS</option>
+				</field>
+			</form>
 		</field>
 		<field name="captcha_groups" type="usergrouplist" multiple="true" layout="joomla.form.field.list-fancy-select" default="1"
 			label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_GROUPS_CAPTCHA_LABEL"

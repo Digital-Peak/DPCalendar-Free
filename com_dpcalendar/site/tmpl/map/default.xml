@@ -319,6 +319,7 @@
 				<option value="images:images">COM_DPCALENDAR_IMAGES</option>
 				<option value="params:jbasic">COM_DPCALENDAR_FIELDSET_OPTIONS</option>
 				<option value="metadata:jmetadata">JGLOBAL_FIELDSET_METADATA_OPTIONS</option>
+				<option value="associations:item_associations">JGLOBAL_FIELDSET_ASSOCIATIONS</option>
 			</field>
 			<field name="event_form_hidden_fields" type="dpcfields" multiple="true" layout="joomla.form.field.list-fancy-select"
 				section="event" hide="id,start_date,end_date,scheduling_*,checked_out*,options,notify_changes,update_modified"

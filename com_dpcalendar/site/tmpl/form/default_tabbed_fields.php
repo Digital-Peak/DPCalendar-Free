@@ -7,6 +7,7 @@
 
 \defined('_JEXEC') or die();
 
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 ?>
 <div class="com-dpcalendar-eventform__tabbed-fields dp-tabs">
 	<?php $checked = 'checked="checked"'; ?>
@@ -21,7 +22,7 @@
 		</label>
 		<div class="dp-tabs__tab dp-tabs__tab-<?php echo $name; ?>">
 			<?php foreach ($fields as $field) { ?>
-				<?php echo $field->renderField(['class' => \DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper::getFieldName($field, true)]); ?>
+				<?php echo $field->renderField(['class' => DPCalendarHelper::getFieldName($field, true)]); ?>
 			<?php } ?>
 			<?php if ($name == 'location'
 				&& !in_array('location_ids', $this->params->get('event_form_hidden_fields', []))

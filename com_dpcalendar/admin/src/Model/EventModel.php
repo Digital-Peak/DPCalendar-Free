@@ -11,6 +11,8 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Mail\MustacheMailTemplate;
+use DigitalPeak\Component\DPCalendar\Administrator\Mail\NotificationMailTrait;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BasicTable;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
@@ -20,16 +22,10 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Associations;
-use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\LanguageHelper;
 use Joomla\CMS\Language\Text;
-use Joomla\CMS\Mail\Exception\MailDisabledException;
-use Joomla\CMS\Mail\Mail;
-use Joomla\CMS\Mail\MailerFactoryAwareInterface;
-use Joomla\CMS\Mail\MailerFactoryAwareTrait;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
-use Joomla\CMS\User\User;
 use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\Versioning\VersionableModelTrait;
@@ -38,11 +34,11 @@ use Joomla\Database\ParameterType;
 use Joomla\Registry\Registry;
 use Joomla\Utilities\ArrayHelper;
 
-class EventModel extends AdminModel implements MailerFactoryAwareInterface, UserFactoryAwareInterface
+class EventModel extends AdminModel implements UserFactoryAwareInterface
 {
-	use MailerFactoryAwareTrait;
 	use UserFactoryAwareTrait;
 	use VersionableModelTrait;
+	use NotificationMailTrait;
 
 	public $typeAlias = 'com_dpcalendar.event';
 
@@ -617,49 +613,25 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		}
 
 		$event->jcfields = $fields;
-		$this->sendMail($this->getState($this->getName() . '.new') ? 'create' : 'edit', [$event]);
+
+		$this->sendNotificationMail('event.' . ($this->getState($this->getName() . '.new') ? 'create' : 'update'), [$event]);
 
 		// Notify the ticket holders
-		if (\array_key_exists('notify_changes', $data) && $data['notify_changes']) {
-			$langs   = [$app->getLanguage()->getTag() => $app->getLanguage()];
-			$tickets = $this->getTickets($event->id);
-			foreach ($tickets as $ticket) {
-				$language = $app->getLanguage()->getTag();
-				if ($ticket->user_id) {
-					$language = $this->getUserFactory()->loadUserById($ticket->user_id)->getParam('language') ?: $language;
+		if (!\array_key_exists('notify_changes', $data) || !$data['notify_changes']) {
+			return $success;
+		}
 
-					if (!\array_key_exists($language, $langs)) {
-						// @phpstan-ignore-next-line
-						$l = Language::getInstance($language, $app->get('debug_lang'));
-						$l->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-						$langs[$l->getTag()] = $l;
-					}
-				}
+		foreach ($this->getTickets($event->id) as $ticket) {
+			$mailer = new MustacheMailTemplate(
+				'event.update.ticket',
+				['events' => [$event], 'ticketLink' => RouteHelper::getTicketRoute($ticket, true)]
+			);
+			$mailer->setCurrentUser($this->getUserFactory()->loadUserById($ticket->user_id));
+			$mailer->setRecipient($ticket->email);
 
-				$subject = DPCalendarHelper::renderEvents([$event], $langs[$language]->_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_EDIT'));
-
-				$body = DPCalendarHelper::renderEvents(
-					[$event],
-					$langs[$language]->_('COM_DPCALENDAR_NOTIFICATION_EVENT_EDIT_TICKETS_BODY'),
-					null,
-					[
-						'ticketLink' => RouteHelper::getTicketRoute($ticket, true),
-						'sitename'   => Factory::getApplication()->get('sitename'),
-						'user'       => $this->getCurrentUser()->name
-					]
-				);
-
-				$mailer = $this->getMailerFactory()->createMailer();
-				$mailer->setSubject($subject);
-				$mailer->setBody($body);
-				$mailer->addRecipient($ticket->email);
-				if ($mailer instanceof Mail) {
-					$mailer->IsHTML(true);
-				}
-				$app->triggerEvent('onDPCalendarBeforeSendMail', ['com_dpcalendar.event.save.notify.tickets', $mailer, $ticket]);
-				$mailer->Send();
-				$app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.event.save.notify.tickets', $mailer, $ticket]);
-			}
+			$app->triggerEvent('onDPCalendarBeforeSendMail', ['com_dpcalendar.event.save.notify.tickets', $mailer->getMailerInstance(), $ticket]);
+			$mailer->send();
+			$app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.event.save.notify.tickets', $mailer->getMailerInstance(), $ticket]);
 		}
 
 		return $success;
@@ -762,16 +734,16 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 	public function publish(&$pks, $value = 1)
 	{
 		$success = parent::publish($pks, $value);
-
-		if ($success) {
-			$events = [];
-			foreach ($pks as $pk) {
-				$event    = $this->getItem($pk);
-				$events[] = $event;
-			}
-
-			$this->sendMail('edit', $events);
+		if (!$success) {
+			return $success;
 		}
+
+		$events = [];
+		foreach ($pks as $pk) {
+			$events[] = $this->getItem($pk);
+		}
+
+		$this->sendNotificationMail('event.update', $events);
 
 		return $success;
 	}
@@ -781,14 +753,12 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		$pks    = (array)$pks;
 		$events = [];
 		foreach ($pks as $pk) {
-			$event    = $this->getItem($pk);
-			$events[] = $event;
+			$events[] = $this->getItem($pk);
 		}
 
 		$success = parent::delete($pks);
-
 		if ($success) {
-			$this->sendMail('delete', $events);
+			$this->sendNotificationMail('event.delete', $events);
 		}
 
 		return $success;
@@ -947,112 +917,5 @@ class EventModel extends AdminModel implements MailerFactoryAwareInterface, User
 		}
 
 		return $params;
-	}
-
-	private function sendMail(string $action, array $events): void
-	{
-		// The current user
-		$user = $this->getCurrentUser();
-
-		// The event authors
-		$authors = [];
-
-		// The event calendars
-		$calendarGroups = [];
-
-		// We don't send notifications when an event is external
-		foreach ($events as $event) {
-			if (!is_numeric($event->catid)) {
-				return;
-			}
-
-			if (($calendar = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid)) instanceof CalendarInterface) {
-				$calendarGroups = array_merge($calendarGroups, $calendar->getParams()->get('notification_groups_' . $action, []));
-			}
-
-			if (($user->id != $event->created_by && DPCalendarHelper::getComponentParameter('notification_author', 0) == 1)
-				|| DPCalendarHelper::getComponentParameter('notification_author', 0) == 2) {
-				$authors[] = $event->created_by;
-			}
-		}
-
-		// Load the language
-		Factory::getApplication()->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-
-		// Create the subject
-		$subject = DPCalendarHelper::renderEvents($events, Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_SUBJECT_' . strtoupper($action)));
-
-		// Create the body
-		$body = DPCalendarHelper::renderEvents(
-			$events,
-			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_' . strtoupper($action) . '_BODY'),
-			null,
-			[
-				'sitename' => Factory::getApplication()->get('sitename'),
-				'user'     => $user->name
-			]
-		);
-
-		// Send the notification to the groups
-		DPCalendarHelper::sendMail($subject, $body, 'notification_groups_' . $action, $calendarGroups);
-
-		// Check if authors should get a mail
-		if ($authors === [] || !DPCalendarHelper::getComponentParameter('notification_author', 0)) {
-			return;
-		}
-
-		$authors = array_unique($authors);
-
-		$extraVars = [
-			'sitename' => Factory::getApplication()->get('sitename'),
-			'user'     => $user->name
-		];
-
-		// Create the subject
-		$subject = DPCalendarHelper::renderEvents(
-			$events,
-			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_SUBJECT_' . strtoupper($action)),
-			null,
-			$extraVars
-		);
-
-		// Create the body
-		$body = DPCalendarHelper::renderEvents(
-			$events,
-			Text::_('COM_DPCALENDAR_NOTIFICATION_EVENT_AUTHOR_' . strtoupper($action) . '_BODY'),
-			null,
-			$extraVars
-		);
-
-		if ($subject === '' || $subject === '0' || ($body === '' || $body === '0')) {
-			return;
-		}
-
-		$app = Factory::getApplication();
-
-		// Loop over the authors to send the notification
-		foreach ($authors as $author) {
-			$u = User::getTable();
-
-			// Load the user
-			if (!$u->load($author)) {
-				continue;
-			}
-
-			// Send the mail
-			$mailer = $this->getMailerFactory()->createMailer();
-			$mailer->setSubject($subject);
-			$mailer->setBody($body);
-			$mailer->addRecipient($u->email);
-			if ($mailer instanceof Mail) {
-				$mailer->IsHTML(true);
-			}
-			$app->triggerEvent('onDPCalendarBeforeSendMail', ['com_dpcalendar.event.save.author', $mailer, $events]);
-			try {
-				$mailer->Send();
-			} catch (MailDisabledException) {
-			}
-			$app->triggerEvent('onDPCalendarAfterSendMail', ['com_dpcalendar.event.save.author', $mailer, $events]);
-		}
 	}
 }

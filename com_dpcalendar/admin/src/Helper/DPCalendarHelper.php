@@ -20,8 +20,6 @@ use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Language\Language;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Layout\LayoutHelper;
-use Joomla\CMS\Mail\Exception\MailDisabledException;
-use Joomla\CMS\Mail\Mail;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\Response\JsonResponse;
 use Joomla\CMS\Router\Route;
@@ -749,62 +747,6 @@ class DPCalendarHelper
 		echo new JsonResponse($data);
 
 		Factory::getApplication()->close();
-	}
-
-	/**
-	 * Sends a mail to all users of the given component parameter groups.
-	 * The user objects are returned where a mail is sent to.
-	 */
-	public static function sendMail(string $subject, string $message, string $parameter, array $additionalGroups = [], ?string $fromMail = null): array
-	{
-		$groups = self::getComponentParameter($parameter);
-
-		if (!\is_array($groups)) {
-			$groups = [$groups];
-		}
-
-		$groups = array_unique(array_filter(array_merge($groups, $additionalGroups)));
-		if ($groups === []) {
-			return [];
-		}
-
-		$users = [];
-		foreach ($groups as $groupId) {
-			$users = array_merge($users, Access::getUsersByGroup($groupId));
-		}
-
-		// @phpstan-ignore-next-line
-		$currentUser = Factory::getUser();
-		$users       = array_unique($users);
-		$userMails   = [];
-		foreach ($users as $userId) {
-			// @phpstan-ignore-next-line
-			$user = Factory::getUser($userId);
-			if ($user->id == $currentUser->id || !$user->email) {
-				continue;
-			}
-
-			// @phpstan-ignore-next-line
-			$mailer = Factory::getMailer();
-
-			if (!\in_array($fromMail, [null, '', '0'], true)) {
-				$mailer->setSender($fromMail);
-				$mailer->Sender = $fromMail;
-			}
-
-			$mailer->setSubject($subject);
-			$mailer->setBody($message);
-			$mailer->IsHTML(true);
-			$mailer->addRecipient($user->email);
-
-			try {
-				$mailer->Send();
-				$userMails[$userId] = $user;
-			} catch (MailDisabledException) {
-			}
-		}
-
-		return $userMails;
 	}
 
 	/**

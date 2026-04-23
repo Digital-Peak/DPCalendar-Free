@@ -10,6 +10,7 @@ namespace DigitalPeak\Component\DPCalendar\Site\Model;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Mail\MustacheMailTemplate;
 use DigitalPeak\Component\DPCalendar\Administrator\Model\EventModel;
 use Joomla\CMS\Access\Access;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
@@ -100,28 +101,23 @@ class FormModel extends EventModel implements UserFactoryAwareInterface
 		// Flag if only the author should get a mail
 		$onlyAuthor = $ticketIds === [-1];
 
-		$subject = DPCalendarHelper::renderEvents([$event], $subject);
-		$body    = DPCalendarHelper::renderEvents([$event], $body);
-
 		if ($app instanceof CMSWebApplicationInterface) {
 			$app->setUserState('com_dpcalendar.form.event.mailticketsdata.subject', $subject);
 			$app->setUserState('com_dpcalendar.form.event.mailticketsdata.message', $body);
 		}
 
+		$subject = DPCalendarHelper::renderEvents([$event], $subject);
+		$body    = DPCalendarHelper::renderEvents([$event], $body);
+
+		$mailer = new MustacheMailTemplate('event.ticketholders', ['events' => [$event], 'subject' => $subject, 'body' => $body]);
+		$mailer->setReplyTo($this->getCurrentUser()->email);
 		foreach ($event->tickets as $ticket) {
 			if ($ticketIds && !\in_array($ticket->id, $ticketIds) && !$onlyAuthor) {
 				continue;
 			}
 
-			$mailer = $this->getMailerFactory()->createMailer();
-			$mailer->addReplyTo($this->getCurrentUser()->email);
-			$mailer->setSubject($subject);
-			$mailer->setBody($body);
-			$mailer->addRecipient($onlyAuthor ? $this->getCurrentUser()->email : $ticket->email);
-			if ($mailer instanceof Mail) {
-				$mailer->IsHTML(true);
-			}
-			$mailer->Send();
+			$mailer->setRecipient($onlyAuthor ? $this->getCurrentUser()->email : $ticket->email);
+			$mailer->send();
 
 			if ($onlyAuthor) {
 				break;

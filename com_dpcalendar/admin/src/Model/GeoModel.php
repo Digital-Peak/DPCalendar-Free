@@ -451,7 +451,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 			}
 
 			$item->value = $address->lat . ',' . $address->lon;
-			$item->title = $address->name ?? $item->title;
+			$item->title = empty($address->name) ? $item->title : $address->name;
 			// $address->display_name is a comma separated list, so when the name is empty that list is the title
 			$item->details = empty($address->name) ? '' : ($address->display_name ?? '');
 

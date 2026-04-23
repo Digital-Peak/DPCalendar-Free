@@ -12,6 +12,8 @@
 			label="COM_DPCALENDAR_TICKET_FIELD_EVENT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_EVENT_DESC"/>
 		<field name="user_id" type="user"
 			label="COM_DPCALENDAR_BOOKING_FIELD_USER_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_USER_DESC"/>
+		<field name="book_date" type="calendar" filter="user_utc" translateformat="true" showtime="true"
+			label="COM_DPCALENDAR_BOOKING_FIELD_BOOK_DATE_LABEL"/>
 
 		<field name="state" type="list" default="1" label="JSTATUS">
 			<option value="1">COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED</option>
@@ -63,11 +65,11 @@
 			label="COM_DPCALENDAR_BOOKING_FIELD_PAYMENT_PROVIDER_LABEL"/>
 		<field name="payment_provider_fee" type="text" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_PAYMENT_PROVIDER_FEE_LABEL"/>
+		<field name="transaction_id" type="text" readonly="true" disabled="true"
+			label="COM_DPCALENDAR_BOOKING_FIELD_TRANSACTION_ID_LABEL"/>
 		<field name="amount" type="integer" first="0" last="1" step="1" default="0"
 			label="COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_AMOUNT_DESC">
 		</field>
-		<field name="book_date" type="hidden" disabled="true"
-			label="COM_DPCALENDAR_CREATED_DATE"/>
 
 		<field name="coupon_id" type="text" class="dp-form-input"
 			label="COM_DPCALENDAR_BOOKING_FIELD_COUPON_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_COUPON_DESC"/>
@@ -87,9 +89,6 @@
 			<option value="1">JYES</option>
 			<option value="0">JNO</option>
 		</field>
-
-		<field name="transaction_id" type="text"
-			label="COM_DPCALENDAR_BOOKING_FIELD_TRANSACTION_ID_LABEL"/>
 		<field name="net_amount" type="hidden" readonly="true" default="0"
 			label="COM_DPCALENDAR_BOOKING_FIELD_NET_AMOUNT_LABEL" description="COM_DPCALENDAR_BOOKING_FIELD_NET_AMOUNT_DESC"/>
 		<field name="options" type="text" class="dp-form-input"

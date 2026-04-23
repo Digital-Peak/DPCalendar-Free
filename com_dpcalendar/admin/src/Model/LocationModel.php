@@ -10,6 +10,7 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Model;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use DigitalPeak\Component\DPCalendar\Administrator\Mail\NotificationMailTrait;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\BasicTable;
 use DigitalPeak\Component\DPCalendar\Administrator\Table\LocationTable;
 use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
@@ -23,12 +24,15 @@ use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Uri\Uri;
+use Joomla\CMS\User\UserFactoryAwareInterface;
 use Joomla\Registry\Registry;
 use Joomla\String\StringHelper;
 use Joomla\Utilities\ArrayHelper;
 
-class LocationModel extends AdminModel
+class LocationModel extends AdminModel implements UserFactoryAwareInterface
 {
+	use NotificationMailTrait;
+
 	protected $text_prefix = 'COM_DPCALENDAR_LOCATION';
 
 	protected $batch_commands = [
@@ -167,41 +171,26 @@ class LocationModel extends AdminModel
 		}
 
 		$success = parent::save($data);
+		if (!$success) {
+			return $success;
+		}
 
-		if ($success && $this->getState('location.new') === true) {
+		if ($this->getState('location.new') === true) {
 			$data['id'] = $this->getState('location.id');
 			if ($app instanceof CMSWebApplicationInterface) {
 				$app->setUserState('dpcalendar.location.id', $data['id']);
 			}
-
-			// Load the language
-			$app->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR . '/components/com_dpcalendar');
-
-			// Create the subject
-			$subject = DPCalendarHelper::renderEvents(
-				[],
-				Text::_('COM_DPCALENDAR_NOTIFICATION_LOCATION_SUBJECT_CREATE'),
-				null,
-				['location' => $data]
-			);
-
-			// Create the body
-			$body = DPCalendarHelper::renderEvents(
-				[],
-				Text::_('COM_DPCALENDAR_NOTIFICATION_LOCATION_CREATE_BODY'),
-				null,
-				[
-					'location'         => $data,
-					'backLinkFull'     => RouteHelper::getLocationRoute((object)$data, true),
-					'formattedAddress' => $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->format([(object)$data]),
-					'sitename'         => Factory::getApplication()->get('sitename'),
-					'user'             => $this->getCurrentUser()->name
-				]
-			);
-
-			// Send the notification to the groups
-			DPCalendarHelper::sendMail($subject, $body, 'notification_groups_location_create');
 		}
+
+		$this->sendNotificationMail(
+			'location.' . ($this->getState('location.new') ? 'create' : 'edit'),
+			[(object)$data],
+			[
+				'location'         => $data,
+				'backLinkFull'     => RouteHelper::getLocationRoute((object)$data, true),
+				'formattedAddress' => $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->format([(object)$data]),
+			]
+		);
 
 		return $success;
 	}
@@ -354,12 +343,42 @@ class LocationModel extends AdminModel
 	public function delete(&$pks)
 	{
 		$success = parent::delete($pks);
-		if ($success) {
-			// Delete associations
-			$pks = ArrayHelper::toInteger($pks);
-			$this->getDatabase()->setQuery('delete from #__dpcalendar_events_location where location_id in (' . implode(',', $pks) . ')');
-			$this->getDatabase()->execute();
+		if (!$success) {
+			return $success;
 		}
+
+		// Delete associations
+		$pks = ArrayHelper::toInteger($pks);
+		$this->getDatabase()->setQuery('delete from #__dpcalendar_events_location where location_id in (' . implode(',', ArrayHelper::toInteger($pks)) . ')');
+		$this->getDatabase()->execute();
+
+		$locations = [];
+		foreach ($pks as $pk) {
+			$locations[] = $this->getItem($pk);
+		}
+
+		$this->sendNotificationMail('location.delete', $locations, [
+			'location'         => $locations[0],
+			'formattedAddress' => $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->format($locations),
+		]);
+
+		return $success;
+	}
+
+	public function publish(&$pks, $value = 1)
+	{
+		$success = parent::publish($pks, $value);
+		if (!$success) {
+			return $success;
+		}
+
+		$locations = [];
+		foreach ($pks as $pk) {
+			$locations[] = $this->getItem($pk);
+		}
+		$this->sendNotificationMail('location.update', $locations, [
+			'formattedAddress' => $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->format($locations),
+		]);
 
 		return $success;
 	}

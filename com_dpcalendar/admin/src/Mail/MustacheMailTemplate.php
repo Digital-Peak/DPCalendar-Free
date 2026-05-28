@@ -23,6 +23,8 @@ class MustacheMailTemplate extends MailTemplate
 {
 	use CurrentUserTrait;
 
+	private static array $languageCache = [];
+
 	public function __construct(string $templateId, array $templateData)
 	{
 		parent::__construct((str_starts_with($templateId, 'plg_') ? '' : 'com_dpcalendar.') . $templateId, '');
@@ -42,7 +44,7 @@ class MustacheMailTemplate extends MailTemplate
 		$app->triggerEvent('onDPCalendarBeforeSendMail', [$this->template_id, $this->getMailerInstance(), $this->data]);
 
 		if ($this->language && $this->language !== $app->getLanguage()->getTag()) {
-			$lang = Factory::getContainer()->get(LanguageFactoryInterface::class)->createLanguage($this->language, $app->get('debug_lang'));
+			$lang = self::$languageCache[$this->language] ?? Factory::getContainer()->get(LanguageFactoryInterface::class)->createLanguage($this->language, $app->get('debug_lang'));
 
 			$extension = explode('.', $this->template_id, 2)[0];
 			switch (substr($extension, 0, 3)) {
@@ -57,6 +59,8 @@ class MustacheMailTemplate extends MailTemplate
 					$lang->load($extension, JPATH_ADMINISTRATOR . '/components/' . $extension, $this->language);
 					break;
 			}
+
+			self::$languageCache[$this->language] = $lang;
 
 			// @phpstan-ignore-next-line
 			Factory::$language = $lang;

@@ -16,6 +16,7 @@ use Joomla\CMS\Factory;
 use Joomla\CMS\Filter\InputFilter;
 use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Image\Image;
+use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\Tag\TaggableTableInterface;
 use Joomla\CMS\Tag\TaggableTableTrait;
@@ -790,15 +791,21 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 			$pk = $this->id;
 		}
 
+		$ids = [$pk];
+		if (Associations::isEnabled()) {
+			$associations = Associations::getAssociations('com_dpcalendar', '#__dpcalendar_events', 'com_dpcalendar.item', (int)$pk);
+			$ids          = array_merge($ids, array_column($associations, 'id'));
+		}
+
 		$query = $this->getDatabase()->getQuery(true);
 		$query->update($this->_tbl);
 		$query->set('capacity_used = (capacity_used ' . ($increment ? '+' : '-') . ' 1)');
-		$query->where('(id = ' . (int)$pk . ' or (original_id = ' . (int)$pk . ' and booking_series = 1))');
+		$query->where('(id in (' . implode(',', ArrayHelper::toInteger($ids)) . ') or (original_id = ' . (int)$pk . ' and booking_series = 1))');
 		if (!$increment) {
 			$query->where('capacity_used > 0');
 		}
-		$this->getDatabase()->setQuery($query);
-		$this->getDatabase()->execute();
+
+		$this->getDatabase()->setQuery($query)->execute();
 
 		if ($this->capacity_used === null) {
 			$this->capacity_used = 0;

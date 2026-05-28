@@ -27,7 +27,6 @@ use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Model\AdminModel;
 use Joomla\CMS\Plugin\PluginHelper;
 use Joomla\CMS\User\UserFactoryAwareInterface;
-use Joomla\CMS\User\UserFactoryAwareTrait;
 use Joomla\CMS\Versioning\VersionableModelTrait;
 use Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
 use Joomla\Database\ParameterType;
@@ -36,7 +35,6 @@ use Joomla\Utilities\ArrayHelper;
 
 class EventModel extends AdminModel implements UserFactoryAwareInterface
 {
-	use UserFactoryAwareTrait;
 	use VersionableModelTrait;
 	use NotificationMailTrait;
 
@@ -481,9 +479,11 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 		$allIds         = $oldEventIds;
 		foreach ($rows as $tmp) {
 			$allIds[(int)$tmp->id] = (int)$tmp->id;
+
 			foreach ($locationIds as $location) {
 				$locationValues .= '(' . (int)$tmp->id . ',' . (int)$location . '),';
 			}
+
 			foreach ($hostIds as $host) {
 				$hostsValues .= '(' . (int)$tmp->id . ',' . (int)$host . '),';
 			}
@@ -509,31 +509,29 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 				$db->setQuery($query);
 
 				$associatedEvents = $db->loadObjectList();
-				if ($associatedEvents === []) {
-					continue;
-				}
+				if ($associatedEvents !== []) {
+					$query        = $db->getQuery(true)->insert('#__associations');
+					$associations = [$tmp->language => $tmp->id];
+					foreach ($associatedEvents as $associatedEvent) {
+						$associations[$associatedEvent->language] = $associatedEvent->id;
+					}
 
-				$query        = $db->getQuery(true)->insert('#__associations');
-				$associations = [$tmp->language => $tmp->id];
-				foreach ($associatedEvents as $associatedEvent) {
-					$associations[$associatedEvent->language] = $associatedEvent->id;
-				}
+					$key = md5(json_encode($associations) ?: '');
 
-				$key = md5(json_encode($associations) ?: '');
-
-				foreach ($associations as $id) {
-					$query->values(
-						implode(
-							',',
-							$query->bindArray(
-								[$id, 'com_dpcalendar.item', $key],
-								[ParameterType::INTEGER, ParameterType::STRING, ParameterType::STRING]
+					foreach ($associations as $id) {
+						$query->values(
+							implode(
+								',',
+								$query->bindArray(
+									[$id, 'com_dpcalendar.item', $key],
+									[ParameterType::INTEGER, ParameterType::STRING, ParameterType::STRING]
+								)
 							)
-						)
-					);
-				}
+						);
+					}
 
-				$db->setQuery($query)->execute();
+					$db->setQuery($query)->execute();
+				}
 			}
 
 			// Check if the event is the main event
@@ -556,8 +554,8 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 					$value = $data['com_fields'][$field->name];
 				}
 
-				// The media field needs the data encoded
-				if ($field->type === 'media' && \is_array($value)) {
+				// The media and subform field needs the data encoded
+				if (\in_array($field->type, ['subform', 'media']) && \is_array($value)) {
 					$value = json_encode($value);
 				}
 
@@ -867,6 +865,9 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 		}
 		if (!isset($item->booking_waiting_list)) {
 			$data['booking_waiting_list'] = $params->get('event_form_booking_waiting_list');
+		}
+		if (!isset($item->prices)) {
+			$data['prices'] = $params->get('event_form_prices');
 		}
 		if (!isset($item->payment_provider)) {
 			$data['payment_provider'] = $params->get('event_form_payment_provider');

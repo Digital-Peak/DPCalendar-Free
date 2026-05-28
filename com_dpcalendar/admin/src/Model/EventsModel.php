@@ -74,7 +74,8 @@ class EventsModel extends ListModel
 				'level',
 				'tag',
 				'original_title',
-				'association'
+				'association',
+				'locations'
 			];
 		}
 
@@ -321,7 +322,7 @@ class EventsModel extends ListModel
 			$query->where('a.catid IN (' . $calendars . ')');
 		}
 
-		// Filter on the level.
+		// Filter on the level
 		if ($level = $this->getState('filter.level')) {
 			$query->where('c.level <= ' . ((int)$level + $baselevel - 1));
 		}
@@ -383,9 +384,14 @@ class EventsModel extends ListModel
 			$query->where('a.xreference like ' . $db->quote($reference));
 		}
 
-		// Filter on the language.
+		// Filter on the language
 		if ($language = $this->getState('filter.language')) {
 			$query->where('a.language = ' . $db->quote($language));
+		}
+
+		// Filter by location
+		if ($locationsFilter = array_filter((array)$this->getState('filter.locations', []))) {
+			$query->where('v.id in (' . implode(',', ArrayHelper::toInteger($locationsFilter)) . ')');
 		}
 
 		// Filter by a single tag.
@@ -399,7 +405,7 @@ class EventsModel extends ListModel
 				);
 		}
 
-		// Join over the associations.
+		// Join over the associations
 		if (Associations::isEnabled()) {
 			$subQuery = $db->getQuery(true)
 				->select('COUNT(asso1.id) > 1')
@@ -415,7 +421,7 @@ class EventsModel extends ListModel
 			$query->select('(' . $subQuery . ') AS association');
 		}
 
-		// Add the list ordering clause.
+		// Add the list ordering clause
 		$orderCol  = $this->state->get('list.ordering', 'start_date');
 		$orderDirn = $this->state->get('list.direction', 'asc');
 		if ($orderCol == 'category_title') {

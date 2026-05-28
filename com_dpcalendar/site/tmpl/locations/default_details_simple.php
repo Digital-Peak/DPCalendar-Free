@@ -6,7 +6,6 @@
  */
 
 \defined('_JEXEC') or die();
-
 ?>
 <div class="com-dpcalendar-locations__details">
 	<?php foreach ($this->locationGroups as $id => $locations) { ?>
@@ -16,11 +15,11 @@
 					<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
 					<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<div class="dp-location__details"
-							 data-latitude="<?php echo $location->latitude; ?>"
-							 data-longitude="<?php echo $location->longitude; ?>"
-							 data-title="<?php echo $location->title; ?>"
-							 data-description="<?php echo $this->escape($description); ?>"
-							 data-color="<?php echo $location->color; ?>">
+							data-latitude="<?php echo $location->latitude; ?>"
+							data-longitude="<?php echo $location->longitude; ?>"
+							data-title="<?php echo $location->title; ?>"
+							data-description="<?php echo $this->escape($description); ?>"
+							data-color="<?php echo $location->color; ?>">
 						</div>
 					</div>
 				<?php } ?>

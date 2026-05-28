@@ -72,6 +72,7 @@ trait CalendarViewTrait
 		$this->filterForm->removeField('access', 'filter');
 		$this->filterForm->removeField('language', 'filter');
 		$this->filterForm->removeField('level', 'filter');
+		$this->filterForm->removeField('locations', 'filter');
 		$this->filterForm->removeField('fullordering', 'list');
 		$this->filterForm->removeField('limit', 'list');
 

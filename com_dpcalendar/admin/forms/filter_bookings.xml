@@ -23,6 +23,10 @@
 		</field>
 		<field name="event_id" type="event"
 			label="COM_DPCALENDAR_TICKET_FIELD_EVENT_LABEL" description="COM_DPCALENDAR_TICKET_FIELD_EVENT_DESC"/>
+		<field name="payment_provider" type="dppaymentprovider" class="dp-select dp-form-select"
+			label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL">
+			<option value="">COM_DPCALENDAR_VIEW_BOOKINGS_SELECT_PAYMENT_PROVIDER</option>
+		</field>
 	</fields>
 	<fields name="list">
 		<field name="date_start" type="datetimechooser" all_day="1" show_time="0" hint="COM_DPCALENDAR_FIELD_START_DATE_LABEL"

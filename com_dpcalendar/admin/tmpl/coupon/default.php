@@ -18,7 +18,7 @@ $action = $this->router->route('index.php?option=com_dpcalendar&view=coupon&co_i
 <div class="com-dpcalendar-couponform com-dpcalendar-adminform">
 	<form class="com-dpcalendar-couponform__form dp-form form-validate" method="post" name="adminForm" id="adminForm"
 		  action="<?php echo $action; ?>">
-		<?php echo HTMLHelper::_('uitab.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
+		<?php echo HTMLHelper::_('uitab.startTabSet', 'com-dpcalendar-form-', ['active' => 'general', 'recall' => true]); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
 			<?php echo HTMLHelper::_('uitab.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<div class="com-dpcalendar-couponform__content dp-grid">

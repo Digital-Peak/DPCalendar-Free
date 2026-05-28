@@ -701,7 +701,7 @@ class EventsModel extends ListModel
 		$this->setState('list.ordering', $orderCol);
 
 		$listOrder = $app->getInput()->getCmd('filter_order_dir', 'ASC');
-		if (!\in_array(strtoupper((string)$listOrder), ['ASC', 'DESC', ''])) {
+		if (!\in_array(strtoupper((string)$listOrder), ['ASC', 'DESC', ''], true)) {
 			$listOrder = 'ASC';
 		}
 		$this->setState('list.direction', $listOrder);
@@ -758,15 +758,16 @@ class EventsModel extends ListModel
 	{
 		parent::preprocessForm($form, $data, $group);
 
-		FieldsHelper::prepareForm('com_dpcalendar.event', $form, new \stdClass());
+		FieldsHelper::prepareForm('com_dpcalendar.event', $form, (object)['language' => Factory::getApplication()->getLanguage()->getTag()]);
 
 		foreach ($form->getGroup('com_fields') as $field) {
 			if ($field->type === 'Text') {
 				$form->setFieldAttribute($field->fieldname, 'disabled', false, $field->group);
 				$form->setFieldAttribute($field->fieldname, 'readonly', false, $field->group);
+				$form->setFieldAttribute($field->fieldname, 'required', false, $field->group);
 
 				if (!$field->hint) {
-					$form->setFieldAttribute($field->fieldname, 'hint', trim(strip_tags($field->label)), $field->group);
+					$form->setFieldAttribute($field->fieldname, 'hint', trim(html_entity_decode(strip_tags($field->label)), " \n\r\t\v\0*"), $field->group);
 				}
 
 				continue;

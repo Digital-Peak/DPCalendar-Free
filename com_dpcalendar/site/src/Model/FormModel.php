@@ -19,17 +19,10 @@ use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Field\SubformField;
 use Joomla\CMS\Form\Form;
-use Joomla\CMS\Mail\Mail;
 use Joomla\CMS\Uri\Uri;
-use Joomla\CMS\User\UserFactoryAwareInterface;
-use Joomla\CMS\User\UserFactoryAwareTrait;
 
-class FormModel extends EventModel implements UserFactoryAwareInterface
+class FormModel extends EventModel
 {
-	use UserFactoryAwareTrait;
-
-	public $typeAlias = 'com_dpcalendar.event';
-
 	/**
 	 * Invites the given users or groups to the event with the given id.
 	 */
@@ -155,11 +148,12 @@ class FormModel extends EventModel implements UserFactoryAwareInterface
 
 		$params = $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
 		if (!$params->get('event_form_fields_order_')) {
-			$params->set(
-				'event_form_fields_order_',
-				ComponentHelper::getParams('com_dpcalendar')->get('event_form_fields_order_', new \stdClass())
-			);
+			$params->set('event_form_fields_order_', DPCalendarHelper::getComponentParameter('event_form_fields_order_', new \stdClass()));
 		}
+		if (!$params->get('event_form_prices')) {
+			$params->set('event_form_prices', DPCalendarHelper::getComponentParameter('event_form_prices', new \stdClass()));
+		}
+
 		$this->setState('params', $params);
 
 		$this->setState('layout', $app->getInput()->getCmd('layout'));

@@ -61,6 +61,10 @@
 			label="COM_DPCALENDAR_CALENDARS" >
 			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_CALENDAR</option>
 		</field>
+		<field name="locations" type="location" class="dp-select" hide_coordinates="true"
+			label="COM_DPCALENDAR_LOCATIONS" >
+			<option value="">COM_DPCALENDAR_VIEW_EVENTS_SELECT_LOCATION</option>
+		</field>
 		<field name="access" type="accesslevel" class="dp-select dp-select_plain">
 			<option value="">JOPTION_SELECT_ACCESS</option>
 		</field>

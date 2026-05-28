@@ -685,10 +685,10 @@ class DPCalendarHelper
 			'zh-TW'
 		];
 		$lang = self::getFrLanguage();
-		if (!\in_array($lang, $languages)) {
+		if (!\in_array($lang, $languages, true)) {
 			$lang = substr($lang, 0, strpos($lang, '-') ?: 0);
 		}
-		if (!\in_array($lang, $languages)) {
+		if (!\in_array($lang, $languages, true)) {
 			return 'en';
 		}
 

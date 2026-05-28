@@ -130,7 +130,8 @@ class RouteHelper
 			$args['token'] = $booking->token;
 		}
 
-		$uri = self::getUrl($args, false);
+		// Tra to use a bookings menu in back end
+		$uri = self::getUrl($args, false, Factory::getApplication() instanceof AdministratorApplication ? ['bookings' => [0]] : []);
 
 		$url = Route::_($uri->toString(['path', 'query', 'fragment']), false);
 		if ($full === true) {
@@ -407,6 +408,10 @@ class RouteHelper
 
 					if ($view === 'event' && isset($item->query['id'])) {
 						self::$lookup[$view][$item->query['id']] = $item->id;
+					}
+
+					if ($view === 'bookings') {
+						self::$lookup[$view][0] = $item->id;
 					}
 
 					if (empty($ids)) {

@@ -2,6 +2,11 @@
 <form addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" addruleprefix="DigitalPeak\Component\DPCalendar\Administrator\Rule">
 	<fields name="filter">
 		<field name="search" type="text" hint="JSEARCH_FILTER" class="dp-input"/>
+		<field name="future" type="dpradio" class="dp-form-radio" default="0" hint="COM_DPCALENDAR_VIEW_CALENDAR_VIEW_TEXTS_FUTURE"
+			label="COM_DPCALENDAR_TICKET_FIELD_FUTURE_LABEL">
+			<option value="1">JYES</option>
+			<option value="0">JNO</option>
+		</field>
 		<field name="state" type="list" class="dp-input js-select-submit-on-change"
 			label="JSTATUS">
 			<option value="">JOPTION_SELECT_PUBLISHED</option>

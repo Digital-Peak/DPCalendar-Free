@@ -21,7 +21,7 @@ use Joomla\CMS\Uri\Uri;
 			<div class="dp-location-group__locations">
 				<?php foreach ($locations as $location) { ?>
 					<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
-					<div class=dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
+					<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<h<?php echo $id ? 3 : 2; ?> class="dp-heading">
 							<span class="dp-heading__icon" style="color: #<?php echo $location->color; ?>">
 								<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
@@ -31,11 +31,11 @@ use Joomla\CMS\Uri\Uri;
 							</a>
 						</h<?php echo $id ? 3 : 2; ?>>
 						<div class="dp-location__details"
-							 data-latitude="<?php echo $location->latitude; ?>"
-							 data-longitude="<?php echo $location->longitude; ?>"
-							 data-title="<?php echo $location->title; ?>"
-							 data-description="<?php echo $this->escape($description); ?>"
-							 data-color="<?php echo $location->color; ?>">
+							data-latitude="<?php echo $location->latitude; ?>"
+							data-longitude="<?php echo $location->longitude; ?>"
+							data-title="<?php echo $location->title; ?>"
+							data-description="<?php echo $this->escape($description); ?>"
+							data-color="<?php echo $location->color; ?>">
 						</div>
 					</div>
 				<?php } ?>

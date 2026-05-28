@@ -155,7 +155,7 @@
 			label="COM_DPCALENDAR_FIELD_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_DESC">
 			<option></option>
 		</field>
-		<field name="rooms" type="dpcrooms" multiple="true" showon="location_ids!:"
+		<field name="rooms" type="dpcrooms" multiple="true"  class="dp-select dp-form-select" showon="location_ids!:"
 			label="COM_DPCALENDAR_ROOMS" description="COM_DPCALENDAR_FIELD_ROOMS_DESC"/>
 		<field name="location_lookup" type="text" class="dp-form-input" autocomplete="0"
 			label="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_LABEL" description="COM_DPCALENDAR_FIELD_LOCATION_LOOKUP_DESC"/>

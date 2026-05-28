@@ -95,26 +95,33 @@ class RawView extends BaseView
 
 		$model->setState('filter.location', $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($location, false));
 
-		if ($start = $model->getState('list.start-date')) {
-			try {
+		try {
+			if ($start = $model->getState('list.start-date')) {
 				$model->setState(
 					'list.start-date',
 					DPCalendarHelper::getDateFromString($start, null, true, $this->params->get('map_date_format', 'd.m.Y'))
 				);
-			} catch (\Exception) {
-
 			}
-		}
 
-		if ($end = $model->getState('list.end-date')) {
-			try {
+			if ($end = $model->getState('list.end-date')) {
 				$model->setState(
 					'list.end-date',
 					DPCalendarHelper::getDateFromString($end, null, true, $this->params->get('map_date_format', 'd.m.Y'))
 				);
-			} catch (\Exception) {
-
 			}
+		} catch (\Exception $exception) {
+			$this->app->enqueueMessage($exception->getMessage(), 'warning');
+
+			$listRequestData = $this->app->getUserStateFromRequest('com_dpcalendar.map', 'list', '', 'array') ?: [];
+
+			// Reset the invalid date
+			$listRequestData['start-date'] = '';
+			$listRequestData['end-date']   = '';
+
+			// Set an empty user state
+			$this->app->setUserState('com_dpcalendar.map', $listRequestData);
+
+			return;
 		}
 
 		// Initialize variables

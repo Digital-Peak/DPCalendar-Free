@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `#__dpcalendar_events` (
   `color` varchar(255) NOT NULL DEFAULT '',
   `url` varchar(255) NOT NULL DEFAULT '',
   `images` text,
-  `description` text,
+  `description` mediumtext,
   `schedule` text,
   `hits` int NOT NULL DEFAULT '0',
   `capacity` int DEFAULT NULL,

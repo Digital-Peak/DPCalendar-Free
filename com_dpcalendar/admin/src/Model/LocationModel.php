@@ -335,9 +335,16 @@ class LocationModel extends AdminModel implements UserFactoryAwareInterface
 			$return = null;
 		}
 
-		$this->setState('return_page', base64_decode((string)($return ?: '')));
+		$params = $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar');
+		if (!$params->get('location_form_fields_order_')) {
+			$params->set(
+				'location_form_fields_order_',
+				ComponentHelper::getParams('com_dpcalendar')->get('location_form_fields_order_', new \stdClass())
+			);
+		}
+		$this->setState('params', $params);
 
-		$this->setState('params', $app instanceof SiteApplication ? $app->getParams() : ComponentHelper::getParams('com_dpcalendar'));
+		$this->setState('return_page', base64_decode((string)($return ?: '')));
 	}
 
 	public function delete(&$pks)

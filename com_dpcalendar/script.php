@@ -54,13 +54,12 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 					continue;
 				}
 
-				$db->setQuery('UPDATE #__dpcalendar_bookings SET transaction_id = ' . $db->quote($id) . ' WHERE id = ' . (int)$booking->id);
-				$db->execute();
+				$this->run('UPDATE #__dpcalendar_bookings SET transaction_id = ' . $db->quote($id) . ' WHERE id = ' . (int)$booking->id);
 			}
 		}
 
 		if (version_compare($version, '10.9.0', '<')) {
-			$db->setQuery(
+			$this->run(
 				"INSERT INTO #__mail_templates (`template_id`, `extension`, `language`, `subject`, `body`, `htmlbody`, `attachments`, `params`) VALUES
 ('com_dpcalendar.event.create', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_CREATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_CREATE_BODY', '', ''),
 ('com_dpcalendar.event.update', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_UPDATE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_EVENT_UPDATE_BODY', '', ''),
@@ -85,35 +84,35 @@ class Com_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 ('com_dpcalendar.location.delete', 'com_dpcalendar', '', 'COM_DPCALENDAR_NOTIFICATION_LOCATION_DELETE_SUBJECT', '', 'COM_DPCALENDAR_NOTIFICATION_LOCATION_DELETE_BODY', '', '')
 ON DUPLICATE KEY UPDATE
 `subject` = VALUES(`subject`), `htmlbody` = VALUES(`htmlbody`)"
-			)->execute();
+			);
 
 			if (file_exists(JPATH_PLUGINS . '/dpcalendarpay/manual/manual.xml')) {
-				$db->setQuery(
+				$this->run(
 					"INSERT INTO #__mail_templates (`template_id`, `extension`, `language`, `subject`, `body`, `htmlbody`, `attachments`, `params`) VALUES
 ('plg_dpcalendarpay_manual.invoice', 'plg_dpcalendarpay_manual', '', 'PLG_DPCALENDARPAY_MANUAL_INVOICE_SUBJECT_TEXT', '', 'PLG_DPCALENDARPAY_MANUAL_INVOICE_MESSAGE_TEXT', '', '')
 ON DUPLICATE KEY UPDATE
 `subject` = VALUES(`subject`), `htmlbody` = VALUES(`htmlbody`)"
-				)->execute();
+				);
 			}
 
 			if (file_exists(JPATH_PLUGINS . '/dpcalendarpay/qr/qr.xml')) {
-				$db->setQuery(
+				$this->run(
 					"INSERT INTO #__mail_templates (`template_id`, `extension`, `language`, `subject`, `body`, `htmlbody`, `attachments`, `params`) VALUES
 ('plg_dpcalendarpay_qr.invoice.imageqr', 'plg_dpcalendarpay_qr', '', 'PLG_DPCALENDARPAY_QR_PAYMENT_PROVIDER_TYPE_IMAGEQR_INVOICE_SUBJECT_TEXT', '', 'PLG_DPCALENDARPAY_QR_PAYMENT_PROVIDER_TYPE_IMAGEQR_INVOICE_MESSAGE_TEXT', '', ''),
 ('plg_dpcalendarpay_qr.invoice.swissqr', 'plg_dpcalendarpay_qr', '', 'PLG_DPCALENDARPAY_QR_PAYMENT_PROVIDER_TYPE_SWISSQR_INVOICE_SUBJECT_TEXT', '', 'PLG_DPCALENDARPAY_QR_PAYMENT_PROVIDER_TYPE_SWISSQR_INVOICE_MESSAGE_TEXT', '', '')
 ON DUPLICATE KEY UPDATE
 `subject` = VALUES(`subject`), `htmlbody` = VALUES(`htmlbody`)"
-				)->execute();
+				);
 			}
 
 			if (file_exists(JPATH_PLUGINS . '/task/dpcalendar/dpcalendar.xml')) {
-				$db->setQuery(
+				$this->run(
 					"INSERT INTO #__mail_templates (`template_id`, `extension`, `language`, `subject`, `body`, `htmlbody`, `attachments`, `params`) VALUES
 ('plg_task_dpcalendar.event.reminder.attendee', 'plg_task_dpcalendar', '', 'PLG_TASK_DPCALENDAR_TASK_EVENT_REMINDERS_ATTENDEE_MAIL_SUBJECT_CONTENT', '', 'PLG_TASK_DPCALENDAR_TASK_EVENT_REMINDERS_ATTENDEE_MAIL_MESSAGE_CONTENT', '', ''),
 ('plg_task_dpcalendar.event.reminder.author', 'plg_task_dpcalendar', '', 'PLG_TASK_DPCALENDAR_TASK_EVENT_REMINDERS_AUTHOR_MAIL_SUBJECT_CONTENT', '', 'PLG_TASK_DPCALENDAR_TASK_EVENT_REMINDERS_AUTHOR_MAIL_MESSAGE_CONTENT', '', '')
 ON DUPLICATE KEY UPDATE
 `subject` = VALUES(`subject`), `htmlbody` = VALUES(`htmlbody`)"
-				)->execute();
+				);
 			}
 
 			$files = array_merge(
@@ -169,7 +168,7 @@ ON DUPLICATE KEY UPDATE
 
 			if (!$params->get('component_notifications')) {
 				$params->set('component_notifications', $notifications);
-				$db->setQuery('update #__extensions set params = ' . $db->quote((string)$params) . ' where element = "com_dpcalendar"')->execute();
+				$this->run('UPDATE #__extensions SET params = ' . $db->quote((string)$params) . ' WHERE element = "com_dpcalendar"');
 			}
 
 			$db->setQuery("SELECT id, raw_data FROM #__dpcalendar_bookings WHERE payment_provider LIKE 'stripe%'");
@@ -188,9 +187,28 @@ ON DUPLICATE KEY UPDATE
 					continue;
 				}
 
-				$db->setQuery('UPDATE #__dpcalendar_bookings SET transaction_id = ' . $db->quote($id) . ' WHERE id = ' . (int)$booking->id);
-				$db->execute();
+				$this->run('UPDATE #__dpcalendar_bookings SET transaction_id = ' . $db->quote($id) . ' WHERE id = ' . (int)$booking->id);
 			}
+		}
+
+		if (version_compare($version, '10.10.0', '<')) {
+			$this->run("UPDATE `#__scheduler_tasks` SET `type` = 'plg_task_dpcalendar_event_updates', `params` = REPLACE(params, 'deletions_', 'updates_') WHERE type = 'plg_task_dpcalendar_event_deletions'");
+			$this->run('ALTER TABLE `#__dpcalendar_events` CHANGE `description` `description` MEDIUMTEXT');
+			$this->run(
+				"UPDATE #__dpcalendar_extcalendars SET params = replace(params, 'format-description', 'format_description') WHERE plugin = 'google'"
+			);
+			$this->run(
+				"UPDATE #__dpcalendar_extcalendars SET params = replace(params, 'calendarId', 'calendar_id') WHERE plugin = 'google'"
+			);
+			$this->run(
+				"UPDATE #__dpcalendar_extcalendars SET params = replace(params, 'refreshToken', 'refresh_token') WHERE plugin = 'google'"
+			);
+			$this->run(
+				"UPDATE #__dpcalendar_extcalendars SET params = replace(params, 'client-id', 'client_id') WHERE plugin = 'google'"
+			);
+			$this->run(
+				"UPDATE #__dpcalendar_extcalendars SET params = replace(params, 'client-secret', 'client_secret') WHERE plugin = 'google'"
+			);
 		}
 	}
 

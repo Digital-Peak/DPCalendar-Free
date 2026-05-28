@@ -277,6 +277,9 @@ $files = [
 
 // From v10.8.0 to dependencies update
 '/plugins/dpcalendarpay/braintree/vendor/braintree/braintree_php/lib/Braintree/MerchantGateway.php',
+
+// From v10.9.0 to 11436
+'/plugins/task/dpcalendar/forms/event_deletions.xml',
 ];
 
 foreach ($files as $file) {

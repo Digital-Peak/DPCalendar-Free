@@ -135,6 +135,9 @@
 				<option value="0">JNO</option>
 				<option value="1">JYES</option>
 			</field>
+			<field name="event_form_prices" type="subform" multiple="true"
+				formsource="administrator/components/com_dpcalendar/forms/event_price.xml"
+				label="COM_DPCALENDAR_FIELD_PRICES_LABEL" description="COM_DPCALENDAR_FIELD_PRICES_DESC"/>
 			<field name="event_form_payment_provider" type="dppaymentprovider" multiple="true"
 				label="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_LABEL" description="COM_DPCALENDAR_FIELD_PAYMENT_PROVIDER_DESC"/>
 			<field name="event_form_featured" type="list" useglobal="true"

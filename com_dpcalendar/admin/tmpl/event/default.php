@@ -68,7 +68,7 @@ $tmpl = $tmpl ? '&tmpl=' . $tmpl : '';
 				<?php echo $this->form->getField('alias')->renderField(['class' => 'dp-field-alias']); ?>
 			<?php } ?>
 		</div>
-		<?php echo HTMLHelper::_('uitab.startTabSet', 'com-dpcalendar-form-', ['active' => 'general']); ?>
+		<?php echo HTMLHelper::_('uitab.startTabSet', 'com-dpcalendar-form-', ['active' => 'general', 'recall' => true]); ?>
 		<?php foreach ($this->form->getFieldsets() as $name => $fieldSet) { ?>
 			<?php echo HTMLHelper::_('uitab.addTab', 'com-dpcalendar-form-', $name, $this->translate($fieldSet->label)); ?>
 			<?php foreach ($this->form->getFieldset($name) as $field) { ?>

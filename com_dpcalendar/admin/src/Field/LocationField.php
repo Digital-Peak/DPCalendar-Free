@@ -29,7 +29,7 @@ class LocationField extends ListField
 			$options[] = HTMLHelper::_(
 				'select.option',
 				$location->id,
-				$location->title . ' [' . $location->latitude . ',' . $location->longitude . ']'
+				$location->title . ($this->element['hide_coordinates'] ? '' : ' [' . $location->latitude . ',' . $location->longitude . ']')
 			);
 		}
 

@@ -13,6 +13,7 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
+use Joomla\CMS\Language\Associations;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
@@ -217,16 +218,28 @@ class TicketsModel extends ListModel
 				'select id,original_id from #__dpcalendar_events where (id in (' . implode(',', $eventId) . ') and original_id > 0) or original_id in (' . implode(',', $eventId) . ')'
 			);
 			foreach ($this->getDatabase()->loadObjectList() as $e) {
+				$id = 0;
 				if ($e->original_id > 0 && \in_array($e->id, $eventId)) {
-					$eventId[] = $e->original_id;
+					$id = $e->original_id;
 				}
 
 				if ($e->id > 0 && \in_array($e->original_id, $eventId)) {
-					$eventId[] = $e->id;
+					$id = $e->id;
+				}
+
+				if (!$id) {
+					continue;
+				}
+
+				$eventId[] = $id;
+
+				if (Associations::isEnabled()) {
+					$associations = Associations::getAssociations('com_dpcalendar', '#__dpcalendar_events', 'com_dpcalendar.item', $id);
+					$eventId      = array_merge($eventId, array_column($associations, 'id'));
 				}
 			}
 
-			$query->where('e.id in (' . implode(',', array_unique($eventId)) . ')');
+			$query->where('e.id in (' . implode(',', array_unique(ArrayHelper::toInteger($eventId))) . ')');
 		}
 
 		if ($this->getState('filter.my', 0) == 1) {

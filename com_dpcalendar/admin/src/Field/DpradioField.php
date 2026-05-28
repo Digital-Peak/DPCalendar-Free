@@ -49,15 +49,16 @@ class DpradioField extends FormField
 				Text::alt($option->text, \in_array($name, ['', '0', null], true) ? '' : $name) . '</label>';
 		}
 
+		if ($this->hint) {
+			$html[] = '<span class="' . $this->element['class'] . '__hint">' . Text::_($this->hint) . '</span>';
+		}
+
 		// End the radio field output.
 		$html[] = '</fieldset>';
 
 		return implode(PHP_EOL, $html);
 	}
 
-	/**
-	 * @return mixed[]
-	 */
 	protected function getOptions(): array
 	{
 		// Initialize variables.

@@ -7,8 +7,8 @@
 
 \defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\Location;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
+use DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
 
@@ -22,14 +22,14 @@ $date = $this->dateHelper->getDate($this->event->start_date, $this->event->all_d
 		&& $this->params->get('event_show_location', '2') == '1' && $this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 		<div class="dp-location">
 			<div class="dp-map" data-zoom="<?php echo $this->params->get('event_map_zoom', 4); ?>"
-				 data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
+				data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
 			<?php foreach ($this->event->locations as $location) { ?>
 				<div class="dp-location__details"
-					 data-latitude="<?php echo $location->latitude; ?>"
-					 data-longitude="<?php echo $location->longitude; ?>"
-					 data-title="<?php echo $location->title; ?>"
-					 data-description="&lt;a href='<?php echo \DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getLocationRoute($location); ?>'&gt;<?php echo $location->title; ?>&lt;/a&gt;"
-					 data-color="<?php echo $location->color; ?>">
+					data-latitude="<?php echo $location->latitude; ?>"
+					data-longitude="<?php echo $location->longitude; ?>"
+					data-title="<?php echo $location->title; ?>"
+					data-description="&lt;a href='<?php echo RouteHelper::getLocationRoute($location); ?>'&gt;<?php echo $location->title; ?>&lt;/a&gt;"
+					data-color="<?php echo $location->color; ?>">
 				</div>
 			<?php } ?>
 		</div>
@@ -41,21 +41,23 @@ $date = $this->dateHelper->getDate($this->event->start_date, $this->event->all_d
 		<?php foreach ($this->event->locations as $location) { ?>
 			<div class="dp-location">
 				<h<?php echo $this->heading + 3; ?> class="dp-heading dp-heading_small">
-					<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
+					<span class=" dp-print-hide">
+						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
+					</span>
 					<?php if ($location->params->get('access-edit')) { ?>
 						<a href="<?php echo $this->router->getLocationFormRoute($location->id, Uri::getInstance()); ?>"
-						   class="dp-link dp-location__edit-link" aria-label="<?php echo $this->translate('JACTION_EDIT'); ?>">
+							class="dp-link dp-location__edit-link dp-print-hide" aria-label="<?php echo $this->translate('JACTION_EDIT'); ?>">
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EDIT]); ?>
 						</a>
 					<?php } ?>
 					<a href="<?php echo $this->router->getLocationRoute($location)
 						. '#year=' . $date->format('Y', true) . '&month=' . $date->format('m', true) . '&day=' . $date->format('d', true); ?>"
-					   class="dp-link dp-location__detail-link" name="<?php echo 'dp-location-' . $location->id; ?>">
+					   class="dp-link dp-location__detail-link dp-print-hide" name="<?php echo 'dp-location-' . $location->id; ?>">
 						<?php echo $location->title; ?>
 					</a>
 				</h<?php echo $this->heading + 3; ?>>
 				<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
-					<div class="dp-button-bar">
+					<div class="dp-button-bar dp-print-hide">
 						<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
 							data-href="<?php echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo','Administrator')->getMapLink($location, $this->params->get('event_map_zoom', 4)); ?>">
 							<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::MAP]); ?>
@@ -72,14 +74,14 @@ $date = $this->dateHelper->getDate($this->event->start_date, $this->event->all_d
 				<?php } ?>
 				<?php if ($this->params->get('event_show_map', '1') == '1' && $this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 					<div class="dp-map" data-zoom="<?php echo $this->params->get('event_map_zoom', 4); ?>"
-						 data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
+						data-ask-consent="<?php echo $this->params->get('map_ask_consent'); ?>"></div>
 				<?php } ?>
 				<div class="dp-location__details"
-					 data-latitude="<?php echo $location->latitude; ?>"
-					 data-longitude="<?php echo $location->longitude; ?>"
-					 data-title="<?php echo $location->title; ?>"
-					 data-description="&lt;a href='<?php echo \DigitalPeak\Component\DPCalendar\Site\Helper\RouteHelper::getLocationRoute($location); ?>'&gt;<?php echo $location->title; ?>&lt;/a&gt;"
-					 data-color="<?php echo $location->color; ?>">
+					data-latitude="<?php echo $location->latitude; ?>"
+					data-longitude="<?php echo $location->longitude; ?>"
+					data-title="<?php echo $location->title; ?>"
+					data-description="&lt;a href='<?php echo RouteHelper::getLocationRoute($location); ?>'&gt;<?php echo $location->title; ?>&lt;/a&gt;"
+					data-color="<?php echo $location->color; ?>">
 					<?php if ($location->street) { ?>
 						<dl class="dp-description">
 							<dt class="dp-description__label"><?php echo $this->translate('COM_DPCALENDAR_LOCATION_FIELD_STREET_LABEL'); ?></dt>
@@ -138,7 +140,7 @@ $date = $this->dateHelper->getDate($this->event->start_date, $this->event->all_d
 				<div class="dp-location__description">
 					<?php echo trim(implode(
 						"\n",
-						$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$params, 0])
+						$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$this->params, 0])
 					)); ?>
 					<?php echo HTMLHelper::_('content.prepare', $location->description ?: ''); ?>
 				</div>

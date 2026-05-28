@@ -42,7 +42,7 @@
 	</fieldset>
 	<fieldset name="rooms" label="COM_DPCALENDAR_ROOMS">
 		<field name="rooms" type="subform" multiple="true" formsource="administrator/components/com_dpcalendar/forms/location_room.xml"
-			label="" description=""/>
+			label="COM_DPCALENDAR_ROOMS" description=""/>
 	</fieldset>
 	<fieldset addfieldprefix="DigitalPeak\Component\DPCalendar\Administrator\Field" name="publishing"
 		label="COM_DPCALENDAR_PUBLISHING">

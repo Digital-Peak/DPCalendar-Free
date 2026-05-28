@@ -2,12 +2,12 @@
 <extension type="component" method="upgrade">
 	<name>com_dpcalendar</name>
 	<author>Digital Peak</author>
-	<creationDate>2026-04-23</creationDate>
+	<creationDate>2026-05-28</creationDate>
 	<copyright>(C) 2014 Digital Peak GmbH</copyright>
 	<license>https://www.gnu.org/licenses/gpl-3.0.html</license>
 	<authorEmail>info@digital-peak.com</authorEmail>
 	<authorUrl>joomla.digital-peak.com</authorUrl>
-	<version>10.9.0</version>
+	<version>10.10.0</version>
 	<description>COM_DPCALENDAR_XML_DESCRIPTION</description>
 	<namespace path="src">DigitalPeak\Component\DPCalendar</namespace>
 	<install>
@@ -41,6 +41,7 @@
 			<menu view="events">COM_DPCALENDAR_SUBMENU_EVENTS</menu>
 			<menu link="option=com_categories&amp;extension=com_dpcalendar" view="categories">COM_DPCALENDAR_SUBMENU_CALENDARS</menu>
 			<menu view="locations">COM_DPCALENDAR_SUBMENU_LOCATIONS</menu>
+			<menu link="option=com_mails&amp;filter[extension]=com_dpcalendar">COM_DPCALENDAR_SUBMENU_MAIL_TEMPLATES</menu>
 			<menu link="option=com_fields&amp;context=com_dpcalendar.event">JGLOBAL_FIELDS</menu>
 			<menu link="option=com_fields&amp;view=groups&amp;context=com_dpcalendar.event">JGLOBAL_FIELD_GROUPS</menu>
 			<menu view="tools">COM_DPCALENDAR_SUBMENU_TOOLS</menu>

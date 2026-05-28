@@ -18,8 +18,8 @@ use Joomla\CMS\Cache\Controller\OutputController;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\BaseDatabaseModel;
-use Joomla\CMS\Uri\Uri;
 use Joomla\Registry\Registry;
+use Joomla\Uri\Uri;
 
 class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareInterface
 {
@@ -168,10 +168,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 				}
 
 				if ($locations) {
-					$locObject = $locations[0];
-					if ((int)$locObject->latitude !== 0) {
-						return $locObject;
-					}
+					return $locations[0];
 				}
 			} catch (\Exception $e) {
 				Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
@@ -191,27 +188,25 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 			$title = $location;
 		}
 
-		if (!isset($locObject)) {
-			$locObject              = new \stdClass();
-			$locObject->id          = 0;
-			$locObject->title       = $title;
-			$locObject->alias       = ApplicationHelper::stringURLSafe($title);
-			$locObject->state       = 1;
-			$locObject->language    = '*';
-			$locObject->country     = 0;
-			$locObject->province    = '';
-			$locObject->city        = '';
-			$locObject->zip         = '';
-			$locObject->street      = '';
-			$locObject->number      = '';
-			$locObject->url         = '';
-			$locObject->description = '';
-			$locObject->latitude    = 0;
-			$locObject->longitude   = 0;
-			$locObject->color       = $this->getColor($locObject);
-			$locObject->params      = new Registry();
-			$locObject->xreference  = $location;
-		}
+		$locObject              = new \stdClass();
+		$locObject->id          = 0;
+		$locObject->title       = $title;
+		$locObject->alias       = ApplicationHelper::stringURLSafe($title);
+		$locObject->state       = 1;
+		$locObject->language    = '*';
+		$locObject->country     = 0;
+		$locObject->province    = '';
+		$locObject->city        = '';
+		$locObject->zip         = '';
+		$locObject->street      = '';
+		$locObject->number      = '';
+		$locObject->url         = '';
+		$locObject->description = '';
+		$locObject->latitude    = 0;
+		$locObject->longitude   = 0;
+		$locObject->color       = $this->getColor($locObject);
+		$locObject->params      = new Registry();
+		$locObject->xreference  = $location;
 
 		$provider = DPCalendarHelper::getComponentParameter('map_provider', 'openstreetmap');
 		if ($provider == 'google') {
@@ -382,7 +377,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 
 	private function searchInOpenStreetMap(string $address): array
 	{
-		$url = Uri::getInstance(DPCalendarHelper::getComponentParameter('map_api_openstreetmap_geocode_url', 'https://nominatim.openstreetmap.org'));
+		$url = new Uri(DPCalendarHelper::getComponentParameter('map_api_openstreetmap_geocode_url', 'https://nominatim.openstreetmap.org'));
 		$url->setVar('format', 'json');
 		$url->setVar('addressdetails', '1');
 		$url->setVar('limit', '5');
@@ -526,7 +521,7 @@ class GeoModel extends BaseDatabaseModel implements CacheControllerFactoryAwareI
 
 	private function fillObjectFromOpenStreetMap(string $location, \stdClass $locObject): void
 	{
-		$url = Uri::getInstance(DPCalendarHelper::getComponentParameter('map_api_openstreetmap_geocode_url', 'https://nominatim.openstreetmap.org'));
+		$url = new Uri(DPCalendarHelper::getComponentParameter('map_api_openstreetmap_geocode_url', 'https://nominatim.openstreetmap.org'));
 		$url->setVar('format', 'json');
 		$url->setVar('addressdetails', '1');
 		$url->setVar('limit', '1');

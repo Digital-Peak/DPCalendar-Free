@@ -201,10 +201,8 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		}
 
 		$originals = [];
-		if (is_iterable($cal->VEVENT)) {
-			foreach ($cal->VEVENT as $tmp) {
-				$originals[] = clone $tmp;
-			}
+		foreach ($cal->VEVENT as $tmp) {
+			$originals[] = clone $tmp;
 		}
 
 		try {
@@ -1071,12 +1069,12 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 			$geo = (string)$event->GEO;
 			if ($geo !== '' && $geo !== '0' && str_contains($geo, ';')) {
 				static $locationModel = null;
-				$app                  = $this->getApplication();
-				if ($locationModel === null && $app instanceof CMSApplicationInterface) {
-					$locationModel = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
+				if ($locationModel === null) {
+					$locationModel = $this->getDPCalendar()->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
 					$locationModel->getState();
 					$locationModel->setState('list.limit', 1);
 				}
+
 				[$latitude, $longitude] = explode(';', $geo);
 				$locationModel->setState('filter.latitude', $latitude);
 				$locationModel->setState('filter.longitude', $longitude);
@@ -1097,6 +1095,8 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 
 					$locations[] = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($latitude . ',' . $longitude, true, $location);
 				}
+			} elseif (is_numeric($location)) {
+				$locations[] = $this->getDPCalendar()->getMVCFactory()->createModel('Location', 'Administrator', ['ignore_request' => true])->getItem($location);
 			} else {
 				$locations[] = $this->getDPCalendar()->getMVCFactory()->createModel('Geo', 'Administrator')->getLocation($this->getDPCalendar()->getMVCFactory()->createModel('Ical', 'Administrator')->icalDecode($location));
 			}
@@ -1300,5 +1300,18 @@ abstract class DPCalendarPlugin extends CMSPlugin implements ClientFactoryAwareI
 		}
 
 		return $app->bootComponent('dpcalendar');
+	}
+
+	protected function getDescriptionForIcal(string $description, Registry $params): string
+	{
+		if ($description === '' || $description === '0') {
+			return '';
+		}
+
+		if (!$params->get('format_description', '1')) {
+			return $this->replaceNl($description);
+		}
+
+		return DPCalendarHelper::parseHtml($this->replaceNl(nl2br($description)));
 	}
 }

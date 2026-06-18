@@ -63,6 +63,7 @@ class RawView extends BaseView
 		}
 
 		// Convert the dates from the user timezone into normal
+		$model->setState('list.local-date', true);
 		$tz    = DPCalendarHelper::getDate()->getTimezone()->getName();
 		$start = $this->app->getInput()->get('date-start', $model->getState('list.start-date'));
 		if ($start) {

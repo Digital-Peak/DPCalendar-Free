@@ -800,6 +800,16 @@ class EventsModel extends ListModel
 		return $filters;
 	}
 
+	public function getStart()
+	{
+		// Parent does adapt start when there are less elements
+		if ($this->getState('list.startforce')) {
+			return $this->getState('list.start');
+		}
+
+		return parent::getStart();
+	}
+
 	protected function loadFormData()
 	{
 		$data = parent::loadFormData();

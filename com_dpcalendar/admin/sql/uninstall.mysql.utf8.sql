@@ -19,3 +19,5 @@ DROP TABLE IF EXISTS `#__dpcalendar_caldav_calendarobjects`;
 DROP TABLE IF EXISTS `#__dpcalendar_caldav_calendars`;
 DROP TABLE IF EXISTS `#__dpcalendar_caldav_principals`;
 DROP TABLE IF EXISTS `#__dpcalendar_caldav_groupmembers`;
+
+DELETE FROM `#__mail_templates` WHERE `extension` LIKE '%dpcalendar%';

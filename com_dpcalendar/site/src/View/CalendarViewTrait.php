@@ -12,11 +12,15 @@ namespace DigitalPeak\Component\DPCalendar\Site\View;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\Calendar;
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
 use DigitalPeak\Component\DPCalendar\Site\Model\EventsModel;
+use Joomla\CMS\Application\CMSApplication;
 use Joomla\CMS\Form\Form;
 use Joomla\Utilities\ArrayHelper;
 
 trait CalendarViewTrait
 {
+	/** @var CMSApplication */
+	protected $app;
+
 	/**
 	 * Does initialize the filter form and active filters.
 	 */
@@ -60,6 +64,12 @@ trait CalendarViewTrait
 
 		// Load the form
 		$this->filterForm = $model->getFilterForm();
+
+		$defaultCalendars = md5(implode(',', array_keys($calendars)));
+		if ($defaultCalendars !== $this->app->getUserState('com_dpcalendar.' . $name . '.filter.calendarshash')) {
+			$this->app->setUserState('com_dpcalendar.' . $name . '.filter.calendarshash', $defaultCalendars);
+			$this->filterForm->setValue('calendars', 'filter', array_keys($calendars));
+		}
 
 		// Set the passed calendars as default value to the form
 		if (empty($this->filterForm->getValue('calendars', 'filter'))) {

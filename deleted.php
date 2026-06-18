@@ -280,6 +280,10 @@ $files = [
 
 // From v10.9.0 to 11436
 '/plugins/task/dpcalendar/forms/event_deletions.xml',
+
+// From development to case 10267
+'/plugins/system/dpcalendarytp/modules/elements/calendar/element.json',
+'/plugins/system/dpcalendarytp/modules/elements/list/element.json',
 ];
 
 foreach ($files as $file) {

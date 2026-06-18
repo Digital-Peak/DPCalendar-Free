@@ -160,7 +160,7 @@ class DPCalendarRules extends MenuRules
 			}
 
 			// Search in the lookup for a passable menu item
-			if (!empty($items['locations']) && \array_key_exists(-1, $items['locations'])) {
+			if (!empty($items['locations']) && \array_key_exists(-1, (array)$items['locations'])) {
 				$query['Itemid'] = $items['locations'][-1];
 
 				return;
@@ -277,7 +277,7 @@ class DPCalendarRules extends MenuRules
 			}
 
 			// Search in the lookup for a passable menu item
-			if (!empty($items['form']) && \array_key_exists(-1, $items['form'])) {
+			if (!empty($items['form']) && \array_key_exists(-1, (array)$items['form'])) {
 				$query['Itemid'] = $items['form'][-1];
 
 				return;

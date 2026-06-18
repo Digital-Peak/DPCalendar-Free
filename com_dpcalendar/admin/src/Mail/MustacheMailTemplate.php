@@ -37,7 +37,11 @@ class MustacheMailTemplate extends MailTemplate
 		$this->addTemplateData($templateData);
 	}
 
-	public function send(): bool
+	/**
+	 * Sends out the mail and does an attachment cleanup when defined. When the mailer is used to send
+	 * multiple mails to different senders, then this is useful to cleanup attachments after send out.
+	 */
+	public function sendWithAttachments(?bool $cleanup = true): bool
 	{
 		$app = Factory::getApplication();
 
@@ -84,19 +88,19 @@ class MustacheMailTemplate extends MailTemplate
 				Factory::$language = $app->getLanguage();
 			}
 
-			foreach ($this->attachments as $file) {
-				if (str_starts_with((string)$file->file, (string)$app->get('tmp_path', JPATH_ROOT . '/tmp')) && file_exists($file->file)) {
-					unlink($file->file);
-				}
+			if ($cleanup) {
+				$this->cleanupAttachments();
 			}
-
-			$this->attachments = [];
-			$this->mailer->clearAttachments();
 		}
 
 		$app->triggerEvent('onDPCalendarAfterSendMail', [$this->template_id, $this->getMailerInstance(), $this->data]);
 
 		return $success;
+	}
+
+	public function send(): bool
+	{
+		return $this->sendWithAttachments(true);
 	}
 
 	public function getMailerInstance(): MailerInterface
@@ -133,6 +137,18 @@ class MustacheMailTemplate extends MailTemplate
 		$this->language = $user->getParam('language', $user->getParam('admin_language', Factory::getApplication()->getLanguage()->getTag()));
 
 		$this->addTemplateData(['user' => $user->name]);
+	}
+
+	public function cleanupAttachments(): void
+	{
+		foreach ($this->attachments as $file) {
+			if (str_starts_with((string)$file->file, (string)Factory::getApplication()->get('tmp_path', JPATH_ROOT . '/tmp')) && file_exists($file->file)) {
+				unlink($file->file);
+			}
+		}
+
+		$this->attachments = [];
+		$this->mailer->clearAttachments();
 	}
 
 	protected function replaceTags($text, $tags, $isHtml = false): string

@@ -75,7 +75,7 @@ class DPCalendarComponent extends MVCComponent implements
 
 	public function getContexts(): array
 	{
-		Factory::getApplication()->getLanguage()->load('com_content', JPATH_ADMINISTRATOR);
+		Factory::getApplication()->getLanguage()->load('com_dpcalendar', JPATH_ADMINISTRATOR);
 
 		return [
 			'com_dpcalendar.event'      => Text::_('COM_DPCALENDAR_FIELDS_SECTION_EVENT'),

@@ -83,7 +83,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 	/** @var string */
 	public $exdates;
 
-	/** @var \stdClass|string */
+	/** @var \stdClass|string|null */
 	public $prices;
 
 	/** @var string */
@@ -324,7 +324,14 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 
 			$tagsChanged = empty($this->newTags) ? $oldTags != null : $this->newTags != $oldTags;
 
-			if ($this->prices != $oldEvent->prices || $this->booking_options != $oldEvent->booking_options || ($hardReset && $this->rrule && $this->booking_series != 1)) {
+			if (
+				// Must compare the price objects
+				($this->prices instanceof \stdClass ? $this->prices : json_decode((string)$this->prices))
+					!= ($oldEvent->prices instanceof \stdClass ? $oldEvent->prices : json_decode((string)$oldEvent->prices))
+				// When booking options have changed
+				|| $this->booking_options != $oldEvent->booking_options
+				// When not full series can be booked and a hard reset should be performed
+				|| ($hardReset && $this->booking_series != 1)) {
 				// Check for tickets
 				$query = $this->getDatabase()->getQuery(true);
 				$query->select('t.id')
@@ -492,7 +499,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 				$table->original_id   = $this->id;
 				$table->rrule         = '';
 				$table->checked_out   = 0;
-				$table->modified      = null;
+				$table->modified      = $this->modified;
 				$table->modified_by   = 0;
 
 				// If the xreference does exist, then we need to create it with the proper scheme
@@ -545,7 +552,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 			'booking_cancel_closing_date = ' . $db->quote($this->booking_cancel_closing_date),
 			'booking_series = ' . $db->quote($this->booking_series),
 			'booking_waiting_list = ' . $db->quote($this->booking_waiting_list),
-			'prices = ' . $db->quote($this->prices instanceof \stdClass ? (json_encode($this->prices) ?: '') : $this->prices),
+			'prices = ' . $db->quote($this->prices instanceof \stdClass ? (json_encode($this->prices) ?: '') : $this->prices ?? ''),
 			'earlybird_discount = ' . $db->quote($this->earlybird_discount),
 			'user_discount = ' . $db->quote($this->user_discount),
 			'events_discount = ' . $db->quote($this->events_discount),

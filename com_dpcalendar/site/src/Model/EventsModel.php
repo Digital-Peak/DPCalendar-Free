@@ -576,12 +576,13 @@ class EventsModel extends ListModel
 		}
 
 		if ($author = $this->getState('filter.author', 0)) {
-			$author = \is_array($author) ? ArrayHelper::toInteger($author) : [$author];
+			$author = ArrayHelper::toInteger(\is_array($author) ? $author : [$author]);
+
+			// My events when author is -1
 			if (\in_array(-1, $author)) {
 				$author[] = $user->id;
 				$author   = array_filter($author, static fn ($a): bool => $a != '-1');
 			}
-			// My events when author is -1
 			$cond = 'a.created_by in (' . implode(',', $author) . ')';
 
 			if (!\in_array(-1, $author) && $user->id > 0 && !DPCalendarHelper::isFree()) {

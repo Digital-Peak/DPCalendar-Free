@@ -12,7 +12,7 @@ if (!$params->get('location_show_map', 1) || $params->get('map_provider', 'opens
 	return;
 }
 
-$description = '<a href="' . $this->router->getLocationRoute($this->location) . '">' . $this->location->title . '</a>';
+$description = '<a href="' . $this->router->getLocationRoute($this->location->id) . '">' . $this->location->title . '</a>';
 ?>
 <div class="com-dpcalendar-location__map dp-location">
 	<div class="dp-map dp-location__details"

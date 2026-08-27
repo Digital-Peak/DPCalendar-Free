@@ -103,7 +103,7 @@ class DPCalendarRules extends MenuRules
 
 		// As the calendar ids are in the params we need to assign them as calendar ids to the lookup for the event forms
 		foreach ($menuItems as $menuItem) {
-			if ($menuItem->query['view'] !== 'form') {
+			if (empty($menuItem->query['view']) || $menuItem->query['view'] !== 'form') {
 				continue;
 			}
 

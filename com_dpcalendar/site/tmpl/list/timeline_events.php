@@ -86,6 +86,9 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 								<?php echo $event->hits . ' ' . $this->translate('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_HITS'); ?>
 							</div>
 						<?php } ?>
+						<?php if (!empty($event->tags?->itemTags)) {?>
+							<?php echo $this->layoutHelper->renderLayout('joomla.content.tags', $event->tags->itemTags); ?>
+						<?php } ?>
 					</div>
 					<?php echo $this->loadTemplate('events_cta'); ?>
 					<?php if ($this->params->get('list_show_display_events') && $event->displayEvent->beforeDisplayContent) { ?>

@@ -11,14 +11,13 @@ use DigitalPeak\Component\DPCalendar\Administrator\Helper\Booking;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 use Joomla\CMS\Uri\Uri;
 
-$params = $this->params;
 ?>
 <div class="com-dpcalendar-profile__events">
 	<h2 class="dp-heading"><?php echo $this->translate('COM_DPCALENDAR_VIEW_PROFILE_UPCOMING_EVENTS'); ?></h2>
 	<ul class="dp-events dp-list dp-list_unordered">
 		<?php foreach ($this->events as $event) { ?>
 			<?php $this->displayData['event'] = $event; ?>
-			<?php $calendar = \Joomla\CMS\Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid); ?>
+			<?php $calendar                   = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($event->catid); ?>
 			<li class="dp-list-unordered__item dp-event">
 				<?php if ($event->state == 0) { ?>
 					<span class="dp-event__state dp-event__state_unpublished"><?php echo $this->translate('JUNPUBLISHED'); ?></span>
@@ -32,7 +31,7 @@ $params = $this->params;
 						); ?>
 					</a>
 				<?php } ?>
-				<?php if ($calendar->canEdit() || ($calendar->canEditOwn() && $event->created_by == $user->id)) { ?>
+				<?php if ($calendar->canEdit() || ($calendar->canEditOwn() && $event->created_by == $this->user->id)) { ?>
 					<a href="<?php echo $this->router->getEventFormRoute($event->id, Uri::getInstance()); ?>" class="dp-link"
 						aria-label="<?php echo $this->translate('JACTION_EDIT'); ?>">
 						<?php echo $this->layoutHelper->renderLayout(
@@ -41,7 +40,7 @@ $params = $this->params;
 						); ?>
 					</a>
 				<?php } ?>
-				<?php if ($calendar->canDelete() || ($calendar->canEditOwn() && $event->created_by == $user->id)) { ?>
+				<?php if ($calendar->canDelete() || ($calendar->canEditOwn() && $event->created_by == $this->user->id)) { ?>
 					<a href="<?php echo $this->router->getEventDeleteRoute($event->id, Uri::getInstance()); ?>" class="dp-link"
 						aria-label="<?php echo $this->translate('JACTION_DELETE'); ?>">
 						<?php echo $this->layoutHelper->renderLayout(
@@ -54,7 +53,7 @@ $params = $this->params;
 					<?php echo $event->title; ?>
 				</a>
 				<span class="dp-event__date">
-					<?php $date = $this->dateHelper->getDateStringFromEvent($event, $params->get('date_format'), $params->get('time_format')); ?>
+					<?php $date = $this->dateHelper->getDateStringFromEvent($event, $this->params->get('date_format'), $this->params->get('time_format')); ?>
 					(<?php echo $this->translate('COM_DPCALENDAR_DATE') . ': ' . $date; ?>)
 				</span>
 				<span class="dp-event__calendar">
@@ -66,11 +65,11 @@ $params = $this->params;
 						<?php foreach ($event->locations as $location) { ?>
 							<span class="dp-event__location dp-location">
 								<span class="dp-location__details"
-									  data-latitude="<?php echo $location->latitude; ?>"
-									  data-longitude="<?php echo $location->longitude; ?>"
-									  data-title="<?php echo $location->title; ?>"
-									  data-color="<?php echo $event->color; ?>"></span>
-								<a href="<?php echo $this->router->getLocationRoute($location); ?>" class="dp-location__url dp-link">
+									data-latitude="<?php echo $location->latitude; ?>"
+									data-longitude="<?php echo $location->longitude; ?>"
+									data-title="<?php echo $this->escape($location->title); ?>"
+									data-color="<?php echo $event->color; ?>"></span>
+								<a href="<?php echo $this->router->getLocationRoute($location->id); ?>" class="dp-location__url dp-link">
 									<?php echo $location->title; ?>
 								</a>
 							</span>

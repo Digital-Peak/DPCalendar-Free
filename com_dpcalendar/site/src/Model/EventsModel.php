@@ -16,6 +16,7 @@ use Joomla\CMS\Application\SiteApplication;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Form\Form;
+use Joomla\CMS\Helper\TagsHelper;
 use Joomla\CMS\Language\Text;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
 use Joomla\CMS\MVC\Model\ListModel;
@@ -131,6 +132,8 @@ class EventsModel extends ListModel
 		if (empty($items)) {
 			return [];
 		}
+
+		$taggedItems = [];
 
 		$model = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
 		$model->getState();
@@ -263,6 +266,17 @@ class EventsModel extends ListModel
 
 			DPCalendarHelper::parseImages($item);
 			DPCalendarHelper::parseReadMore($item);
+			$taggedItems[$item->id] = $item;
+			$item->tags             = new TagsHelper();
+		}
+
+		if ($taggedItems) {
+			$tagsHelper = new TagsHelper();
+			$itemIds    = array_keys($taggedItems);
+
+			foreach ($tagsHelper->getMultipleItemTags('com_dpcalendar.event', $itemIds) as $id => $tags) {
+				$taggedItems[$id]->tags->itemTags = $tags;
+			}
 		}
 
 		return $items;
@@ -603,12 +617,13 @@ class EventsModel extends ListModel
 
 		$this->searchInFields($query);
 
-		// Add the list ordering clause.
-		$query->order($db->escape($this->getState('list.ordering', 'a.start_date')) . ' ' . $db->escape($this->getState('list.direction', 'ASC')));
-
-		if ($this->getState('print.query', false) === true) {
-			echo nl2br(implode('', (array)str_replace('#__', 'j_', $query)));
-		}
+		// Add the list ordering clause
+		$ordering  = $this->getState('list.ordering', 'a.start_date');
+		$direction = strtoupper((string)$this->getState('list.direction', 'ASC'));
+		$query->order(
+			$db->escape(\in_array($ordering, $this->filter_fields) ? $ordering : 'start_date') . ' ' .
+			$db->escape(\in_array($direction, ['ASC', 'DESC', ''], true) ? $direction : 'ASC')
+		);
 
 		return $query;
 	}

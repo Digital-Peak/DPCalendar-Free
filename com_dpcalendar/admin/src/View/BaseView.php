@@ -197,10 +197,11 @@ class BaseView extends HtmlView
 
 		// Check for empty title and add site name if param is set
 		$title = $this->getDocumentTitle();
-		if ($this->app->get('sitename_pagetitles', 0) == 1) {
+		if ($title && $this->app->get('sitename_pagetitles', 0) == 1) {
 			$title = Text::sprintf('JPAGETITLE', $this->app->get('sitename'), $title);
 		}
-		if ($this->app->get('sitename_pagetitles', 0) == 2) {
+
+		if ($title && $this->app->get('sitename_pagetitles', 0) == 2) {
 			$title = Text::sprintf('JPAGETITLE', $title, $this->app->get('sitename'));
 		}
 

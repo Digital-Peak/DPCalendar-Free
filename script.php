@@ -8,6 +8,7 @@
 \defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\CMSWebApplicationInterface;
+use Joomla\CMS\Document\HtmlDocument;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
@@ -56,7 +57,7 @@ class Pkg_DPCalendarInstallerScript extends InstallerScript implements DatabaseA
 				'error'
 			);
 
-			if ($app instanceof CMSWebApplicationInterface) {
+			if ($app instanceof CMSWebApplicationInterface && $app->getDocument() instanceof HtmlDocument) {
 				$app->redirect('index.php?option=com_installer&view=install');
 			}
 

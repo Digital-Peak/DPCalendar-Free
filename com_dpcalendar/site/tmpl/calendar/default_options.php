@@ -61,9 +61,10 @@ $options['calendarIds']          = array_keys($this->items);
 $options['initialView'] = $params->get('default_view', 'month');
 
 // Some general calendar options
-$options['weekNumbers']    = (bool)$params->get('week_numbers');
-$options['weekends']       = (bool)$params->get('weekend', 1);
-$options['fixedWeekCount'] = (bool)$params->get('fixed_week_count', 1);
+$options['weekNumbers']         = (bool)$params->get('week_numbers');
+$options['weekends']            = (bool)$params->get('weekend', 1);
+$options['fixedWeekCount']      = (bool)$params->get('fixed_week_count', 1);
+$options['showNonCurrentDates'] = !$params->get('calendar_current_dates', 0);
 
 if ($bd = (array)$params->get('business_hours_days', [])) {
 	$options['businessHours'] = [

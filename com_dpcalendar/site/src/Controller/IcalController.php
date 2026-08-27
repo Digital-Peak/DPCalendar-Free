@@ -14,7 +14,6 @@ use DigitalPeak\ThinHTTP\CurlClient;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Authentication\Authentication;
 use Joomla\CMS\Authentication\AuthenticationResponse;
-use Joomla\CMS\Factory;
 use Joomla\CMS\Mail\MailHelper;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Plugin\PluginHelper;
@@ -44,14 +43,13 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 			$loggedIn = $this->login($token);
 		}
 
+		$calendarModel = $app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator');
+
 		// Get the calendar
-		$calendar = Factory::getApplication()->bootComponent('dpcalendar')->getMVCFactory()->createModel('Calendar', 'Administrator')->getCalendar($this->input->getCmd('id'));
-		if (!$calendar instanceof CalendarInterface) {
-			throw new \Exception('Calendar not found!', 404);
-		}
+		$calendar = $calendarModel->getCalendar($this->input->getCmd('id'));
 
 		// Download the external url
-		if ($calendar->getIcalUrl() !== '' && $calendar->getIcalUrl() !== '0' && $calendar->getIcalUrl() === 'plugin') {
+		if ($calendar instanceof CalendarInterface && $calendar->getIcalUrl() !== '' && $calendar->getIcalUrl() === 'plugin') {
 			header('Content-Type: text/calendar; charset=utf-8');
 			header('Content-disposition: attachment; filename="' . $calendar->getTitle() . '.ics"');
 
@@ -59,7 +57,7 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 			$app->close();
 		}
 
-		if ($calendar->getIcalUrl() !== '' && $calendar->getIcalUrl() !== '0') {
+		if ($calendar instanceof CalendarInterface && $calendar->getIcalUrl() !== '') {
 			header('Content-Type: text/calendar; charset=utf-8');
 			header('Content-disposition: attachment; filename="' . $calendar->getTitle() . '.ics"');
 
@@ -71,19 +69,41 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 			$app->close();
 		}
 
-		if (!is_numeric($calendar->getId())) {
-			throw new \Exception('Only native calendars are allowed!');
+		$calendars = [];
+		$ids       = [];
+		if ($id = $this->input->getCmd('id')) {
+			$ids[] = $id;
+		}
+		if ($id = $this->input->getString('ids')) {
+			$ids = array_merge($ids, explode(',', $id));
 		}
 
-		// Also include children when available
-		$calendars = [$this->input->getCmd('id')];
-		foreach ($calendar->getChildren() as $c) {
-			$calendars[] = $c->getId();
+		foreach ($ids as $id) {
+			$calendar = $calendarModel->getCalendar(trim($id));
+			if (!$calendar instanceof CalendarInterface) {
+				throw new \Exception('Calendar not found with id: ' . $id . '!', 404);
+			}
+
+			if (!is_numeric($calendar->getId())) {
+				continue;
+			}
+
+			// Also include children when available
+			$calendars[] = $calendar->getId();
+			foreach ($calendar->getChildren() as $c) {
+				$calendars[] = $c->getId();
+			}
 		}
+
+		if (!$calendar instanceof CalendarInterface) {
+			throw new \Exception('Calendar not found!', 404);
+		}
+
+		$fileName = \count($calendars) > 1 ? 'calendars' : Path::clean($calendar->getTitle());
 
 		// Download the ical content
 		$app->setHeader('Content-Type', 'text/calendar; charset=utf-8', true);
-		$app->setHeader('Content-disposition', 'attachment; filename="' . Path::clean($calendar->getTitle()) . '.ics"', true);
+		$app->setHeader('Content-disposition', 'attachment; filename="' . $fileName . '.ics"', true);
 
 		$buffer = $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Ical', 'Administrator')->createIcalFromCalendar($calendars, false);
 		$buffer = MailHelper::convertRelativeToAbsoluteUrls($buffer);
@@ -93,10 +113,10 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 			$app->getSession()->set('user');
 		}
 
-		/* @deprecated no format is not supported */
+		// @deprecated no format is not supported
 		if ($app->getInput()->get('format') !== 'raw') {
 			header('Content-Type: text/calendar; charset=utf-8');
-			header('Content-disposition: attachment; filename="' . Path::clean($calendar->getTitle()) . '.ics"');
+			header('Content-disposition: attachment; filename="' . $fileName . '.ics"');
 			$app->close();
 		}
 	}

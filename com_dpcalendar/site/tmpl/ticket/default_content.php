@@ -31,7 +31,7 @@ $event  = $this->event;
 			<dd class="dp-description__description">
 				<?php foreach ($event->locations as $location) { ?>
 					<div class="dp-location">
-						<a href="<?php echo $this->router->getLocationRoute($location); ?>" class="dp-link">
+						<a href="<?php echo $this->router->getLocationRoute($location->id); ?>" class="dp-link">
 							<?php echo $location->title; ?>
 						</a>
 					</div>

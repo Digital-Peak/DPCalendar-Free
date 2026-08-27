@@ -11,6 +11,7 @@
 			label="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_LABEL" description="COM_DPCALENDAR_LOCATION_FIELD_GEOCOMPLETE_DESC"/>
 
 		<field name="title" type="text" required="true" class="dp-form-input"
+			filter="\Joomla\CMS\Component\ComponentHelper::filterText"
 			label="JGLOBAL_TITLE" description="COM_DPCALENDAR_LOCATION_FIELD_TITLE_DESC"/>
 
 		<field name="country" type="dpcountries" class="dp-form-input dp-select"

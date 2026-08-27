@@ -96,7 +96,7 @@ class IcalModel extends BaseDatabaseModel
 				$calendars[$event->catid] = $calendar instanceof CalendarInterface ? $calendar->getTitle() : $event->catid;
 			}
 		}
-		// $text[] = 'X-WR-CALNAME:'.implode('; ', $calendars);
+		$text[] = 'X-WR-CALNAME:' . implode('; ', $calendars);
 
 		foreach ($events as $event) {
 			$text = array_merge($text, self::addEventData($event, $eventsModel));

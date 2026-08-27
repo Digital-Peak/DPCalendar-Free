@@ -10,9 +10,9 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\Mail;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
+use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
-use Joomla\CMS\Language\LanguageFactoryInterface;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
 use Joomla\CMS\Mail\MailerInterface;
 use Joomla\CMS\Mail\MailTemplate;
@@ -23,17 +23,19 @@ class MustacheMailTemplate extends MailTemplate
 {
 	use CurrentUserTrait;
 
-	private static array $languageCache = [];
+	private CMSApplicationInterface $application;
 
 	public function __construct(string $templateId, array $templateData)
 	{
 		parent::__construct((str_starts_with($templateId, 'plg_') ? '' : 'com_dpcalendar.') . $templateId, '');
 
-		if ($user = Factory::getApplication()->getIdentity()) {
+		$this->application = Factory::getApplication();
+
+		if ($user = $this->application->getIdentity()) {
 			$this->setCurrentUser($user);
 		}
 
-		$templateData['sitename'] = Factory::getApplication()->get('sitename');
+		$templateData['sitename'] = $this->application->get('sitename');
 		$this->addTemplateData($templateData);
 	}
 
@@ -43,32 +45,7 @@ class MustacheMailTemplate extends MailTemplate
 	 */
 	public function sendWithAttachments(?bool $cleanup = true): bool
 	{
-		$app = Factory::getApplication();
-
-		$app->triggerEvent('onDPCalendarBeforeSendMail', [$this->template_id, $this->getMailerInstance(), $this->data]);
-
-		if ($this->language && $this->language !== $app->getLanguage()->getTag()) {
-			$lang = self::$languageCache[$this->language] ?? Factory::getContainer()->get(LanguageFactoryInterface::class)->createLanguage($this->language, $app->get('debug_lang'));
-
-			$extension = explode('.', $this->template_id, 2)[0];
-			switch (substr($extension, 0, 3)) {
-				case 'plg':
-					$parts = explode('_', $extension, 3);
-					if (\count($parts) > 2) {
-						$lang->load($extension, JPATH_PLUGINS . '/' . $parts[1] . '/' . $parts[2], $this->language);
-					}
-					break;
-				case 'com':
-				default:
-					$lang->load($extension, JPATH_ADMINISTRATOR . '/components/' . $extension, $this->language);
-					break;
-			}
-
-			self::$languageCache[$this->language] = $lang;
-
-			// @phpstan-ignore-next-line
-			Factory::$language = $lang;
-		}
+		$this->application->triggerEvent('onDPCalendarBeforeSendMail', [$this->template_id, $this->getMailerInstance(), $this->data]);
 
 		$config    = ComponentHelper::getParams('com_mails');
 		$mailStyle = $config->get('mail_style');
@@ -83,17 +60,12 @@ class MustacheMailTemplate extends MailTemplate
 		} finally {
 			$config->set('mail_style', $mailStyle);
 
-			if ($this->language !== $app->getLanguage()->getTag()) {
-				// @phpstan-ignore-next-line
-				Factory::$language = $app->getLanguage();
-			}
-
 			if ($cleanup) {
 				$this->cleanupAttachments();
 			}
 		}
 
-		$app->triggerEvent('onDPCalendarAfterSendMail', [$this->template_id, $this->getMailerInstance(), $this->data]);
+		$this->application->triggerEvent('onDPCalendarAfterSendMail', [$this->template_id, $this->getMailerInstance(), $this->data]);
 
 		return $success;
 	}
@@ -113,7 +85,7 @@ class MustacheMailTemplate extends MailTemplate
 		return $this->template_id;
 	}
 
-	/// @phpstan-ignore-next-line
+	// @phpstan-ignore-next-line
 	public function getTemplateData($plain = false): array
 	{
 		return $plain ? $this->plain_data : $this->data;
@@ -128,21 +100,18 @@ class MustacheMailTemplate extends MailTemplate
 
 	public function setCurrentUser(User $user): void
 	{
-		if (!$user->id) {
-			return;
-		}
-
 		$this->currentUser = $user;
 
-		$this->language = $user->getParam('language', $user->getParam('admin_language', Factory::getApplication()->getLanguage()->getTag()));
+		$this->language = $user->getParam('language', $user->getParam('admin_language', $this->application->getLanguage()->getTag()));
 
 		$this->addTemplateData(['user' => $user->name]);
 	}
 
 	public function cleanupAttachments(): void
 	{
+		$tmpPath = (string)$this->application->get('tmp_path', JPATH_ROOT . '/tmp');
 		foreach ($this->attachments as $file) {
-			if (str_starts_with((string)$file->file, (string)Factory::getApplication()->get('tmp_path', JPATH_ROOT . '/tmp')) && file_exists($file->file)) {
+			if (str_starts_with((string)$file->file, $tmpPath) && file_exists($file->file)) {
 				unlink($file->file);
 			}
 		}

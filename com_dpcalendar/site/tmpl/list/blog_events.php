@@ -7,7 +7,6 @@
 
 \defined('_JEXEC') or die();
 
-use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 
 $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
@@ -79,6 +78,9 @@ $this->translator->translateJS('COM_DPCALENDAR_CONFIRM_DELETE');
 						<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::BULLSEYE,]); ?>
 						<?php echo $event->hits . ' ' . $this->translate('COM_DPCALENDAR_FIELD_CONFIG_EVENT_LABEL_HITS'); ?>
 					</div>
+				<?php } ?>
+				<?php if (!empty($event->tags?->itemTags)) {?>
+					<?php echo $this->layoutHelper->renderLayout('joomla.content.tags', $event->tags->itemTags); ?>
 				<?php } ?>
 			</div>
 			<?php echo $this->loadTemplate('events_cta'); ?>

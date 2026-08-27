@@ -10,6 +10,7 @@
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
 use Joomla\CMS\HTML\HTMLHelper;
 use Joomla\CMS\Uri\Uri;
+
 ?>
 <div class="com-dpcalendar-locations__details com-dpcalendar-locations-full__details">
 	<?php foreach ($this->locationGroups as $id => $locations) { ?>
@@ -21,34 +22,34 @@ use Joomla\CMS\Uri\Uri;
 			<?php } ?>
 			<div class="dp-location-group__locations">
 				<?php foreach ($locations as $location) { ?>
-					<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
+					<?php $description = '<a href="' . $this->router->getLocationRoute($location->id) . '">' . $location->title . '</a>'; ?>
 					<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<h<?php echo $id ? 3 : 2; ?> class="dp-heading">
 							<span class="dp-heading__icon" style="color: #<?php echo $location->color; ?>">
 								<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
 							</span>
-							<a href="<?php echo $this->router->getLocationRoute($location, Uri::getInstance()); ?>" class="dp-link">
+							<a href="<?php echo $this->router->getLocationRoute($location->id); ?>" class="dp-link">
 								<?php echo $location->title; ?>
 							</a>
 						</h<?php echo $id ? 3 : 2; ?>>
 						<div class="dp-location__buttons dp-button-bar">
 							<?php if ($location->params->get('access-edit')) { ?>
 								<button type="button" class="dp-button dp-button-action dp-button-edit"
-									data-href="<?php echo $this->router->getLocationFormRoute($location->id, Uri::getInstance()); ?>">
+									data-href="<?php echo $this->router->getLocationFormRoute($location->id); ?>">
 									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EDIT]); ?>
 									<?php echo $this->translate('JACTION_EDIT'); ?>
 								</button>
 							<?php } ?>
 							<?php if ($this->params->get('map_provider', 'openstreetmap') != 'none') { ?>
 								<button type="button" class="dp-button dp-button-action dp-button-map-site" data-target="new"
-									data-href="<?php echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo','Administrator')->getMapLink($location, $this->params->get('locations_map_zoom', 10)); ?>">
+									data-href="<?php echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->getMapLink($location, $this->params->get('locations_map_zoom', 10)); ?>">
 									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::MAP]); ?>
 									<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_SITE_LINK'); ?>
 									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EXTERNAL]); ?>
 								</button>
 								<button type="button" class="dp-button dp-button-action dp-button-map-directions" data-target="new"
-									data-href="<?php echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo','Administrator')->getDirectionsLink($location, $this->params->get('locations_map_zoom', 10)); ?>">
-									<?php echo $this->layoutHelper->renderLayout('block.icon',['icon' => Icon::DIRECTIONS]); ?>
+									data-href="<?php echo $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->getDirectionsLink($location, $this->params->get('locations_map_zoom', 10)); ?>">
+									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::DIRECTIONS]); ?>
 									<?php echo $this->translate('COM_DPCALENDAR_VIEW_LOCATION_MAP_DIRECTIONS_LINK'); ?>
 									<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::EXTERNAL]); ?>
 								</button>
@@ -57,7 +58,7 @@ use Joomla\CMS\Uri\Uri;
 						<div class="dp-location__details"
 							data-latitude="<?php echo $location->latitude; ?>"
 							data-longitude="<?php echo $location->longitude; ?>"
-							data-title="<?php echo $location->title; ?>"
+							data-title="<?php echo $this->escape($location->title); ?>"
 							data-description="<?php echo $this->escape($description); ?>"
 							data-color="<?php echo $location->color; ?>">
 							<?php if ($location->street) { ?>
@@ -128,7 +129,7 @@ use Joomla\CMS\Uri\Uri;
 						<div class="dp-location__description">
 							<?php echo trim(implode(
 								"\n",
-								$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$params, 0])
+								$this->app->triggerEvent('onContentBeforeDisplay', ['com_dpcalendar.location', &$location, &$this->params, 0])
 							)); ?>
 							<?php echo HTMLHelper::_('content.prepare', $location->description ?: ''); ?>
 						</div>

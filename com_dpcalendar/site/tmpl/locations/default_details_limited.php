@@ -8,7 +8,7 @@
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\HTML\Block\Icon;
-use Joomla\CMS\Uri\Uri;
+
 ?>
 <div class="com-dpcalendar-locations__details com-dpcalendar-locations-limited__details">
 	<?php foreach ($this->locationGroups as $id => $locations) { ?>
@@ -20,20 +20,20 @@ use Joomla\CMS\Uri\Uri;
 			<?php } ?>
 			<div class="dp-location-group__locations">
 				<?php foreach ($locations as $location) { ?>
-					<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
+					<?php $description = '<a href="' . $this->router->getLocationRoute($location->id) . '">' . $location->title . '</a>'; ?>
 					<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<h<?php echo $id ? 3 : 2; ?> class="dp-heading">
 							<span class="dp-heading__icon" style="color: #<?php echo $location->color; ?>">
 								<?php echo $this->layoutHelper->renderLayout('block.icon', ['icon' => Icon::LOCATION]); ?>
 							</span>
-							<a href="<?php echo $this->router->getLocationRoute($location, Uri::getInstance()); ?>" class="dp-link">
+							<a href="<?php echo $this->router->getLocationRoute($location->id); ?>" class="dp-link">
 								<?php echo $location->title; ?>
 							</a>
 						</h<?php echo $id ? 3 : 2; ?>>
 						<div class="dp-location__details"
 							data-latitude="<?php echo $location->latitude; ?>"
 							data-longitude="<?php echo $location->longitude; ?>"
-							data-title="<?php echo $location->title; ?>"
+							data-title="<?php echo $this->escape($location->title); ?>"
 							data-description="<?php echo $this->escape($description); ?>"
 							data-color="<?php echo $location->color; ?>">
 						</div>

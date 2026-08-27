@@ -12,12 +12,12 @@
 		<div class="dp-location-group dp-location-group-<?php echo $id; ?>">
 			<div class="dp-location-group__locations">
 				<?php foreach ($locations as $location) { ?>
-					<?php $description = '<a href="' . $this->router->getLocationRoute($location) . '">' . $location->title . '</a>'; ?>
+					<?php $description = '<a href="' . $this->router->getLocationRoute($location->id) . '">' . $location->title . '</a>'; ?>
 					<div class="dp-location" id="<?php echo 'dp-location-' . $location->id; ?>">
 						<div class="dp-location__details"
 							data-latitude="<?php echo $location->latitude; ?>"
 							data-longitude="<?php echo $location->longitude; ?>"
-							data-title="<?php echo $location->title; ?>"
+							data-title="<?php echo $this->escape($location->title); ?>"
 							data-description="<?php echo $this->escape($description); ?>"
 							data-color="<?php echo $location->color; ?>">
 						</div>

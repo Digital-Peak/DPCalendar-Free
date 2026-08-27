@@ -10,6 +10,7 @@ namespace DigitalPeak\Component\DPCalendar\Site\Helper;
 \defined('_JEXEC') or die();
 
 use DigitalPeak\Component\DPCalendar\Administrator\Calendar\CalendarInterface;
+use DigitalPeak\Component\DPCalendar\Administrator\Helper\DPCalendarHelper;
 use Joomla\CMS\Application\AdministratorApplication;
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Application\SiteApplication;
@@ -89,10 +90,19 @@ class RouteHelper
 		return $link;
 	}
 
-	public static function getLocationRoute(\stdClass $location, ?bool $full = false): string
+	/**
+	 * @param string|int $id
+	 */
+	public static function getLocationRoute($id, ?bool $full = false): string
 	{
+		// @dprecated, pass an id instead
+		// @phpstan-ignore-next-line
+		if (\is_object($id)) {
+			$id = $id->id;
+		}
+
 		// Create the link
-		$link = ($full === true ? Uri::root() : '') . 'index.php?option=com_dpcalendar&view=location&id=' . $location->id;
+		$link = ($full === true ? Uri::root() : '') . 'index.php?option=com_dpcalendar&view=location&id=' . $id;
 
 		if ($tmpl = Factory::getApplication()->getInput()->getWord('tmpl')) {
 			$link .= '&tmpl=' . $tmpl;
@@ -126,7 +136,7 @@ class RouteHelper
 		$args['view'] = 'booking';
 		$args['uid']  = $booking->uid;
 
-		if (!empty($booking->token)) {
+		if (!empty($booking->token) && DPCalendarHelper::getComponentParameter('bookingsys_enable_token')) {
 			$args['token'] = $booking->token;
 		}
 

@@ -28,9 +28,12 @@ foreach ($this->events as $event) {
 	}
 }
 
-if ($this->getCurrentUser()->guest && ($id = $this->app->getSession()->get('com_dpcalendar.booking_id', 0)) && $booking = $this->getModel()->getItem($id)) {
-	$booking->event_title = array_column($booking->tickets, 'event_title')[0] ?? '';
-	$bookings[$booking->id] = $booking;
+if ($this->getCurrentUser()->guest
+	&& ($id = $this->app->getSession()->get('com_dpcalendar.booking_id', 0))
+	&& ($booking = $this->getModel()->getItem($id))
+	&& array_intersect(array_column($booking->tickets ?? [], 'event_id'), array_keys($this->events))) {
+		$booking->event_title   = array_column($booking->tickets, 'event_title')[0] ?? '';
+		$bookings[$booking->id] = $booking;
 }
 
 if ($bookings === []) {

@@ -101,7 +101,7 @@ class LocationformController extends LocationController implements CurrentUserIn
 		}
 
 		if ($location = $this->getModel('Location')->getItem($this->app->getUserState('dpcalendar.location.id'))) {
-			$this->setRedirect(RouteHelper::getLocationRoute($location));
+			$this->setRedirect(RouteHelper::getLocationRoute($location->id));
 		}
 
 		return $result;

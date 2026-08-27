@@ -50,6 +50,12 @@
 				<option value="1">JYES</option>
 				<option value="0">JNO</option>
 			</field>
+			<field name="calendar_current_dates" type="list" useglobal="true"
+				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_CURRENT_DATES_LABEL"
+				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_CURRENT_DATES_DESC">
+				<option value="1">JYES</option>
+				<option value="0">JNO</option>
+			</field>
 			<field name="week_numbers" type="list" useglobal="true"
 				label="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_NUMBER_LABEL"
 				description="COM_DPCALENDAR_FIELD_CONFIG_CALENDAR_SHOW_WEEK_NUMBER_DESC">

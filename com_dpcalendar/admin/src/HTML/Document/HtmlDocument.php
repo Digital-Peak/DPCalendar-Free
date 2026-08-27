@@ -10,9 +10,8 @@ namespace DigitalPeak\Component\DPCalendar\Administrator\HTML\Document;
 \defined('_JEXEC') or die();
 
 use Joomla\CMS\Application\CMSWebApplicationInterface;
-use Joomla\CMS\Document\HtmlDocument as DocumentHtmlDocument;
+use Joomla\CMS\Document\HtmlDocument as CMSHtmlDocument;
 use Joomla\CMS\Factory;
-use Joomla\CMS\HTML\HTMLHelper;
 
 /**
  * Html document.
@@ -36,26 +35,42 @@ class HtmlDocument
 
 	public function loadScriptFile(string $path, string $extension = 'com_dpcalendar'): void
 	{
-		/** @var DocumentHtmlDocument $doc */
 		$doc = $this->app->getDocument();
+		if (!$doc instanceof CMSHtmlDocument) {
+			return;
+		}
+
 		$doc->getWebAssetManager()->registerAndUseScript(
 			$extension . '/' . str_replace('.js', '', $path),
 			$extension . '/' . str_replace('.js', '.min.js', $path),
 			['relative' => true, 'version' => JDEBUG ? false : 'auto'],
-			['type'     => 'module'],
+			['type' => 'module'],
 			['core', 'messages']
 		);
 	}
 
 	public function addScriptOptions(string $key, mixed $options): void
 	{
-		$this->app->getDocument()->addScriptOptions('DPCalendar.' . $key, $options);
+		$doc = $this->app->getDocument();
+		if (!$doc instanceof CMSHtmlDocument) {
+			return;
+		}
+
+		$doc->addScriptOptions('DPCalendar.' . $key, $options);
 	}
 
 	public function loadStyleFile(string $path, string $extension = 'com_dpcalendar'): void
 	{
-		$path = str_replace('.css', '.min.css', $path);
-		HTMLHelper::_('stylesheet', $extension . '/' . $path, ['relative' => true, 'version' => JDEBUG ? false : 'auto']);
+		$doc = $this->app->getDocument();
+		if (!$doc instanceof CMSHtmlDocument) {
+			return;
+		}
+
+		$doc->getWebAssetManager()->registerAndUseStyle(
+			$extension . '/' . str_replace('.css', '', $path),
+			$extension . '/' . str_replace('.css', '.min.css', $path),
+			['relative' => true, 'version' => JDEBUG ? false : 'auto']
+		);
 	}
 
 	public function addScript(?string $content = ''): void
@@ -64,7 +79,12 @@ class HtmlDocument
 			return;
 		}
 
-		$this->app->getDocument()->getWebAssetManager()->addInlineScript($content);
+		$doc = $this->app->getDocument();
+		if (!$doc instanceof CMSHtmlDocument) {
+			return;
+		}
+
+		$doc->getWebAssetManager()->addInlineScript($content);
 	}
 
 	public function addStyle(?string $content = ''): void
@@ -73,6 +93,11 @@ class HtmlDocument
 			return;
 		}
 
-		$this->app->getDocument()->getWebAssetManager()->addInlineStyle($content);
+		$doc = $this->app->getDocument();
+		if (!$doc instanceof CMSHtmlDocument) {
+			return;
+		}
+
+		$doc->getWebAssetManager()->addInlineStyle($content);
 	}
 }

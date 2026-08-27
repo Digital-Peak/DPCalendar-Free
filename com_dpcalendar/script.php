@@ -9,6 +9,7 @@
 
 use Joomla\CMS\Application\CMSWebApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
+use Joomla\CMS\Document\HtmlDocument;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Installer\InstallerAdapter;
 use Joomla\CMS\Installer\InstallerScript;
@@ -240,7 +241,7 @@ ON DUPLICATE KEY UPDATE
 				'error'
 			);
 
-			if ($app instanceof CMSWebApplicationInterface) {
+			if ($app instanceof CMSWebApplicationInterface && $app->getDocument() instanceof HtmlDocument) {
 				$app->redirect('index.php?option=com_installer&view=install');
 			}
 

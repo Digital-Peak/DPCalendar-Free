@@ -187,7 +187,7 @@ class LocationModel extends AdminModel implements UserFactoryAwareInterface
 			[(object)$data],
 			[
 				'location'         => $data,
-				'backLinkFull'     => RouteHelper::getLocationRoute((object)$data, true),
+				'backLinkFull'     => RouteHelper::getLocationRoute(((object)$data)->id, true),
 				'formattedAddress' => $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->format([(object)$data]),
 			]
 		);

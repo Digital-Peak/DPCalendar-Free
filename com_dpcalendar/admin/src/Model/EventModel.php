@@ -362,6 +362,8 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 
 	public function save($data)
 	{
+		$db = $this->getDatabase();
+
 		$locationIds = [];
 		if (isset($data['location_ids'])) {
 			$locationIds = array_unique($data['location_ids'] ?: []);
@@ -375,8 +377,8 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 
 		$oldEventIds = [];
 		if (isset($data['id']) && $data['id']) {
-			$this->getDatabase()->setQuery('select id from #__dpcalendar_events where original_id = ' . (int)$data['id']);
-			$rows = $this->getDatabase()->loadObjectList();
+			$db->setQuery('select id from #__dpcalendar_events where original_id = ' . (int)$data['id']);
+			$rows = $db->loadObjectList();
 			foreach ($rows as $oldEvent) {
 				$oldEventIds[$oldEvent->id] = $oldEvent->id;
 			}
@@ -461,13 +463,15 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 			throw new \Exception('Event is not created');
 		}
 
+		$event->location_ids = $locationIds;
+
 		$app = Factory::getApplication();
 		if ($app instanceof CMSWebApplicationInterface) {
 			$app->setUserState('dpcalendar.event.id', $id);
 		}
 
-		$this->getDatabase()->setQuery('select id, modified, start_date, end_date, language from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
-		$rows = $this->getDatabase()->loadObjectList();
+		$db->setQuery('select id, modified, start_date, end_date, language from #__dpcalendar_events where id = ' . $id . ' or original_id = ' . $id);
+		$rows = $db->loadObjectList();
 
 		$fieldModel = $this->bootComponent('fields')->getMVCFactory()->createModel('Field', 'Administrator', ['ignore_request' => true]);
 
@@ -493,8 +497,6 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 			}
 
 			if (Associations::isEnabled() && !empty($data['associations']) && $tmp->id != $event->id) {
-				$db = $this->getDatabase();
-
 				// Remove old associations
 				$result = $db->setQuery('select `key` from #__associations where id = ' . $tmp->id . ' and context = ' . $db->quote('com_dpcalendar.item'))->loadResult();
 				$db->setQuery('delete from #__associations where `key` = ' . $db->quote($result) . ' and context = ' . $db->quote('com_dpcalendar.item'))->execute();
@@ -581,36 +583,40 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 
 		// Delete the location associations for the events which do not exist anymore
 		if (!$this->getState($this->getName() . '.new')) {
-			$this->getDatabase()->setQuery('delete from #__dpcalendar_events_location where event_id in (' . implode(',', $allIds) . ')');
-			$this->getDatabase()->execute();
+			$db->setQuery('delete from #__dpcalendar_events_location where event_id in (' . implode(',', $allIds) . ')');
+			$db->execute();
 		}
 
 		// Insert the new location assignments
 		if ($locationValues !== '' && $locationValues !== '0') {
-			$this->getDatabase()->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $locationValues);
-			$this->getDatabase()->execute();
+			$db->setQuery('insert into #__dpcalendar_events_location (event_id, location_id) values ' . $locationValues);
+			$db->execute();
 		}
 
 		// Delete the hosts assignments for the events which do not exist anymore
 		if (!$this->getState($this->getName() . '.new')) {
-			$this->getDatabase()->setQuery('delete from #__dpcalendar_events_hosts where event_id in (' . implode(',', $allIds) . ')');
-			$this->getDatabase()->execute();
+			$db->setQuery('delete from #__dpcalendar_events_hosts where event_id in (' . implode(',', $allIds) . ')');
+			$db->execute();
 		}
 
 		// Insert the new host assignments
 		if ($hostsValues !== '' && $hostsValues !== '0') {
-			$this->getDatabase()->setQuery('insert into #__dpcalendar_events_hosts (event_id, user_id) values ' . $hostsValues);
-			$this->getDatabase()->execute();
+			$db->setQuery('insert into #__dpcalendar_events_hosts (event_id, user_id) values ' . $hostsValues);
+			$db->execute();
 		}
 
-		if (!empty($event->location_ids) || $locationIds) {
+		if ($locationIds !== []) {
 			$model = $this->bootComponent('dpcalendar')->getMVCFactory()->createModel('Locations', 'Administrator', ['ignore_request' => true]);
 			$model->setState('list.limit', 100);
 			$model->setState('filter.search', 'ids:' . implode(',', $event->location_ids ?? $locationIds));
 			$event->locations = $model->getItems();
+		} else {
+			$event->locations = [];
 		}
 
 		$event->jcfields = $fields;
+
+		$app->triggerEvent('onDPCalendarEventAfterSave', [$event, $this->getState($this->getName() . '.new')]);
 
 		$this->sendNotificationMail('event.' . ($this->getState($this->getName() . '.new') ? 'create' : 'update'), [$event]);
 

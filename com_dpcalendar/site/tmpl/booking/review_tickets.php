@@ -17,11 +17,9 @@ foreach ($this->tickets as $sortedTickets) {
 }
 ?>
 <div class="com-dpcalendar-booking__tickets dp-print-hide">
-	<?php foreach ($tickets as $ticket) { ?>
+	<?php foreach ($tickets as $index => $ticket) { ?>
 		<h4 class="com-dpcalendar-booking__ticket-heading dp-heading">
-			<?php if ($ticket->price_label) { ?>
-				<?php echo $ticket->price_label; ?>
-			<?php } ?>
+			<?php echo sprintf($this->translate('COM_DPCALENDAR_VIEW_BOOKING_REVIEW_TICKETS_HEADING'), $index + 1, $ticket->price_label ?: ''); ?>
 			<?php if ($ticket->price) { ?>
 				[<?php echo DPCalendarHelper::renderPrice($ticket->price); ?>]
 			<?php } ?>

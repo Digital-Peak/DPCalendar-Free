@@ -45,9 +45,12 @@ class Router
 		return Route::_('index.php?option=com_dpcalendar&task=event.delete&e_id=' . $id . '&return=' . base64_encode(\in_array($return, [null, '', '0'], true) ? '' : $return));
 	}
 
-	public function getLocationRoute(\stdClass $location): string
+	/**
+	 * @param string|int $id
+	 */
+	public static function getLocationRoute($id): string
 	{
-		return RouteHelper::getLocationRoute($location);
+		return RouteHelper::getLocationRoute($id);
 	}
 
 	public function getLocationFormRoute(?string $id, ?string $return = null): string

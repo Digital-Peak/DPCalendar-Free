@@ -98,12 +98,7 @@ class HtmlView extends BaseView
 			$this->app->getPathway()->addItem($this->location->title, '');
 		}
 
-		$title = $this->location->title;
-		if (!$title) {
-			$title = $this->params->get('page_title', '');
-		}
 		$document = $this->getDocument();
-		$document->setTitle($title);
 
 		$metadesc = trim((string)$this->location->metadata->get('metadesc', ''));
 		if ($metadesc === '' || $metadesc === '0') {
@@ -125,5 +120,10 @@ class HtmlView extends BaseView
 		}
 
 		$this->heading = $this->params->get('show_page_heading') ? 1 : 0;
+	}
+
+	protected function getDocumentTitle(): string
+	{
+		return $this->location->title;
 	}
 }

@@ -183,7 +183,7 @@ class DPCalendar extends CMSPlugin
 		}
 
 		if ($form->getName() !== 'com_users.profile' && $form->getName() !== 'com_admin.profile'
-			&& !($app instanceof AdministratorApplication && $form->getName() === 'com_users.user')) {
+			&& (!$app instanceof AdministratorApplication || $form->getName() !== 'com_users.user')) {
 			return true;
 		}
 

@@ -129,9 +129,15 @@ class LocationTable extends BasicTable implements TaggableTableInterface
 		}
 
 		// Verify that the alias is unique
-		$table = new self($this->getDatabase());
-		if ($table->load(['alias' => $this->alias]) && ($table->id != $this->id || $this->id === 0)) {
-			throw new \Exception(Text::_('COM_DPCALENDAR_ERROR_UNIQUE_ALIAS_LOCATION') . ': ' . $table->alias);
+		$db = $this->getDatabase();
+		while (true) {
+			$db->setQuery('SELECT id, alias FROM #__dpcalendar_locations WHERE alias = ' . $db->quote($this->alias) . ' and id != ' . (int)$this->id);
+			$table = $db->loadObject();
+			if (!$table || !$table->id) {
+				break;
+			}
+
+			$this->alias = ApplicationHelper::stringURLSafe(StringHelper::increment($this->alias, 'dash'));
 		}
 
 		// Attempt to store the user data.
@@ -143,15 +149,6 @@ class LocationTable extends BasicTable implements TaggableTableInterface
 		// Check for valid name
 		if (trim($this->title) === '') {
 			throw new \Exception(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_TITLE'));
-		}
-
-		// Check for existing name
-		$query = 'SELECT id FROM #__dpcalendar_locations WHERE title = ' . $this->getDatabase()->Quote($this->title);
-		$this->getDatabase()->setQuery($query);
-
-		$xid = (int)$this->getDatabase()->loadResult();
-		if ($xid && $xid !== (int)$this->id) {
-			throw new \Exception(Text::_('COM_DPCALENDAR_LOCATION_ERR_TABLES_NAME'));
 		}
 
 		if (empty($this->alias)) {

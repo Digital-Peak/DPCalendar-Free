@@ -582,6 +582,12 @@
 			<option value="0">JNO</option>
 			<option value="1">JYES</option>
 		</field>
+		<field name="event_all_day_default" type="radio" default="0" class="btn-group"
+			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_ALL_DAY_DEFAULT_LABEL"
+			description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_ALL_DAY_DEFAULT_DESC">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+		</field>
 		<field name="event_show_location" type="list" class="btn-group" default="2"
 			label="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_LABEL" description="COM_DPCALENDAR_FIELD_CONFIG_EVENT_SHOW_LOCATION_DESC">
 			<option value="0">JNO</option>

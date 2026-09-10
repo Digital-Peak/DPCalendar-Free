@@ -31,7 +31,7 @@ foreach ($this->items as $event) {
 	if (!empty($event->locations)) {
 		foreach ($event->locations as $location) {
 			$locations[] = [
-				'location'  => $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo','Administrator')->format($location),
+				'location'  => $this->app->bootComponent('dpcalendar')->getMVCFactory()->createModel('Geo', 'Administrator')->format($location),
 				'latitude'  => $location->latitude,
 				'longitude' => $location->longitude
 			];
@@ -62,9 +62,9 @@ foreach ($this->items as $event) {
 		$fgcolor = $event->color;
 		$rgb     = '';
 		for ($x = 0; $x < 3; $x++) {
-			$c   = 255 - hexdec(substr((string)$fgcolor, (2 * $x), 2));
-			$c   = ($c < 0) ? 0 : dechex($c);
-			$rgb .= (strlen((string) $c) < 2) ? '0' . $c : $c;
+			$c = 255 - hexdec(substr((string)$fgcolor, (2 * $x), 2));
+			$c = ($c < 0) ? 0 : dechex($c);
+			$rgb .= (\strlen((string)$c) < 2) ? '0' . $c : $c;
 		}
 		$fgcolor = '#' . $rgb;
 	}
@@ -109,16 +109,20 @@ foreach ($this->items as $event) {
 		$prefix = '';
 		switch ($event->state) {
 			case 0:
-				$prefix='[' . $this->translate('JUNPUBLISHED') . '] ';
+				$prefix                    = '[' . $this->translate('JUNPUBLISHED') . '] ';
+				$eventData['classNames'][] = 'dp-event_unpublished';
 				break;
 			case 2:
-				$prefix='[' . $this->translate('JARCHIVED') . '] ';
+				$prefix                    = '[' . $this->translate('JARCHIVED') . '] ';
+				$eventData['classNames'][] = 'dp-event_archived';
 				break;
 			case 3:
-				$prefix='[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ';
+				$prefix                    = '[' . $this->translate('COM_DPCALENDAR_FIELD_VALUE_CANCELED') . '] ';
+				$eventData['classNames'][] = 'dp-event_canceled';
 				break;
 			case -2:
-				$prefix='[' . $this->translate('JTRASHED') . '] ';
+				$prefix                    = '[' . $this->translate('JTRASHED') . '] ';
+				$eventData['classNames'][] = 'dp-event_trashed';
 				break;
 		}
 		$eventData['title'] = $prefix . $eventData['title'];
@@ -129,7 +133,7 @@ foreach ($this->items as $event) {
 	}
 
 	$eventData['resourceIds'] = $resourceIds;
-	$data[] = $eventData;
+	$data[]                   = $eventData;
 }
 
 // Echo the data

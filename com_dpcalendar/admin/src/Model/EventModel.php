@@ -556,8 +556,8 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 					$value = $data['com_fields'][$field->name];
 				}
 
-				// The media and subform field needs the data encoded
-				if (\in_array($field->type, ['subform', 'media']) && \is_array($value)) {
+				// The different media and subform field needs the data encoded
+				if (\in_array($field->type, ['subform', 'media', 'document', 'audio', 'video']) && \is_array($value)) {
 					$value = json_encode($value);
 				}
 

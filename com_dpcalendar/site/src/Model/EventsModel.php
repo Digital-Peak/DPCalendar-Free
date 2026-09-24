@@ -270,7 +270,7 @@ class EventsModel extends ListModel
 			$item->tags             = new TagsHelper();
 		}
 
-		if ($taggedItems) {
+		if ($taggedItems !== []) {
 			$tagsHelper = new TagsHelper();
 			$itemIds    = array_keys($taggedItems);
 

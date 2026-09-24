@@ -31,6 +31,8 @@ class BookingsModel extends ListModel
 				'id',
 				'a.id',
 				'a.uid',
+				'first_name',
+				'a.first_name',
 				'name',
 				'a.name',
 				'state',
@@ -175,10 +177,10 @@ class BookingsModel extends ListModel
 				$query->where('a.id = ' . (int)substr((string)$search, 3));
 			} elseif (stripos((string)$search, 'author:') === 0) {
 				$search = $db->quote('%' . $db->escape(substr((string)$search, 7), true) . '%');
-				$query->where('(a.name LIKE ' . $search . ' OR ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
+				$query->where('(a.first_name LIKE ' . $search . ' OR a.name LIKE ' . $search . ' OR ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search . ')');
 			} else {
 				$search = $db->quote('%' . $db->escape($search, true) . '%');
-				$query->where('(a.name LIKE ' . $search . ' OR a.email LIKE ' . $search . ' OR a.uid LIKE ' . $search . ')');
+				$query->where('(a.first_name LIKE ' . $search . ' OR a.name LIKE ' . $search . ' OR a.email LIKE ' . $search . ' OR a.uid LIKE ' . $search . ')');
 			}
 		}
 

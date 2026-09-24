@@ -60,8 +60,8 @@ class CouponModel extends AdminModel
 			return null;
 		}
 
-		// Check mail
-		if ($item->emails && !\in_array($email, explode(PHP_EOL, (string)$item->emails))) {
+		// Check mail, support new lines and comma and trim before search
+		if ($item->emails && !\in_array($email, array_map(trim(...), explode(',', str_replace(PHP_EOL, ',', (string)$item->emails))))) {
 			return null;
 		}
 

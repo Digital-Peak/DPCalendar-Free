@@ -29,6 +29,8 @@ class TicketsModel extends ListModel
 				'a.id',
 				'uid',
 				'a.uid',
+				'first_name',
+				'a.first_name',
 				'name',
 				'a.name',
 				'price',
@@ -149,13 +151,13 @@ class TicketsModel extends ListModel
 			} elseif (stripos((string)$search, 'author:') === 0) {
 				$search = $db->quote('%' . $db->escape(substr((string)$search, 7), true) . '%');
 				$query->where(
-					'(a.name LIKE ' . $search . ' OR b.name LIKE ' . $search . ' OR ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search .
+					'(a.first_name LIKE ' . $search . ' OR a.name LIKE ' . $search . ' OR b.first_name LIKE ' . $search . ' OR b.name LIKE ' . $search . ' OR ua.name LIKE ' . $search . ' OR ua.username LIKE ' . $search .
 					')'
 				);
 			} else {
 				$search = $db->quote('%' . $db->escape($search, true) . '%');
 				$query->where(
-					'(a.name LIKE ' . $search . ' OR a.uid LIKE ' . $search . ' OR b.name LIKE ' . $search . ' OR b.email LIKE ' . $search .
+					'(a.first_name LIKE ' . $search . ' OR a.name LIKE ' . $search . ' OR a.uid LIKE ' . $search . ' OR b.first_name LIKE ' . $search . ' OR b.name LIKE ' . $search . ' OR b.email LIKE ' . $search .
 					' OR e.title LIKE ' . $search . ')'
 				);
 			}

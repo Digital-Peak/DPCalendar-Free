@@ -135,7 +135,7 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 		}
 
 		// Get a fake login response
-		$options            = ['remember' => false];
+		$options            = ['remember' => false, 'action' => 'core.login.site'];
 		$response           = new AuthenticationResponse();
 		$response->status   = (string)Authentication::STATUS_SUCCESS;
 		$response->type     = 'icstoken';
@@ -145,7 +145,7 @@ class IcalController extends BaseController implements UserFactoryAwareInterface
 
 		// Run the login user events
 		PluginHelper::importPlugin('user');
-		$app->triggerEvent('onLoginUser', [(array)$response, $options]);
+		$app->triggerEvent('onUserLogin', [(array)$response, $options]);
 
 		// Set the user in the session, effectively logging in the user
 		$app->getSession()->set('user', $user);

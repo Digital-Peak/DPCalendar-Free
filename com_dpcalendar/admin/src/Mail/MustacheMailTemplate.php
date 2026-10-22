@@ -14,6 +14,7 @@ use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\Factory;
 use Joomla\CMS\Mail\Exception\MailDisabledException;
+use Joomla\CMS\Mail\Mail;
 use Joomla\CMS\Mail\MailerInterface;
 use Joomla\CMS\Mail\MailTemplate;
 use Joomla\CMS\User\CurrentUserTrait;
@@ -94,7 +95,11 @@ class MustacheMailTemplate extends MailTemplate
 	public function setRecipient(string $email): void
 	{
 		$this->recipients = [];
-		$this->mailer->clearAllRecipients();
+
+		if ($this->mailer instanceof Mail) {
+			$this->mailer->clearAllRecipients();
+		}
+
 		parent::addRecipient($email);
 	}
 
@@ -117,7 +122,10 @@ class MustacheMailTemplate extends MailTemplate
 		}
 
 		$this->attachments = [];
-		$this->mailer->clearAttachments();
+
+		if ($this->mailer instanceof Mail) {
+			$this->mailer->clearAttachments();
+		}
 	}
 
 	protected function replaceTags($text, $tags, $isHtml = false): string

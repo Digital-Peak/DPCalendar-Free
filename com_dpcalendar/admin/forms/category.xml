@@ -32,6 +32,26 @@
 						<option value="1">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_DIFFERENT_USER</option>
 						<option value="2">COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_AUTHOR_ALWAYS</option>
 					</field>
+					<field name="state" type="list" showon="action:com_dpcalendar.booking.create,com_dpcalendar.booking.update"
+						label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_STATE">
+						<option value="">JALL</option>
+						<option value="1">COM_DPCALENDAR_BOOKING_FIELD_STATE_PUBLISHED</option>
+						<option value="0">COM_DPCALENDAR_BOOKING_FIELD_STATE_UNPUBLISHED</option>
+						<option value="2">COM_DPCALENDAR_BOOKING_FIELD_STATE_TICKET_REVIEW</option>
+						<option value="3">COM_DPCALENDAR_BOOKING_FIELD_STATE_CONFIRMATION</option>
+						<option value="4">COM_DPCALENDAR_BOOKING_FIELD_STATE_HOLD</option>
+						<option value="5">COM_DPCALENDAR_BOOKING_FIELD_STATE_INVITED</option>
+						<option value="6">COM_DPCALENDAR_BOOKING_FIELD_STATE_CANCELED</option>
+						<option value="7">COM_DPCALENDAR_BOOKING_FIELD_STATE_REFUNDED</option>
+						<option value="8">COM_DPCALENDAR_BOOKING_FIELD_STATE_WAITING</option>
+						<option value="10">COM_DPCALENDAR_BOOKING_FIELD_STATE_PARTIALLY_PAID</option>
+						<option value="-2">JTRASHED</option>
+					</field>
+					<field name="state_transition" type="radio" class="btn-group" default="0"
+						label="COM_DPCALENDAR_FIELD_CONFIG_COMPONENT_NOTIFICATION_STATE_TRANSITION">
+						<option value="1">JYES</option>
+						<option value="0">JNO</option>
+					</field>
 				</form>
 			</field>
 			<field name="etag" type="hidden" default="1"/>

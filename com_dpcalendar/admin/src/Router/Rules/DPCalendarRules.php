@@ -214,13 +214,16 @@ class DPCalendarRules extends MenuRules
 			return;
 		}
 
-		// The active element
+		$targetLang = empty($query['lang']) ? null : $query['lang'];
+
+		// The active element, only when it matches the requested language
 		$active = $this->router->menu->getActive();
 
 		// If we have no default item but the active fits as a parent for the event view use it as id
 		// This means we do not have unique ids, but the event is always shown below the actual menu item
 		if ($active && $active->component == 'com_dpcalendar'
-			&& \in_array($active->query['view'], ['calendar', 'list', 'map'])) {
+			&& \in_array($active->query['view'], ['calendar', 'list', 'map'])
+			&& (!$targetLang || $active->language === '*' || $active->language === $targetLang)) {
 			$selectedCalendars = [];
 			foreach ($active->getParams()->get('ids', []) as $selectedCalendar) {
 				$selectedCalendars[] = $selectedCalendar;
@@ -241,17 +244,33 @@ class DPCalendarRules extends MenuRules
 			}
 		}
 
+		// Only search the requested language (and '*'), otherwise all languages as before
+		$languagesToSearch = $targetLang ? array_unique([$targetLang, '*']) : array_keys($this->lookup);
+		$firstFallbackItem = null;
+
 		// Search in the lookup for a passable menu item
-		foreach ($this->lookup as $items) {
-			foreach ($items as $calIds) {
+		foreach ($languagesToSearch as $langKey) {
+			foreach (($this->lookup[$langKey] ?? []) as $viewName => $calIds) {
 				foreach ((array)$calIds as $calId => $menuItemId) {
 					if ($calId && ($calendar->getId() == $calId || $calId == -1)) {
 						$query['Itemid'] = $menuItemId;
 
 						return;
 					}
+
+					// Fallback candidate: first calendar menu item of the target language
+					if ($targetLang && $firstFallbackItem === null && $menuItemId && \in_array($viewName, ['calendar', 'list', 'map'])) {
+						$firstFallbackItem = $menuItemId;
+					}
 				}
 			}
+		}
+
+		// Keep a SEF URL in the target language instead of a global one
+		if ($firstFallbackItem) {
+			$query['Itemid'] = $firstFallbackItem;
+
+			return;
 		}
 
 		// Unset the item id, the router creates then global urls

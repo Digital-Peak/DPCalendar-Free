@@ -209,7 +209,7 @@ class EventsModel extends ListModel
 				$item->color = '3366CC';
 			}
 
-			if (Associations::isEnabled()) {
+			if (Associations::isEnabled() && $item->id) {
 				$item->associations = AssociationHelper::displayAssociations($item->id);
 			}
 		}

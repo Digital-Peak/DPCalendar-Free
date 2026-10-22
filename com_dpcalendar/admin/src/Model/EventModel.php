@@ -345,7 +345,7 @@ class EventModel extends AdminModel implements UserFactoryAwareInterface
 					$item->prices = json_decode($item->prices);
 				}
 
-				if (Associations::isEnabled()) {
+				if (Associations::isEnabled() && $item->id) {
 					$item->associations = [];
 
 					$associations = Associations::getAssociations('com_dpcalendar', '#__dpcalendar_events', 'com_dpcalendar.item', $item->id, 'id', '', '');

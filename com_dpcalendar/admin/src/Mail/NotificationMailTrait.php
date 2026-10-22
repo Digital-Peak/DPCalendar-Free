@@ -52,6 +52,18 @@ trait NotificationMailTrait
 		foreach ($notifications as $notification) {
 			// Calendar notifications are array
 			$notification = (object)$notification;
+			$notification->state ??= '';
+			$notification->state_transition ??= false;
+
+			// Is the state not set or not in items array
+			if ($notification->state !== '' && !\in_array($notification->state, array_column($items, 'state'), false)) {
+				continue;
+			}
+
+			// On transitions, the state of the old item should be different
+			if ($notification->state !== '' && $notification->state_transition && !empty($templateData['oldItem']) && $templateData['oldItem']->state == $notification->state) {
+				continue;
+			}
 
 			[$id]   = explode('.', $action);
 			$mailer = new MustacheMailTemplate($action, [$id . 's' => $items] + $templateData);

@@ -358,6 +358,7 @@ class Booking
 	 * Returns the discounted price if there are discounts to apply for the defined area (ticket, booking, option).
 	 * If the early bird key is set, only the early bird with that key is used.
 	 * If the user group key is set, only the user group discount with that key is used.
+	 * When multiple early bird or user group discounts apply, the one with the highest discount is used.
 	 */
 	public static function getPriceWithDiscount(float $price, \stdClass $event, string $earlyBirdKey = '', string $userGroupKey = '', string $area = 'ticket'): float
 	{
@@ -365,10 +366,9 @@ class Booking
 			return 0;
 		}
 
-		$newPrice = $price;
-
-		$now = DPCalendarHelper::getDate();
-
+		$now             = DPCalendarHelper::getDate();
+		$discountedPrice = $price;
+		$basePrice       = $price;
 		if ($event->earlybird_discount instanceof \stdClass && $earlyBirdKey !== '-1') {
 			foreach ((array)$event->earlybird_discount as $key => $discount) {
 				$discount->area ??= 'ticket';
@@ -393,18 +393,13 @@ class Booking
 					continue;
 				}
 
-				$newPrice = $discount->type == 'value' ? $newPrice - $discount->value : $newPrice - (($newPrice / 100) * $discount->value);
-
-				if ($newPrice < 0) {
-					$newPrice = 0;
-				}
-
-				break;
+				$discountedPrice = min($discountedPrice, self::applyDiscount($basePrice, $discount));
 			}
 		}
 
 		// @phpstan-ignore-next-line
 		$userGroups = Access::getGroupsByUser(Factory::getUser()->id);
+		$basePrice  = $discountedPrice;
 		if ($event->user_discount instanceof \stdClass && $userGroupKey !== '-1') {
 			foreach ((array)$event->user_discount as $key => $discount) {
 				$discount->area ??= 'ticket';
@@ -417,17 +412,21 @@ class Booking
 					continue;
 				}
 
-				$newPrice = $discount->type == 'value' ? $newPrice - $discount->value : $newPrice - (($newPrice / 100) * $discount->value);
-
-				if ($newPrice < 0) {
-					$newPrice = 0;
-				}
-
-				break;
+				$discountedPrice = min($discountedPrice, self::applyDiscount($basePrice, $discount));
 			}
 		}
 
-		return $newPrice;
+		return $discountedPrice;
+	}
+
+	/**
+	 * Returns the price reduced by the given value or percentage discount, but never below zero.
+	 */
+	private static function applyDiscount(float $price, \stdClass $discount): float
+	{
+		$newPrice = $discount->type == 'value' ? $price - $discount->value : $price - (($price / 100) * $discount->value);
+
+		return max($newPrice, 0.0);
 	}
 
 	public static function getStatusLabel(\stdClass $booking): string

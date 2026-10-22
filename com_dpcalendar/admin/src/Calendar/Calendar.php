@@ -226,6 +226,10 @@ class Calendar extends \stdClass implements CalendarInterface
 
 	public function __get(string $name): mixed
 	{
+		if (!isset($this->$name)) {
+			return null;
+		}
+
 		return $this->$name;
 	}
 

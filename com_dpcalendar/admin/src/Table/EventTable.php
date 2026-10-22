@@ -799,7 +799,7 @@ class EventTable extends BasicTable implements TaggableTableInterface, Versionab
 		}
 
 		$ids = [$pk];
-		if (Associations::isEnabled()) {
+		if (Associations::isEnabled() && $pk) {
 			$associations = Associations::getAssociations('com_dpcalendar', '#__dpcalendar_events', 'com_dpcalendar.item', (int)$pk);
 			$ids          = array_merge($ids, array_column($associations, 'id'));
 		}
